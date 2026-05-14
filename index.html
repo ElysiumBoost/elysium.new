@@ -2570,7 +2570,8 @@
       { label: "Queen Boss Clear",                    service: "boss",       category: "bosses",     type: "service" },
       { label: "PvP Coaching Session",                service: "pvp",        category: "coaching",   type: "service" }
     ];
-    let recentOrderTimer = 0;
+    let recentOrderTimers = [0, 0, 0];
+    const ORDER_FEED_SLOT_MS = [16000, 10000, 20000];
     let recentOrderLastBatch = [];
 
     const prices = {
@@ -3238,7 +3239,7 @@
       $("detailSteps").innerHTML = detailSteps(service.form).map(step => `
         <div class="detail-step"><strong>${ui(step.title)}</strong><span>${ui(step.copy)}</span></div>
       `).join("");
-      renderOrderFeed(true);
+      renderOrderFeed();
       $("orderForm").innerHTML = buildForm(service.form);
       wireForm(service.form);
       updateTotal();
@@ -3319,13 +3320,52 @@
       return picked;
     }
 
-    function bindOrderFeedClicks() {
+    function pickSingleRecentOrder(slotIndex) {
+      const blocked = new Set();
+      for (let i = 0; i < 3; i += 1) {
+        if (i !== slotIndex && recentOrderLastBatch[i]) blocked.add(recentOrderLastBatch[i].label);
+      }
+      const cur = recentOrderLastBatch[slotIndex];
+      let candidates = recentOrders.filter(o => !blocked.has(o.label));
+      if (cur) {
+        const alt = candidates.filter(o => o.label !== cur.label);
+        if (alt.length) candidates = alt;
+      }
+      if (!candidates.length) candidates = recentOrders.filter(o => !blocked.has(o.label));
+      if (!candidates.length) candidates = recentOrders.slice();
+      return candidates[Math.floor(Math.random() * candidates.length)];
+    }
+
+    function renderOrderFeedSlot(slotIndex) {
       const feed = $("orderFeed");
       if (!feed) return;
-      feed.querySelectorAll("[data-feed-service]").forEach(card => {
-        card.addEventListener("click", () => {
-          openRecentOrder(card.dataset.feedService, card.dataset.feedCategory);
-        });
+      const cards = feed.querySelectorAll(".order-feed-card");
+      if (cards.length !== 3 || slotIndex < 0 || slotIndex > 2) {
+        renderOrderFeed();
+        return;
+      }
+      const newOrder = pickSingleRecentOrder(slotIndex);
+      recentOrderLastBatch[slotIndex] = newOrder;
+      const card = cards[slotIndex];
+      card.classList.add("is-changing");
+      window.setTimeout(() => {
+        card.dataset.feedService = newOrder.service;
+        card.dataset.feedCategory = newOrder.category;
+        card.setAttribute("aria-label", "Open " + newOrder.label);
+        const strong = card.querySelector("strong");
+        if (strong) strong.textContent = newOrder.label;
+        card.classList.remove("is-changing");
+      }, 360);
+    }
+
+    function bindOrderFeedClicks() {
+      const feed = $("orderFeed");
+      if (!feed || feed.dataset.feedDelegated === "1") return;
+      feed.dataset.feedDelegated = "1";
+      feed.addEventListener("click", event => {
+        const card = event.target.closest(".order-feed-card[data-feed-service]");
+        if (!card) return;
+        openRecentOrder(card.dataset.feedService, card.dataset.feedCategory);
       });
     }
 
@@ -3343,7 +3383,7 @@
       });
     }
 
-    function renderOrderFeed(initial = false) {
+    function renderOrderFeed() {
       const feed = $("orderFeed");
       if (!feed) return;
       const entries = pickRecentOrders();
@@ -3353,23 +3393,15 @@
           <strong>${escapeHtml(order.label)}</strong>
         </button>
       `).join("");
-      if (initial || !feed.innerHTML) {
-        feed.innerHTML = html;
-        bindOrderFeedClicks();
-        return;
-      }
-      feed.querySelectorAll(".order-feed-card").forEach(card => card.classList.add("is-changing"));
-      window.setTimeout(() => {
-        feed.innerHTML = html;
-        bindOrderFeedClicks();
-      }, 360);
+      feed.innerHTML = html;
+      bindOrderFeedClicks();
     }
 
     function startOrderFeed() {
-      window.clearInterval(recentOrderTimer);
-      recentOrderTimer = window.setInterval(() => {
-        renderOrderFeed();
-      }, 8000);
+      recentOrderTimers.forEach(id => window.clearInterval(id));
+      recentOrderTimers = ORDER_FEED_SLOT_MS.map((ms, slot) => window.setInterval(() => {
+        renderOrderFeedSlot(slot);
+      }, ms));
     }
 
     function qtyField(id, label, value = 0, min = 0, max = null) {
