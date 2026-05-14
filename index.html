@@ -30,7 +30,7 @@
       --radius: 8px;
       --font: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --display: Rajdhani, Inter, sans-serif;
-      --hero-bg: url("assets/bg-elysium-4k.webp");
+      --hero-bg: url("assets/ana1.webp"), url("assets/bg-elysium-4k.webp");
     }
 
     * { box-sizing: border-box; }
@@ -57,7 +57,8 @@
       z-index: -2;
       background:
         linear-gradient(rgba(5, 3, 13, .68), rgba(5, 3, 13, .88)),
-        url("assets/bg-elysium-4k.webp") center center / contain no-repeat,
+        url("assets/ana1.webp") center center / cover no-repeat,
+        url("assets/bg-elysium-4k.webp") center center / cover no-repeat,
         radial-gradient(circle at 50% 52%, rgba(122, 77, 255, .2), transparent 42%),
         #05030d;
       pointer-events: none;
@@ -504,6 +505,13 @@
 
     .cat-ribbon.recommended {
       background: linear-gradient(135deg, #37e08a, #9b68ff);
+    }
+
+    .cat-ribbon.popular {
+      border-color: rgba(255, 209, 102, .58);
+      background: linear-gradient(135deg, #9b68ff, #ffd166);
+      color: #1a1030;
+      box-shadow: 0 8px 24px rgba(155,104,255,.38), 0 0 18px rgba(255,209,102,.22);
     }
 
     .cat-ribbon.new {
@@ -1688,12 +1696,25 @@
 
     .depositary-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 120px;
-      gap: 10px;
-      align-items: end;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .depositary-grid .depositary-custom-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 6px;
+    }
+
+    .depositary-grid .depositary-slider-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 6px;
     }
 
     .depositary-grid input[type="number"] {
+      width: 100%;
       text-align: center;
       font-weight: 900;
     }
@@ -1864,6 +1885,24 @@
         linear-gradient(90deg, rgba(16,11,35,.85), rgba(49,35,96,.72)),
         var(--event-bg, none) center center / cover no-repeat;
       box-shadow: inset 0 0 18px rgba(255,184,88,.08);
+    }
+
+    .event-switch.event-mode-card.is-block {
+      display: flex;
+      width: 100%;
+      min-width: 0;
+      margin: 0 0 10px;
+      padding: 12px 14px;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+    }
+
+    .event-switch.event-mode-card.is-block span {
+      font-size: 14px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      font-weight: 900;
     }
 
     .event-switch.event-mode-card::before {
@@ -2212,6 +2251,36 @@
       line-height: 1.6;
     }
 
+    .estimated-tag {
+      display: inline-flex;
+      align-items: center;
+      margin-left: 8px;
+      padding: 2px 8px;
+      border: 1px solid rgba(255,209,102,.58);
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(155,104,255,.32), rgba(255,209,102,.28));
+      color: #fff7d6;
+      font-family: var(--font);
+      font-size: 10px;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .cart-estimate-note {
+      margin: 8px 0 0;
+      padding: 8px 10px;
+      border: 1px dashed rgba(255,209,102,.45);
+      border-radius: 8px;
+      background: rgba(255,209,102,.08);
+      color: #ffe7b8;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
     .copy-status {
       min-height: 20px;
       color: var(--green);
@@ -2308,10 +2377,6 @@
         <input class="site-search" id="siteSearch" type="search" placeholder="Search services" aria-label="Search services">
         <button class="btn" id="siteSearchBtn" type="button">Search</button>
         <div class="search-results" id="siteSearchResults" role="listbox" aria-label="Search results"></div>
-        <select class="currency" id="language" aria-label="Language">
-          <option value="EN">EN</option>
-          <option value="TR">TR</option>
-        </select>
         <select class="currency" id="currency" aria-label="Currency">
           <option value="USD">$ USD</option>
           <option value="EUR">&euro; EUR</option>
@@ -2499,7 +2564,7 @@
 
     const prices = {
       blueprint: .75,
-      coins100k: .20,
+      coins100k: .25,
       weapon: .50,
       blueMod: .15,
       premiumMod: .25,
@@ -2514,11 +2579,38 @@
       raid: 3.50,
       event: 1.50,
       workshopLevel: 10,
-      workshopBench: 7,
-      workshopMax: 35,
+      workshopBench: 6,
+      workshopMax: 36,
       scrappyLevel: 3,
-      depositarySlot: .50
+      depositarySlot: .35
     };
+
+    const coinTiers = [
+      { amount: 3000000, discount: 0.10, label: "3M Coins" },
+      { amount: 6000000, discount: 0.15, label: "6M Coins" },
+      { amount: 9000000, discount: 0.20, label: "9M Coins" }
+    ];
+
+    const seedTiers = [
+      { amount: 2500, discount: 0.05, label: "2,500 Seeds" },
+      { amount: 5000, discount: 0.15, label: "5,000 Seeds" }
+    ];
+
+    function coinTier(amount) {
+      return coinTiers.find(tier => tier.amount === amount) || null;
+    }
+
+    function seedTier(amount) {
+      return seedTiers.find(tier => tier.amount === amount) || null;
+    }
+
+    function nextCoinTier(amount) {
+      return coinTiers.find(tier => tier.amount > amount) || null;
+    }
+
+    function nextSeedTier(amount) {
+      return seedTiers.find(tier => tier.amount > amount) || null;
+    }
 
     const blueprintGroups = {
       "Gun Blueprints": ["Anvil", "Bettina", "Bobcat", "Burletta", "Dolabra", "Equalizer", "Hullcracker", "Il Toro", "Jupiter", "Osprey", "Renegade", "Canto", "Vulcano", "Torrente", "Tempest", "Venator"],
@@ -2646,13 +2738,13 @@
         categories: [
           { id: "blueprints", label: "All Blueprints", icon: "i-blueprint", badge: "HOT", badgeTone: "hot" },
           { id: "guns", label: "All Guns", icon: "i-gun", badge: "PRICE DROP", badgeTone: "price-drop" },
-          { id: "loadouts", label: "Custom Loadout", icon: "i-loadout" },
+          { id: "loadouts", label: "Custom Loadout", icon: "i-loadout", badge: "POPULAR", badgeTone: "popular" },
           { id: "coins", label: "Raider Coins", icon: "i-coins", badge: "PRICE DROP", badgeTone: "price-drop" },
           { id: "seeds", label: "Assorted Seeds", icon: "i-coins", badge: "NEW", badgeTone: "new" },
           { id: "depositary", label: "Depositary Service", icon: "i-depository" },
           { id: "trials", label: "Trials", icon: "i-trials", badge: "RECOMMENDED", badgeTone: "recommended" },
           { id: "raids", label: "All Raids", icon: "i-raid" },
-          { id: "coaching", label: "Coaching", icon: "i-coach" },
+          { id: "coaching", label: "Coaching", icon: "i-coach", badge: "RECOMMENDED", badgeTone: "recommended" },
           { id: "leveling", label: "Leveling", icon: "i-level" },
           { id: "workshop", label: "Workshop & Scrappy", icon: "i-workshop", badge: "RECOMMENDED", badgeTone: "recommended" },
           { id: "bosses", label: "Boss & Puzzle", icon: "i-skull" },
@@ -2664,16 +2756,16 @@
           arcService("blueprints", "blueprints", "Buy Arc Raiders Blueprints", "All Blueprints", "i-blueprint", .75, " each", "Discounted blueprints, now $0.75 each instead of $1.50.", "30-60 Minutes", "blueprints", 1.50),
           arcService("guns", "guns", "Buy Arc Raiders Weapons", "All Guns", "i-gun", .50, " each", "Discounted weapons and mods with automatic attachment quantity.", "30-60 Minutes", "guns", 1.00),
           arcService("loadout", "loadouts", "Build a Custom Loadout", "Custom Loadout", "i-loadout", 0, "", "Weapon, mods, Looting Mk. 3 Augments, Medium Shields, quick-use bundles, and special bundles.", "30-90 Minutes", "loadout"),
-          arcService("coins", "coins", "Buy Raider Coins", "Raider Coins", "i-coins", .20, " / 100k", "Choose from 100k to 10 million coins with instant price updates.", "15-30 Minutes", "coins"),
-          arcService("seeds", "seeds", "Buy Assorted Seeds", "Assorted Seeds", "i-coins", .35, " / 100", "Choose 100 to 10,000 Assorted Seeds with bulk discount checkpoints.", "15-30 Minutes", "seeds"),
-          arcService("depositary", "depositary", "Arc Raiders Depositary Service", "Depositary Service", "i-depository", 25, " / 50 slots", "Safe item storage service with selectable inventory slots.", "30-60 Minutes", "depositary"),
-          arcService("trials", "trials", "Arc Raiders Trials Boost", "Trials Boost", "i-trials", 20, "", "All 3 Stars with current-rank and rank option rules.", "1-3 Hours", "trials"),
-          arcService("raid", "raids", "Arc Raiders Raid Boost", "All Raids", "i-raid", 3.50, " / raid", "Choose raid count, Duo/Trio, and optional Event Mode.", "15-30 Minutes", "raid"),
-          arcService("pvp", "coaching", "Arc Raiders Coaching", "Coaching", "i-coach", 20, " / hr", "PvP or PvE coaching with Duo/Trio session options.", "By Request", "pvp"),
+          arcService("coins", "coins", "Buy Raider Coins", "Raider Coins", "i-coins", .25, " / 100k", "Choose from 100k to 9 million coins with instant price updates.", "15-30 Minutes", "coins", 0.4167),
+          { ...arcService("seeds", "seeds", "Buy Assorted Seeds", "Assorted Seeds", "i-coins", .35, " / 100", "Choose 100 to 5,000 Assorted Seeds with bulk discount checkpoints.", "15-30 Minutes", "seeds"), noDiscount: true },
+          { ...arcService("depositary", "depositary", "Arc Raiders Depositary Service", "Depositary Service", "i-depository", 17.50, " / 50 slots", "Safe item storage service with selectable inventory slots, 20 to 280 slots.", "30-60 Minutes", "depositary"), noDiscount: true },
+          arcService("trials", "trials", "Arc Raiders Trials Boost", "Trials Boost", "i-trials", 20, "", "All 3 Stars with current-rank and rank option rules.", "1-3 Hours", "trials", 40),
+          arcService("raid", "raids", "Arc Raiders Raid Boost", "All Raids", "i-raid", 3.50, " / raid", "Choose raid count, Duo/Trio, and optional Event Mode.", "15-30 Minutes", "raid", 4.67),
+          arcService("pvp", "coaching", "Arc Raiders Coaching", "Coaching", "i-coach", 20, " / hr", "PvP or PvE coaching with Duo/Trio session options.", "By Request", "pvp", 26.67),
           arcService("leveling", "leveling", "Arc Raiders Leveling", "Leveling", "i-level", 0, "", "Current level, target level, speed, and account access requirements.", "By Request", "leveling"),
-          arcService("workshop", "workshop", "Arc Raiders Workshop & Scrappy", "Workshop & Scrappy", "i-workshop", 3, "+", "Upgrade workshops from level 1 to 3 or select Scrappy levels from 1 to 5.", "30-60 Minutes", "workshop"),
-          arcService("expedition", "expeditions", "Arc Raiders Expedition Boost", "Expedition Boost", "i-expedition", 10, "+", "Choose a specific expedition stage.", "30-60 Minutes", "expedition"),
-          arcService("boss", "bosses", "Arc Raiders Boss & Puzzle", "Boss & Puzzle", "i-skull", 20, "", "Queen, Matriarch, or Harvester Puzzle completion request.", "30-90 Minutes", "boss"),
+          { ...arcService("workshop", "workshop", "Arc Raiders Workshop & Scrappy", "Workshop & Scrappy", "i-workshop", 3, "+", "Upgrade workshops from level 1 to 3 or select Scrappy levels from 1 to 5.", "30-60 Minutes", "workshop"), noDiscount: true },
+          arcService("expedition", "expeditions", "Arc Raiders Expedition Boost", "Expedition Boost", "i-expedition", 10, "+", "Choose a specific expedition stage.", "30-60 Minutes", "expedition", 13.33),
+          { ...arcService("boss", "bosses", "Arc Raiders Boss & Puzzle", "Boss & Puzzle", "i-skull", 20, "", "Queen, Matriarch, or Harvester Puzzle completion request.", "30-90 Minutes", "boss"), noDiscount: true },
           arcService("private", "custom", "Private Arc Raiders Order", "Private Order", "i-private", 0, "", "Write a custom request for manual boosters review.", "Manual", "private")
         ]
       }
@@ -2724,7 +2816,6 @@
       category: null,
       serviceId: null,
       currency: "USD",
-      language: "EN",
       arcId: "",
       arcIdSkipped: false,
       pendingArcAction: null,
@@ -2758,226 +2849,15 @@
       return currency.symbol + (Number(value || 0) * currency.rate).toFixed(2);
     }
 
-    const itemTr = {
-      "No Weapon": "Silah Yok",
-      "Anvil": "Anvil",
-      "Bettina": "Bettina",
-      "Bobcat": "Bobcat",
-      "Burletta": "Burletta",
-      "Dolabra": "Dolabra",
-      "Equalizer": "Equalizer",
-      "Hullcracker": "Hullcracker",
-      "Il Toro": "Il Toro",
-      "Jupiter": "Jupiter",
-      "Osprey": "Osprey",
-      "Renegade": "Renegade",
-      "Canto": "Canto",
-      "Vulcano": "Vulcano",
-      "Torrente": "Torrente",
-      "Tempest": "Tempest",
-      "Venator": "Venator",
-      "Backpack Blueprints": "SÄ±rt Ã‡antasÄ± PlanlarÄ±",
-      "Gun Blueprints": "Silah PlanlarÄ±",
-      "Quick Use Blueprints": "HÄ±zlÄ± KullanÄ±m PlanlarÄ±",
-      "Gun Part Blueprints": "Silah ParÃ§asÄ± PlanlarÄ±",
-      "Combat Mk.3 (Flanking)": "SavaÅŸ Mk.3 (Kanat)",
-      "Combat Mk.3 (Aggressive)": "SavaÅŸ Mk.3 (Agresif)",
-      "Tactical Mk.3 (Defensive)": "Taktik Mk.3 (Savunma)",
-      "Tactical Mk.3 (Healing)": "Taktik Mk.3 (Ä°yileÅŸtirme)",
-      "Looting Mk.3 (Survivor)": "YaÄŸma Mk.3 (Hayatta Kalan)",
-      "Looting Mk.3 (Safekeeper)": "YaÄŸma Mk.3 (Kasa MuhafÄ±zÄ±)",
-      "Tactical Mk.3 (Revival)": "Taktik Mk.3 (CanlandÄ±rma)",
-      "Tactical Mk.3 (Smoke)": "Taktik Mk.3 (Duman)",
-      "Barricade Kit": "Barikat Kiti",
-      "Explosive Mine": "PatlayÄ±cÄ± MayÄ±n",
-      "Defibrillator": "DefibrilatÃ¶r",
-      "White Flag": "Beyaz Bayrak",
-      "Crash Mat": "DÃ¼ÅŸÃ¼ÅŸ Minderi",
-      "Powered Descender": "Motorlu Ä°niÅŸ AparatÄ±",
-      "Vita Shot": "Vita Ä°ÄŸnesi",
-      "Vita Spray": "Vita Spreyi",
-      "Wolfpack": "Kurt SÃ¼rÃ¼sÃ¼",
-      "Snap Hook": "Kanca",
-      "Smoke Grenade": "Duman BombasÄ±",
-      "Showstopper": "GÃ¶steri Durdurucu",
-      "Lure Grenade": "Yem BombasÄ±",
-      "Deadline": "Son Ã‡izgi",
-      "Seeker Grenade": "ArayÄ±cÄ± Bomba",
-      "Trailblazer": "Yol AÃ§Ä±cÄ±",
-      "Gas Mine": "Gaz MayÄ±nÄ±",
-      "Pulse Mine": "Darbe MayÄ±nÄ±",
-      "Fireworks Box": "Havai FiÅŸek Kutusu",
-      "Blue Light Stick": "Mavi IÅŸÄ±k Ã‡ubuÄŸu",
-      "Green Light Stick": "YeÅŸil IÅŸÄ±k Ã‡ubuÄŸu",
-      "Yellow Light Stick": "SarÄ± IÅŸÄ±k Ã‡ubuÄŸu",
-      "Red Light Stick": "KÄ±rmÄ±zÄ± IÅŸÄ±k Ã‡ubuÄŸu",
-      "Remote Raider Flare": "Uzaktan Raider Ä°ÅŸareti",
-      "Surge Coil": "Dalga Bobini",
-      "Tagging Grenade": "Ä°ÅŸaretleme BombasÄ±",
-      "Jolt Mine": "Åok MayÄ±nÄ±",
-      "Blaze Grenade": "Alev BombasÄ±",
-      "Trigger 'Nade": "Tetik BombasÄ±",
-      "Angled Grip II": "AÃ§Ä±lÄ± Tutamak II",
-      "Angled Grip III": "AÃ§Ä±lÄ± Tutamak III",
-      "Compensator II": "KompansatÃ¶r II",
-      "Compensator III": "KompansatÃ¶r III",
-      "Extended Barrel": "UzatÄ±lmÄ±ÅŸ Namlu",
-      "Extended Light Magazine II": "UzatÄ±lmÄ±ÅŸ Hafif ÅarjÃ¶r II",
-      "Extended Light Magazine III": "UzatÄ±lmÄ±ÅŸ Hafif ÅarjÃ¶r III",
-      "Extended Medium Magazine II": "UzatÄ±lmÄ±ÅŸ Orta ÅarjÃ¶r II",
-      "Extended Medium Magazine III": "UzatÄ±lmÄ±ÅŸ Orta ÅarjÃ¶r III",
-      "Extended Shotgun Magazine II": "UzatÄ±lmÄ±ÅŸ PompalÄ± ÅarjÃ¶rÃ¼ II",
-      "Extended Shotgun Magazine III": "UzatÄ±lmÄ±ÅŸ PompalÄ± ÅarjÃ¶rÃ¼ III",
-      "Lightweight Stock": "Hafif DipÃ§ik",
-      "Muzzle Brake II": "Namlu Freni II",
-      "Muzzle Brake III": "Namlu Freni III",
-      "Padded Stock": "Dolgulu DipÃ§ik",
-      "Shotgun Choke II": "PompalÄ± DaraltÄ±cÄ± II",
-      "Shotgun Choke III": "PompalÄ± DaraltÄ±cÄ± III",
-      "Shotgun Silencer": "PompalÄ± Susturucu",
-      "Silencer I": "Susturucu I",
-      "Silencer II": "Susturucu II",
-      "Stable Stock II": "Dengeli DipÃ§ik II",
-      "Stable Stock III": "Dengeli DipÃ§ik III",
-      "Vertical Grip III": "Dikey Tutamak III",
-      "Heavy Gun Parts": "AÄŸÄ±r Silah ParÃ§alarÄ±",
-      "Complex Gun Parts": "KarmaÅŸÄ±k Silah ParÃ§alarÄ±"
-    };
-
-    const uiTr = {
-      "Choose Your Boosting Arena": "Boosting AlanÄ±nÄ± SeÃ§",
-      "Start from the ELYSIUM home screen, choose a game, then build a Discord-ready order with clean pricing and service details.": "ELYSIUM ana ekranÄ±ndan oyunu seÃ§, servisi Ã¶zelleÅŸtir ve Discord'a hazÄ±r net fiyatlÄ± sipariÅŸ oluÅŸtur.",
-      "Choose Your Game": "Oyununu SeÃ§",
-      "Select a game first. The page will switch to that game's services and background.": "Ã–nce oyunu seÃ§. Sayfa seÃ§tiÄŸin oyunun servislerine geÃ§er.",
-      "Coming Soon": "YakÄ±nda",
-      "Select Game": "Oyunu SeÃ§",
-      "About Us": "HakkÄ±mÄ±zda",
-      "How It Works": "NasÄ±l Ã‡alÄ±ÅŸÄ±r",
-      "Clear Pricing": "Net FiyatlandÄ±rma",
-      "ELYSIUM BOOST is built as a clean Discord-ticket order desk for premium game services. Pick a service, customize it, and send boosters a readable order summary.": "ELYSIUM BOOST premium oyun servisleri iÃ§in temiz Discord ticket sipariÅŸ masasÄ±dÄ±r. Servisi seÃ§, Ã¶zelleÅŸtir ve boosterlara okunabilir Ã¶zet gÃ¶nder.",
-      "Choose a game, select a service, adjust options and quantities, add it to cart, then copy the ticket into Discord for confirmation.": "Oyunu ve servisi seÃ§, seÃ§enekleri ayarla, sepete ekle ve onay iÃ§in ticket metnini Discord'a yapÄ±ÅŸtÄ±r.",
-      "Customers can view prices in their selected currency, and the copied ticket keeps that same currency.": "MÃ¼ÅŸteriler fiyatÄ± seÃ§tikleri para biriminde gÃ¶rÃ¼r; ticket aynÄ± para birimiyle hazÄ±rlanÄ±r.",
-      "Buy Arc Raiders Services": "Arc Raiders Servisleri",
-      "Choose an Arc Raiders category, customize the service, and copy a Discord-ready order with USD booster totals.": "Arc Raiders kategorisini seÃ§, servisi Ã¶zelleÅŸtir ve Discord'a hazÄ±r sipariÅŸ oluÅŸtur.",
-      "Popular Arc Raiders Orders": "PopÃ¼ler Arc Raiders SipariÅŸleri",
-      "Fast picks rotate between Trials, All Guns, Blueprints, and Raider Coins without repeating the selected category.": "HÄ±zlÄ± sipariÅŸlerde Trials, All Guns, Blueprints ve Raider Coins seÃ§ili kategori tekrarlanmadan gÃ¶sterilir.",
-      "Open a service, customize the order, and add it to cart.": "Servisi aÃ§, sipariÅŸi Ã¶zelleÅŸtir ve sepete ekle.",
-      "All Blueprints": "TÃ¼m Blueprintler",
-      "All Guns": "TÃ¼m Silahlar",
-      "Custom Loadout": "Ã–zel Loadout",
-      "Raider Coins": "Raider Coins",
-      "Assorted Seeds": "Assorted Seeds",
-      "Depositary Service": "Depo Servisi",
-      "Trials Boost": "Trials Boost",
-      "All Raids": "TÃ¼m Raidler",
-      "Coaching": "KoÃ§luk",
-      "Leveling": "Level KasÄ±mÄ±",
-      "Workshop & Scrappy": "Workshop & Scrappy",
-      "Boss & Puzzle": "Boss & Puzzle",
-      "Expedition Boost": "Expedition Boost",
-      "Private Order": "Ã–zel SipariÅŸ",
-      "Buy Arc Raiders Blueprints": "Arc Raiders Blueprint SatÄ±n Al",
-      "Buy Arc Raiders Weapons": "Arc Raiders Silah SatÄ±n Al",
-      "Build a Custom Loadout": "Ã–zel Loadout OluÅŸtur",
-      "Buy Raider Coins": "Raider Coins SatÄ±n Al",
-      "Buy Assorted Seeds": "Assorted Seeds SatÄ±n Al",
-      "Arc Raiders Depositary Service": "Arc Raiders Depo Servisi",
-      "Arc Raiders Trials Boost": "Arc Raiders Trials Boost",
-      "Arc Raiders Raid Boost": "Arc Raiders Raid Boost",
-      "Arc Raiders Coaching": "Arc Raiders KoÃ§luk",
-      "Arc Raiders Leveling": "Arc Raiders Level KasÄ±mÄ±",
-      "Arc Raiders Workshop & Scrappy": "Arc Raiders Workshop & Scrappy",
-      "Arc Raiders Boss & Puzzle": "Arc Raiders Boss & Puzzle",
-      "Private Arc Raiders Order": "Ã–zel Arc Raiders SipariÅŸi",
-      "Details": "Detaylar",
-      "Customize": "Ã–zelleÅŸtir",
-      "Clear": "Temizle",
-      "Total": "Toplam",
-      "Add to Cart": "Sepete Ekle",
-      "Search services": "Servis ara",
-      "Search": "Ara",
-      "Leave Feedback": "Feedback BÄ±rak",
-      "Open Discord": "Discord AÃ§",
-      "Copy Discord Ticket": "Discord Ticket Kopyala",
-      "Clear Cart": "Sepeti BoÅŸalt",
-      "Order Cart": "SipariÅŸ Sepeti",
-      "Select Blueprints": "Blueprint SeÃ§",
-      "Search Blueprints": "Blueprint Ara",
-      "Type blueprint name...": "Blueprint adÄ±nÄ± yaz...",
-      "Select All": "Hepsini SeÃ§",
-      "Weapon": "Silah",
-      "Quantity": "Adet",
-      "Mods": "Modlar",
-      "No Mods": "Mod Yok",
-      "Blue Mods - $0.15 each (was $0.30)": "Blue Mod - adet $0.15 (Ã¶nce $0.30)",
-      "Legendary / Epic Mods - $0.25 each (was $0.50)": "Legendary / Epic Mod - adet $0.25 (Ã¶nce $0.50)",
-      "Mod quantity automatically matches weapon quantity.": "Mod adedi otomatik olarak silah adediyle eÅŸleÅŸir.",
-      "Event Mode": "Event Modu",
-      "Raider just ordered": "Raider satÄ±n aldÄ±!",
-      "Discounted": "Ä°ndirimli",
-      "Popular deal, 20% off": "PopÃ¼ler fÄ±rsat, %20 indirim",
-      "Bulk deal, 20% off": "Toplu alÄ±m, %20 indirim",
-      "Price updates every 100k": "Fiyat her 100k'da gÃ¼ncellenir"
-      ,"No blueprint found.": "Blueprint bulunamadÄ±."
-      ,"Most requested services for this game.": "Bu oyun iÃ§in en Ã§ok istenen servisler."
-      ,"Popular": "PopÃ¼ler"
-      ,"Services": "Servisler"
-      ,"Select a service and adjust the order panel below.": "Servisi seÃ§ ve aÅŸaÄŸÄ±daki sipariÅŸ panelini ayarla."
-      ,"Coming soon. We are polishing this section after the Arc Raiders order flow is finished.": "YakÄ±nda. Arc Raiders sipariÅŸ akÄ±ÅŸÄ± bittikten sonra bu bÃ¶lÃ¼mÃ¼ hazÄ±rlÄ±yoruz."
-    };
-
-    const orderTr = {
-      "20x Tempest": "20x Tempest",
-      "Anvil Blueprint": "Anvil Blueprint",
-      "Bobcat Blueprint": "Bobcat Blueprint",
-      "Tempest Blueprint": "Tempest Blueprint",
-      "Vulcano Blueprint": "Vulcano Blueprint",
-      "Venator Blueprint": "Venator Blueprint",
-      "Looting Mk.3 Survivor Blueprint": "Looting Mk.3 Survivor Blueprint",
-      "20x Bobcat": "20x Bobcat",
-      "10x Bobcat + 10x Vulcano": "10x Bobcat + 10x Vulcano",
-      "3M Discounted Coins": "3M indirimli Coins",
-      "4x Raid Boost": "4x Raid Boost",
-      "6M Discounted Coins": "6M indirimli Coins",
-      "20x Looting Mk.3 Survivor": "20x Looting Mk.3 Survivor",
-      "20x Medium Shield": "20x Medium Shield",
-      "100x Herbal Bandage": "100x Herbal Bandage",
-      "2,500 Assorted Seeds": "2.500 Assorted Seeds",
-      "Trials Boost +3 Rank Up": "Trials Boost +3 Rank Up",
-      "Scrappy Level 1 to 5": "Scrappy Level 1'den 5'e",
-      "Expedition Boost": "Expedition Boost",
-      "10x Canto": "10x Canto",
-      "10x Venator": "10x Venator",
-      "20x Anvil": "20x Anvil",
-      "Extended Medium Mag III Blueprint": "Extended Medium Mag III Blueprint",
-      "Extended Light Mag III Blueprint": "Extended Light Mag III Blueprint",
-      "75x Trigger Nade": "75x Trigger Nade"
-    };
-
-    function trName(name) {
-      if (state.language !== "TR") return name;
-      return itemTr[name] || name;
-    }
-
-    function ui(text) {
-      return state.language === "TR" ? (uiTr[text] || text) : text;
-    }
-
-    function translateOrder(text) {
-      return state.language === "TR" ? (orderTr[text] || text) : text;
-    }
-
-    function displayItemName(name) {
-      const translated = trName(name);
-      return state.language === "TR" && translated !== name ? `${translated} (${name})` : translated;
-    }
-
-    function displayItemList(list) {
-      return list.map(displayItemName).join(", ");
-    }
+    function trName(name) { return name; }
+    function ui(text) { return text; }
+    function translateOrder(text) { return text; }
+    function displayItemName(name) { return name; }
+    function displayItemList(list) { return list.join(", "); }
 
     function comparePrice(value, service) {
       if (!value) return 0;
+      if (service?.noDiscount) return 0;
       return service?.oldUSD || value * 1.3;
     }
 
@@ -2991,8 +2871,9 @@
     }
 
     function serviceSaleBadge(service) {
-      if (!service || ["private", "loadout", "leveling"].includes(service.form) || !service.fromUSD) return "";
+      if (!service || ["private", "loadout", "leveling"].includes(service.form) || !service.fromUSD || service.noDiscount) return "";
       const old = comparePrice(service.fromUSD, service);
+      if (!old) return "";
       const percent = service.oldUSD ? Math.round((1 - service.fromUSD / service.oldUSD) * 100) : 30;
       return `<span class="price-old">${displayMoney(old)}</span> ${displayMoney(service.fromUSD)} ${service.suffix || ""} - ${percent}% off`;
     }
@@ -3158,7 +3039,10 @@
 
     function renderHero() {
       const game = currentGame();
-      $("hero").style.setProperty("--hero-bg", `url("${game ? game.heroBg : "assets/bg-elysium-4k.webp"}")`);
+      const heroBg = game
+        ? `url("${game.heroBg}")`
+        : `url("assets/ana1.webp"), url("assets/bg-elysium-4k.webp")`;
+      $("hero").style.setProperty("--hero-bg", heroBg);
       $("hero").style.setProperty("--hero-position", game ? game.heroPosition || "center center" : "center center");
       $("heroKicker").textContent = game ? ui(game.kicker) : "ELYSIUM BOOST";
       $("heroTitle").textContent = game ? ui(game.title) : ui("Choose Your Boosting Arena");
@@ -3464,8 +3348,9 @@
       }, 8000);
     }
 
-    function qtyField(id, label, value = 0, min = 0) {
-      return `<div><label for="${id}">${label}</label><input id="${id}" type="number" min="${min}" value="${value}"></div>`;
+    function qtyField(id, label, value = 0, min = 0, max = null) {
+      const maxAttr = max != null ? ` max="${max}"` : "";
+      return `<div><label for="${id}">${label}</label><input id="${id}" type="number" min="${min}"${maxAttr} value="${value}"></div>`;
     }
 
     function weaponOptions(includeNone = true) {
@@ -3490,36 +3375,33 @@
         `;
       }
       if (type === "coins") {
+        const tierButtons = coinTiers.map(tier => `<button class="raid-pill" type="button" data-coin-deal="${tier.amount}"><strong>${tier.label}<small>Popular deal, ${Math.round(tier.discount * 100)}% off</small></strong><span>${moneyUSD(tier.amount / 100000 * prices.coins100k * (1 - tier.discount))}</span></button>`).join("");
         return `
           <div class="coin-panel">
             <input id="coinDeal" type="hidden" value="">
             <div class="coin-readout">
               <div><label for="coinAmount">Raider Coins</label><strong><span id="coinLabel">1,000,000</span><span class="discounted-tag" id="coinDiscountTag">${ui("Discounted")}</span></strong></div>
-              <span>100k minimum<br>10M maximum</span>
+              <span>100k minimum<br>9M maximum</span>
             </div>
-            <input id="coinAmount" type="range" min="100000" max="10000000" step="100000" value="1000000">
+            <input id="coinAmount" type="range" min="100000" max="9000000" step="100000" value="1000000">
             <div class="deal-hint" id="coinNextHint"></div>
-            <div class="coin-quick-grid seed-quick-grid">
-              <button class="raid-pill" type="button" data-coin-deal="3000000"><strong>3M Coins<small>${ui("Popular deal, 20% off")}</small></strong><span>${moneyUSD(3000000 / 100000 * prices.coins100k * .80)}</span></button>
-              <button class="raid-pill" type="button" data-coin-deal="6000000"><strong>6M Coins<small>${ui("Popular deal, 20% off")}</small></strong><span>${moneyUSD(6000000 / 100000 * prices.coins100k * .80)}</span></button>
-            </div>
+            <div class="coin-quick-grid seed-quick-grid">${tierButtons}</div>
             <div class="badge" style="justify-self:start">${ui("Price updates every 100k")}</div>
           </div>
         `;
       }
       if (type === "seeds") {
+        const seedButtons = seedTiers.map(tier => `<button class="raid-pill" type="button" data-seed-deal="${tier.amount}"><strong>${tier.label}<small>Bulk deal, ${Math.round(tier.discount * 100)}% off</small></strong><span>${moneyUSD(tier.amount / 100 * prices.seeds100 * (1 - tier.discount))}</span></button>`).join("");
         return `
           <div class="coin-panel">
             <input id="seedDeal" type="hidden" value="">
             <div class="coin-readout">
               <div><label for="seedAmount">Assorted Seeds</label><strong><span id="seedLabel">100</span><span class="discounted-tag" id="seedDiscountTag">${ui("Discounted")}</span></strong></div>
-              <span>100 minimum<br>10,000 maximum</span>
+              <span>100 minimum<br>5,000 maximum</span>
             </div>
-            <input id="seedAmount" type="range" min="100" max="10000" step="100" value="100">
+            <input id="seedAmount" type="range" min="100" max="5000" step="100" value="100">
             <div class="deal-hint" id="seedNextHint"></div>
-            <div class="coin-quick-grid">
-              ${[2500,5000,10000].map(amount => `<button class="raid-pill" type="button" data-seed-deal="${amount}"><strong>${amount.toLocaleString()} Seeds<small>${ui("Bulk deal, 20% off")}</small></strong><span>${moneyUSD(amount / 100 * prices.seeds100 * .80)}</span></button>`).join("")}
-            </div>
+            <div class="coin-quick-grid">${seedButtons}</div>
             <div class="badge" style="justify-self:start">100 seeds = ${moneyUSD(prices.seeds100)}</div>
           </div>
         `;
@@ -3528,20 +3410,21 @@
         return `
           <div class="coin-panel">
             <div class="coin-readout">
-              <div><label for="depositarySlots">Storage Slots</label><strong id="slotLabel">50 Slots</strong></div>
+              <div><label for="depositarySlots">Storage Slots</label><strong id="slotLabel">60 Slots</strong></div>
               <span>Slider moves by 20<br>custom amount allowed</span>
             </div>
             <div class="depositary-grid">
-              <div>
-                <label for="depositarySlots">Quick Slider</label>
-                <input id="depositarySlots" type="range" min="20" max="200" step="20" value="60">
-              </div>
-              <div>
+              <div class="depositary-custom-row">
                 <label for="depositaryCustom">Custom</label>
                 <input id="depositaryCustom" type="number" min="1" max="999" step="1" value="60">
               </div>
+              <div class="depositary-slider-row">
+                <label for="depositarySlots">Quick Slider</label>
+                <input id="depositarySlots" type="range" min="20" max="280" step="20" value="60">
+              </div>
             </div>
-            <div class="range-ticks">${[20,40,60,80,100,120,140,160,180,200].map(slot => `<span>${slot}</span>`).join("")}</div>
+            <div class="range-ticks">${[20,60,100,140,180,220,260,280].map(slot => `<span>${slot}</span>`).join("")}</div>
+            <div class="badge" style="justify-self:start">1 slot = ${moneyUSD(prices.depositarySlot)}</div>
           </div>
         `;
       }
@@ -3599,7 +3482,7 @@
         `;
       }
       if (type === "leveling") {
-        return `<div class="field-grid">${qtyField("currentLevel", "Current Level", 1, 1)}${qtyField("targetLevel", "Target Level", 25, 2)}</div><div><label for="speed">Speed</label><select id="speed"><option value="1">Standard</option><option value="1.10">Express (+10%)</option><option value="1.25">Super Express (+25%)</option></select></div>`;
+        return `<div class="field-grid">${qtyField("currentLevel", "Current Level", 1, 1, 74)}${qtyField("targetLevel", "Target Level", 25, 2, 75)}</div><div><label for="speed">Speed</label><select id="speed"><option value="1">Standard</option><option value="1.10">Express (+10%)</option><option value="1.25">Super Express (+25%)</option></select></div>`;
       }
       if (type === "workshop") {
         return `
@@ -3664,7 +3547,8 @@
             </div>
           </div>
           <div class="field-block">
-            <div class="field-block-head"><h4>Raid Amount</h4><label class="event-switch event-mode-card" style="--event-bg:url('assets/event-mod.webp')"><input id="raidEventMode" type="checkbox"><span>Event Mode</span></label></div>
+            <div class="field-block-head"><h4>Raid Amount</h4></div>
+            <label class="event-switch event-mode-card is-block" style="--event-bg:url('assets/event-mod.webp')"><input id="raidEventMode" type="checkbox"><span>Event Mode</span></label>
             <input id="raidCount" type="hidden" value="2">
             <div class="quick-raid-grid">${raidPackageButtons}</div>
             <p class="raid-panel-note">Event Mode adds ${moneyUSD(prices.event)} per selected raid when enabled.</p>
@@ -3834,13 +3718,13 @@
         const dealButtons = Array.from(document.querySelectorAll("#orderForm [data-coin-deal]"));
         const syncCoin = () => {
           const amount = Number(val("coinAmount"));
-          const deal = [3000000, 6000000].includes(amount);
-          $("coinDeal").value = deal ? String(amount) : "";
+          const tier = coinTier(amount);
+          $("coinDeal").value = tier ? String(amount) : "";
           dealButtons.forEach(button => button.classList.toggle("active", Number(button.dataset.coinDeal) === amount));
-          $("coinDiscountTag").classList.toggle("active", deal);
-          const next = amount < 3000000 ? 3000000 : amount < 6000000 ? 6000000 : 0;
+          $("coinDiscountTag").classList.toggle("active", Boolean(tier));
+          const next = nextCoinTier(amount);
           $("coinNextHint").classList.toggle("active", Boolean(next));
-          $("coinNextHint").textContent = next ? `Add ${(next - amount).toLocaleString()} more for 20% discount` : "";
+          $("coinNextHint").textContent = next ? `Add ${(next.amount - amount).toLocaleString()} more for ${Math.round(next.discount * 100)}% discount` : "";
           $("coinLabel").textContent = amount.toLocaleString();
           updateTotal();
         };
@@ -3855,13 +3739,13 @@
         const dealButtons = Array.from(document.querySelectorAll("#orderForm [data-seed-deal]"));
         const syncSeeds = () => {
           const amount = Number(val("seedAmount"));
-          const deal = [2500, 5000, 10000].includes(amount);
-          $("seedDeal").value = deal ? String(amount) : "";
+          const tier = seedTier(amount);
+          $("seedDeal").value = tier ? String(amount) : "";
           dealButtons.forEach(button => button.classList.toggle("active", Number(button.dataset.seedDeal) === amount));
-          $("seedDiscountTag").classList.toggle("active", deal);
-          const next = amount < 2500 ? 2500 : amount < 5000 ? 5000 : amount < 10000 ? 10000 : 0;
+          $("seedDiscountTag").classList.toggle("active", Boolean(tier));
+          const next = nextSeedTier(amount);
           $("seedNextHint").classList.toggle("active", Boolean(next));
-          $("seedNextHint").textContent = next ? `Add ${(next - amount).toLocaleString()} more for 20% discount` : "";
+          $("seedNextHint").textContent = next ? `Add ${(next.amount - amount).toLocaleString()} more for ${Math.round(next.discount * 100)}% discount` : "";
           $("seedLabel").textContent = amount.toLocaleString();
           updateTotal();
         };
@@ -3876,7 +3760,7 @@
         const syncSlots = source => {
           let slots = Math.max(1, Math.min(999, Math.round(Number(val(source) || 1))));
           if (source === "depositarySlots") $("depositaryCustom").value = slots;
-          if (source === "depositaryCustom") $("depositarySlots").value = Math.max(20, Math.min(200, Math.round(slots / 20) * 20));
+          if (source === "depositaryCustom") $("depositarySlots").value = Math.max(20, Math.min(280, Math.round(slots / 20) * 20));
           $("slotLabel").textContent = slots + " Slots";
           updateTotal();
         };
@@ -4062,11 +3946,161 @@
       };
     }
 
+    const PRIVATE_ESTIMATE_NOTE = "This is only an estimated price. Final price may change after staff review.";
+
+    function parseNumber(text) {
+      if (!text) return 0;
+      let value = String(text).toLowerCase().replace(/[,_\s]/g, "");
+      let multiplier = 1;
+      if (value.endsWith("kk")) { multiplier = 1_000_000; value = value.slice(0, -2); }
+      else if (value.endsWith("k")) { multiplier = 1_000; value = value.slice(0, -1); }
+      else if (value.endsWith("m")) { multiplier = 1_000_000; value = value.slice(0, -1); }
+      const n = parseFloat(value);
+      return isNaN(n) ? 0 : n * multiplier;
+    }
+
+    function estimatePrivateOrder(text) {
+      const result = { total: 0, lines: [] };
+      if (!text) return result;
+      const lower = " " + String(text).toLowerCase().replace(/\s+/g, " ") + " ";
+      const tryMatch = (regex, handler) => {
+        let match;
+        regex.lastIndex = 0;
+        while ((match = regex.exec(lower)) !== null) handler(match);
+      };
+
+      tryMatch(/(\d[\d,_.]*\s*[km]{1,2})\s*(?:raider\s*)?coins?\b/g, m => {
+        const amount = parseNumber(m[1]);
+        if (amount < 1000) return;
+        const cost = (amount / 100000) * prices.coins100k;
+        result.total += cost;
+        result.lines.push(`${amount.toLocaleString()} Raider Coins ≈ ${moneyUSD(cost)}`);
+      });
+
+      tryMatch(/(\d[\d,_.]*)\s*(?:assorted\s*)?seeds?\b/g, m => {
+        const amount = parseNumber(m[1]);
+        if (amount < 50) return;
+        const cost = (amount / 100) * prices.seeds100;
+        result.total += cost;
+        result.lines.push(`${amount.toLocaleString()} Assorted Seeds ≈ ${moneyUSD(cost)}`);
+      });
+
+      tryMatch(/(\d+)\s*x?\s*blueprints?\b/g, m => {
+        const qty = parseInt(m[1], 10);
+        if (!qty) return;
+        const cost = qty * prices.blueprint;
+        result.total += cost;
+        result.lines.push(`${qty}x Blueprints ≈ ${moneyUSD(cost)}`);
+      });
+
+      tryMatch(/(\d+)\s*x?\s*(?:weapons?|guns?)\b/g, m => {
+        const qty = parseInt(m[1], 10);
+        if (!qty) return;
+        const cost = qty * prices.weapon;
+        result.total += cost;
+        result.lines.push(`${qty}x Weapons ≈ ${moneyUSD(cost)}`);
+      });
+
+      tryMatch(/(\d+)\s*x?\s*(?:legendary|epic|premium)\s*mods?\b/g, m => {
+        const qty = parseInt(m[1], 10);
+        if (!qty) return;
+        const cost = qty * prices.premiumMod;
+        result.total += cost;
+        result.lines.push(`${qty}x Legendary / Epic Mods ≈ ${moneyUSD(cost)}`);
+      });
+
+      tryMatch(/(\d+)\s*x?\s*blue\s*mods?\b/g, m => {
+        const qty = parseInt(m[1], 10);
+        if (!qty) return;
+        const cost = qty * prices.blueMod;
+        result.total += cost;
+        result.lines.push(`${qty}x Blue Mods ≈ ${moneyUSD(cost)}`);
+      });
+
+      tryMatch(/(\d+)\s*x?\s*(?:raids?|raid\s*runs?)\b/g, m => {
+        const qty = parseInt(m[1], 10);
+        if (!qty) return;
+        const cost = qty * prices.raid;
+        result.total += cost;
+        result.lines.push(`${qty}x Raids ≈ ${moneyUSD(cost)}`);
+      });
+
+      tryMatch(/(\d+)\s*x?\s*(?:trials?|trial\s*runs?)\b/g, m => {
+        const qty = parseInt(m[1], 10);
+        if (!qty) return;
+        const cost = qty * prices.trialsBase;
+        result.total += cost;
+        result.lines.push(`${qty}x Trials ≈ ${moneyUSD(cost)}`);
+      });
+
+      tryMatch(/(\d+)\s*(?:slots?|depository|depositary)\b/g, m => {
+        const qty = parseInt(m[1], 10);
+        if (!qty) return;
+        const cost = qty * prices.depositarySlot;
+        result.total += cost;
+        result.lines.push(`${qty} Depositary Slots ≈ ${moneyUSD(cost)}`);
+      });
+
+      tryMatch(/(\d+)\s*x?\s*workshop\s*(?:benches?|workbenches?|levels?)?\b/g, m => {
+        const qty = parseInt(m[1], 10);
+        if (!qty) return;
+        const cost = qty * prices.workshopBench;
+        result.total += cost;
+        result.lines.push(`${qty}x Workshop Benches ≈ ${moneyUSD(cost)}`);
+      });
+
+      tryMatch(/scrappy\s*(?:level\s*)?(\d+)\s*(?:to|->|–|—)\s*(\d+)/g, m => {
+        const from = parseInt(m[1], 10);
+        const to = parseInt(m[2], 10);
+        if (to <= from) return;
+        const cost = Math.max(0, to - from) * prices.scrappyLevel;
+        result.total += cost;
+        result.lines.push(`Scrappy ${from} to ${to} ≈ ${moneyUSD(cost)}`);
+      });
+
+      tryMatch(/(?:level|lvl)\s*(\d+)\s*(?:to|->|–|—)\s*(\d+)/g, m => {
+        const from = parseInt(m[1], 10);
+        const to = parseInt(m[2], 10);
+        if (to <= from) return;
+        const cost = levelCost(from, to);
+        result.total += cost;
+        result.lines.push(`Leveling ${from} to ${Math.min(75, to)} ≈ ${moneyUSD(cost)}`);
+      });
+
+      tryMatch(/(\d+)\s*x?\s*(?:queen|matriarch|harvester|boss)\b/g, m => {
+        const qty = parseInt(m[1], 10);
+        if (!qty) return;
+        const cost = qty * 20;
+        result.total += cost;
+        result.lines.push(`${qty}x Boss/Puzzle ≈ ${moneyUSD(cost)}`);
+      });
+
+      tryMatch(/(\d+)\s*x?\s*(?:coaching|coach)\b/g, m => {
+        const qty = parseInt(m[1], 10);
+        if (!qty) return;
+        const cost = qty * 20;
+        result.total += cost;
+        result.lines.push(`${qty}x Coaching Hours ≈ ${moneyUSD(cost)}`);
+      });
+
+      result.total = Math.round(result.total * 100) / 100;
+      return result;
+    }
+
     function levelCost(current, target) {
-      if (target <= current) return 0;
-      return Math.max(0, Math.min(target, 25) - current) * 2 +
-        Math.max(0, Math.min(target, 50) - Math.max(current, 25)) * 2.5 +
-        Math.max(0, target - Math.max(current, 50)) * 3.5;
+      const cap = Math.min(target, 75);
+      if (cap <= current) return 0;
+      return Math.max(0, Math.min(cap, 25) - current) * 2 +
+        Math.max(0, Math.min(cap, 50) - Math.max(current, 25)) * 2.5 +
+        Math.max(0, cap - Math.max(current, 50)) * 3;
+    }
+
+    function oldLevelCost(current, target) {
+      const cap = Math.min(target, 75);
+      if (cap <= current) return 0;
+      return Math.max(0, Math.min(cap, 25) - current) * 2 +
+        Math.max(0, Math.min(cap, 50) - Math.max(current, 25)) * 2.5 +
+        Math.max(0, cap - Math.max(current, 50)) * 3.5;
     }
 
     function calculate() {
@@ -4083,22 +4117,34 @@
         return { total: all.length * prices.blueprint, oldTotal: all.length * 1.50, valid: all.length > 0, details };
       }
       if (type === "coins") {
-        const amount = num("coinAmount");
+        const amount = Math.max(100000, Math.min(9000000, num("coinAmount")));
         const base = amount / 100000 * prices.coins100k;
-        const deal = [3000000, 6000000].includes(amount);
-        const discount = deal ? base * .20 : 0;
-        return { total: base - discount, oldTotal: deal ? base : 0, valid: amount >= 100000, details: `${amount.toLocaleString()} Raider Coins${deal ? `\nPopular Deal Discount: -${moneyUSD(discount)} USD (20%)` : ""}` };
+        const tier = coinTier(amount);
+        const discount = tier ? base * tier.discount : 0;
+        const percentLabel = tier ? Math.round(tier.discount * 100) : 0;
+        return {
+          total: base - discount,
+          oldTotal: tier ? base : 0,
+          valid: amount >= 100000,
+          details: `${amount.toLocaleString()} Raider Coins${tier ? `\nPopular Deal Discount: -${moneyUSD(discount)} USD (${percentLabel}%)` : ""}`
+        };
       }
       if (type === "seeds") {
-        const amount = num("seedAmount");
+        const amount = Math.max(100, Math.min(5000, num("seedAmount")));
         const base = amount / 100 * prices.seeds100;
-        const deal = [2500, 5000, 10000].includes(amount);
-        const discount = deal ? base * .20 : 0;
-        return { total: base - discount, oldTotal: deal ? base : 0, valid: amount >= 100, details: `${amount.toLocaleString()} Assorted Seeds${deal ? `\nBulk Deal Discount: -${moneyUSD(discount)} USD (20%)` : ""}` };
+        const tier = seedTier(amount);
+        const discount = tier ? base * tier.discount : 0;
+        const percentLabel = tier ? Math.round(tier.discount * 100) : 0;
+        return {
+          total: base - discount,
+          oldTotal: tier ? base : 0,
+          valid: amount >= 100,
+          details: `${amount.toLocaleString()} Assorted Seeds${tier ? `\nBulk Deal Discount: -${moneyUSD(discount)} USD (${percentLabel}%)` : ""}`
+        };
       }
       if (type === "depositary") {
         const slots = Math.max(1, num("depositaryCustom"));
-        return { total: slots * prices.depositarySlot, valid: slots >= 1, details: `Depositary Slots: ${slots}\nRate: ${moneyUSD(prices.depositarySlot)} per slot\n50 Slot Package: ${moneyUSD(50 * prices.depositarySlot)}` };
+        return { total: slots * prices.depositarySlot, valid: slots >= 1, details: `Depositary Slots: ${slots}\nRate: ${moneyUSD(prices.depositarySlot)} per slot\n50 Slot Package: ${moneyUSD(50 * prices.depositarySlot)}\n280 Slot Maximum: ${moneyUSD(280 * prices.depositarySlot)}` };
       }
       if (type === "guns") {
         const line = calcWeapon("gun", true);
@@ -4133,9 +4179,17 @@
         return { total: hours * (mode === "Trio" ? 30 : 20), valid: true, details: `${focus}\nSession: ${mode}\nHours: ${hours}\nMaximum: 6 hours per ticket${notes ? `\nCoaching Notes: ${notes}` : ""}` };
       }
       if (type === "leveling") {
-        const current = Math.max(1, num("currentLevel"));
-        const target = Math.max(1, num("targetLevel"));
-        return { total: levelCost(current, target) * Number(val("speed")), valid: target > current, details: `Current Level: ${current}\nTarget Level: ${target}\nSpeed: ${$("speed").selectedOptions[0].textContent}` };
+        const current = Math.max(1, Math.min(74, num("currentLevel")));
+        const target = Math.max(1, Math.min(75, num("targetLevel")));
+        const speed = Number(val("speed"));
+        const total = levelCost(current, target) * speed;
+        const oldTotal = oldLevelCost(current, target) * speed * 0.90;
+        return {
+          total,
+          oldTotal: oldTotal > total ? oldTotal : 0,
+          valid: target > current,
+          details: `Current Level: ${current}\nTarget Level: ${target}\nSpeed: ${$("speed").selectedOptions[0].textContent}`
+        };
       }
       if (type === "workshop") {
         if (val("workshopBundle") === "1") {
@@ -4166,11 +4220,15 @@
         const levels = Math.max(0, to - from);
         const levelMultiplier = levels / 2;
         const fullTotal = selected.length === workshops.length ? prices.workshopMax : selected.length * prices.workshopBench;
-        const total = fullTotal * levelMultiplier;
+        const subtotal = fullTotal * levelMultiplier;
+        const workshopDiscountRate = 0.25;
+        const discount = subtotal * workshopDiscountRate;
+        const total = subtotal - discount;
         return {
           total,
+          oldTotal: subtotal > total ? subtotal : 0,
           valid: selected.length > 0 && levels > 0,
-          details: `From Level: ${from}\nTo Level: ${to}\nWorkshops: ${selected.join(", ") || "None"}\nFull 1-3 Rate: ${moneyUSD(prices.workshopBench)} per workbench\nAll 6 Workbench Package: ${moneyUSD(prices.workshopMax)}`
+          details: `From Level: ${from}\nTo Level: ${to}\nWorkshops: ${selected.join(", ") || "None"}\nUnit Rate: ${moneyUSD(prices.workshopBench)} per workbench\nAll 6 Workbench Package: ${moneyUSD(prices.workshopMax)}\nSubtotal: ${moneyUSD(subtotal)}\nWorkshop Discount: -${moneyUSD(discount)} USD (25%)`
         };
       }
       if (type === "raid") return calcRaid();
@@ -4184,7 +4242,25 @@
         return { total: qty * 20, valid: true, details: `${qty}x ${val("boss")}` };
       }
       const req = val("privateText").trim();
-      return { total: 0, valid: req.length > 0, custom: true, details: req || "Custom request to be discussed in Discord" };
+      if (!req) return { total: 0, valid: false, custom: true, details: "Custom request to be discussed in Discord" };
+      const estimate = estimatePrivateOrder(req);
+      const hasEstimate = estimate.total > 0;
+      const detailLines = [`Request: ${req}`];
+      if (hasEstimate) {
+        detailLines.push("");
+        detailLines.push("Estimated breakdown:");
+        estimate.lines.forEach(line => detailLines.push(`- ${line}`));
+        detailLines.push(`Estimated Total: ${moneyUSD(estimate.total)} USD`);
+      }
+      detailLines.push("");
+      detailLines.push(`Note: ${PRIVATE_ESTIMATE_NOTE}`);
+      return {
+        total: estimate.total,
+        valid: true,
+        custom: !hasEstimate,
+        estimated: hasEstimate,
+        details: detailLines.join("\n")
+      };
     }
 
     function calcLoadout() {
@@ -4238,8 +4314,11 @@
     function updateTotal() {
       const result = calculate();
       const old = result.oldTotal && result.oldTotal > result.total ? `<span class="old-total">${displayMoney(result.oldTotal)}</span>` : "";
-      $("liveTotal").innerHTML = result.custom ? "CUSTOM" : old + displayMoney(result.total);
-      $("usdHint").textContent = result.custom ? "Ticket value: CUSTOM" : "Ticket value: " + moneyUSD(result.total) + " USD";
+      const estTag = result.estimated ? `<span class="estimated-tag">Estimated</span>` : "";
+      $("liveTotal").innerHTML = result.custom ? "CUSTOM" : old + displayMoney(result.total) + estTag;
+      $("usdHint").textContent = result.custom
+        ? "Ticket value: CUSTOM"
+        : (result.estimated ? "Estimated ticket value: " : "Ticket value: ") + moneyUSD(result.total) + " USD";
       $("addToCart").disabled = !result.valid;
     }
 
@@ -4260,11 +4339,12 @@
         total: result.total,
         oldTotal: result.oldTotal || 0,
         custom: Boolean(result.custom),
+        estimated: Boolean(result.estimated),
         viewedCurrency: state.currency,
-        language: state.language
+        language: "EN"
       });
       renderCart();
-      showToast("Added to cart.");
+      showToast(result.estimated ? "Estimated order added to cart." : "Added to cart.");
     }
 
     function renderCart() {
@@ -4273,15 +4353,21 @@
       if (!state.cart.length) {
         $("cartBody").innerHTML = `<div class="empty">Your cart is empty. Select a service and add it to cart first.</div>`;
       } else {
-        $("cartBody").innerHTML = state.cart.map(item => `
-          <article class="cart-item">
-            <div class="cart-item-top">
-              <div><h3>${ui(item.title)}</h3><p>Game: ${ui(item.game)}\n${escapeHtml(item.details)}</p></div>
-              <div class="price">${item.custom ? "CUSTOM" : displayInCurrency(item.total, item.viewedCurrency)}</div>
-            </div>
-            <button class="btn remove" type="button" data-remove="${item.id}">Remove</button>
-          </article>
-        `).join("");
+        $("cartBody").innerHTML = state.cart.map(item => {
+          const priceLabel = item.custom
+            ? "CUSTOM"
+            : (item.estimated ? `<span class="estimated-tag">Estimated</span>${displayInCurrency(item.total, item.viewedCurrency)}` : displayInCurrency(item.total, item.viewedCurrency));
+          const estimateNote = item.estimated ? `<p class="cart-estimate-note">${escapeHtml(PRIVATE_ESTIMATE_NOTE)}</p>` : "";
+          return `
+            <article class="cart-item">
+              <div class="cart-item-top">
+                <div><h3>${ui(item.title)}</h3><p>Game: ${ui(item.game)}\n${escapeHtml(item.details)}</p>${estimateNote}</div>
+                <div class="price">${priceLabel}</div>
+              </div>
+              <button class="btn remove" type="button" data-remove="${item.id}">Remove</button>
+            </article>
+          `;
+        }).join("");
         document.querySelectorAll("[data-remove]").forEach(button => button.addEventListener("click", () => {
           state.cart = state.cart.filter(item => item.id !== button.dataset.remove);
           renderCart();
@@ -4326,22 +4412,19 @@
 
     function getArcIdLine() {
       if (!cartNeedsArcId()) return "";
-      const label = state.language === "TR" ? "Oyun iÃ§i ID" : "Embark ID";
+      const label = "Embark ID";
       if (state.arcId) return `${label}: ${state.arcId}`;
-      if (state.arcIdSkipped) return `${label}: ${state.language === "TR" ? "Discord'da yazacak" : "Will type it on Discord"}`;
+      if (state.arcIdSkipped) return `${label}: Will type it on Discord`;
       return "";
     }
 
     function updateArcIdModalText() {
-      const isTr = state.language === "TR";
-      $("arcIdTitle").textContent = isTr ? "Oyun iÃ§i ID" : "Embark ID";
-      $("arcIdCopy").textContent = isTr
-        ? "Discord ticket acmadan once oyun ici ID bilgisini ekleyebilirsin."
-        : "Add your in-game ID before copying or opening the Discord ticket.";
-      $("arcIdLabel").textContent = isTr ? "Oyun iÃ§i ID" : "Embark ID";
-      $("arcIdInput").placeholder = isTr ? "Oyuncu adi#0000" : "Name#0000";
-      $("arcIdDone").setAttribute("aria-label", isTr ? "Tamam" : "Done");
-      $("arcIdSkip").setAttribute("aria-label", isTr ? "Discord'a yazacagim" : "Will type it on Discord");
+      $("arcIdTitle").textContent = "Embark ID";
+      $("arcIdCopy").textContent = "Add your in-game ID before copying or opening the Discord ticket.";
+      $("arcIdLabel").textContent = "Embark ID";
+      $("arcIdInput").placeholder = "Name#0000";
+      $("arcIdDone").setAttribute("aria-label", "Done");
+      $("arcIdSkip").setAttribute("aria-label", "Will type it on Discord");
     }
 
     function openArcIdModal(action) {
@@ -4376,20 +4459,26 @@
     function ticketText() {
       const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
       const hasCustom = state.cart.some(item => item.custom);
+      const hasEstimate = state.cart.some(item => item.estimated);
       const lines = ["ELYSIUM BOOST - ORDER TICKET", "Discord Ticket: " + DISCORD_URL, "", "ORDER ITEMS:"];
       state.cart.forEach((item, index) => {
         lines.push(`${index + 1}. ${item.game} - ${item.title}`);
         item.details.split("\n").forEach(line => lines.push(`   - ${line}`));
-        lines.push(`   Price: ${item.custom ? "CUSTOM" : displayInCurrency(item.total, item.viewedCurrency)}`);
+        const priceLine = item.custom
+          ? "CUSTOM"
+          : (item.estimated ? `Estimated ${displayInCurrency(item.total, item.viewedCurrency)}` : displayInCurrency(item.total, item.viewedCurrency));
+        lines.push(`   Price: ${priceLine}`);
         lines.push(`   Currency: ${item.viewedCurrency}`);
         lines.push("");
       });
       const currency = state.cart[0]?.viewedCurrency || state.currency;
+      const totalLabel = hasEstimate ? "ESTIMATED TOTAL" : "TOTAL";
       const totalText = hasCustom ? displayInCurrency(total, currency) + " + CUSTOM" : displayInCurrency(total, currency);
-      lines.push("TOTAL: " + totalText);
+      lines.push(`${totalLabel}: ${totalText}`);
       const idLine = getArcIdLine();
       if (idLine) lines.push(idLine);
       lines.push("");
+      if (hasEstimate) lines.push(`Customer note: ${PRIVATE_ESTIMATE_NOTE}`);
       lines.push("Customer note: Please confirm availability, ETA, and final instructions in Discord.");
       return lines.join("\n");
     }
@@ -4529,11 +4618,6 @@
       }
       renderCart();
     });
-    $("language").addEventListener("change", () => {
-      state.language = $("language").value;
-      renderAll();
-      updateArcIdModalText();
-    });
     $("brandHome").addEventListener("click", event => {
       event.preventDefault();
       state.game = null;
@@ -4555,7 +4639,7 @@
     $("arcIdDone").addEventListener("click", () => {
       const id = val("arcIdInput").trim();
       if (!id) {
-        showToast(state.language === "TR" ? "ID yaz ya da kirmizi secenegi kullan." : "Enter ID or use the red option.");
+        showToast("Enter ID or use the red option.");
         return;
       }
       state.arcId = id;
