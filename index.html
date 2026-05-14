@@ -324,9 +324,7 @@
       position: relative;
       top: auto;
       z-index: 45;
-      background:
-        linear-gradient(rgba(5, 3, 13, .6), rgba(5, 3, 13, .88)),
-        url(assets/ana1.webp) center center / cover no-repeat;
+      background: linear-gradient(180deg, rgba(12, 10, 32, .98), rgba(8, 6, 22, .98));
       border-bottom: 1px solid var(--line);
     }
 
@@ -356,6 +354,10 @@
       overscroll-behavior-inline: contain;
       cursor: grab;
       user-select: none;
+      background:
+        linear-gradient(rgba(5, 3, 13, .6), rgba(5, 3, 13, .88)),
+        url(assets/ana1.webp) center center / cover no-repeat;
+      border-radius: var(--radius);
     }
 
     .category-scroll.dragging {
