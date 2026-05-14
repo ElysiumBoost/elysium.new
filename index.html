@@ -1109,7 +1109,6 @@
       box-shadow: 0 0 6px rgba(255,95,125,.34);
     }
 
-    .sale-pill,
     .deal-hint,
     .detail-deal {
       display: inline-flex;
@@ -1132,7 +1131,6 @@
       box-shadow: inset 0 0 18px rgba(255,184,88,.1), 0 8px 22px rgba(0,0,0,.28);
     }
 
-    .sale-pill .price-old,
     .detail-deal .price-old,
     .old-total {
       position: relative;
@@ -1431,7 +1429,7 @@
       background: rgba(255,184,88,.08);
     }
 
-    label, .field-label {
+    label {
       display: block;
       margin-bottom: 7px;
       color: #d8d1ff;
@@ -1529,12 +1527,6 @@
       grid-template-columns: repeat(5, 1fr);
       margin-top: 6px;
       font-size: 11px;
-    }
-
-    .range-ticks.twelve {
-      grid-template-columns: repeat(12, 1fr);
-      margin-top: 6px;
-      font-size: 10px;
     }
 
     .level-range {
@@ -1720,49 +1712,11 @@
     }
 
     .raid-toggle-grid,
-    .quick-raid-grid {
+    .quick-raid-grid,
+    .bundle-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
-    }
-
-    .bundle-grid,
-    .map-choice-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .map-choice-grid {
-      max-height: 192px;
-      overflow: auto;
-      padding-right: 3px;
-    }
-
-    .map-choice-grid.expanded {
-      max-height: 278px;
-    }
-
-    .map-row {
-      display: grid;
-      grid-template-columns: 18px minmax(0, 1fr) 74px;
-      align-items: center;
-      gap: 8px;
-      min-height: 42px;
-      padding: 8px 9px;
-      border: 1px solid rgba(172,146,255,.24);
-      border-radius: 8px;
-      background: rgba(255,255,255,.045);
-      font-size: 13px;
-      font-weight: 900;
-    }
-
-    .map-row input { width: 16px; height: 16px; }
-
-    .map-row select {
-      min-height: 30px;
-      padding: 0 6px;
-      font-size: 12px;
     }
 
     .raid-pill {
@@ -1814,12 +1768,6 @@
         radial-gradient(circle at 15% 12%, rgba(255,184,88,.24), transparent 42%),
         linear-gradient(180deg, rgba(98,64,188,.72), rgba(21,14,54,.92));
       box-shadow: 0 0 0 1px rgba(255,184,88,.18), 0 12px 28px rgba(122,77,255,.2);
-    }
-
-    .form-divider {
-      height: 1px;
-      margin: 12px 0;
-      background: linear-gradient(90deg, transparent, rgba(255,184,88,.5), transparent);
     }
 
     .raid-panel-note {
@@ -2311,18 +2259,6 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-
     @media (max-width: 1080px) {
       .topbar-inner { grid-template-columns: 1fr auto; }
       .game-tabs { grid-column: 1 / -1; justify-content: flex-start; overflow-x: auto; padding-bottom: 10px; }
@@ -2578,7 +2514,6 @@
       trialsBase: 20,
       raid: 3.50,
       event: 1.50,
-      workshopLevel: 10,
       workshopBench: 6,
       workshopMax: 36,
       scrappyLevel: 3,
@@ -2833,7 +2768,6 @@
     const $ = id => document.getElementById(id);
     const val = id => $(id)?.value || "";
     const num = id => Number(val(id) || 0);
-    const slug = text => text.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
 
     function currentGame() { return games.find(game => game.id === state.game); }
     function currentService() { return currentGame()?.services.find(service => service.id === state.serviceId) || currentGame()?.services[0]; }
@@ -3176,12 +3110,6 @@
       const targetPage = Math.floor(button.offsetLeft / pageStep);
       const maxLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
       scroller.scrollTo({ left: Math.max(0, Math.min(maxLeft, targetPage * pageStep)), behavior });
-    }
-
-    function syncActiveCategoryPosition(behavior = "smooth") {
-      const active = $("categoryScroll").querySelector(".cat-btn.active");
-      if (!active) return;
-      requestAnimationFrame(() => centerCategory(active, behavior));
     }
 
     function cardMarkup(service, popular) {
@@ -3913,10 +3841,6 @@
       if (rank === "Daredevil III") return [{ value: "none", label: "No Rank Up", price: 0 }, { value: "plus1", label: "+1 Rank Up", price: 15 }];
       if (rank === "Daredevil II") return [{ value: "none", label: "No Rank Up", price: 0 }, { value: "plus1", label: "+1 Rank Up", price: 5 }, { value: "plus2", label: "+2 Rank Up", price: 15 }];
       return [{ value: "none", label: "No Rank Up", price: 0 }, { value: "plus1", label: "+1 Rank Up", price: 5 }, { value: "plus2", label: "+2 Rank Up", price: 10 }, { value: "plus3", label: "+3 Rank Up", price: 15 }];
-    }
-
-    function splitList(text) {
-      return String(text || "").split(",").map(item => item.trim()).filter(Boolean);
     }
 
     function modPrice(type) {
