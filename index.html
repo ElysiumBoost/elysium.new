@@ -56,10 +56,10 @@
       inset: 0;
       z-index: -2;
       background:
-        linear-gradient(rgba(5, 3, 13, .68), rgba(5, 3, 13, .88)),
+        linear-gradient(rgba(5, 3, 13, .56), rgba(5, 3, 13, .82)),
         url("assets/ana1.webp") center center / cover no-repeat,
         url("assets/bg-elysium-4k.webp") center center / cover no-repeat,
-        radial-gradient(circle at 50% 52%, rgba(122, 77, 255, .2), transparent 42%),
+        radial-gradient(circle at 50% 50%, rgba(122, 77, 255, .22), transparent 48%),
         #05030d;
       pointer-events: none;
     }
@@ -591,6 +591,12 @@
         var(--hero-bg) var(--hero-position, center center) / cover no-repeat;
     }
 
+    .hero.is-home {
+      background:
+        linear-gradient(180deg, rgba(5,3,13,.32), rgba(5,3,13,.12) 55%, transparent);
+      border-bottom: 0;
+    }
+
     .hero::after {
       content: "";
       position: absolute;
@@ -598,6 +604,15 @@
       height: 120px;
       background: linear-gradient(180deg, transparent, rgba(5,3,13,.96));
       pointer-events: none;
+    }
+
+    .hero.is-home::after {
+      display: none;
+    }
+
+    .home-content {
+      position: relative;
+      background: linear-gradient(180deg, transparent, rgba(5,3,13,.22) 30%, rgba(5,3,13,.0));
     }
 
     .hero .shell { position: relative; z-index: 1; }
@@ -1313,7 +1328,7 @@
 
     .order-feed-card {
       min-height: 62px;
-      padding: 10px;
+      padding: 10px 12px;
       border: 1px solid rgba(255,184,88,.25);
       border-radius: 8px;
       background:
@@ -1322,7 +1337,23 @@
       box-shadow: inset 0 0 18px rgba(122,77,255,.09);
       opacity: 1;
       transform: translateY(0);
-      transition: opacity .35s ease;
+      transition: opacity .35s ease, transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+      cursor: pointer;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      width: 100%;
+    }
+
+    .order-feed-card:hover,
+    .order-feed-card:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(255,209,102,.62);
+      background:
+        radial-gradient(circle at 8% 20%, rgba(255,184,88,.18), transparent 34%),
+        linear-gradient(180deg, rgba(58,42,121,.48), rgba(18,12,42,.66));
+      box-shadow: inset 0 0 22px rgba(122,77,255,.18), 0 10px 26px rgba(122,77,255,.2);
+      outline: none;
     }
 
     .order-feed-card.is-changing {
@@ -1355,9 +1386,9 @@
       color: #f5f0ff;
       font-family: var(--display);
       font-size: 18px;
-      line-height: 1.04;
-      letter-spacing: .035em;
-      text-transform: uppercase;
+      line-height: 1.1;
+      letter-spacing: .015em;
+      text-transform: none;
       overflow-wrap: anywhere;
     }
 
@@ -1529,6 +1560,36 @@
       font-size: 11px;
     }
 
+    .range-ticks--anchored {
+      position: relative;
+      display: block;
+      height: 22px;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .range-ticks--anchored > span {
+      position: absolute;
+      top: 0;
+      transform: translateX(-50%);
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      line-height: 1;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .range-ticks--anchored > span > i {
+      width: 1px;
+      height: 6px;
+      background: rgba(172, 146, 255, .55);
+      display: block;
+    }
+
     .level-range {
       display: grid;
       gap: 12px;
@@ -1678,6 +1739,15 @@
 
     .seed-quick-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .coin-quick-grid--four {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    @media (max-width: 720px) {
+      .coin-quick-grid--four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     .depositary-grid {
@@ -1866,29 +1936,22 @@
     .event-switch.event-mode-card input {
       appearance: none;
       -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      flex: 0 0 18px;
+      width: 22px;
+      height: 22px;
+      flex: 0 0 22px;
       display: grid;
       place-items: center;
       border: 1px solid rgba(255,184,88,.74);
-      border-radius: 5px;
+      border-radius: 4px;
       background: rgba(8,6,20,.72);
       box-shadow: inset 0 0 10px rgba(0,0,0,.36), 0 0 12px rgba(255,184,88,.12);
+      transition: background .15s ease, border-color .15s ease, box-shadow .15s ease;
     }
 
     .event-switch.event-mode-card input:checked {
       border-color: rgba(255,214,128,.95);
       background: linear-gradient(135deg, #ffd675, #ff994d);
-    }
-
-    .event-switch.event-mode-card input:checked::before {
-      content: "";
-      width: 10px;
-      height: 7px;
-      border-left: 3px solid #21110a;
-      border-bottom: 3px solid #21110a;
-      transform: rotate(-45deg) translate(1px, -1px);
+      box-shadow: inset 0 0 12px rgba(255,184,88,.32), 0 0 16px rgba(255,184,88,.42);
     }
 
     .tabs {
@@ -2459,31 +2522,35 @@
     };
 
     const recentOrders = [
-      "20x Tempest",
-      "Anvil Blueprint",
-      "Bobcat Blueprint",
-      "Tempest Blueprint",
-      "Vulcano Blueprint",
-      "Venator Blueprint",
-      "Looting Mk.3 Survivor Blueprint",
-      "20x Bobcat",
-      "10x Bobcat + 10x Vulcano",
-      "3M Discounted Coins",
-      "4x Raid Boost",
-      "6M Discounted Coins",
-      "20x Looting Mk.3 Survivor",
-      "20x Medium Shield",
-      "100x Herbal Bandage",
-      "2,500 Assorted Seeds",
-      "Trials Boost +3 Rank Up",
-      "Scrappy Level 1 to 5",
-      "Expedition Boost",
-      "10x Canto",
-      "10x Venator",
-      "20x Anvil",
-      "Extended Medium Mag III Blueprint",
-      "Extended Light Mag III Blueprint",
-      "75x Trigger Nade"
+      { label: "20x Tempest Weapon Bundle",          service: "guns",       category: "guns",       type: "item" },
+      { label: "Anvil Blueprint",                     service: "blueprints", category: "blueprints", type: "blueprint" },
+      { label: "Bobcat Blueprint",                    service: "blueprints", category: "blueprints", type: "blueprint" },
+      { label: "Tempest Blueprint",                   service: "blueprints", category: "blueprints", type: "blueprint" },
+      { label: "Vulcano Blueprint",                   service: "blueprints", category: "blueprints", type: "blueprint" },
+      { label: "Venator Blueprint",                   service: "blueprints", category: "blueprints", type: "blueprint" },
+      { label: "Looting Mk.3 Survivor Blueprint",     service: "blueprints", category: "blueprints", type: "blueprint" },
+      { label: "20x Bobcat Weapon Bundle",            service: "guns",       category: "guns",       type: "item" },
+      { label: "10x Bobcat + 10x Vulcano Bundle",     service: "guns",       category: "guns",       type: "item" },
+      { label: "3M Discounted Raider Coins",          service: "coins",      category: "coins",      type: "currency" },
+      { label: "4x Raid Boost",                       service: "raid",       category: "raids",      type: "service" },
+      { label: "6M Discounted Raider Coins",          service: "coins",      category: "coins",      type: "currency" },
+      { label: "20x Looting Mk.3 Survivor Augment",   service: "loadout",    category: "loadouts",   type: "item" },
+      { label: "20x Medium Shield",                   service: "loadout",    category: "loadouts",   type: "item" },
+      { label: "100x Herbal Bandage",                 service: "loadout",    category: "loadouts",   type: "item" },
+      { label: "2,500 Assorted Seeds",                service: "seeds",      category: "seeds",      type: "currency" },
+      { label: "Trials Boost +3 Rank Up",             service: "trials",     category: "trials",     type: "service" },
+      { label: "Scrappy Level 1 to 5",                service: "workshop",   category: "workshop",   type: "service" },
+      { label: "Expedition Boost",                    service: "expedition", category: "expeditions",type: "service" },
+      { label: "10x Canto Weapon Bundle",             service: "guns",       category: "guns",       type: "item" },
+      { label: "10x Venator Weapon Bundle",           service: "guns",       category: "guns",       type: "item" },
+      { label: "20x Anvil Weapon Bundle",             service: "guns",       category: "guns",       type: "item" },
+      { label: "Extended Medium Mag III Blueprint",   service: "blueprints", category: "blueprints", type: "blueprint" },
+      { label: "Extended Light Mag III Blueprint",    service: "blueprints", category: "blueprints", type: "blueprint" },
+      { label: "75x Trigger Nade Bundle",             service: "loadout",    category: "loadouts",   type: "item" },
+      { label: "9M Discounted Raider Coins",          service: "coins",      category: "coins",      type: "currency" },
+      { label: "12M Discounted Raider Coins",         service: "coins",      category: "coins",      type: "currency" },
+      { label: "Queen Boss Clear",                    service: "boss",       category: "bosses",     type: "service" },
+      { label: "PvP Coaching Session",                service: "pvp",        category: "coaching",   type: "service" }
     ];
     let recentOrderTimer = 0;
     let recentOrderLastBatch = [];
@@ -2494,7 +2561,7 @@
       weapon: .50,
       blueMod: .15,
       premiumMod: .25,
-      seeds100: .35,
+      seeds100: .40,
       augment: .30,
       shield: .30,
       bandageBundle: .25,
@@ -2511,14 +2578,15 @@
     };
 
     const coinTiers = [
-      { amount: 3000000, discount: 0.10, label: "3M Coins" },
-      { amount: 6000000, discount: 0.15, label: "6M Coins" },
-      { amount: 9000000, discount: 0.20, label: "9M Coins" }
+      { amount:  3000000, discount: 0.10, label: "3M Coins"  },
+      { amount:  6000000, discount: 0.15, label: "6M Coins"  },
+      { amount:  9000000, discount: 0.20, label: "9M Coins"  },
+      { amount: 12000000, discount: 0.25, label: "12M Coins" }
     ];
 
     const seedTiers = [
-      { amount: 2500, discount: 0.05, label: "2,500 Seeds" },
-      { amount: 5000, discount: 0.15, label: "5,000 Seeds" }
+      { amount: 1000, discount: 0.10, label: "1,000 Seeds" },
+      { amount: 2000, discount: 0.20, label: "2,000 Seeds" }
     ];
 
     function coinTier(amount) {
@@ -2538,7 +2606,7 @@
     }
 
     const blueprintGroups = {
-      "Gun Blueprints": ["Anvil", "Bettina", "Bobcat", "Burletta", "Dolabra", "Equalizer", "Hullcracker", "Il Toro", "Jupiter", "Osprey", "Renegade", "Canto", "Vulcano", "Torrente", "Tempest", "Venator"],
+      "Gun Blueprints": ["Anvil", "Bettina", "Bobcat", "Burletta", "Dolabra", "Equalizer", "Hullcracker", "Il Toro", "Jupiter", "Osprey", "Canto", "Vulcano", "Torrente", "Tempest", "Venator"],
       "Backpack Blueprints": ["Combat Mk.3 (Flanking)", "Combat Mk.3 (Aggressive)", "Tactical Mk.3 (Defensive)", "Tactical Mk.3 (Healing)", "Looting Mk.3 (Survivor)", "Looting Mk.3 (Safekeeper)", "Tactical Mk.3 (Revival)", "Tactical Mk.3 (Smoke)"],
       "Quick Use Blueprints": ["Barricade Kit", "Explosive Mine", "Defibrillator", "White Flag", "Crash Mat", "Powered Descender", "Vita Shot", "Vita Spray", "Wolfpack", "Snap Hook", "Smoke Grenade", "Showstopper", "Lure Grenade", "Deadline", "Seeker Grenade", "Trailblazer", "Gas Mine", "Pulse Mine", "Fireworks Box", "Blue Light Stick", "Green Light Stick", "Yellow Light Stick", "Red Light Stick", "Remote Raider Flare", "Surge Coil", "Tagging Grenade", "Jolt Mine", "Blaze Grenade", "Trigger 'Nade"],
       "Gun Part Blueprints": ["Angled Grip II", "Angled Grip III", "Compensator II", "Extended Barrel", "Extended Light Magazine II", "Extended Medium Magazine II", "Extended Shotgun Magazine II", "Lightweight Stock", "Muzzle Brake II", "Padded Stock", "Shotgun Choke II", "Silencer I", "Silencer II", "Stable Stock II", "Heavy Gun Parts", "Compensator III", "Extended Light Magazine III", "Extended Medium Magazine III", "Extended Shotgun Magazine III", "Muzzle Brake III", "Shotgun Choke III", "Shotgun Silencer", "Stable Stock III", "Vertical Grip III", "Complex Gun Parts"]
@@ -2962,11 +3030,16 @@
 
     function renderHero() {
       const game = currentGame();
-      const heroBg = game
-        ? `url("${game.heroBg}")`
-        : `url("assets/ana1.webp"), url("assets/bg-elysium-4k.webp")`;
-      $("hero").style.setProperty("--hero-bg", heroBg);
-      $("hero").style.setProperty("--hero-position", game ? game.heroPosition || "center center" : "center center");
+      const hero = $("hero");
+      if (game) {
+        hero.classList.remove("is-home");
+        hero.style.setProperty("--hero-bg", `url("${game.heroBg}")`);
+        hero.style.setProperty("--hero-position", game.heroPosition || "center center");
+      } else {
+        hero.classList.add("is-home");
+        hero.style.removeProperty("--hero-bg");
+        hero.style.removeProperty("--hero-position");
+      }
       $("heroKicker").textContent = game ? ui(game.kicker) : "ELYSIUM BOOST";
       $("heroTitle").textContent = game ? ui(game.title) : ui("Choose Your Boosting Arena");
       $("heroCopy").textContent = game ? ui(game.copy) : ui("Start from the ELYSIUM home screen, choose a game, then build a Discord-ready order with clean pricing and service details.");
@@ -3209,11 +3282,7 @@
     }
 
     function recentOrderType(order) {
-      const text = String(order || "").toLowerCase();
-      if (text.includes("blueprint")) return "blueprint";
-      if (text.includes("coin") || text.includes("seed")) return "currency";
-      if (text.includes("raid") || text.includes("trials") || text.includes("scrappy") || text.includes("expedition")) return "service";
-      return "item";
+      return order?.type || "item";
     }
 
     function pickRecentOrders() {
@@ -3221,28 +3290,61 @@
       const used = new Set();
       let previousType = recentOrderLastBatch.length ? recentOrderType(recentOrderLastBatch[recentOrderLastBatch.length - 1]) : "";
       for (let slot = 0; slot < 3; slot += 1) {
-        let candidates = recentOrders.filter(order => !used.has(order) && recentOrderType(order) !== previousType);
-        if (!candidates.length) candidates = recentOrders.filter(order => !used.has(order));
+        let candidates = recentOrders.filter(order => !used.has(order.label) && order.type !== previousType);
+        if (!candidates.length) candidates = recentOrders.filter(order => !used.has(order.label));
         const choice = candidates[Math.floor(Math.random() * candidates.length)] || recentOrders[Math.floor(Math.random() * recentOrders.length)];
         picked.push(choice);
-        used.add(choice);
-        previousType = recentOrderType(choice);
+        used.add(choice.label);
+        previousType = choice.type;
       }
       recentOrderLastBatch = picked;
       return picked;
+    }
+
+    function bindOrderFeedClicks() {
+      const feed = $("orderFeed");
+      if (!feed) return;
+      feed.querySelectorAll("[data-feed-service]").forEach(card => {
+        card.addEventListener("click", () => {
+          openRecentOrder(card.dataset.feedService, card.dataset.feedCategory);
+        });
+      });
+    }
+
+    function openRecentOrder(serviceId, categoryId) {
+      const arc = games.find(game => game.id === "arc");
+      if (!arc) return;
+      const service = arc.services.find(s => s.id === serviceId);
+      if (!service) return;
+      state.game = "arc";
+      state.category = categoryId || service.category;
+      state.serviceId = service.id;
+      renderAll();
+      requestAnimationFrame(() => {
+        $("detailSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
     }
 
     function renderOrderFeed(initial = false) {
       const feed = $("orderFeed");
       if (!feed) return;
       const entries = pickRecentOrders();
-      const html = entries.map(order => `<article class="order-feed-card"><small><span class="live-dot" aria-hidden="true"></span>${ui("Raider just ordered")}</small><strong>${escapeHtml(translateOrder(order))}</strong></article>`).join("");
+      const html = entries.map(order => `
+        <button class="order-feed-card" type="button" data-feed-service="${escapeHtml(order.service)}" data-feed-category="${escapeHtml(order.category)}" aria-label="Open ${escapeHtml(order.label)}">
+          <small><span class="live-dot" aria-hidden="true"></span>Raider Just Ordered!</small>
+          <strong>${escapeHtml(order.label)}</strong>
+        </button>
+      `).join("");
       if (initial || !feed.innerHTML) {
         feed.innerHTML = html;
+        bindOrderFeedClicks();
         return;
       }
       feed.querySelectorAll(".order-feed-card").forEach(card => card.classList.add("is-changing"));
-      window.setTimeout(() => { feed.innerHTML = html; }, 360);
+      window.setTimeout(() => {
+        feed.innerHTML = html;
+        bindOrderFeedClicks();
+      }, 360);
     }
 
     function startOrderFeed() {
@@ -3284,12 +3386,12 @@
           <div class="coin-panel">
             <input id="coinDeal" type="hidden" value="">
             <div class="coin-readout">
-              <div><label for="coinAmount">Raider Coins</label><strong><span id="coinLabel">1,000,000</span><span class="discounted-tag" id="coinDiscountTag">${ui("Discounted")}</span></strong></div>
-              <span>100k minimum<br>9M maximum</span>
+              <div><label for="coinAmount">Raider Coins</label><strong><span id="coinLabel">100,000</span><span class="discounted-tag" id="coinDiscountTag">${ui("Discounted")}</span></strong></div>
+              <span>100k minimum<br>12M maximum</span>
             </div>
-            <input id="coinAmount" type="range" min="100000" max="9000000" step="100000" value="1000000">
+            <input id="coinAmount" type="range" min="100000" max="12000000" step="100000" value="100000">
             <div class="deal-hint" id="coinNextHint"></div>
-            <div class="coin-quick-grid seed-quick-grid">${tierButtons}</div>
+            <div class="coin-quick-grid coin-quick-grid--four">${tierButtons}</div>
             <div class="badge" style="justify-self:start">${ui("Price updates every 100k")}</div>
           </div>
         `;
@@ -3301,9 +3403,9 @@
             <input id="seedDeal" type="hidden" value="">
             <div class="coin-readout">
               <div><label for="seedAmount">Assorted Seeds</label><strong><span id="seedLabel">100</span><span class="discounted-tag" id="seedDiscountTag">${ui("Discounted")}</span></strong></div>
-              <span>100 minimum<br>5,000 maximum</span>
+              <span>100 minimum<br>2,000 maximum</span>
             </div>
-            <input id="seedAmount" type="range" min="100" max="5000" step="100" value="100">
+            <input id="seedAmount" type="range" min="100" max="2000" step="100" value="100">
             <div class="deal-hint" id="seedNextHint"></div>
             <div class="coin-quick-grid">${seedButtons}</div>
             <div class="badge" style="justify-self:start">100 seeds = ${moneyUSD(prices.seeds100)}</div>
@@ -3311,11 +3413,18 @@
         `;
       }
       if (type === "depositary") {
+        const sliderMin = 20;
+        const sliderMax = 280;
+        const milestones = [25, 50, 100, 150, 200, 280];
+        const ticks = milestones.map(v => {
+          const pct = ((v - sliderMin) / (sliderMax - sliderMin)) * 100;
+          return `<span style="left:${pct.toFixed(2)}%"><i></i>${v}</span>`;
+        }).join("");
         return `
           <div class="coin-panel">
             <div class="coin-readout">
               <div><label for="depositarySlots">Storage Slots</label><strong id="slotLabel">60 Slots</strong></div>
-              <span>Slider moves by 20<br>custom amount allowed</span>
+              <span>Drag the slider or enter a custom amount<br>20 minimum &middot; 280 maximum</span>
             </div>
             <div class="depositary-grid">
               <div class="depositary-custom-row">
@@ -3324,10 +3433,10 @@
               </div>
               <div class="depositary-slider-row">
                 <label for="depositarySlots">Quick Slider</label>
-                <input id="depositarySlots" type="range" min="20" max="280" step="20" value="60">
+                <input id="depositarySlots" type="range" min="${sliderMin}" max="${sliderMax}" step="5" value="60">
+                <div class="range-ticks range-ticks--anchored">${ticks}</div>
               </div>
             </div>
-            <div class="range-ticks">${[20,60,100,140,180,220,260,280].map(slot => `<span>${slot}</span>`).join("")}</div>
             <div class="badge" style="justify-self:start">1 slot = ${moneyUSD(prices.depositarySlot)}</div>
           </div>
         `;
@@ -3416,7 +3525,7 @@
                 <input id="workshopFrom" type="range" min="1" max="3" step="1" value="1" aria-label="Workshop from level">
                 <input id="workshopTo" type="range" min="1" max="3" step="1" value="3" aria-label="Workshop target level">
               </div>
-              <div class="range-ticks three"><span>1</span><span>2</span><span>3</span></div>
+              <div class="range-ticks range-ticks--anchored range-ticks--workshop"><span style="left:0%"><i></i>1</span><span style="left:50%"><i></i>2</span><span style="left:100%"><i></i>3</span></div>
             </div>
             <div style="margin-top:10px"><label>Workshop</label><div class="checks">${workshops.map(name => `<label class="check-row"><input type="checkbox" value="${name}" data-workshop="${name}"><span>${name} - ${moneyUSD(prices.workshopBench)}</span></label>`).join("")}</div></div>
             <p class="raid-panel-note">Each full 1 to 3 workbench upgrade is ${moneyUSD(prices.workshopBench)}. Partial level steps are calculated from the selected range.</p>
@@ -4017,7 +4126,7 @@
         return { total: all.length * prices.blueprint, oldTotal: all.length * 1.50, valid: all.length > 0, details };
       }
       if (type === "coins") {
-        const amount = Math.max(100000, Math.min(9000000, num("coinAmount")));
+        const amount = Math.max(100000, Math.min(12000000, num("coinAmount")));
         const base = amount / 100000 * prices.coins100k;
         const tier = coinTier(amount);
         const discount = tier ? base * tier.discount : 0;
@@ -4030,7 +4139,7 @@
         };
       }
       if (type === "seeds") {
-        const amount = Math.max(100, Math.min(5000, num("seedAmount")));
+        const amount = Math.max(100, Math.min(2000, num("seedAmount")));
         const base = amount / 100 * prices.seeds100;
         const tier = seedTier(amount);
         const discount = tier ? base * tier.discount : 0;
@@ -4391,18 +4500,115 @@
       ensureArcId(copyOrderNow);
     }
 
-    async function copyOrderNow() {
-      try {
-        await navigator.clipboard.writeText(ticketText());
-      } catch (error) {
-        const helper = document.createElement("textarea");
-        helper.value = ticketText();
-        document.body.appendChild(helper);
-        helper.select();
-        document.execCommand("copy");
-        helper.remove();
+    const HTML2CANVAS_CDN = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+    const HTML2CANVAS_SRI = "sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==";
+    let html2canvasLoader = null;
+
+    function loadHtml2Canvas() {
+      if (typeof window.html2canvas === "function") return Promise.resolve();
+      if (html2canvasLoader) return html2canvasLoader;
+      html2canvasLoader = new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = HTML2CANVAS_CDN;
+        script.integrity = HTML2CANVAS_SRI;
+        script.crossOrigin = "anonymous";
+        script.referrerPolicy = "no-referrer";
+        script.onload = () => resolve();
+        script.onerror = () => {
+          html2canvasLoader = null;
+          reject(new Error("Could not load html2canvas"));
+        };
+        document.head.appendChild(script);
+      });
+      return html2canvasLoader;
+    }
+
+    async function captureCartCanvas() {
+      const drawer = document.querySelector(".drawer");
+      if (!drawer) throw new Error("Cart drawer not found");
+      const body = $("cartBody");
+      const prevDrawerMaxHeight = drawer.style.maxHeight;
+      const prevDrawerHeight    = drawer.style.height;
+      const prevBodyMaxHeight   = body ? body.style.maxHeight : "";
+      const prevBodyOverflow    = body ? body.style.overflow  : "";
+      drawer.style.maxHeight = "none";
+      drawer.style.height    = "auto";
+      if (body) {
+        body.style.maxHeight = "none";
+        body.style.overflow  = "visible";
       }
-      $("copyStatus").textContent = "Ticket copied.";
+      try {
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        return await window.html2canvas(drawer, {
+          backgroundColor: "#0a0721",
+          scale: Math.min(2, window.devicePixelRatio || 1.5),
+          useCORS: true,
+          logging: false,
+          windowWidth: document.documentElement.clientWidth,
+          windowHeight: document.documentElement.clientHeight
+        });
+      } finally {
+        drawer.style.maxHeight = prevDrawerMaxHeight;
+        drawer.style.height    = prevDrawerHeight;
+        if (body) {
+          body.style.maxHeight = prevBodyMaxHeight;
+          body.style.overflow  = prevBodyOverflow;
+        }
+      }
+    }
+
+    function canvasToBlob(canvas, type) {
+      return new Promise((resolve, reject) => {
+        canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("Canvas export failed")), type);
+      });
+    }
+
+    function downloadCanvasAsPng(canvas) {
+      const link = document.createElement("a");
+      link.download = `elysium-cart-${Date.now()}.png`;
+      link.href = canvas.toDataURL("image/png");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    async function copyOrderNow() {
+      const statusEl = $("copyStatus");
+      statusEl.textContent = "Preparing cart screenshot...";
+      try {
+        await loadHtml2Canvas();
+      } catch (loadError) {
+        try {
+          await navigator.clipboard.writeText(ticketText());
+          statusEl.textContent = "Image library unavailable - copied text ticket instead. Paste it into Discord.";
+        } catch (textError) {
+          statusEl.textContent = "Could not load screenshot tool and clipboard is blocked. Take a manual screenshot of the cart.";
+        }
+        return;
+      }
+      let canvas;
+      try {
+        canvas = await captureCartCanvas();
+      } catch (captureError) {
+        statusEl.textContent = "Screenshot failed. Take a manual screenshot of the cart panel and attach it in Discord.";
+        return;
+      }
+      try {
+        const blob = await canvasToBlob(canvas, "image/png");
+        if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+          await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+          statusEl.textContent = "Cart screenshot copied! Paste it into your Discord ticket (Ctrl/Cmd+V).";
+          return;
+        }
+        throw new Error("Clipboard image write not supported");
+      } catch (clipError) {
+        try {
+          downloadCanvasAsPng(canvas);
+          statusEl.textContent = "Cart screenshot downloaded. Upload it into your Discord ticket.";
+        } catch (downloadError) {
+          statusEl.textContent = "Could not copy or download the cart screenshot. Please take a manual screenshot.";
+        }
+      }
     }
 
     function openDiscordTicket() {
