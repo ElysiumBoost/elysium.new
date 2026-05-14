@@ -1676,12 +1676,6 @@
       margin: 0;
     }
 
-    .coin-quick-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-
     .seed-quick-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
@@ -1693,12 +1687,7 @@
       align-items: stretch;
     }
 
-    .depositary-grid .depositary-custom-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      gap: 6px;
-    }
-
+    .depositary-grid .depositary-custom-row,
     .depositary-grid .depositary-slider-row {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
@@ -1713,7 +1702,8 @@
 
     .raid-toggle-grid,
     .quick-raid-grid,
-    .bundle-grid {
+    .bundle-grid,
+    .coin-quick-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
@@ -2554,7 +2544,6 @@
       "Gun Part Blueprints": ["Angled Grip II", "Angled Grip III", "Compensator II", "Extended Barrel", "Extended Light Magazine II", "Extended Medium Magazine II", "Extended Shotgun Magazine II", "Lightweight Stock", "Muzzle Brake II", "Padded Stock", "Shotgun Choke II", "Silencer I", "Silencer II", "Stable Stock II", "Heavy Gun Parts", "Compensator III", "Extended Light Magazine III", "Extended Medium Magazine III", "Extended Shotgun Magazine III", "Muzzle Brake III", "Shotgun Choke III", "Shotgun Silencer", "Stable Stock III", "Vertical Grip III", "Complex Gun Parts"]
     };
     const weapons = ["No Weapon", "Anvil", "Bettina", "Bobcat", "Burletta", "Dolabra", "Equalizer", "Hullcracker", "Il Toro", "Jupiter", "Osprey", "Renegade", "Canto", "Vulcano", "Torrente", "Tempest", "Venator"];
-    const maps = ["Riven Tides", "Stella Montis", "Dam Battlegrounds", "Buried City", "Spaceport", "Blue Gate"];
     const stages = [["Foundation", 10], ["Core Systems", 10], ["Framework", 10], ["Outfitting", 10], ["Load Stage", 15]];
     const workshops = ["Gunsmith", "Gear Bench", "Medical Lab", "Explosive Station", "Utility Station", "Refiner"];
     const ranks = ["Rookie I", "Rookie II", "Rookie III", "Tryhard I", "Tryhard II", "Tryhard III", "Wildcard I", "Wildcard II", "Wildcard III", "Daredevil I", "Daredevil II", "Daredevil III", "Hotshot"];
@@ -3097,19 +3086,6 @@
         };
         categoryMotion.raf = requestAnimationFrame(tick);
       }
-    }
-
-    function centerCategory(button, behavior = "smooth") {
-      const scroller = $("categoryScroll");
-      const first = scroller.querySelector(".cat-btn");
-      if (!first) return;
-      const styles = getComputedStyle(scroller);
-      const gap = parseFloat(styles.columnGap || styles.gap || "12") || 12;
-      const step = first.offsetWidth + gap;
-      const pageStep = step * 3;
-      const targetPage = Math.floor(button.offsetLeft / pageStep);
-      const maxLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
-      scroller.scrollTo({ left: Math.max(0, Math.min(maxLeft, targetPage * pageStep)), behavior });
     }
 
     function cardMarkup(service, popular) {
