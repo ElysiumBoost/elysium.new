@@ -325,8 +325,8 @@
       top: auto;
       z-index: 45;
       background:
-        linear-gradient(rgba(5, 3, 13, .6), rgba(5, 3, 13, .88)),
-        url(assets/ana1.webp) center center / cover no-repeat;
+        linear-gradient(180deg, rgba(12, 6, 20, .82), rgba(5, 3, 13, .58)),
+        linear-gradient(90deg, rgba(28, 8, 18, .2), transparent 28%, transparent 72%, rgba(28, 8, 18, .2));
       border-bottom: 1px solid var(--line);
     }
 
@@ -1606,46 +1606,6 @@
       height: 6px;
       background: rgba(172, 146, 255, .55);
       display: block;
-    }
-
-    /* Depository milestones: even columns so 25/280 sit at track edges, mids balanced */
-    .range-ticks--depositary-scale {
-      display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      width: 100%;
-      margin-top: 6px;
-      min-height: 26px;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .range-ticks--depositary-scale > span {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      white-space: nowrap;
-      min-width: 0;
-    }
-
-    .range-ticks--depositary-scale > span:nth-child(1) {
-      justify-self: start;
-      align-items: flex-start;
-    }
-
-    .range-ticks--depositary-scale > span:nth-child(6) {
-      justify-self: end;
-      align-items: flex-end;
-    }
-
-    .range-ticks--depositary-scale > span > i {
-      width: 1px;
-      height: 6px;
-      background: rgba(172, 146, 255, .55);
-      display: block;
-      flex-shrink: 0;
     }
 
     .level-range {
@@ -3505,8 +3465,6 @@
       if (type === "depositary") {
         const sliderMin = 20;
         const sliderMax = 280;
-        const milestones = [25, 50, 100, 150, 200, 280];
-        const ticks = milestones.map(v => `<span><i></i>${v}</span>`).join("");
         return `
           <div class="coin-panel">
             <div class="coin-readout">
@@ -3521,7 +3479,6 @@
               <div class="depositary-slider-row">
                 <label for="depositarySlots">Quick Slider</label>
                 <input id="depositarySlots" type="range" min="${sliderMin}" max="${sliderMax}" step="5" value="60">
-                <div class="range-ticks range-ticks--depositary-scale">${ticks}</div>
               </div>
             </div>
             <div class="badge" style="justify-self:start">1 slot = ${moneyUSD(prices.depositarySlot)}</div>
