@@ -1,0 +1,4620 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ELYSIUM BOOST | Premium Game Services</title>
+  <meta name="description" content="ELYSIUM BOOST service builder for Arc Raiders, Valorant, and League of Legends. Customize an order, add it to cart, and copy a Discord ticket.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #05030d;
+      --nav: rgba(9, 7, 24, .9);
+      --panel: rgba(20, 17, 49, .88);
+      --panel-2: rgba(31, 27, 76, .88);
+      --panel-3: rgba(45, 38, 105, .78);
+      --text: #f7f5ff;
+      --muted: #b7b0df;
+      --soft: #8177b4;
+      --line: rgba(172, 146, 255, .24);
+      --line-strong: rgba(173, 122, 255, .64);
+      --purple: #7a4dff;
+      --purple-2: #9b68ff;
+      --green: #1fd26f;
+      --cyan: #bffcff;
+      --gold: #ffd166;
+      --danger: #ff5f7d;
+      --shadow: 0 24px 80px rgba(0, 0, 0, .45);
+      --radius: 8px;
+      --font: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --display: Rajdhani, Inter, sans-serif;
+      --hero-bg: url("assets/bg-elysium-4k.webp");
+    }
+
+    * { box-sizing: border-box; }
+    html {
+      scroll-behavior: smooth;
+      scrollbar-gutter: stable;
+      background: #05030d;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: var(--font);
+      background: transparent;
+      position: relative;
+      isolation: isolate;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        linear-gradient(rgba(5, 3, 13, .68), rgba(5, 3, 13, .88)),
+        url("assets/bg-elysium-4k.webp") center center / contain no-repeat,
+        radial-gradient(circle at 50% 52%, rgba(122, 77, 255, .2), transparent 42%),
+        #05030d;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(90deg, rgba(5,3,13,.42), transparent 24%, transparent 76%, rgba(5,3,13,.42)),
+        linear-gradient(180deg, rgba(5,3,13,.2), rgba(5,3,13,.5));
+      pointer-events: none;
+    }
+
+    body.cart-open { overflow: hidden; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+
+    .shell {
+      width: min(1240px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      background: rgba(8, 5, 22, .96);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      min-height: 64px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 1px solid rgba(255,255,255,.2);
+      box-shadow: 0 0 26px rgba(155, 104, 255, .45);
+      flex: 0 0 auto;
+    }
+
+    .brand strong {
+      display: block;
+      font-family: var(--display);
+      font-size: 24px;
+      line-height: .92;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .game-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .game-tab svg {
+      width: 18px;
+      height: 18px;
+      color: #dcd1ff;
+      flex: 0 0 auto;
+    }
+
+    .btn, .game-tab, .cat-btn, .service-btn, .tab-btn {
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.055);
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 13px;
+      font-weight: 900;
+      letter-spacing: .02em;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover, .game-tab:hover, .cat-btn:hover, .service-btn:hover, .tab-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--line-strong);
+      background: rgba(122, 77, 255, .18);
+    }
+
+    button:disabled,
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: .48;
+      transform: none;
+    }
+
+    .game-tab.active,
+    .btn-primary,
+    .cat-btn.active,
+    .service-btn.active,
+    .tab-btn.active {
+      border-color: rgba(173, 122, 255, .88);
+      background: linear-gradient(135deg, #6848ef, #9b68ff);
+      color: #fff;
+      box-shadow: 0 12px 30px rgba(122, 77, 255, .23);
+    }
+
+    .btn-green {
+      border-color: rgba(31, 210, 111, .75);
+      background: linear-gradient(135deg, #1fd26f, #15a957);
+      color: #04130a;
+      box-shadow: 0 12px 30px rgba(31, 210, 111, .18);
+    }
+
+    .actions {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .site-search {
+      width: min(220px, 22vw);
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(20, 17, 49, .92);
+      color: var(--text);
+      padding: 0 11px;
+      font-weight: 800;
+    }
+
+    .search-results {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 112px;
+      width: min(430px, calc(100vw - 32px));
+      max-height: min(440px, calc(100vh - 96px));
+      overflow: auto;
+      padding: 8px;
+      display: none;
+      gap: 7px;
+      border: 1px solid rgba(172,146,255,.32);
+      border-radius: 10px;
+      background: rgba(9, 6, 26, .98);
+      box-shadow: 0 18px 56px rgba(0,0,0,.48);
+      z-index: 90;
+    }
+
+    .search-results.active { display: grid; }
+
+    .search-result-btn {
+      min-height: 50px;
+      padding: 9px 10px;
+      border: 1px solid rgba(172,146,255,.22);
+      border-radius: 8px;
+      background: rgba(255,255,255,.045);
+      color: var(--text);
+      text-align: left;
+    }
+
+    .search-result-btn strong {
+      display: block;
+      color: #fff;
+      font-family: var(--display);
+      font-size: 18px;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+    }
+
+    .search-result-btn span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .currency {
+      width: auto;
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(20, 17, 49, .92);
+      color: var(--text);
+      padding: 0 10px;
+      font-weight: 900;
+      outline: none;
+    }
+
+    .audio-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 40px;
+      padding: 0 10px;
+      border: 1px solid rgba(172,146,255,.28);
+      border-radius: var(--radius);
+      background: rgba(20,17,49,.92);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .audio-toggle {
+      width: 28px;
+      height: 28px;
+      border: 0;
+      border-radius: 7px;
+      background: linear-gradient(135deg, rgba(122,77,255,.86), rgba(255,179,71,.2));
+      color: #fff;
+      font-weight: 950;
+      display: grid;
+      place-items: center;
+      padding: 0;
+    }
+
+    .audio-volume {
+      width: 74px;
+      accent-color: var(--purple-2);
+    }
+
+    .cart-button {
+      position: relative;
+      width: 48px;
+      padding: 0;
+    }
+
+    .cart-count {
+      position: absolute;
+      right: -7px;
+      top: -7px;
+      min-width: 20px;
+      height: 20px;
+      display: grid;
+      place-items: center;
+      padding: 0 5px;
+      border-radius: 999px;
+      background: var(--green);
+      color: #04130a;
+      font-size: 11px;
+      font-weight: 900;
+      border: 1px solid rgba(255,255,255,.62);
+    }
+
+    .category-bar {
+      position: relative;
+      top: auto;
+      z-index: 45;
+      background: rgba(17, 13, 43, .96);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .category-bar.hidden { display: none; }
+
+    .is-hidden { display: none !important; }
+
+    .category-shell {
+      min-height: 178px;
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) 44px;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .category-scroll {
+      min-height: 178px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scroll-snap-type: none;
+      scroll-padding-inline: 0;
+      scrollbar-width: none;
+      padding: 12px 0;
+      overscroll-behavior-inline: contain;
+      cursor: grab;
+      user-select: none;
+    }
+
+    .category-scroll.dragging {
+      cursor: grabbing;
+      scroll-behavior: auto;
+    }
+
+    .category-scroll::-webkit-scrollbar { display: none; }
+
+    .cat-arrow {
+      width: 44px;
+      min-width: 44px;
+      height: 136px;
+      padding: 0;
+      border-radius: 8px;
+    }
+
+    .cat-arrow {
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .cat-btn {
+      position: relative;
+      overflow: hidden;
+      width: 164px;
+      min-width: 164px;
+      min-height: 154px;
+      flex-direction: column;
+      padding: 9px;
+      text-align: center;
+      justify-content: space-between;
+      align-items: stretch;
+      border-color: rgba(201, 174, 255, .26);
+      background:
+        radial-gradient(circle at 50% 16%, rgba(255, 153, 62, .14), transparent 36%),
+        linear-gradient(180deg, rgba(54, 41, 116, .56), rgba(12, 8, 32, .94));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.08),
+        inset 0 -18px 34px rgba(0,0,0,.18),
+        0 12px 30px rgba(0,0,0,.22);
+    }
+
+    .cat-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(191,252,255,.12), transparent 28%),
+        radial-gradient(circle at 76% 10%, rgba(255, 171, 70, .18), transparent 30%);
+      opacity: .72;
+      pointer-events: none;
+    }
+
+    .cat-btn::after {
+      content: "";
+      position: absolute;
+      inset: auto 10px 7px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 184, 88, .6), transparent);
+      opacity: .55;
+      pointer-events: none;
+    }
+
+    .cat-btn.active {
+      border-color: rgba(255, 184, 88, .78);
+      background:
+        radial-gradient(circle at 50% 18%, rgba(255, 155, 54, .26), transparent 38%),
+        linear-gradient(180deg, rgba(98, 64, 188, .72), rgba(19, 12, 45, .96));
+      box-shadow:
+        0 0 0 1px rgba(255, 184, 88, .22),
+        0 18px 42px rgba(122, 77, 255, .3),
+        inset 0 1px 0 rgba(255,255,255,.14);
+    }
+
+    .service-thumb {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 116px;
+      border: 1px solid rgba(180, 120, 255, .28);
+      border-radius: 10px;
+      background: #080511;
+      box-shadow:
+        inset 0 0 24px rgba(155, 104, 255, .12),
+        0 12px 28px rgba(0,0,0,.38);
+      overflow: hidden;
+    }
+
+    .service-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      transition: transform .22s ease;
+    }
+
+    .cat-btn:hover .service-thumb img,
+    .popular-card:hover .service-thumb img,
+    .service-card:hover .service-thumb img,
+    .detail-left:hover .service-thumb img {
+      transform: scale(1.035);
+    }
+
+    .cat-label {
+      position: relative;
+      z-index: 1;
+      display: block;
+      min-height: 27px;
+      color: #f6f1ff;
+      font-size: 13px;
+      line-height: 1.05;
+      font-weight: 950;
+      overflow-wrap: anywhere;
+      max-width: 100%;
+      text-shadow: 0 7px 20px rgba(0,0,0,.65);
+    }
+
+    .cat-ribbon {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      z-index: 4;
+      max-width: calc(100% - 14px);
+      padding: 4px 7px;
+      border: 1px solid rgba(255,255,255,.32);
+      border-radius: 999px;
+      color: #fff;
+      font-size: 9px;
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      text-shadow: 0 2px 8px rgba(0,0,0,.55);
+      box-shadow: 0 8px 22px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.22);
+      animation: tagFloat 1.8s ease-in-out infinite;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .cat-ribbon.price-drop {
+      background: linear-gradient(135deg, #9b5cff, #ff7a18);
+    }
+
+    .cat-ribbon.hot {
+      background: linear-gradient(135deg, #ff3d26, #ffb347);
+    }
+
+    .cat-ribbon.recommended {
+      background: linear-gradient(135deg, #37e08a, #9b68ff);
+    }
+
+    .cat-ribbon.new {
+      border-color: rgba(255,184,88,.44);
+      background: linear-gradient(135deg, #7a4dff, #ffb347);
+      color: #fff7d6;
+      box-shadow: 0 8px 24px rgba(122,77,255,.38), 0 0 18px rgba(255,184,88,.16);
+    }
+
+    @keyframes tagFloat {
+      0%, 100% { transform: translateY(0) scale(1); filter: brightness(1); }
+      50% { transform: translateY(-2px) scale(1.035); filter: brightness(1.16); }
+    }
+
+    .category-bar.circle-mode .category-shell {
+      min-height: 194px;
+    }
+
+    .category-bar.circle-mode .category-scroll {
+      min-height: 194px;
+      align-items: stretch;
+      padding: 14px 0;
+    }
+
+    .category-bar.circle-mode .cat-btn {
+      width: 170px;
+      min-width: 170px;
+      min-height: 164px;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: 13px;
+      border-color: rgba(172,146,255,.36);
+      background:
+        linear-gradient(180deg, rgba(4,3,12,.06), rgba(4,3,12,.86)),
+        var(--cat-bg) center / cover no-repeat;
+      text-align: left;
+    }
+
+    .category-bar.circle-mode .cat-btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 42%, rgba(7,5,19,.9));
+      pointer-events: none;
+    }
+
+    .category-bar.circle-mode .cat-btn.active {
+      border-color: rgba(176, 255, 0, .95);
+      box-shadow: 0 0 0 2px rgba(176, 255, 0, .32), 0 16px 36px rgba(122,77,255,.22);
+    }
+
+    .category-bar.circle-mode .cat-btn svg {
+      display: none;
+    }
+
+    .category-bar.circle-mode .cat-btn span {
+      position: relative;
+      z-index: 1;
+      color: #fff;
+      font-family: var(--display);
+      font-size: 19px;
+      letter-spacing: .035em;
+      text-shadow: 0 8px 24px rgba(0,0,0,.75);
+    }
+
+    .hero {
+      min-height: 360px;
+      display: grid;
+      align-items: end;
+      padding: 58px 0 34px;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background:
+        linear-gradient(90deg, rgba(5,3,13,.84), rgba(5,3,13,.50) 52%, rgba(5,3,13,.86)),
+        linear-gradient(180deg, rgba(5,3,13,.18), rgba(5,3,13,.82)),
+        var(--hero-bg) var(--hero-position, center center) / cover no-repeat;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 120px;
+      background: linear-gradient(180deg, transparent, rgba(5,3,13,.96));
+      pointer-events: none;
+    }
+
+    .hero .shell { position: relative; z-index: 1; }
+
+    .eyebrow {
+      display: inline-flex;
+      color: var(--cyan);
+      font-family: var(--display);
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 10px 0 9px;
+      max-width: 850px;
+      color: #e9ffff;
+      font-family: var(--display);
+      font-size: clamp(44px, 6vw, 84px);
+      line-height: .9;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      text-shadow: 0 12px 40px rgba(0,0,0,.46);
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 700px;
+      color: #e0e3ff;
+      line-height: 1.55;
+      font-weight: 650;
+      text-shadow: 0 8px 30px rgba(0,0,0,.5);
+    }
+
+    .home-content,
+    .main { padding: 28px 0 60px; }
+
+    .home-content.hidden,
+    .service-content.hidden { display: none; }
+
+    .home-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0 24px;
+    }
+
+    .home-game-card {
+      min-height: 230px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #05030d;
+      box-shadow: 0 18px 54px rgba(0,0,0,.28);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      position: relative;
+      overflow: hidden;
+      text-align: left;
+      transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease, filter .22s ease;
+    }
+
+    .home-game-media {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      filter: brightness(.86) contrast(1.08) saturate(1);
+      transition: transform .28s ease, filter .28s ease;
+      pointer-events: none;
+    }
+
+    .home-game-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.06), rgba(5,3,13,.84)),
+        radial-gradient(circle at 18% 70%, rgba(122,77,255,.24), transparent 38%);
+      pointer-events: none;
+    }
+
+    .home-game-card.coming-soon {
+      cursor: not-allowed;
+      filter: none;
+      opacity: 1;
+    }
+
+    .home-game-card.coming-soon .btn {
+      border-color: rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
+      color: var(--muted);
+      box-shadow: none;
+    }
+
+    .home-game-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(180, 120, 255, .62);
+      box-shadow: 0 24px 70px rgba(122,77,255,.18);
+      filter: brightness(1.06) contrast(1.04);
+    }
+
+    .home-game-card:hover .home-game-media {
+      transform: scale(1.025);
+      filter: brightness(.86) contrast(1.12) saturate(1);
+    }
+
+    .home-game-card > :not(.home-game-media) { position: relative; z-index: 2; }
+
+    .home-game-card h2 {
+      margin: 0 0 6px;
+      color: #f4f0ff;
+      font-family: var(--display);
+      font-size: 31px;
+      line-height: .95;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      text-shadow: 0 9px 24px rgba(0,0,0,.72);
+      overflow-wrap: anywhere;
+    }
+
+    .home-game-card p {
+      margin: 0 0 13px;
+      color: #e6e2ff;
+      line-height: 1.45;
+      font-size: 14px;
+      max-width: 420px;
+    }
+
+    .cs2-split-card {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      overflow: hidden;
+      border: 1px solid rgba(172, 146, 255, .44);
+      border-radius: var(--radius);
+      background: #05030d;
+      box-shadow: 0 18px 54px rgba(0,0,0,.28);
+    }
+
+    .cs2-mode-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 230px;
+      border-radius: 0;
+      border: 0;
+      background: #05030d;
+      box-shadow: none;
+      padding: 0;
+      text-align: left;
+      cursor: not-allowed;
+    }
+
+    .cs2-mode-card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      filter: brightness(1.2) contrast(1.14) saturate(1.08);
+      transition: transform .28s ease, filter .28s ease;
+    }
+
+    .cs2-mode-card + .cs2-mode-card {
+      border-left: 1px solid rgba(172, 146, 255, .28);
+    }
+
+    .cs2-mode-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0), rgba(5,3,13,.30)),
+        radial-gradient(circle at 15% 65%, rgba(122,77,255,.10), transparent 38%);
+      pointer-events: none;
+    }
+
+    .cs2-mode-card:hover img {
+      transform: scale(1.025);
+      filter: brightness(1.25) contrast(1.16) saturate(1.12);
+    }
+
+    .cs2-mode-card.coming-soon:not(:hover) img {
+      filter: brightness(1.2) contrast(1.14) saturate(1.08);
+    }
+
+    .cs2-mode-overlay {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      z-index: 2;
+    }
+
+    .cs2-mode-overlay h3 {
+      margin: 0 0 6px;
+      color: #f4f0ff;
+      font-family: var(--display);
+      font-size: 26px;
+      line-height: .95;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      text-shadow: 0 12px 34px rgba(0,0,0,.7);
+    }
+
+    .cs2-mode-overlay p {
+      margin: 0 0 13px;
+      max-width: 420px;
+      color: rgba(240,237,255,.84);
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 650;
+      text-shadow: 0 8px 24px rgba(0,0,0,.68);
+    }
+
+    .disabled-btn {
+      display: inline-flex;
+      min-width: 132px;
+      height: 34px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0;
+      border-radius: var(--radius);
+      border: 1px solid rgba(172, 146, 255, .45);
+      background: rgba(120, 80, 180, .22);
+      color: rgba(255,255,255,.72);
+      font-weight: 900;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .info-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(38,31,91,.48), rgba(12,9,30,.66));
+      box-shadow: 0 18px 54px rgba(0,0,0,.22);
+      padding: 16px;
+    }
+
+    .info-card h3 {
+      margin: 0 0 8px;
+      font-family: var(--display);
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .info-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .quick-head, .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .quick-head h2, .section-head h2 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .quick-head p, .section-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .popular-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .popular-card, .service-card, .detail-left, .order-card, .cart-item {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(38, 31, 91, .62), rgba(14, 11, 36, .78));
+      box-shadow: 0 18px 54px rgba(0,0,0,.26);
+    }
+
+    .popular-card, .service-card {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 15px;
+    }
+
+    .popular-card { min-height: 184px; }
+    .service-card { min-height: 302px; }
+
+    .popular-card::before, .service-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 3px;
+      background: linear-gradient(90deg, #9b68ff, #d2b9ff, #1fd26f);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: flex-start;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .card-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 34% 22%, rgba(191,252,255,.22), transparent 42%),
+        linear-gradient(145deg, rgba(122,77,255,.2), rgba(12,9,30,.7));
+      color: #efeaff;
+      flex: 0 0 auto;
+      box-shadow: inset 0 0 18px rgba(191,252,255,.08);
+    }
+
+    .category-thumb {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 340 / 270;
+      padding: 0;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    .category-thumb .service-thumb {
+      width: 100%;
+      height: 100%;
+      border-color: rgba(255, 184, 88, .16);
+    }
+
+    .service-card .category-thumb {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 340 / 270;
+      margin-bottom: 2px;
+    }
+
+    .popular-card {
+      gap: 10px;
+      padding: 12px;
+    }
+
+    .popular-card-head {
+      display: grid;
+      grid-template-columns: 116px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      min-width: 0;
+    }
+
+    .popular-card .category-thumb {
+      grid-row: 1 / span 2;
+      width: 116px;
+      align-self: start;
+    }
+
+    .popular-card-main {
+      min-width: 0;
+    }
+
+    .popular-card .price {
+      grid-column: 2;
+      justify-self: start;
+      text-align: left;
+      font-size: 22px;
+    }
+
+    .popular-card .service-btn {
+      align-self: end;
+      min-width: 108px;
+      min-height: 38px;
+      margin-left: auto;
+    }
+
+    .popular-card h3, .service-card h3 {
+      margin: 0 0 7px;
+      font-family: var(--display);
+      font-size: 23px;
+      line-height: .98;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      overflow-wrap: normal;
+      word-break: normal;
+    }
+
+    .popular-card h3 {
+      font-size: 21px;
+      line-height: 1;
+    }
+
+    .popular-card p, .service-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.43;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .popular-card p {
+      font-size: 13px;
+      line-height: 1.34;
+    }
+
+    .badge {
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      color: #eeeaff;
+      padding: 4px 7px;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .popular-card footer, .service-card footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: auto;
+      padding-top: 14px;
+    }
+
+    .price {
+      color: var(--green);
+      font-family: var(--display);
+      font-size: 26px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: .015em;
+      text-shadow: 0 0 18px rgba(31, 210, 111, .18);
+      white-space: nowrap;
+    }
+
+    .price small {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--soft);
+      font-family: var(--font);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .price del,
+    .price-old {
+      position: relative;
+      display: inline-block;
+      margin-right: 6px;
+      color: rgba(255,255,255,.52);
+      font-size: .72em;
+      text-decoration: none;
+      text-shadow: none;
+    }
+
+    .price del::after,
+    .price-old::after,
+    .old-total::after {
+      content: "";
+      position: absolute;
+      left: -4px;
+      right: -4px;
+      top: 50%;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(255,95,125,.15), rgba(255,95,125,.95), rgba(255,184,88,.7));
+      transform: rotate(-13deg);
+      transform-origin: center;
+      pointer-events: none;
+      box-shadow: 0 0 6px rgba(255,95,125,.34);
+    }
+
+    .sale-pill,
+    .deal-hint,
+    .detail-deal {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      max-width: 100%;
+      padding: 7px 12px;
+      border: 1px solid rgba(255,184,88,.58);
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 8% 30%, rgba(255,184,88,.28), transparent 36%),
+        linear-gradient(180deg, rgba(58,41,101,.9), rgba(16,11,37,.96));
+      color: #fff4cf;
+      font-size: 13px;
+      font-weight: 950;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: .045em;
+      box-shadow: inset 0 0 18px rgba(255,184,88,.1), 0 8px 22px rgba(0,0,0,.28);
+    }
+
+    .sale-pill .price-old,
+    .detail-deal .price-old,
+    .old-total {
+      position: relative;
+      color: rgba(255,255,255,.55);
+      text-decoration: none;
+    }
+
+    .detail-deal {
+      justify-self: start;
+      margin-right: auto;
+      font-size: 13px;
+      min-height: 36px;
+    }
+
+    .detail-deal .price-old {
+      font-size: .95em;
+    }
+
+    .detail-deal:empty {
+      display: none;
+    }
+
+    .deal-hint {
+      display: none;
+      justify-content: center;
+      width: fit-content;
+      color: #a7ffcf;
+      border-color: rgba(31,210,111,.34);
+      background: rgba(20, 64, 46, .5);
+      animation: softPulse 1.8s ease-in-out infinite;
+    }
+
+    .deal-hint.active {
+      display: inline-flex;
+    }
+
+    @keyframes softPulse {
+      0%, 100% { transform: translateY(0); box-shadow: 0 0 0 rgba(31,210,111,0); }
+      50% { transform: translateY(-1px); box-shadow: 0 0 18px rgba(31,210,111,.16); }
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .service-grid.is-hidden {
+      display: none;
+    }
+
+    .detail {
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(400px, .56fr);
+      gap: 18px;
+      align-items: start;
+      margin-top: 8px;
+    }
+
+    .detail-left {
+      min-height: 0;
+      padding: 0;
+      position: relative;
+      overflow: visible;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .detail-left::before {
+      display: none;
+    }
+
+    .detail-left > * { position: relative; z-index: 1; }
+
+    .detail-title {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .detail-icon {
+      width: 150px;
+      height: auto;
+      aspect-ratio: 340 / 270;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: var(--radius);
+      background: transparent;
+      color: #dcd1ff;
+    }
+
+    .detail-icon .service-thumb {
+      width: 100%;
+      height: 100%;
+      border-color: rgba(255, 184, 88, .22);
+    }
+
+    .detail-title h2 {
+      margin: 0 0 5px;
+      color: var(--cyan);
+      font-family: var(--display);
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: .94;
+      text-transform: uppercase;
+      letter-spacing: .055em;
+      overflow-wrap: normal;
+      word-break: normal;
+      text-wrap: balance;
+    }
+
+    .rating {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      color: #f6f3ff;
+      font-size: 12px;
+      font-weight: 850;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 999px;
+      background: rgba(255,255,255,.055);
+      padding: 6px 9px;
+    }
+
+    .stars {
+      display: inline-flex;
+      gap: 2px;
+    }
+
+    .stars span {
+      width: 17px;
+      height: 17px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 38% 28%, rgba(255,255,255,.5), transparent 32%),
+        linear-gradient(135deg, #ffb347, #7a4dff 72%);
+      color: #fff7d6;
+      font-size: 0;
+      line-height: 1;
+      box-shadow: 0 0 14px rgba(255, 184, 88, .28);
+    }
+
+    .stars span::before {
+      content: "\2605";
+      font-size: 11px;
+    }
+
+    .intro {
+      margin: 0;
+      max-width: 820px;
+      color: #e6e2ff;
+      line-height: 1.52;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .detail-steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+      max-width: 860px;
+    }
+
+    .order-feed {
+      max-width: 860px;
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .order-feed-card {
+      min-height: 62px;
+      padding: 10px;
+      border: 1px solid rgba(255,184,88,.25);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 8% 20%, rgba(255,184,88,.12), transparent 34%),
+        linear-gradient(180deg, rgba(38,31,91,.34), rgba(12,9,30,.52));
+      box-shadow: inset 0 0 18px rgba(122,77,255,.09);
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity .35s ease;
+    }
+
+    .order-feed-card.is-changing {
+      opacity: 0;
+    }
+
+    .order-feed-card small {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .live-dot {
+      width: 9px;
+      height: 9px;
+      flex: 0 0 9px;
+      border-radius: 999px;
+      background: #ff304d;
+      box-shadow: 0 0 0 3px rgba(255,48,77,.14), 0 0 13px rgba(255,48,77,.6);
+    }
+
+    .order-feed-card strong {
+      display: block;
+      margin-top: 5px;
+      color: #f5f0ff;
+      font-family: var(--display);
+      font-size: 18px;
+      line-height: 1.04;
+      letter-spacing: .035em;
+      text-transform: uppercase;
+      overflow-wrap: anywhere;
+    }
+
+    #serviceContent,
+    #detailSection {
+      scroll-margin-top: 84px;
+    }
+
+    .detail-step {
+      min-height: 76px;
+      border: 1px solid rgba(172,146,255,.23);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(38,31,91,.34), rgba(12,9,30,.46));
+      padding: 10px;
+    }
+
+    .detail-step strong {
+      display: block;
+      color: var(--cyan);
+      font-family: var(--display);
+      font-size: 16px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .detail-step span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .order-card {
+      position: sticky;
+      top: 254px;
+      max-height: calc(100vh - 238px);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .order-form {
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+      overflow: auto;
+      flex: 1 1 auto;
+      min-height: 180px;
+      max-height: min(68vh, 680px);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(172,146,255,.62) rgba(12,8,31,.34);
+    }
+
+    .order-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 10px 14px 0;
+    }
+
+    .clear-service {
+      min-height: 30px;
+      padding: 0 10px;
+      border-color: rgba(255,184,88,.45);
+      color: #ffe0a3;
+      font-size: 11px;
+      background: rgba(255,184,88,.08);
+    }
+
+    label, .field-label {
+      display: block;
+      margin-bottom: 7px;
+      color: #d8d1ff;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .055em;
+      text-transform: uppercase;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid rgba(172, 146, 255, .34);
+      border-radius: 7px;
+      background: rgba(43, 36, 108, .92);
+      color: #fff;
+      padding: 10px 11px;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(191, 252, 255, .7);
+      box-shadow: 0 0 0 3px rgba(191,252,255,.08);
+    }
+
+    textarea {
+      min-height: 104px;
+      resize: vertical;
+    }
+
+    input[type="range"] {
+      accent-color: var(--green);
+      min-height: 32px;
+      padding: 0;
+    }
+
+    .coin-panel {
+      display: grid;
+      gap: 12px;
+      border: 1px solid rgba(172,146,255,.2);
+      border-radius: 9px;
+      background: rgba(255,255,255,.035);
+      padding: 12px;
+    }
+
+    .coin-readout {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .coin-readout strong {
+      color: var(--green);
+      font-family: var(--display);
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: .02em;
+    }
+
+    .coin-readout strong .discounted-tag {
+      display: none;
+      margin-left: 8px;
+      vertical-align: middle;
+      color: #ffe8a8;
+      font-family: var(--font);
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      animation: softPulse 1.8s ease-in-out infinite;
+    }
+
+    .coin-readout strong .discounted-tag.active {
+      display: inline-flex;
+    }
+
+    .coin-readout span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .range-ticks {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 3px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .range-ticks.five {
+      grid-template-columns: repeat(5, 1fr);
+      margin-top: 6px;
+      font-size: 11px;
+    }
+
+    .range-ticks.twelve {
+      grid-template-columns: repeat(12, 1fr);
+      margin-top: 6px;
+      font-size: 10px;
+    }
+
+    .level-range {
+      display: grid;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid rgba(172,146,255,.24);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(122,77,255,.18), transparent 42%),
+        linear-gradient(180deg, rgba(54,41,116,.42), rgba(12,8,32,.72));
+    }
+
+    .level-range-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .level-range-chip {
+      width: 74px;
+      min-height: 62px;
+      display: grid;
+      place-items: center;
+      padding: 7px;
+      border-radius: 9px;
+      background: linear-gradient(180deg, rgba(122,77,255,.96), rgba(63,42,165,.92));
+      box-shadow: 0 12px 26px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.14);
+      text-align: center;
+    }
+
+    .level-range-chip small,
+    .level-range-chip span {
+      display: block;
+      color: #e8e2ff;
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+
+    .level-range-chip strong {
+      color: #fff;
+      font-size: 17px;
+      line-height: 1;
+      font-weight: 950;
+    }
+
+    .dual-range {
+      position: relative;
+      height: 30px;
+      display: grid;
+      align-items: center;
+    }
+
+    .dual-range-track,
+    .dual-range-fill {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 4px;
+      border-radius: 999px;
+    }
+
+    .dual-range-track {
+      background: rgba(255,255,255,.18);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+    }
+
+    .dual-range-fill {
+      left: var(--range-left, 0%);
+      right: var(--range-right, 0%);
+      background: linear-gradient(90deg, #7a4dff, #ffb347);
+      box-shadow: 0 0 18px rgba(122,77,255,.42);
+    }
+
+    .dual-range input[type="range"] {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 30px;
+      margin: 0;
+      background: transparent;
+      pointer-events: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .dual-range input[type="range"]::-webkit-slider-thumb {
+      width: 22px;
+      height: 22px;
+      border: 3px solid rgba(191,252,255,.28);
+      border-radius: 999px;
+      background: linear-gradient(135deg, #7a4dff, #2fe88f);
+      box-shadow: 0 0 0 4px rgba(122,77,255,.18), 0 10px 22px rgba(0,0,0,.36);
+      cursor: pointer;
+      pointer-events: auto;
+      -webkit-appearance: none;
+    }
+
+    .dual-range input[type="range"]::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border: 3px solid rgba(191,252,255,.28);
+      border-radius: 999px;
+      background: linear-gradient(135deg, #7a4dff, #2fe88f);
+      box-shadow: 0 0 0 4px rgba(122,77,255,.18), 0 10px 22px rgba(0,0,0,.36);
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .equal-grid > div {
+      min-height: 78px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .mod-wide {
+      grid-column: 1 / -1;
+    }
+
+    .discount-note {
+      display: block;
+      margin-top: 5px;
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .03em;
+    }
+
+    .bp-search-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: end;
+      margin: 10px 0;
+    }
+
+    .bp-search-row .search-box {
+      margin: 0;
+    }
+
+    .coin-quick-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .seed-quick-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .depositary-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 120px;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .depositary-grid input[type="number"] {
+      text-align: center;
+      font-weight: 900;
+    }
+
+    .raid-toggle-grid,
+    .quick-raid-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .bundle-grid,
+    .map-choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .map-choice-grid {
+      max-height: 192px;
+      overflow: auto;
+      padding-right: 3px;
+    }
+
+    .map-choice-grid.expanded {
+      max-height: 278px;
+    }
+
+    .map-row {
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr) 74px;
+      align-items: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 8px 9px;
+      border: 1px solid rgba(172,146,255,.24);
+      border-radius: 8px;
+      background: rgba(255,255,255,.045);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .map-row input { width: 16px; height: 16px; }
+
+    .map-row select {
+      min-height: 30px;
+      padding: 0 6px;
+      font-size: 12px;
+    }
+
+    .raid-pill {
+      min-height: 52px;
+      border: 1px solid rgba(172,146,255,.28);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 16% 16%, rgba(255,184,88,.13), transparent 38%),
+        linear-gradient(180deg, rgba(54,41,116,.58), rgba(18,13,47,.88));
+      color: #f6f1ff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 9px 10px;
+      font-weight: 950;
+      text-align: left;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .raid-pill small {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .raid-pill strong {
+      display: block;
+      min-width: 0;
+      line-height: 1.05;
+      overflow-wrap: normal;
+      word-break: normal;
+    }
+
+    .raid-pill span {
+      color: var(--gold);
+      font-family: var(--display);
+      font-size: 18px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .raid-pill.active {
+      border-color: rgba(255,184,88,.86);
+      background:
+        radial-gradient(circle at 15% 12%, rgba(255,184,88,.24), transparent 42%),
+        linear-gradient(180deg, rgba(98,64,188,.72), rgba(21,14,54,.92));
+      box-shadow: 0 0 0 1px rgba(255,184,88,.18), 0 12px 28px rgba(122,77,255,.2);
+    }
+
+    .form-divider {
+      height: 1px;
+      margin: 12px 0;
+      background: linear-gradient(90deg, transparent, rgba(255,184,88,.5), transparent);
+    }
+
+    .raid-panel-note {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 700;
+    }
+
+    .field-block {
+      border: 1px solid rgba(172,146,255,.22);
+      border-radius: 8px;
+      padding: 11px;
+      background: rgba(255,255,255,.035);
+    }
+
+    .field-block h4 {
+      margin: 0 0 10px;
+      color: var(--cyan);
+      font-family: var(--display);
+      font-size: 18px;
+      line-height: 1;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .field-block-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .field-block-head h4 {
+      margin: 0;
+    }
+
+    .event-switch {
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      padding: 5px 8px;
+      border: 1px solid rgba(255,184,88,.36);
+      border-radius: 8px;
+      background: rgba(255,184,88,.08);
+      color: #ffe7b8;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .event-switch.event-mode-card {
+      position: relative;
+      min-height: 58px;
+      min-width: 156px;
+      overflow: hidden;
+      justify-content: flex-start;
+      padding: 9px 12px;
+      background:
+        linear-gradient(90deg, rgba(16,11,35,.85), rgba(49,35,96,.72)),
+        var(--event-bg, none) center center / cover no-repeat;
+      box-shadow: inset 0 0 18px rgba(255,184,88,.08);
+    }
+
+    .event-switch.event-mode-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(9,6,24,.92), rgba(9,6,24,.2));
+      z-index: 0;
+    }
+
+    .event-switch.event-mode-card input,
+    .event-switch.event-mode-card span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .event-switch input {
+      width: 15px;
+      height: 15px;
+      accent-color: var(--gold);
+    }
+
+    .event-switch.event-mode-card input {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      flex: 0 0 18px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,184,88,.74);
+      border-radius: 5px;
+      background: rgba(8,6,20,.72);
+      box-shadow: inset 0 0 10px rgba(0,0,0,.36), 0 0 12px rgba(255,184,88,.12);
+    }
+
+    .event-switch.event-mode-card input:checked {
+      border-color: rgba(255,214,128,.95);
+      background: linear-gradient(135deg, #ffd675, #ff994d);
+    }
+
+    .event-switch.event-mode-card input:checked::before {
+      content: "";
+      width: 10px;
+      height: 7px;
+      border-left: 3px solid #21110a;
+      border-bottom: 3px solid #21110a;
+      transform: rotate(-45deg) translate(1px, -1px);
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    #bpTabs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tab-btn {
+      min-height: 34px;
+      padding: 0 9px;
+      font-size: 12px;
+    }
+
+    .scroll-list {
+      max-height: 244px;
+      overflow: auto;
+      display: grid;
+      gap: 8px;
+      padding-right: 3px;
+    }
+
+    .search-box {
+      margin: 10px 0;
+    }
+
+    .checks {
+      display: grid;
+      gap: 8px;
+    }
+
+    .check-row {
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      min-height: 38px;
+      padding: 8px;
+      border: 1px solid rgba(172, 146, 255, .24);
+      border-radius: 7px;
+      background: rgba(255,255,255,.045);
+      color: #f0edff;
+      font-size: 13px;
+      font-weight: 750;
+      overflow: hidden;
+    }
+
+    .check-row input {
+      width: 16px;
+      min-height: 16px;
+      accent-color: var(--green);
+      flex: 0 0 auto;
+    }
+
+    .check-row span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .summary-total span {
+      display: block;
+      color: #fff;
+      font-family: var(--display);
+      font-size: 17px;
+      line-height: 1;
+    }
+
+    .summary-total small {
+      display: block;
+      color: var(--muted);
+      margin-top: 4px;
+      font-size: 11px;
+      line-height: 1.25;
+    }
+
+    .summary-total {
+      padding: 13px 14px 14px;
+      border-top: 1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      flex: 0 0 auto;
+    }
+
+    .summary-total span {
+      color: var(--green);
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: .015em;
+      text-shadow: 0 0 20px rgba(31, 210, 111, .2);
+    }
+
+    .summary-total .old-total {
+      display: inline-block;
+      margin-right: 8px;
+      color: rgba(255,255,255,.46);
+      font-size: .62em;
+      text-shadow: none;
+    }
+
+    .summary-total em {
+      display: block;
+      color: var(--soft);
+      font-style: normal;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .cart-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      justify-items: end;
+      z-index: 90;
+      padding: 18px;
+      background: rgba(0,0,0,.72);
+    }
+
+    .cart-backdrop.active { display: grid; }
+
+    .id-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(10px);
+    }
+
+    .id-modal-backdrop.active {
+      display: grid;
+    }
+
+    .id-modal {
+      width: min(480px, 100%);
+      padding: 20px;
+      border: 1px solid rgba(172,146,255,.38);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(122,77,255,.24), transparent 42%),
+        linear-gradient(180deg, rgba(29,22,68,.98), rgba(10,7,25,.98));
+      box-shadow: var(--shadow);
+    }
+
+    .id-modal h2 {
+      margin: 0 0 8px;
+      color: var(--cyan);
+      font-family: var(--display);
+      font-size: 28px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .id-modal p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.45;
+      font-weight: 700;
+    }
+
+    .id-modal label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--cyan);
+      font-family: var(--display);
+      font-size: 14px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .id-modal input {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 8px;
+      border: 1px solid rgba(172,146,255,.5);
+      background: rgba(49,38,111,.76);
+      color: #fff;
+      padding: 0 13px;
+      font: 800 16px var(--font);
+      outline: none;
+    }
+
+    .id-modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .id-modal-actions .btn {
+      min-height: 48px;
+      font-size: 22px;
+    }
+
+    .btn-danger {
+      border-color: rgba(255,95,125,.45);
+      background: linear-gradient(180deg, rgba(130,31,52,.86), rgba(71,12,28,.92));
+      color: #ffe8ee;
+    }
+
+    .drawer {
+      width: min(460px, 100%);
+      height: calc(100svh - 36px);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      background: rgba(18, 14, 45, .98);
+      box-shadow: var(--shadow);
+    }
+
+    .drawer-head, .drawer-foot {
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .drawer-foot {
+      border-top: 1px solid var(--line);
+      border-bottom: 0;
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .drawer-head h2 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: 26px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .drawer-body {
+      flex: 1;
+      overflow: auto;
+      padding: 14px;
+    }
+
+    .close {
+      width: 38px;
+      min-height: 38px;
+      padding: 0;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .cart-item {
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .cart-item h3 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: 20px;
+      line-height: 1;
+      text-transform: uppercase;
+      overflow-wrap: anywhere;
+    }
+
+    .cart-item p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      white-space: pre-line;
+      line-height: 1.45;
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .cart-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .remove {
+      min-height: 30px;
+      margin-top: 10px;
+      padding: 0 9px;
+      border-color: rgba(255,95,125,.5);
+      color: #ffd7df;
+      font-size: 11px;
+    }
+
+    .empty {
+      padding: 32px 10px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .copy-status {
+      min-height: 20px;
+      color: var(--green);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 120;
+      transform: translateX(-50%) translateY(22px);
+      opacity: 0;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: rgba(18, 14, 45, .98);
+      color: #fff;
+      box-shadow: var(--shadow);
+      padding: 11px 14px;
+      font-weight: 800;
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+
+    .toast.active {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 1080px) {
+      .topbar-inner { grid-template-columns: 1fr auto; }
+      .game-tabs { grid-column: 1 / -1; justify-content: flex-start; overflow-x: auto; padding-bottom: 10px; }
+      .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .detail { grid-template-columns: 1fr; }
+      .order-card {
+        position: static;
+        max-height: none;
+      }
+      .order-form { max-height: none; }
+    }
+
+    @media (max-width: 720px) {
+      .shell { width: min(100% - 22px, 1240px); }
+      .brand strong { font-size: 20px; }
+      .actions { gap: 6px; flex-wrap: wrap; grid-column: 1 / -1; justify-content: flex-start; }
+      .site-search { width: min(100%, 220px); flex: 1 1 170px; }
+      #siteSearchBtn { width: auto; }
+      .audio-control { flex: 0 0 auto; }
+      .audio-volume { width: 58px; }
+      .currency { max-width: 88px; }
+      .hero { min-height: 320px; padding-top: 38px; }
+      .popular-grid, .service-grid, .field-grid, .home-grid, .info-grid { grid-template-columns: 1fr; }
+      .cs2-split-card { grid-template-columns: 1fr; }
+      .cs2-mode-card + .cs2-mode-card { border-left: 0; border-top: 1px solid rgba(172, 146, 255, .28); }
+      .cs2-mode-card { min-height: 230px; }
+      .cs2-mode-overlay { left: 20px; right: 20px; bottom: 22px; }
+      .disabled-btn { width: 100%; min-width: 0; }
+      .popular-card-head { grid-template-columns: 100px minmax(0, 1fr); }
+      .popular-card .category-thumb { width: 100px; }
+      .raid-toggle-grid, .quick-raid-grid { grid-template-columns: 1fr 1fr; }
+      .detail-steps { grid-template-columns: 1fr; }
+      .detail-title { grid-template-columns: 1fr; }
+      .detail-icon { width: 150px; height: auto; }
+      .quick-head, .section-head { align-items: flex-start; flex-direction: column; }
+      .cart-backdrop { padding: 10px; }
+      .drawer { height: calc(100svh - 20px); }
+      .btn:not(.cart-button):not(#siteSearchBtn), .service-btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <audio id="bgMusic" src="assets/elysium-loop.mp3" loop preload="auto" autoplay></audio>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="#" id="brandHome">
+        <img src="assets/elysium-mark.webp" alt="ELYSIUM BOOST logo">
+        <strong>ELYSIUM BOOST</strong>
+      </a>
+      <nav class="game-tabs" id="gameTabs" aria-label="Choose game"></nav>
+      <div class="actions">
+        <input class="site-search" id="siteSearch" type="search" placeholder="Search services" aria-label="Search services">
+        <button class="btn" id="siteSearchBtn" type="button">Search</button>
+        <div class="search-results" id="siteSearchResults" role="listbox" aria-label="Search results"></div>
+        <select class="currency" id="language" aria-label="Language">
+          <option value="EN">EN</option>
+          <option value="TR">TR</option>
+        </select>
+        <select class="currency" id="currency" aria-label="Currency">
+          <option value="USD">$ USD</option>
+          <option value="EUR">&euro; EUR</option>
+          <option value="GBP">&pound; GBP</option>
+          <option value="TRY">&#8378; TRY</option>
+        </select>
+        <div class="audio-control" title="Music volume">
+          <button class="audio-toggle" id="audioToggle" type="button" aria-label="Toggle music">&#9835;</button>
+          <input class="audio-volume" id="audioVolume" type="range" min="0" max="100" value="22" aria-label="Music volume">
+        </div>
+        <button class="btn cart-button" id="cartOpen" type="button" aria-label="Open cart">Cart<span class="cart-count" id="cartCount">0</span></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="category-bar" id="categoryBar">
+    <div class="shell category-shell">
+      <button class="btn cat-arrow" id="catPrev" type="button" aria-label="Previous categories">&lsaquo;</button>
+      <div class="category-scroll" id="categoryScroll"></div>
+      <button class="btn cat-arrow" id="catNext" type="button" aria-label="Next categories">&rsaquo;</button>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="shell">
+        <span class="eyebrow" id="heroKicker">Arc Raiders Boost</span>
+        <h1 id="heroTitle">Buy Arc Raiders Services</h1>
+        <p id="heroCopy">Choose a service, customize the order, add it to cart, and copy a clean Discord ticket. Customers can view local currency while booster totals stay in USD.</p>
+      </div>
+    </section>
+
+    <section class="home-content" id="homeContent">
+      <div class="shell">
+        <div class="quick-head" id="popularHead">
+          <div>
+            <h2>Choose Your Game</h2>
+            <p>Select a game first. The page will switch to that game's services and background.</p>
+          </div>
+        </div>
+        <div class="home-grid" id="homeGameGrid"></div>
+        <div class="info-grid">
+          <article class="info-card">
+            <h3>About Us</h3>
+            <p>ELYSIUM BOOST is built as a clean Discord-ticket order desk for premium game services. Pick a service, customize it, and send boosters a readable order summary.</p>
+          </article>
+          <article class="info-card">
+            <h3>How It Works</h3>
+            <p>Choose a game, select a service, adjust options and quantities, add it to cart, then copy the ticket into Discord for confirmation.</p>
+          </article>
+          <article class="info-card">
+            <h3>Clear Pricing</h3>
+            <p>Customers can view prices in their selected currency, and the copied ticket keeps that same currency.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="main service-content hidden" id="serviceContent">
+      <div class="shell">
+        <div class="quick-head">
+          <div>
+            <h2 id="popularTitle">Popular Orders</h2>
+            <p id="popularCopy">Fast-start services customers usually choose first.</p>
+          </div>
+        </div>
+        <div class="popular-grid" id="popularGrid"></div>
+
+        <div class="section-head" id="serviceHead">
+          <div>
+            <h2 id="serviceTitle">Services</h2>
+            <p id="serviceCopy">Open a service to see details, delivery notes, and customization.</p>
+          </div>
+        </div>
+        <div class="service-grid" id="serviceGrid"></div>
+
+        <section class="detail" id="detailSection" aria-label="Service details">
+          <div class="detail-left">
+            <div class="detail-title">
+              <div class="detail-icon" id="detailIcon"></div>
+              <div>
+                <h2 id="detailTitle">Service Details</h2>
+                <div class="rating">
+                  <span>Excellent</span>
+                  <span class="stars"><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span></span>
+                  <span>Discord order support</span>
+                </div>
+              </div>
+            </div>
+            <p class="intro" id="detailIntro"></p>
+            <div class="detail-steps" id="detailSteps"></div>
+            <div class="order-feed" id="orderFeed" aria-live="polite"></div>
+          </div>
+          <aside class="order-card">
+            <div class="order-panel-head"><span class="detail-deal" id="detailDeal"></span><button class="btn clear-service" id="clearService" type="button">Clear</button></div>
+            <div class="order-form" id="orderForm"></div>
+            <div class="summary-total">
+              <small>Total</small>
+              <span id="liveTotal">$0.00</span>
+              <em id="usdHint">Ticket value: $0.00 USD</em>
+              <button class="btn btn-green" id="addToCart" type="button" style="width:100%;margin-top:12px">Add to Cart</button>
+            </div>
+          </aside>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div class="cart-backdrop" id="cartBackdrop" aria-hidden="true">
+    <aside class="drawer" aria-label="Cart">
+      <div class="drawer-head">
+        <h2>Order Cart</h2>
+        <button class="btn close" id="cartClose" type="button" aria-label="Close cart">&times;</button>
+      </div>
+      <div class="drawer-body" id="cartBody"></div>
+      <div class="drawer-foot">
+        <div class="summary-total" style="padding:0;border:0;background:transparent">
+          <small>Cart Total</small>
+          <span id="cartTotal">$0.00</span>
+          <em id="cartUsdHint">Ticket total: $0.00 USD</em>
+        </div>
+        <button class="btn btn-green" id="copyOrder" type="button">Copy Discord Ticket</button>
+        <button class="btn" id="clearCart" type="button">Clear Cart</button>
+        <a class="btn btn-primary" id="openDiscord" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Open Discord</a>
+        <a class="btn" href="https://discord.com/channels/1499767937974669363/1503176511912542298" target="_blank" rel="noopener">Leave Feedback</a>
+        <div class="copy-status" id="copyStatus" aria-live="polite"></div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="id-modal-backdrop" id="arcIdModal" aria-hidden="true">
+    <div class="id-modal" role="dialog" aria-modal="true" aria-labelledby="arcIdTitle">
+      <h2 id="arcIdTitle">Embark ID</h2>
+      <p id="arcIdCopy">Add your in-game ID before copying or opening the Discord ticket.</p>
+      <label id="arcIdLabel" for="arcIdInput">Embark ID</label>
+      <input id="arcIdInput" type="text" autocomplete="off" placeholder="Name#0000">
+      <div class="id-modal-actions">
+        <button class="btn btn-green" id="arcIdDone" type="button" aria-label="Done">&#10003;</button>
+        <button class="btn btn-danger" id="arcIdSkip" type="button" aria-label="Will type it on Discord">&#10005;</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const DISCORD_URL = "https://discord.com/channels/1499767937974669363/1499796035382415462";
+
+    const rates = {
+      USD: { symbol: "$", rate: 1 },
+      EUR: { symbol: "\u20ac", rate: 0.92 },
+      GBP: { symbol: "\u00a3", rate: 0.79 },
+      TRY: { symbol: "\u20ba", rate: 32.5 }
+    };
+
+    const recentOrders = [
+      "20x Tempest",
+      "Anvil Blueprint",
+      "Bobcat Blueprint",
+      "Tempest Blueprint",
+      "Vulcano Blueprint",
+      "Venator Blueprint",
+      "Looting Mk.3 Survivor Blueprint",
+      "20x Bobcat",
+      "10x Bobcat + 10x Vulcano",
+      "3M Discounted Coins",
+      "4x Raid Boost",
+      "6M Discounted Coins",
+      "20x Looting Mk.3 Survivor",
+      "20x Medium Shield",
+      "100x Herbal Bandage",
+      "2,500 Assorted Seeds",
+      "Trials Boost +3 Rank Up",
+      "Scrappy Level 1 to 5",
+      "Expedition Boost",
+      "10x Canto",
+      "10x Venator",
+      "20x Anvil",
+      "Extended Medium Mag III Blueprint",
+      "Extended Light Mag III Blueprint",
+      "75x Trigger Nade"
+    ];
+    let recentOrderTimer = 0;
+    let recentOrderLastBatch = [];
+
+    const prices = {
+      blueprint: .75,
+      coins100k: .20,
+      weapon: .50,
+      blueMod: .15,
+      premiumMod: .25,
+      seeds100: .35,
+      augment: .30,
+      shield: .30,
+      bandageBundle: .25,
+      nadeBundle: .20,
+      rechargerBundle: .15,
+      surgeRechargerBundle: .15,
+      trialsBase: 20,
+      raid: 3.50,
+      event: 1.50,
+      workshopLevel: 10,
+      workshopBench: 7,
+      workshopMax: 35,
+      scrappyLevel: 3,
+      depositarySlot: .50
+    };
+
+    const blueprintGroups = {
+      "Gun Blueprints": ["Anvil", "Bettina", "Bobcat", "Burletta", "Dolabra", "Equalizer", "Hullcracker", "Il Toro", "Jupiter", "Osprey", "Renegade", "Canto", "Vulcano", "Torrente", "Tempest", "Venator"],
+      "Backpack Blueprints": ["Combat Mk.3 (Flanking)", "Combat Mk.3 (Aggressive)", "Tactical Mk.3 (Defensive)", "Tactical Mk.3 (Healing)", "Looting Mk.3 (Survivor)", "Looting Mk.3 (Safekeeper)", "Tactical Mk.3 (Revival)", "Tactical Mk.3 (Smoke)"],
+      "Quick Use Blueprints": ["Barricade Kit", "Explosive Mine", "Defibrillator", "White Flag", "Crash Mat", "Powered Descender", "Vita Shot", "Vita Spray", "Wolfpack", "Snap Hook", "Smoke Grenade", "Showstopper", "Lure Grenade", "Deadline", "Seeker Grenade", "Trailblazer", "Gas Mine", "Pulse Mine", "Fireworks Box", "Blue Light Stick", "Green Light Stick", "Yellow Light Stick", "Red Light Stick", "Remote Raider Flare", "Surge Coil", "Tagging Grenade", "Jolt Mine", "Blaze Grenade", "Trigger 'Nade"],
+      "Gun Part Blueprints": ["Angled Grip II", "Angled Grip III", "Compensator II", "Extended Barrel", "Extended Light Magazine II", "Extended Medium Magazine II", "Extended Shotgun Magazine II", "Lightweight Stock", "Muzzle Brake II", "Padded Stock", "Shotgun Choke II", "Silencer I", "Silencer II", "Stable Stock II", "Heavy Gun Parts", "Compensator III", "Extended Light Magazine III", "Extended Medium Magazine III", "Extended Shotgun Magazine III", "Muzzle Brake III", "Shotgun Choke III", "Shotgun Silencer", "Stable Stock III", "Vertical Grip III", "Complex Gun Parts"]
+    };
+    const weapons = ["No Weapon", "Anvil", "Bettina", "Bobcat", "Burletta", "Dolabra", "Equalizer", "Hullcracker", "Il Toro", "Jupiter", "Osprey", "Renegade", "Canto", "Vulcano", "Torrente", "Tempest", "Venator"];
+    const maps = ["Riven Tides", "Stella Montis", "Dam Battlegrounds", "Buried City", "Spaceport", "Blue Gate"];
+    const stages = [["Foundation", 10], ["Core Systems", 10], ["Framework", 10], ["Outfitting", 10], ["Load Stage", 15]];
+    const workshops = ["Gunsmith", "Gear Bench", "Medical Lab", "Explosive Station", "Utility Station", "Refiner"];
+    const ranks = ["Rookie I", "Rookie II", "Rookie III", "Tryhard I", "Tryhard II", "Tryhard III", "Wildcard I", "Wildcard II", "Wildcard III", "Daredevil I", "Daredevil II", "Daredevil III", "Hotshot"];
+
+    const games = [
+      {
+        id: "valorant",
+        label: "Valorant",
+        tabIcon: "i-rank",
+        heroBg: "assets/bg-valorant-4k.webp",
+        heroPosition: "center 58%",
+        kicker: "Valorant Boost",
+        title: "Valorant Ranked Services",
+        copy: "Choose a Valorant mode, set quantity or session time, and create a clean Discord order ticket.",
+        categories: [
+          { id: "placement", label: "Placement Matches", icon: "i-placement" },
+          { id: "season", label: "New Season Package", icon: "i-package" },
+          { id: "pro", label: "Pro Games", icon: "i-star" },
+          { id: "swift", label: "Swift Pass Boosting", icon: "i-swift" },
+          { id: "high-tier", label: "High Tier Boosting", icon: "i-rank" },
+          { id: "rank", label: "Rank Boosting", icon: "i-rank" },
+          { id: "wins", label: "Win Boosting", icon: "i-win" },
+          { id: "pay-per", label: "Pay Per Games", icon: "i-gamepad" },
+          { id: "coaching", label: "Coaching Sessions", icon: "i-coach" },
+          { id: "accounts", label: "Accounts", icon: "i-private" }
+        ],
+        popular: ["val-rank", "val-win", "val-coach"],
+        services: [
+          gameService("val-placement", "placement", "Valorant Placement Matches", "Placement Matches", "i-placement", 10.99, " / match", "Placement match support for a cleaner act start.", "Choose the amount of placement matches and add rank, server, and agent notes."),
+          gameService("val-season", "season", "Valorant New Season Package", "New Season Package", "i-package", 41.99, "", "Fresh-act package with ranked setup support.", "Add your current act, goal, region, and preferred schedule."),
+          gameService("val-pro", "pro", "Valorant Pro Games", "Pro Games", "i-star", 21.99, " / game", "Play with a high-skill teammate for focused games.", "Set game quantity and add role, agent, and queue notes."),
+          gameService("val-swift", "swift", "Valorant Swift Pass Boosting", "Swift Pass Boosting", "i-swift", 7.99, " / game", "Fast casual progress sessions.", "Choose game quantity and add timing or account notes."),
+          gameService("val-high-tier", "high-tier", "Valorant High Tier Boosting", "High Tier Boosting", "i-rank", 31.99, " / order", "Premium high-rank ranked support.", "Boosters will confirm exact rank range in Discord before delivery."),
+          gameService("val-rank", "rank", "Valorant Rank Boosting", "Rank Boosting", "i-rank", 16.99, " / division", "Rank progress with current and desired rank notes.", "Add current rank, desired rank, server, role, and any restrictions."),
+          gameService("val-win", "wins", "Valorant Win Boosting", "Win Boosting", "i-win", 9.99, " / win", "Win-based order with clean Discord details.", "Set win quantity and add account, role, and schedule notes."),
+          gameService("val-pay", "pay-per", "Valorant Pay Per Games", "Pay Per Games", "i-gamepad", 8.99, " / game", "Pay by game with flexible notes.", "Choose game quantity and add mode, rank, and server details."),
+          gameService("val-coach", "coaching", "Valorant Coaching Sessions", "Coaching Sessions", "i-coach", 21.99, " / hour", "Aim, utility, VOD review, and role coaching.", "Choose session hours and add the topics you want reviewed."),
+          gameService("val-accounts", "accounts", "Valorant Accounts", "Accounts", "i-private", 0, "", "Custom account request for manual review.", "Describe the exact account request and boosters will quote it in Discord.", "private")
+        ]
+      },
+      {
+        id: "circle",
+        label: "Boost Plus",
+        tabIcon: "i-circle",
+        heroBg: "assets/bg-elysium-4k.webp",
+        heroPosition: "center center",
+        kicker: "Boost Plus",
+        title: "Boost Plus Teammate Services",
+        copy: "Choose League, Valorant, or E-Girl teammate services and copy a clean Discord ticket.",
+        categories: [
+          { id: "circle-lol", label: "League of Legends", icon: "i-circle", bg: "assets/bg-lol-4k.webp" },
+          { id: "circle-valorant", label: "Valorant", icon: "i-circle", bg: "assets/bg-valorant-4k.webp" },
+          { id: "circle-egirl", label: "E-Girl", icon: "i-egirl", bg: "assets/bg-elysium-4k.webp" }
+        ],
+        popular: ["circle-val-pistol", "circle-lol-first", "circle-egirl-chill"],
+        services: [
+          gameService("circle-lol-first", "circle-lol", "League of Legends First Blood", "First Blood", "i-win", 15.99, "", "Play 3 games with a Grandmaster+ teammate.", "Set package quantity and add lane, server, and schedule notes."),
+          gameService("circle-lol-duodiff", "circle-lol", "League of Legends Duo Diff", "Duo Diff", "i-coach", 24.99, "", "Play 5 games with a Grandmaster+ teammate.", "Set package quantity and add lane, role, and schedule notes."),
+          gameService("circle-lol-full", "circle-lol", "League of Legends Full Clear", "Full Clear", "i-star", 45.99, "", "Play 10 games with a Grandmaster+ teammate.", "Set package quantity and add account, server, and lane notes."),
+          gameService("circle-lol-duo", "circle-lol", "League of Legends Duo", "Duo", "i-coach", 5.99, " / game", "Play with a Master+ teammate.", "Choose game quantity and add role and server notes."),
+          gameService("circle-lol-ultra", "circle-lol", "League of Legends Duo Ultra", "Duo Ultra", "i-coach", 8.50, " / game", "Play with a Grandmaster+ teammate.", "Choose game quantity and add preferred lane."),
+          gameService("circle-lol-coach", "circle-lol", "League of Legends Coaching", "Coaching", "i-coach", 15.99, " / game", "Get coached by a Grandmaster+ teammate.", "Choose game quantity and coaching focus."),
+          gameService("circle-val-pistol", "circle-valorant", "Valorant Pistol Round", "Pistol Round", "i-gamepad", 40.99, "", "Play 3 hours with a Radiant teammate.", "Add rank, server, role, and schedule notes."),
+          gameService("circle-val-clutch", "circle-valorant", "Valorant Clutch Up", "Clutch Up", "i-win", 60.99, "", "Play 5 hours with a Radiant teammate.", "Add queue, server, and account notes."),
+          gameService("circle-val-overtime", "circle-valorant", "Valorant Overtime", "Overtime", "i-swift", 80.99, "", "Play 8 hours with a Radiant teammate.", "Add rank, server, and schedule notes."),
+          gameService("circle-val-duo", "circle-valorant", "Valorant Duo Ultra", "Duo Ultra", "i-coach", 8.99, " / game", "Learn and duo with a Radiant teammate.", "Choose game quantity and add role notes."),
+          gameService("circle-val-trio", "circle-valorant", "Valorant Trio Ultra", "Trio Ultra", "i-coach", 15.99, " / game", "Play with two Radiant teammates.", "Choose game quantity and add server notes."),
+          gameService("circle-val-coach", "circle-valorant", "Valorant Coaching", "Coaching", "i-coach", 13.99, " / game", "Get coached by a Radiant teammate.", "Choose game quantity and focus areas."),
+          gameService("circle-egirl-chill", "circle-egirl", "E-Girl Duo Chill", "Duo Chill", "i-egirl", 7.99, " / 30 min", "Chill, chat, or watch with a teammate.", "Choose session count and add game/platform notes."),
+          gameService("circle-egirl-zombies", "circle-egirl", "E-Girl Squad Zombies", "Squad Zombies", "i-egirl", 8.99, " / 60 min", "Play zombies with skilled teammates.", "Choose session count and add platform notes."),
+          gameService("circle-egirl-lol", "circle-egirl", "E-Girl League Duo Normal", "League Duo Normal", "i-egirl", 5.99, " / game", "Play a normal game with a teammate.", "Choose game quantity and add server/lane notes."),
+          gameService("circle-egirl-aram", "circle-egirl", "E-Girl ARAM", "ARAM", "i-egirl", 5.99, " / game", "Play ARAM with a teammate.", "Choose game quantity and add server notes."),
+          gameService("circle-egirl-valorant", "circle-egirl", "E-Girl Valorant", "Valorant Gamer Girl", "i-egirl", 7.99, " / game", "Hang out and play Valorant.", "Choose game quantity and add server/rank notes."),
+          gameService("circle-egirl-fortnite", "circle-egirl", "E-Girl Fortnite", "Fortnite Gamer Girl", "i-egirl", 7.49, " / 30 min", "Hang out and play Fortnite.", "Choose session count and add platform notes.")
+        ]
+      },
+      {
+        id: "lol",
+        label: "League of Legends",
+        tabIcon: "i-star",
+        heroBg: "assets/bg-lol-4k.webp",
+        heroPosition: "center center",
+        kicker: "League of Legends Boost",
+        title: "League Ranked Services",
+        copy: "Build a League order for net wins, duo queue, or coaching, then paste the ticket into Discord.",
+        categories: [],
+        popular: ["lol-win", "lol-duo", "lol-coach"],
+        services: [
+          fastService("lol-win", "Net Win", "i-trials", 10.99, "One clean net win order.", "A simple win-based order with the final details confirmed by boosters."),
+          fastService("lol-duo", "Duo Queue", "i-coach", 12.99, "Queue together with a stronger teammate.", "Play with a coordinated teammate and confirm region and role in Discord."),
+          fastService("lol-coach", "LoL Coaching", "i-coach", 19.99, "Lane, macro, matchup, and replay review.", "Choose session length and add your focus areas before copying the ticket.")
+        ]
+      },
+      {
+        id: "wow",
+        label: "World of Warcraft",
+        tabIcon: "i-star",
+        heroBg: "assets/wow.webp",
+        heroPosition: "center center",
+        kicker: "World of Warcraft Boost",
+        title: "World of Warcraft Services",
+        copy: "Coming soon. Premium World of Warcraft services will be added after the Arc Raiders flow is polished.",
+        categories: [],
+        popular: [],
+        services: []
+      },
+      {
+        id: "arc",
+        label: "Arc Raiders",
+        tabIcon: "i-raid",
+        heroBg: "assets/bg-arc-4k.webp",
+        heroPosition: "center center",
+        kicker: "Arc Raiders Boost",
+        title: "Buy Arc Raiders Services",
+        copy: "Choose an Arc Raiders category, customize the service, and copy a Discord-ready order with USD booster totals.",
+        categories: [
+          { id: "blueprints", label: "All Blueprints", icon: "i-blueprint", badge: "HOT", badgeTone: "hot" },
+          { id: "guns", label: "All Guns", icon: "i-gun", badge: "PRICE DROP", badgeTone: "price-drop" },
+          { id: "loadouts", label: "Custom Loadout", icon: "i-loadout" },
+          { id: "coins", label: "Raider Coins", icon: "i-coins", badge: "PRICE DROP", badgeTone: "price-drop" },
+          { id: "seeds", label: "Assorted Seeds", icon: "i-coins", badge: "NEW", badgeTone: "new" },
+          { id: "depositary", label: "Depositary Service", icon: "i-depository" },
+          { id: "trials", label: "Trials", icon: "i-trials", badge: "RECOMMENDED", badgeTone: "recommended" },
+          { id: "raids", label: "All Raids", icon: "i-raid" },
+          { id: "coaching", label: "Coaching", icon: "i-coach" },
+          { id: "leveling", label: "Leveling", icon: "i-level" },
+          { id: "workshop", label: "Workshop & Scrappy", icon: "i-workshop", badge: "RECOMMENDED", badgeTone: "recommended" },
+          { id: "bosses", label: "Boss & Puzzle", icon: "i-skull" },
+          { id: "expeditions", label: "Expedition Boost", icon: "i-expedition", badge: "HOT", badgeTone: "hot" },
+          { id: "custom", label: "Private Order", icon: "i-private" }
+        ],
+        popular: ["trials", "guns", "blueprints", "coins"],
+        services: [
+          arcService("blueprints", "blueprints", "Buy Arc Raiders Blueprints", "All Blueprints", "i-blueprint", .75, " each", "Discounted blueprints, now $0.75 each instead of $1.50.", "30-60 Minutes", "blueprints", 1.50),
+          arcService("guns", "guns", "Buy Arc Raiders Weapons", "All Guns", "i-gun", .50, " each", "Discounted weapons and mods with automatic attachment quantity.", "30-60 Minutes", "guns", 1.00),
+          arcService("loadout", "loadouts", "Build a Custom Loadout", "Custom Loadout", "i-loadout", 0, "", "Weapon, mods, Looting Mk. 3 Augments, Medium Shields, quick-use bundles, and special bundles.", "30-90 Minutes", "loadout"),
+          arcService("coins", "coins", "Buy Raider Coins", "Raider Coins", "i-coins", .20, " / 100k", "Choose from 100k to 10 million coins with instant price updates.", "15-30 Minutes", "coins"),
+          arcService("seeds", "seeds", "Buy Assorted Seeds", "Assorted Seeds", "i-coins", .35, " / 100", "Choose 100 to 10,000 Assorted Seeds with bulk discount checkpoints.", "15-30 Minutes", "seeds"),
+          arcService("depositary", "depositary", "Arc Raiders Depositary Service", "Depositary Service", "i-depository", 25, " / 50 slots", "Safe item storage service with selectable inventory slots.", "30-60 Minutes", "depositary"),
+          arcService("trials", "trials", "Arc Raiders Trials Boost", "Trials Boost", "i-trials", 20, "", "All 3 Stars with current-rank and rank option rules.", "1-3 Hours", "trials"),
+          arcService("raid", "raids", "Arc Raiders Raid Boost", "All Raids", "i-raid", 3.50, " / raid", "Choose raid count, Duo/Trio, and optional Event Mode.", "15-30 Minutes", "raid"),
+          arcService("pvp", "coaching", "Arc Raiders Coaching", "Coaching", "i-coach", 20, " / hr", "PvP or PvE coaching with Duo/Trio session options.", "By Request", "pvp"),
+          arcService("leveling", "leveling", "Arc Raiders Leveling", "Leveling", "i-level", 0, "", "Current level, target level, speed, and account access requirements.", "By Request", "leveling"),
+          arcService("workshop", "workshop", "Arc Raiders Workshop & Scrappy", "Workshop & Scrappy", "i-workshop", 3, "+", "Upgrade workshops from level 1 to 3 or select Scrappy levels from 1 to 5.", "30-60 Minutes", "workshop"),
+          arcService("expedition", "expeditions", "Arc Raiders Expedition Boost", "Expedition Boost", "i-expedition", 10, "+", "Choose a specific expedition stage.", "30-60 Minutes", "expedition"),
+          arcService("boss", "bosses", "Arc Raiders Boss & Puzzle", "Boss & Puzzle", "i-skull", 20, "", "Queen, Matriarch, or Harvester Puzzle completion request.", "30-90 Minutes", "boss"),
+          arcService("private", "custom", "Private Arc Raiders Order", "Private Order", "i-private", 0, "", "Write a custom request for manual boosters review.", "Manual", "private")
+        ]
+      }
+    ];
+
+    function fastService(id, title, icon, price, short, intro) {
+      return {
+        id, category: "services", title, cardTitle: title, icon, fromUSD: price, suffix: "", short, start: "By Request", form: "fast", intro
+      };
+    }
+
+    function gameService(id, category, title, cardTitle, icon, fromUSD, suffix, short, intro, form = "fast") {
+      return {
+        id, category, title, cardTitle, icon, fromUSD, suffix, short, start: "", form, intro
+      };
+    }
+
+    function arcService(id, category, title, cardTitle, icon, fromUSD, suffix, short, start, form, oldUSD = 0) {
+      return {
+        id, category, title, cardTitle, icon, fromUSD, suffix, short, start, form,
+        oldUSD,
+        intro: arcIntro(id)
+      };
+    }
+
+    function arcIntro(id) {
+      const copy = {
+        blueprints: "Pick the exact blueprint groups you need and use search to find items quickly. Selected items are delivered through a clean Discord ticket so boosters can confirm availability and handoff details.",
+        guns: "Choose the weapon, quantity, and optional Blue or Legendary / Epic mods. Weapon and mod quantities are calculated separately, with bundle discounts applied only when the 20x bundle rules match.",
+        loadout: "Build a full Arc Raiders loadout around your selected weapon. You can order individual gear or use 10x/20x special bundles for weapons, Looting Mk. 3 (Survivor) Augments, Medium Shields, rechargers, and Herbal Bandages.",
+        coins: "Move the slider to choose Raider Coins from 100k to 10 million. Customers can view local currency, while every copied boosters ticket keeps the exact USD total.",
+        seeds: "Choose Assorted Seeds from 100 to 10,000. Bulk checkpoints show the discount clearly before the order is added to the Discord ticket.",
+        depositary: "Choose safe storage capacity for wipe protection. Boosters confirm the item handoff, keep a clean inventory list, and return items after ticket confirmation.",
+        trials: "Order Weekly All 3 Stars, rank-up support, or both. Rank options unlock from your current rank so the ticket stays accurate before boosters confirm timing.",
+        raid: "Choose raid count, Duo or Trio team, and optional Event Mode. Only successful raids count toward the order; failed runs are retried or compensated in the ticket.",
+        pvp: "Choose PvP or PvE coaching, Duo or Trio support, and session hours up to 6. Coaching focuses on positioning, extraction decisions, fights, routes, and safer raid execution.",
+        leveling: "Leveling is completed by logging into the customer's Steam or Xbox account. For account protection, boosters can use the customer's preferred VPN location; Steam or Xbox access is required or we cannot log in.",
+        workshop: "Upgrade Workshop benches or Scrappy levels with clear level ranges and bundle pricing. The panel shows the total instantly before you add the order to cart.",
+        expedition: "Select the exact expedition stages you want completed. Each chosen stage is listed separately in the Discord ticket for clean confirmation.",
+        boss: "Choose Queen, Matriarch, or Harvester Puzzle service. The ticket keeps the target and quantity clear so boosters can confirm availability and completion requirements.",
+        private: "Describe a custom Arc Raiders request for manual boosters review. Use this when your order does not fit a standard service, bundle, or quantity option."
+      };
+      return copy[id] || "Customize this service and copy the order into Discord.";
+    }
+
+    const state = {
+      game: null,
+      category: null,
+      serviceId: null,
+      currency: "USD",
+      language: "EN",
+      arcId: "",
+      arcIdSkipped: false,
+      pendingArcAction: null,
+      cart: [],
+      pendingBlueprintSearch: null,
+      bpTab: "Gun Blueprints",
+      blueprintSelections: {
+        "Gun Blueprints": new Set(),
+        "Backpack Blueprints": new Set(),
+        "Quick Use Blueprints": new Set(),
+        "Gun Part Blueprints": new Set()
+      }
+    };
+
+    const $ = id => document.getElementById(id);
+    const val = id => $(id)?.value || "";
+    const num = id => Number(val(id) || 0);
+    const slug = text => text.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+
+    function currentGame() { return games.find(game => game.id === state.game); }
+    function currentService() { return currentGame()?.services.find(service => service.id === state.serviceId) || currentGame()?.services[0]; }
+    function moneyUSD(value) { return "$" + Number(value || 0).toFixed(2); }
+
+    function displayMoney(value) {
+      const currency = rates[state.currency];
+      return currency.symbol + (Number(value || 0) * currency.rate).toFixed(2);
+    }
+
+    function displayInCurrency(value, currencyCode = state.currency) {
+      const currency = rates[currencyCode] || rates.USD;
+      return currency.symbol + (Number(value || 0) * currency.rate).toFixed(2);
+    }
+
+    const itemTr = {
+      "No Weapon": "Silah Yok",
+      "Anvil": "Anvil",
+      "Bettina": "Bettina",
+      "Bobcat": "Bobcat",
+      "Burletta": "Burletta",
+      "Dolabra": "Dolabra",
+      "Equalizer": "Equalizer",
+      "Hullcracker": "Hullcracker",
+      "Il Toro": "Il Toro",
+      "Jupiter": "Jupiter",
+      "Osprey": "Osprey",
+      "Renegade": "Renegade",
+      "Canto": "Canto",
+      "Vulcano": "Vulcano",
+      "Torrente": "Torrente",
+      "Tempest": "Tempest",
+      "Venator": "Venator",
+      "Backpack Blueprints": "SÄ±rt Ã‡antasÄ± PlanlarÄ±",
+      "Gun Blueprints": "Silah PlanlarÄ±",
+      "Quick Use Blueprints": "HÄ±zlÄ± KullanÄ±m PlanlarÄ±",
+      "Gun Part Blueprints": "Silah ParÃ§asÄ± PlanlarÄ±",
+      "Combat Mk.3 (Flanking)": "SavaÅŸ Mk.3 (Kanat)",
+      "Combat Mk.3 (Aggressive)": "SavaÅŸ Mk.3 (Agresif)",
+      "Tactical Mk.3 (Defensive)": "Taktik Mk.3 (Savunma)",
+      "Tactical Mk.3 (Healing)": "Taktik Mk.3 (Ä°yileÅŸtirme)",
+      "Looting Mk.3 (Survivor)": "YaÄŸma Mk.3 (Hayatta Kalan)",
+      "Looting Mk.3 (Safekeeper)": "YaÄŸma Mk.3 (Kasa MuhafÄ±zÄ±)",
+      "Tactical Mk.3 (Revival)": "Taktik Mk.3 (CanlandÄ±rma)",
+      "Tactical Mk.3 (Smoke)": "Taktik Mk.3 (Duman)",
+      "Barricade Kit": "Barikat Kiti",
+      "Explosive Mine": "PatlayÄ±cÄ± MayÄ±n",
+      "Defibrillator": "DefibrilatÃ¶r",
+      "White Flag": "Beyaz Bayrak",
+      "Crash Mat": "DÃ¼ÅŸÃ¼ÅŸ Minderi",
+      "Powered Descender": "Motorlu Ä°niÅŸ AparatÄ±",
+      "Vita Shot": "Vita Ä°ÄŸnesi",
+      "Vita Spray": "Vita Spreyi",
+      "Wolfpack": "Kurt SÃ¼rÃ¼sÃ¼",
+      "Snap Hook": "Kanca",
+      "Smoke Grenade": "Duman BombasÄ±",
+      "Showstopper": "GÃ¶steri Durdurucu",
+      "Lure Grenade": "Yem BombasÄ±",
+      "Deadline": "Son Ã‡izgi",
+      "Seeker Grenade": "ArayÄ±cÄ± Bomba",
+      "Trailblazer": "Yol AÃ§Ä±cÄ±",
+      "Gas Mine": "Gaz MayÄ±nÄ±",
+      "Pulse Mine": "Darbe MayÄ±nÄ±",
+      "Fireworks Box": "Havai FiÅŸek Kutusu",
+      "Blue Light Stick": "Mavi IÅŸÄ±k Ã‡ubuÄŸu",
+      "Green Light Stick": "YeÅŸil IÅŸÄ±k Ã‡ubuÄŸu",
+      "Yellow Light Stick": "SarÄ± IÅŸÄ±k Ã‡ubuÄŸu",
+      "Red Light Stick": "KÄ±rmÄ±zÄ± IÅŸÄ±k Ã‡ubuÄŸu",
+      "Remote Raider Flare": "Uzaktan Raider Ä°ÅŸareti",
+      "Surge Coil": "Dalga Bobini",
+      "Tagging Grenade": "Ä°ÅŸaretleme BombasÄ±",
+      "Jolt Mine": "Åok MayÄ±nÄ±",
+      "Blaze Grenade": "Alev BombasÄ±",
+      "Trigger 'Nade": "Tetik BombasÄ±",
+      "Angled Grip II": "AÃ§Ä±lÄ± Tutamak II",
+      "Angled Grip III": "AÃ§Ä±lÄ± Tutamak III",
+      "Compensator II": "KompansatÃ¶r II",
+      "Compensator III": "KompansatÃ¶r III",
+      "Extended Barrel": "UzatÄ±lmÄ±ÅŸ Namlu",
+      "Extended Light Magazine II": "UzatÄ±lmÄ±ÅŸ Hafif ÅarjÃ¶r II",
+      "Extended Light Magazine III": "UzatÄ±lmÄ±ÅŸ Hafif ÅarjÃ¶r III",
+      "Extended Medium Magazine II": "UzatÄ±lmÄ±ÅŸ Orta ÅarjÃ¶r II",
+      "Extended Medium Magazine III": "UzatÄ±lmÄ±ÅŸ Orta ÅarjÃ¶r III",
+      "Extended Shotgun Magazine II": "UzatÄ±lmÄ±ÅŸ PompalÄ± ÅarjÃ¶rÃ¼ II",
+      "Extended Shotgun Magazine III": "UzatÄ±lmÄ±ÅŸ PompalÄ± ÅarjÃ¶rÃ¼ III",
+      "Lightweight Stock": "Hafif DipÃ§ik",
+      "Muzzle Brake II": "Namlu Freni II",
+      "Muzzle Brake III": "Namlu Freni III",
+      "Padded Stock": "Dolgulu DipÃ§ik",
+      "Shotgun Choke II": "PompalÄ± DaraltÄ±cÄ± II",
+      "Shotgun Choke III": "PompalÄ± DaraltÄ±cÄ± III",
+      "Shotgun Silencer": "PompalÄ± Susturucu",
+      "Silencer I": "Susturucu I",
+      "Silencer II": "Susturucu II",
+      "Stable Stock II": "Dengeli DipÃ§ik II",
+      "Stable Stock III": "Dengeli DipÃ§ik III",
+      "Vertical Grip III": "Dikey Tutamak III",
+      "Heavy Gun Parts": "AÄŸÄ±r Silah ParÃ§alarÄ±",
+      "Complex Gun Parts": "KarmaÅŸÄ±k Silah ParÃ§alarÄ±"
+    };
+
+    const uiTr = {
+      "Choose Your Boosting Arena": "Boosting AlanÄ±nÄ± SeÃ§",
+      "Start from the ELYSIUM home screen, choose a game, then build a Discord-ready order with clean pricing and service details.": "ELYSIUM ana ekranÄ±ndan oyunu seÃ§, servisi Ã¶zelleÅŸtir ve Discord'a hazÄ±r net fiyatlÄ± sipariÅŸ oluÅŸtur.",
+      "Choose Your Game": "Oyununu SeÃ§",
+      "Select a game first. The page will switch to that game's services and background.": "Ã–nce oyunu seÃ§. Sayfa seÃ§tiÄŸin oyunun servislerine geÃ§er.",
+      "Coming Soon": "YakÄ±nda",
+      "Select Game": "Oyunu SeÃ§",
+      "About Us": "HakkÄ±mÄ±zda",
+      "How It Works": "NasÄ±l Ã‡alÄ±ÅŸÄ±r",
+      "Clear Pricing": "Net FiyatlandÄ±rma",
+      "ELYSIUM BOOST is built as a clean Discord-ticket order desk for premium game services. Pick a service, customize it, and send boosters a readable order summary.": "ELYSIUM BOOST premium oyun servisleri iÃ§in temiz Discord ticket sipariÅŸ masasÄ±dÄ±r. Servisi seÃ§, Ã¶zelleÅŸtir ve boosterlara okunabilir Ã¶zet gÃ¶nder.",
+      "Choose a game, select a service, adjust options and quantities, add it to cart, then copy the ticket into Discord for confirmation.": "Oyunu ve servisi seÃ§, seÃ§enekleri ayarla, sepete ekle ve onay iÃ§in ticket metnini Discord'a yapÄ±ÅŸtÄ±r.",
+      "Customers can view prices in their selected currency, and the copied ticket keeps that same currency.": "MÃ¼ÅŸteriler fiyatÄ± seÃ§tikleri para biriminde gÃ¶rÃ¼r; ticket aynÄ± para birimiyle hazÄ±rlanÄ±r.",
+      "Buy Arc Raiders Services": "Arc Raiders Servisleri",
+      "Choose an Arc Raiders category, customize the service, and copy a Discord-ready order with USD booster totals.": "Arc Raiders kategorisini seÃ§, servisi Ã¶zelleÅŸtir ve Discord'a hazÄ±r sipariÅŸ oluÅŸtur.",
+      "Popular Arc Raiders Orders": "PopÃ¼ler Arc Raiders SipariÅŸleri",
+      "Fast picks rotate between Trials, All Guns, Blueprints, and Raider Coins without repeating the selected category.": "HÄ±zlÄ± sipariÅŸlerde Trials, All Guns, Blueprints ve Raider Coins seÃ§ili kategori tekrarlanmadan gÃ¶sterilir.",
+      "Open a service, customize the order, and add it to cart.": "Servisi aÃ§, sipariÅŸi Ã¶zelleÅŸtir ve sepete ekle.",
+      "All Blueprints": "TÃ¼m Blueprintler",
+      "All Guns": "TÃ¼m Silahlar",
+      "Custom Loadout": "Ã–zel Loadout",
+      "Raider Coins": "Raider Coins",
+      "Assorted Seeds": "Assorted Seeds",
+      "Depositary Service": "Depo Servisi",
+      "Trials Boost": "Trials Boost",
+      "All Raids": "TÃ¼m Raidler",
+      "Coaching": "KoÃ§luk",
+      "Leveling": "Level KasÄ±mÄ±",
+      "Workshop & Scrappy": "Workshop & Scrappy",
+      "Boss & Puzzle": "Boss & Puzzle",
+      "Expedition Boost": "Expedition Boost",
+      "Private Order": "Ã–zel SipariÅŸ",
+      "Buy Arc Raiders Blueprints": "Arc Raiders Blueprint SatÄ±n Al",
+      "Buy Arc Raiders Weapons": "Arc Raiders Silah SatÄ±n Al",
+      "Build a Custom Loadout": "Ã–zel Loadout OluÅŸtur",
+      "Buy Raider Coins": "Raider Coins SatÄ±n Al",
+      "Buy Assorted Seeds": "Assorted Seeds SatÄ±n Al",
+      "Arc Raiders Depositary Service": "Arc Raiders Depo Servisi",
+      "Arc Raiders Trials Boost": "Arc Raiders Trials Boost",
+      "Arc Raiders Raid Boost": "Arc Raiders Raid Boost",
+      "Arc Raiders Coaching": "Arc Raiders KoÃ§luk",
+      "Arc Raiders Leveling": "Arc Raiders Level KasÄ±mÄ±",
+      "Arc Raiders Workshop & Scrappy": "Arc Raiders Workshop & Scrappy",
+      "Arc Raiders Boss & Puzzle": "Arc Raiders Boss & Puzzle",
+      "Private Arc Raiders Order": "Ã–zel Arc Raiders SipariÅŸi",
+      "Details": "Detaylar",
+      "Customize": "Ã–zelleÅŸtir",
+      "Clear": "Temizle",
+      "Total": "Toplam",
+      "Add to Cart": "Sepete Ekle",
+      "Search services": "Servis ara",
+      "Search": "Ara",
+      "Leave Feedback": "Feedback BÄ±rak",
+      "Open Discord": "Discord AÃ§",
+      "Copy Discord Ticket": "Discord Ticket Kopyala",
+      "Clear Cart": "Sepeti BoÅŸalt",
+      "Order Cart": "SipariÅŸ Sepeti",
+      "Select Blueprints": "Blueprint SeÃ§",
+      "Search Blueprints": "Blueprint Ara",
+      "Type blueprint name...": "Blueprint adÄ±nÄ± yaz...",
+      "Select All": "Hepsini SeÃ§",
+      "Weapon": "Silah",
+      "Quantity": "Adet",
+      "Mods": "Modlar",
+      "No Mods": "Mod Yok",
+      "Blue Mods - $0.15 each (was $0.30)": "Blue Mod - adet $0.15 (Ã¶nce $0.30)",
+      "Legendary / Epic Mods - $0.25 each (was $0.50)": "Legendary / Epic Mod - adet $0.25 (Ã¶nce $0.50)",
+      "Mod quantity automatically matches weapon quantity.": "Mod adedi otomatik olarak silah adediyle eÅŸleÅŸir.",
+      "Event Mode": "Event Modu",
+      "Raider just ordered": "Raider satÄ±n aldÄ±!",
+      "Discounted": "Ä°ndirimli",
+      "Popular deal, 20% off": "PopÃ¼ler fÄ±rsat, %20 indirim",
+      "Bulk deal, 20% off": "Toplu alÄ±m, %20 indirim",
+      "Price updates every 100k": "Fiyat her 100k'da gÃ¼ncellenir"
+      ,"No blueprint found.": "Blueprint bulunamadÄ±."
+      ,"Most requested services for this game.": "Bu oyun iÃ§in en Ã§ok istenen servisler."
+      ,"Popular": "PopÃ¼ler"
+      ,"Services": "Servisler"
+      ,"Select a service and adjust the order panel below.": "Servisi seÃ§ ve aÅŸaÄŸÄ±daki sipariÅŸ panelini ayarla."
+      ,"Coming soon. We are polishing this section after the Arc Raiders order flow is finished.": "YakÄ±nda. Arc Raiders sipariÅŸ akÄ±ÅŸÄ± bittikten sonra bu bÃ¶lÃ¼mÃ¼ hazÄ±rlÄ±yoruz."
+    };
+
+    const orderTr = {
+      "20x Tempest": "20x Tempest",
+      "Anvil Blueprint": "Anvil Blueprint",
+      "Bobcat Blueprint": "Bobcat Blueprint",
+      "Tempest Blueprint": "Tempest Blueprint",
+      "Vulcano Blueprint": "Vulcano Blueprint",
+      "Venator Blueprint": "Venator Blueprint",
+      "Looting Mk.3 Survivor Blueprint": "Looting Mk.3 Survivor Blueprint",
+      "20x Bobcat": "20x Bobcat",
+      "10x Bobcat + 10x Vulcano": "10x Bobcat + 10x Vulcano",
+      "3M Discounted Coins": "3M indirimli Coins",
+      "4x Raid Boost": "4x Raid Boost",
+      "6M Discounted Coins": "6M indirimli Coins",
+      "20x Looting Mk.3 Survivor": "20x Looting Mk.3 Survivor",
+      "20x Medium Shield": "20x Medium Shield",
+      "100x Herbal Bandage": "100x Herbal Bandage",
+      "2,500 Assorted Seeds": "2.500 Assorted Seeds",
+      "Trials Boost +3 Rank Up": "Trials Boost +3 Rank Up",
+      "Scrappy Level 1 to 5": "Scrappy Level 1'den 5'e",
+      "Expedition Boost": "Expedition Boost",
+      "10x Canto": "10x Canto",
+      "10x Venator": "10x Venator",
+      "20x Anvil": "20x Anvil",
+      "Extended Medium Mag III Blueprint": "Extended Medium Mag III Blueprint",
+      "Extended Light Mag III Blueprint": "Extended Light Mag III Blueprint",
+      "75x Trigger Nade": "75x Trigger Nade"
+    };
+
+    function trName(name) {
+      if (state.language !== "TR") return name;
+      return itemTr[name] || name;
+    }
+
+    function ui(text) {
+      return state.language === "TR" ? (uiTr[text] || text) : text;
+    }
+
+    function translateOrder(text) {
+      return state.language === "TR" ? (orderTr[text] || text) : text;
+    }
+
+    function displayItemName(name) {
+      const translated = trName(name);
+      return state.language === "TR" && translated !== name ? `${translated} (${name})` : translated;
+    }
+
+    function displayItemList(list) {
+      return list.map(displayItemName).join(", ");
+    }
+
+    function comparePrice(value, service) {
+      if (!value) return 0;
+      return service?.oldUSD || value * 1.3;
+    }
+
+    function servicePrice(service) {
+      if (service.form === "private") return "CUSTOM";
+      if (service.form === "loadout") return "CUSTOM";
+      if (service.form === "leveling") return "CUSTOM";
+      const old = comparePrice(service.fromUSD, service);
+      const oldPrice = old ? `<del>${displayMoney(old)}</del>` : "";
+      return oldPrice + displayMoney(service.fromUSD) + service.suffix;
+    }
+
+    function serviceSaleBadge(service) {
+      if (!service || ["private", "loadout", "leveling"].includes(service.form) || !service.fromUSD) return "";
+      const old = comparePrice(service.fromUSD, service);
+      const percent = service.oldUSD ? Math.round((1 - service.fromUSD / service.oldUSD) * 100) : 30;
+      return `<span class="price-old">${displayMoney(old)}</span> ${displayMoney(service.fromUSD)} ${service.suffix || ""} - ${percent}% off`;
+    }
+
+    function renderAll() {
+      updateStaticText();
+      renderGames();
+      renderHero();
+      renderHome();
+      if (!state.game) {
+        $("categoryBar").classList.add("hidden");
+        $("serviceContent").classList.add("hidden");
+        renderCart();
+        return;
+      }
+      $("serviceContent").classList.remove("hidden");
+      renderCategories();
+      renderPopular();
+      renderServices();
+      renderDetail();
+      renderCart();
+    }
+
+    function updateStaticText() {
+      $("siteSearch").placeholder = ui("Search services");
+      $("siteSearchBtn").textContent = ui("Search");
+      $("clearService").textContent = ui("Clear");
+      $("addToCart").textContent = ui("Add to Cart");
+      $("copyOrder").textContent = ui("Copy Discord Ticket");
+      $("clearCart").textContent = ui("Clear Cart");
+      document.querySelector('a[href*="1499796035382415462"]').textContent = ui("Open Discord");
+      document.querySelector('a[href*="1503176511912542298"]').textContent = ui("Leave Feedback");
+      document.querySelector(".drawer-head h2").textContent = ui("Order Cart");
+    }
+
+    function selectGame(id) {
+      if (id !== "arc") {
+        showToast("Coming soon. Arc Raiders is open now.");
+        return;
+      }
+      state.game = id;
+      const game = currentGame();
+      state.category = game.categories[0]?.id || "services";
+      state.serviceId = game.services.find(service => service.category === state.category)?.id || game.services[0].id;
+      renderAll();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderGames() {
+      $("gameTabs").innerHTML = games
+        .filter(game => game.id === "arc")
+        .map(game => `<button class="game-tab ${game.id === state.game ? "active" : ""}" type="button" data-game="${game.id}">${ui(game.label)}</button>`)
+        .join("");
+      document.querySelectorAll("[data-game]").forEach(button => button.addEventListener("click", () => {
+        selectGame(button.dataset.game);
+      }));
+    }
+
+    function renderHome() {
+      $("homeContent").classList.toggle("hidden", Boolean(state.game));
+      const orderedGames = [...games].sort((a, b) => (a.id === "arc" ? -1 : b.id === "arc" ? 1 : 0));
+      const gameCards = orderedGames.map(game => `
+          <button class="home-game-card ${game.id === "arc" ? "" : "coming-soon"}" type="button" ${game.id === "arc" ? `data-home-game="${game.id}"` : "disabled"}>
+            <img class="home-game-media" src="${game.heroBg}" alt="${escapeHtml(ui(game.label))}" loading="eager">
+            <h2>${ui(game.label)}</h2>
+            <p>${game.id === "arc" ? ui(game.copy) : ui("Coming soon. We are polishing this section after the Arc Raiders order flow is finished.")}</p>
+            <span class="btn btn-primary">${game.id === "arc" ? ui("Select Game") : ui("Coming Soon")}</span>
+          </button>
+        `);
+      gameCards.push(`
+        <div class="cs2-split-card" aria-label="Counter-Strike 2 modes">
+          <button class="cs2-mode-card cs2-premier-card coming-soon" type="button" disabled>
+            <img src="assets/premier-cs.webp" alt="CS2 Premier">
+            <div class="cs2-mode-overlay">
+              <h3>CS2 Premier</h3>
+              <p>Play Premier matchmaking and climb the ranks.</p>
+              <span class="disabled-btn">${ui("Coming Soon")}</span>
+            </div>
+          </button>
+          <button class="cs2-mode-card cs2-faceit-card coming-soon" type="button" disabled>
+            <img src="assets/faceit.webp" alt="CS2 FACEIT">
+            <div class="cs2-mode-overlay">
+              <h3>CS2 FACEIT</h3>
+              <p>Queue on FACEIT and compete at the highest level.</p>
+              <span class="disabled-btn">${ui("Coming Soon")}</span>
+            </div>
+          </button>
+        </div>
+      `);
+      $("homeGameGrid").innerHTML = gameCards.join("");
+      document.querySelector(".info-grid").innerHTML = `
+        <article class="info-card">
+          <h3>${ui("About Us")}</h3>
+          <p>${ui("ELYSIUM BOOST is built as a clean Discord-ticket order desk for premium game services. Pick a service, customize it, and send boosters a readable order summary.")}</p>
+        </article>
+        <article class="info-card">
+          <h3>${ui("How It Works")}</h3>
+          <p>${ui("Choose a game, select a service, adjust options and quantities, add it to cart, then copy the ticket into Discord for confirmation.")}</p>
+        </article>
+        <article class="info-card">
+          <h3>${ui("Clear Pricing")}</h3>
+          <p>${ui("Customers can view prices in their selected currency, and the copied ticket keeps that same currency.")}</p>
+        </article>
+      `;
+      document.querySelectorAll("[data-home-game]").forEach(button => button.addEventListener("click", () => {
+        selectGame(button.dataset.homeGame);
+      }));
+    }
+
+    const serviceImages = {
+      blueprints: "assets/thumb-blueprints.webp",
+      guns: "assets/thumb-guns.webp",
+      loadouts: "assets/thumb-loadouts.webp",
+      coins: "assets/thumb-coins.webp",
+      seeds: "assets/assorted-seeds.png",
+      depositary: "assets/thumb-depository.webp",
+      trials: "assets/thumb-trials.webp",
+      raids: "assets/thumb-raids.webp",
+      coaching: "assets/thumb-coaching.webp",
+      leveling: "assets/thumb-leveling.webp",
+      workshop: "assets/thumb-workshop.webp",
+      bosses: "assets/thumb-boss.webp",
+      expeditions: "assets/thumb-expedition.webp",
+      custom: "assets/thumb-private-order.webp",
+      services: "assets/thumb-private-order.webp"
+    };
+
+    function categoryArtwork(id, label = "") {
+      const src = serviceImages[id] || serviceImages.custom;
+      return `<div class="service-thumb"><img src="${src}" alt="${escapeHtml(label)}" loading="eager"></div>`;
+    }
+    function selectCategory(categoryId) {
+      pauseCategoryAuto(3500);
+      state.category = categoryId;
+      state.serviceId = currentGame().services.find(service => service.category === state.category)?.id || currentGame().services[0].id;
+      renderCategories();
+      renderPopular();
+      renderServices();
+      renderDetail();
+    }
+
+    function renderCategories() {
+      const game = currentGame();
+      $("categoryBar").classList.toggle("hidden", game.categories.length === 0);
+      $("categoryBar").classList.toggle("circle-mode", game.id === "circle");
+      $("categoryScroll").innerHTML = game.categories.map(cat => `
+        <button class="cat-btn ${cat.id === state.category ? "active" : ""}" type="button" data-cat="${cat.id}" ${cat.bg ? `style="--cat-bg:url('${cat.bg}')"` : ""}>
+          ${cat.badge ? `<span class="cat-ribbon ${cat.badgeTone || "hot"}">${cat.badge}</span>` : ""}
+          ${categoryArtwork(cat.id, ui(cat.label))}<span class="cat-label">${ui(cat.label)}</span>
+        </button>
+      `).join("");
+      document.querySelectorAll("[data-cat]").forEach(button => button.addEventListener("click", event => {
+        if (categoryMotion.didDrag || categoryMotion.skipClick) {
+          event.preventDefault();
+          categoryMotion.skipClick = false;
+          return;
+        }
+        selectCategory(button.dataset.cat);
+      }));
+      bindCategoryArrows();
+      setupCategoryMotion();
+    }
+
+    function renderHero() {
+      const game = currentGame();
+      $("hero").style.setProperty("--hero-bg", `url("${game ? game.heroBg : "assets/bg-elysium-4k.webp"}")`);
+      $("hero").style.setProperty("--hero-position", game ? game.heroPosition || "center center" : "center center");
+      $("heroKicker").textContent = game ? ui(game.kicker) : "ELYSIUM BOOST";
+      $("heroTitle").textContent = game ? ui(game.title) : ui("Choose Your Boosting Arena");
+      $("heroCopy").textContent = game ? ui(game.copy) : ui("Start from the ELYSIUM home screen, choose a game, then build a Discord-ready order with clean pricing and service details.");
+    }
+
+    function renderPopular() {
+      const game = currentGame();
+      if (game.id === "circle" || game.id === "valorant") {
+        $("popularHead").classList.add("is-hidden");
+        $("popularGrid").classList.add("is-hidden");
+        $("popularGrid").innerHTML = "";
+        return;
+      }
+      $("popularTitle").textContent = game.id === "arc" ? ui("Popular Arc Raiders Orders") : ui("Popular") + " " + ui(game.label) + " " + ui("Services");
+      $("popularCopy").textContent = game.id === "arc" ? ui("Fast picks rotate between Trials, All Guns, Blueprints, and Raider Coins without repeating the selected category.") : ui("Most requested services for this game.");
+      const visibleIds = new Set(game.categories.length
+        ? game.services.filter(service => service.category === state.category).map(service => service.id)
+        : [state.serviceId]);
+      const list = game.popular
+        .map(id => game.services.find(service => service.id === id))
+        .filter(service => service && !visibleIds.has(service.id))
+        .slice(0, 3);
+      $("popularHead").classList.toggle("is-hidden", list.length === 0);
+      $("popularGrid").classList.toggle("is-hidden", list.length === 0);
+      $("popularGrid").innerHTML = list.map(service => cardMarkup(service, true)).join("");
+      bindServiceButtons();
+    }
+
+    function renderServices() {
+      const game = currentGame();
+      const category = game.categories.find(cat => cat.id === state.category);
+      const list = game.categories.length ? game.services.filter(service => service.category === state.category) : game.services;
+      $("serviceTitle").textContent = category ? ui(category.label) : ui(game.label) + " " + ui("Services");
+      $("serviceCopy").textContent = game.id === "arc" ? ui("Open a service, customize the order, and add it to cart.") : ui("Select a service and adjust the order panel below.");
+      $("serviceHead").classList.toggle("is-hidden", list.length <= 1);
+      $("serviceGrid").classList.toggle("is-hidden", list.length <= 1);
+      $("serviceGrid").innerHTML = list.map(service => cardMarkup(service, false)).join("");
+      bindServiceButtons();
+    }
+
+    function bindCategoryArrows() {
+      const scroller = $("categoryScroll");
+      const clampScroll = left => Math.max(0, Math.min(Math.max(0, scroller.scrollWidth - scroller.clientWidth), left));
+      const stepSize = () => {
+        const first = scroller.querySelector(".cat-btn");
+        if (!first) return 0;
+        const styles = getComputedStyle(scroller);
+        const gap = parseFloat(styles.columnGap || styles.gap || "12") || 12;
+        return first.offsetWidth + gap;
+      };
+      const move = direction => {
+        pauseCategoryAuto(6000);
+        const step = stepSize();
+        if (!step) return;
+        const pageStep = step * 3;
+        const currentPage = Math.round(scroller.scrollLeft / pageStep);
+        scroller.scrollTo({ left: clampScroll((currentPage + direction) * pageStep), behavior: "smooth" });
+      };
+      $("catPrev").onclick = () => move(-1);
+      $("catNext").onclick = () => move(1);
+    }
+
+    const categoryMotion = { bound: false, paused: false, pauseUntil: 0, dragging: false, didDrag: false, skipClick: false, startX: 0, startLeft: 0, targetCat: "", direction: 1, raf: 0 };
+
+    function pauseCategoryAuto(ms = 4000) {
+      categoryMotion.pauseUntil = Date.now() + ms;
+    }
+
+    function setupCategoryMotion() {
+      const scroller = $("categoryScroll");
+      if (!categoryMotion.bound) {
+        categoryMotion.bound = true;
+        scroller.addEventListener("mouseenter", () => { categoryMotion.paused = true; });
+        scroller.addEventListener("mouseleave", () => { categoryMotion.paused = false; });
+        scroller.addEventListener("wheel", () => pauseCategoryAuto(7000), { passive: true });
+        scroller.addEventListener("pointerdown", event => {
+          categoryMotion.dragging = true;
+          categoryMotion.didDrag = false;
+          categoryMotion.startX = event.clientX;
+          categoryMotion.startLeft = scroller.scrollLeft;
+          categoryMotion.targetCat = event.target.closest("[data-cat]")?.dataset.cat || "";
+          scroller.classList.add("dragging");
+          pauseCategoryAuto(8000);
+          scroller.setPointerCapture?.(event.pointerId);
+        });
+        scroller.addEventListener("pointermove", event => {
+          if (!categoryMotion.dragging) return;
+          const delta = event.clientX - categoryMotion.startX;
+          if (Math.abs(delta) > 5) categoryMotion.didDrag = true;
+          scroller.scrollLeft = categoryMotion.startLeft - delta;
+        });
+        const stopDrag = event => {
+          const shouldSelect = !categoryMotion.didDrag && categoryMotion.targetCat;
+          categoryMotion.dragging = false;
+          scroller.classList.remove("dragging");
+          scroller.releasePointerCapture?.(event.pointerId);
+          pauseCategoryAuto(6000);
+          if (shouldSelect) {
+            categoryMotion.skipClick = true;
+            selectCategory(categoryMotion.targetCat);
+          }
+          categoryMotion.targetCat = "";
+        };
+        scroller.addEventListener("pointerup", stopDrag);
+        scroller.addEventListener("pointercancel", stopDrag);
+      }
+      if (!categoryMotion.raf) {
+        const tick = () => {
+          const maxLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+          const canMove = maxLeft > 12 && !categoryMotion.paused && !categoryMotion.dragging && Date.now() > categoryMotion.pauseUntil && state.game;
+          if (canMove) {
+            if (scroller.scrollLeft >= maxLeft - 1) categoryMotion.direction = -1;
+            if (scroller.scrollLeft <= 1) categoryMotion.direction = 1;
+            scroller.scrollLeft += categoryMotion.direction * .28;
+          }
+          categoryMotion.raf = requestAnimationFrame(tick);
+        };
+        categoryMotion.raf = requestAnimationFrame(tick);
+      }
+    }
+
+    function centerCategory(button, behavior = "smooth") {
+      const scroller = $("categoryScroll");
+      const first = scroller.querySelector(".cat-btn");
+      if (!first) return;
+      const styles = getComputedStyle(scroller);
+      const gap = parseFloat(styles.columnGap || styles.gap || "12") || 12;
+      const step = first.offsetWidth + gap;
+      const pageStep = step * 3;
+      const targetPage = Math.floor(button.offsetLeft / pageStep);
+      const maxLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+      scroller.scrollTo({ left: Math.max(0, Math.min(maxLeft, targetPage * pageStep)), behavior });
+    }
+
+    function syncActiveCategoryPosition(behavior = "smooth") {
+      const active = $("categoryScroll").querySelector(".cat-btn.active");
+      if (!active) return;
+      requestAnimationFrame(() => centerCategory(active, behavior));
+    }
+
+    function cardMarkup(service, popular) {
+      const serviceVisual = categoryArtwork(service.category || "custom", service.cardTitle);
+      if (popular) {
+        return `
+          <article class="popular-card">
+            <div class="popular-card-head">
+              <span class="card-icon category-thumb">${serviceVisual}</span>
+              <div class="popular-card-main">
+                <h3>${ui(service.cardTitle)}</h3>
+                <p>${ui(service.short)}</p>
+              </div>
+              <div class="price"><small>From</small>${servicePrice(service)}</div>
+            </div>
+            <button class="service-btn ${state.serviceId === service.id ? "active" : ""}" type="button" data-service="${service.id}">${ui("Customize")}</button>
+          </article>
+        `;
+      }
+      return `
+        <article class="service-card">
+          <div class="card-top"><span class="card-icon category-thumb">${serviceVisual}</span></div>
+          <h3>${ui(service.cardTitle)}</h3>
+          <p>${ui(service.short)}</p>
+          <footer>
+            <div class="price"><small>From</small>${servicePrice(service)}</div>
+            <button class="service-btn ${state.serviceId === service.id ? "active" : ""}" type="button" data-service="${service.id}">${ui("Details")}</button>
+          </footer>
+        </article>
+      `;
+    }
+
+    function bindServiceButtons() {
+      document.querySelectorAll("[data-service]").forEach(button => button.addEventListener("click", () => {
+        state.serviceId = button.dataset.service;
+        const service = currentService();
+        state.category = service.category;
+        renderCategories();
+        renderPopular();
+        renderServices();
+        renderDetail();
+        $("detailSection").scrollIntoView({ behavior: "smooth", block: "start" });
+      }));
+    }
+
+    function renderDetail() {
+      const service = currentService();
+      state.bpTab = "Gun Blueprints";
+      state.blueprintSelections = {
+        "Gun Blueprints": new Set(),
+        "Backpack Blueprints": new Set(),
+        "Quick Use Blueprints": new Set(),
+        "Gun Part Blueprints": new Set()
+      };
+      $("detailIcon").innerHTML = categoryArtwork(service.category || "custom", service.cardTitle);
+      $("detailTitle").textContent = ui(service.title);
+      $("detailIntro").textContent = ui(service.intro);
+      $("detailDeal").innerHTML = serviceSaleBadge(service);
+      $("detailSteps").innerHTML = detailSteps(service.form).map(step => `
+        <div class="detail-step"><strong>${ui(step.title)}</strong><span>${ui(step.copy)}</span></div>
+      `).join("");
+      renderOrderFeed(true);
+      $("orderForm").innerHTML = buildForm(service.form);
+      wireForm(service.form);
+      updateTotal();
+    }
+
+    function detailSteps(type) {
+      const shared = {
+        blueprints: [
+          { title: "Pick Items", copy: "Select each blueprint group from the tabs and tick the exact items you want." },
+          { title: "Add Order", copy: "The cart keeps every selected item separated by category for clean review." },
+          { title: "Discord Ticket", copy: "Copy the summary and paste it into your ticket so boosters can confirm delivery." }
+        ],
+        coins: [
+          { title: "Set Amount", copy: "Drag the coin slider from 100k to 10M and watch the total update instantly." },
+          { title: "Review USD", copy: "You can browse locally, while boosters receive a clean USD ticket value." },
+          { title: "Confirm", copy: "Paste the order into Discord and boosters will confirm delivery instructions." }
+        ],
+        depositary: [
+          { title: "Choose Slots", copy: "Select safe storage capacity from 5 to 50 inventory slots." },
+          { title: "Secure Items", copy: "Boosters confirm the handoff plan and keep the ticket list clean." },
+          { title: "Return Order", copy: "After confirmation, items are returned using the Discord ticket instructions." }
+        ],
+        trials: [
+          { title: "Choose Service", copy: "Select Weekly All 3 Star Trials, rank-up service, or both together." },
+          { title: "Set Rank", copy: "Pick your current rank so the correct rank-up options and prices unlock." },
+          { title: "Send Ticket", copy: "Add to cart and copy the Discord ticket for boosters confirmation." }
+        ],
+        loadout: [
+          { title: "Build Loadout", copy: "Choose a weapon, mods, gear, quick-use bundles, or a 10x/20x special bundle." },
+          { title: "Check Total", copy: "Weapons and mod quantities are priced separately to avoid bundle mistakes." },
+          { title: "Deliver Notes", copy: "Your ticket lists every item line by line for Discord delivery." }
+        ],
+        raid: [
+          { title: "Choose Count", copy: "Pick a 2x to 12x raid package and enable Event Mode only if needed." },
+          { title: "Event Option", copy: "Event Mode adds a fixed per-raid event fee when toggled on." },
+          { title: "Successful Runs", copy: "Only completed raids count. Failed attempts are retried or compensated by boosters." }
+        ],
+        pvp: [
+          { title: "Pick Focus", copy: "Choose PvP for combat improvement or PvE for routes, loot safety, and raid planning." },
+          { title: "Set Session", copy: "Choose Duo or Trio and book up to 6 hours per ticket." },
+          { title: "Confirm Goals", copy: "Boosters confirm schedule, platform, and exact coaching goals in Discord." }
+        ],
+        leveling: [
+          { title: "Account Access", copy: "Leveling requires Steam or Xbox account access; otherwise boosters cannot log in." },
+          { title: "VPN Location", copy: "For account protection, boosters can use the customer's preferred VPN location." },
+          { title: "Final Total", copy: "Current level, target level, and speed are calculated privately before ticket confirmation." }
+        ],
+        boss: [
+          { title: "Pick Target", copy: "Choose Queen, Matriarch, or Harvester Puzzle in the order panel." },
+          { title: "Set Quantity", copy: "Add the amount you need and boosters will confirm availability." },
+          { title: "Ticket Notes", copy: "The copied ticket keeps the boss or puzzle target clear for delivery." }
+        ]
+      };
+      return shared[type] || [
+        { title: "Customize", copy: "Select the service options and quantities in the order panel." },
+        { title: "Add To Cart", copy: "Review the total and add the configured service to your cart." },
+        { title: "Copy Ticket", copy: "Paste the clean order summary into Discord for boosters confirmation." }
+      ];
+    }
+
+    function recentOrderType(order) {
+      const text = String(order || "").toLowerCase();
+      if (text.includes("blueprint")) return "blueprint";
+      if (text.includes("coin") || text.includes("seed")) return "currency";
+      if (text.includes("raid") || text.includes("trials") || text.includes("scrappy") || text.includes("expedition")) return "service";
+      return "item";
+    }
+
+    function pickRecentOrders() {
+      const picked = [];
+      const used = new Set();
+      let previousType = recentOrderLastBatch.length ? recentOrderType(recentOrderLastBatch[recentOrderLastBatch.length - 1]) : "";
+      for (let slot = 0; slot < 3; slot += 1) {
+        let candidates = recentOrders.filter(order => !used.has(order) && recentOrderType(order) !== previousType);
+        if (!candidates.length) candidates = recentOrders.filter(order => !used.has(order));
+        const choice = candidates[Math.floor(Math.random() * candidates.length)] || recentOrders[Math.floor(Math.random() * recentOrders.length)];
+        picked.push(choice);
+        used.add(choice);
+        previousType = recentOrderType(choice);
+      }
+      recentOrderLastBatch = picked;
+      return picked;
+    }
+
+    function renderOrderFeed(initial = false) {
+      const feed = $("orderFeed");
+      if (!feed) return;
+      const entries = pickRecentOrders();
+      const html = entries.map(order => `<article class="order-feed-card"><small><span class="live-dot" aria-hidden="true"></span>${ui("Raider just ordered")}</small><strong>${escapeHtml(translateOrder(order))}</strong></article>`).join("");
+      if (initial || !feed.innerHTML) {
+        feed.innerHTML = html;
+        return;
+      }
+      feed.querySelectorAll(".order-feed-card").forEach(card => card.classList.add("is-changing"));
+      window.setTimeout(() => { feed.innerHTML = html; }, 360);
+    }
+
+    function startOrderFeed() {
+      window.clearInterval(recentOrderTimer);
+      recentOrderTimer = window.setInterval(() => {
+        renderOrderFeed();
+      }, 8000);
+    }
+
+    function qtyField(id, label, value = 0, min = 0) {
+      return `<div><label for="${id}">${label}</label><input id="${id}" type="number" min="${min}" value="${value}"></div>`;
+    }
+
+    function weaponOptions(includeNone = true) {
+      return weapons.filter(weapon => includeNone || weapon !== "No Weapon").map(weapon => `<option value="${weapon}">${displayItemName(weapon)}</option>`).join("");
+    }
+
+    function modFields(prefix) {
+      return `
+        <div class="mod-wide"><label for="${prefix}ModType">${ui("Mods")}</label><select id="${prefix}ModType"><option value="none">${ui("No Mods")}</option><option value="blue">${ui("Blue Mods - $0.15 each (was $0.30)")}</option><option value="premium">${ui("Legendary / Epic Mods - $0.25 each (was $0.50)")}</option></select><span class="discount-note">${ui("Mod quantity automatically matches weapon quantity.")}</span></div>
+      `;
+    }
+
+    function buildForm(type) {
+      if (type === "fast") {
+        return `<div class="field-grid">${qtyField("fastQty", "Quantity / Hours", 1, 1)}<div><label for="fastNote">Order Notes</label><input id="fastNote" placeholder="Rank, server, role, schedule"></div></div>`;
+      }
+      if (type === "blueprints") {
+        return `
+          <div><label>${ui("Select Blueprints")}</label><div class="tabs" id="bpTabs"></div></div>
+          <div class="bp-search-row"><div class="search-box"><label for="bpSearch">${ui("Search Blueprints")}</label><input id="bpSearch" type="search" placeholder="${ui("Type blueprint name...")}"></div><button class="btn" id="bpSelectAll" type="button">${ui("Select All")}</button></div>
+          <div id="bpContent"></div>
+        `;
+      }
+      if (type === "coins") {
+        return `
+          <div class="coin-panel">
+            <input id="coinDeal" type="hidden" value="">
+            <div class="coin-readout">
+              <div><label for="coinAmount">Raider Coins</label><strong><span id="coinLabel">1,000,000</span><span class="discounted-tag" id="coinDiscountTag">${ui("Discounted")}</span></strong></div>
+              <span>100k minimum<br>10M maximum</span>
+            </div>
+            <input id="coinAmount" type="range" min="100000" max="10000000" step="100000" value="1000000">
+            <div class="deal-hint" id="coinNextHint"></div>
+            <div class="coin-quick-grid seed-quick-grid">
+              <button class="raid-pill" type="button" data-coin-deal="3000000"><strong>3M Coins<small>${ui("Popular deal, 20% off")}</small></strong><span>${moneyUSD(3000000 / 100000 * prices.coins100k * .80)}</span></button>
+              <button class="raid-pill" type="button" data-coin-deal="6000000"><strong>6M Coins<small>${ui("Popular deal, 20% off")}</small></strong><span>${moneyUSD(6000000 / 100000 * prices.coins100k * .80)}</span></button>
+            </div>
+            <div class="badge" style="justify-self:start">${ui("Price updates every 100k")}</div>
+          </div>
+        `;
+      }
+      if (type === "seeds") {
+        return `
+          <div class="coin-panel">
+            <input id="seedDeal" type="hidden" value="">
+            <div class="coin-readout">
+              <div><label for="seedAmount">Assorted Seeds</label><strong><span id="seedLabel">100</span><span class="discounted-tag" id="seedDiscountTag">${ui("Discounted")}</span></strong></div>
+              <span>100 minimum<br>10,000 maximum</span>
+            </div>
+            <input id="seedAmount" type="range" min="100" max="10000" step="100" value="100">
+            <div class="deal-hint" id="seedNextHint"></div>
+            <div class="coin-quick-grid">
+              ${[2500,5000,10000].map(amount => `<button class="raid-pill" type="button" data-seed-deal="${amount}"><strong>${amount.toLocaleString()} Seeds<small>${ui("Bulk deal, 20% off")}</small></strong><span>${moneyUSD(amount / 100 * prices.seeds100 * .80)}</span></button>`).join("")}
+            </div>
+            <div class="badge" style="justify-self:start">100 seeds = ${moneyUSD(prices.seeds100)}</div>
+          </div>
+        `;
+      }
+      if (type === "depositary") {
+        return `
+          <div class="coin-panel">
+            <div class="coin-readout">
+              <div><label for="depositarySlots">Storage Slots</label><strong id="slotLabel">50 Slots</strong></div>
+              <span>Slider moves by 20<br>custom amount allowed</span>
+            </div>
+            <div class="depositary-grid">
+              <div>
+                <label for="depositarySlots">Quick Slider</label>
+                <input id="depositarySlots" type="range" min="20" max="200" step="20" value="60">
+              </div>
+              <div>
+                <label for="depositaryCustom">Custom</label>
+                <input id="depositaryCustom" type="number" min="1" max="999" step="1" value="60">
+              </div>
+            </div>
+            <div class="range-ticks">${[20,40,60,80,100,120,140,160,180,200].map(slot => `<span>${slot}</span>`).join("")}</div>
+          </div>
+        `;
+      }
+      if (type === "guns") {
+        return `<div class="field-grid"><div><label for="gunWeapon">${ui("Weapon")}</label><select id="gunWeapon">${weaponOptions(false)}</select></div>${qtyField("gunQty", ui("Quantity"), 1, 1)}${modFields("gun")}<button class="btn" id="bundle20" type="button" style="grid-column:1/-1">20x Weapon + Legendary / Epic Mods (-10%)</button></div>`;
+      }
+      if (type === "loadout") {
+        return `
+          <input id="loadoutBundle" type="hidden" value="0">
+          <div class="field-block">
+            <h4>Special Bundle</h4>
+            <div class="bundle-grid">
+              <button class="raid-pill" type="button" data-loadout-bundle="10"><strong>10x Bundle<small>10 weapon, 10 Looting Mk. 3 (Survivor) Augment, 10 Medium Shield, 50 Shield Recharger, 50 Herbal</small></strong><span>${moneyUSD(10 * (prices.weapon + prices.augment + prices.shield + prices.rechargerBundle + prices.bandageBundle))}</span></button>
+              <button class="raid-pill" type="button" data-loadout-bundle="20"><strong>20x Bundle<small>20 weapon, 20 Looting Mk. 3 (Survivor) Augment, 20 Medium Shield, 100 Shield Recharger, 100 Herbal</small></strong><span>${moneyUSD(20 * (prices.weapon + prices.augment + prices.shield + prices.rechargerBundle + prices.bandageBundle))}</span></button>
+            </div>
+          </div>
+          ${weaponBlock("Primary Weapon", "primary")}
+          <div class="field-block"><h4>Gear</h4><div class="field-grid equal-grid">${qtyField("augmentQty", "Looting Mk. 3 (Survivor) Augment Qty")}${qtyField("shieldQty", "Medium Shield Qty")}</div></div>
+          <div class="field-block"><h4>Quick Use Bundles</h4><div class="field-grid equal-grid">${qtyField("bandageQty", "5x Herbal Bandage")}${qtyField("nadeQty", "3x Trigger Nade")}${qtyField("rechargerQty", "5x Shield Recharger")}${qtyField("surgeRechargerQty", "5x Surge Shield Recharger")}</div></div>
+        `;
+      }
+      if (type === "trials") {
+        return `
+          <div class="checks">
+            <label class="check-row"><input id="trialAllStars" type="checkbox" checked><span>Weekly All 3 Star Trials - ${moneyUSD(prices.trialsBase)}</span></label>
+            <label class="check-row"><input id="trialRankUp" type="checkbox"><span>Rank Up Service Base - ${moneyUSD(prices.trialsBase)}</span></label>
+          </div>
+          <div class="field-grid">
+            <div><label for="trialRank">Current Rank</label><select id="trialRank">${ranks.map(rank => `<option value="${rank}">${rank}</option>`).join("")}</select></div>
+            <div><label for="trialOption">Rank Option</label><select id="trialOption"></select></div>
+          </div>
+        `;
+      }
+      if (type === "pvp") {
+        return `
+          <input id="coachFocus" type="hidden" value="pvp">
+          <input id="pvpMode" type="hidden" value="duo">
+          <div class="field-block">
+            <h4>Coaching Focus</h4>
+            <div class="raid-toggle-grid">
+              <button class="raid-pill active" type="button" data-coach-focus="pvp"><strong>PvP Coaching<small>Fights, angles, pressure, extraction decisions</small></strong></button>
+              <button class="raid-pill" type="button" data-coach-focus="pve"><strong>PvE Coaching<small>Routes, loot safety, raid planning</small></strong></button>
+            </div>
+          </div>
+          <div class="field-block">
+            <h4>Session Type</h4>
+            <div class="raid-toggle-grid">
+              <button class="raid-pill active" type="button" data-coach-team="duo"><strong>Duo<small>${moneyUSD(20)} / hour</small></strong></button>
+              <button class="raid-pill" type="button" data-coach-team="trio"><strong>Trio<small>${moneyUSD(30)} / hour</small></strong></button>
+            </div>
+          </div>
+          <div><label for="pvpHours">Hours</label><input id="pvpHours" type="number" min="1" max="6" value="1"></div>
+          <div><label for="coachNotes">Coaching Notes</label><textarea id="coachNotes" placeholder="Tell us what kind of PvP/PvE experience you want, weak points, goals, schedule, or preferred focus."></textarea></div>
+          <p class="raid-panel-note">Maximum 6 hours per coaching ticket. Boosters confirm schedule, platform, and exact coaching goals in Discord.</p>
+        `;
+      }
+      if (type === "leveling") {
+        return `<div class="field-grid">${qtyField("currentLevel", "Current Level", 1, 1)}${qtyField("targetLevel", "Target Level", 25, 2)}</div><div><label for="speed">Speed</label><select id="speed"><option value="1">Standard</option><option value="1.10">Express (+10%)</option><option value="1.25">Super Express (+25%)</option></select></div>`;
+      }
+      if (type === "workshop") {
+        return `
+          <input id="workshopMode" type="hidden" value="workshop">
+          <input id="workshopBundle" type="hidden" value="0">
+          <div class="tabs" id="workshopModeTabs">
+            <button class="tab-btn active" type="button" data-workshop-mode="workshop">Workshop</button>
+            <button class="tab-btn" type="button" data-workshop-mode="scrappy">Scrappy</button>
+          </div>
+          <div class="field-block">
+            <h4>Max Bundle</h4>
+            <button class="raid-pill" id="maxWorkshopScrappy" type="button">
+              <strong>Max Workshop + Scrappy<small>All 6 workbenches + Scrappy Level 5, 10% off</small></strong>
+              <span>${moneyUSD((prices.workshopMax + 5 * prices.scrappyLevel) * .90)}</span>
+            </button>
+          </div>
+          <div class="field-block" data-workshop-panel="workshop">
+            <h4>Workshop Leveling</h4>
+            <div class="level-range" id="workshopRange">
+              <div class="level-range-head">
+                <div class="level-range-chip"><span>From</span><strong id="workshopFromLabel">1</strong><small>Level</small></div>
+                <div class="level-range-chip"><span>To</span><strong id="workshopToLabel">3</strong><small>Level</small></div>
+              </div>
+              <div class="dual-range" id="workshopDualRange" style="--range-left:0%;--range-right:0%">
+                <div class="dual-range-track"></div>
+                <div class="dual-range-fill"></div>
+                <input id="workshopFrom" type="range" min="1" max="3" step="1" value="1" aria-label="Workshop from level">
+                <input id="workshopTo" type="range" min="1" max="3" step="1" value="3" aria-label="Workshop target level">
+              </div>
+              <div class="range-ticks three"><span>1</span><span>2</span><span>3</span></div>
+            </div>
+            <div style="margin-top:10px"><label>Workshop</label><div class="checks">${workshops.map(name => `<label class="check-row"><input type="checkbox" value="${name}" data-workshop="${name}"><span>${name} - ${moneyUSD(prices.workshopBench)}</span></label>`).join("")}</div></div>
+            <p class="raid-panel-note">Each full 1 to 3 workbench upgrade is ${moneyUSD(prices.workshopBench)}. Partial level steps are calculated from the selected range.</p>
+          </div>
+          <div class="field-block is-hidden" data-workshop-panel="scrappy">
+            <h4>Scrappy Leveling</h4>
+            <div class="level-range" id="scrappyRange">
+              <div class="level-range-head">
+                <div class="level-range-chip"><span>From</span><strong id="scrappyFromLabel">1</strong><small>Level</small></div>
+                <div class="level-range-chip"><span>To</span><strong id="scrappyToLabel">5</strong><small>Level</small></div>
+              </div>
+              <div class="dual-range" id="scrappyDualRange" style="--range-left:0%;--range-right:0%">
+                <div class="dual-range-track"></div>
+                <div class="dual-range-fill"></div>
+                <input id="scrappyFrom" type="range" min="1" max="5" step="1" value="1" aria-label="Scrappy from level">
+                <input id="scrappyTo" type="range" min="1" max="5" step="1" value="5" aria-label="Scrappy target level">
+              </div>
+              <div class="range-ticks five">${[1,2,3,4,5].map(level => `<span>${level}</span>`).join("")}</div>
+              <p class="raid-panel-note">Scrappy is ${moneyUSD(prices.scrappyLevel)} per selected level range.</p>
+            </div>
+          </div>
+        `;
+      }
+      if (type === "raid") {
+        const raidPackageButtons = [2,4,6,8,10,12].map(count => `<button class="raid-pill ${count === 2 ? "active" : ""}" type="button" data-raid-package="${count}"><strong>${count}x Raid<small>Successful raids only</small></strong><span>${moneyUSD(count * prices.raid)}</span></button>`).join("");
+        return `
+          <div class="field-block">
+            <h4>Raid Team</h4>
+            <div class="raid-toggle-grid">
+              <button class="raid-pill active" type="button" data-raid-team="duo"><strong>Duo<small>Standard price</small></strong></button>
+              <button class="raid-pill" type="button" data-raid-team="trio"><strong>Trio<small>Two boosters</small></strong><span>+50%</span></button>
+            </div>
+          </div>
+          <div class="field-block">
+            <div class="field-block-head"><h4>Raid Amount</h4><label class="event-switch event-mode-card" style="--event-bg:url('assets/event-mod.webp')"><input id="raidEventMode" type="checkbox"><span>Event Mode</span></label></div>
+            <input id="raidCount" type="hidden" value="2">
+            <div class="quick-raid-grid">${raidPackageButtons}</div>
+            <p class="raid-panel-note">Event Mode adds ${moneyUSD(prices.event)} per selected raid when enabled.</p>
+          </div>
+        `;
+      }
+      if (type === "expedition") {
+        return `<div><label>Expedition Stages</label><div class="checks">${stages.map(([name, price]) => `<label class="check-row"><input type="checkbox" value="${price}" data-stage="${name}"><span>${name} - ${moneyUSD(price)}</span></label>`).join("")}</div></div>`;
+      }
+      if (type === "boss") {
+        return `
+          <input id="boss" type="hidden" value="Kill Queen">
+          <div class="field-block">
+            <h4>Boss & Puzzle</h4>
+            <div class="raid-toggle-grid">
+              <button class="raid-pill active" type="button" data-boss="Kill Queen"><strong>Queen Kill<small>${moneyUSD(20)}</small></strong></button>
+              <button class="raid-pill" type="button" data-boss="Kill Matriarch"><strong>Matriarch Kill<small>${moneyUSD(20)}</small></strong></button>
+            </div>
+            <div style="margin-top:8px">
+              <button class="raid-pill" type="button" data-boss="Harvester Puzzle" style="width:100%"><strong>Harvester Puzzle<small>${moneyUSD(20)}</small></strong></button>
+            </div>
+          </div>
+          ${qtyField("bossQty", "Quantity", 1, 1)}
+        `;
+      }
+      return `<div><label for="privateText">Custom Request</label><textarea id="privateText" placeholder="Describe the exact service, quantity, timing, and notes."></textarea></div><div class="badge">Price: CUSTOM</div>`;
+    }
+
+    function weaponBlock(title, prefix) {
+      return `<div class="field-block"><h4>${title}</h4><div class="field-grid"><div><label for="${prefix}Weapon">Weapon</label><select id="${prefix}Weapon">${weaponOptions(true)}</select></div>${qtyField(prefix + "WeaponQty", "Quantity")}${modFields(prefix)}</div></div>`;
+    }
+
+    function wireForm(type) {
+      if (type === "blueprints") wireBlueprints();
+      if (type === "loadout") {
+        const bundleInput = $("loadoutBundle");
+        const bundleButtons = Array.from(document.querySelectorAll("#orderForm [data-loadout-bundle]"));
+        const clearBundle = () => {
+          bundleInput.value = "0";
+          bundleButtons.forEach(button => button.classList.remove("active"));
+        };
+        bundleButtons.forEach(button => button.addEventListener("click", () => {
+          const count = Number(button.dataset.loadoutBundle);
+          bundleInput.value = String(count);
+          bundleButtons.forEach(item => item.classList.toggle("active", item === button));
+          if ($("primaryWeapon").value === "No Weapon") $("primaryWeapon").value = "Anvil";
+          $("primaryWeaponQty").value = count;
+          updateTotal();
+        }));
+        ["primaryWeapon", "primaryWeaponQty", "primaryModType", "augmentQty", "shieldQty", "bandageQty", "nadeQty", "rechargerQty", "surgeRechargerQty"].forEach(id => {
+          $(id)?.addEventListener("input", event => {
+            if (event.target.id !== "primaryWeapon") clearBundle();
+          });
+          $(id)?.addEventListener("change", event => {
+            if (event.target.id !== "primaryWeapon") clearBundle();
+          });
+        });
+      }
+      if (type === "workshop") {
+        const from = $("workshopFrom");
+        const to = $("workshopTo");
+        const bundleInput = $("workshopBundle");
+        const bundleButton = $("maxWorkshopScrappy");
+        const modeInput = $("workshopMode");
+        const modeButtons = Array.from(document.querySelectorAll("#orderForm [data-workshop-mode]"));
+        const panels = Array.from(document.querySelectorAll("#orderForm [data-workshop-panel]"));
+        const workshopChecks = Array.from(document.querySelectorAll("#orderForm [data-workshop]"));
+        const workshopRange = $("workshopDualRange");
+        const scrappyFrom = $("scrappyFrom");
+        const scrappyTo = $("scrappyTo");
+        const scrappyRange = $("scrappyDualRange");
+        const clearWorkshopBundle = () => {
+          bundleInput.value = "0";
+          bundleButton.classList.remove("active");
+        };
+        const syncWorkshopMode = mode => {
+          modeInput.value = mode;
+          modeButtons.forEach(button => button.classList.toggle("active", button.dataset.workshopMode === mode));
+          panels.forEach(panel => panel.classList.toggle("is-hidden", panel.dataset.workshopPanel !== mode));
+        };
+        const syncWorkshopLevels = changed => {
+          let start = Number(from.value);
+          let end = Number(to.value);
+          if (start >= end) {
+            if (changed === "from") {
+              end = Math.min(3, start + 1);
+              to.value = String(end);
+              if (start >= end) {
+                start = Math.max(1, end - 1);
+                from.value = String(start);
+              }
+            } else {
+              start = Math.max(1, end - 1);
+              from.value = String(start);
+            }
+          }
+          $("workshopFromLabel").textContent = start;
+          $("workshopToLabel").textContent = end;
+          workshopRange.style.setProperty("--range-left", `${((start - 1) / 2) * 100}%`);
+          workshopRange.style.setProperty("--range-right", `${100 - ((end - 1) / 2) * 100}%`);
+        };
+        const syncScrappyRange = changed => {
+          let start = Number(scrappyFrom.value);
+          let end = Number(scrappyTo.value);
+          if (start >= end) {
+            if (changed === "from") {
+              end = Math.min(5, start + 1);
+              scrappyTo.value = String(end);
+              if (start >= end) {
+                start = Math.max(1, end - 1);
+                scrappyFrom.value = String(start);
+              }
+            } else {
+              start = Math.max(1, end - 1);
+              scrappyFrom.value = String(start);
+            }
+          }
+          $("scrappyFromLabel").textContent = start;
+          $("scrappyToLabel").textContent = end;
+          scrappyRange.style.setProperty("--range-left", `${((start - 1) / 4) * 100}%`);
+          scrappyRange.style.setProperty("--range-right", `${100 - ((end - 1) / 4) * 100}%`);
+        };
+        modeButtons.forEach(button => button.addEventListener("click", () => {
+          clearWorkshopBundle();
+          syncWorkshopMode(button.dataset.workshopMode);
+          updateTotal();
+        }));
+        from.addEventListener("input", () => {
+          clearWorkshopBundle();
+          syncWorkshopLevels("from");
+          updateTotal();
+        });
+        to.addEventListener("input", () => {
+          clearWorkshopBundle();
+          syncWorkshopLevels("to");
+          updateTotal();
+        });
+        scrappyFrom.addEventListener("input", () => {
+          clearWorkshopBundle();
+          syncScrappyRange("from");
+          updateTotal();
+        });
+        scrappyTo.addEventListener("input", () => {
+          clearWorkshopBundle();
+          syncScrappyRange("to");
+          updateTotal();
+        });
+        workshopChecks.forEach(input => input.addEventListener("change", clearWorkshopBundle));
+        bundleButton.addEventListener("click", () => {
+          from.value = "1";
+          to.value = "3";
+          workshopChecks.forEach(input => { input.checked = true; });
+          scrappyFrom.value = "1";
+          scrappyTo.value = "5";
+          bundleInput.value = "1";
+          bundleButton.classList.add("active");
+          syncWorkshopMode("workshop");
+          syncWorkshopLevels("to");
+          syncScrappyRange("to");
+          updateTotal();
+        });
+        syncWorkshopMode(modeInput.value);
+        syncWorkshopLevels("to");
+        syncScrappyRange("to");
+      }
+      if (type === "coins") {
+        const dealButtons = Array.from(document.querySelectorAll("#orderForm [data-coin-deal]"));
+        const syncCoin = () => {
+          const amount = Number(val("coinAmount"));
+          const deal = [3000000, 6000000].includes(amount);
+          $("coinDeal").value = deal ? String(amount) : "";
+          dealButtons.forEach(button => button.classList.toggle("active", Number(button.dataset.coinDeal) === amount));
+          $("coinDiscountTag").classList.toggle("active", deal);
+          const next = amount < 3000000 ? 3000000 : amount < 6000000 ? 6000000 : 0;
+          $("coinNextHint").classList.toggle("active", Boolean(next));
+          $("coinNextHint").textContent = next ? `Add ${(next - amount).toLocaleString()} more for 20% discount` : "";
+          $("coinLabel").textContent = amount.toLocaleString();
+          updateTotal();
+        };
+        $("coinAmount").addEventListener("input", syncCoin);
+        dealButtons.forEach(button => button.addEventListener("click", () => {
+          $("coinAmount").value = button.dataset.coinDeal;
+          syncCoin();
+        }));
+        syncCoin();
+      }
+      if (type === "seeds") {
+        const dealButtons = Array.from(document.querySelectorAll("#orderForm [data-seed-deal]"));
+        const syncSeeds = () => {
+          const amount = Number(val("seedAmount"));
+          const deal = [2500, 5000, 10000].includes(amount);
+          $("seedDeal").value = deal ? String(amount) : "";
+          dealButtons.forEach(button => button.classList.toggle("active", Number(button.dataset.seedDeal) === amount));
+          $("seedDiscountTag").classList.toggle("active", deal);
+          const next = amount < 2500 ? 2500 : amount < 5000 ? 5000 : amount < 10000 ? 10000 : 0;
+          $("seedNextHint").classList.toggle("active", Boolean(next));
+          $("seedNextHint").textContent = next ? `Add ${(next - amount).toLocaleString()} more for 20% discount` : "";
+          $("seedLabel").textContent = amount.toLocaleString();
+          updateTotal();
+        };
+        $("seedAmount").addEventListener("input", syncSeeds);
+        dealButtons.forEach(button => button.addEventListener("click", () => {
+          $("seedAmount").value = button.dataset.seedDeal;
+          syncSeeds();
+        }));
+        syncSeeds();
+      }
+      if (type === "depositary") {
+        const syncSlots = source => {
+          let slots = Math.max(1, Math.min(999, Math.round(Number(val(source) || 1))));
+          if (source === "depositarySlots") $("depositaryCustom").value = slots;
+          if (source === "depositaryCustom") $("depositarySlots").value = Math.max(20, Math.min(200, Math.round(slots / 20) * 20));
+          $("slotLabel").textContent = slots + " Slots";
+          updateTotal();
+        };
+        $("depositarySlots").addEventListener("input", () => syncSlots("depositarySlots"));
+        $("depositaryCustom").addEventListener("input", () => syncSlots("depositaryCustom"));
+        syncSlots("depositaryCustom");
+      }
+      if (type === "guns") $("bundle20").addEventListener("click", () => {
+        $("gunQty").value = 20;
+        $("gunModType").value = "premium";
+        $("bundle20").classList.add("active");
+        updateTotal();
+      });
+      if (type === "trials") {
+        updateTrialOptions();
+        $("trialRank").addEventListener("change", () => {
+          updateTrialOptions();
+          updateTotal();
+        });
+        $("trialRankUp").addEventListener("change", () => {
+          updateTrialOptions();
+          updateTotal();
+        });
+      }
+      if (type === "pvp") {
+        document.querySelectorAll("#orderForm [data-coach-focus]").forEach(button => button.addEventListener("click", () => {
+          $("coachFocus").value = button.dataset.coachFocus;
+          document.querySelectorAll("#orderForm [data-coach-focus]").forEach(item => item.classList.toggle("active", item === button));
+          updateTotal();
+        }));
+        document.querySelectorAll("#orderForm [data-coach-team]").forEach(button => button.addEventListener("click", () => {
+          $("pvpMode").value = button.dataset.coachTeam;
+          document.querySelectorAll("#orderForm [data-coach-team]").forEach(item => item.classList.toggle("active", item === button));
+          updateTotal();
+        }));
+        $("pvpHours").addEventListener("input", () => {
+          $("pvpHours").value = Math.max(1, Math.min(6, Math.round(Number($("pvpHours").value || 1))));
+          updateTotal();
+        });
+      }
+      if (type === "boss") {
+        document.querySelectorAll("#orderForm [data-boss]").forEach(button => button.addEventListener("click", () => {
+          $("boss").value = button.dataset.boss;
+          document.querySelectorAll("#orderForm [data-boss]").forEach(item => item.classList.toggle("active", item === button));
+          updateTotal();
+        }));
+      }
+      if (type === "raid") wireRaidForm();
+      $("orderForm").querySelectorAll("input, select, textarea").forEach(input => {
+        input.addEventListener("input", updateTotal);
+        input.addEventListener("change", updateTotal);
+      });
+    }
+
+    function wireRaidForm() {
+      const raidInput = $("raidCount");
+      const eventInput = $("raidEventMode");
+      const packageButtons = Array.from(document.querySelectorAll("#orderForm [data-raid-package]"));
+      const teamButtons = Array.from(document.querySelectorAll("#orderForm [data-raid-team]"));
+
+      const clampRaidCount = () => {
+        const next = Math.max(2, Math.min(12, Math.round(Number(raidInput.value || 2))));
+        raidInput.value = next;
+        return next;
+      };
+
+      const syncRaidPanel = () => {
+        const count = clampRaidCount();
+        packageButtons.forEach(button => button.classList.toggle("active", Number(button.dataset.raidPackage) === count));
+      };
+
+      packageButtons.forEach(button => button.addEventListener("click", () => {
+        raidInput.value = button.dataset.raidPackage;
+        syncRaidPanel();
+        updateTotal();
+      }));
+      teamButtons.forEach(button => button.addEventListener("click", () => {
+        teamButtons.forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        updateTotal();
+      }));
+
+      eventInput.addEventListener("change", updateTotal);
+      syncRaidPanel();
+    }
+
+    function wireBlueprints() {
+      const tabs = Object.keys(blueprintGroups);
+      $("bpTabs").innerHTML = tabs.map(tab => `<button class="tab-btn ${tab === state.bpTab ? "active" : ""}" type="button" data-bp="${tab}">${displayItemName(tab)}</button>`).join("");
+
+      const setBlueprintTab = tab => {
+        if (!blueprintGroups[tab]) return;
+        state.bpTab = tab;
+        document.querySelectorAll("[data-bp]").forEach(item => item.classList.toggle("active", item.dataset.bp === tab));
+      };
+
+      const matchesBlueprintQuery = (name, query) => {
+        if (!query) return true;
+        return name.toLowerCase().includes(query) || trName(name).toLowerCase().includes(query);
+      };
+
+      function draw() {
+        const query = val("bpSearch").trim().toLowerCase();
+        if (query) {
+          const matchingTab = tabs.find(tab => blueprintGroups[tab].some(name => matchesBlueprintQuery(name, query)));
+          if (matchingTab && matchingTab !== state.bpTab) setBlueprintTab(matchingTab);
+        }
+        const selected = state.blueprintSelections[state.bpTab];
+        const list = blueprintGroups[state.bpTab].filter(name => matchesBlueprintQuery(name, query));
+        $("bpContent").innerHTML = `<div class="scroll-list">${list.map(name => `<label class="check-row"><input type="checkbox" value="${name}" ${selected.has(name) ? "checked" : ""}><span>${displayItemName(name)}</span></label>`).join("") || `<div class="empty">${ui("No blueprint found.")}</div>`}</div>`;
+        $("bpContent").querySelectorAll("input").forEach(input => input.addEventListener("change", () => {
+          input.checked ? selected.add(input.value) : selected.delete(input.value);
+          updateTotal();
+        }));
+      }
+
+      $("bpSelectAll").addEventListener("click", () => {
+        const query = val("bpSearch").trim().toLowerCase();
+        const selected = state.blueprintSelections[state.bpTab];
+        blueprintGroups[state.bpTab]
+          .filter(name => matchesBlueprintQuery(name, query))
+          .forEach(name => selected.add(name));
+        draw();
+        updateTotal();
+      });
+
+      document.querySelectorAll("[data-bp]").forEach(button => button.addEventListener("click", () => {
+        setBlueprintTab(button.dataset.bp);
+        draw();
+        updateTotal();
+      }));
+      $("bpSearch").addEventListener("input", draw);
+      if (state.pendingBlueprintSearch) {
+        setBlueprintTab(state.pendingBlueprintSearch.tab);
+        $("bpSearch").value = state.pendingBlueprintSearch.query;
+        state.pendingBlueprintSearch = null;
+      }
+      draw();
+    }
+
+    function updateTrialOptions() {
+      const rank = val("trialRank");
+      const options = trialOptions(rank);
+      $("trialOption").innerHTML = options.map(option => `<option value="${option.value}" data-label="${option.label}" data-price="${option.price}">${option.label} (${moneyUSD(option.price)})</option>`).join("");
+      $("trialOption").disabled = !$("trialRankUp")?.checked;
+    }
+
+    function trialOptions(rank) {
+      if (rank === "Hotshot") return [{ value: "secure", label: "Rank Secure", price: 15 }];
+      if (rank === "Daredevil III") return [{ value: "none", label: "No Rank Up", price: 0 }, { value: "plus1", label: "+1 Rank Up", price: 15 }];
+      if (rank === "Daredevil II") return [{ value: "none", label: "No Rank Up", price: 0 }, { value: "plus1", label: "+1 Rank Up", price: 5 }, { value: "plus2", label: "+2 Rank Up", price: 15 }];
+      return [{ value: "none", label: "No Rank Up", price: 0 }, { value: "plus1", label: "+1 Rank Up", price: 5 }, { value: "plus2", label: "+2 Rank Up", price: 10 }, { value: "plus3", label: "+3 Rank Up", price: 15 }];
+    }
+
+    function splitList(text) {
+      return String(text || "").split(",").map(item => item.trim()).filter(Boolean);
+    }
+
+    function modPrice(type) {
+      if (type === "blue") return prices.blueMod;
+      if (type === "premium") return prices.premiumMod;
+      return 0;
+    }
+
+    function modLabel(type) {
+      if (type === "blue") return "Blue Mods";
+      if (type === "premium") return "Legendary / Epic Mods";
+      return "No Mods";
+    }
+
+    function calcWeapon(prefix, simple = false) {
+      const weapon = val(simple ? "gunWeapon" : prefix + "Weapon");
+      const weaponQty = Math.max(0, num(simple ? "gunQty" : prefix + "WeaponQty"));
+      const modType = val(prefix + "ModType");
+      const finalWeaponQty = weapon === "No Weapon" ? 0 : weaponQty;
+      const modQty = modType === "none" ? 0 : finalWeaponQty;
+      return {
+        weapon,
+        weaponQty: finalWeaponQty,
+        modType,
+        modQty,
+        total: finalWeaponQty * prices.weapon + modQty * modPrice(modType)
+      };
+    }
+
+    function levelCost(current, target) {
+      if (target <= current) return 0;
+      return Math.max(0, Math.min(target, 25) - current) * 2 +
+        Math.max(0, Math.min(target, 50) - Math.max(current, 25)) * 2.5 +
+        Math.max(0, target - Math.max(current, 50)) * 3.5;
+    }
+
+    function calculate() {
+      const service = currentService();
+      const type = service.form;
+      if (type === "fast") {
+        const qty = Math.max(1, num("fastQty"));
+        return { total: service.fromUSD * qty, valid: true, details: `Quantity / Hours: ${qty}\nNotes: ${val("fastNote") || "None"}` };
+      }
+      if (type === "blueprints") {
+        const groups = Object.entries(state.blueprintSelections).map(([group, set]) => [group, Array.from(set).sort()]);
+        const all = groups.flatMap(([, list]) => list);
+        const details = groups.map(([group, list]) => list.length ? `${displayItemName(group)}: ${displayItemList(list)}` : "").filter(Boolean).join("\n") || "No blueprints selected";
+        return { total: all.length * prices.blueprint, oldTotal: all.length * 1.50, valid: all.length > 0, details };
+      }
+      if (type === "coins") {
+        const amount = num("coinAmount");
+        const base = amount / 100000 * prices.coins100k;
+        const deal = [3000000, 6000000].includes(amount);
+        const discount = deal ? base * .20 : 0;
+        return { total: base - discount, oldTotal: deal ? base : 0, valid: amount >= 100000, details: `${amount.toLocaleString()} Raider Coins${deal ? `\nPopular Deal Discount: -${moneyUSD(discount)} USD (20%)` : ""}` };
+      }
+      if (type === "seeds") {
+        const amount = num("seedAmount");
+        const base = amount / 100 * prices.seeds100;
+        const deal = [2500, 5000, 10000].includes(amount);
+        const discount = deal ? base * .20 : 0;
+        return { total: base - discount, oldTotal: deal ? base : 0, valid: amount >= 100, details: `${amount.toLocaleString()} Assorted Seeds${deal ? `\nBulk Deal Discount: -${moneyUSD(discount)} USD (20%)` : ""}` };
+      }
+      if (type === "depositary") {
+        const slots = Math.max(1, num("depositaryCustom"));
+        return { total: slots * prices.depositarySlot, valid: slots >= 1, details: `Depositary Slots: ${slots}\nRate: ${moneyUSD(prices.depositarySlot)} per slot\n50 Slot Package: ${moneyUSD(50 * prices.depositarySlot)}` };
+      }
+      if (type === "guns") {
+        const line = calcWeapon("gun", true);
+        const isBundle20 = line.weaponQty === 20 && line.modQty === 20 && line.modType === "premium";
+        const discount = isBundle20 ? line.total * .10 : 0;
+        const details = [
+          `${line.weaponQty}x ${line.weapon}`,
+          line.modQty > 0 ? `${line.modQty}x ${modLabel(line.modType)} (auto-matched to weapon qty)` : "",
+          isBundle20 ? `20x Bundle Discount: -${moneyUSD(discount)} USD (10%)` : ""
+        ].filter(Boolean).join("\n");
+        return { total: line.total - discount, oldTotal: line.total, valid: line.total > 0, details };
+      }
+      if (type === "loadout") return calcLoadout();
+      if (type === "trials") {
+        const allStars = Boolean($("trialAllStars")?.checked);
+        const rankUp = Boolean($("trialRankUp")?.checked);
+        const selected = $("trialOption").selectedOptions[0];
+        const optionLabel = selected?.dataset.label || "No Rank Up";
+        const optionPrice = rankUp ? Number(selected?.dataset.price || 0) : 0;
+        const basePrice = (allStars ? prices.trialsBase : 0) + (rankUp ? prices.trialsBase : 0);
+        return {
+          total: basePrice + optionPrice,
+          valid: allStars || rankUp,
+          details: `Weekly All 3 Stars: ${allStars ? "Yes" : "No"}\nRank Up Service: ${rankUp ? "Yes" : "No"}\nCurrent Rank: ${val("trialRank")}\nRank Option: ${rankUp ? optionLabel : "None"}\nRank Option Price: ${moneyUSD(optionPrice)}`
+        };
+      }
+      if (type === "pvp") {
+        const hours = Math.max(1, Math.min(6, num("pvpHours")));
+        const mode = val("pvpMode") === "trio" ? "Trio" : "Duo";
+        const focus = val("coachFocus") === "pve" ? "PvE Coaching" : "PvP Coaching";
+        const notes = val("coachNotes").trim();
+        return { total: hours * (mode === "Trio" ? 30 : 20), valid: true, details: `${focus}\nSession: ${mode}\nHours: ${hours}\nMaximum: 6 hours per ticket${notes ? `\nCoaching Notes: ${notes}` : ""}` };
+      }
+      if (type === "leveling") {
+        const current = Math.max(1, num("currentLevel"));
+        const target = Math.max(1, num("targetLevel"));
+        return { total: levelCost(current, target) * Number(val("speed")), valid: target > current, details: `Current Level: ${current}\nTarget Level: ${target}\nSpeed: ${$("speed").selectedOptions[0].textContent}` };
+      }
+      if (type === "workshop") {
+        if (val("workshopBundle") === "1") {
+          const workshopTotal = prices.workshopMax;
+          const scrappyTotal = 5 * prices.scrappyLevel;
+          const subtotal = workshopTotal + scrappyTotal;
+          const discount = subtotal * .10;
+          return {
+            total: subtotal - discount,
+            valid: true,
+            details: `Max Bundle: Workshop + Scrappy\nWorkshops: All 6 workbenches - ${moneyUSD(workshopTotal)}\nScrappy Level: 5 - ${moneyUSD(scrappyTotal)}\nBundle Discount: -${moneyUSD(discount)} USD (10%)`
+          };
+        }
+        const mode = val("workshopMode") || "workshop";
+        if (mode === "scrappy") {
+          const from = Math.max(1, Math.min(5, num("scrappyFrom")));
+          const to = Math.max(1, Math.min(5, num("scrappyTo")));
+          const levels = Math.max(1, to - from + 1);
+          return {
+            total: levels * prices.scrappyLevel,
+            valid: to > from,
+            details: `Mode: Scrappy Leveling\nFrom Level: ${from}\nTo Level: ${to}\nSelected Levels: ${levels}\nRate: ${moneyUSD(prices.scrappyLevel)} per level`
+          };
+        }
+        const from = Number(val("workshopFrom"));
+        const to = Number(val("workshopTo"));
+        const selected = Array.from(document.querySelectorAll("#orderForm [data-workshop]:checked")).map(input => input.value);
+        const levels = Math.max(0, to - from);
+        const levelMultiplier = levels / 2;
+        const fullTotal = selected.length === workshops.length ? prices.workshopMax : selected.length * prices.workshopBench;
+        const total = fullTotal * levelMultiplier;
+        return {
+          total,
+          valid: selected.length > 0 && levels > 0,
+          details: `From Level: ${from}\nTo Level: ${to}\nWorkshops: ${selected.join(", ") || "None"}\nFull 1-3 Rate: ${moneyUSD(prices.workshopBench)} per workbench\nAll 6 Workbench Package: ${moneyUSD(prices.workshopMax)}`
+        };
+      }
+      if (type === "raid") return calcRaid();
+      if (type === "expedition") {
+        const selected = Array.from(document.querySelectorAll("#orderForm [data-stage]:checked")).map(input => ({ name: input.dataset.stage, price: Number(input.value) }));
+        const total = selected.reduce((sum, item) => sum + item.price, 0);
+        return { total, valid: selected.length > 0, details: selected.map(item => `${item.name} - ${moneyUSD(item.price)}`).join("\n") || "No expedition stages selected" };
+      }
+      if (type === "boss") {
+        const qty = Math.max(1, num("bossQty"));
+        return { total: qty * 20, valid: true, details: `${qty}x ${val("boss")}` };
+      }
+      const req = val("privateText").trim();
+      return { total: 0, valid: req.length > 0, custom: true, details: req || "Custom request to be discussed in Discord" };
+    }
+
+    function calcLoadout() {
+      const primary = calcWeapon("primary");
+      const bundleSize = Math.max(0, num("loadoutBundle"));
+      const bundleExtra = bundleSize ? (bundleSize * prices.augment) + (bundleSize * prices.shield) + ((bundleSize * 5) / 5 * prices.rechargerBundle) + ((bundleSize * 5) / 5 * prices.bandageBundle) : 0;
+      const extras = [
+        ["Looting Mk. 3 (Survivor) Augment", num("augmentQty"), prices.augment],
+        ["Medium Shield", num("shieldQty"), prices.shield],
+        ["5x Herbal Bandage Bundle", num("bandageQty"), prices.bandageBundle],
+        ["3x Trigger Nade Bundle", num("nadeQty"), prices.nadeBundle],
+        ["5x Shield Recharger Bundle", num("rechargerQty"), prices.rechargerBundle],
+        ["5x Surge Shield Recharger Bundle", num("surgeRechargerQty"), prices.surgeRechargerBundle]
+      ];
+      const total = primary.total + bundleExtra + extras.reduce((sum, [, qty, price]) => sum + Math.max(0, qty) * price, 0);
+      const details = [
+        bundleSize ? `Special Bundle: ${bundleSize}x\nBundle Items: ${bundleSize}x ${primary.weapon}, ${bundleSize}x Looting Mk. 3 (Survivor) Augment, ${bundleSize}x Medium Shield, ${bundleSize * 5}x Shield Recharger, ${bundleSize * 5}x Herbal` : "",
+        weaponDetail("Primary", primary),
+        ...extras.filter(([, qty]) => qty > 0).map(([name, qty]) => `${qty}x ${name}`)
+      ].filter(Boolean).join("\n") || "No loadout items selected";
+      return { total, valid: total > 0, details };
+    }
+
+    function weaponDetail(label, line) {
+      return [
+        line.weaponQty > 0 ? `${label}: ${line.weaponQty}x ${line.weapon}` : "",
+        line.modQty > 0 && line.modType !== "none" ? `${label} Mods: ${line.modQty}x ${modLabel(line.modType)}` : ""
+      ].filter(Boolean).join("\n");
+    }
+
+    function calcRaid() {
+      const packageQty = Math.max(2, Math.min(12, num("raidCount") || 2));
+      const raidQty = packageQty;
+      const eventOn = Boolean($("raidEventMode")?.checked);
+      const team = document.querySelector("#orderForm [data-raid-team].active")?.dataset.raidTeam || "duo";
+      const teamLabel = team === "trio" ? "Trio (+50%)" : "Duo";
+      const teamMultiplier = team === "trio" ? 1.5 : 1;
+      const raidTotal = raidQty * prices.raid * teamMultiplier;
+      const eventTotal = eventOn ? raidQty * prices.event : 0;
+      const total = raidTotal + eventTotal;
+      const details = [
+        `Team: ${teamLabel}`,
+        `Raid Count: ${raidQty}`,
+        `Map Preference: Any Map`,
+        `Event Mode: ${eventOn ? `On (+${moneyUSD(eventTotal)} USD)` : "Off"}`,
+        "Rule: only successful raids count; failed runs are retried or compensated."
+      ].join("\n");
+      return { total, valid: raidQty > 0, details };
+    }
+
+    function updateTotal() {
+      const result = calculate();
+      const old = result.oldTotal && result.oldTotal > result.total ? `<span class="old-total">${displayMoney(result.oldTotal)}</span>` : "";
+      $("liveTotal").innerHTML = result.custom ? "CUSTOM" : old + displayMoney(result.total);
+      $("usdHint").textContent = result.custom ? "Ticket value: CUSTOM" : "Ticket value: " + moneyUSD(result.total) + " USD";
+      $("addToCart").disabled = !result.valid;
+    }
+
+    function clearServiceForm() {
+      renderDetail();
+      showToast("Service form cleared.");
+    }
+
+    function addToCart() {
+      const result = calculate();
+      if (!result.valid) return showToast("Please customize the service first.");
+      const service = currentService();
+      state.cart.push({
+        id: String(Date.now() + Math.random()),
+        game: currentGame().label,
+        title: service.cardTitle,
+        details: result.details,
+        total: result.total,
+        oldTotal: result.oldTotal || 0,
+        custom: Boolean(result.custom),
+        viewedCurrency: state.currency,
+        language: state.language
+      });
+      renderCart();
+      showToast("Added to cart.");
+    }
+
+    function renderCart() {
+      $("cartCount").textContent = state.cart.length;
+      $("clearCart").disabled = !state.cart.length;
+      if (!state.cart.length) {
+        $("cartBody").innerHTML = `<div class="empty">Your cart is empty. Select a service and add it to cart first.</div>`;
+      } else {
+        $("cartBody").innerHTML = state.cart.map(item => `
+          <article class="cart-item">
+            <div class="cart-item-top">
+              <div><h3>${ui(item.title)}</h3><p>Game: ${ui(item.game)}\n${escapeHtml(item.details)}</p></div>
+              <div class="price">${item.custom ? "CUSTOM" : displayInCurrency(item.total, item.viewedCurrency)}</div>
+            </div>
+            <button class="btn remove" type="button" data-remove="${item.id}">Remove</button>
+          </article>
+        `).join("");
+        document.querySelectorAll("[data-remove]").forEach(button => button.addEventListener("click", () => {
+          state.cart = state.cart.filter(item => item.id !== button.dataset.remove);
+          renderCart();
+        }));
+      }
+      const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
+      const hasCustom = state.cart.some(item => item.custom);
+      const sameCurrency = state.cart.length && state.cart.every(item => item.viewedCurrency === state.cart[0].viewedCurrency);
+      const cartCurrency = sameCurrency ? state.cart[0].viewedCurrency : state.currency;
+      $("cartTotal").textContent = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
+      $("cartUsdHint").textContent = hasCustom ? "Ticket total: " + displayInCurrency(total, cartCurrency) + " + CUSTOM" : "Ticket total: " + displayInCurrency(total, cartCurrency);
+    }
+
+    function clearCart() {
+      if (!state.cart.length) return showToast("Cart is already empty.");
+      state.cart = [];
+      renderCart();
+      $("copyStatus").textContent = "Cart cleared.";
+      showToast("Cart cleared.");
+    }
+
+    function escapeHtml(text) {
+      return String(text).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
+    }
+
+    function openCart() {
+      renderCart();
+      $("cartBackdrop").classList.add("active");
+      $("cartBackdrop").setAttribute("aria-hidden", "false");
+      document.body.classList.add("cart-open");
+    }
+
+    function closeCart() {
+      $("cartBackdrop").classList.remove("active");
+      $("cartBackdrop").setAttribute("aria-hidden", "true");
+      document.body.classList.remove("cart-open");
+    }
+
+    function cartNeedsArcId() {
+      return state.cart.some(item => item.game === "Arc Raiders");
+    }
+
+    function getArcIdLine() {
+      if (!cartNeedsArcId()) return "";
+      const label = state.language === "TR" ? "Oyun iÃ§i ID" : "Embark ID";
+      if (state.arcId) return `${label}: ${state.arcId}`;
+      if (state.arcIdSkipped) return `${label}: ${state.language === "TR" ? "Discord'da yazacak" : "Will type it on Discord"}`;
+      return "";
+    }
+
+    function updateArcIdModalText() {
+      const isTr = state.language === "TR";
+      $("arcIdTitle").textContent = isTr ? "Oyun iÃ§i ID" : "Embark ID";
+      $("arcIdCopy").textContent = isTr
+        ? "Discord ticket acmadan once oyun ici ID bilgisini ekleyebilirsin."
+        : "Add your in-game ID before copying or opening the Discord ticket.";
+      $("arcIdLabel").textContent = isTr ? "Oyun iÃ§i ID" : "Embark ID";
+      $("arcIdInput").placeholder = isTr ? "Oyuncu adi#0000" : "Name#0000";
+      $("arcIdDone").setAttribute("aria-label", isTr ? "Tamam" : "Done");
+      $("arcIdSkip").setAttribute("aria-label", isTr ? "Discord'a yazacagim" : "Will type it on Discord");
+    }
+
+    function openArcIdModal(action) {
+      state.pendingArcAction = action;
+      updateArcIdModalText();
+      $("arcIdInput").value = state.arcId || "";
+      $("arcIdModal").classList.add("active");
+      $("arcIdModal").setAttribute("aria-hidden", "false");
+      setTimeout(() => $("arcIdInput").focus(), 30);
+    }
+
+    function closeArcIdModal() {
+      $("arcIdModal").classList.remove("active");
+      $("arcIdModal").setAttribute("aria-hidden", "true");
+    }
+
+    function proceedAfterArcId() {
+      const action = state.pendingArcAction;
+      state.pendingArcAction = null;
+      closeArcIdModal();
+      if (typeof action === "function") action();
+    }
+
+    function ensureArcId(action) {
+      if (!cartNeedsArcId() || state.arcId || state.arcIdSkipped) {
+        action();
+        return;
+      }
+      openArcIdModal(action);
+    }
+
+    function ticketText() {
+      const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
+      const hasCustom = state.cart.some(item => item.custom);
+      const lines = ["ELYSIUM BOOST - ORDER TICKET", "Discord Ticket: " + DISCORD_URL, "", "ORDER ITEMS:"];
+      state.cart.forEach((item, index) => {
+        lines.push(`${index + 1}. ${item.game} - ${item.title}`);
+        item.details.split("\n").forEach(line => lines.push(`   - ${line}`));
+        lines.push(`   Price: ${item.custom ? "CUSTOM" : displayInCurrency(item.total, item.viewedCurrency)}`);
+        lines.push(`   Currency: ${item.viewedCurrency}`);
+        lines.push("");
+      });
+      const currency = state.cart[0]?.viewedCurrency || state.currency;
+      const totalText = hasCustom ? displayInCurrency(total, currency) + " + CUSTOM" : displayInCurrency(total, currency);
+      lines.push("TOTAL: " + totalText);
+      const idLine = getArcIdLine();
+      if (idLine) lines.push(idLine);
+      lines.push("");
+      lines.push("Customer note: Please confirm availability, ETA, and final instructions in Discord.");
+      return lines.join("\n");
+    }
+
+    async function copyOrder() {
+      if (!state.cart.length) {
+        $("copyStatus").textContent = "Add an item before copying.";
+        return;
+      }
+      ensureArcId(copyOrderNow);
+    }
+
+    async function copyOrderNow() {
+      try {
+        await navigator.clipboard.writeText(ticketText());
+      } catch (error) {
+        const helper = document.createElement("textarea");
+        helper.value = ticketText();
+        document.body.appendChild(helper);
+        helper.select();
+        document.execCommand("copy");
+        helper.remove();
+      }
+      $("copyStatus").textContent = "Ticket copied.";
+    }
+
+    function openDiscordTicket() {
+      if (!state.cart.length) {
+        $("copyStatus").textContent = "Add an item before opening Discord.";
+        return;
+      }
+      ensureArcId(() => window.open(DISCORD_URL, "_blank", "noopener"));
+    }
+
+    function showToast(message) {
+      $("toast").textContent = message;
+      $("toast").classList.add("active");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => $("toast").classList.remove("active"), 1700);
+    }
+
+    function searchEntries(query) {
+      const arc = games.find(game => game.id === "arc");
+      const entries = [];
+      arc.services.forEach(service => {
+        const category = arc.categories.find(cat => cat.id === service.category)?.label || service.category;
+        const haystack = [service.title, service.cardTitle, service.short, service.intro, service.category, category, service.form].join(" ").toLowerCase();
+        if (haystack.includes(query)) entries.push({ type: "service", serviceId: service.id, categoryId: service.category, title: service.cardTitle, meta: `${category} / ${service.cardTitle}` });
+      });
+      Object.entries(blueprintGroups).forEach(([tab, names]) => {
+        const matches = names.filter(name => name.toLowerCase().includes(query) || trName(name).toLowerCase().includes(query));
+        if (matches.length) {
+          entries.push({
+            type: "blueprint",
+            serviceId: "blueprints",
+            categoryId: "blueprints",
+            bpTab: tab,
+            bpQuery: query,
+            title: tab,
+            meta: `Blueprints / ${matches.slice(0, 3).join(", ")}${matches.length > 3 ? "..." : ""}`
+          });
+        }
+      });
+      return entries.slice(0, 10);
+    }
+
+    function openSearchResult(entry) {
+      state.game = "arc";
+      state.category = entry.categoryId;
+      state.serviceId = entry.serviceId;
+      if (entry.type === "blueprint") state.pendingBlueprintSearch = { tab: entry.bpTab, query: entry.bpQuery };
+      $("siteSearchResults").classList.remove("active");
+      renderAll();
+      $("detailSection").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function renderSiteSearchResults(entries, query) {
+      const box = $("siteSearchResults");
+      if (!query) {
+        box.classList.remove("active");
+        box.innerHTML = "";
+        return;
+      }
+      if (!entries.length) {
+        box.innerHTML = `<div class="empty">No matching service found.</div>`;
+        box.classList.add("active");
+        return;
+      }
+      box.innerHTML = entries.map((entry, index) => `
+        <button class="search-result-btn" type="button" data-search-index="${index}">
+          <strong>${escapeHtml(entry.title)}</strong>
+          <span>${escapeHtml(entry.meta)}</span>
+        </button>
+      `).join("");
+      box.classList.add("active");
+      box.querySelectorAll("[data-search-index]").forEach(button => {
+        button.addEventListener("click", () => openSearchResult(entries[Number(button.dataset.searchIndex)]));
+      });
+    }
+
+    function runSiteSearch() {
+      const query = val("siteSearch").trim().toLowerCase();
+      if (!query) return;
+      const entries = searchEntries(query);
+      if (entries.length === 1) return openSearchResult(entries[0]);
+      renderSiteSearchResults(entries, query);
+    }
+
+    const bgMusic = $("bgMusic");
+    const audioToggle = $("audioToggle");
+    const audioVolume = $("audioVolume");
+    let musicStarted = false;
+    bgMusic.volume = Number(audioVolume.value) / 100;
+
+    function updateAudioButton() {
+      audioToggle.innerHTML = bgMusic.paused || bgMusic.muted ? "&#9835;" : "II";
+      audioToggle.setAttribute("aria-label", bgMusic.paused || bgMusic.muted ? "Play music" : "Pause music");
+    }
+
+    function startMusic() {
+      if (musicStarted || !bgMusic.src) return;
+      musicStarted = true;
+      bgMusic.play().then(updateAudioButton).catch(() => {
+        musicStarted = false;
+        updateAudioButton();
+      });
+    }
+
+    $("currency").addEventListener("change", () => {
+      state.currency = $("currency").value;
+      if (state.game) {
+        renderPopular();
+        renderServices();
+        updateTotal();
+      } else {
+        renderHome();
+      }
+      renderCart();
+    });
+    $("language").addEventListener("change", () => {
+      state.language = $("language").value;
+      renderAll();
+      updateArcIdModalText();
+    });
+    $("brandHome").addEventListener("click", event => {
+      event.preventDefault();
+      state.game = null;
+      state.category = null;
+      state.serviceId = null;
+      renderAll();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    $("addToCart").addEventListener("click", addToCart);
+    $("clearService").addEventListener("click", clearServiceForm);
+    $("cartOpen").addEventListener("click", openCart);
+    $("cartClose").addEventListener("click", closeCart);
+    $("copyOrder").addEventListener("click", copyOrder);
+    $("clearCart").addEventListener("click", clearCart);
+    $("openDiscord").addEventListener("click", event => {
+      event.preventDefault();
+      openDiscordTicket();
+    });
+    $("arcIdDone").addEventListener("click", () => {
+      const id = val("arcIdInput").trim();
+      if (!id) {
+        showToast(state.language === "TR" ? "ID yaz ya da kirmizi secenegi kullan." : "Enter ID or use the red option.");
+        return;
+      }
+      state.arcId = id;
+      state.arcIdSkipped = false;
+      proceedAfterArcId();
+    });
+    $("arcIdSkip").addEventListener("click", () => {
+      state.arcId = "";
+      state.arcIdSkipped = true;
+      proceedAfterArcId();
+    });
+    $("arcIdModal").addEventListener("click", event => {
+      if (event.target === $("arcIdModal")) closeArcIdModal();
+    });
+    audioToggle.addEventListener("click", event => {
+      event.stopPropagation();
+      if (bgMusic.paused) {
+        musicStarted = false;
+        startMusic();
+      } else {
+        bgMusic.pause();
+        updateAudioButton();
+      }
+    });
+    audioVolume.addEventListener("input", () => {
+      bgMusic.volume = Number(audioVolume.value) / 100;
+      if (bgMusic.volume > 0) bgMusic.muted = false;
+      startMusic();
+    });
+    document.addEventListener("pointerdown", startMusic, { once: true });
+    $("siteSearchBtn").addEventListener("click", runSiteSearch);
+    $("siteSearch").addEventListener("input", () => {
+      const query = val("siteSearch").trim().toLowerCase();
+      renderSiteSearchResults(query ? searchEntries(query) : [], query);
+    });
+    $("siteSearch").addEventListener("keydown", event => {
+      if (event.key === "Enter") runSiteSearch();
+    });
+    $("cartBackdrop").addEventListener("click", event => { if (event.target === $("cartBackdrop")) closeCart(); });
+    document.addEventListener("click", event => {
+      if (!$("siteSearchResults").contains(event.target) && event.target !== $("siteSearch") && event.target !== $("siteSearchBtn")) {
+        $("siteSearchResults").classList.remove("active");
+      }
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closeCart();
+        closeArcIdModal();
+        $("siteSearchResults").classList.remove("active");
+      }
+    });
+
+    updateAudioButton();
+    renderAll();
+    startOrderFeed();
+    startMusic();
+  </script>
+</body>
+</html>
+
+
+
