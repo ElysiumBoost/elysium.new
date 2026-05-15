@@ -97,7 +97,7 @@
       min-height: 64px;
       display: grid;
       grid-template-columns: auto minmax(0, 1fr) auto;
-      gap: 16px;
+      gap: 12px;
       align-items: center;
     }
 
@@ -195,7 +195,7 @@
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      gap: 8px;
+      gap: 6px;
     }
 
     .site-search {
@@ -297,9 +297,30 @@
       accent-color: var(--purple-2);
     }
 
+    .btn-icon {
+      width: 42px;
+      min-width: 42px;
+      padding: 0;
+      gap: 0;
+    }
+
+    .btn-icon:focus-visible {
+      outline: 2px solid rgba(255, 209, 102, .55);
+      outline-offset: 2px;
+    }
+
+    .btn-icon-svg {
+      display: block;
+      width: 20px;
+      height: 20px;
+      flex: 0 0 auto;
+      color: #e8e2ff;
+    }
+
     .cart-button {
       position: relative;
-      width: 48px;
+      width: 46px;
+      min-width: 46px;
       padding: 0;
     }
 
@@ -716,22 +737,22 @@
       pointer-events: none;
     }
 
-    /* Valorant: bias focal point upward so agent faces stay in frame (cover crop) */
+    /* Valorant: anchor crop toward top of artwork so faces / upper bodies stay in frame */
     .hero[data-hero-game="valorant"]:not(.is-home)::before {
-      background: var(--hero-bg) center 22% / cover no-repeat;
+      background: var(--hero-bg) center top / cover no-repeat;
       background-attachment: scroll;
     }
 
     @media (max-width: 1080px) {
       .hero[data-hero-game="valorant"]:not(.is-home)::before {
-        background: var(--hero-bg) center 26% / cover no-repeat;
+        background: var(--hero-bg) center 8% / cover no-repeat;
         background-attachment: scroll;
       }
     }
 
     @media (max-width: 720px) {
       .hero[data-hero-game="valorant"]:not(.is-home)::before {
-        background: var(--hero-bg) center 18% / cover no-repeat;
+        background: var(--hero-bg) center top / cover no-repeat;
         background-attachment: scroll;
       }
     }
@@ -2562,7 +2583,9 @@
       <nav class="game-tabs" id="gameTabs" aria-label="Choose game"></nav>
       <div class="actions">
         <input class="site-search" id="siteSearch" type="search" placeholder="Search services" aria-label="Search services">
-        <button class="btn" id="siteSearchBtn" type="button">Search</button>
+        <button class="btn btn-icon" id="siteSearchBtn" type="button" aria-label="Search" title="Search">
+          <svg class="btn-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.65"/><path fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" d="M15.2 15.2L21 21"/></svg>
+        </button>
         <div class="search-results" id="siteSearchResults" role="listbox" aria-label="Search results"></div>
         <select class="currency" id="currency" aria-label="Currency">
           <option value="USD">$ USD</option>
@@ -2574,7 +2597,10 @@
           <button class="audio-toggle" id="audioToggle" type="button" aria-label="Toggle music">&#9835;</button>
           <input class="audio-volume" id="audioVolume" type="range" min="0" max="100" value="22" aria-label="Music volume">
         </div>
-        <button class="btn cart-button" id="cartOpen" type="button" aria-label="Open cart">Cart<span class="cart-count" id="cartCount">0</span></button>
+        <button class="btn cart-button btn-icon" id="cartOpen" type="button" aria-label="Open cart" title="Open cart">
+          <svg class="btn-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.65" stroke-linejoin="round" d="M6.5 7h11l-1.1 11H7.6L6.5 7z"/><path fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" d="M9.5 7V6a2.5 2.5 0 015 0v1"/></svg>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
       </div>
     </div>
   </header>
@@ -2847,7 +2873,7 @@
         label: "Valorant",
         tabIcon: "i-rank",
         heroBg: "assets/bg-valorant-4k.webp",
-        heroPosition: "center 22%",
+        heroPosition: "center top",
         kicker: "Valorant — Coming Soon",
         title: "Valorant Services",
         copy: "This section is opening soon. Preview categories and the layout now; only Placement Matches can be configured and added to cart today.",
@@ -3099,7 +3125,10 @@
 
     function updateStaticText() {
       $("siteSearch").placeholder = ui("Search services");
-      $("siteSearchBtn").textContent = ui("Search");
+      $("siteSearchBtn").setAttribute("aria-label", ui("Search"));
+      $("siteSearchBtn").setAttribute("title", ui("Search"));
+      $("cartOpen").setAttribute("aria-label", ui("Open cart"));
+      $("cartOpen").setAttribute("title", ui("Open cart"));
       $("clearService").textContent = ui("Clear");
       $("addToCart").textContent = ui("Add to Cart");
       $("copyOrder").textContent = ui("Copy Discord Ticket");
