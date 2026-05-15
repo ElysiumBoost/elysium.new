@@ -737,18 +737,6 @@
       pointer-events: none;
     }
 
-    /* Valorant: full key art (contain) — section height/padding match default game hero (same as Arc) */
-    .hero[data-hero-game="valorant"]:not(.is-home)::before {
-      background-color: var(--bg);
-      background-image: var(--hero-bg);
-      background-position: center bottom;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-attachment: scroll;
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
-      mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
-    }
-
     .hero:not(.is-home)::after {
       content: "";
       position: absolute;
@@ -2865,7 +2853,7 @@
         label: "Valorant",
         tabIcon: "i-rank",
         heroBg: "assets/bg-valorant-4k.webp",
-        heroPosition: "center bottom",
+        heroPosition: "center 40%",
         kicker: "Valorant — Coming Soon",
         title: "Valorant Services",
         copy: "This section is opening soon. Preview categories and the layout now; only Placement Matches can be configured and added to cart today.",
@@ -3316,16 +3304,9 @@
       if (game) {
         hero.classList.remove("is-home");
         hero.style.setProperty("--hero-bg", `url("${game.heroBg}")`);
-        if (game.id === "valorant") {
-          hero.dataset.heroGame = "valorant";
-          hero.style.removeProperty("--hero-position");
-        } else {
-          delete hero.dataset.heroGame;
-          hero.style.setProperty("--hero-position", game.heroPosition || "center center");
-        }
+        hero.style.setProperty("--hero-position", game.heroPosition || "center center");
       } else {
         hero.classList.add("is-home");
-        delete hero.dataset.heroGame;
         hero.style.removeProperty("--hero-bg");
         hero.style.removeProperty("--hero-position");
       }
