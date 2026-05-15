@@ -993,49 +993,88 @@
       max-width: 420px;
     }
 
-    .cs2-split-card {
+    .home-pair-bundle {
+      position: relative;
+      grid-column: 1 / -1;
+      border-radius: var(--radius);
+      border: 1px solid rgba(172, 146, 255, .48);
+      background: radial-gradient(120% 88% at 50% -12%, rgba(122, 77, 255, .26), transparent 54%), linear-gradient(180deg, rgba(16, 10, 38, .96), #05030d 42%);
+      box-shadow: 0 20px 58px rgba(0, 0, 0, .32), inset 0 1px 0 rgba(255, 255, 255, .06);
+      overflow: hidden;
+    }
+
+    .home-pair-bundle-split {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      overflow: hidden;
-      border: 1px solid rgba(172, 146, 255, .44);
-      border-radius: var(--radius);
-      background: #05030d;
-      box-shadow: 0 18px 54px rgba(0,0,0,.28);
+      min-height: 256px;
     }
 
-    .cs2-mode-card {
+    .home-pair-bundle-pane {
       position: relative;
-      overflow: hidden;
-      min-height: 230px;
-      border-radius: 0;
-      border: 0;
-      background: #05030d;
-      box-shadow: none;
+      display: block;
+      width: 100%;
+      min-height: 256px;
+      margin: 0;
       padding: 0;
+      border: 0;
+      background: #07051d;
       text-align: left;
-      cursor: not-allowed;
-    }
-
-    .cs2-split-card.home-pair-wide {
-      grid-column: 1 / -1;
-    }
-
-    .cs2-mode-card.home-pick {
       cursor: pointer;
+      color: inherit;
+      font: inherit;
+      -webkit-appearance: none;
+      appearance: none;
     }
 
-    .cs2-mode-card.home-pick:focus-visible {
-      outline: 2px solid rgba(255, 209, 102, .55);
-      outline-offset: 2px;
-      z-index: 3;
+    .home-pair-bundle-pane + .home-pair-bundle-pane {
+      border-left: 1px solid rgba(155, 104, 255, .42);
+      box-shadow: inset 14px 0 36px -20px rgba(0, 0, 0, .5);
     }
 
-    .cs2-mode-card.home-pick.is-media-fallback {
+    .home-pair-bundle-pane.home-pick:focus-visible .cs2-mode-overlay {
+      outline: 2px solid rgba(255, 209, 102, .52);
+      outline-offset: 3px;
+      border-radius: 8px;
+    }
+
+    .home-pair-bundle-pane.home-pick.is-media-fallback {
       background: radial-gradient(ellipse 120% 85% at 50% 18%, rgba(122, 77, 255, .5), rgba(8, 5, 22, .94) 58%), linear-gradient(180deg, #1a0f3a, #05030d);
     }
 
-    .cs2-mode-card.home-pick.is-media-fallback > img {
+    .home-pair-bundle-pane.home-pick.is-media-fallback > img {
       display: none;
+    }
+
+    .home-pair-bundle-pane img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      filter: brightness(1.16) contrast(1.12) saturate(1.08);
+      transition: transform .22s ease, filter .22s ease;
+    }
+
+    .home-pair-bundle-pane img.home-pick-img--social {
+      object-position: center 28%;
+    }
+
+    .home-pair-bundle-pane::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(185deg, rgba(0, 0, 0, .18) 0%, rgba(5, 3, 13, .4) 55%, rgba(5, 3, 13, .58) 100%),
+        radial-gradient(circle at 22% 68%, rgba(122, 77, 255, .2), transparent 48%);
+      pointer-events: none;
+    }
+
+    .home-pair-bundle-pane:hover img {
+      transform: scale(1.045);
+      filter: brightness(1.22) contrast(1.14) saturate(1.1);
     }
 
     .home-pair-h {
@@ -1059,45 +1098,6 @@
       line-height: 1.45;
       font-weight: 650;
       text-shadow: 0 8px 24px rgba(0, 0, 0, .68);
-    }
-
-    .cs2-mode-card img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center center;
-      display: block;
-      filter: brightness(1.2) contrast(1.14) saturate(1.08);
-      transition: transform .28s ease, filter .28s ease;
-    }
-
-    .cs2-mode-card.home-pick img.home-pick-img--social {
-      object-position: center 28%;
-    }
-
-    .cs2-mode-card + .cs2-mode-card {
-      border-left: 1px solid rgba(172, 146, 255, .28);
-    }
-
-    .cs2-mode-card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,0), rgba(5,3,13,.30)),
-        radial-gradient(circle at 15% 65%, rgba(122,77,255,.10), transparent 38%);
-      pointer-events: none;
-    }
-
-    .cs2-mode-card:hover img {
-      transform: scale(1.025);
-      filter: brightness(1.25) contrast(1.16) saturate(1.12);
-    }
-
-    .cs2-mode-card.coming-soon:not(:hover) img {
-      filter: brightness(1.2) contrast(1.14) saturate(1.08);
     }
 
     .cs2-mode-overlay {
@@ -2628,9 +2628,18 @@
       .currency { max-width: 88px; }
       .hero { min-height: 320px; padding-top: 38px; }
       .popular-grid, .service-grid, .field-grid, .home-grid, .info-grid { grid-template-columns: 1fr; }
-      .cs2-split-card { grid-template-columns: 1fr; }
-      .cs2-mode-card + .cs2-mode-card { border-left: 0; border-top: 1px solid rgba(172, 146, 255, .28); }
-      .cs2-mode-card { min-height: 230px; }
+      .home-pair-bundle-split {
+        grid-template-columns: 1fr;
+      }
+      .home-pair-bundle-pane + .home-pair-bundle-pane {
+        border-left: 0;
+        border-top: 1px solid rgba(155, 104, 255, .38);
+        box-shadow: inset 0 16px 36px -22px rgba(0, 0, 0, .48);
+      }
+      .home-pair-bundle-pane,
+      .home-pair-bundle-split {
+        min-height: 220px;
+      }
       .cs2-mode-overlay { left: 20px; right: 20px; bottom: 22px; }
       .disabled-btn { width: 100%; min-width: 0; }
       .popular-card-head { grid-template-columns: 100px minmax(0, 1fr); }
@@ -3448,48 +3457,52 @@
       const face = g("faceit");
       if (prem && face) {
         chunks.push(`
-        <div class="cs2-split-card home-pair-wide" aria-label="${escapeHtml(ui("Counter-Strike 2"))}">
-          <button type="button" class="cs2-mode-card home-pick" data-home-game="premier" aria-label="${escapeHtml(ui("CS2 Premier"))}, ${escapeHtml(ui("Select Game"))}">
-            <img src="${escapeHtml(prem.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-pick')?.classList.add('is-media-fallback');">
-            <span class="cs2-mode-overlay">
-              <span class="home-pair-h">${ui("CS2 Premier")}</span>
-              <span class="home-pair-p">${ui(prem.copy)}</span>
-              <span class="btn btn-primary">${ui("Select Game")}</span>
-            </span>
-          </button>
-          <button type="button" class="cs2-mode-card home-pick" data-home-game="faceit" aria-label="${escapeHtml(ui("CS2 Faceit"))}, ${escapeHtml(ui("Select Game"))}">
-            <img class="home-pick-img--faceit" src="${escapeHtml(face.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-pick')?.classList.add('is-media-fallback');">
-            <span class="cs2-mode-overlay">
-              <span class="home-pair-h">${ui("CS2 Faceit")}</span>
-              <span class="home-pair-p">${ui(face.copy)}</span>
-              <span class="btn btn-primary">${ui("Select Game")}</span>
-            </span>
-          </button>
-        </div>`);
+        <section class="home-pair-bundle home-pair-bundle--cs2" aria-label="${escapeHtml(ui("Counter-Strike 2"))}">
+          <div class="home-pair-bundle-split">
+            <button type="button" class="home-pair-bundle-pane home-pick" data-home-game="premier" aria-label="${escapeHtml(ui("CS2 Premier"))}, ${escapeHtml(ui("Select Game"))}">
+              <img src="${escapeHtml(prem.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-pick')?.classList.add('is-media-fallback');">
+              <span class="cs2-mode-overlay">
+                <span class="home-pair-h">${ui("CS2 Premier")}</span>
+                <span class="home-pair-p">${ui(prem.copy)}</span>
+                <span class="btn btn-primary">${ui("Select Game")}</span>
+              </span>
+            </button>
+            <button type="button" class="home-pair-bundle-pane home-pick" data-home-game="faceit" aria-label="${escapeHtml(ui("CS2 Faceit"))}, ${escapeHtml(ui("Select Game"))}">
+              <img class="home-pick-img--faceit" src="${escapeHtml(face.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-pick')?.classList.add('is-media-fallback');">
+              <span class="cs2-mode-overlay">
+                <span class="home-pair-h">${ui("CS2 Faceit")}</span>
+                <span class="home-pair-p">${ui(face.copy)}</span>
+                <span class="btn btn-primary">${ui("Select Game")}</span>
+              </span>
+            </button>
+          </div>
+        </section>`);
       }
       const boost = g("circle");
       const soc = g("social");
       if (boost && soc) {
         const socialImg = "assets/social.webp";
         chunks.push(`
-        <div class="cs2-split-card home-pair-wide" aria-label="${escapeHtml(ui("Boost and Social"))}">
-          <button type="button" class="cs2-mode-card home-pick" data-home-game="circle" aria-label="${escapeHtml(ui("Boost+"))}, ${escapeHtml(ui("Select Game"))}">
-            <img src="${escapeHtml(boost.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-pick')?.classList.add('is-media-fallback');">
-            <span class="cs2-mode-overlay">
-              <span class="home-pair-h">${ui("Boost+")}</span>
-              <span class="home-pair-p">${ui(boost.copy)}</span>
-              <span class="btn btn-primary">${ui("Select Game")}</span>
-            </span>
-          </button>
-          <button type="button" class="cs2-mode-card home-pick" data-home-game="social" aria-label="${escapeHtml(ui("Social"))}, ${escapeHtml(ui("Select Game"))}">
-            <img class="home-pick-img--social" src="${escapeHtml(socialImg)}" alt="" loading="lazy" onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='assets/social.png';return;}this.style.display='none';this.closest('.home-pick')?.classList.add('is-media-fallback');">
-            <span class="cs2-mode-overlay">
-              <span class="home-pair-h">${ui("Social")}</span>
-              <span class="home-pair-p">${ui(soc.copy)}</span>
-              <span class="btn btn-primary">${ui("Select Game")}</span>
-            </span>
-          </button>
-        </div>`);
+        <section class="home-pair-bundle home-pair-bundle--boost-social" aria-label="${escapeHtml(ui("Boost and Social"))}">
+          <div class="home-pair-bundle-split">
+            <button type="button" class="home-pair-bundle-pane home-pick" data-home-game="circle" aria-label="${escapeHtml(ui("Boost+"))}, ${escapeHtml(ui("Select Game"))}">
+              <img src="${escapeHtml(boost.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-pick')?.classList.add('is-media-fallback');">
+              <span class="cs2-mode-overlay">
+                <span class="home-pair-h">${ui("Boost+")}</span>
+                <span class="home-pair-p">${ui(boost.copy)}</span>
+                <span class="btn btn-primary">${ui("Select Game")}</span>
+              </span>
+            </button>
+            <button type="button" class="home-pair-bundle-pane home-pick" data-home-game="social" aria-label="${escapeHtml(ui("Social"))}, ${escapeHtml(ui("Select Game"))}">
+              <img class="home-pick-img--social" src="${escapeHtml(socialImg)}" alt="" loading="lazy" onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='assets/social.png';return;}this.style.display='none';this.closest('.home-pick')?.classList.add('is-media-fallback');">
+              <span class="cs2-mode-overlay">
+                <span class="home-pair-h">${ui("Social")}</span>
+                <span class="home-pair-p">${ui(soc.copy)}</span>
+                <span class="btn btn-primary">${ui("Select Game")}</span>
+              </span>
+            </button>
+          </div>
+        </section>`);
       }
       $("homeGameGrid").innerHTML = chunks.join("");
       document.querySelector(".info-grid").innerHTML = `
