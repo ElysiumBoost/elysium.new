@@ -996,107 +996,149 @@
     .home-game-card.home-combo-card {
       cursor: default;
       min-width: 0;
-    }
-
-    .home-combo-card.is-media-fallback {
-      background:
-        radial-gradient(ellipse 120% 88% at 50% 12%, rgba(122, 77, 255, .35), transparent 52%),
-        linear-gradient(180deg, rgba(16, 10, 38, .96), #05030d 55%);
-    }
-
-    .home-combo-body {
-      width: 100%;
-      margin-top: auto;
+      padding: 0;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      position: relative;
-      z-index: 2;
+      justify-content: stretch;
     }
 
-    .home-combo-card h2 {
-      margin: 0 0 2px;
-      font-size: clamp(22px, 3.1vw, 28px);
-      letter-spacing: .045em;
+    .home-game-card.home-combo-card::before {
+      display: none;
     }
 
-    .home-combo-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      width: 100%;
-    }
-
-    .home-combo-tile {
+    .home-combo-split {
+      flex: 1 1 auto;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 8px 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      min-height: 230px;
       width: 100%;
-      padding: 10px 11px;
-      border-radius: 11px;
-      border: 1px solid rgba(122, 77, 255, .38);
-      background: rgba(5, 3, 13, .78);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05), 0 10px 28px rgba(0, 0, 0, .22);
+    }
+
+    .home-combo-half {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      min-width: 0;
+      min-height: 100%;
+      margin: 0;
+      padding: 10px 9px 12px;
+      border: 0;
       cursor: pointer;
       text-align: left;
       color: inherit;
       font: inherit;
+      background: #07051d;
+      overflow: hidden;
       -webkit-appearance: none;
       appearance: none;
-      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+      transition: transform .2s ease, box-shadow .2s ease;
     }
 
-    .home-combo-tile:hover {
+    .home-combo-half + .home-combo-half {
+      border-left: 1px solid rgba(155, 104, 255, .42);
+      box-shadow: inset 10px 0 26px -14px rgba(0, 0, 0, .42);
+    }
+
+    .home-combo-half:hover {
       transform: translateY(-1px);
-      border-color: rgba(255, 209, 102, .42);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07), 0 12px 32px rgba(122, 77, 255, .14);
+      z-index: 2;
+      box-shadow: 0 14px 40px rgba(122, 77, 255, .2);
     }
 
-    .home-combo-tile:focus-visible {
+    .home-combo-half:focus-visible {
       outline: 2px solid rgba(255, 209, 102, .55);
-      outline-offset: 2px;
+      outline-offset: -2px;
+      z-index: 3;
     }
 
-    .home-combo-tile-text {
+    .home-combo-half.is-media-fallback {
+      background:
+        radial-gradient(ellipse 120% 88% at 50% 10%, rgba(122, 77, 255, .42), transparent 52%),
+        linear-gradient(180deg, rgba(16, 10, 38, .96), #05030d 58%);
+    }
+
+    .home-combo-half.is-media-fallback .home-combo-half-media {
+      display: none;
+    }
+
+    .home-combo-half-media {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      z-index: 0;
+      display: block;
+      filter: brightness(.9) contrast(1.08) saturate(1.05);
+      transition: transform .22s ease, filter .22s ease;
+      pointer-events: none;
+    }
+
+    .home-combo-half-media--social {
+      object-position: center 28%;
+    }
+
+    .home-combo-half:hover .home-combo-half-media {
+      transform: scale(1.035);
+      filter: brightness(.98) contrast(1.1) saturate(1.08);
+    }
+
+    .home-combo-half-scrim {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(185deg, rgba(0, 0, 0, .12) 0%, rgba(5, 3, 13, .42) 52%, rgba(5, 3, 13, .78) 100%),
+        radial-gradient(circle at 50% 72%, rgba(122, 77, 255, .22), transparent 44%);
+      pointer-events: none;
+    }
+
+    .home-combo-half-content {
+      position: relative;
+      z-index: 2;
       display: flex;
       flex-direction: column;
-      gap: 3px;
-      min-width: 0;
+      gap: 5px;
+      width: 100%;
+      align-items: flex-start;
     }
 
-    .home-combo-tile-label {
+    .home-combo-half-h {
       font-family: var(--display);
-      font-size: 14px;
+      font-size: clamp(11px, 1.35vw, 15px);
       font-weight: 800;
       letter-spacing: .04em;
       text-transform: uppercase;
       color: #f4f0ff;
       line-height: 1.05;
-      text-shadow: 0 8px 22px rgba(0, 0, 0, .65);
+      text-shadow: 0 8px 22px rgba(0, 0, 0, .72);
     }
 
-    .home-combo-tile-sub {
+    .home-combo-half-p {
       margin: 0;
-      font-size: 11px;
+      font-size: 10px;
       line-height: 1.32;
       font-weight: 650;
-      color: rgba(230, 226, 255, .82);
+      color: rgba(230, 226, 255, .86);
       display: -webkit-box;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      max-width: 100%;
     }
 
     .home-combo-mini.btn.btn-primary {
-      flex: 0 0 auto;
-      min-width: 0;
-      width: auto;
-      min-height: 32px;
-      padding: 0 12px;
+      align-self: stretch;
+      width: 100%;
+      min-height: 30px;
+      padding: 0 8px;
       font-size: 11px;
       letter-spacing: .05em;
-      white-space: nowrap;
+      justify-content: center;
+      margin-top: 2px;
     }
 
     .disabled-btn {
@@ -2597,8 +2639,18 @@
       .currency { max-width: 88px; }
       .hero { min-height: 320px; padding-top: 38px; }
       .popular-grid, .service-grid, .field-grid, .home-grid, .info-grid { grid-template-columns: 1fr; }
-      .home-combo-card h2 { font-size: clamp(20px, 5vw, 26px); }
-      .home-combo-tile { padding: 9px 10px; }
+      .home-combo-split {
+        grid-template-columns: 1fr;
+        min-height: 0;
+      }
+      .home-combo-half {
+        min-height: 188px;
+      }
+      .home-combo-half + .home-combo-half {
+        border-left: 0;
+        border-top: 1px solid rgba(155, 104, 255, .42);
+        box-shadow: inset 0 14px 28px -18px rgba(0, 0, 0, .45);
+      }
       .disabled-btn { width: 100%; min-width: 0; }
       .popular-card-head { grid-template-columns: 100px minmax(0, 1fr); }
       .popular-card .category-thumb { width: 100px; }
@@ -3399,11 +3451,11 @@
       const renderHomeSingleCard = game => {
         const media = `<img class="home-game-media" src="${escapeHtml(game.heroBg)}" alt="${escapeHtml(ui(game.label))}" loading="eager">`;
         return `
-        <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(ui(game.label))}, ${escapeHtml(ui("Select Game"))}">
+        <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(ui(game.label))}, ${escapeHtml(ui("Select"))}">
           ${media}
           <h2>${ui(game.label)}</h2>
           <p>${ui(game.copy)}</p>
-          <span class="btn btn-primary">${ui("Select Game")}</span>
+          <span class="btn btn-primary">${ui("Select")}</span>
         </button>`;
       };
       const chunks = [];
@@ -3416,52 +3468,53 @@
       if (prem && face) {
         chunks.push(`
         <article class="home-game-card home-combo-card" aria-label="${escapeHtml(ui("CS2 Services"))}">
-          <img class="home-game-media" src="${escapeHtml(prem.heroBg)}" alt="${escapeHtml(ui("CS2 Services"))}" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-card')?.classList.add('is-media-fallback');">
-          <div class="home-combo-body">
-            <h2>${ui("CS2 Services")}</h2>
-            <div class="home-combo-actions">
-              <button type="button" class="home-combo-tile" data-home-game="premier" aria-label="${escapeHtml(ui("CS2 Premier"))}, ${escapeHtml(ui("Select Game"))}">
-                <span class="home-combo-tile-text">
-                  <span class="home-combo-tile-label">${ui("CS2 Premier")}</span>
-                  <span class="home-combo-tile-sub">${escapeHtml(ui(prem.copy))}</span>
-                </span>
-                <span class="btn btn-primary home-combo-mini">${ui("Select Game")}</span>
-              </button>
-              <button type="button" class="home-combo-tile" data-home-game="faceit" aria-label="${escapeHtml(ui("CS2 Faceit"))}, ${escapeHtml(ui("Select Game"))}">
-                <span class="home-combo-tile-text">
-                  <span class="home-combo-tile-label">${ui("CS2 Faceit")}</span>
-                  <span class="home-combo-tile-sub">${escapeHtml(ui(face.copy))}</span>
-                </span>
-                <span class="btn btn-primary home-combo-mini">${ui("Select Game")}</span>
-              </button>
-            </div>
+          <div class="home-combo-split">
+            <button type="button" class="home-combo-half" data-home-game="premier" aria-label="${escapeHtml(ui("CS2 Premier"))}, ${escapeHtml(ui("Select"))}">
+              <img class="home-combo-half-media" src="${escapeHtml(prem.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
+              <span class="home-combo-half-scrim" aria-hidden="true"></span>
+              <span class="home-combo-half-content">
+                <span class="home-combo-half-h">${ui("CS2 Premier")}</span>
+                <span class="home-combo-half-p">${escapeHtml(ui(prem.copy))}</span>
+                <span class="btn btn-primary home-combo-mini">${ui("Select")}</span>
+              </span>
+            </button>
+            <button type="button" class="home-combo-half" data-home-game="faceit" aria-label="${escapeHtml(ui("CS2 Faceit"))}, ${escapeHtml(ui("Select"))}">
+              <img class="home-combo-half-media" src="${escapeHtml(face.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
+              <span class="home-combo-half-scrim" aria-hidden="true"></span>
+              <span class="home-combo-half-content">
+                <span class="home-combo-half-h">${ui("CS2 Faceit")}</span>
+                <span class="home-combo-half-p">${escapeHtml(ui(face.copy))}</span>
+                <span class="btn btn-primary home-combo-mini">${ui("Select")}</span>
+              </span>
+            </button>
           </div>
         </article>`);
       }
       const boost = g("circle");
       const soc = g("social");
       if (boost && soc) {
+        const socialImg = "assets/social.webp";
         chunks.push(`
         <article class="home-game-card home-combo-card" aria-label="${escapeHtml(ui("Boost+ / Social"))}">
-          <img class="home-game-media" src="${escapeHtml(boost.heroBg)}" alt="${escapeHtml(ui("Boost+ / Social"))}" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-card')?.classList.add('is-media-fallback');">
-          <div class="home-combo-body">
-            <h2>${ui("Boost+ / Social")}</h2>
-            <div class="home-combo-actions">
-              <button type="button" class="home-combo-tile" data-home-game="circle" aria-label="${escapeHtml(ui("Boost+"))}, ${escapeHtml(ui("Select Game"))}">
-                <span class="home-combo-tile-text">
-                  <span class="home-combo-tile-label">${ui("Boost+")}</span>
-                  <span class="home-combo-tile-sub">${escapeHtml(ui(boost.copy))}</span>
-                </span>
-                <span class="btn btn-primary home-combo-mini">${ui("Select Game")}</span>
-              </button>
-              <button type="button" class="home-combo-tile" data-home-game="social" aria-label="${escapeHtml(ui("Social"))}, ${escapeHtml(ui("Select Game"))}">
-                <span class="home-combo-tile-text">
-                  <span class="home-combo-tile-label">${ui("Social")}</span>
-                  <span class="home-combo-tile-sub">${escapeHtml(ui(soc.copy))}</span>
-                </span>
-                <span class="btn btn-primary home-combo-mini">${ui("Select Game")}</span>
-              </button>
-            </div>
+          <div class="home-combo-split">
+            <button type="button" class="home-combo-half" data-home-game="circle" aria-label="${escapeHtml(ui("Boost+"))}, ${escapeHtml(ui("Select"))}">
+              <img class="home-combo-half-media" src="${escapeHtml(boost.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
+              <span class="home-combo-half-scrim" aria-hidden="true"></span>
+              <span class="home-combo-half-content">
+                <span class="home-combo-half-h">${ui("Boost+")}</span>
+                <span class="home-combo-half-p">${escapeHtml(ui(boost.copy))}</span>
+                <span class="btn btn-primary home-combo-mini">${ui("Select")}</span>
+              </span>
+            </button>
+            <button type="button" class="home-combo-half" data-home-game="social" aria-label="${escapeHtml(ui("Social"))}, ${escapeHtml(ui("Select"))}">
+              <img class="home-combo-half-media home-combo-half-media--social" src="${escapeHtml(socialImg)}" alt="" loading="lazy" onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='assets/social.png';return;}this.style.display='none';this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
+              <span class="home-combo-half-scrim" aria-hidden="true"></span>
+              <span class="home-combo-half-content">
+                <span class="home-combo-half-h">${ui("Social")}</span>
+                <span class="home-combo-half-p">${escapeHtml(ui(soc.copy))}</span>
+                <span class="btn btn-primary home-combo-mini">${ui("Select")}</span>
+              </span>
+            </button>
           </div>
         </article>`);
       }
