@@ -128,21 +128,86 @@
       white-space: nowrap;
     }
 
-    .game-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
+    .game-menu-wrap {
+      position: relative;
+      z-index: 70;
       min-width: 0;
+      justify-self: start;
     }
 
-    .game-tab svg {
-      width: 18px;
-      height: 18px;
+    .game-menu-btn {
+      font-family: var(--display);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      font-size: 13px;
+    }
+
+    .game-menu-chevron {
+      width: 14px;
+      height: 14px;
       color: #dcd1ff;
-      flex: 0 0 auto;
+      flex-shrink: 0;
+      transition: transform .18s ease, color .18s ease;
     }
 
-    .btn, .game-tab, .cat-btn, .service-btn, .tab-btn {
+    .game-menu-btn[aria-expanded="true"] .game-menu-chevron {
+      transform: rotate(180deg);
+      color: #bffcff;
+    }
+
+    .game-menu-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      min-width: max(100%, 232px);
+      max-width: min(100vw - 24px, 320px);
+      padding: 8px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(155, 104, 255, .35);
+      background: linear-gradient(165deg, rgba(22, 14, 42, .97), rgba(8, 5, 20, .94));
+      box-shadow: 0 22px 60px rgba(0, 0, 0, .45), 0 0 0 1px rgba(255, 255, 255, .04) inset;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .game-menu-item {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      text-align: left;
+      padding: 10px 12px;
+      margin: 0 0 4px;
+      border-radius: calc(var(--radius) - 2px);
+      border: 1px solid transparent;
+      background: rgba(255, 255, 255, .04);
+      color: var(--text);
+      font-family: var(--display);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .game-menu-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .game-menu-item:hover {
+      transform: translateY(-1px);
+      border-color: rgba(155, 104, 255, .55);
+      background: rgba(122, 77, 255, .22);
+      box-shadow: 0 0 18px rgba(122, 77, 255, .25);
+    }
+
+    .game-menu-item.is-active {
+      border-color: rgba(191, 252, 255, .42);
+      background: rgba(122, 77, 255, .28);
+      box-shadow: 0 0 0 1px rgba(122, 77, 255, .35), 0 10px 28px rgba(122, 77, 255, .2);
+    }
+
+    .btn, .game-menu-btn, .cat-btn, .service-btn, .tab-btn {
       min-height: 40px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -159,7 +224,7 @@
       white-space: nowrap;
     }
 
-    .btn:hover, .game-tab:hover, .cat-btn:hover, .service-btn:hover, .tab-btn:hover {
+    .btn:hover, .game-menu-btn:hover, .cat-btn:hover, .service-btn:hover, .tab-btn:hover {
       transform: translateY(-1px);
       border-color: var(--line-strong);
       background: rgba(122, 77, 255, .18);
@@ -172,7 +237,12 @@
       transform: none;
     }
 
-    .game-tab.active,
+    .game-menu-btn[aria-expanded="true"] {
+      border-color: rgba(173, 122, 255, .72);
+      background: linear-gradient(135deg, rgba(104, 72, 239, .38), rgba(155, 104, 255, .32));
+      box-shadow: 0 12px 30px rgba(122, 77, 255, .22);
+    }
+
     .btn-primary,
     .cat-btn.active,
     .service-btn.active,
@@ -887,32 +957,6 @@
     .home-game-card.coming-soon.coming-soon-clickable:focus-visible {
       outline: 2px solid rgba(255, 209, 102, .55);
       outline-offset: 3px;
-    }
-
-    .game-tab.game-tab--coming-soon:not(.active) {
-      opacity: .9;
-      border-color: rgba(255, 255, 255, .1);
-      color: var(--muted);
-    }
-
-    .game-tab-soon {
-      margin-left: 8px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-size: 9px;
-      font-weight: 950;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      border: 1px solid rgba(255, 209, 102, .42);
-      color: #ffd166;
-      background: rgba(122, 77, 255, .2);
-      vertical-align: middle;
-    }
-
-    .game-tab.game-tab--coming-soon.active .game-tab-soon {
-      border-color: rgba(255, 255, 255, .35);
-      color: #fff7d6;
-      background: rgba(0, 0, 0, .18);
     }
 
     .home-game-card:hover {
@@ -2513,7 +2557,7 @@
 
     @media (max-width: 1080px) {
       .topbar-inner { grid-template-columns: 1fr auto; }
-      .game-tabs { grid-column: 1 / -1; justify-content: flex-start; overflow-x: auto; padding-bottom: 10px; }
+      .game-menu-wrap { grid-column: 1 / -1; justify-self: start; padding-bottom: 6px; }
       .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .detail { grid-template-columns: 1fr; }
       .order-card {
@@ -2560,7 +2604,13 @@
         <img src="assets/elysium-mark.webp" alt="ELYSIUM BOOST logo">
         <strong>ELYSIUM BOOST</strong>
       </a>
-      <nav class="game-tabs" id="gameTabs" aria-label="Choose game"></nav>
+      <div class="game-menu-wrap" id="gameTabs" aria-label="Choose game">
+        <button class="btn game-menu-btn" type="button" id="gameMenuBtn" aria-expanded="false" aria-controls="gameMenuPanel" aria-haspopup="true">
+          <span class="game-menu-btn-label">Games</span>
+          <svg class="game-menu-chevron" viewBox="0 0 24 24" aria-hidden="true" width="14" height="14"><path fill="currentColor" d="M6.5 9.2 12 15l5.5-5.8L18 10l-6 6.3a1 1 0 0 1-1.45 0L6 10l.5-.8z"/></svg>
+        </button>
+        <div class="game-menu-panel" id="gameMenuPanel" role="menu" aria-labelledby="gameMenuBtn" hidden></div>
+      </div>
       <div class="actions">
         <input class="site-search" id="siteSearch" type="search" placeholder="Search services" aria-label="Search services">
         <button class="btn btn-icon" id="siteSearchBtn" type="button" aria-label="Search" title="Search">
@@ -2897,12 +2947,12 @@
       },
       {
         id: "circle",
-        label: "Boost Plus",
+        label: "Boost+",
         tabIcon: "i-circle",
         heroBg: "assets/bg-elysium-4k.webp",
         heroPosition: "center center",
-        kicker: "Boost Plus",
-        title: "Boost Plus Teammate Services",
+        kicker: "Boost+",
+        title: "Boost+ Teammate Services",
         copy: "Choose League, Valorant, or E-Girl teammate services and copy a clean Discord ticket.",
         categories: [
           { id: "circle-lol", label: "League of Legends", icon: "i-circle", bg: "assets/bg-lol-4k.webp" },
@@ -2962,6 +3012,32 @@
         services: []
       },
       {
+        id: "faceit",
+        label: "Faceit",
+        tabIcon: "i-star",
+        heroBg: "assets/faceit.webp",
+        heroPosition: "center center",
+        kicker: "CS 2 Faceit",
+        title: "CS 2 Faceit Services",
+        copy: "FACEIT hub preview. Live listings will appear here soon.",
+        categories: [],
+        popular: [],
+        services: []
+      },
+      {
+        id: "premier",
+        label: "Premier",
+        tabIcon: "i-star",
+        heroBg: "assets/premier-cs.webp",
+        heroPosition: "center center",
+        kicker: "CS 2 Premier",
+        title: "CS 2 Premier Services",
+        copy: "Premier matchmaking hub preview. Services will be listed here soon.",
+        categories: [],
+        popular: [],
+        services: []
+      },
+      {
         id: "arc",
         label: "Arc Raiders",
         tabIcon: "i-raid",
@@ -3005,6 +3081,46 @@
         ]
       }
     ];
+
+    const GAME_DROPDOWN_ORDER = ["arc", "valorant", "wow", "lol", "premier", "faceit", "circle"];
+    const GAME_HASH_SLUGS = {
+      arc: "arc-raiders",
+      valorant: "valorant",
+      wow: "world-of-warcraft",
+      circle: "boost-plus",
+      lol: "league-of-legends",
+      faceit: "faceit",
+      premier: "premier"
+    };
+    const HASH_TO_GAME_ID = (() => {
+      const map = {};
+      Object.entries(GAME_HASH_SLUGS).forEach(([gameId, slug]) => {
+        map[String(slug).toLowerCase()] = gameId;
+      });
+      map.arc = "arc";
+      map.wow = "wow";
+      map.lol = "lol";
+      map.circle = "circle";
+      return map;
+    })();
+
+    function parseGameHash() {
+      const key = (location.hash || "").replace(/^#\/?/, "").trim().toLowerCase();
+      if (!key) return null;
+      return HASH_TO_GAME_ID[key] || null;
+    }
+
+    function syncGameHash(gameId) {
+      const base = location.pathname + (location.search || "");
+      if (!gameId) {
+        if (location.hash) history.replaceState(null, "", base);
+        return;
+      }
+      const slug = GAME_HASH_SLUGS[gameId];
+      if (!slug) return;
+      const next = `#${slug}`;
+      if (location.hash !== next) history.replaceState(null, "", next);
+    }
 
     function fastService(id, title, icon, price, short, intro) {
       return {
@@ -3064,6 +3180,15 @@
         "Gun Part Blueprints": new Set()
       }
     };
+
+    function restoreGameFromHash() {
+      const id = parseGameHash();
+      if (!id || !games.some(g => g.id === id)) return;
+      const game = games.find(g => g.id === id);
+      state.game = id;
+      state.category = game.categories[0]?.id || "services";
+      state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
+    }
 
     const $ = id => document.getElementById(id);
     const val = id => $(id)?.value || "";
@@ -3141,6 +3266,10 @@
       $("siteSearchBtn").setAttribute("title", ui("Search"));
       $("cartOpen").setAttribute("aria-label", ui("Open cart"));
       $("cartOpen").setAttribute("title", ui("Open cart"));
+      $("gameMenuBtn").setAttribute("aria-label", ui("Games menu"));
+      $("gameMenuBtn").setAttribute("title", ui("Games"));
+      const gl = $("gameMenuBtn")?.querySelector(".game-menu-btn-label");
+      if (gl) gl.textContent = ui("Games");
       $("clearService").textContent = ui("Clear");
       $("addToCart").textContent = ui("Add to Cart");
       $("copyOrder").textContent = ui("Copy Discord Ticket");
@@ -3150,43 +3279,95 @@
       document.querySelector(".drawer-head h2").textContent = ui("Order Cart");
     }
 
+    function closeGameMenu() {
+      const btn = $("gameMenuBtn");
+      const panel = $("gameMenuPanel");
+      if (!btn || !panel) return;
+      panel.classList.remove("is-open");
+      panel.setAttribute("hidden", "");
+      btn.setAttribute("aria-expanded", "false");
+    }
+
+    function openGameMenu() {
+      const btn = $("gameMenuBtn");
+      const panel = $("gameMenuPanel");
+      if (!btn || !panel) return;
+      panel.removeAttribute("hidden");
+      panel.classList.add("is-open");
+      btn.setAttribute("aria-expanded", "true");
+    }
+
+    function gameMenuLabel(game) {
+      if (game.id === "premier") return ui("CS 2 Premier");
+      if (game.id === "faceit") return ui("CS 2 Faceit");
+      if (game.id === "circle") return ui("Boost+");
+      return ui(game.label);
+    }
+
+    function setupGameMenuListeners() {
+      if (setupGameMenuListeners.done) return;
+      const wrap = $("gameTabs");
+      const btn = $("gameMenuBtn");
+      const panel = $("gameMenuPanel");
+      if (!wrap || !btn || !panel) return;
+      setupGameMenuListeners.done = true;
+      btn.addEventListener("click", event => {
+        event.stopPropagation();
+        if (panel.classList.contains("is-open")) closeGameMenu();
+        else openGameMenu();
+      });
+      panel.addEventListener("click", event => {
+        const row = event.target.closest("[data-game-menu-id]");
+        if (!row) return;
+        event.stopPropagation();
+        selectGame(row.dataset.gameMenuId);
+      });
+      document.addEventListener("click", event => {
+        if (!wrap.contains(event.target)) closeGameMenu();
+      });
+    }
+
     function selectGame(id) {
-      if (id !== "arc" && id !== "valorant" && id !== "wow") {
-        showToast("Coming soon. Arc Raiders, Valorant, and World of Warcraft are open now.");
+      if (!games.some(g => g.id === id)) {
+        showToast("That game is not available.");
         return;
       }
       state.game = id;
       const game = currentGame();
       state.category = game.categories[0]?.id || "services";
       state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
+      closeGameMenu();
+      syncGameHash(id);
       renderAll();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function renderGames() {
-      const tabOrder = { arc: 0, valorant: 1, wow: 2 };
-      $("gameTabs").innerHTML = games
-        .filter(game => game.id === "arc" || game.id === "valorant" || game.id === "wow")
-        .sort((a, b) => (tabOrder[a.id] ?? 9) - (tabOrder[b.id] ?? 9))
+      closeGameMenu();
+      const rank = gid => {
+        const i = GAME_DROPDOWN_ORDER.indexOf(gid);
+        return i === -1 ? 99 : i;
+      };
+      const panel = $("gameMenuPanel");
+      if (!panel) return;
+      panel.innerHTML = games
+        .filter(game => GAME_DROPDOWN_ORDER.includes(game.id))
+        .sort((a, b) => rank(a.id) - rank(b.id))
         .map(game => {
-          const soonTab = game.id === "valorant" ? " game-tab--coming-soon" : "";
-          const labelHtml = game.id === "valorant"
-            ? `${escapeHtml(ui(game.label))}<span class="game-tab-soon">${escapeHtml(ui("Soon"))}</span>`
-            : escapeHtml(ui(game.label));
-          return `<button class="game-tab${soonTab} ${game.id === state.game ? "active" : ""}" type="button" data-game="${game.id}">${labelHtml}</button>`;
+          const active = game.id === state.game ? " is-active" : "";
+          return `<button type="button" class="game-menu-item${active}" role="menuitem" data-game-menu-id="${game.id}">${escapeHtml(gameMenuLabel(game))}</button>`;
         })
         .join("");
-      document.querySelectorAll("[data-game]").forEach(button => button.addEventListener("click", () => {
-        selectGame(button.dataset.game);
-      }));
+      setupGameMenuListeners();
     }
 
     function renderHome() {
       $("homeContent").classList.toggle("hidden", Boolean(state.game));
-      const orderedGames = [...games].sort((a, b) => {
-        const order = { arc: 0, valorant: 1, wow: 2 };
-        return (order[a.id] ?? 50) - (order[b.id] ?? 50);
-      });
+      const rank = gid => {
+        const i = GAME_DROPDOWN_ORDER.indexOf(gid);
+        return i === -1 ? 99 : i;
+      };
+      const orderedGames = [...games].sort((a, b) => rank(a.id) - rank(b.id));
       const gameCards = orderedGames.map(game => {
         const media = `<img class="home-game-media" src="${game.heroBg}" alt="${escapeHtml(ui(game.label))}" loading="eager">`;
         const title = `<h2>${ui(game.label)}</h2>`;
@@ -3200,6 +3381,15 @@
           </button>`;
         }
         if (game.id === "wow") {
+          return `
+          <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(ui(game.label))}, ${escapeHtml(ui("Select Game"))}">
+            ${media}
+            ${title}
+            <p>${ui(game.copy)}</p>
+            <span class="btn btn-primary">${ui("Select Game")}</span>
+          </button>`;
+        }
+        if (game.id === "circle" || game.id === "lol" || game.id === "faceit" || game.id === "premier") {
           return `
           <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(ui(game.label))}, ${escapeHtml(ui("Select Game"))}">
             ${media}
@@ -3225,26 +3415,6 @@
             <span class="btn btn-primary">${ui("Coming Soon")}</span>
           </button>`;
       });
-      gameCards.push(`
-        <div class="cs2-split-card" aria-label="Counter-Strike 2 modes">
-          <button class="cs2-mode-card cs2-premier-card coming-soon" type="button" disabled>
-            <img src="assets/premier-cs.webp" alt="CS2 Premier">
-            <div class="cs2-mode-overlay">
-              <h3>CS2 Premier</h3>
-              <p>Play Premier matchmaking and climb the ranks.</p>
-              <span class="disabled-btn">${ui("Coming Soon")}</span>
-            </div>
-          </button>
-          <button class="cs2-mode-card cs2-faceit-card coming-soon" type="button" disabled>
-            <img src="assets/faceit.webp" alt="CS2 FACEIT">
-            <div class="cs2-mode-overlay">
-              <h3>CS2 FACEIT</h3>
-              <p>Queue on FACEIT and compete at the highest level.</p>
-              <span class="disabled-btn">${ui("Coming Soon")}</span>
-            </div>
-          </button>
-        </div>
-      `);
       $("homeGameGrid").innerHTML = gameCards.join("");
       document.querySelector(".info-grid").innerHTML = `
         <article class="info-card">
@@ -3369,7 +3539,8 @@
 
     function renderPopular() {
       const game = currentGame();
-      if (game.id === "circle" || game.id === "valorant") {
+      if (!game) return;
+      if (game.id === "circle" || game.id === "valorant" || game.id === "faceit" || game.id === "premier") {
         $("popularHead").classList.add("is-hidden");
         $("popularGrid").classList.add("is-hidden");
         $("popularGrid").innerHTML = "";
@@ -3696,6 +3867,7 @@
       state.game = "arc";
       state.category = categoryId || service.category;
       state.serviceId = service.id;
+      syncGameHash("arc");
       renderAll();
       requestAnimationFrame(() => {
         $("detailSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -5000,7 +5172,7 @@
       const pushGameServices = game => {
         if (!game || !game.services) return;
         game.services.forEach(service => {
-          const category = game.categories.find(cat => cat.id === service.category)?.label || service.category;
+          const category = game.categories?.find(cat => cat.id === service.category)?.label || service.category;
           const haystack = [service.title, service.cardTitle, service.short, service.intro, service.category, category, service.form, game.label].join(" ").toLowerCase();
           if (haystack.includes(query)) {
             entries.push({
@@ -5017,6 +5189,10 @@
       pushGameServices(games.find(g => g.id === "arc"));
       pushGameServices(games.find(g => g.id === "valorant"));
       pushGameServices(games.find(g => g.id === "wow"));
+      pushGameServices(games.find(g => g.id === "circle"));
+      pushGameServices(games.find(g => g.id === "lol"));
+      pushGameServices(games.find(g => g.id === "faceit"));
+      pushGameServices(games.find(g => g.id === "premier"));
       const pushCategoryHits = game => {
         if (!game || !game.categories?.length) return;
         game.categories.forEach(cat => {
@@ -5062,6 +5238,7 @@
       }
       if (entry.type === "blueprint") state.pendingBlueprintSearch = { tab: entry.bpTab, query: entry.bpQuery };
       $("siteSearchResults").classList.remove("active");
+      syncGameHash(state.game);
       renderAll();
       $("detailSection").scrollIntoView({ behavior: "smooth", block: "start" });
     }
@@ -5134,6 +5311,7 @@
       state.game = null;
       state.category = null;
       state.serviceId = null;
+      syncGameHash(null);
       renderAll();
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
@@ -5197,6 +5375,7 @@
     });
     document.addEventListener("keydown", event => {
       if (event.key === "Escape") {
+        closeGameMenu();
         closeCart();
         closeArcIdModal();
         $("siteSearchResults").classList.remove("active");
@@ -5204,6 +5383,27 @@
     });
 
     updateAudioButton();
+    restoreGameFromHash();
+    window.addEventListener("hashchange", () => {
+      closeGameMenu();
+      const id = parseGameHash();
+      if (id && games.some(g => g.id === id)) {
+        if (state.game !== id) {
+          const game = games.find(g => g.id === id);
+          state.game = id;
+          state.category = game.categories[0]?.id || "services";
+          state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
+          renderAll();
+        }
+      } else if (!id) {
+        if (state.game) {
+          state.game = null;
+          state.category = null;
+          state.serviceId = null;
+          renderAll();
+        }
+      }
+    });
     renderAll();
     startOrderFeed();
     startMusic();
