@@ -853,6 +853,47 @@
       box-shadow: none;
     }
 
+    .home-game-card.coming-soon.coming-soon-clickable {
+      cursor: pointer;
+    }
+
+    .home-game-card.coming-soon.coming-soon-clickable:hover {
+      transform: translateY(-2px);
+      border-color: rgba(180, 120, 255, .58);
+      box-shadow: 0 22px 64px rgba(122, 77, 255, .16);
+    }
+
+    .home-game-card.coming-soon.coming-soon-clickable:focus-visible {
+      outline: 2px solid rgba(255, 209, 102, .55);
+      outline-offset: 3px;
+    }
+
+    .game-tab.game-tab--coming-soon:not(.active) {
+      opacity: .9;
+      border-color: rgba(255, 255, 255, .1);
+      color: var(--muted);
+    }
+
+    .game-tab-soon {
+      margin-left: 8px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 9px;
+      font-weight: 950;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      border: 1px solid rgba(255, 209, 102, .42);
+      color: #ffd166;
+      background: rgba(122, 77, 255, .2);
+      vertical-align: middle;
+    }
+
+    .game-tab.game-tab--coming-soon.active .game-tab-soon {
+      border-color: rgba(255, 255, 255, .35);
+      color: #fff7d6;
+      background: rgba(0, 0, 0, .18);
+    }
+
     .home-game-card:hover {
       transform: translateY(-2px);
       border-color: rgba(180, 120, 255, .62);
@@ -2787,9 +2828,9 @@
         tabIcon: "i-rank",
         heroBg: "assets/bg-valorant-4k.webp",
         heroPosition: "center 58%",
-        kicker: "Valorant Boost",
-        title: "Valorant Ranked Services",
-        copy: "Choose a Valorant mode, set quantity or session time, and create a clean Discord order ticket.",
+        kicker: "Valorant — Coming Soon",
+        title: "Valorant Services",
+        copy: "This section is opening soon. Preview categories and the layout now; only Placement Matches can be configured and added to cart today.",
         categories: valorantCategories,
         popular: [],
         services: [
@@ -3066,7 +3107,13 @@
       $("gameTabs").innerHTML = games
         .filter(game => game.id === "arc" || game.id === "valorant")
         .sort((a, b) => (tabOrder[a.id] ?? 9) - (tabOrder[b.id] ?? 9))
-        .map(game => `<button class="game-tab ${game.id === state.game ? "active" : ""}" type="button" data-game="${game.id}">${ui(game.label)}</button>`)
+        .map(game => {
+          const soonTab = game.id === "valorant" ? " game-tab--coming-soon" : "";
+          const labelHtml = game.id === "valorant"
+            ? `${escapeHtml(ui(game.label))}<span class="game-tab-soon">${escapeHtml(ui("Soon"))}</span>`
+            : escapeHtml(ui(game.label));
+          return `<button class="game-tab${soonTab} ${game.id === state.game ? "active" : ""}" type="button" data-game="${game.id}">${labelHtml}</button>`;
+        })
         .join("");
       document.querySelectorAll("[data-game]").forEach(button => button.addEventListener("click", () => {
         selectGame(button.dataset.game);
@@ -3079,15 +3126,35 @@
         const order = { arc: 0, valorant: 1 };
         return (order[a.id] ?? 50) - (order[b.id] ?? 50);
       });
-      const openGame = game => game.id === "arc" || game.id === "valorant";
-      const gameCards = orderedGames.map(game => `
-          <button class="home-game-card ${openGame(game) ? "" : "coming-soon"}" type="button" ${openGame(game) ? `data-home-game="${game.id}"` : "disabled"}>
-            <img class="home-game-media" src="${game.heroBg}" alt="${escapeHtml(ui(game.label))}" loading="eager">
-            <h2>${ui(game.label)}</h2>
-            <p>${openGame(game) ? ui(game.copy) : ui("Coming soon. We are polishing this section after the Arc Raiders order flow is finished.")}</p>
-            <span class="btn btn-primary">${openGame(game) ? ui("Select Game") : ui("Coming Soon")}</span>
-          </button>
-        `);
+      const gameCards = orderedGames.map(game => {
+        const media = `<img class="home-game-media" src="${game.heroBg}" alt="${escapeHtml(ui(game.label))}" loading="eager">`;
+        const title = `<h2>${ui(game.label)}</h2>`;
+        if (game.id === "arc") {
+          return `
+          <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(ui(game.label))}, ${escapeHtml(ui("Select Game"))}">
+            ${media}
+            ${title}
+            <p>${ui(game.copy)}</p>
+            <span class="btn btn-primary">${ui("Select Game")}</span>
+          </button>`;
+        }
+        if (game.id === "valorant") {
+          return `
+          <button class="home-game-card coming-soon coming-soon-clickable" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(ui(game.label))}, ${escapeHtml(ui("Coming soon"))}, ${escapeHtml(ui("Click to preview the section"))}">
+            ${media}
+            ${title}
+            <p>${ui("Coming soon. Click the card to open the Valorant hub and preview categories; only Placement Matches is available to order right now.")}</p>
+            <span class="btn btn-primary">${ui("Coming Soon")}</span>
+          </button>`;
+        }
+        return `
+          <button class="home-game-card coming-soon" type="button" disabled aria-disabled="true">
+            ${media}
+            ${title}
+            <p>${ui("Coming soon. We are polishing this section after the Arc Raiders order flow is finished.")}</p>
+            <span class="btn btn-primary">${ui("Coming Soon")}</span>
+          </button>`;
+      });
       gameCards.push(`
         <div class="cs2-split-card" aria-label="Counter-Strike 2 modes">
           <button class="cs2-mode-card cs2-premier-card coming-soon" type="button" disabled>
