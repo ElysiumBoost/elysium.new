@@ -590,13 +590,20 @@
     }
 
     .hero:not(.is-home) {
-      background:
-        linear-gradient(to bottom, rgba(5, 3, 13, .62) 0%, transparent 32%),
-        linear-gradient(to top, rgba(5, 3, 13, .68) 0%, transparent 34%),
-        linear-gradient(180deg, rgba(5, 3, 13, .22), rgba(5, 3, 13, .76)),
-        var(--hero-bg) var(--hero-position, center center) / cover no-repeat;
       background-color: var(--bg);
-      transform: translateZ(0);
+      background-image:
+        linear-gradient(
+          180deg,
+          rgba(5, 3, 13, .58) 0%,
+          rgba(5, 3, 13, 0) 32%,
+          rgba(5, 3, 13, 0) 66%,
+          rgba(5, 3, 13, .76) 100%
+        ),
+        var(--hero-bg);
+      background-position: center center, var(--hero-position, center center);
+      background-size: cover, cover;
+      background-repeat: no-repeat;
+      background-attachment: scroll, scroll;
     }
 
     .hero.is-home {
@@ -609,8 +616,8 @@
       content: "";
       position: absolute;
       inset: auto 0 0;
-      height: 150px;
-      background: linear-gradient(180deg, transparent 0%, rgba(5, 3, 13, .32) 42%, rgba(5, 3, 13, .94) 100%);
+      height: 120px;
+      background: linear-gradient(180deg, transparent 0%, rgba(5, 3, 13, .2) 48%, rgba(5, 3, 13, .88) 100%);
       pointer-events: none;
       z-index: 1;
     }
