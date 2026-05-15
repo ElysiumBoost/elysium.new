@@ -523,6 +523,113 @@
       box-shadow: 0 8px 24px rgba(122,77,255,.38), 0 0 18px rgba(255,184,88,.16);
     }
 
+    .category-bar.valorant-neon .category-shell {
+      min-height: 168px;
+    }
+
+    .category-bar.valorant-neon .category-scroll {
+      min-height: 168px;
+      justify-content: flex-start;
+      gap: 14px;
+      padding: 14px 12px;
+    }
+
+    @media (min-width: 1080px) {
+      .category-bar.valorant-neon .category-scroll {
+        justify-content: center;
+      }
+    }
+
+    .category-bar.valorant-neon .cat-btn.cat-btn--val {
+      width: 102px;
+      min-width: 102px;
+      min-height: 128px;
+      padding: 10px 6px 8px;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 8px;
+      border-radius: 14px;
+      border: 1px solid rgba(172, 146, 255, .38);
+      background:
+        radial-gradient(circle at 50% 22%, rgba(255, 184, 88, .12), transparent 42%),
+        linear-gradient(180deg, rgba(22, 16, 52, .82), rgba(6, 4, 16, .94));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 10px 26px rgba(0, 0, 0, .28);
+    }
+
+    .category-bar.valorant-neon .cat-btn.cat-btn--val.active {
+      border-color: rgba(255, 209, 102, .72);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .12),
+        0 0 0 1px rgba(255, 209, 102, .28),
+        0 0 22px rgba(255, 209, 102, .22),
+        0 0 34px rgba(122, 77, 255, .35);
+    }
+
+    .category-bar.valorant-neon .cat-btn.cat-btn--val.cat-btn--featured:not(.active) {
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 0 18px rgba(155, 104, 255, .22);
+    }
+
+    .category-bar.valorant-neon .cat-val-ring {
+      position: relative;
+      width: 58px;
+      height: 58px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto;
+      border: 1px solid rgba(191, 252, 255, .22);
+      background: radial-gradient(circle at 50% 32%, rgba(122, 77, 255, .55), rgba(18, 12, 44, .92));
+      box-shadow: inset 0 -6px 14px rgba(0, 0, 0, .35), 0 0 16px rgba(122, 77, 255, .28);
+    }
+
+    .category-bar.valorant-neon .cat-btn.cat-btn--val.active .cat-val-ring {
+      border-color: rgba(255, 209, 102, .55);
+      box-shadow: inset 0 -6px 14px rgba(0, 0, 0, .3), 0 0 20px rgba(255, 209, 102, .28);
+    }
+
+    .category-bar.valorant-neon .cat-val-svg-wrap {
+      color: #ffd166;
+    }
+
+    .category-bar.valorant-neon .cat-val-svg-wrap svg {
+      width: 26px;
+      height: 26px;
+      display: block;
+    }
+
+    .category-bar.valorant-neon .cat-ribbon.cat-ribbon--val {
+      top: -2px;
+      right: -6px;
+      left: auto;
+      max-width: none;
+      animation: none;
+      z-index: 6;
+    }
+
+    .category-bar.valorant-neon .cat-btn.cat-btn--val::before,
+    .category-bar.valorant-neon .cat-btn.cat-btn--val::after {
+      display: none;
+    }
+
+    .category-bar.valorant-neon .cat-btn.cat-btn--val .service-thumb {
+      display: none;
+    }
+
+    .category-bar.valorant-neon .cat-label {
+      font-size: 11px;
+      letter-spacing: .04em;
+      text-align: center;
+      min-height: 32px;
+    }
+
+    .service-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      margin: 18px 0 8px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
     @keyframes tagFloat {
       0%, 100% { transform: translateY(0) scale(1); filter: brightness(1); }
       50% { transform: translateY(-2px) scale(1.035); filter: brightness(1.16); }
@@ -2647,6 +2754,32 @@
     const workshops = ["Gunsmith", "Gear Bench", "Medical Lab", "Explosive Station", "Utility Station", "Refiner"];
     const ranks = ["Rookie I", "Rookie II", "Rookie III", "Tryhard I", "Tryhard II", "Tryhard III", "Wildcard I", "Wildcard II", "Wildcard III", "Daredevil I", "Daredevil II", "Daredevil III", "Hotshot"];
 
+    const valorantCategories = [
+      { id: "rank-boosting", label: "Rank Boosting", icon: "rank", badge: null, badgeType: null, featured: true },
+      { id: "placement-matches", label: "Placement Matches", icon: "placement", badge: null, badgeType: null, featured: false },
+      { id: "radiant-boost", label: "Radiant Boost", icon: "radiant", badge: "HOT", badgeType: "hot", featured: false },
+      { id: "ranked-wins", label: "Ranked Wins", icon: "wins", badge: null, badgeType: null, featured: false },
+      { id: "unrated-games", label: "Unrated Games", icon: "unrated", badge: null, badgeType: null, featured: false },
+      { id: "account-leveling", label: "Account Leveling", icon: "leveling", badge: null, badgeType: null, featured: false },
+      { id: "battle-pass", label: "Battle Pass", icon: "battle-pass", badge: "NEW", badgeType: "new", featured: false },
+      { id: "coaching", label: "Coaching", icon: "coaching", badge: null, badgeType: null, featured: false }
+    ];
+
+    function valorantCategorySvg(iconKey) {
+      const s = 'fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"';
+      const map = {
+        rank: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><path d="M12 2l2.4 5 5.4.8-3.9 3.8.9 5.4L12 17.8 7.2 17l.9-5.4L4.2 7.8l5.4-.8L12 2z"/></svg>`,
+        placement: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><path d="M5 21V7l7-4 7 4v14"/><path d="M9 11h6"/><path d="M9 15h5"/></svg>`,
+        radiant: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>`,
+        wins: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><path d="M6 9h4v11H6z"/><path d="M14 4h4v16h-4z"/><path d="M10 6h4v14h-4z"/></svg>`,
+        unrated: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 12h8"/></svg>`,
+        leveling: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><path d="M4 18h16"/><path d="M7 18V9l3 5 3-8 3 7 2-3v8"/></svg>`,
+        "battle-pass": `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6"/><path d="M9 12h6"/></svg>`,
+        coaching: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><path d="M6 11a6 6 0 0112 0v2H6z"/><path d="M9 17v3"/><path d="M15 17v3"/></svg>`
+      };
+      return map[iconKey] || map.rank;
+    }
+
     const games = [
       {
         id: "valorant",
@@ -2657,30 +2790,10 @@
         kicker: "Valorant Boost",
         title: "Valorant Ranked Services",
         copy: "Choose a Valorant mode, set quantity or session time, and create a clean Discord order ticket.",
-        categories: [
-          { id: "placement", label: "Placement Matches", icon: "i-placement" },
-          { id: "season", label: "New Season Package", icon: "i-package" },
-          { id: "pro", label: "Pro Games", icon: "i-star" },
-          { id: "swift", label: "Swift Pass Boosting", icon: "i-swift" },
-          { id: "high-tier", label: "High Tier Boosting", icon: "i-rank" },
-          { id: "rank", label: "Rank Boosting", icon: "i-rank" },
-          { id: "wins", label: "Win Boosting", icon: "i-win" },
-          { id: "pay-per", label: "Pay Per Games", icon: "i-gamepad" },
-          { id: "coaching", label: "Coaching Sessions", icon: "i-coach" },
-          { id: "accounts", label: "Accounts", icon: "i-private" }
-        ],
-        popular: ["val-rank", "val-win", "val-coach"],
+        categories: valorantCategories,
+        popular: [],
         services: [
-          gameService("val-placement", "placement", "Valorant Placement Matches", "Placement Matches", "i-placement", 10.99, " / match", "Placement match support for a cleaner act start.", "Choose the amount of placement matches and add rank, server, and agent notes."),
-          gameService("val-season", "season", "Valorant New Season Package", "New Season Package", "i-package", 41.99, "", "Fresh-act package with ranked setup support.", "Add your current act, goal, region, and preferred schedule."),
-          gameService("val-pro", "pro", "Valorant Pro Games", "Pro Games", "i-star", 21.99, " / game", "Play with a high-skill teammate for focused games.", "Set game quantity and add role, agent, and queue notes."),
-          gameService("val-swift", "swift", "Valorant Swift Pass Boosting", "Swift Pass Boosting", "i-swift", 7.99, " / game", "Fast casual progress sessions.", "Choose game quantity and add timing or account notes."),
-          gameService("val-high-tier", "high-tier", "Valorant High Tier Boosting", "High Tier Boosting", "i-rank", 31.99, " / order", "Premium high-rank ranked support.", "Boosters will confirm exact rank range in Discord before delivery."),
-          gameService("val-rank", "rank", "Valorant Rank Boosting", "Rank Boosting", "i-rank", 16.99, " / division", "Rank progress with current and desired rank notes.", "Add current rank, desired rank, server, role, and any restrictions."),
-          gameService("val-win", "wins", "Valorant Win Boosting", "Win Boosting", "i-win", 9.99, " / win", "Win-based order with clean Discord details.", "Set win quantity and add account, role, and schedule notes."),
-          gameService("val-pay", "pay-per", "Valorant Pay Per Games", "Pay Per Games", "i-gamepad", 8.99, " / game", "Pay by game with flexible notes.", "Choose game quantity and add mode, rank, and server details."),
-          gameService("val-coach", "coaching", "Valorant Coaching Sessions", "Coaching Sessions", "i-coach", 21.99, " / hour", "Aim, utility, VOD review, and role coaching.", "Choose session hours and add the topics you want reviewed."),
-          gameService("val-accounts", "accounts", "Valorant Accounts", "Accounts", "i-private", 0, "", "Custom account request for manual review.", "Describe the exact account request and boosters will quote it in Discord.", "private")
+          gameService("val-placement", "placement-matches", "Valorant Placement Matches", "Placement Matches", "i-placement", 10.99, " / match", "Placement match support for a cleaner act start.", "Choose the amount of placement matches and add rank, server, and agent notes.")
         ]
       },
       {
@@ -2802,7 +2915,7 @@
 
     function gameService(id, category, title, cardTitle, icon, fromUSD, suffix, short, intro, form = "fast") {
       return {
-        id, category, title, cardTitle, icon, fromUSD, suffix, short, start: "", form, intro
+        id, category, categoryId: category, title, cardTitle, icon, fromUSD, suffix, short, start: "", form, intro
       };
     }
 
@@ -2858,7 +2971,11 @@
     const num = id => Number(val(id) || 0);
 
     function currentGame() { return games.find(game => game.id === state.game); }
-    function currentService() { return currentGame()?.services.find(service => service.id === state.serviceId) || currentGame()?.services[0]; }
+    function currentService() {
+      const game = currentGame();
+      if (!game || !state.serviceId) return null;
+      return game.services.find(service => service.id === state.serviceId) || null;
+    }
     function moneyUSD(value) { return "$" + Number(value || 0).toFixed(2); }
 
     function displayMoney(value) {
@@ -2932,21 +3049,23 @@
     }
 
     function selectGame(id) {
-      if (id !== "arc") {
-        showToast("Coming soon. Arc Raiders is open now.");
+      if (id !== "arc" && id !== "valorant") {
+        showToast("Coming soon. Arc Raiders and Valorant are open now.");
         return;
       }
       state.game = id;
       const game = currentGame();
       state.category = game.categories[0]?.id || "services";
-      state.serviceId = game.services.find(service => service.category === state.category)?.id || game.services[0].id;
+      state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
       renderAll();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function renderGames() {
+      const tabOrder = { arc: 0, valorant: 1 };
       $("gameTabs").innerHTML = games
-        .filter(game => game.id === "arc")
+        .filter(game => game.id === "arc" || game.id === "valorant")
+        .sort((a, b) => (tabOrder[a.id] ?? 9) - (tabOrder[b.id] ?? 9))
         .map(game => `<button class="game-tab ${game.id === state.game ? "active" : ""}" type="button" data-game="${game.id}">${ui(game.label)}</button>`)
         .join("");
       document.querySelectorAll("[data-game]").forEach(button => button.addEventListener("click", () => {
@@ -2956,13 +3075,17 @@
 
     function renderHome() {
       $("homeContent").classList.toggle("hidden", Boolean(state.game));
-      const orderedGames = [...games].sort((a, b) => (a.id === "arc" ? -1 : b.id === "arc" ? 1 : 0));
+      const orderedGames = [...games].sort((a, b) => {
+        const order = { arc: 0, valorant: 1 };
+        return (order[a.id] ?? 50) - (order[b.id] ?? 50);
+      });
+      const openGame = game => game.id === "arc" || game.id === "valorant";
       const gameCards = orderedGames.map(game => `
-          <button class="home-game-card ${game.id === "arc" ? "" : "coming-soon"}" type="button" ${game.id === "arc" ? `data-home-game="${game.id}"` : "disabled"}>
+          <button class="home-game-card ${openGame(game) ? "" : "coming-soon"}" type="button" ${openGame(game) ? `data-home-game="${game.id}"` : "disabled"}>
             <img class="home-game-media" src="${game.heroBg}" alt="${escapeHtml(ui(game.label))}" loading="eager">
             <h2>${ui(game.label)}</h2>
-            <p>${game.id === "arc" ? ui(game.copy) : ui("Coming soon. We are polishing this section after the Arc Raiders order flow is finished.")}</p>
-            <span class="btn btn-primary">${game.id === "arc" ? ui("Select Game") : ui("Coming Soon")}</span>
+            <p>${openGame(game) ? ui(game.copy) : ui("Coming soon. We are polishing this section after the Arc Raiders order flow is finished.")}</p>
+            <span class="btn btn-primary">${openGame(game) ? ui("Select Game") : ui("Coming Soon")}</span>
           </button>
         `);
       gameCards.push(`
@@ -3020,7 +3143,14 @@
       bosses: "assets/thumb-boss.webp",
       expeditions: "assets/thumb-expedition.webp",
       custom: "assets/thumb-private-order.webp",
-      services: "assets/thumb-private-order.webp"
+      services: "assets/thumb-private-order.webp",
+      "rank-boosting": "assets/thumb-private-order.webp",
+      "placement-matches": "assets/thumb-private-order.webp",
+      "radiant-boost": "assets/thumb-private-order.webp",
+      "ranked-wins": "assets/thumb-private-order.webp",
+      "unrated-games": "assets/thumb-private-order.webp",
+      "account-leveling": "assets/thumb-private-order.webp",
+      "battle-pass": "assets/thumb-private-order.webp"
     };
 
     function categoryArtwork(id, label = "") {
@@ -3030,7 +3160,7 @@
     function selectCategory(categoryId) {
       pauseCategoryAuto(3500);
       state.category = categoryId;
-      state.serviceId = currentGame().services.find(service => service.category === state.category)?.id || currentGame().services[0].id;
+      state.serviceId = currentGame().services.find(service => service.category === state.category)?.id ?? null;
       renderCategories();
       renderPopular();
       renderServices();
@@ -3041,12 +3171,25 @@
       const game = currentGame();
       $("categoryBar").classList.toggle("hidden", game.categories.length === 0);
       $("categoryBar").classList.toggle("circle-mode", game.id === "circle");
-      $("categoryScroll").innerHTML = game.categories.map(cat => `
+      $("categoryBar").classList.toggle("valorant-neon", game.id === "valorant");
+      if (game.id === "valorant") {
+        $("categoryScroll").innerHTML = game.categories.map(cat => {
+          const svg = valorantCategorySvg(cat.icon);
+          const rib = cat.badge ? `<span class="cat-ribbon ${cat.badgeTone || cat.badgeType || "hot"} cat-ribbon--val">${escapeHtml(cat.badge)}</span>` : "";
+          const featured = cat.featured ? " cat-btn--featured" : "";
+          return `<button class="cat-btn cat-btn--val${featured} ${cat.id === state.category ? "active" : ""}" type="button" data-cat="${cat.id}">
+            <span class="cat-val-ring">${rib}<span class="cat-val-svg-wrap">${svg}</span></span>
+            <span class="cat-label">${ui(cat.label)}</span>
+          </button>`;
+        }).join("");
+      } else {
+        $("categoryScroll").innerHTML = game.categories.map(cat => `
         <button class="cat-btn ${cat.id === state.category ? "active" : ""}" type="button" data-cat="${cat.id}" ${cat.bg ? `style="--cat-bg:url('${cat.bg}')"` : ""}>
           ${cat.badge ? `<span class="cat-ribbon ${cat.badgeTone || "hot"}">${cat.badge}</span>` : ""}
           ${categoryArtwork(cat.id, ui(cat.label))}<span class="cat-label">${ui(cat.label)}</span>
         </button>
       `).join("");
+      }
       document.querySelectorAll("[data-cat]").forEach(button => button.addEventListener("click", event => {
         if (categoryMotion.didDrag || categoryMotion.skipClick) {
           event.preventDefault();
@@ -3105,9 +3248,12 @@
       const list = game.categories.length ? game.services.filter(service => service.category === state.category) : game.services;
       $("serviceTitle").textContent = category ? ui(category.label) : ui(game.label) + " " + ui("Services");
       $("serviceCopy").textContent = game.id === "arc" ? ui("Open a service, customize the order, and add it to cart.") : ui("Select a service and adjust the order panel below.");
-      $("serviceHead").classList.toggle("is-hidden", list.length <= 1);
-      $("serviceGrid").classList.toggle("is-hidden", list.length <= 1);
-      $("serviceGrid").innerHTML = list.map(service => cardMarkup(service, false)).join("");
+      const isEmpty = list.length === 0;
+      $("serviceHead").classList.toggle("is-hidden", list.length <= 1 && !isEmpty);
+      $("serviceGrid").classList.toggle("is-hidden", list.length <= 1 && !isEmpty);
+      $("serviceGrid").innerHTML = isEmpty
+        ? `<p class="intro service-empty">${ui("No services available yet.")}</p>`
+        : list.map(service => cardMarkup(service, false)).join("");
       bindServiceButtons();
     }
 
@@ -3226,7 +3372,7 @@
       document.querySelectorAll("[data-service]").forEach(button => button.addEventListener("click", () => {
         state.serviceId = button.dataset.service;
         const service = currentService();
-        state.category = service.category;
+        if (service) state.category = service.category;
         renderCategories();
         renderPopular();
         renderServices();
@@ -3244,6 +3390,17 @@
         "Quick Use Blueprints": new Set(),
         "Gun Part Blueprints": new Set()
       };
+      if (!service) {
+        $("detailIcon").innerHTML = categoryArtwork("custom", ui("Valorant"));
+        $("detailTitle").textContent = ui("No services available yet.");
+        $("detailIntro").textContent = "";
+        $("detailDeal").innerHTML = "";
+        $("detailSteps").innerHTML = "";
+        $("orderForm").innerHTML = "";
+        renderOrderFeed();
+        updateTotal();
+        return;
+      }
       $("detailIcon").innerHTML = categoryArtwork(service.category || "custom", service.cardTitle);
       $("detailTitle").textContent = ui(service.title);
       $("detailIntro").textContent = ui(service.intro);
@@ -3351,6 +3508,8 @@
     function renderOrderFeedSlot(slotIndex) {
       const feed = $("orderFeed");
       if (!feed) return;
+      const game = currentGame();
+      if (!game || game.id !== "arc") return;
       const cards = feed.querySelectorAll(".order-feed-card");
       if (cards.length !== 3 || slotIndex < 0 || slotIndex > 2) {
         renderOrderFeed();
@@ -3398,6 +3557,11 @@
     function renderOrderFeed() {
       const feed = $("orderFeed");
       if (!feed) return;
+      const game = currentGame();
+      if (!game || game.id !== "arc") {
+        feed.innerHTML = "";
+        return;
+      }
       const entries = pickRecentOrders();
       const html = entries.map(order => `
         <button class="order-feed-card" type="button" data-feed-service="${escapeHtml(order.service)}" data-feed-category="${escapeHtml(order.category)}" aria-label="Open ${escapeHtml(order.label)}">
@@ -4170,6 +4334,7 @@
 
     function calculate() {
       const service = currentService();
+      if (!service) return { total: 0, valid: false, details: "", custom: false, estimated: false };
       const type = service.form;
       if (type === "fast") {
         const qty = Math.max(1, num("fastQty"));
@@ -4683,13 +4848,26 @@
     }
 
     function searchEntries(query) {
-      const arc = games.find(game => game.id === "arc");
       const entries = [];
-      arc.services.forEach(service => {
-        const category = arc.categories.find(cat => cat.id === service.category)?.label || service.category;
-        const haystack = [service.title, service.cardTitle, service.short, service.intro, service.category, category, service.form].join(" ").toLowerCase();
-        if (haystack.includes(query)) entries.push({ type: "service", serviceId: service.id, categoryId: service.category, title: service.cardTitle, meta: `${category} / ${service.cardTitle}` });
-      });
+      const pushGameServices = game => {
+        if (!game || !game.services) return;
+        game.services.forEach(service => {
+          const category = game.categories.find(cat => cat.id === service.category)?.label || service.category;
+          const haystack = [service.title, service.cardTitle, service.short, service.intro, service.category, category, service.form, game.label].join(" ").toLowerCase();
+          if (haystack.includes(query)) {
+            entries.push({
+              type: "service",
+              gameId: game.id,
+              serviceId: service.id,
+              categoryId: service.category,
+              title: service.cardTitle,
+              meta: `${game.label} / ${category} / ${service.cardTitle}`
+            });
+          }
+        });
+      };
+      pushGameServices(games.find(g => g.id === "arc"));
+      pushGameServices(games.find(g => g.id === "valorant"));
       Object.entries(blueprintGroups).forEach(([tab, names]) => {
         const matches = names.filter(name => name.toLowerCase().includes(query) || trName(name).toLowerCase().includes(query));
         if (matches.length) {
@@ -4708,7 +4886,7 @@
     }
 
     function openSearchResult(entry) {
-      state.game = "arc";
+      state.game = entry.gameId || "arc";
       state.category = entry.categoryId;
       state.serviceId = entry.serviceId;
       if (entry.type === "blueprint") state.pendingBlueprintSearch = { tab: entry.bpTab, query: entry.bpQuery };
