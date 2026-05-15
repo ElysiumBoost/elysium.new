@@ -544,11 +544,11 @@
       box-shadow: 0 8px 24px rgba(122,77,255,.38), 0 0 18px rgba(255,184,88,.16);
     }
 
-    .category-bar.valorant-neon .category-shell {
+    .category-bar.neon-game-cats .category-shell {
       min-height: 168px;
     }
 
-    .category-bar.valorant-neon .category-scroll {
+    .category-bar.neon-game-cats .category-scroll {
       min-height: 168px;
       justify-content: flex-start;
       gap: 14px;
@@ -556,12 +556,12 @@
     }
 
     @media (min-width: 1080px) {
-      .category-bar.valorant-neon .category-scroll {
+      .category-bar.neon-game-cats .category-scroll {
         justify-content: center;
       }
     }
 
-    .category-bar.valorant-neon .cat-btn.cat-btn--val {
+    .category-bar.neon-game-cats .cat-btn.cat-btn--val {
       width: 102px;
       min-width: 102px;
       min-height: 128px;
@@ -577,7 +577,7 @@
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 10px 26px rgba(0, 0, 0, .28);
     }
 
-    .category-bar.valorant-neon .cat-btn.cat-btn--val.active {
+    .category-bar.neon-game-cats .cat-btn.cat-btn--val.active {
       border-color: rgba(255, 209, 102, .72);
       box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, .12),
@@ -586,11 +586,11 @@
         0 0 34px rgba(122, 77, 255, .35);
     }
 
-    .category-bar.valorant-neon .cat-btn.cat-btn--val.cat-btn--featured:not(.active) {
+    .category-bar.neon-game-cats .cat-btn.cat-btn--val.cat-btn--featured:not(.active) {
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 0 18px rgba(155, 104, 255, .22);
     }
 
-    .category-bar.valorant-neon .cat-val-ring {
+    .category-bar.neon-game-cats .cat-val-ring {
       position: relative;
       width: 58px;
       height: 58px;
@@ -603,22 +603,22 @@
       box-shadow: inset 0 -6px 14px rgba(0, 0, 0, .35), 0 0 16px rgba(122, 77, 255, .28);
     }
 
-    .category-bar.valorant-neon .cat-btn.cat-btn--val.active .cat-val-ring {
+    .category-bar.neon-game-cats .cat-btn.cat-btn--val.active .cat-val-ring {
       border-color: rgba(255, 209, 102, .55);
       box-shadow: inset 0 -6px 14px rgba(0, 0, 0, .3), 0 0 20px rgba(255, 209, 102, .28);
     }
 
-    .category-bar.valorant-neon .cat-val-svg-wrap {
+    .category-bar.neon-game-cats .cat-val-svg-wrap {
       color: #ffd166;
     }
 
-    .category-bar.valorant-neon .cat-val-svg-wrap svg {
+    .category-bar.neon-game-cats .cat-val-svg-wrap svg {
       width: 26px;
       height: 26px;
       display: block;
     }
 
-    .category-bar.valorant-neon .cat-ribbon.cat-ribbon--val {
+    .category-bar.neon-game-cats .cat-ribbon.cat-ribbon--val {
       top: -2px;
       right: -6px;
       left: auto;
@@ -627,16 +627,16 @@
       z-index: 6;
     }
 
-    .category-bar.valorant-neon .cat-btn.cat-btn--val::before,
-    .category-bar.valorant-neon .cat-btn.cat-btn--val::after {
+    .category-bar.neon-game-cats .cat-btn.cat-btn--val::before,
+    .category-bar.neon-game-cats .cat-btn.cat-btn--val::after {
       display: none;
     }
 
-    .category-bar.valorant-neon .cat-btn.cat-btn--val .service-thumb {
+    .category-bar.neon-game-cats .cat-btn.cat-btn--val .service-thumb {
       display: none;
     }
 
-    .category-bar.valorant-neon .cat-label {
+    .category-bar.neon-game-cats .cat-label {
       font-size: 11px;
       letter-spacing: .04em;
       text-align: center;
@@ -2847,6 +2847,38 @@
       return map[iconKey] || map.rank;
     }
 
+    const wowCategories = [
+      { id: "mythic-plus", label: "Mythic+", icon: "mythic", badge: "HOT", badgeType: "hot", featured: true },
+      { id: "raid-calendar", label: "Raid Calendar", icon: "raid", badge: null, badgeType: null, featured: false },
+      { id: "arena", label: "Arena", icon: "arena", badge: null, badgeType: null, featured: false },
+      { id: "gear-boost", label: "Gear Boost", icon: "gear", badge: null, badgeType: null, featured: false },
+      { id: "gold-trade", label: "Gold Trade", icon: "gold", badge: null, badgeType: null, featured: false },
+      { id: "leveling", label: "Leveling", icon: "leveling", badge: null, badgeType: null, featured: false },
+      { id: "delves", label: "Delves", icon: "delves", badge: "NEW", badgeType: "new", featured: false },
+      { id: "dungeons", label: "Dungeons", icon: "dungeons", badge: null, badgeType: null, featured: false },
+      { id: "request-a-service", label: "Request a Service", icon: "request", badge: null, badgeType: null, featured: false },
+      { id: "timewalking-mage-tower", label: "Timewalking Mage Tower", icon: "mage-tower", badge: null, badgeType: null, featured: false },
+      { id: "mounts", label: "Mounts", icon: "mounts", badge: null, badgeType: null, featured: false }
+    ];
+
+    function wowCategorySvg(iconKey) {
+      const s = 'fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"';
+      const map = {
+        mythic: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><path d="M5 19V5l4 3 3-3 4 2 3-2v14"/><path d="M9 10h2M14 10h2"/></svg>`,
+        raid: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><circle cx="12" cy="13" r="3"/><path d="M12 4v4M12 17v3M4 12h3M17 12h3"/></svg>`,
+        arena: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><rect x="4" y="6" width="16" height="13" rx="2"/><path d="M8 9h8M8 13h8"/></svg>`,
+        gear: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><path d="M12 5l2 3 3 1-2 2 1 4-4-2-4 2 1-4-2-2 3-1 2-3z"/><circle cx="12" cy="11" r="2"/></svg>`,
+        gold: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><circle cx="9" cy="14" r="5"/><circle cx="15" cy="10" r="5"/></svg>`,
+        leveling: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><path d="M4 18h16"/><path d="M7 18V9l3 5 3-8 3 7 2-3v8"/></svg>`,
+        delves: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><path d="M12 3C8 7 6 11 6 14a6 6 0 1012 0c0-3-2-7-6-11z"/></svg>`,
+        dungeons: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><rect x="5" y="4" width="14" height="16" rx="1"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>`,
+        request: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><rect x="5" y="4" width="14" height="16" rx="2"/><path d="M9 8h6M9 12h4"/></svg>`,
+        "mage-tower": `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><path d="M12 3l8 6v9l-8 4-8-4V9l8-6z"/><path d="M12 8v7"/></svg>`,
+        mounts: `<svg viewBox="0 0 24 24" aria-hidden="true" ${s}><ellipse cx="12" cy="16" rx="7" ry="3"/><path d="M7 16c0-6 2-9 5-10 2 4 3 7 3 10"/></svg>`
+      };
+      return map[iconKey] || map.mythic;
+    }
+
     const games = [
       {
         id: "valorant",
@@ -2924,8 +2956,8 @@
         heroPosition: "center center",
         kicker: "World of Warcraft Boost",
         title: "World of Warcraft Services",
-        copy: "Coming soon. Premium World of Warcraft services will be added after the Arc Raiders flow is polished.",
-        categories: [],
+        copy: "Browse WoW categories and preview the hub. Services and pricing will be added soon; use Request a Service for custom orders when available.",
+        categories: wowCategories,
         popular: [],
         services: []
       },
@@ -3119,8 +3151,8 @@
     }
 
     function selectGame(id) {
-      if (id !== "arc" && id !== "valorant") {
-        showToast("Coming soon. Arc Raiders and Valorant are open now.");
+      if (id !== "arc" && id !== "valorant" && id !== "wow") {
+        showToast("Coming soon. Arc Raiders, Valorant, and World of Warcraft are open now.");
         return;
       }
       state.game = id;
@@ -3132,9 +3164,9 @@
     }
 
     function renderGames() {
-      const tabOrder = { arc: 0, valorant: 1 };
+      const tabOrder = { arc: 0, valorant: 1, wow: 2 };
       $("gameTabs").innerHTML = games
-        .filter(game => game.id === "arc" || game.id === "valorant")
+        .filter(game => game.id === "arc" || game.id === "valorant" || game.id === "wow")
         .sort((a, b) => (tabOrder[a.id] ?? 9) - (tabOrder[b.id] ?? 9))
         .map(game => {
           const soonTab = game.id === "valorant" ? " game-tab--coming-soon" : "";
@@ -3152,13 +3184,22 @@
     function renderHome() {
       $("homeContent").classList.toggle("hidden", Boolean(state.game));
       const orderedGames = [...games].sort((a, b) => {
-        const order = { arc: 0, valorant: 1 };
+        const order = { arc: 0, valorant: 1, wow: 2 };
         return (order[a.id] ?? 50) - (order[b.id] ?? 50);
       });
       const gameCards = orderedGames.map(game => {
         const media = `<img class="home-game-media" src="${game.heroBg}" alt="${escapeHtml(ui(game.label))}" loading="eager">`;
         const title = `<h2>${ui(game.label)}</h2>`;
         if (game.id === "arc") {
+          return `
+          <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(ui(game.label))}, ${escapeHtml(ui("Select Game"))}">
+            ${media}
+            ${title}
+            <p>${ui(game.copy)}</p>
+            <span class="btn btn-primary">${ui("Select Game")}</span>
+          </button>`;
+        }
+        if (game.id === "wow") {
           return `
           <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(ui(game.label))}, ${escapeHtml(ui("Select Game"))}">
             ${media}
@@ -3246,7 +3287,17 @@
       "ranked-wins": "assets/thumb-private-order.webp",
       "unrated-games": "assets/thumb-private-order.webp",
       "account-leveling": "assets/thumb-private-order.webp",
-      "battle-pass": "assets/thumb-private-order.webp"
+      "battle-pass": "assets/thumb-private-order.webp",
+      "mythic-plus": "assets/thumb-private-order.webp",
+      "raid-calendar": "assets/thumb-raids.webp",
+      arena: "assets/thumb-private-order.webp",
+      "gear-boost": "assets/thumb-loadouts.webp",
+      "gold-trade": "assets/thumb-coins.webp",
+      delves: "assets/thumb-private-order.webp",
+      dungeons: "assets/thumb-private-order.webp",
+      "request-a-service": "assets/thumb-private-order.webp",
+      "timewalking-mage-tower": "assets/thumb-private-order.webp",
+      mounts: "assets/thumb-private-order.webp"
     };
 
     function categoryArtwork(id, label = "") {
@@ -3267,10 +3318,11 @@
       const game = currentGame();
       $("categoryBar").classList.toggle("hidden", game.categories.length === 0);
       $("categoryBar").classList.toggle("circle-mode", game.id === "circle");
-      $("categoryBar").classList.toggle("valorant-neon", game.id === "valorant");
-      if (game.id === "valorant") {
+      $("categoryBar").classList.toggle("neon-game-cats", game.id === "valorant" || game.id === "wow");
+      if (game.id === "valorant" || game.id === "wow") {
+        const catSvg = game.id === "wow" ? wowCategorySvg : valorantCategorySvg;
         $("categoryScroll").innerHTML = game.categories.map(cat => {
-          const svg = valorantCategorySvg(cat.icon);
+          const svg = catSvg(cat.icon);
           const rib = cat.badge ? `<span class="cat-ribbon ${cat.badgeTone || cat.badgeType || "hot"} cat-ribbon--val">${escapeHtml(cat.badge)}</span>` : "";
           const featured = cat.featured ? " cat-btn--featured" : "";
           return `<button class="cat-btn cat-btn--val${featured} ${cat.id === state.category ? "active" : ""}" type="button" data-cat="${cat.id}">
@@ -4964,6 +5016,24 @@
       };
       pushGameServices(games.find(g => g.id === "arc"));
       pushGameServices(games.find(g => g.id === "valorant"));
+      pushGameServices(games.find(g => g.id === "wow"));
+      const pushCategoryHits = game => {
+        if (!game || !game.categories?.length) return;
+        game.categories.forEach(cat => {
+          const lab = ui(cat.label).toLowerCase();
+          if (cat.id.toLowerCase().includes(query) || lab.includes(query)) {
+            entries.push({
+              type: "category",
+              gameId: game.id,
+              categoryId: cat.id,
+              title: ui(cat.label),
+              meta: `${game.label} / ${ui(cat.label)}`
+            });
+          }
+        });
+      };
+      pushCategoryHits(games.find(g => g.id === "valorant"));
+      pushCategoryHits(games.find(g => g.id === "wow"));
       Object.entries(blueprintGroups).forEach(([tab, names]) => {
         const matches = names.filter(name => name.toLowerCase().includes(query) || trName(name).toLowerCase().includes(query));
         if (matches.length) {
@@ -4984,7 +5054,12 @@
     function openSearchResult(entry) {
       state.game = entry.gameId || "arc";
       state.category = entry.categoryId;
-      state.serviceId = entry.serviceId;
+      if (entry.type === "category") {
+        const g = games.find(x => x.id === state.game);
+        state.serviceId = g?.services.find(s => s.category === state.category)?.id ?? null;
+      } else {
+        state.serviceId = entry.serviceId;
+      }
       if (entry.type === "blueprint") state.pendingBlueprintSearch = { tab: entry.bpTab, query: entry.bpQuery };
       $("siteSearchResults").classList.remove("active");
       renderAll();
