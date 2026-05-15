@@ -737,24 +737,22 @@
       pointer-events: none;
     }
 
-    /* Valorant: anchor crop toward top of artwork so faces / upper bodies stay in frame */
+    /* Valorant: same asset as home card — show full key art (contain) in a taller hero, not wide-strip cover crop */
+    .hero[data-hero-game="valorant"]:not(.is-home) {
+      min-height: min(82vh, 880px);
+      padding-top: 46px;
+      padding-bottom: 42px;
+    }
+
     .hero[data-hero-game="valorant"]:not(.is-home)::before {
-      background: var(--hero-bg) center top / cover no-repeat;
+      background-color: var(--bg);
+      background-image: var(--hero-bg);
+      background-position: center bottom;
+      background-size: contain;
+      background-repeat: no-repeat;
       background-attachment: scroll;
-    }
-
-    @media (max-width: 1080px) {
-      .hero[data-hero-game="valorant"]:not(.is-home)::before {
-        background: var(--hero-bg) center 8% / cover no-repeat;
-        background-attachment: scroll;
-      }
-    }
-
-    @media (max-width: 720px) {
-      .hero[data-hero-game="valorant"]:not(.is-home)::before {
-        background: var(--hero-bg) center top / cover no-repeat;
-        background-attachment: scroll;
-      }
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 4%, #000 96%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, #000 4%, #000 96%, transparent 100%);
     }
 
     .hero:not(.is-home)::after {
@@ -770,6 +768,17 @@
         rgba(5, 3, 13, .4) 100%
       );
       pointer-events: none;
+    }
+
+    .hero[data-hero-game="valorant"]:not(.is-home)::after {
+      background: linear-gradient(
+        180deg,
+        rgba(5, 3, 13, .52) 0%,
+        rgba(5, 3, 13, .14) 38%,
+        transparent 56%,
+        rgba(5, 3, 13, .48) 72%,
+        rgba(5, 3, 13, .92) 100%
+      );
     }
 
     .hero.is-home {
@@ -2541,6 +2550,9 @@
         max-height: none;
       }
       .order-form { max-height: none; }
+      .hero[data-hero-game="valorant"]:not(.is-home) {
+        min-height: min(78vh, 800px);
+      }
     }
 
     @media (max-width: 720px) {
@@ -2553,6 +2565,11 @@
       .audio-volume { width: 58px; }
       .currency { max-width: 88px; }
       .hero { min-height: 320px; padding-top: 38px; }
+      .hero[data-hero-game="valorant"]:not(.is-home) {
+        min-height: min(74vh, 680px);
+        padding-top: 36px;
+        padding-bottom: 30px;
+      }
       .popular-grid, .service-grid, .field-grid, .home-grid, .info-grid { grid-template-columns: 1fr; }
       .cs2-split-card { grid-template-columns: 1fr; }
       .cs2-mode-card + .cs2-mode-card { border-left: 0; border-top: 1px solid rgba(172, 146, 255, .28); }
@@ -2873,7 +2890,7 @@
         label: "Valorant",
         tabIcon: "i-rank",
         heroBg: "assets/bg-valorant-4k.webp",
-        heroPosition: "center top",
+        heroPosition: "center bottom",
         kicker: "Valorant — Coming Soon",
         title: "Valorant Services",
         copy: "This section is opening soon. Preview categories and the layout now; only Placement Matches can be configured and added to cart today.",
