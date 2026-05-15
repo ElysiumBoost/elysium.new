@@ -716,6 +716,26 @@
       pointer-events: none;
     }
 
+    /* Valorant: bias focal point upward so agent faces stay in frame (cover crop) */
+    .hero[data-hero-game="valorant"]:not(.is-home)::before {
+      background: var(--hero-bg) center 22% / cover no-repeat;
+      background-attachment: scroll;
+    }
+
+    @media (max-width: 1080px) {
+      .hero[data-hero-game="valorant"]:not(.is-home)::before {
+        background: var(--hero-bg) center 26% / cover no-repeat;
+        background-attachment: scroll;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .hero[data-hero-game="valorant"]:not(.is-home)::before {
+        background: var(--hero-bg) center 18% / cover no-repeat;
+        background-attachment: scroll;
+      }
+    }
+
     .hero:not(.is-home)::after {
       content: "";
       position: absolute;
@@ -2827,7 +2847,7 @@
         label: "Valorant",
         tabIcon: "i-rank",
         heroBg: "assets/bg-valorant-4k.webp",
-        heroPosition: "center 58%",
+        heroPosition: "center 22%",
         kicker: "Valorant — Coming Soon",
         title: "Valorant Services",
         copy: "This section is opening soon. Preview categories and the layout now; only Placement Matches can be configured and added to cart today.",
@@ -3275,9 +3295,16 @@
       if (game) {
         hero.classList.remove("is-home");
         hero.style.setProperty("--hero-bg", `url("${game.heroBg}")`);
-        hero.style.setProperty("--hero-position", game.heroPosition || "center center");
+        if (game.id === "valorant") {
+          hero.dataset.heroGame = "valorant";
+          hero.style.removeProperty("--hero-position");
+        } else {
+          delete hero.dataset.heroGame;
+          hero.style.setProperty("--hero-position", game.heroPosition || "center center");
+        }
       } else {
         hero.classList.add("is-home");
+        delete hero.dataset.heroGame;
         hero.style.removeProperty("--hero-bg");
         hero.style.removeProperty("--hero-position");
       }
