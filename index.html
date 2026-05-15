@@ -1016,6 +1016,51 @@
       cursor: not-allowed;
     }
 
+    .cs2-split-card.home-pair-wide {
+      grid-column: 1 / -1;
+    }
+
+    .cs2-mode-card.home-pick {
+      cursor: pointer;
+    }
+
+    .cs2-mode-card.home-pick:focus-visible {
+      outline: 2px solid rgba(255, 209, 102, .55);
+      outline-offset: 2px;
+      z-index: 3;
+    }
+
+    .cs2-mode-card.home-pick.is-media-fallback {
+      background: radial-gradient(ellipse 120% 85% at 50% 18%, rgba(122, 77, 255, .5), rgba(8, 5, 22, .94) 58%), linear-gradient(180deg, #1a0f3a, #05030d);
+    }
+
+    .cs2-mode-card.home-pick.is-media-fallback > img {
+      display: none;
+    }
+
+    .home-pair-h {
+      display: block;
+      margin: 0 0 6px;
+      color: #f4f0ff;
+      font-family: var(--display);
+      font-size: 26px;
+      line-height: .95;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      text-shadow: 0 12px 34px rgba(0, 0, 0, .7);
+    }
+
+    .home-pair-p {
+      display: block;
+      margin: 0 0 13px;
+      max-width: 420px;
+      color: rgba(240, 237, 255, .84);
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 650;
+      text-shadow: 0 8px 24px rgba(0, 0, 0, .68);
+    }
+
     .cs2-mode-card img {
       position: absolute;
       inset: 0;
@@ -1026,6 +1071,10 @@
       display: block;
       filter: brightness(1.2) contrast(1.14) saturate(1.08);
       transition: transform .28s ease, filter .28s ease;
+    }
+
+    .cs2-mode-card.home-pick img.home-pick-img--social {
+      object-position: center 28%;
     }
 
     .cs2-mode-card + .cs2-mode-card {
@@ -1057,6 +1106,7 @@
       right: 16px;
       bottom: 16px;
       z-index: 2;
+      display: block;
     }
 
     .cs2-mode-overlay h3 {
@@ -2936,9 +2986,9 @@
         tabIcon: "i-rank",
         heroBg: "assets/bg-valorant-4k.webp",
         heroPosition: "center 15%",
-        kicker: "Valorant — Coming Soon",
+        kicker: "Valorant Boost",
         title: "Valorant Services",
-        copy: "This section is opening soon. Preview categories and the layout now; only Placement Matches can be configured and added to cart today.",
+        copy: "Browse Valorant categories, customize placement matches, and build a clean Discord-ready ticket as more services go live.",
         categories: valorantCategories,
         popular: [],
         services: [
@@ -2982,6 +3032,19 @@
         ]
       },
       {
+        id: "social",
+        label: "Social",
+        tabIcon: "i-star",
+        heroBg: "assets/social.webp",
+        heroPosition: "center 32%",
+        kicker: "Social",
+        title: "Social Services",
+        copy: "Choose social, companion, and community-focused services with a clean Discord-ready request.",
+        categories: [],
+        popular: [],
+        services: []
+      },
+      {
         id: "lol",
         label: "League of Legends",
         tabIcon: "i-star",
@@ -3017,8 +3080,8 @@
         tabIcon: "i-star",
         heroBg: "assets/faceit.webp",
         heroPosition: "center center",
-        kicker: "CS 2 Faceit",
-        title: "CS 2 Faceit Services",
+        kicker: "CS2 Faceit",
+        title: "CS2 Faceit Services",
         copy: "FACEIT hub preview. Live listings will appear here soon.",
         categories: [],
         popular: [],
@@ -3030,8 +3093,8 @@
         tabIcon: "i-star",
         heroBg: "assets/premier-cs.webp",
         heroPosition: "center center",
-        kicker: "CS 2 Premier",
-        title: "CS 2 Premier Services",
+        kicker: "CS2 Premier",
+        title: "CS2 Premier Services",
         copy: "Premier matchmaking hub preview. Services will be listed here soon.",
         categories: [],
         popular: [],
@@ -3082,7 +3145,7 @@
       }
     ];
 
-    const GAME_DROPDOWN_ORDER = ["arc", "valorant", "wow", "lol", "premier", "faceit", "circle"];
+    const GAME_DROPDOWN_ORDER = ["arc", "valorant", "wow", "lol", "premier", "faceit", "circle", "social"];
     const GAME_HASH_SLUGS = {
       arc: "arc-raiders",
       valorant: "valorant",
@@ -3090,7 +3153,8 @@
       circle: "boost-plus",
       lol: "league-of-legends",
       faceit: "faceit",
-      premier: "premier"
+      premier: "premier",
+      social: "social"
     };
     const HASH_TO_GAME_ID = (() => {
       const map = {};
@@ -3298,9 +3362,10 @@
     }
 
     function gameMenuLabel(game) {
-      if (game.id === "premier") return ui("CS 2 Premier");
-      if (game.id === "faceit") return ui("CS 2 Faceit");
+      if (game.id === "premier") return ui("CS2 Premier");
+      if (game.id === "faceit") return ui("CS2 Faceit");
       if (game.id === "circle") return ui("Boost+");
+      if (game.id === "social") return ui("Social");
       return ui(game.label);
     }
 
@@ -3363,59 +3428,70 @@
 
     function renderHome() {
       $("homeContent").classList.toggle("hidden", Boolean(state.game));
-      const rank = gid => {
-        const i = GAME_DROPDOWN_ORDER.indexOf(gid);
-        return i === -1 ? 99 : i;
-      };
-      const orderedGames = [...games].sort((a, b) => rank(a.id) - rank(b.id));
-      const gameCards = orderedGames.map(game => {
-        const media = `<img class="home-game-media" src="${game.heroBg}" alt="${escapeHtml(ui(game.label))}" loading="eager">`;
-        const title = `<h2>${ui(game.label)}</h2>`;
-        if (game.id === "arc") {
-          return `
-          <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(ui(game.label))}, ${escapeHtml(ui("Select Game"))}">
-            ${media}
-            ${title}
-            <p>${ui(game.copy)}</p>
-            <span class="btn btn-primary">${ui("Select Game")}</span>
-          </button>`;
-        }
-        if (game.id === "wow") {
-          return `
-          <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(ui(game.label))}, ${escapeHtml(ui("Select Game"))}">
-            ${media}
-            ${title}
-            <p>${ui(game.copy)}</p>
-            <span class="btn btn-primary">${ui("Select Game")}</span>
-          </button>`;
-        }
-        if (game.id === "circle" || game.id === "lol" || game.id === "faceit" || game.id === "premier") {
-          return `
-          <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(ui(game.label))}, ${escapeHtml(ui("Select Game"))}">
-            ${media}
-            ${title}
-            <p>${ui(game.copy)}</p>
-            <span class="btn btn-primary">${ui("Select Game")}</span>
-          </button>`;
-        }
-        if (game.id === "valorant") {
-          return `
-          <button class="home-game-card coming-soon coming-soon-clickable" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(ui(game.label))}, ${escapeHtml(ui("Coming soon"))}, ${escapeHtml(ui("Click to preview the section"))}">
-            ${media}
-            ${title}
-            <p>${ui("Coming soon. Click the card to open the Valorant hub and preview categories; only Placement Matches is available to order right now.")}</p>
-            <span class="btn btn-primary">${ui("Coming Soon")}</span>
-          </button>`;
-        }
+      const g = id => games.find(x => x.id === id);
+      const renderHomeSingleCard = game => {
+        const media = `<img class="home-game-media" src="${escapeHtml(game.heroBg)}" alt="${escapeHtml(ui(game.label))}" loading="eager">`;
         return `
-          <button class="home-game-card coming-soon" type="button" disabled aria-disabled="true">
-            ${media}
-            ${title}
-            <p>${ui("Coming soon. We are polishing this section after the Arc Raiders order flow is finished.")}</p>
-            <span class="btn btn-primary">${ui("Coming Soon")}</span>
-          </button>`;
+        <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(ui(game.label))}, ${escapeHtml(ui("Select Game"))}">
+          ${media}
+          <h2>${ui(game.label)}</h2>
+          <p>${ui(game.copy)}</p>
+          <span class="btn btn-primary">${ui("Select Game")}</span>
+        </button>`;
+      };
+      const chunks = [];
+      ["arc", "valorant", "wow", "lol"].forEach(id => {
+        const game = g(id);
+        if (game) chunks.push(renderHomeSingleCard(game));
       });
-      $("homeGameGrid").innerHTML = gameCards.join("");
+      const prem = g("premier");
+      const face = g("faceit");
+      if (prem && face) {
+        chunks.push(`
+        <div class="cs2-split-card home-pair-wide" aria-label="${escapeHtml(ui("Counter-Strike 2"))}">
+          <button type="button" class="cs2-mode-card home-pick" data-home-game="premier" aria-label="${escapeHtml(ui("CS2 Premier"))}, ${escapeHtml(ui("Select Game"))}">
+            <img src="${escapeHtml(prem.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-pick')?.classList.add('is-media-fallback');">
+            <span class="cs2-mode-overlay">
+              <span class="home-pair-h">${ui("CS2 Premier")}</span>
+              <span class="home-pair-p">${ui(prem.copy)}</span>
+              <span class="btn btn-primary">${ui("Select Game")}</span>
+            </span>
+          </button>
+          <button type="button" class="cs2-mode-card home-pick" data-home-game="faceit" aria-label="${escapeHtml(ui("CS2 Faceit"))}, ${escapeHtml(ui("Select Game"))}">
+            <img class="home-pick-img--faceit" src="${escapeHtml(face.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-pick')?.classList.add('is-media-fallback');">
+            <span class="cs2-mode-overlay">
+              <span class="home-pair-h">${ui("CS2 Faceit")}</span>
+              <span class="home-pair-p">${ui(face.copy)}</span>
+              <span class="btn btn-primary">${ui("Select Game")}</span>
+            </span>
+          </button>
+        </div>`);
+      }
+      const boost = g("circle");
+      const soc = g("social");
+      if (boost && soc) {
+        const socialImg = "assets/social.webp";
+        chunks.push(`
+        <div class="cs2-split-card home-pair-wide" aria-label="${escapeHtml(ui("Boost and Social"))}">
+          <button type="button" class="cs2-mode-card home-pick" data-home-game="circle" aria-label="${escapeHtml(ui("Boost+"))}, ${escapeHtml(ui("Select Game"))}">
+            <img src="${escapeHtml(boost.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-pick')?.classList.add('is-media-fallback');">
+            <span class="cs2-mode-overlay">
+              <span class="home-pair-h">${ui("Boost+")}</span>
+              <span class="home-pair-p">${ui(boost.copy)}</span>
+              <span class="btn btn-primary">${ui("Select Game")}</span>
+            </span>
+          </button>
+          <button type="button" class="cs2-mode-card home-pick" data-home-game="social" aria-label="${escapeHtml(ui("Social"))}, ${escapeHtml(ui("Select Game"))}">
+            <img class="home-pick-img--social" src="${escapeHtml(socialImg)}" alt="" loading="lazy" onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='assets/social.png';return;}this.style.display='none';this.closest('.home-pick')?.classList.add('is-media-fallback');">
+            <span class="cs2-mode-overlay">
+              <span class="home-pair-h">${ui("Social")}</span>
+              <span class="home-pair-p">${ui(soc.copy)}</span>
+              <span class="btn btn-primary">${ui("Select Game")}</span>
+            </span>
+          </button>
+        </div>`);
+      }
+      $("homeGameGrid").innerHTML = chunks.join("");
       document.querySelector(".info-grid").innerHTML = `
         <article class="info-card">
           <h3>${ui("About Us")}</h3>
@@ -3540,7 +3616,7 @@
     function renderPopular() {
       const game = currentGame();
       if (!game) return;
-      if (game.id === "circle" || game.id === "valorant" || game.id === "faceit" || game.id === "premier") {
+      if (game.id === "circle" || game.id === "valorant" || game.id === "faceit" || game.id === "premier" || game.id === "social") {
         $("popularHead").classList.add("is-hidden");
         $("popularGrid").classList.add("is-hidden");
         $("popularGrid").innerHTML = "";
@@ -5193,6 +5269,7 @@
       pushGameServices(games.find(g => g.id === "lol"));
       pushGameServices(games.find(g => g.id === "faceit"));
       pushGameServices(games.find(g => g.id === "premier"));
+      pushGameServices(games.find(g => g.id === "social"));
       const pushCategoryHits = game => {
         if (!game || !game.categories?.length) return;
         game.categories.forEach(cat => {
