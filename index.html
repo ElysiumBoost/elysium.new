@@ -3569,7 +3569,7 @@
       let valThumb = "";
       if (game && game.id === "valorant") {
         const cat = valorantCategories.find(c => c.id === id);
-        if (cat && cat.thumb) valThumb = cat.thumb;
+        if (cat && (cat.thumb || cat.image)) valThumb = cat.thumb || cat.image;
       }
       const override = thumbOverride != null && String(thumbOverride).trim() !== "" ? String(thumbOverride).trim() : "";
       const src = override || valThumb || serviceImages[id] || serviceImages.custom;
