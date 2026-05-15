@@ -591,39 +591,43 @@
 
     .hero:not(.is-home) {
       background-color: var(--bg);
-      background-image:
-        linear-gradient(
-          180deg,
-          rgba(5, 3, 13, .58) 0%,
-          rgba(5, 3, 13, 0) 32%,
-          rgba(5, 3, 13, 0) 66%,
-          rgba(5, 3, 13, .76) 100%
-        ),
-        var(--hero-bg);
-      background-position: center center, var(--hero-position, center center);
-      background-size: cover, cover;
-      background-repeat: no-repeat;
-      background-attachment: scroll, scroll;
+    }
+
+    .hero:not(.is-home)::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: var(--hero-bg) var(--hero-position, center center) / cover no-repeat;
+      background-attachment: scroll;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    .hero:not(.is-home)::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(
+        180deg,
+        rgba(5, 3, 13, .34) 0%,
+        transparent 26%,
+        transparent 74%,
+        rgba(5, 3, 13, .4) 100%
+      );
+      pointer-events: none;
     }
 
     .hero.is-home {
       background:
         linear-gradient(180deg, rgba(5,3,13,.32), rgba(5,3,13,.12) 55%, transparent);
       border-bottom: 0;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: auto 0 0;
-      height: 120px;
-      background: linear-gradient(180deg, transparent 0%, rgba(5, 3, 13, .2) 48%, rgba(5, 3, 13, .88) 100%);
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .hero.is-home::after {
-      display: none;
     }
 
     .home-content {
