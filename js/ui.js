@@ -717,6 +717,11 @@
             <button type="button" class="cart-embark-btn" id="cartEmbarkEditBtn">${escapeHtml(ui("Add or edit Embark ID"))}</button>
           </div>`
           : "";
+        {
+          const foot = $("cartDrawerFoot");
+          const strip = $("orderCheckoutStrip");
+          if (foot && strip && strip.parentElement !== foot) foot.appendChild(strip);
+        }
         ensureOrderPreviewId();
         const leftCol = `
           <div class="order-center__left">
@@ -843,7 +848,8 @@
         state.cart = [];
         state.orderPreviewId = "";
         renderCart();
-        $("copyStatus").textContent = "Cart cleared.";
+        const cs = $("copyStatus");
+        if (cs) cs.textContent = "Cart cleared.";
         showToast("Cart cleared.");
         return;
       }
@@ -995,12 +1001,14 @@
 
     async function copyOrder() {
       if (!state.cart.length) {
-        $("copyStatus").textContent = ui("Add an item before copying.");
+        const cs = $("copyStatus");
+        if (cs) cs.textContent = ui("Add an item before copying.");
         return;
       }
       const v = validateTicketRequirements();
       if (!v.ok) {
-        $("copyStatus").textContent = v.message;
+        const cs = $("copyStatus");
+        if (cs) cs.textContent = v.message;
         showToast(v.message, 3800, true);
         return;
       }
@@ -1197,12 +1205,12 @@
       const text = ticketText();
       const statusEl = $("copyStatus");
       const ok = () => {
-        statusEl.textContent = ui("Ticket copied successfully. Open Discord and paste it into your order ticket.");
+        if (statusEl) statusEl.textContent = ui("Ticket copied successfully. Open Discord and paste it into your order ticket.");
         showToast(ui("Ticket copied."), 2600, false);
         openCopySuccessModal();
       };
       const fail = () => {
-        statusEl.textContent = ui("Copy failed. Try Download Receipt Image or copy the ticket manually.");
+        if (statusEl) statusEl.textContent = ui("Copy failed. Try Download Receipt Image or copy the ticket manually.");
         showToast(ui("Copy failed."), 3200, true);
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1220,25 +1228,25 @@
       const statusEl = $("copyStatus");
       const gate = orderReceiptBlockedMessage();
       if (gate) {
-        statusEl.textContent = gate;
+        if (statusEl) statusEl.textContent = gate;
         showToast(gate, 3400, true);
         return;
       }
-      statusEl.textContent = ui("Generating receipt image...");
+      if (statusEl) statusEl.textContent = ui("Generating receipt image...");
       try {
         const canvas = await drawPremiumOrderReceiptCanvas();
         downloadCanvasAsPng(canvas, receiptFilenameFromPreviewId());
-        statusEl.textContent = ui("Receipt downloaded. Attach it to your Discord ticket if asked.");
+        if (statusEl) statusEl.textContent = ui("Receipt downloaded. Attach it to your Discord ticket if asked.");
         showToast(ui("Receipt downloaded."), 2600, false);
         try {
           if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
             const blob = await canvasToBlob(canvas, "image/png");
             await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-            statusEl.textContent = ui("Receipt downloaded and copied — paste the image into Discord if needed.");
+            if (statusEl) statusEl.textContent = ui("Receipt downloaded and copied — paste the image into Discord if needed.");
           }
         } catch (_) {}
       } catch (e) {
-        statusEl.textContent = ui("Could not generate receipt. Try again or copy the text ticket.");
+        if (statusEl) statusEl.textContent = ui("Could not generate receipt. Try again or copy the text ticket.");
         showToast(ui("Receipt generation failed."), 3200, true);
       }
     }
@@ -1260,7 +1268,8 @@
 
     function openDiscordTicket() {
       if (!state.cart.length) {
-        $("copyStatus").textContent = "Add an item before opening Discord.";
+        const csOd = $("copyStatus");
+        if (csOd) csOd.textContent = "Add an item before opening Discord.";
         return;
       }
       ensureArcId(() => window.open(DISCORD_URL, "_blank", "noopener"));
