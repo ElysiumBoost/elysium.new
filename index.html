@@ -7,7 +7,7 @@
   <meta name="description" content="ELYSIUM BOOST service builder for Arc Raiders, Valorant, and League of Legends. Customize an order, add it to cart, and copy a Discord ticket.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #05030d;
@@ -995,23 +995,27 @@
     .home-game-card > :not(.home-game-media) { position: relative; z-index: 2; }
 
     .home-game-card h2 {
-      margin: 0 0 6px;
-      color: #f4f0ff;
+      margin: 0 0 8px;
+      color: #fdfbff;
       font-family: var(--display);
-      font-size: 31px;
-      line-height: .95;
-      letter-spacing: .05em;
+      font-size: clamp(26px, 3.1vw, 34px);
+      font-weight: 800;
+      line-height: 1.02;
+      letter-spacing: .06em;
       text-transform: uppercase;
-      text-shadow: 0 9px 24px rgba(0,0,0,.72);
+      text-shadow: 0 9px 28px rgba(0,0,0,.78);
       overflow-wrap: anywhere;
     }
 
     .home-game-card p {
-      margin: 0 0 13px;
-      color: #e6e2ff;
-      line-height: 1.45;
-      font-size: 14px;
+      margin: 0 0 14px;
+      font-family: var(--font);
+      color: rgba(183, 176, 223, .92);
+      line-height: 1.52;
+      font-size: 13px;
+      font-weight: 300;
       max-width: 420px;
+      overflow-wrap: anywhere;
     }
 
     .home-game-card.home-combo-card {
@@ -1128,24 +1132,25 @@
     }
 
     .home-combo-half-h {
-      margin: 0 0 6px;
+      margin: 0 0 8px;
       font-family: var(--display);
-      font-size: clamp(20px, 2.6vw, 31px);
+      font-size: clamp(20px, 2.55vw, 30px);
       font-weight: 800;
-      letter-spacing: .05em;
+      letter-spacing: .06em;
       text-transform: uppercase;
-      color: #f4f0ff;
-      line-height: .95;
-      text-shadow: 0 9px 24px rgba(0, 0, 0, .72);
+      color: #fdfbff;
+      line-height: 1.02;
+      text-shadow: 0 9px 28px rgba(0, 0, 0, .78);
       overflow-wrap: anywhere;
     }
 
     .home-combo-half-p {
-      margin: 0 0 13px;
-      font-size: 14px;
-      line-height: 1.45;
-      font-weight: 650;
-      color: #e6e2ff;
+      margin: 0 0 14px;
+      font-family: var(--font);
+      font-size: 13px;
+      line-height: 1.52;
+      font-weight: 300;
+      color: rgba(183, 176, 223, .92);
       display: -webkit-box;
       -webkit-line-clamp: 4;
       -webkit-box-orient: vertical;
