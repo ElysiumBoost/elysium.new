@@ -456,7 +456,7 @@
       const boost = g("circle");
       const soc = g("social");
       if (boost && soc) {
-        const socialImg = "assets/boost-social-bg.webp";
+        const socialImg = "assets/backgrounds/boost-social-bg.webp";
         chunks.push(`
         <article class="home-game-card home-combo-card" aria-label="${escapeHtml(ui("Boost+ and Social"))}">
           <div class="home-combo-split">
@@ -632,7 +632,7 @@
     function renderPopular() {
       const game = currentGame();
       if (!game) return;
-      if (game.id === "circle" || game.id === "valorant" || game.id === "faceit" || game.id === "premier" || game.id === "social") {
+      if (game.id === "circle" || game.id === "valorant" || game.id === "faceit" || game.id === "premier" || game.id === "social" || game.id === "arc") {
         $("popularHead").classList.add("is-hidden");
         $("popularGrid").classList.add("is-hidden");
         $("popularGrid").innerHTML = "";
@@ -1676,16 +1676,10 @@
             <div class="valorant-rank-tier-grid">
               <div class="field-block field-block--tight valorant-rank-field">
                 <label for="valRbCurrent">${ui("Current Rank")}</label>
-                <div class="valorant-rank-badge-slot" aria-hidden="true">
-                  <img id="valRbCurrentIcon" class="valorant-rank-badge-img" src="${escapeHtml(valorantRankBadgeUrl("Silver III"))}" alt="" width="96" height="96" decoding="async" loading="eager">
-                </div>
                 <select id="valRbCurrent">${valorantRankOptionsHtml(VALORANT_RANKS, "Silver III")}</select>
               </div>
               <div class="field-block field-block--tight valorant-rank-field">
                 <label for="valRbDesired">${ui("Desired Rank")}</label>
-                <div class="valorant-rank-badge-slot" aria-hidden="true">
-                  <img id="valRbDesiredIcon" class="valorant-rank-badge-img" src="${escapeHtml(valorantRankBadgeUrl("Gold I"))}" alt="" width="96" height="96" decoding="async" loading="eager">
-                </div>
                 <select id="valRbDesired">${valorantRankOptionsHtml(desiredRanks, "Gold I")}</select>
               </div>
             </div>
