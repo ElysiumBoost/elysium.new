@@ -2406,10 +2406,46 @@
     }
 
     .valorant-rank-card-visual {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 52px;
+      min-height: 72px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .valorant-rank-card-visual::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      border-radius: inherit;
+      background: linear-gradient(180deg, transparent 38%, rgba(7, 10, 18, .52));
+    }
+
+    .valorant-rank-card-ph {
+      width: 100%;
+      min-height: 72px;
+      border-radius: 10px;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(0, 212, 255, .12), transparent 55%),
+        linear-gradient(145deg, rgba(124, 77, 255, .22), rgba(7, 10, 18, .88));
+      border: 1px solid rgba(124, 77, 255, .26);
+      box-shadow: inset 0 0 22px rgba(0, 0, 0, .22);
+    }
+
+    .valorant-rank-card-img {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 72px;
+      object-fit: contain;
+      object-position: center center;
+      display: none;
+      border-radius: 10px;
+      background: rgba(7, 10, 18, .4);
     }
 
     .valorant-rank-card label {
@@ -4676,6 +4712,57 @@
       "Ascendant I", "Ascendant II", "Ascendant III", "Immortal I", "Immortal II", "Immortal III"
     ];
 
+    function valorantRankBadgeImageCandidates(rankLabel) {
+      const r = String(rankLabel || "").trim();
+      if (r === "Radiant") {
+        return [
+          "assets/radiant_3.png",
+          "assets/radiant_3.webp",
+          "assets/radiant.png",
+          "assets/radiant.webp",
+          "assets/valorant-radiant-boost.webp"
+        ];
+      }
+      const m = r.match(/^([A-Za-z]+)/);
+      if (!m) return [];
+      const tier = m[1].toLowerCase();
+      return [`assets/${tier}_3.png`, `assets/${tier}_3.webp`];
+    }
+
+    function applyValorantRankBadgeImage(img, rankLabel) {
+      if (!img) return;
+      const wrap = img.closest(".valorant-rank-card-visual");
+      const ph = wrap && wrap.querySelector(".valorant-rank-card-ph");
+      const urls = valorantRankBadgeImageCandidates(rankLabel);
+      let idx = 0;
+      const showPlaceholder = () => {
+        img.removeAttribute("src");
+        img.style.display = "none";
+        if (ph) ph.hidden = false;
+      };
+      const tryNext = () => {
+        if (idx >= urls.length) {
+          showPlaceholder();
+          return;
+        }
+        const url = urls[idx++];
+        img.onload = () => {
+          img.style.display = "block";
+          if (ph) ph.hidden = true;
+        };
+        img.onerror = () => tryNext();
+        img.alt = rankLabel || "";
+        img.src = url;
+      };
+      tryNext();
+    }
+
+    function syncValorantRankBoostRankArt() {
+      if (currentService()?.form !== "valorant-rank-boost") return;
+      applyValorantRankBadgeImage($("valRbCurrentImg"), val("valRbCurrent"));
+      applyValorantRankBadgeImage($("valRbDesiredImg"), val("valRbDesired"));
+    }
+
     const VALORANT_RANK_SEGMENT_EUR = [
       4.5, 4.9, 5.5, 5.9, 6.4, 7.2, 7.9, 8.7, 9.9, 11.5, 12.9, 15.5, 18.5, 21.5, 26, 32, 38, 46, 58, 72, 95, 130, 170
     ];
@@ -4980,6 +5067,8 @@
         label: "Valorant",
         tabIcon: "i-rank",
         heroBg: "assets/bg-valorant-4k.webp",
+        valorantHeroPrimary: "assets/valorant-hero.webp",
+        homeCardMedia: "assets/valorant-home.webp",
         heroPosition: "center 15%",
         kicker: "Valorant Boost",
         title: "Valorant Services",
@@ -5263,6 +5352,27 @@
     const val = id => $(id)?.value || "";
     const num = id => Number(val(id) || 0);
 
+    function elyValorantThumbFallback(img) {
+      const fb = img.getAttribute("data-thumb-fb");
+      if (fb && !img.dataset.thumbFbTried) {
+        img.dataset.thumbFbTried = "1";
+        img.src = fb;
+        return;
+      }
+      img.style.display = "none";
+      img.closest(".service-thumb")?.classList.add("is-cat-thumb-fallback");
+    }
+
+    function elyHomeCardFallback(img) {
+      const fb = img.getAttribute("data-home-card-fb");
+      if (fb && !img.dataset.homeCardFbTried) {
+        img.dataset.homeCardFbTried = "1";
+        img.src = fb;
+        return;
+      }
+      img.style.display = "none";
+    }
+
     function currentGame() { return games.find(game => game.id === state.game); }
     function currentService() {
       const game = currentGame();
@@ -5447,7 +5557,9 @@
       $("homeContent").classList.toggle("hidden", Boolean(state.game));
       const g = id => games.find(x => x.id === id);
       const renderHomeSingleCard = game => {
-        const media = `<img class="home-game-media" src="${escapeHtml(game.heroBg)}" alt="${escapeHtml(ui(game.label))}" loading="eager">`;
+        const media = game.id === "valorant" && game.homeCardMedia
+          ? `<img class="home-game-media" src="${escapeHtml(game.homeCardMedia)}" alt="${escapeHtml(ui(game.label))}" loading="eager" data-home-card-fb="${escapeHtml(game.heroBg)}" onerror="elyHomeCardFallback(this)">`
+          : `<img class="home-game-media" src="${escapeHtml(game.heroBg)}" alt="${escapeHtml(ui(game.label))}" loading="eager">`;
         return `
         <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(ui(game.label))}, ${escapeHtml(ui("Select"))}">
           ${media}
@@ -5582,7 +5694,11 @@
       }
       const override = thumbOverride != null && String(thumbOverride).trim() !== "" ? String(thumbOverride).trim() : "";
       const src = override || valThumb || serviceImages[id] || serviceImages.custom;
-      return `<div class="service-thumb"><img src="${escapeHtml(src)}" alt="${escapeHtml(label)}" loading="eager" onerror="this.style.display='none'; this.closest('.service-thumb')?.classList.add('is-cat-thumb-fallback');"></div>`;
+      const isVal = game && game.id === "valorant";
+      const pngSibling = isVal && /\.webp($|\?)/i.test(src) ? src.replace(/\.webp($|\?)/i, (m, q) => `.png${q || ""}`) : "";
+      const fbAttr = pngSibling && pngSibling !== src ? ` data-thumb-fb="${escapeHtml(pngSibling)}"` : "";
+      const errFn = isVal && fbAttr ? ` onerror="elyValorantThumbFallback(this)"` : ` onerror="this.style.display='none'; this.closest('.service-thumb')?.classList.add('is-cat-thumb-fallback');"`;
+      return `<div class="service-thumb"><img src="${escapeHtml(src)}" alt="${escapeHtml(label)}" loading="eager"${fbAttr}${errFn}></div>`;
     }
     function selectCategory(categoryId) {
       pauseCategoryAuto(3500);
@@ -5643,7 +5759,12 @@
       const hero = $("hero");
       if (game) {
         hero.classList.remove("is-home");
-        hero.style.setProperty("--hero-bg", `url("${game.heroBg}")`);
+        const vHero = game.id === "valorant" && game.valorantHeroPrimary;
+        if (vHero) {
+          hero.style.setProperty("--hero-bg", `url("${game.valorantHeroPrimary}"), url("${game.heroBg}")`);
+        } else {
+          hero.style.setProperty("--hero-bg", `url("${game.heroBg}")`);
+        }
         hero.style.setProperty("--hero-position", game.heroPosition || "center center");
       } else {
         hero.classList.add("is-home");
@@ -6625,15 +6746,12 @@
               <div class="valorant-rank-card" data-valorant-rank-card="current">
                 <div class="valorant-rank-card-visual" aria-hidden="true">
                   <div class="valorant-rank-card-ph"></div>
+                  <img id="valRbCurrentImg" class="valorant-rank-card-img" alt="" decoding="async" loading="eager" width="140" height="72" />
                 </div>
                 <label for="valRbCurrent">${ui("Current Rank")}</label>
                 <select id="valRbCurrent">${valorantRankOptionsHtml(VALORANT_RANKS, "Silver III")}</select>
               </div>
-              <div class="valorant-rank-card" data-valorant-rank-card="desired">
-                <div class="valorant-rank-card-visual" aria-hidden="true">
-                  <div class="valorant-rank-card-ph"></div>
-                </div>
-                <label for="valRbDesired">${ui("Desired Rank")}</label>
+                  <img id="valRbDesiredImg" class="valorant-rank-card-img" alt="" decoding="async" loading="eager" width="140" height="72" />
                 <select id="valRbDesired">${valorantRankOptionsHtml(desiredRanks, "Gold I")}</select>
               </div>
             </div>
@@ -7981,7 +8099,10 @@
           noteEl.hidden = true;
         }
       }
-      if (vForm) syncValorantPathRail();
+      if (vForm) {
+        syncValorantPathRail();
+        syncValorantRankBoostRankArt();
+      }
       syncLoadoutQuickBundleHints();
     }
 
