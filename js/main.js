@@ -70,53 +70,6 @@
       });
     }
 
-    function runSafeRenderAll() {
-      try {
-        renderAll();
-      } catch (error) {
-        console.error("renderAll failed, falling back to homepage cards:", error);
-        state.game = null;
-        state.category = null;
-        state.serviceId = null;
-        document.getElementById("homeContent")?.classList.remove("hidden");
-        document.getElementById("serviceContent")?.classList.add("hidden");
-        document.getElementById("categoryBar")?.classList.add("hidden");
-        const cs = document.getElementById("categoryScroll");
-        if (cs) cs.innerHTML = "";
-        document.getElementById("detailSection")?.classList.add("is-hidden");
-      }
-    }
-
-    function openHomeGameFromCard(card) {
-      if (!card) return;
-      const id = card.dataset.homeGame;
-      if (!id) return;
-
-      if (typeof selectGame === "function") {
-        try {
-          selectGame(id);
-        } catch (error) {
-          console.error("[selectGame failed]", error);
-        }
-        return;
-      }
-
-      const slugMap = {
-        arc: "arc-raiders",
-        valorant: "valorant",
-        wow: "world-of-warcraft",
-        lol: "league-of-legends",
-        premier: "premier",
-        faceit: "faceit",
-        circle: "boost-plus",
-        social: "social"
-      };
-
-      if (slugMap[id]) {
-        window.location.hash = "#" + slugMap[id];
-      }
-    }
-
     const currencyEl = $("currency");
     if (currencyEl) {
       currencyEl.addEventListener("change", () => {
@@ -142,7 +95,7 @@
         state.category = null;
         state.serviceId = null;
         syncGameHash(null);
-        runSafeRenderAll();
+        renderAll();
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
     }
@@ -239,16 +192,6 @@
     }
 
     document.addEventListener("click", event => {
-      const card = event.target.closest("[data-home-game]");
-      if (!card) return;
-
-      event.preventDefault();
-      event.stopPropagation();
-
-      openHomeGameFromCard(card);
-    });
-
-    document.addEventListener("click", event => {
       const sr = $("siteSearchResults");
       const ss = $("siteSearch");
       const ssb = $("siteSearchBtn");
@@ -256,18 +199,6 @@
       if (!sr.contains(event.target) && event.target !== ss && event.target !== ssb) {
         sr.classList.remove("active");
       }
-    });
-
-    document.addEventListener("keydown", event => {
-      if (event.key !== "Enter" && event.key !== " ") return;
-
-      const card = event.target.closest("[data-home-game]");
-      if (!card) return;
-
-      event.preventDefault();
-      event.stopPropagation();
-
-      openHomeGameFromCard(card);
     });
 
     document.addEventListener("keydown", event => {
@@ -285,12 +216,10 @@
     updateAudioButton();
     restoreOrderState();
     cleanStaleCart();
+    persistOrderState();
     restoreGameFromHash();
-    sanitizeNavigationState();
     if (state.game) syncGameHash(state.game);
     else syncGameHash(null);
-    persistOrderState();
-
     window.addEventListener("hashchange", () => {
       closeGameMenu();
       const id = parseGameHash();
@@ -300,20 +229,16 @@
           state.game = id;
           state.category = game.categories[0]?.id || "services";
           state.serviceId = null;
-          runSafeRenderAll();
+          renderAll();
         }
       } else if (!id) {
         if (state.game) {
           state.game = null;
           state.category = null;
           state.serviceId = null;
-          runSafeRenderAll();
+          renderAll();
         }
       }
     });
-    runSafeRenderAll();
-    try {
-      if (typeof startOrderFeed === "function") startOrderFeed();
-    } catch (e2) {
-      console.error("startOrderFeed failed:", e2);
-    }
+    renderAll();
+    startOrderFeed();

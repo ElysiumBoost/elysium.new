@@ -181,14 +181,15 @@
       if (!id || !games.some(g => g.id === id)) return;
       const game = games.find(g => g.id === id);
       state.game = id;
-      state.category = game.categories[0]?.id || "services";
+      state.category = game.categories?.[0]?.id || "services";
       state.serviceId = null;
     }
 
     function servicesInCurrentCategory() {
       const game = currentGame();
-      if (!game) return [];
-      return game.categories.length ? game.services.filter(service => service.category === state.category) : game.services;
+      if (!game || !Array.isArray(game.services)) return [];
+      const cats = Array.isArray(game.categories) ? game.categories : [];
+      return cats.length ? game.services.filter(service => service.category === state.category) : game.services;
     }
 
     function elyValorantThumbFallback(img) {
@@ -255,19 +256,6 @@
       if (!old) return "";
       const percent = service.oldUSD ? Math.round((1 - service.fromUSD / service.oldUSD) * 100) : 30;
       return `<span class="price-old">${displayMoney(old)}</span> ${displayMoney(service.fromUSD)} ${service.suffix || ""} - ${percent}% off`;
-    }
-
-    const ELY_ALLOWED_GAME_IDS = ["arc", "valorant", "wow", "lol", "premier", "faceit", "circle", "social"];
-
-    function sanitizeNavigationState() {
-      const gid = state.game;
-      const allowed = ELY_ALLOWED_GAME_IDS.includes(gid);
-      const inCatalog = typeof games !== "undefined" && games.some && games.some(g => g.id === gid);
-      if (!allowed || !inCatalog || !currentGame()) {
-        state.game = null;
-        state.category = null;
-        state.serviceId = null;
-      }
     }
 
     function renderAll() {
@@ -395,20 +383,20 @@
     }
 
     function selectGame(id) {
-      if (!games.some(g => g.id === id)) {
-        showToast("That game is not available.");
+      const game = games.find(g => g.id === id);
+      if (!game) {
+        console.error("Unknown game id", id);
         return;
       }
       state.game = id;
-      const game = currentGame();
-      state.category = game.categories[0]?.id || "services";
+      state.category = game.categories?.[0]?.id || "services";
       state.serviceId = null;
       closeGameMenu();
       syncGameHash(id);
       renderAll();
-      requestAnimationFrame(() => {
-        const target = $("serviceHead") || $("serviceContent");
-        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      document.getElementById("serviceContent")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
       });
     }
     window.selectGame = selectGame;
@@ -612,13 +600,14 @@
 
     function renderCategories() {
       const game = currentGame();
-      const scroller = $("categoryScroll");
-      if (!scroller) return;
       if (!game || !Array.isArray(game.categories)) {
         $("categoryBar")?.classList.add("hidden");
-        scroller.innerHTML = "";
+        const scroll = $("categoryScroll");
+        if (scroll) scroll.innerHTML = "";
         return;
       }
+      const scroller = $("categoryScroll");
+      if (!scroller) return;
       $("categoryBar")?.classList.toggle("hidden", game.categories.length === 0);
       $("categoryBar")?.classList.toggle("circle-mode", game.id === "circle");
       $("categoryBar")?.classList.toggle("neon-game-cats", game.id === "wow");
@@ -694,13 +683,20 @@
 
     function renderServices() {
       const game = currentGame();
+      if (!game || !Array.isArray(game.services)) return;
       const head = $("serviceHead");
       const grid = $("serviceGrid");
       const titleEl = $("serviceTitle");
       const copyEl = $("serviceCopy");
-      if (!game || !grid || !titleEl || !copyEl) return;
-      const category = game.categories.find(cat => cat.id === state.category);
-      const list = game.categories.length ? game.services.filter(service => service.category === state.category) : game.services;
+      if (!grid || !titleEl || !copyEl) return;
+      const cats = Array.isArray(game.categories) ? game.categories : [];
+      if (cats.length) {
+        if (!state.category || !cats.some(c => c.id === state.category)) {
+          state.category = cats[0]?.id || "services";
+        }
+      }
+      const category = cats.find(cat => cat.id === state.category);
+      const list = cats.length ? game.services.filter(service => service.category === state.category) : game.services;
       titleEl.textContent = category ? ui(category.label) : ui(game.label) + " " + ui("Services");
       copyEl.textContent = game.id === "arc" ? ui("Open a service, customize the order, and add it to cart.") : ui("Select a service and adjust the order panel below.");
       const isEmpty = list.length === 0;
