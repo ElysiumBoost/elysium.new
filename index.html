@@ -2339,6 +2339,7 @@
 
     .valorant-configurator select,
     .valorant-configurator input[type="number"],
+    .valorant-configurator .qty-stepper-input,
     .order-card.is-valorant .valorant-order-chrome select {
       border-radius: 10px;
       border: 1px solid rgba(155, 104, 255, .42);
@@ -2350,8 +2351,25 @@
       color: var(--text);
     }
 
+    .valorant-configurator .qty-stepper {
+      border-radius: 10px;
+      border: 1px solid rgba(155, 104, 255, .42);
+      min-height: 44px;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .22);
+    }
+
+    .valorant-configurator .qty-step {
+      background: rgba(22, 18, 52, .72);
+    }
+
+    .valorant-configurator .qty-stepper-input {
+      border-left-color: rgba(155, 104, 255, .28);
+      border-right-color: rgba(155, 104, 255, .28);
+    }
+
     .valorant-configurator select:focus,
     .valorant-configurator input[type="number"]:focus,
+    .valorant-configurator .qty-stepper-input:focus,
     .order-card.is-valorant .valorant-order-chrome select:focus {
       border-color: rgba(191, 252, 255, .55);
       box-shadow: 0 0 0 3px rgba(122, 77, 255, .18);
@@ -2796,6 +2814,242 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+    }
+
+    .qty-field {
+      display: grid;
+      gap: 6px;
+      align-content: start;
+    }
+
+    .qty-field--bundle .qty-bundle-head {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .qty-bundle-sub {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: rgba(183, 176, 223, .82);
+      line-height: 1.25;
+    }
+
+    .qty-stepper {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) 44px;
+      align-items: stretch;
+      gap: 0;
+      min-height: 44px;
+      border-radius: 10px;
+      border: 1px solid rgba(155, 104, 255, .38);
+      background: linear-gradient(180deg, rgba(38, 31, 91, .55), rgba(12, 9, 32, .88));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .06),
+        0 10px 26px rgba(0, 0, 0, .22);
+      overflow: hidden;
+    }
+
+    .qty-stepper--wide {
+      grid-template-columns: 44px minmax(0, 1fr) 44px;
+    }
+
+    .qty-step {
+      border: 0;
+      margin: 0;
+      padding: 0;
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--gold);
+      background: rgba(10, 8, 28, .55);
+      cursor: pointer;
+      transition: background .18s ease, color .18s ease, box-shadow .18s ease;
+    }
+
+    .qty-step:hover {
+      background: rgba(122, 77, 255, .22);
+      color: #fff3d6;
+      box-shadow: inset 0 0 22px rgba(255, 209, 102, .08);
+    }
+
+    .qty-step:active {
+      transform: scale(0.98);
+    }
+
+    .qty-step:focus-visible {
+      outline: none;
+      box-shadow: inset 0 0 0 2px rgba(191, 252, 255, .35);
+    }
+
+    .qty-stepper-input {
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      border-left: 1px solid rgba(155, 104, 255, .22);
+      border-right: 1px solid rgba(155, 104, 255, .22);
+      border-radius: 0;
+      margin: 0;
+      padding: 0 8px;
+      text-align: center;
+      font-family: var(--display);
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      color: var(--text);
+      background: rgba(6, 4, 18, .35);
+      min-height: 44px;
+      box-shadow: none;
+      -moz-appearance: textfield;
+    }
+
+    .qty-stepper-input:focus {
+      outline: none;
+      border-color: rgba(191, 252, 255, .35);
+      box-shadow: inset 0 0 0 1px rgba(122, 77, 255, .35);
+    }
+
+    .qty-stepper-input::-webkit-outer-spin-button,
+    .qty-stepper-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .bundle-final-line {
+      min-height: 18px;
+      margin-top: 4px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .03em;
+      color: rgba(255, 209, 102, .92);
+      line-height: 1.35;
+    }
+
+    .bundle-final-line.is-empty {
+      margin-top: 0;
+      min-height: 0;
+    }
+
+    #orderForm input[type="number"]:not(.qty-stepper-input),
+    #orderForm input[type="number"].qty-stepper-input {
+      -moz-appearance: textfield;
+    }
+
+    #orderForm input[type="number"]::-webkit-outer-spin-button,
+    #orderForm input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .coin-range-wrap {
+      display: grid;
+      gap: 8px;
+      padding: 4px 2px 0;
+    }
+
+    .coin-range-markers {
+      position: relative;
+      height: 34px;
+      margin: 0 10px 2px;
+      pointer-events: none;
+    }
+
+    .coin-tier-marker {
+      position: absolute;
+      top: 0;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      z-index: 1;
+    }
+
+    .coin-tier-marker__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 7px 3px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 209, 102, .42);
+      background: linear-gradient(180deg, rgba(58, 41, 101, .9), rgba(16, 11, 37, .96));
+      font-family: var(--display);
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #ffecc4;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .28), 0 0 12px rgba(255, 209, 102, .12);
+    }
+
+    .coin-tier-marker__glyph {
+      font-size: 8px;
+      line-height: 1;
+      color: var(--gold);
+      opacity: .95;
+    }
+
+    .coin-tier-marker__nub {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(155, 104, 255, .55);
+      background: radial-gradient(circle at 30% 25%, rgba(255, 209, 102, .55), rgba(122, 77, 255, .55));
+      box-shadow: 0 0 10px rgba(122, 77, 255, .35);
+    }
+
+    .coin-tier-marker.is-active .coin-tier-marker__nub {
+      box-shadow: 0 0 14px rgba(255, 209, 102, .45), 0 0 10px rgba(122, 77, 255, .4);
+      border-color: rgba(255, 209, 102, .65);
+    }
+
+    .coin-tier-marker.is-active .coin-tier-marker__badge {
+      border-color: rgba(191, 252, 255, .45);
+      animation: softPulse 2.2s ease-in-out infinite;
+    }
+
+    .coin-range-input {
+      width: 100%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .coin-discount-guidance {
+      min-height: 40px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(155, 104, 255, .28);
+      background: linear-gradient(180deg, rgba(38, 31, 91, .38), rgba(10, 8, 28, .72));
+      color: rgba(231, 226, 255, .92);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.45;
+      letter-spacing: .02em;
+    }
+
+    .coin-discount-guidance.is-unlocked {
+      border-color: rgba(255, 209, 102, .42);
+      color: #fff6df;
+      box-shadow: inset 0 0 18px rgba(255, 209, 102, .08), 0 10px 24px rgba(0, 0, 0, .22);
+    }
+
+    @media (max-width: 720px) {
+      .coin-range-markers {
+        height: 38px;
+        margin: 0 6px 0;
+      }
+
+      .coin-tier-marker__badge {
+        font-size: 8px;
+        padding: 2px 5px;
+      }
+    }
+
+    .field-grid.equal-grid > .qty-field--bundle {
+      min-height: 118px;
     }
 
     .mod-wide {
@@ -3885,6 +4139,16 @@
 
     function nextSeedTier(amount) {
       return seedTiers.find(tier => tier.amount > amount) || null;
+    }
+
+    const COIN_SLIDER_MIN = 100000;
+    const COIN_SLIDER_MAX = 12000000;
+    const SEED_SLIDER_MIN = 100;
+    const SEED_SLIDER_MAX = 2000;
+
+    function rangeTierMarkerPct(value, min, max) {
+      if (max <= min) return 0;
+      return Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));
     }
 
     const blueprintGroups = {
@@ -5047,7 +5311,75 @@
 
     function qtyField(id, label, value = 0, min = 0, max = null) {
       const maxAttr = max != null ? ` max="${max}"` : "";
-      return `<div><label for="${id}">${label}</label><input id="${id}" type="number" min="${min}"${maxAttr} value="${value}"></div>`;
+      return `<div class="qty-field"><label for="${id}">${label}</label><div class="qty-stepper" data-qty-wrap>
+        <button type="button" class="qty-step qty-step--minus" data-qty-for="${id}" data-qty-step="-1" aria-label="Decrease quantity"></button>
+        <input id="${id}" class="qty-stepper-input" type="number" inputmode="numeric" min="${min}"${maxAttr} value="${value}">
+        <button type="button" class="qty-step qty-step--plus" data-qty-for="${id}" data-qty-step="1" aria-label="Increase quantity"></button>
+      </div></div>`;
+    }
+
+    function loadoutBundleQtyField(id, bundleLabel, perBundle, value = 0, min = 0, max = null) {
+      const maxAttr = max != null ? ` max="${max}"` : "";
+      return `<div class="qty-field qty-field--bundle" data-bundle-for="${id}">
+        <div class="qty-bundle-head">
+          <label for="${id}">${bundleLabel}</label>
+          <span class="qty-bundle-sub">${perBundle} items per bundle · quantity = bundles</span>
+        </div>
+        <div class="qty-stepper" data-qty-wrap>
+          <button type="button" class="qty-step qty-step--minus" data-qty-for="${id}" data-qty-step="-1" aria-label="Decrease bundle quantity"></button>
+          <input id="${id}" class="qty-stepper-input" type="number" inputmode="numeric" min="${min}"${maxAttr} value="${value}">
+          <button type="button" class="qty-step qty-step--plus" data-qty-for="${id}" data-qty-step="1" aria-label="Increase bundle quantity"></button>
+        </div>
+        <div class="bundle-final-line is-empty" id="${id}BundleTotal" aria-live="polite"></div>
+      </div>`;
+    }
+
+    function wireQtySteppers(root) {
+      if (!root || !root.querySelectorAll) return;
+      root.querySelectorAll(".qty-step[data-qty-for]").forEach(btn => {
+        btn.addEventListener("click", e => {
+          e.preventDefault();
+          const id = btn.dataset.qtyFor;
+          const inp = document.getElementById(id);
+          if (!inp || inp.disabled) return;
+          const delta = Number(btn.dataset.qtyStep);
+          if (!delta) return;
+          const min = inp.min !== "" && inp.min != null ? Number(inp.min) : 0;
+          const max = inp.max !== "" && inp.max != null ? Number(inp.max) : null;
+          let v = Math.round(Number(inp.value || 0)) + delta;
+          if (Number.isFinite(min)) v = Math.max(min, v);
+          if (max != null && Number.isFinite(max)) v = Math.min(max, v);
+          inp.value = String(v);
+          inp.dispatchEvent(new Event("input", { bubbles: true }));
+        });
+      });
+    }
+
+    function syncLoadoutQuickBundleHints() {
+      [
+        { id: "bandageQty", per: 5, name: "Herbal Bandage" },
+        { id: "nadeQty", per: 3, name: "Trigger Nade" },
+        { id: "rechargerQty", per: 5, name: "Shield Recharger" },
+        { id: "surgeRechargerQty", per: 5, name: "Surge Shield Recharger" }
+      ].forEach(({ id, per, name }) => {
+        const el = $(id + "BundleTotal");
+        if (!el) return;
+        const b = Math.max(0, num(id));
+        if (b) {
+          el.textContent = `${b} bundle${b === 1 ? "" : "s"} × ${per} each → ${(b * per).toLocaleString()} ${name}`;
+          el.classList.remove("is-empty");
+        } else {
+          el.textContent = "";
+          el.classList.add("is-empty");
+        }
+      });
+    }
+
+    function loadoutBundleDetailLine(bundleQty, per, displayName) {
+      const b = Math.max(0, bundleQty);
+      if (!b) return "";
+      const items = b * per;
+      return `${displayName}: ${items.toLocaleString()} total (${b} bundle${b === 1 ? "" : "s"} × ${per} = ${items.toLocaleString()})`;
     }
 
     function weaponOptions(includeNone = true) {
@@ -5249,6 +5581,11 @@
       }
       if (type === "coins") {
         const tierButtons = coinTiers.map(tier => `<button class="raid-pill" type="button" data-coin-deal="${tier.amount}"><strong>${tier.label}<small>Popular deal, ${Math.round(tier.discount * 100)}% off</small></strong><span>${moneyUSD(tier.amount / 100000 * prices.coins100k * (1 - tier.discount))}</span></button>`).join("");
+        const coinMarkersHtml = coinTiers.map(tier => {
+          const left = rangeTierMarkerPct(tier.amount, COIN_SLIDER_MIN, COIN_SLIDER_MAX);
+          const pct = Math.round(tier.discount * 100);
+          return `<span class="coin-tier-marker" data-tier-amount="${tier.amount}" style="left:${left}%"><span class="coin-tier-marker__badge"><span class="coin-tier-marker__glyph" aria-hidden="true">★</span>${pct}%</span><span class="coin-tier-marker__nub" title="Deal tier at ${tier.amount.toLocaleString()} coins"></span></span>`;
+        }).join("");
         return `
           <div class="coin-panel">
             <input id="coinDeal" type="hidden" value="">
@@ -5256,8 +5593,11 @@
               <div><label for="coinAmount">Raider Coins</label><strong><span id="coinLabel">100,000</span><span class="discounted-tag" id="coinDiscountTag">${ui("Discounted")}</span></strong></div>
               <span>100k minimum<br>12M maximum</span>
             </div>
-            <input id="coinAmount" type="range" min="100000" max="12000000" step="100000" value="100000">
-            <div class="deal-hint" id="coinNextHint"></div>
+            <div class="coin-range-wrap">
+              <div class="coin-range-markers" aria-hidden="true">${coinMarkersHtml}</div>
+              <input id="coinAmount" class="coin-range-input" type="range" min="${COIN_SLIDER_MIN}" max="${COIN_SLIDER_MAX}" step="100000" value="100000">
+            </div>
+            <div class="coin-discount-guidance" id="coinDiscountGuidance" role="status" aria-live="polite"></div>
             <div class="coin-quick-grid coin-quick-grid--four">${tierButtons}</div>
             <div class="badge" style="justify-self:start">${ui("Price updates every 100k")}</div>
           </div>
@@ -5265,6 +5605,11 @@
       }
       if (type === "seeds") {
         const seedButtons = seedTiers.map(tier => `<button class="raid-pill" type="button" data-seed-deal="${tier.amount}"><strong>${tier.label}<small>Bulk deal, ${Math.round(tier.discount * 100)}% off</small></strong><span>${moneyUSD(tier.amount / 100 * prices.seeds100 * (1 - tier.discount))}</span></button>`).join("");
+        const seedMarkersHtml = seedTiers.map(tier => {
+          const left = rangeTierMarkerPct(tier.amount, SEED_SLIDER_MIN, SEED_SLIDER_MAX);
+          const pct = Math.round(tier.discount * 100);
+          return `<span class="coin-tier-marker" data-seed-tier-amount="${tier.amount}" style="left:${left}%"><span class="coin-tier-marker__badge"><span class="coin-tier-marker__glyph" aria-hidden="true">★</span>${pct}%</span><span class="coin-tier-marker__nub" title="Bulk tier at ${tier.amount.toLocaleString()} seeds"></span></span>`;
+        }).join("");
         return `
           <div class="coin-panel">
             <input id="seedDeal" type="hidden" value="">
@@ -5272,8 +5617,11 @@
               <div><label for="seedAmount">Assorted Seeds</label><strong><span id="seedLabel">100</span><span class="discounted-tag" id="seedDiscountTag">${ui("Discounted")}</span></strong></div>
               <span>100 minimum<br>2,000 maximum</span>
             </div>
-            <input id="seedAmount" type="range" min="100" max="2000" step="100" value="100">
-            <div class="deal-hint" id="seedNextHint"></div>
+            <div class="coin-range-wrap">
+              <div class="coin-range-markers" aria-hidden="true">${seedMarkersHtml}</div>
+              <input id="seedAmount" class="coin-range-input" type="range" min="${SEED_SLIDER_MIN}" max="${SEED_SLIDER_MAX}" step="100" value="100">
+            </div>
+            <div class="coin-discount-guidance" id="seedDiscountGuidance" role="status" aria-live="polite"></div>
             <div class="coin-quick-grid">${seedButtons}</div>
             <div class="badge" style="justify-self:start">100 seeds = ${moneyUSD(prices.seeds100)}</div>
           </div>
@@ -5291,7 +5639,11 @@
             <div class="depositary-grid">
               <div class="depositary-custom-row">
                 <label for="depositaryCustom">Custom</label>
-                <input id="depositaryCustom" type="number" min="1" max="999" step="1" value="60">
+                <div class="qty-stepper qty-stepper--wide" data-qty-wrap>
+                  <button type="button" class="qty-step qty-step--minus" data-qty-for="depositaryCustom" data-qty-step="-1" aria-label="Decrease slots"></button>
+                  <input id="depositaryCustom" class="qty-stepper-input" type="number" min="1" max="999" step="1" value="60">
+                  <button type="button" class="qty-step qty-step--plus" data-qty-for="depositaryCustom" data-qty-step="1" aria-label="Increase slots"></button>
+                </div>
               </div>
               <div class="depositary-slider-row">
                 <label for="depositarySlots">Quick Slider</label>
@@ -5318,7 +5670,7 @@
           ${weaponBlock("Primary Weapon", "primary")}
           ${weaponBlock("Secondary Weapon", "secondary")}
           <div class="field-block"><h4>Gear</h4><div class="field-grid equal-grid">${qtyField("augmentQty", "Looting Mk. 3 (Survivor) Augment Qty")}${qtyField("shieldQty", "Medium Shield Qty")}</div></div>
-          <div class="field-block"><h4>Quick Use Bundles</h4><div class="field-grid equal-grid">${qtyField("bandageQty", "5x Herbal Bandage")}${qtyField("nadeQty", "3x Trigger Nade")}${qtyField("rechargerQty", "5x Shield Recharger")}${qtyField("surgeRechargerQty", "5x Surge Shield Recharger")}</div></div>
+          <div class="field-block"><h4>Quick Use Bundles</h4><div class="field-grid equal-grid">${loadoutBundleQtyField("bandageQty", "5x Herbal Bandage", 5)}${loadoutBundleQtyField("nadeQty", "3x Trigger Nade", 3)}${loadoutBundleQtyField("rechargerQty", "5x Shield Recharger", 5)}${loadoutBundleQtyField("surgeRechargerQty", "5x Surge Shield Recharger", 5)}</div></div>
         `;
       }
       if (type === "trials") {
@@ -5351,7 +5703,11 @@
               <button class="raid-pill" type="button" data-coach-team="trio"><strong>Trio<small>${moneyUSD(30)} / hour</small></strong></button>
             </div>
           </div>
-          <div><label for="pvpHours">Hours</label><input id="pvpHours" type="number" min="1" max="6" value="1"></div>
+          <div class="qty-field"><label for="pvpHours">Hours</label><div class="qty-stepper" data-qty-wrap>
+            <button type="button" class="qty-step qty-step--minus" data-qty-for="pvpHours" data-qty-step="-1" aria-label="Decrease hours"></button>
+            <input id="pvpHours" class="qty-stepper-input" type="number" min="1" max="6" value="1">
+            <button type="button" class="qty-step qty-step--plus" data-qty-for="pvpHours" data-qty-step="1" aria-label="Increase hours"></button>
+          </div></div>
           <div><label for="coachNotes">Coaching Notes</label><textarea id="coachNotes" placeholder="Tell us what kind of PvP/PvE experience you want, weak points, goals, schedule, or preferred focus."></textarea></div>
           <p class="raid-panel-note">Maximum 6 hours per coaching ticket. Boosters confirm schedule, platform, and exact coaching goals in Discord.</p>
         `;
@@ -5759,8 +6115,27 @@
           dealButtons.forEach(button => button.classList.toggle("active", Number(button.dataset.coinDeal) === amount));
           $("coinDiscountTag").classList.toggle("active", Boolean(tier));
           const next = nextCoinTier(amount);
-          $("coinNextHint").classList.toggle("active", Boolean(next));
-          $("coinNextHint").textContent = next ? `Add ${(next.amount - amount).toLocaleString()} more for ${Math.round(next.discount * 100)}% discount` : "";
+          const guide = $("coinDiscountGuidance");
+          if (guide) {
+            let msg = "";
+            if (tier) {
+              const pct = Math.round(tier.discount * 100);
+              msg = `Discount unlocked: ${pct}% OFF`;
+              if (next) msg += ` · Next: ${Math.round(next.discount * 100)}% OFF at ${next.amount.toLocaleString()} coins`;
+              else msg += " · Highest tier on slider.";
+            } else if (next) {
+              const need = next.amount - amount;
+              msg = `Add ${need.toLocaleString()} more coins for ${Math.round(next.discount * 100)}% OFF (tier at ${next.amount.toLocaleString()})`;
+            } else {
+              msg = "Slide to a ★ pin on the track for bundled savings.";
+            }
+            guide.textContent = msg;
+            guide.classList.toggle("is-unlocked", Boolean(tier));
+          }
+          document.querySelectorAll("#orderForm .coin-tier-marker[data-tier-amount]").forEach(el => {
+            const ta = Number(el.dataset.tierAmount);
+            el.classList.toggle("is-active", Boolean(tier) && amount === ta);
+          });
           $("coinLabel").textContent = amount.toLocaleString();
           updateTotal();
         };
@@ -5780,8 +6155,27 @@
           dealButtons.forEach(button => button.classList.toggle("active", Number(button.dataset.seedDeal) === amount));
           $("seedDiscountTag").classList.toggle("active", Boolean(tier));
           const next = nextSeedTier(amount);
-          $("seedNextHint").classList.toggle("active", Boolean(next));
-          $("seedNextHint").textContent = next ? `Add ${(next.amount - amount).toLocaleString()} more for ${Math.round(next.discount * 100)}% discount` : "";
+          const guide = $("seedDiscountGuidance");
+          if (guide) {
+            let msg = "";
+            if (tier) {
+              const pct = Math.round(tier.discount * 100);
+              msg = `Bulk discount unlocked: ${pct}% OFF`;
+              if (next) msg += ` · Next: ${Math.round(next.discount * 100)}% OFF at ${next.amount.toLocaleString()} seeds`;
+              else msg += " · Highest tier on slider.";
+            } else if (next) {
+              const need = next.amount - amount;
+              msg = `Add ${need.toLocaleString()} more seeds for ${Math.round(next.discount * 100)}% OFF (tier at ${next.amount.toLocaleString()})`;
+            } else {
+              msg = "Slide to a ★ pin for bulk savings.";
+            }
+            guide.textContent = msg;
+            guide.classList.toggle("is-unlocked", Boolean(tier));
+          }
+          document.querySelectorAll("#orderForm .coin-tier-marker[data-seed-tier-amount]").forEach(el => {
+            const ta = Number(el.dataset.seedTierAmount);
+            el.classList.toggle("is-active", Boolean(tier) && amount === ta);
+          });
           $("seedLabel").textContent = amount.toLocaleString();
           updateTotal();
         };
@@ -5850,6 +6244,7 @@
         input.addEventListener("input", updateTotal);
         input.addEventListener("change", updateTotal);
       });
+      wireQtySteppers(bindRoot);
     }
 
     function wireRaidForm() {
@@ -6613,21 +7008,32 @@
       const secondary = calcWeapon("secondary");
       const bundleSize = Math.max(0, num("loadoutBundle"));
       const bundleExtra = bundleSize ? (bundleSize * prices.augment) + (bundleSize * prices.shield) + ((bundleSize * 5) / 5 * prices.rechargerBundle) + ((bundleSize * 5) / 5 * prices.bandageBundle) : 0;
-      const extras = [
-        ["Looting Mk. 3 (Survivor) Augment", num("augmentQty"), prices.augment],
-        ["Medium Shield", num("shieldQty"), prices.shield],
-        ["5x Herbal Bandage Bundle", num("bandageQty"), prices.bandageBundle],
-        ["3x Trigger Nade Bundle", num("nadeQty"), prices.nadeBundle],
-        ["5x Shield Recharger Bundle", num("rechargerQty"), prices.rechargerBundle],
-        ["5x Surge Shield Recharger Bundle", num("surgeRechargerQty"), prices.surgeRechargerBundle]
-      ];
-      const total = primary.total + secondary.total + bundleExtra + extras.reduce((sum, [, qty, price]) => sum + Math.max(0, qty) * price, 0);
-      const details = [
+      const augmentQty = Math.max(0, num("augmentQty"));
+      const shieldQty = Math.max(0, num("shieldQty"));
+      const bandageBundles = Math.max(0, num("bandageQty"));
+      const nadeBundles = Math.max(0, num("nadeQty"));
+      const rechargerBundles = Math.max(0, num("rechargerQty"));
+      const surgeBundles = Math.max(0, num("surgeRechargerQty"));
+      const extrasSubtotal =
+        augmentQty * prices.augment +
+        shieldQty * prices.shield +
+        bandageBundles * prices.bandageBundle +
+        nadeBundles * prices.nadeBundle +
+        rechargerBundles * prices.rechargerBundle +
+        surgeBundles * prices.surgeRechargerBundle;
+      const total = primary.total + secondary.total + bundleExtra + extrasSubtotal;
+      const detailParts = [
         bundleSize ? `Special Bundle: ${bundleSize}x\nBundle Items: ${bundleSize}x ${primary.weapon}, ${bundleSize}x Looting Mk. 3 (Survivor) Augment, ${bundleSize}x Medium Shield, ${bundleSize * 5}x Shield Recharger, ${bundleSize * 5}x Herbal` : "",
         weaponDetail("Primary", primary),
         weaponDetail("Secondary", secondary),
-        ...extras.filter(([, qty]) => qty > 0).map(([name, qty]) => `${qty}x ${name}`)
-      ].filter(Boolean).join("\n") || "No loadout items selected";
+        augmentQty > 0 ? `${augmentQty}x Looting Mk. 3 (Survivor) Augment` : "",
+        shieldQty > 0 ? `${shieldQty}x Medium Shield` : "",
+        loadoutBundleDetailLine(bandageBundles, 5, "Herbal Bandage"),
+        loadoutBundleDetailLine(nadeBundles, 3, "Trigger Nade"),
+        loadoutBundleDetailLine(rechargerBundles, 5, "Shield Recharger"),
+        loadoutBundleDetailLine(surgeBundles, 5, "Surge Shield Recharger")
+      ];
+      const details = detailParts.filter(Boolean).join("\n") || "No loadout items selected";
       return { total, valid: total > 0, details };
     }
 
@@ -6699,6 +7105,7 @@
         }
       }
       if (vForm) syncValorantPathRail();
+      syncLoadoutQuickBundleHints();
     }
 
     function clearServiceForm() {
