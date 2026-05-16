@@ -1,8 +1,3 @@
-    function setCopyStatus(text) {
-      const el = $("copyStatus");
-      if (el) el.textContent = text;
-    }
-
     function calculate() {
       const service = currentService();
       if (!service) return { total: 0, valid: false, details: "", custom: false, estimated: false };
@@ -258,15 +253,12 @@
 
     function updateTotal() {
       const wrap = $("orderSummaryTotal");
-      const liveEl = $("liveTotal");
-      const usdEl = $("usdHint");
-      const atc = $("addToCart");
       const svc = currentService();
       if (!svc) {
         if (wrap) wrap.classList.add("summary-total--idle");
-        if (liveEl) liveEl.textContent = ui("Select a service to build your order.");
-        if (usdEl) usdEl.textContent = "";
-        if (atc) atc.disabled = true;
+        $("liveTotal").textContent = ui("Select a service to build your order.");
+        $("usdHint").textContent = "";
+        $("addToCart").disabled = true;
         const br = $("arcPriceBreakdown");
         if (br) {
           br.hidden = true;
@@ -281,59 +273,14 @@
       }
       if (wrap) wrap.classList.remove("summary-total--idle");
       const result = calculate();
-      const incomplete =
-        !result.valid &&
-        !result.custom &&
-        !result.contactOnly &&
-        Number(result.total) === 0;
-      if (incomplete) {
-        if (wrap) wrap.classList.add("summary-total--idle");
-        if (liveEl) liveEl.textContent = ui("Complete the options above to see your total.");
-        if (usdEl) usdEl.textContent = "";
-        if (atc) atc.disabled = true;
-        const br = $("arcPriceBreakdown");
-        if (br) {
-          br.hidden = true;
-          br.innerHTML = "";
-        }
-        const arcPrev = $("arcOrderSummaryPreview");
-        if (arcPrev) {
-          arcPrev.hidden = true;
-          arcPrev.innerHTML = "";
-        }
-        const dl = $("valorantSummaryDl");
-        const noteEl = $("valorantSummaryNote");
-        const valRbHint = $("valRbHint");
-        if (valRbHint) {
-          if (result.valorantValRbError) {
-            valRbHint.hidden = false;
-            valRbHint.textContent = result.valorantValRbError;
-          } else {
-            valRbHint.hidden = true;
-            valRbHint.textContent = "";
-          }
-        }
-        if (dl && Array.isArray(result.valorantRows)) dl.innerHTML = "";
-        if (noteEl) {
-          noteEl.textContent = "";
-          noteEl.hidden = true;
-        }
-        if (svc?.form && String(svc.form).startsWith("valorant-") && typeof syncValorantPathRail === "function") {
-          syncValorantPathRail();
-        }
-        return;
-      }
-      if (wrap) wrap.classList.remove("summary-total--idle");
       const vForm = svc?.form && String(svc.form).startsWith("valorant-");
       const old = result.oldTotal && result.oldTotal > result.total ? `<span class="old-total">${displayMoney(result.oldTotal)}</span>` : "";
       const estTag = result.estimated ? `<span class="estimated-tag">Estimated</span>` : "";
       const customFace = result.custom && vForm ? "Custom Price" : "CUSTOM";
-      if (liveEl) liveEl.innerHTML = result.custom ? customFace : old + displayMoney(result.total) + estTag;
-      if (usdEl) {
-        usdEl.textContent = result.custom
-          ? (vForm ? "Custom Price — contact for final quote" : "Ticket value: CUSTOM")
-          : (result.estimated ? "Estimated ticket value: " : "Ticket value: ") + moneyUSD(result.total) + " USD";
-      }
+      $("liveTotal").innerHTML = result.custom ? customFace : old + displayMoney(result.total) + estTag;
+      $("usdHint").textContent = result.custom
+        ? (vForm ? "Custom Price — contact for final quote" : "Ticket value: CUSTOM")
+        : (result.estimated ? "Estimated ticket value: " : "Ticket value: ") + moneyUSD(result.total) + " USD";
       const br = $("arcPriceBreakdown");
       if (br) {
         if (result.arcPriceBreakdown && result.arcPriceBreakdown.rows && result.arcPriceBreakdown.rows.length) {
@@ -371,10 +318,8 @@
           arcPrev.innerHTML = "";
         }
       }
-      if (atc) {
-        atc.disabled = !result.valid;
-        atc.textContent = ui(result.contactOnly || (vForm && result.custom) ? "Contact Us" : "Add to Cart");
-      }
+      $("addToCart").disabled = !result.valid;
+      $("addToCart").textContent = ui(result.contactOnly || (vForm && result.custom) ? "Contact Us" : "Add to Cart");
       const dl = $("valorantSummaryDl");
       const noteEl = $("valorantSummaryNote");
       const valRbHint = $("valRbHint");
@@ -409,9 +354,6 @@
     }
 
     function clearServiceForm() {
-      state.serviceId = null;
-      if (typeof renderCategories === "function") renderCategories();
-      if (typeof renderServices === "function") renderServices();
       renderDetail();
       showToast("Service form cleared.");
     }
@@ -737,36 +679,31 @@
 
     function renderCart() {
       const lineCount = state.cart.reduce((n, item) => n + (item.qty || 1), 0);
-      const cartCountEl = $("cartCount");
-      const cartBodyEl = $("cartBody");
-      const clearEl = $("clearCart");
-      if (cartCountEl) cartCountEl.textContent = String(lineCount);
+      $("cartCount").textContent = String(lineCount);
       document.querySelector("#cartBackdrop .drawer")?.classList.toggle("drawer--wide", Boolean(state.cart.length));
-      if (clearEl) clearEl.disabled = !state.cart.length;
+      $("clearCart").disabled = !state.cart.length;
       const hasArcItems = state.cart.some(item => item.game === "Arc Raiders");
       if (!state.cart.length) {
         state.arcId = "";
         state.arcIdSkipped = false;
         state.clearCartConfirmUntil = 0;
         state.orderPreviewId = "";
-        if (cartBodyEl) {
-          cartBodyEl.innerHTML = `
+        $("cartBody").innerHTML = `
           <div class="cart-empty-card">
             <div class="cart-empty-icon" aria-hidden="true">✦</div>
             <p class="cart-empty-title">${escapeHtml(ui("Your order is empty"))}</p>
             <p class="cart-empty-sub">${escapeHtml(ui("Choose a service to build your Discord ticket."))}</p>
-            <button type="button" class="btn btn-premium" id="browsePopularServices">${escapeHtml(ui("Browse services"))}</button>
+            <button type="button" class="btn btn-premium" id="browsePopularServices">${escapeHtml(ui("Browse popular services"))}</button>
             <button type="button" class="btn btn-glass cart-empty-secondary" id="continueShoppingEmpty">${escapeHtml(ui("Continue browsing"))}</button>
           </div>`;
-          const bp = $("browsePopularServices");
-          if (bp) bp.addEventListener("click", () => {
-            closeCart();
-            selectGame("arc");
-            requestAnimationFrame(() => $("serviceHead")?.scrollIntoView({ behavior: "smooth", block: "start" }));
-          });
-          const c0 = $("continueShoppingEmpty");
-          if (c0) c0.addEventListener("click", continueShopping);
-        }
+        const bp = $("browsePopularServices");
+        if (bp) bp.addEventListener("click", () => {
+          closeCart();
+          selectGame("arc");
+          requestAnimationFrame(() => $("popularHead")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+        });
+        const c0 = $("continueShoppingEmpty");
+        if (c0) c0.addEventListener("click", continueShopping);
       } else {
         if (!hasArcItems) {
           state.arcId = "";
@@ -852,35 +789,32 @@
             <div class="cart-continue-wrap order-lines-continue"><button type="button" class="btn-continue" id="continueShoppingCart">${escapeHtml(ui("Continue shopping"))}</button></div>
             <div id="cartCheckoutDock" class="cart-checkout-dock" aria-label="${escapeHtml(ui("Checkout"))}"></div>
           </div>`;
-        if (cartBodyEl) {
-          cartBodyEl.innerHTML = `<div class="order-center">${leftCol}${rightCol}</div>`;
-          document.querySelectorAll("[data-remove]").forEach(button => button.addEventListener("click", () => {
-            state.cart = state.cart.filter(item => item.id !== button.dataset.remove);
-            if (!state.cart.length) state.orderPreviewId = "";
-            persistOrderState();
-            renderCart();
-          }));
-          document.querySelectorAll("[data-adjust]").forEach(button => button.addEventListener("click", () => adjustCartItem(button.dataset.adjust)));
-          document.querySelectorAll("[data-cart-qty-delta]").forEach(button => {
-            button.addEventListener("click", () => {
-              if (button.disabled) return;
-              adjustCartLineQty(button.dataset.cartQtyId, Number(button.dataset.cartQtyDelta));
-            });
+        $("cartBody").innerHTML = `<div class="order-center">${leftCol}${rightCol}</div>`;
+        document.querySelectorAll("[data-remove]").forEach(button => button.addEventListener("click", () => {
+          state.cart = state.cart.filter(item => item.id !== button.dataset.remove);
+          if (!state.cart.length) state.orderPreviewId = "";
+          persistOrderState();
+          renderCart();
+        }));
+        document.querySelectorAll("[data-adjust]").forEach(button => button.addEventListener("click", () => adjustCartItem(button.dataset.adjust)));
+        document.querySelectorAll("[data-cart-qty-delta]").forEach(button => {
+          button.addEventListener("click", () => {
+            if (button.disabled) return;
+            adjustCartLineQty(button.dataset.cartQtyId, Number(button.dataset.cartQtyDelta));
           });
-          const c1 = $("continueShoppingCart");
-          if (c1) c1.addEventListener("click", continueShopping);
-          $("cartEmbarkEditBtn")?.addEventListener("click", () => openArcIdModal(null));
-          bindOrderSummaryContext();
-        }
+        });
+        const c1 = $("continueShoppingCart");
+        if (c1) c1.addEventListener("click", continueShopping);
+        $("cartEmbarkEditBtn")?.addEventListener("click", () => openArcIdModal(null));
+        bindOrderSummaryContext();
       }
       const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
       const hasCustom = state.cart.some(item => item.custom);
       const sameCurrency = state.cart.length && state.cart.every(item => item.viewedCurrency === state.cart[0].viewedCurrency);
       const cartCurrency = sameCurrency ? state.cart[0].viewedCurrency : state.currency;
       const totalEl = $("cartTotal");
-      const usdHintEl = $("cartUsdHint");
       if (state.cart.length) {
-        if (totalEl && lastCartMonetaryTotal !== null && lastCartMonetaryTotal !== total) {
+        if (lastCartMonetaryTotal !== null && lastCartMonetaryTotal !== total) {
           totalEl.classList.remove("cart-total-pulse");
           void totalEl.offsetWidth;
           totalEl.classList.add("cart-total-pulse");
@@ -890,8 +824,8 @@
       } else {
         lastCartMonetaryTotal = null;
       }
-      if (totalEl) totalEl.textContent = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
-      if (usdHintEl) usdHintEl.textContent = hasCustom ? "Ticket total: " + displayInCurrency(total, cartCurrency) + " + CUSTOM" : "Ticket total: " + displayInCurrency(total, cartCurrency);
+      totalEl.textContent = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
+      $("cartUsdHint").textContent = hasCustom ? "Ticket total: " + displayInCurrency(total, cartCurrency) + " + CUSTOM" : "Ticket total: " + displayInCurrency(total, cartCurrency);
       updateCartFootAlerts();
       syncClearCartButton();
       applyDrawerCompactClass();
@@ -909,7 +843,7 @@
         state.cart = [];
         state.orderPreviewId = "";
         renderCart();
-        setCopyStatus("Cart cleared.");
+        $("copyStatus").textContent = "Cart cleared.";
         showToast("Cart cleared.");
         return;
       }
@@ -925,28 +859,19 @@
     }
 
     function escapeHtml(text) {
-      return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+      return String(text).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
     }
 
     function openCart() {
       renderCart();
-      const bd = $("cartBackdrop");
-      if (!bd) return;
-      bd.classList.add("active");
-      bd.setAttribute("aria-hidden", "false");
+      $("cartBackdrop").classList.add("active");
+      $("cartBackdrop").setAttribute("aria-hidden", "false");
       document.body.classList.add("cart-open");
     }
 
     function closeCart() {
-      const bd = $("cartBackdrop");
-      if (!bd) return;
-      bd.classList.remove("active");
-      bd.setAttribute("aria-hidden", "true");
+      $("cartBackdrop").classList.remove("active");
+      $("cartBackdrop").setAttribute("aria-hidden", "true");
       document.body.classList.remove("cart-open");
     }
 
@@ -1070,12 +995,12 @@
 
     async function copyOrder() {
       if (!state.cart.length) {
-        setCopyStatus(ui("Add an item before copying."));
+        $("copyStatus").textContent = ui("Add an item before copying.");
         return;
       }
       const v = validateTicketRequirements();
       if (!v.ok) {
-        setCopyStatus(v.message);
+        $("copyStatus").textContent = v.message;
         showToast(v.message, 3800, true);
         return;
       }
@@ -1272,12 +1197,12 @@
       const text = ticketText();
       const statusEl = $("copyStatus");
       const ok = () => {
-        if (statusEl) statusEl.textContent = ui("Ticket copied successfully. Open Discord and paste it into your order ticket.");
+        statusEl.textContent = ui("Ticket copied successfully. Open Discord and paste it into your order ticket.");
         showToast(ui("Ticket copied."), 2600, false);
         openCopySuccessModal();
       };
       const fail = () => {
-        if (statusEl) statusEl.textContent = ui("Copy failed. Try Download Receipt Image or copy the ticket manually.");
+        statusEl.textContent = ui("Copy failed. Try Download Receipt Image or copy the ticket manually.");
         showToast(ui("Copy failed."), 3200, true);
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1295,25 +1220,25 @@
       const statusEl = $("copyStatus");
       const gate = orderReceiptBlockedMessage();
       if (gate) {
-        if (statusEl) statusEl.textContent = gate;
+        statusEl.textContent = gate;
         showToast(gate, 3400, true);
         return;
       }
-      if (statusEl) statusEl.textContent = ui("Generating receipt image...");
+      statusEl.textContent = ui("Generating receipt image...");
       try {
         const canvas = await drawPremiumOrderReceiptCanvas();
         downloadCanvasAsPng(canvas, receiptFilenameFromPreviewId());
-        if (statusEl) statusEl.textContent = ui("Receipt downloaded. Attach it to your Discord ticket if asked.");
+        statusEl.textContent = ui("Receipt downloaded. Attach it to your Discord ticket if asked.");
         showToast(ui("Receipt downloaded."), 2600, false);
         try {
           if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
             const blob = await canvasToBlob(canvas, "image/png");
             await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-            if (statusEl) statusEl.textContent = ui("Receipt downloaded and copied — paste the image into Discord if needed.");
+            statusEl.textContent = ui("Receipt downloaded and copied — paste the image into Discord if needed.");
           }
         } catch (_) {}
       } catch (e) {
-        if (statusEl) statusEl.textContent = ui("Could not generate receipt. Try again or copy the text ticket.");
+        statusEl.textContent = ui("Could not generate receipt. Try again or copy the text ticket.");
         showToast(ui("Receipt generation failed."), 3200, true);
       }
     }
@@ -1335,7 +1260,7 @@
 
     function openDiscordTicket() {
       if (!state.cart.length) {
-        setCopyStatus("Add an item before opening Discord.");
+        $("copyStatus").textContent = "Add an item before opening Discord.";
         return;
       }
       ensureArcId(() => window.open(DISCORD_URL, "_blank", "noopener"));
@@ -1343,7 +1268,6 @@
 
     function showToast(message, ms = 2200, isError = false) {
       const el = $("toast");
-      if (!el) return;
       el.textContent = message;
       el.classList.toggle("toast--error", Boolean(isError));
       el.classList.add("active");
@@ -1419,7 +1343,8 @@
       state.game = entry.gameId || "arc";
       state.category = entry.categoryId;
       if (entry.type === "category") {
-        state.serviceId = null;
+        const g = games.find(x => x.id === state.game);
+        state.serviceId = g?.services.find(s => s.category === state.category)?.id ?? null;
       } else {
         state.serviceId = entry.serviceId;
       }

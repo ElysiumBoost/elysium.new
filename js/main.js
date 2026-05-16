@@ -1,9 +1,3 @@
-    const $ =
-      typeof window.$ === "function"
-        ? window.$
-        : function elyDomId(id) {
-            return document.getElementById(id);
-          };
     const MUSIC_PREF_KEY = "elyBoostMusicPrefV1";
     const bgMusic = $("bgMusic");
     const audioToggle = $("audioToggle");
@@ -77,6 +71,7 @@
         const label = state.currency === "USD" ? "USD" : state.currency === "EUR" ? "EUR" : state.currency === "GBP" ? "GBP" : state.currency === "TRY" ? "TRY" : state.currency;
         showToast(`Currency updated to ${label}`, 1800, false);
         if (state.game) {
+          renderPopular();
           renderServices();
           updateTotal();
         } else {
@@ -227,7 +222,7 @@
           const game = games.find(g => g.id === id);
           state.game = id;
           state.category = game.categories[0]?.id || "services";
-          state.serviceId = null;
+          state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
           renderAll();
         }
       } else if (!id) {
@@ -240,3 +235,4 @@
       }
     });
     renderAll();
+    startOrderFeed();

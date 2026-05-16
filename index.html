@@ -1,5 +1,4 @@
 ﻿<!doctype html>
-<!-- ElysiumBoost stability cleanup 2026-05-16 -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -17,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=recovery-arc-val-working1">
+  <link rel="stylesheet" href="css/styles.css">
 
 </head>
 <body>
@@ -60,15 +59,10 @@
     </div>
   </header>
 
-  <div class="category-bar hidden" id="categoryBar">
+  <div class="category-bar" id="categoryBar">
     <div class="shell category-shell">
       <button class="btn cat-arrow" id="catPrev" type="button" aria-label="Previous categories">&lsaquo;</button>
-      <div class="category-scroll-stack">
-        <div class="category-scroll" id="categoryScroll"></div>
-        <div class="category-scroll-progress" id="categoryScrollProgress" aria-hidden="true">
-          <div class="category-scroll-progress__fill" id="categoryScrollProgressFill"></div>
-        </div>
-      </div>
+      <div class="category-scroll" id="categoryScroll"></div>
       <button class="btn cat-arrow" id="catNext" type="button" aria-label="Next categories">&rsaquo;</button>
     </div>
   </div>
@@ -216,6 +210,14 @@
 
     <section class="main service-content hidden" id="serviceContent">
       <div class="shell">
+        <div class="quick-head" id="popularHead">
+          <div>
+            <h2 id="popularTitle">Popular Orders</h2>
+            <p id="popularCopy">Fast-start services customers usually choose first.</p>
+          </div>
+        </div>
+        <div class="popular-grid" id="popularGrid"></div>
+
         <div class="section-head" id="serviceHead">
           <div>
             <h2 id="serviceTitle">Services</h2>
@@ -231,7 +233,7 @@
                 <div class="detail-icon" id="detailIcon"></div>
                 <div>
                   <h2 id="detailTitle">Service Details</h2>
-                  <div class="rating rating--premium" id="detailRating" hidden>
+                  <div class="rating rating--premium">
                     <span class="rating-score" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
                     <span class="rating-text">4.9/5 Discord Support</span>
                   </div>
@@ -243,6 +245,7 @@
             <div id="valorantConfiguratorMount" class="valorant-cfg-mount" hidden></div>
             <div class="detail-left-meta" id="detailLeftMeta">
               <div class="detail-steps" id="detailSteps"></div>
+              <div class="order-feed" id="orderFeed" aria-live="polite"></div>
               <div class="detail-highlights-wrap" id="detailHighlights" hidden></div>
               <div class="detail-val-trust" id="detailValorantTrust" hidden></div>
             </div>
@@ -371,14 +374,14 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="js/config.js?v=recovery-arc-val-working1"></script>
-  <script src="js/products.js?v=recovery-arc-val-working1"></script>
-  <script src="js/state.js?v=recovery-arc-val-working1"></script>
-  <script src="js/storage.js?v=recovery-arc-val-working1"></script>
-  <script src="js/validation.js?v=recovery-arc-val-working1"></script>
-  <script src="js/cart.js?v=recovery-arc-val-working1"></script>
-  <script src="js/ui.js?v=recovery-arc-val-working1"></script>
-  <script src="js/main.js?v=recovery-arc-val-working1"></script>
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
 
 </body>
 </html>

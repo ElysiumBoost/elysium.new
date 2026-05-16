@@ -1,6 +1,6 @@
 ELYSIUMBOOST BACKGROUND MAP
 
-Use these files in your /assets folder:
+Use these files in `assets/backgrounds/`:
 
 1) elysium-home-mainmenu-bg.webp
    Use for: Main homepage / main menu hero background
@@ -28,6 +28,3 @@ Use these files in your /assets folder:
 
 9) fallback-purple-bg.webp
    Use for: secondary generic section background / fallback hero / shared premium backup background
-
-10) High-res reference art (optional; paths under this folder only):
-    bg-arc-4k.webp, bg-elysium-4k.webp, bg-lol-4k.webp, bg-valorant-4k.webp

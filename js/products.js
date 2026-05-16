@@ -45,6 +45,41 @@
     }
 
 
+    const recentOrders = [
+      { label: "20x Tempest Weapon Bundle",          service: "guns",       category: "guns",       type: "item" },
+      { label: "Anvil Blueprint",                     service: "blueprints", category: "blueprints", type: "blueprint" },
+      { label: "Bobcat Blueprint",                    service: "blueprints", category: "blueprints", type: "blueprint" },
+      { label: "Tempest Blueprint",                   service: "blueprints", category: "blueprints", type: "blueprint" },
+      { label: "Vulcano Blueprint",                   service: "blueprints", category: "blueprints", type: "blueprint" },
+      { label: "Venator Blueprint",                   service: "blueprints", category: "blueprints", type: "blueprint" },
+      { label: "Looting Mk.3 Survivor Blueprint",     service: "blueprints", category: "blueprints", type: "blueprint" },
+      { label: "20x Bobcat Weapon Bundle",            service: "guns",       category: "guns",       type: "item" },
+      { label: "10x Bobcat + 10x Vulcano Bundle",     service: "guns",       category: "guns",       type: "item" },
+      { label: "3M Discounted Raider Coins",          service: "coins",      category: "coins",      type: "currency" },
+      { label: "4x Raid Boost",                       service: "raid",       category: "raids",      type: "service" },
+      { label: "6M Discounted Raider Coins",          service: "coins",      category: "coins",      type: "currency" },
+      { label: "20x Looting Mk.3 Survivor Augment",   service: "loadout",    category: "loadouts",   type: "item" },
+      { label: "20x Medium Shield",                   service: "loadout",    category: "loadouts",   type: "item" },
+      { label: "100x Herbal Bandage",                 service: "loadout",    category: "loadouts",   type: "item" },
+      { label: "2,500 Assorted Seeds",                service: "seeds",      category: "seeds",      type: "currency" },
+      { label: "Trials Boost +3 Rank Up",             service: "trials",     category: "trials",     type: "service" },
+      { label: "Scrappy Level 1 to 5",                service: "workshop",   category: "workshop",   type: "service" },
+      { label: "Expedition Boost",                    service: "expedition", category: "expeditions",type: "service" },
+      { label: "10x Canto Weapon Bundle",             service: "guns",       category: "guns",       type: "item" },
+      { label: "10x Venator Weapon Bundle",           service: "guns",       category: "guns",       type: "item" },
+      { label: "20x Anvil Weapon Bundle",             service: "guns",       category: "guns",       type: "item" },
+      { label: "Extended Medium Mag III Blueprint",   service: "blueprints", category: "blueprints", type: "blueprint" },
+      { label: "Extended Light Mag III Blueprint",    service: "blueprints", category: "blueprints", type: "blueprint" },
+      { label: "75x Trigger Nade Bundle",             service: "loadout",    category: "loadouts",   type: "item" },
+      { label: "9M Discounted Raider Coins",          service: "coins",      category: "coins",      type: "currency" },
+      { label: "12M Discounted Raider Coins",         service: "coins",      category: "coins",      type: "currency" },
+      { label: "Queen Boss Clear",                    service: "boss",       category: "bosses",     type: "service" },
+      { label: "PvP Coaching Session",                service: "pvp",        category: "coaching",   type: "service" }
+    ];
+    let recentOrderTimers = [0, 0, 0];
+    const ORDER_FEED_SLOT_MS = [16000, 10000, 20000];
+    let recentOrderLastBatch = [];
+
     const prices = {
       blueprint: .75,
       coins100k: .25,
