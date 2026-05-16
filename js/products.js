@@ -410,7 +410,8 @@
       }
       const slug = GAME_HASH_SLUGS[gameId];
       if (!slug) return;
-      const next = `#${slug}`;
-      if (location.hash !== next) history.replaceState(null, "", next);
+      const frag = "#" + slug;
+      const nextUrl = base + frag;
+      if (location.hash !== frag) history.replaceState(null, "", nextUrl);
     }
 

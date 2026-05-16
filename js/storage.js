@@ -37,6 +37,34 @@ function cleanStaleCart() {
   if (!state.cart.length) state.orderPreviewId = "";
 }
 
+function sanitizeNavigationState() {
+  try {
+    if (state.game != null && !games.some(g => g.id === state.game)) {
+      state.game = null;
+      state.category = null;
+      state.serviceId = null;
+      return;
+    }
+    if (!state.game) return;
+    const g = games.find(x => x.id === state.game);
+    if (!g) {
+      state.game = null;
+      state.category = null;
+      state.serviceId = null;
+      return;
+    }
+    const catList = g.categories || [];
+    const catIds = new Set(catList.map(c => c.id));
+    if (state.category == null || !catIds.has(state.category)) {
+      state.category = catList[0]?.id || "services";
+    }
+    const inCat = s => s.category === state.category;
+    if (state.serviceId == null || !g.services.some(s => s.id === state.serviceId && inCat(s))) {
+      state.serviceId = g.services.find(s => s.category === state.category)?.id ?? null;
+    }
+  } catch (e) {}
+}
+
 function persistOrderState() {
   try {
     localStorage.setItem(ORDER_STATE_KEY, JSON.stringify({

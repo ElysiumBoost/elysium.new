@@ -210,29 +210,31 @@
 
     updateAudioButton();
     restoreOrderState();
+    sanitizeNavigationState();
     cleanStaleCart();
     persistOrderState();
     restoreGameFromHash();
+    sanitizeNavigationState();
     if (state.game) syncGameHash(state.game);
     window.addEventListener("hashchange", () => {
       closeGameMenu();
       const id = parseGameHash();
-      if (id && games.some(g => g.id === id)) {
-        if (state.game !== id) {
-          const game = games.find(g => g.id === id);
-          state.game = id;
-          state.category = game.categories[0]?.id || "services";
-          state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
-          renderAll();
-        }
-      } else if (!id) {
-        if (state.game) {
+      if (!id) {
+        if (state.game != null || state.category != null || state.serviceId != null) {
           state.game = null;
           state.category = null;
           state.serviceId = null;
           renderAll();
         }
+        return;
       }
+      if (!games.some(g => g.id === id)) return;
+      const game = games.find(g => g.id === id);
+      state.game = id;
+      state.category = game.categories[0]?.id || "services";
+      state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
+      sanitizeNavigationState();
+      renderAll();
     });
 
     window.selectGame = selectGame;
