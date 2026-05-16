@@ -1676,10 +1676,16 @@
             <div class="valorant-rank-tier-grid">
               <div class="field-block field-block--tight valorant-rank-field">
                 <label for="valRbCurrent">${ui("Current Rank")}</label>
+                <div class="valorant-rank-badge-slot" aria-hidden="true">
+                  <img id="valRbCurrentIcon" class="valorant-rank-badge-img" src="${escapeHtml(valorantRankBadgeUrl("Silver III"))}" alt="" width="96" height="96" decoding="async" loading="eager">
+                </div>
                 <select id="valRbCurrent">${valorantRankOptionsHtml(VALORANT_RANKS, "Silver III")}</select>
               </div>
               <div class="field-block field-block--tight valorant-rank-field">
                 <label for="valRbDesired">${ui("Desired Rank")}</label>
+                <div class="valorant-rank-badge-slot" aria-hidden="true">
+                  <img id="valRbDesiredIcon" class="valorant-rank-badge-img" src="${escapeHtml(valorantRankBadgeUrl("Gold I"))}" alt="" width="96" height="96" decoding="async" loading="eager">
+                </div>
                 <select id="valRbDesired">${valorantRankOptionsHtml(desiredRanks, "Gold I")}</select>
               </div>
             </div>

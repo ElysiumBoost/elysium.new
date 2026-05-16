@@ -28,6 +28,20 @@
       "Ascendant I", "Ascendant II", "Ascendant III", "Immortal I", "Immortal II", "Immortal III"
     ];
 
+    const VALORANT_RANK_BADGE_TIERS = new Set([
+      "iron", "bronze", "silver", "gold", "platinum", "diamond", "ascendant", "immortal", "radiant"
+    ]);
+
+    function valorantRankTierSlug(rankLabel) {
+      const raw = String(rankLabel || "").trim().split(/\s+/)[0] || "";
+      const slug = raw.toLowerCase();
+      return VALORANT_RANK_BADGE_TIERS.has(slug) ? slug : "iron";
+    }
+
+    function valorantRankBadgeUrl(rankLabel) {
+      return "assets/ranks/rank-" + valorantRankTierSlug(rankLabel) + ".webp";
+    }
+
     const VALORANT_RANK_SEGMENT_EUR = [
       4.5, 4.9, 5.5, 5.9, 6.4, 7.2, 7.9, 8.7, 9.9, 11.5, 12.9, 15.5, 18.5, 21.5, 26, 32, 38, 46, 58, 72, 95, 130, 170
     ];

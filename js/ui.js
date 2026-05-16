@@ -251,6 +251,33 @@
       return { total, valid: raidQty > 0, details };
     }
 
+    function syncValorantRankBadgeImages() {
+      const svc = currentService();
+      if (!svc || svc.form !== "valorant-rank-boost") return;
+      const curSel = $("valRbCurrent");
+      const desSel = $("valRbDesired");
+      const curImg = $("valRbCurrentIcon");
+      const desImg = $("valRbDesiredIcon");
+      const apply = (img, rankLabel) => {
+        if (!img) return;
+        const url = valorantRankBadgeUrl(rankLabel);
+        if (img.dataset.elyRankSrc === url) return;
+        img.dataset.elyRankSrc = url;
+        delete img.dataset.fallback;
+        img.alt = "";
+        img.src = url;
+        img.onerror = () => {
+          if (img.dataset.fallback) return;
+          if (valorantRankTierSlug(rankLabel) === "radiant") {
+            img.dataset.fallback = "1";
+            img.src = "assets/ranks/rank-immortal.webp";
+          }
+        };
+      };
+      if (curSel) apply(curImg, curSel.value);
+      if (desSel) apply(desImg, desSel.value);
+    }
+
     function updateTotal() {
       const wrap = $("orderSummaryTotal");
       const svc = currentService();
@@ -349,6 +376,7 @@
       }
       if (vForm) {
         syncValorantPathRail();
+        syncValorantRankBadgeImages();
       }
       syncLoadoutQuickBundleHints();
     }
