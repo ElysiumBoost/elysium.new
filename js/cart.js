@@ -590,6 +590,12 @@
         }).join("");
       }
       document.querySelectorAll("[data-cat]").forEach(button => button.addEventListener("click", event => {
+        if (categoryMotion.blockNextClick) {
+          event.preventDefault();
+          event.stopPropagation();
+          categoryMotion.blockNextClick = false;
+          return;
+        }
         if (categoryMotion.didDrag || categoryMotion.skipClick) {
           event.preventDefault();
           categoryMotion.skipClick = false;
@@ -690,10 +696,33 @@
       $("catNext").onclick = () => move(1);
     }
 
-    const categoryMotion = { bound: false, paused: false, pauseUntil: 0, dragging: false, didDrag: false, skipClick: false, startX: 0, startLeft: 0, targetCat: "", direction: 1, raf: 0 };
+    const categoryMotion = { bound: false, paused: false, pauseUntil: 0, dragging: false, didDrag: false, skipClick: false, blockNextClick: false, startX: 0, startY: 0, startLeft: 0, targetCat: "", direction: 1, raf: 0, progressHideTimer: 0 };
 
     function pauseCategoryAuto(ms = 4000) {
       categoryMotion.pauseUntil = Date.now() + ms;
+    }
+
+    function updateCategoryScrollProgress() {
+      const scroller = $("categoryScroll");
+      const fill = $("categoryScrollProgressFill");
+      if (!scroller || !fill) return;
+      const max = Math.max(1, scroller.scrollWidth - scroller.clientWidth);
+      const p = scroller.scrollLeft / max;
+      fill.style.transform = `scaleX(${Math.min(1, Math.max(0, p))})`;
+    }
+
+    function setCategoryProgressVisible(visible) {
+      const track = $("categoryScrollProgress");
+      if (!track) return;
+      track.classList.toggle("is-visible", visible);
+    }
+
+    function scheduleHideCategoryProgress() {
+      if (categoryMotion.progressHideTimer) clearTimeout(categoryMotion.progressHideTimer);
+      categoryMotion.progressHideTimer = setTimeout(() => {
+        setCategoryProgressVisible(false);
+        categoryMotion.progressHideTimer = 0;
+      }, 420);
     }
 
     function setupCategoryMotion() {
@@ -703,33 +732,54 @@
         scroller.addEventListener("mouseenter", () => { categoryMotion.paused = true; });
         scroller.addEventListener("mouseleave", () => { categoryMotion.paused = false; });
         scroller.addEventListener("wheel", () => pauseCategoryAuto(7000), { passive: true });
+        scroller.addEventListener("scroll", () => {
+          updateCategoryScrollProgress();
+        }, { passive: true });
         scroller.addEventListener("pointerdown", event => {
+          if (event.pointerType === "mouse" && event.button !== 0) return;
+          categoryMotion.blockNextClick = false;
           categoryMotion.dragging = true;
           categoryMotion.didDrag = false;
           categoryMotion.startX = event.clientX;
+          categoryMotion.startY = event.clientY;
           categoryMotion.startLeft = scroller.scrollLeft;
           categoryMotion.targetCat = event.target.closest("[data-cat]")?.dataset.cat || "";
           scroller.classList.add("dragging");
           pauseCategoryAuto(8000);
-          scroller.setPointerCapture?.(event.pointerId);
+          updateCategoryScrollProgress();
+          try {
+            scroller.setPointerCapture(event.pointerId);
+          } catch (e) {}
         });
         scroller.addEventListener("pointermove", event => {
           if (!categoryMotion.dragging) return;
-          const delta = event.clientX - categoryMotion.startX;
-          if (Math.abs(delta) > 5) categoryMotion.didDrag = true;
-          scroller.scrollLeft = categoryMotion.startLeft - delta;
+          const dx = event.clientX - categoryMotion.startX;
+          const dy = event.clientY - categoryMotion.startY;
+          if (Math.hypot(dx, dy) > 8) {
+            if (!categoryMotion.didDrag) setCategoryProgressVisible(true);
+            categoryMotion.didDrag = true;
+          }
+          scroller.scrollLeft = categoryMotion.startLeft - dx;
+          updateCategoryScrollProgress();
         });
         const stopDrag = event => {
-          const shouldSelect = !categoryMotion.didDrag && categoryMotion.targetCat;
+          if (!categoryMotion.dragging) return;
+          const hadDrag = categoryMotion.didDrag;
+          const shouldSelect = !hadDrag && categoryMotion.targetCat;
           categoryMotion.dragging = false;
           scroller.classList.remove("dragging");
-          scroller.releasePointerCapture?.(event.pointerId);
+          try {
+            scroller.releasePointerCapture(event.pointerId);
+          } catch (e) {}
           pauseCategoryAuto(6000);
+          if (hadDrag) categoryMotion.blockNextClick = true;
           if (shouldSelect) {
             categoryMotion.skipClick = true;
             selectCategory(categoryMotion.targetCat);
           }
           categoryMotion.targetCat = "";
+          scheduleHideCategoryProgress();
+          updateCategoryScrollProgress();
         };
         scroller.addEventListener("pointerup", stopDrag);
         scroller.addEventListener("pointercancel", stopDrag);
@@ -779,10 +829,11 @@
 
     function cardMarkup(service, popular) {
       const serviceVisual = categoryArtwork(service.category || "custom", service.cardTitle);
+      const activeCard = state.serviceId === service.id ? " is-active" : "";
       const priceBlock = `${(service.valorantCustomPrice || service.form === "valorant-radiant") ? "" : "<small>From</small>"}${servicePrice(service)}`;
       if (popular) {
         return `
-          <article class="popular-card">
+          <article class="popular-card${activeCard}">
             <span class="popular-badge">${ui("Best seller")}</span>
             <div class="popular-card__inner">
               <div class="popular-card__media"><span class="category-thumb">${serviceVisual}</span></div>
@@ -798,7 +849,7 @@
         `;
       }
       return `
-        <article class="service-card">
+        <article class="service-card${activeCard}">
           <div class="service-card__media"><span class="category-thumb">${serviceVisual}</span></div>
           <div class="service-card__body">
             <h3>${ui(service.cardTitle)}</h3>
