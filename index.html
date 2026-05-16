@@ -2388,92 +2388,143 @@
       gap: 10px;
     }
 
-    .valorant-rank-row {
+    .valorant-rank-boost .valorant-rank-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      align-items: stretch;
     }
 
     @media (max-width: 520px) {
-      .valorant-rank-row {
+      .valorant-rank-boost .valorant-rank-row {
         grid-template-columns: 1fr;
       }
     }
 
-    .valorant-rank-card {
-      padding: 12px 12px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(124, 77, 255, .34);
+    .valorant-rank-boost .valorant-rank-card {
+      padding: 14px 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(124, 77, 255, .32);
       background:
-        linear-gradient(180deg, rgba(18, 21, 38, .5), rgba(7, 10, 18, .78));
+        linear-gradient(165deg, rgba(18, 21, 38, .94), rgba(7, 10, 18, .96));
       box-shadow:
-        0 12px 32px rgba(0, 0, 0, .22),
-        inset 0 1px 0 rgba(255, 255, 255, .05);
+        0 14px 40px rgba(0, 0, 0, .3),
+        inset 0 1px 0 rgba(255, 255, 255, .06),
+        0 0 40px rgba(124, 77, 255, .05);
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
       min-width: 0;
+      min-height: 100%;
     }
 
-    .valorant-rank-card-visual {
+    .valorant-rank-boost .valorant-rank-card-visual {
       position: relative;
+      flex: 0 0 auto;
+      border-radius: 0;
+      overflow: visible;
+    }
+
+    .valorant-rank-boost .valorant-rank-card-thumb {
+      position: relative;
+      width: 100%;
+      height: 104px;
+      border-radius: 12px;
+      padding: 8px 12px;
+      box-sizing: border-box;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 72px;
-      border-radius: 10px;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 40%, rgba(124, 77, 255, .14), transparent 70%),
+        linear-gradient(180deg, #060b12 0%, #0c121c 48%, #090d16 100%);
+      border: 1px solid rgba(124, 77, 255, .3);
+      box-shadow:
+        inset 0 0 0 1px rgba(0, 0, 0, .5),
+        inset 0 1px 0 rgba(255, 255, 255, .05),
+        0 12px 32px rgba(0, 0, 0, .35);
       overflow: hidden;
     }
 
-    .valorant-rank-card-visual::after {
+    .valorant-rank-boost .valorant-rank-card-thumb::after {
       content: "";
       position: absolute;
       inset: 0;
       z-index: 2;
       pointer-events: none;
       border-radius: inherit;
-      background: linear-gradient(180deg, transparent 38%, rgba(7, 10, 18, .52));
+      background:
+        radial-gradient(ellipse 90% 85% at 50% 42%, transparent 35%, rgba(7, 10, 18, .72) 100%),
+        linear-gradient(180deg, rgba(7, 10, 18, .12), transparent 40%, rgba(7, 10, 18, .35));
     }
 
-    .valorant-rank-card-ph {
-      width: 100%;
-      min-height: 72px;
+    .valorant-rank-boost .valorant-rank-card-ph {
+      position: absolute;
+      inset: 7px;
+      width: auto;
+      height: auto;
+      min-height: 0;
       border-radius: 10px;
       background:
-        radial-gradient(circle at 30% 25%, rgba(0, 212, 255, .12), transparent 55%),
-        linear-gradient(145deg, rgba(124, 77, 255, .22), rgba(7, 10, 18, .88));
-      border: 1px solid rgba(124, 77, 255, .26);
-      box-shadow: inset 0 0 22px rgba(0, 0, 0, .22);
+        radial-gradient(circle at 50% 36%, rgba(0, 212, 255, .09), transparent 52%),
+        linear-gradient(145deg, rgba(124, 77, 255, .12), rgba(6, 9, 15, .94));
+      border: 1px dashed rgba(124, 77, 255, .2);
+      box-shadow: inset 0 0 24px rgba(0, 0, 0, .4);
     }
 
-    .valorant-rank-card-img {
+    .valorant-rank-boost .valorant-rank-card-img {
       position: relative;
       z-index: 1;
-      width: 100%;
-      height: 72px;
+      max-width: 100%;
+      max-height: 88px;
+      width: auto;
+      height: auto;
       object-fit: contain;
       object-position: center center;
       display: none;
-      border-radius: 10px;
-      background: rgba(7, 10, 18, .4);
+      filter: drop-shadow(0 5px 18px rgba(0, 0, 0, .55));
     }
 
-    .valorant-rank-card label {
-      color: #dcd6ff;
-      font-size: 10px;
-      letter-spacing: .08em;
+    .valorant-rank-boost .valorant-rank-card label {
+      color: rgba(200, 210, 235, .92);
+      font-size: 9px;
+      letter-spacing: .12em;
       text-transform: uppercase;
-      font-weight: 700;
+      font-weight: 800;
+      line-height: 1.2;
+      margin: 0;
+      padding: 0 1px;
     }
 
-    .valorant-rank-card select {
+    .valorant-rank-boost .valorant-rank-card select {
       width: 100%;
       border-radius: 10px;
-      border: 1px solid rgba(124, 77, 255, .45);
-      background: rgba(22, 18, 52, .94);
-      min-height: 42px;
-      font-size: 13px;
+      border: 1px solid rgba(124, 77, 255, .38);
+      background: rgba(14, 17, 28, .96);
+      min-height: 40px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .02em;
+      line-height: 1.25;
       color: var(--text);
+    }
+
+    .valorant-path-rail--rank-boost .valorant-path-rank {
+      font-size: 10px;
+      font-weight: 750;
+      letter-spacing: .06em;
+      line-height: 1.2;
+      max-width: min(148px, 42vw);
+      overflow-wrap: normal;
+      word-break: normal;
+      hyphens: none;
+    }
+
+    @media (max-width: 400px) {
+      .valorant-path-rail--rank-boost .valorant-path-rank {
+        max-width: 34vw;
+        font-size: 9px;
+      }
     }
 
     .valorant-inline-kicker {
@@ -6818,8 +6869,9 @@
       wrap.dataset.valorantOrderChrome = "";
       wrap.className = "valorant-order-chrome";
       const customize = valorantOrderChromeCustomizeInner(svc.form);
+      const pathRailExtra = svc.form === "valorant-rank-boost" ? " valorant-path-rail--rank-boost" : "";
       wrap.innerHTML = `
-        <div id="valorantPathRail" class="valorant-path-rail" aria-live="polite"></div>
+        <div id="valorantPathRail" class="valorant-path-rail${pathRailExtra}" aria-live="polite"></div>
         ${customize ? `<section class="valorant-customize-surface" aria-label="${escapeHtml(ui("Customize"))}"><h4 class="valorant-block-kicker">${escapeHtml(ui("Customize"))}</h4>${customize}</section>` : ""}
         <p class="valorant-mini-promo">${escapeHtml(ui("Manual completion · VPN-safe routing · Discord confirmation on every order."))}</p>
         <div class="valorant-summary-panel valorant-summary-panel--sticky">
@@ -7089,19 +7141,28 @@
       if (type === "valorant-rank-boost") {
         const desiredRanks = [...VALORANT_RANKS.slice(1), "Radiant"];
         return `
-        <div class="valorant-configurator">
+        <div class="valorant-configurator valorant-rank-boost">
           ${valorantConfiguratorCompactHeader()}
           <div class="valorant-cfg-stack valorant-cfg-stack--selects">
             <div class="valorant-rank-row">
               <div class="valorant-rank-card" data-valorant-rank-card="current">
                 <div class="valorant-rank-card-visual" aria-hidden="true">
-                  <div class="valorant-rank-card-ph"></div>
-                  <img id="valRbCurrentImg" class="valorant-rank-card-img" alt="" decoding="async" loading="eager" width="140" height="72" />
+                  <div class="valorant-rank-card-thumb">
+                    <div class="valorant-rank-card-ph"></div>
+                    <img id="valRbCurrentImg" class="valorant-rank-card-img" alt="" decoding="async" loading="eager" width="120" height="96" />
+                  </div>
                 </div>
                 <label for="valRbCurrent">${ui("Current Rank")}</label>
                 <select id="valRbCurrent">${valorantRankOptionsHtml(VALORANT_RANKS, "Silver III")}</select>
               </div>
-                  <img id="valRbDesiredImg" class="valorant-rank-card-img" alt="" decoding="async" loading="eager" width="140" height="72" />
+              <div class="valorant-rank-card" data-valorant-rank-card="desired">
+                <div class="valorant-rank-card-visual" aria-hidden="true">
+                  <div class="valorant-rank-card-thumb">
+                    <div class="valorant-rank-card-ph"></div>
+                    <img id="valRbDesiredImg" class="valorant-rank-card-img" alt="" decoding="async" loading="eager" width="120" height="96" />
+                  </div>
+                </div>
+                <label for="valRbDesired">${ui("Desired Rank")}</label>
                 <select id="valRbDesired">${valorantRankOptionsHtml(desiredRanks, "Gold I")}</select>
               </div>
             </div>
