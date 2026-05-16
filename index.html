@@ -1044,7 +1044,7 @@
       min-width: 0;
       min-height: 100%;
       margin: 0;
-      padding: 10px 9px 12px;
+      padding: 16px;
       border: 0;
       cursor: pointer;
       text-align: left;
@@ -1122,44 +1122,45 @@
       z-index: 2;
       display: flex;
       flex-direction: column;
-      gap: 5px;
-      width: 100%;
       align-items: flex-start;
-    }
-
-    .home-combo-half-h {
-      font-family: var(--display);
-      font-size: clamp(11px, 1.35vw, 15px);
-      font-weight: 800;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      color: #f4f0ff;
-      line-height: 1.05;
-      text-shadow: 0 8px 22px rgba(0, 0, 0, .72);
-    }
-
-    .home-combo-half-p {
-      margin: 0;
-      font-size: 10px;
-      line-height: 1.32;
-      font-weight: 650;
-      color: rgba(230, 226, 255, .86);
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      width: 100%;
       max-width: 100%;
     }
 
-    .home-combo-mini.btn.btn-primary {
-      align-self: stretch;
-      width: 100%;
-      min-height: 30px;
-      padding: 0 8px;
-      font-size: 11px;
+    .home-combo-half-h {
+      margin: 0 0 6px;
+      font-family: var(--display);
+      font-size: clamp(20px, 2.6vw, 31px);
+      font-weight: 800;
       letter-spacing: .05em;
-      justify-content: center;
-      margin-top: 2px;
+      text-transform: uppercase;
+      color: #f4f0ff;
+      line-height: .95;
+      text-shadow: 0 9px 24px rgba(0, 0, 0, .72);
+      overflow-wrap: anywhere;
+    }
+
+    .home-combo-half-p {
+      margin: 0 0 13px;
+      font-size: 14px;
+      line-height: 1.45;
+      font-weight: 650;
+      color: #e6e2ff;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      max-width: 420px;
+    }
+
+    .home-game-card .home-combo-mini.btn.btn-primary {
+      align-self: flex-start;
+      width: auto;
+      flex: 0 0 auto;
+      min-height: 40px;
+      padding: 0 13px;
+      margin-top: 0;
+      letter-spacing: .02em;
     }
 
     .disabled-btn {
@@ -3797,8 +3798,8 @@
               <img class="home-combo-half-media" src="${escapeHtml(prem.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
               <span class="home-combo-half-scrim" aria-hidden="true"></span>
               <span class="home-combo-half-content">
-                <span class="home-combo-half-h">${ui("CS2 Premier")}</span>
-                <span class="home-combo-half-p">${escapeHtml(ui(prem.copy))}</span>
+                <h2 class="home-combo-half-h">${ui("CS2 Premier")}</h2>
+                <p class="home-combo-half-p">${escapeHtml(ui("CS2 Premier matchmaking — customize and copy a clean Discord ticket when listings go live."))}</p>
                 <span class="btn btn-primary home-combo-mini">${ui("Select")}</span>
               </span>
             </button>
@@ -3806,8 +3807,8 @@
               <img class="home-combo-half-media" src="${escapeHtml(face.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
               <span class="home-combo-half-scrim" aria-hidden="true"></span>
               <span class="home-combo-half-content">
-                <span class="home-combo-half-h">${ui("CS2 Faceit")}</span>
-                <span class="home-combo-half-p">${escapeHtml(ui(face.copy))}</span>
+                <h2 class="home-combo-half-h">${ui("CS2 Faceit")}</h2>
+                <p class="home-combo-half-p">${escapeHtml(ui("FACEIT CS2 services — build readable orders and paste your ticket when listings appear here."))}</p>
                 <span class="btn btn-primary home-combo-mini">${ui("Select")}</span>
               </span>
             </button>
@@ -3825,8 +3826,8 @@
               <img class="home-combo-half-media" src="${escapeHtml(boost.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
               <span class="home-combo-half-scrim" aria-hidden="true"></span>
               <span class="home-combo-half-content">
-                <span class="home-combo-half-h">${ui("Boost+")}</span>
-                <span class="home-combo-half-p">${escapeHtml(ui(boost.copy))}</span>
+                <h2 class="home-combo-half-h">${ui("Boost+")}</h2>
+                <p class="home-combo-half-p">${escapeHtml(ui("Premium teammate sessions for League, Valorant, and E-Girl packages — Discord-ready orders."))}</p>
                 <span class="btn btn-primary home-combo-mini">${ui("Select")}</span>
               </span>
             </button>
@@ -3834,8 +3835,8 @@
               <img class="home-combo-half-media home-combo-half-media--social" src="${escapeHtml(socialImg)}" alt="" loading="lazy" onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='assets/social.png';return;}this.style.display='none';this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
               <span class="home-combo-half-scrim" aria-hidden="true"></span>
               <span class="home-combo-half-content">
-                <span class="home-combo-half-h">${ui("Social")}</span>
-                <span class="home-combo-half-p">${escapeHtml(ui(soc.copy))}</span>
+                <h2 class="home-combo-half-h">${ui("Social")}</h2>
+                <p class="home-combo-half-p">${escapeHtml(ui("Companion and community services — choose a social pick and send a clear Discord request."))}</p>
                 <span class="btn btn-primary home-combo-mini">${ui("Select")}</span>
               </span>
             </button>
