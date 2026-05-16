@@ -1778,8 +1778,35 @@
       align-items: stretch;
     }
 
+    #detailSection.detail--valorant-layout .detail-left {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 18px;
+    }
+
+    #detailSection.detail--valorant-layout .detail-left-head {
+      flex: 0 0 auto;
+    }
+
+    #detailSection.detail--valorant-layout .detail-left-head .detail-title {
+      margin-bottom: 0;
+    }
+
+    #detailSection.detail--valorant-layout .detail-left-head .detail-title h2 {
+      font-size: clamp(26px, 3.4vw, 38px);
+      font-weight: 800;
+      letter-spacing: .05em;
+      line-height: 1.02;
+      color: #f4f0ff;
+    }
+
+    #detailSection.detail--valorant-layout .detail-left-head .rating {
+      margin-top: 4px;
+    }
+
     #detailSection.detail--valorant-layout .valorant-cfg-mount {
-      margin-bottom: 14px;
+      margin-bottom: 0;
       border-radius: 14px;
       border: 1px solid rgba(155, 104, 255, .4);
       background:
@@ -1789,7 +1816,7 @@
         0 20px 52px rgba(0, 0, 0, .34),
         inset 0 1px 0 rgba(255, 255, 255, .07),
         0 0 42px rgba(122, 77, 255, .12);
-      padding: 12px 12px 14px;
+      padding: 14px 14px 16px;
     }
 
     #detailSection.detail--valorant-layout .valorant-cfg-mount .order-form {
@@ -1801,52 +1828,66 @@
     }
 
     #detailSection.detail--valorant-layout .detail-left-meta {
-      margin-top: 2px;
-    }
-
-    #detailSection.detail--valorant-layout .detail-title h2 {
-      font-size: clamp(22px, 3.1vw, 34px);
+      margin-top: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
     #detailSection.detail--valorant-layout .intro {
+      margin: 0;
       font-size: 13px;
-      font-weight: 600;
-      line-height: 1.48;
-      color: rgba(220, 214, 255, .88);
+      font-weight: 500;
+      line-height: 1.55;
+      color: rgba(183, 176, 223, .95);
+      max-width: 100%;
     }
 
     #detailSection.detail--valorant-layout .detail-highlights-wrap,
     #detailSection.detail--valorant-layout .detail-val-trust {
-      margin-top: 10px;
+      margin-top: 0;
       margin-bottom: 0;
     }
 
     #detailSection.detail--valorant-layout .detail-highlights-wrap h4,
     #detailSection.detail--valorant-layout .detail-val-trust h4 {
-      font-size: 13px;
+      font-size: 12px;
+      letter-spacing: .1em;
     }
 
     #detailSection.detail--valorant-layout .detail-highlights-wrap ul,
     #detailSection.detail--valorant-layout .detail-val-trust p,
     #detailSection.detail--valorant-layout .detail-val-trust ul {
       font-size: 12px;
+      line-height: 1.48;
     }
 
     @media (max-width: 1080px) {
+      #detailSection.detail--valorant-layout {
+        row-gap: 16px;
+      }
       #detailSection.detail--valorant-layout > .detail-left {
         display: contents;
       }
-      #detailSection.detail--valorant-layout .valorant-cfg-mount {
+      #detailSection.detail--valorant-layout .detail-left-head {
         grid-row: 1;
         grid-column: 1;
       }
-      #detailSection.detail--valorant-layout .order-card {
+      #detailSection.detail--valorant-layout .valorant-cfg-mount {
         grid-row: 2;
         grid-column: 1;
       }
-      #detailSection.detail--valorant-layout .detail-left-meta {
+      #detailSection.detail--valorant-layout .order-card {
         grid-row: 3;
         grid-column: 1;
+      }
+      #detailSection.detail--valorant-layout .detail-left-meta {
+        grid-row: 4;
+        grid-column: 1;
+      }
+      #detailSection.detail--valorant-layout .valorant-cfg-mount .order-form {
+        max-height: none;
+        overflow-y: visible;
       }
     }
 
@@ -1856,7 +1897,7 @@
       align-self: start;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
       padding: 14px 14px 16px;
       margin: 0;
       border-top: none;
@@ -1871,6 +1912,15 @@
         0 0 48px rgba(122, 77, 255, .14);
     }
 
+    .detail-highlights-wrap {
+      margin: 12px 0 14px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(172, 146, 255, .28);
+      background: linear-gradient(145deg, rgba(38, 31, 91, .4), rgba(12, 9, 30, .5));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
+    }
+
     .order-card.is-valorant .summary-total small {
       font-family: var(--display);
       letter-spacing: .08em;
@@ -1880,16 +1930,31 @@
     }
 
     .order-card.is-valorant .summary-total #liveTotal {
+      display: block;
       font-family: var(--display);
       font-size: clamp(24px, 3vw, 32px);
       color: var(--gold);
       letter-spacing: .03em;
+      line-height: 1.12;
+      min-height: 1.12em;
+      word-break: break-word;
+      overflow-wrap: anywhere;
     }
 
     .order-card.is-valorant .summary-total #usdHint {
       font-size: 11px;
       color: var(--muted);
       line-height: 1.35;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      max-width: 100%;
+    }
+
+    .order-card.is-valorant .summary-total .btn.btn-green {
+      margin-top: 4px;
+      min-height: 46px;
+      box-sizing: border-box;
+      flex-shrink: 0;
     }
 
     .valorant-order-chrome {
@@ -1948,7 +2013,9 @@
       text-transform: uppercase;
       color: #f0eaff;
       line-height: 1.25;
-      max-width: 140px;
+      max-width: 160px;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .valorant-path-arrow {
@@ -2291,7 +2358,10 @@
       color: var(--text);
       text-align: right;
       font-size: 11px;
-      line-height: 1.35;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      min-width: 0;
     }
 
     .valorant-summary-note {
@@ -2310,21 +2380,6 @@
       gap: 6px;
     }
 
-    @media (max-width: 1080px) {
-      #detailSection.detail--valorant-layout .valorant-cfg-mount .order-form {
-        max-height: none;
-        overflow-y: visible;
-      }
-    }
-
-    .detail-highlights-wrap {
-      margin: 12px 0 14px;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1px solid rgba(172, 146, 255, .28);
-      background: linear-gradient(145deg, rgba(38, 31, 91, .4), rgba(12, 9, 30, .5));
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
-    }
 
     .detail-highlights-wrap h4 {
       margin: 0 0 8px;
@@ -2390,6 +2445,11 @@
       max-height: min(68vh, 680px);
       scrollbar-width: thin;
       scrollbar-color: rgba(172,146,255,.62) rgba(12,8,31,.34);
+    }
+
+    .add-to-cart-main {
+      width: 100%;
+      margin-top: 10px;
     }
 
     .order-panel-head {
@@ -3412,24 +3472,26 @@
 
         <section class="detail" id="detailSection" aria-label="Service details">
           <div class="detail-left">
-            <div id="valorantConfiguratorMount" class="valorant-cfg-mount" hidden></div>
-            <div class="detail-left-meta" id="detailLeftMeta">
-            <div class="detail-title">
-              <div class="detail-icon" id="detailIcon"></div>
-              <div>
-                <h2 id="detailTitle">Service Details</h2>
-                <div class="rating">
-                  <span>Excellent</span>
-                  <span class="stars"><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span></span>
-                  <span>Discord order support</span>
+            <div class="detail-left-head" id="detailLeftHead">
+              <div class="detail-title">
+                <div class="detail-icon" id="detailIcon"></div>
+                <div>
+                  <h2 id="detailTitle">Service Details</h2>
+                  <div class="rating">
+                    <span>Excellent</span>
+                    <span class="stars"><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span></span>
+                    <span>Discord order support</span>
+                  </div>
                 </div>
               </div>
             </div>
-            <p class="intro" id="detailIntro"></p>
-            <div class="detail-highlights-wrap" id="detailHighlights" hidden></div>
-            <div class="detail-val-trust" id="detailValorantTrust" hidden></div>
-            <div class="detail-steps" id="detailSteps"></div>
-            <div class="order-feed" id="orderFeed" aria-live="polite"></div>
+            <div id="valorantConfiguratorMount" class="valorant-cfg-mount" hidden></div>
+            <div class="detail-left-meta" id="detailLeftMeta">
+              <p class="intro" id="detailIntro"></p>
+              <div class="detail-highlights-wrap" id="detailHighlights" hidden></div>
+              <div class="detail-val-trust" id="detailValorantTrust" hidden></div>
+              <div class="detail-steps" id="detailSteps"></div>
+              <div class="order-feed" id="orderFeed" aria-live="polite"></div>
             </div>
           </div>
           <aside class="order-card">
@@ -3440,7 +3502,7 @@
                 <small>Total</small>
                 <span id="liveTotal">$0.00</span>
                 <em id="usdHint">Ticket value: $0.00 USD</em>
-                <button class="btn btn-green" id="addToCart" type="button" style="width:100%;margin-top:12px">Add to Cart</button>
+                <button class="btn btn-green add-to-cart-main" id="addToCart" type="button">Add to Cart</button>
               </div>
             </div>
           </aside>
