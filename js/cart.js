@@ -514,8 +514,8 @@
                 <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
               </span>
             </button>
-            <button type="button" class="home-combo-half" data-home-game="social" aria-label="${escapeHtml(gameAria("Social"))}">
-              <img class="home-combo-half-media home-combo-half-media--social" src="${escapeHtml(homeCardSrc(soc))}" alt="" loading="lazy" onerror="elyImagePlaceholder(this)">
+            <button type="button" class="home-combo-half home-combo-half--social" data-home-game="social" aria-label="${escapeHtml(gameAria("Social"))}">
+              <img class="home-combo-half-media home-combo-half-media--social" src="${escapeHtml(soc.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
               <span class="home-combo-half-scrim" aria-hidden="true"></span>
               <span class="home-combo-half-content">
                 <h2 class="home-combo-half-h">${ui("Social")}</h2>
