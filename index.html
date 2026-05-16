@@ -1762,6 +1762,17 @@
       flex-direction: column;
     }
 
+    .order-card.is-valorant {
+      top: 88px;
+      max-height: calc(100vh - 100px);
+      overflow: visible;
+      align-self: start;
+    }
+
+    .order-card.is-valorant .order-panel-head {
+      flex-shrink: 0;
+    }
+
     .order-card-body {
       flex: 1 1 auto;
       display: flex;
@@ -1776,6 +1787,9 @@
       padding: 0 12px 14px;
       gap: 0;
       align-items: stretch;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: hidden;
     }
 
     #detailSection.detail--valorant-layout .detail-left {
@@ -1825,6 +1839,27 @@
       max-height: min(78vh, 860px);
       overflow-y: auto;
       min-height: 0;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(122, 77, 255, .55) rgba(10, 8, 26, .75);
+    }
+
+    #detailSection.detail--valorant-layout .valorant-cfg-mount .order-form::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #detailSection.detail--valorant-layout .valorant-cfg-mount .order-form::-webkit-scrollbar-track {
+      background: rgba(10, 8, 24, .92);
+      border-radius: 999px;
+    }
+
+    #detailSection.detail--valorant-layout .valorant-cfg-mount .order-form::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, rgba(155, 104, 255, .82), rgba(90, 52, 168, .88));
+      border-radius: 999px;
+      border: 2px solid rgba(10, 8, 24, .92);
+    }
+
+    #detailSection.detail--valorant-layout .valorant-cfg-mount .order-form::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, rgba(191, 252, 255, .32), rgba(155, 104, 255, .92));
     }
 
     #detailSection.detail--valorant-layout .detail-left-meta {
@@ -1892,12 +1927,16 @@
     }
 
     .order-card.is-valorant .summary-total {
-      position: sticky;
-      top: 92px;
-      align-self: start;
+      position: relative;
+      top: auto;
+      align-self: stretch;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      flex: 1 1 auto;
+      min-height: 0;
+      max-height: 100%;
+      overflow: hidden;
+      gap: 12px;
       padding: 14px 14px 16px;
       margin: 0;
       border-top: none;
@@ -1912,6 +1951,54 @@
         0 0 48px rgba(122, 77, 255, .14);
     }
 
+    .order-card.is-valorant .summary-total .valorant-order-chrome {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding-right: 4px;
+      margin-right: -2px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(122, 77, 255, .55) rgba(10, 8, 26, .9);
+    }
+
+    .order-card.is-valorant .summary-total .valorant-order-chrome::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .order-card.is-valorant .summary-total .valorant-order-chrome::-webkit-scrollbar-track {
+      background: rgba(10, 8, 24, .94);
+      border-radius: 999px;
+    }
+
+    .order-card.is-valorant .summary-total .valorant-order-chrome::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, rgba(155, 104, 255, .85), rgba(90, 52, 168, .9));
+      border-radius: 999px;
+      border: 2px solid rgba(10, 8, 24, .94);
+    }
+
+    .order-card.is-valorant .summary-total .valorant-order-chrome::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, rgba(191, 252, 255, .35), rgba(155, 104, 255, .95));
+    }
+
+    .order-card.is-valorant .summary-total > small {
+      flex-shrink: 0;
+      margin-top: 0;
+      font-family: var(--display);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      font-size: 11px;
+    }
+
+    .order-card.is-valorant .summary-total > #liveTotal {
+      flex-shrink: 0;
+    }
+
+    .order-card.is-valorant .summary-total > #usdHint {
+      flex-shrink: 0;
+    }
+
     .detail-highlights-wrap {
       margin: 12px 0 14px;
       padding: 12px 14px;
@@ -1919,14 +2006,6 @@
       border: 1px solid rgba(172, 146, 255, .28);
       background: linear-gradient(145deg, rgba(38, 31, 91, .4), rgba(12, 9, 30, .5));
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
-    }
-
-    .order-card.is-valorant .summary-total small {
-      font-family: var(--display);
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--cyan);
-      font-size: 11px;
     }
 
     .order-card.is-valorant .summary-total #liveTotal {
@@ -1960,7 +2039,7 @@
     .valorant-order-chrome {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .valorant-path-rail {
@@ -2329,11 +2408,9 @@
     .valorant-summary-dl {
       margin: 0;
       display: grid;
-      gap: 5px 8px;
+      gap: 6px 10px;
       font-size: 12px;
-      max-height: min(38vh, 320px);
-      overflow-y: auto;
-      padding-right: 2px;
+      padding-right: 0;
     }
 
     .valorant-summary-dl div {
@@ -3329,6 +3406,19 @@
       .order-card {
         position: static;
         max-height: none;
+      }
+      .order-card.is-valorant .order-card-body {
+        overflow: visible;
+      }
+      .order-card.is-valorant .summary-total {
+        flex: none;
+        max-height: none;
+        overflow: visible;
+      }
+      .order-card.is-valorant .summary-total .valorant-order-chrome {
+        flex: none;
+        max-height: none;
+        overflow-y: visible;
       }
       .order-form { max-height: none; }
     }
