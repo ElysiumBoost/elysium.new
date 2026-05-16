@@ -454,10 +454,11 @@
         return map[id] || (game.copy && game.copy.split(".")[0] + ".") || "";
       };
       const gameAria = label => `${ui("View")} ${ui(label)} ${ui("services")}`;
+      const homeCardSrc = game => (game.homeCardImage || game.heroBg);
       const renderHomeSingleCard = game => {
         const media = game.id === "valorant" && game.homeCardMedia
           ? `<img class="home-game-media" src="${escapeHtml(game.homeCardMedia)}" alt="${escapeHtml(ui(game.label))}" loading="eager" data-home-card-fb="${escapeHtml(game.heroBg)}" onerror="elyHomeCardFallback(this)">`
-          : `<img class="home-game-media" src="${escapeHtml(game.heroBg)}" alt="${escapeHtml(ui(game.label))}" loading="eager">`;
+          : `<img class="home-game-media" src="${escapeHtml(homeCardSrc(game))}" alt="${escapeHtml(ui(game.label))}" loading="eager" data-home-card-fb="${escapeHtml(game.heroBg)}" onerror="elyHomeCardFallback(this)">`;
         return `
         <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(gameAria(game.label))}">
           ${media}
@@ -478,7 +479,7 @@
         <article class="home-game-card home-combo-card" aria-label="${escapeHtml(ui("CS2 Premier and Faceit"))}">
           <div class="home-combo-split">
             <button type="button" class="home-combo-half" data-home-game="premier" aria-label="${escapeHtml(gameAria("CS2 Premier"))}">
-              <img class="home-combo-half-media" src="${escapeHtml(prem.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
+              <img class="home-combo-half-media" src="${escapeHtml(homeCardSrc(prem))}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
               <span class="home-combo-half-scrim" aria-hidden="true"></span>
               <span class="home-combo-half-content">
                 <h2 class="home-combo-half-h">${ui("CS2 Premier")}</h2>
@@ -487,7 +488,7 @@
               </span>
             </button>
             <button type="button" class="home-combo-half" data-home-game="faceit" aria-label="${escapeHtml(gameAria("CS2 Faceit"))}">
-              <img class="home-combo-half-media" src="${escapeHtml(face.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
+              <img class="home-combo-half-media" src="${escapeHtml(homeCardSrc(face))}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
               <span class="home-combo-half-scrim" aria-hidden="true"></span>
               <span class="home-combo-half-content">
                 <h2 class="home-combo-half-h">${ui("CS2 Faceit")}</h2>
@@ -501,12 +502,11 @@
       const boost = g("circle");
       const soc = g("social");
       if (boost && soc) {
-        const socialImg = "assets/backgrounds/boost-social-bg.webp?v=bg-files-final1";
         chunks.push(`
         <article class="home-game-card home-combo-card" aria-label="${escapeHtml(ui("Boost+ and Social"))}">
           <div class="home-combo-split">
             <button type="button" class="home-combo-half" data-home-game="circle" aria-label="${escapeHtml(gameAria("Boost+"))}">
-              <img class="home-combo-half-media" src="${escapeHtml(boost.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
+              <img class="home-combo-half-media" src="${escapeHtml(homeCardSrc(boost))}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
               <span class="home-combo-half-scrim" aria-hidden="true"></span>
               <span class="home-combo-half-content">
                 <h2 class="home-combo-half-h">${ui("Boost+")}</h2>
@@ -515,7 +515,7 @@
               </span>
             </button>
             <button type="button" class="home-combo-half" data-home-game="social" aria-label="${escapeHtml(gameAria("Social"))}">
-              <img class="home-combo-half-media home-combo-half-media--social" src="${escapeHtml(socialImg)}" alt="" loading="lazy" onerror="elyImagePlaceholder(this)">
+              <img class="home-combo-half-media home-combo-half-media--social" src="${escapeHtml(homeCardSrc(soc))}" alt="" loading="lazy" onerror="elyImagePlaceholder(this)">
               <span class="home-combo-half-scrim" aria-hidden="true"></span>
               <span class="home-combo-half-content">
                 <h2 class="home-combo-half-h">${ui("Social")}</h2>
