@@ -2360,6 +2360,13 @@
 
     .valorant-configurator .qty-step {
       background: rgba(22, 18, 52, .72);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .valorant-configurator .qty-step .qty-step-glyph {
+      pointer-events: none;
     }
 
     .valorant-configurator .qty-stepper-input {
@@ -2822,21 +2829,6 @@
       align-content: start;
     }
 
-    .qty-field--bundle .qty-bundle-head {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .qty-bundle-sub {
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      color: rgba(183, 176, 223, .82);
-      line-height: 1.25;
-    }
-
     .qty-stepper {
       display: grid;
       grid-template-columns: 44px minmax(0, 1fr) 44px;
@@ -2860,6 +2852,9 @@
       border: 0;
       margin: 0;
       padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-family: var(--display);
       font-size: 22px;
       font-weight: 800;
@@ -2868,6 +2863,27 @@
       background: rgba(10, 8, 28, .55);
       cursor: pointer;
       transition: background .18s ease, color .18s ease, box-shadow .18s ease;
+    }
+
+    .qty-step .qty-step-glyph {
+      font-size: 24px;
+      font-weight: 900;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .qty-stepper--bundle {
+      border-color: rgba(155, 104, 255, .44);
+      background: linear-gradient(180deg, rgba(42, 34, 98, .58), rgba(10, 8, 28, .9));
+    }
+
+    .qty-field--bundle > label {
+      margin-bottom: 6px;
+    }
+
+    .field-grid.equal-grid > .qty-field--bundle {
+      min-height: 0;
+      gap: 8px;
     }
 
     .qty-step:hover {
@@ -2919,12 +2935,13 @@
     }
 
     .bundle-final-line {
-      min-height: 18px;
-      margin-top: 4px;
-      font-size: 12px;
+      min-height: 20px;
+      margin-top: 6px;
+      font-family: var(--display);
+      font-size: 15px;
       font-weight: 800;
-      letter-spacing: .03em;
-      color: rgba(255, 209, 102, .92);
+      letter-spacing: .04em;
+      color: rgba(255, 209, 102, .95);
       line-height: 1.35;
     }
 
@@ -3046,10 +3063,6 @@
         font-size: 8px;
         padding: 2px 5px;
       }
-    }
-
-    .field-grid.equal-grid > .qty-field--bundle {
-      min-height: 118px;
     }
 
     .mod-wide {
@@ -3544,6 +3557,51 @@
       padding: 0;
       font-size: 22px;
       line-height: 1;
+    }
+
+    .cart-embark-panel {
+      margin: 0 0 14px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(155, 104, 255, .48);
+      background:
+        radial-gradient(circle at 12% 20%, rgba(122, 77, 255, .22), transparent 42%),
+        linear-gradient(180deg, rgba(38, 31, 91, .62), rgba(10, 8, 28, .94));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .07),
+        0 14px 36px rgba(0, 0, 0, .28);
+    }
+
+    .cart-embark-label {
+      margin: 0 0 8px;
+      font-family: var(--display);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(191, 252, 255, .88);
+    }
+
+    .cart-embark-value {
+      margin: 0;
+      font-family: var(--display);
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: .03em;
+      line-height: 1.3;
+      color: #fff6e8;
+      overflow-wrap: anywhere;
+    }
+
+    .cart-embark-k {
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(183, 176, 223, .95);
+      vertical-align: middle;
     }
 
     .cart-item {
@@ -5312,23 +5370,20 @@
     function qtyField(id, label, value = 0, min = 0, max = null) {
       const maxAttr = max != null ? ` max="${max}"` : "";
       return `<div class="qty-field"><label for="${id}">${label}</label><div class="qty-stepper" data-qty-wrap>
-        <button type="button" class="qty-step qty-step--minus" data-qty-for="${id}" data-qty-step="-1" aria-label="Decrease quantity"></button>
+        <button type="button" class="qty-step qty-step--minus" data-qty-for="${id}" data-qty-step="-1" aria-label="Decrease quantity"><span class="qty-step-glyph" aria-hidden="true">−</span></button>
         <input id="${id}" class="qty-stepper-input" type="number" inputmode="numeric" min="${min}"${maxAttr} value="${value}">
-        <button type="button" class="qty-step qty-step--plus" data-qty-for="${id}" data-qty-step="1" aria-label="Increase quantity"></button>
+        <button type="button" class="qty-step qty-step--plus" data-qty-for="${id}" data-qty-step="1" aria-label="Increase quantity"><span class="qty-step-glyph" aria-hidden="true">+</span></button>
       </div></div>`;
     }
 
     function loadoutBundleQtyField(id, bundleLabel, perBundle, value = 0, min = 0, max = null) {
       const maxAttr = max != null ? ` max="${max}"` : "";
       return `<div class="qty-field qty-field--bundle" data-bundle-for="${id}">
-        <div class="qty-bundle-head">
-          <label for="${id}">${bundleLabel}</label>
-          <span class="qty-bundle-sub">${perBundle} items per bundle · quantity = bundles</span>
-        </div>
-        <div class="qty-stepper" data-qty-wrap>
-          <button type="button" class="qty-step qty-step--minus" data-qty-for="${id}" data-qty-step="-1" aria-label="Decrease bundle quantity"></button>
+        <label for="${id}">${bundleLabel}</label>
+        <div class="qty-stepper qty-stepper--bundle" data-qty-wrap>
+          <button type="button" class="qty-step qty-step--minus" data-qty-for="${id}" data-qty-step="-1" aria-label="Decrease bundle quantity"><span class="qty-step-glyph" aria-hidden="true">−</span></button>
           <input id="${id}" class="qty-stepper-input" type="number" inputmode="numeric" min="${min}"${maxAttr} value="${value}">
-          <button type="button" class="qty-step qty-step--plus" data-qty-for="${id}" data-qty-step="1" aria-label="Increase bundle quantity"></button>
+          <button type="button" class="qty-step qty-step--plus" data-qty-for="${id}" data-qty-step="1" aria-label="Increase bundle quantity"><span class="qty-step-glyph" aria-hidden="true">+</span></button>
         </div>
         <div class="bundle-final-line is-empty" id="${id}BundleTotal" aria-live="polite"></div>
       </div>`;
@@ -5366,7 +5421,7 @@
         if (!el) return;
         const b = Math.max(0, num(id));
         if (b) {
-          el.textContent = `${b} bundle${b === 1 ? "" : "s"} × ${per} each → ${(b * per).toLocaleString()} ${name}`;
+          el.textContent = `${(b * per).toLocaleString()} ${name}`;
           el.classList.remove("is-empty");
         } else {
           el.textContent = "";
@@ -5379,7 +5434,7 @@
       const b = Math.max(0, bundleQty);
       if (!b) return "";
       const items = b * per;
-      return `${displayName}: ${items.toLocaleString()} total (${b} bundle${b === 1 ? "" : "s"} × ${per} = ${items.toLocaleString()})`;
+      return `${items.toLocaleString()} ${displayName}`;
     }
 
     function weaponOptions(includeNone = true) {
@@ -5640,9 +5695,9 @@
               <div class="depositary-custom-row">
                 <label for="depositaryCustom">Custom</label>
                 <div class="qty-stepper qty-stepper--wide" data-qty-wrap>
-                  <button type="button" class="qty-step qty-step--minus" data-qty-for="depositaryCustom" data-qty-step="-1" aria-label="Decrease slots"></button>
+                  <button type="button" class="qty-step qty-step--minus" data-qty-for="depositaryCustom" data-qty-step="-1" aria-label="Decrease slots"><span class="qty-step-glyph" aria-hidden="true">−</span></button>
                   <input id="depositaryCustom" class="qty-stepper-input" type="number" min="1" max="999" step="1" value="60">
-                  <button type="button" class="qty-step qty-step--plus" data-qty-for="depositaryCustom" data-qty-step="1" aria-label="Increase slots"></button>
+                  <button type="button" class="qty-step qty-step--plus" data-qty-for="depositaryCustom" data-qty-step="1" aria-label="Increase slots"><span class="qty-step-glyph" aria-hidden="true">+</span></button>
                 </div>
               </div>
               <div class="depositary-slider-row">
@@ -5704,9 +5759,9 @@
             </div>
           </div>
           <div class="qty-field"><label for="pvpHours">Hours</label><div class="qty-stepper" data-qty-wrap>
-            <button type="button" class="qty-step qty-step--minus" data-qty-for="pvpHours" data-qty-step="-1" aria-label="Decrease hours"></button>
+            <button type="button" class="qty-step qty-step--minus" data-qty-for="pvpHours" data-qty-step="-1" aria-label="Decrease hours"><span class="qty-step-glyph" aria-hidden="true">−</span></button>
             <input id="pvpHours" class="qty-stepper-input" type="number" min="1" max="6" value="1">
-            <button type="button" class="qty-step qty-step--plus" data-qty-for="pvpHours" data-qty-step="1" aria-label="Increase hours"></button>
+            <button type="button" class="qty-step qty-step--plus" data-qty-for="pvpHours" data-qty-step="1" aria-label="Increase hours"><span class="qty-step-glyph" aria-hidden="true">+</span></button>
           </div></div>
           <div><label for="coachNotes">Coaching Notes</label><textarea id="coachNotes" placeholder="Tell us what kind of PvP/PvE experience you want, weak points, goals, schedule, or preferred focus."></textarea></div>
           <p class="raid-panel-note">Maximum 6 hours per coaching ticket. Boosters confirm schedule, platform, and exact coaching goals in Discord.</p>
@@ -7142,10 +7197,24 @@
     function renderCart() {
       $("cartCount").textContent = state.cart.length;
       $("clearCart").disabled = !state.cart.length;
+      const hasArcItems = state.cart.some(item => item.game === "Arc Raiders");
       if (!state.cart.length) {
+        state.arcId = "";
+        state.arcIdSkipped = false;
         $("cartBody").innerHTML = `<div class="empty">Your cart is empty. Select a service and add it to cart first.</div>`;
       } else {
-        $("cartBody").innerHTML = state.cart.map(item => {
+        if (!hasArcItems) {
+          state.arcId = "";
+          state.arcIdSkipped = false;
+        }
+        const showEmbark = hasArcItems && (state.arcId || state.arcIdSkipped);
+        const embarkBlock = showEmbark
+          ? `<div class="cart-embark-panel" role="region" aria-label="Embark ID">
+            <div class="cart-embark-label">Customer Info</div>
+            <p class="cart-embark-value"><span class="cart-embark-k">Embark ID</span>${state.arcId ? escapeHtml(state.arcId) : escapeHtml("Will type it on Discord")}</p>
+          </div>`
+          : "";
+        $("cartBody").innerHTML = embarkBlock + state.cart.map(item => {
           const priceLabel = item.custom
             ? (item.game === "Valorant" ? "Custom Price" : "CUSTOM")
             : (item.estimated ? `<span class="estimated-tag">Estimated</span>${displayInCurrency(item.total, item.viewedCurrency)}` : displayInCurrency(item.total, item.viewedCurrency));
@@ -7577,11 +7646,13 @@
       state.arcId = id;
       state.arcIdSkipped = false;
       proceedAfterArcId();
+      if (state.cart.length) renderCart();
     });
     $("arcIdSkip").addEventListener("click", () => {
       state.arcId = "";
       state.arcIdSkipped = true;
       proceedAfterArcId();
+      if (state.cart.length) renderCart();
     });
     $("arcIdModal").addEventListener("click", event => {
       if (event.target === $("arcIdModal")) closeArcIdModal();
