@@ -1,6 +1,8 @@
-ELYSIUMBOOST BACKGROUND MAP
+# ELYSIUMBOOST BACKGROUND MAP
 
-Use these files in your /assets folder:
+This file lives next to the hero images in `assets/backgrounds/`. Use root-relative URLs from the published site: `assets/backgrounds/<filename>.webp`.
+
+---
 
 1) elysium-home-mainmenu-bg.webp
    Use for: Main homepage / main menu hero background

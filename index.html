@@ -62,7 +62,12 @@
   <div class="category-bar" id="categoryBar">
     <div class="shell category-shell">
       <button class="btn cat-arrow" id="catPrev" type="button" aria-label="Previous categories">&lsaquo;</button>
-      <div class="category-scroll" id="categoryScroll"></div>
+      <div class="category-scroll-stack">
+        <div class="category-scroll" id="categoryScroll"></div>
+        <div class="category-scroll-progress" id="categoryScrollProgress" aria-hidden="true">
+          <div class="category-scroll-progress__fill" id="categoryScrollProgressFill"></div>
+        </div>
+      </div>
       <button class="btn cat-arrow" id="catNext" type="button" aria-label="Next categories">&rsaquo;</button>
     </div>
   </div>
@@ -210,14 +215,6 @@
 
     <section class="main service-content hidden" id="serviceContent">
       <div class="shell">
-        <div class="quick-head" id="popularHead">
-          <div>
-            <h2 id="popularTitle">Popular Orders</h2>
-            <p id="popularCopy">Fast-start services customers usually choose first.</p>
-          </div>
-        </div>
-        <div class="popular-grid" id="popularGrid"></div>
-
         <div class="section-head" id="serviceHead">
           <div>
             <h2 id="serviceTitle">Services</h2>

@@ -693,14 +693,14 @@
             <div class="cart-empty-icon" aria-hidden="true">✦</div>
             <p class="cart-empty-title">${escapeHtml(ui("Your order is empty"))}</p>
             <p class="cart-empty-sub">${escapeHtml(ui("Choose a service to build your Discord ticket."))}</p>
-            <button type="button" class="btn btn-premium" id="browsePopularServices">${escapeHtml(ui("Browse popular services"))}</button>
+            <button type="button" class="btn btn-premium" id="browsePopularServices">${escapeHtml(ui("Browse services"))}</button>
             <button type="button" class="btn btn-glass cart-empty-secondary" id="continueShoppingEmpty">${escapeHtml(ui("Continue browsing"))}</button>
           </div>`;
         const bp = $("browsePopularServices");
         if (bp) bp.addEventListener("click", () => {
           closeCart();
           selectGame("arc");
-          requestAnimationFrame(() => $("popularHead")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+          requestAnimationFrame(() => $("serviceHead")?.scrollIntoView({ behavior: "smooth", block: "start" }));
         });
         const c0 = $("continueShoppingEmpty");
         if (c0) c0.addEventListener("click", continueShopping);

@@ -263,7 +263,6 @@
       }
       $("serviceContent").classList.remove("hidden");
       renderCategories();
-      renderPopular();
       renderServices();
       renderDetail();
       renderCart();
@@ -276,27 +275,41 @@
     }
 
     function updateStaticText() {
-      $("siteSearch").placeholder = ui("Search services");
-      $("siteSearchBtn").setAttribute("aria-label", ui("Search"));
-      $("siteSearchBtn").setAttribute("title", ui("Search"));
-      $("cartOpen").setAttribute("aria-label", ui("Open order summary"));
-      $("cartOpen").setAttribute("title", ui("Order summary"));
-      $("gameMenuBtn").setAttribute("aria-label", ui("Games menu"));
-      $("gameMenuBtn").setAttribute("title", ui("Games"));
-      const gl = $("gameMenuBtn")?.querySelector(".game-menu-btn-label");
+      const ss = $("siteSearch");
+      if (ss) ss.placeholder = ui("Search services");
+      const ssb = $("siteSearchBtn");
+      if (ssb) {
+        ssb.setAttribute("aria-label", ui("Search"));
+        ssb.setAttribute("title", ui("Search"));
+      }
+      const co = $("cartOpen");
+      if (co) {
+        co.setAttribute("aria-label", ui("Open order summary"));
+        co.setAttribute("title", ui("Order summary"));
+      }
+      const gmb = $("gameMenuBtn");
+      if (gmb) {
+        gmb.setAttribute("aria-label", ui("Games menu"));
+        gmb.setAttribute("title", ui("Games"));
+      }
+      const gl = gmb?.querySelector(".game-menu-btn-label");
       if (gl) gl.textContent = ui("Games");
-      $("clearService").textContent = ui("Clear");
-      $("addToCart").textContent = ui("Add to Order");
-      $("copyOrder").textContent = ui("Copy Discord Ticket");
+      const cs = $("clearService");
+      if (cs) cs.textContent = ui("Clear");
+      const atc = $("addToCart");
+      if (atc) atc.textContent = ui("Add to Order");
+      const cp = $("copyOrder");
+      if (cp) cp.textContent = ui("Copy Discord Ticket");
       const dlR = $("downloadOrderReceipt");
       if (dlR) dlR.textContent = ui("Download Receipt Image");
       const vNote = $("cartVerifyNote");
       if (vNote) vNote.textContent = ui("Attach the receipt image to Discord if support requests visual confirmation.");
       syncCompactToggleLabel();
-      document.querySelector('a[href*="1499796035382415462"]').textContent = ui("Open Discord");
+      document.querySelectorAll('a[href*="1499796035382415462"]').forEach(a => { a.textContent = ui("Open Discord"); });
       const fb = $("cartFeedbackLink");
       if (fb) fb.textContent = ui("Leave feedback");
-      document.querySelector(".drawer-head h2").textContent = ui("Order center");
+      const dh = document.querySelector(".drawer-head h2");
+      if (dh) dh.textContent = ui("Order center");
       const ctl = $("cartTotalLabel");
       if (ctl) ctl.textContent = ui("Order total");
       const td = document.querySelector(".topbar-discord");
@@ -553,7 +566,6 @@
       state.category = categoryId;
       state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
       renderCategories();
-      renderPopular();
       renderServices();
       renderDetail();
       requestAnimationFrame(() => {
@@ -590,6 +602,12 @@
         }).join("");
       }
       document.querySelectorAll("[data-cat]").forEach(button => button.addEventListener("click", event => {
+        if (categoryMotion.blockNextClick) {
+          event.preventDefault();
+          event.stopPropagation();
+          categoryMotion.blockNextClick = false;
+          return;
+        }
         if (categoryMotion.didDrag || categoryMotion.skipClick) {
           event.preventDefault();
           categoryMotion.skipClick = false;
@@ -629,30 +647,6 @@
       }
     }
 
-    function renderPopular() {
-      const game = currentGame();
-      if (!game) return;
-      if (game.id === "circle" || game.id === "valorant" || game.id === "faceit" || game.id === "premier" || game.id === "social" || game.id === "arc") {
-        $("popularHead").classList.add("is-hidden");
-        $("popularGrid").classList.add("is-hidden");
-        $("popularGrid").innerHTML = "";
-        return;
-      }
-      $("popularTitle").textContent = game.id === "arc" ? ui("Featured Arc Raiders Services") : ui("Popular") + " " + ui(game.label) + " " + ui("Services");
-      $("popularCopy").textContent = game.id === "arc" ? ui("Curated starters — Trials, guns, blueprints, and coins — without repeating your open category.") : ui("Most requested services for this game.");
-      const visibleIds = new Set(game.categories.length
-        ? game.services.filter(service => service.category === state.category).map(service => service.id)
-        : [state.serviceId]);
-      const list = game.popular
-        .map(id => game.services.find(service => service.id === id))
-        .filter(service => service && !visibleIds.has(service.id))
-        .slice(0, 3);
-      $("popularHead").classList.toggle("is-hidden", list.length === 0);
-      $("popularGrid").classList.toggle("is-hidden", list.length === 0);
-      $("popularGrid").innerHTML = list.map(service => cardMarkup(service, true)).join("");
-      bindServiceButtons();
-    }
-
     function renderServices() {
       const game = currentGame();
       const category = game.categories.find(cat => cat.id === state.category);
@@ -690,10 +684,33 @@
       $("catNext").onclick = () => move(1);
     }
 
-    const categoryMotion = { bound: false, paused: false, pauseUntil: 0, dragging: false, didDrag: false, skipClick: false, startX: 0, startLeft: 0, targetCat: "", direction: 1, raf: 0 };
+    const categoryMotion = { bound: false, paused: false, pauseUntil: 0, dragging: false, didDrag: false, skipClick: false, blockNextClick: false, startX: 0, startY: 0, startLeft: 0, targetCat: "", direction: 1, raf: 0, progressHideTimer: 0 };
 
     function pauseCategoryAuto(ms = 4000) {
       categoryMotion.pauseUntil = Date.now() + ms;
+    }
+
+    function updateCategoryScrollProgress() {
+      const scroller = $("categoryScroll");
+      const fill = $("categoryScrollProgressFill");
+      if (!scroller || !fill) return;
+      const max = Math.max(1, scroller.scrollWidth - scroller.clientWidth);
+      const p = scroller.scrollLeft / max;
+      fill.style.transform = `scaleX(${Math.min(1, Math.max(0, p))})`;
+    }
+
+    function setCategoryProgressVisible(visible) {
+      const track = $("categoryScrollProgress");
+      if (!track) return;
+      track.classList.toggle("is-visible", visible);
+    }
+
+    function scheduleHideCategoryProgress() {
+      if (categoryMotion.progressHideTimer) clearTimeout(categoryMotion.progressHideTimer);
+      categoryMotion.progressHideTimer = setTimeout(() => {
+        setCategoryProgressVisible(false);
+        categoryMotion.progressHideTimer = 0;
+      }, 420);
     }
 
     function setupCategoryMotion() {
@@ -703,33 +720,54 @@
         scroller.addEventListener("mouseenter", () => { categoryMotion.paused = true; });
         scroller.addEventListener("mouseleave", () => { categoryMotion.paused = false; });
         scroller.addEventListener("wheel", () => pauseCategoryAuto(7000), { passive: true });
+        scroller.addEventListener("scroll", () => {
+          updateCategoryScrollProgress();
+        }, { passive: true });
         scroller.addEventListener("pointerdown", event => {
+          if (event.pointerType === "mouse" && event.button !== 0) return;
+          categoryMotion.blockNextClick = false;
           categoryMotion.dragging = true;
           categoryMotion.didDrag = false;
           categoryMotion.startX = event.clientX;
+          categoryMotion.startY = event.clientY;
           categoryMotion.startLeft = scroller.scrollLeft;
           categoryMotion.targetCat = event.target.closest("[data-cat]")?.dataset.cat || "";
           scroller.classList.add("dragging");
           pauseCategoryAuto(8000);
-          scroller.setPointerCapture?.(event.pointerId);
+          updateCategoryScrollProgress();
+          try {
+            scroller.setPointerCapture(event.pointerId);
+          } catch (e) {}
         });
         scroller.addEventListener("pointermove", event => {
           if (!categoryMotion.dragging) return;
-          const delta = event.clientX - categoryMotion.startX;
-          if (Math.abs(delta) > 5) categoryMotion.didDrag = true;
-          scroller.scrollLeft = categoryMotion.startLeft - delta;
+          const dx = event.clientX - categoryMotion.startX;
+          const dy = event.clientY - categoryMotion.startY;
+          if (Math.hypot(dx, dy) > 8) {
+            if (!categoryMotion.didDrag) setCategoryProgressVisible(true);
+            categoryMotion.didDrag = true;
+          }
+          scroller.scrollLeft = categoryMotion.startLeft - dx;
+          updateCategoryScrollProgress();
         });
         const stopDrag = event => {
-          const shouldSelect = !categoryMotion.didDrag && categoryMotion.targetCat;
+          if (!categoryMotion.dragging) return;
+          const hadDrag = categoryMotion.didDrag;
+          const shouldSelect = !hadDrag && categoryMotion.targetCat;
           categoryMotion.dragging = false;
           scroller.classList.remove("dragging");
-          scroller.releasePointerCapture?.(event.pointerId);
+          try {
+            scroller.releasePointerCapture(event.pointerId);
+          } catch (e) {}
           pauseCategoryAuto(6000);
+          if (hadDrag) categoryMotion.blockNextClick = true;
           if (shouldSelect) {
             categoryMotion.skipClick = true;
             selectCategory(categoryMotion.targetCat);
           }
           categoryMotion.targetCat = "";
+          scheduleHideCategoryProgress();
+          updateCategoryScrollProgress();
         };
         scroller.addEventListener("pointerup", stopDrag);
         scroller.addEventListener("pointercancel", stopDrag);
@@ -779,10 +817,11 @@
 
     function cardMarkup(service, popular) {
       const serviceVisual = categoryArtwork(service.category || "custom", service.cardTitle);
+      const activeCard = state.serviceId === service.id ? " is-active" : "";
       const priceBlock = `${(service.valorantCustomPrice || service.form === "valorant-radiant") ? "" : "<small>From</small>"}${servicePrice(service)}`;
       if (popular) {
         return `
-          <article class="popular-card">
+          <article class="popular-card${activeCard}">
             <span class="popular-badge">${ui("Best seller")}</span>
             <div class="popular-card__inner">
               <div class="popular-card__media"><span class="category-thumb">${serviceVisual}</span></div>
@@ -798,7 +837,7 @@
         `;
       }
       return `
-        <article class="service-card">
+        <article class="service-card${activeCard}">
           <div class="service-card__media"><span class="category-thumb">${serviceVisual}</span></div>
           <div class="service-card__body">
             <h3>${ui(service.cardTitle)}</h3>
@@ -819,7 +858,6 @@
         const service = currentService();
         if (service) state.category = service.category;
         renderCategories();
-        renderPopular();
         renderServices();
         renderDetail();
         ($("detailLeftHead") || $("detailSection")).scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1398,9 +1436,9 @@
       wrap.dataset.valorantOrderChrome = "";
       wrap.className = "valorant-order-chrome";
       const customize = valorantOrderChromeCustomizeInner(svc.form);
-      const pathRailExtra = svc.form === "valorant-rank-boost" ? " valorant-path-rail--rank-boost" : "";
+      const includePathRail = svc.form !== "valorant-rank-boost";
       wrap.innerHTML = `
-        <div id="valorantPathRail" class="valorant-path-rail${pathRailExtra}" aria-live="polite"></div>
+        ${includePathRail ? `<div id="valorantPathRail" class="valorant-path-rail" aria-live="polite"></div>` : ""}
         ${customize ? `<section class="valorant-customize-surface" aria-label="${escapeHtml(ui("Customize"))}"><h4 class="valorant-block-kicker">${escapeHtml(ui("Customize"))}</h4>${customize}</section>` : ""}
         <p class="valorant-mini-promo">${escapeHtml(ui("Manual completion · VPN-safe routing · Discord confirmation on every order."))}</p>
         <div class="valorant-summary-panel valorant-summary-panel--sticky">
