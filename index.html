@@ -89,8 +89,11 @@
       position: sticky;
       top: 0;
       z-index: 60;
-      background: rgba(8, 5, 22, .96);
+      background: linear-gradient(180deg, rgba(8, 5, 22, .94), rgba(8, 5, 22, .88));
       border-bottom: 1px solid var(--line);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, .35);
+      backdrop-filter: blur(14px) saturate(1.15);
+      -webkit-backdrop-filter: blur(14px) saturate(1.15);
     }
 
     .topbar-inner {
@@ -297,6 +300,31 @@
     }
 
     .search-results.active { display: grid; }
+
+    .drawer-body::-webkit-scrollbar,
+    .search-results::-webkit-scrollbar,
+    .order-form::-webkit-scrollbar,
+    .game-menu-panel::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    .drawer-body::-webkit-scrollbar-track,
+    .search-results::-webkit-scrollbar-track,
+    .order-form::-webkit-scrollbar-track,
+    .game-menu-panel::-webkit-scrollbar-track {
+      background: rgba(5, 3, 13, .35);
+      border-radius: 999px;
+    }
+
+    .drawer-body::-webkit-scrollbar-thumb,
+    .search-results::-webkit-scrollbar-thumb,
+    .order-form::-webkit-scrollbar-thumb,
+    .game-menu-panel::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(122, 77, 255, .55), rgba(155, 104, 255, .35));
+      border: 1px solid rgba(255, 255, 255, .06);
+    }
 
     .search-result-btn {
       min-height: 50px;
@@ -3790,7 +3818,7 @@
       background: linear-gradient(135deg, rgba(155,104,255,.32), rgba(255,209,102,.28));
       color: #fff7d6;
       font-family: var(--font);
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 950;
       text-transform: uppercase;
       letter-spacing: .08em;
@@ -3838,6 +3866,217 @@
     .toast.active {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.toast--error {
+      border-color: rgba(255, 95, 125, .55);
+      background: linear-gradient(180deg, rgba(42, 12, 28, .98), rgba(18, 14, 45, .98));
+      color: #ffe8ee;
+    }
+
+    .cart-continue-wrap {
+      margin-top: 14px;
+      padding-top: 4px;
+    }
+
+    .cart-qty-pill {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 209, 102, .42);
+      background: rgba(255, 209, 102, .12);
+      color: #fff4d4;
+      font-family: var(--display);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      vertical-align: middle;
+    }
+
+    .cart-foot-alerts {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .cart-foot-alerts:empty {
+      display: none;
+    }
+
+    .cart-inline-warn {
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 95, 125, .42);
+      background: linear-gradient(135deg, rgba(130, 31, 52, .35), rgba(18, 14, 45, .92));
+      color: #ffe8ee;
+      font-size: 13px;
+      font-weight: 750;
+      line-height: 1.45;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+    }
+
+    .cart-ready-banner {
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 209, 102, .42);
+      background:
+        radial-gradient(circle at 8% 30%, rgba(122, 77, 255, .28), transparent 46%),
+        linear-gradient(180deg, rgba(38, 31, 91, .72), rgba(10, 8, 28, .94));
+      font-family: var(--display);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: #fff4d4;
+      text-align: center;
+    }
+
+    .cart-checklist {
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(155, 104, 255, .32);
+      background: rgba(12, 10, 32, .72);
+      display: grid;
+      gap: 8px;
+    }
+
+    .cart-checklist-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .cart-checklist-row.is-done {
+      color: #dfffea;
+    }
+
+    .cart-checklist-row .chk {
+      flex: 0 0 auto;
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 900;
+      border: 1px solid rgba(172, 146, 255, .35);
+      background: rgba(255, 255, 255, .04);
+      color: rgba(183, 176, 223, .9);
+    }
+
+    .cart-checklist-row.is-done .chk {
+      border-color: rgba(31, 210, 111, .45);
+      background: rgba(31, 210, 111, .14);
+      color: #9cf5c8;
+    }
+
+    .cart-empty-card {
+      padding: 28px 20px 22px;
+      border-radius: 12px;
+      border: 1px solid rgba(155, 104, 255, .38);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(122, 77, 255, .2), transparent 55%),
+        linear-gradient(180deg, rgba(38, 31, 91, .55), rgba(10, 8, 28, .94));
+      text-align: center;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), 0 16px 44px rgba(0, 0, 0, .28);
+    }
+
+    .cart-empty-card .cart-empty-icon {
+      font-size: 28px;
+      line-height: 1;
+      margin-bottom: 10px;
+      opacity: .88;
+    }
+
+    .cart-empty-card p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .btn-continue {
+      width: 100%;
+      min-height: 44px;
+      border-radius: 10px;
+      border: 1px solid rgba(155, 104, 255, .45);
+      background: linear-gradient(135deg, rgba(122, 77, 255, .35), rgba(20, 17, 49, .9));
+      color: #f2ecff;
+      font-family: var(--display);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .btn-continue:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255, 209, 102, .45);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, .35);
+    }
+
+    .search-empty-card {
+      padding: 18px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(155, 104, 255, .28);
+      background: linear-gradient(180deg, rgba(38, 31, 91, .5), rgba(10, 8, 28, .94));
+      text-align: center;
+    }
+
+    .search-empty-card strong {
+      display: block;
+      font-family: var(--display);
+      font-size: 15px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .search-empty-card span {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .drawer-foot .summary-total small {
+      font-size: 12px;
+      letter-spacing: .08em;
+    }
+
+    .drawer-foot .summary-total #cartTotal {
+      font-family: var(--display);
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: .03em;
+      color: var(--gold);
+    }
+
+    .drawer-foot .summary-total em {
+      font-size: 13px;
+      font-weight: 650;
+      color: rgba(191, 252, 255, .88);
+    }
+
+    @keyframes cartTotalPulse {
+      0% { text-shadow: none; filter: none; }
+      35% { text-shadow: 0 0 22px rgba(255, 209, 102, .55); filter: brightness(1.08); }
+      100% { text-shadow: none; filter: none; }
+    }
+
+    #cartTotal.cart-total-pulse {
+      animation: cartTotalPulse 0.85s ease;
     }
 
     @media (max-width: 1080px) {
@@ -4054,6 +4293,7 @@
       </div>
       <div class="drawer-body" id="cartBody"></div>
       <div class="drawer-foot">
+        <div class="cart-foot-alerts" id="cartFootAlerts" aria-live="polite"></div>
         <div class="summary-total" style="padding:0;border:0;background:transparent">
           <small>Cart Total</small>
           <span id="cartTotal">$0.00</span>
@@ -4658,6 +4898,7 @@
       arcId: "",
       arcIdSkipped: false,
       pendingArcAction: null,
+      clearCartConfirmUntil: 0,
       cart: [],
       pendingBlueprintSearch: null,
       bpTab: "Gun Blueprints",
@@ -4668,6 +4909,8 @@
         "Gun Part Blueprints": new Set()
       }
     };
+
+    let lastCartMonetaryTotal = null;
 
     function restoreGameFromHash() {
       const id = parseGameHash();
@@ -4773,7 +5016,7 @@
       $("clearService").textContent = ui("Clear");
       $("addToCart").textContent = ui("Add to Cart");
       $("copyOrder").textContent = ui("Copy Discord Ticket");
-      $("clearCart").textContent = ui("Clear Cart");
+      syncClearCartButton();
       document.querySelector('a[href*="1499796035382415462"]').textContent = ui("Open Discord");
       document.querySelector('a[href*="1503176511912542298"]').textContent = ui("Leave Feedback");
       document.querySelector(".drawer-head h2").textContent = ui("Order Cart");
@@ -7320,7 +7563,8 @@
         showToast("Opening Discord — contact ElysiumBoost with your request.");
         return;
       }
-      state.cart.push({
+      state.clearCartConfirmUntil = 0;
+      const newLine = {
         id: String(Date.now() + Math.random()),
         game: currentGame().label,
         title: service.cardTitle,
@@ -7331,19 +7575,84 @@
         estimated: Boolean(result.estimated),
         viewedCurrency: state.currency,
         language: "EN"
-      });
+      };
+      const mergeIdx = state.cart.findIndex(it =>
+        it.game === newLine.game &&
+        it.title === newLine.title &&
+        it.details === newLine.details &&
+        it.custom === newLine.custom &&
+        it.estimated === newLine.estimated &&
+        it.viewedCurrency === newLine.viewedCurrency &&
+        it.language === newLine.language
+      );
+      if (mergeIdx >= 0) {
+        state.cart[mergeIdx].total += newLine.total;
+        state.cart[mergeIdx].oldTotal = (state.cart[mergeIdx].oldTotal || 0) + (newLine.oldTotal || 0);
+        state.cart[mergeIdx].qty = (state.cart[mergeIdx].qty || 1) + 1;
+      } else {
+        state.cart.push(newLine);
+      }
       renderCart();
       showToast(result.estimated ? "Estimated order added to cart." : "Added to cart.");
     }
 
+    function syncClearCartButton() {
+      const btn = $("clearCart");
+      if (!btn) return;
+      const pending = state.clearCartConfirmUntil && Date.now() < state.clearCartConfirmUntil;
+      btn.textContent = pending ? ui("Confirm Clear") : ui("Clear Cart");
+    }
+
+    function updateCartFootAlerts() {
+      const foot = $("cartFootAlerts");
+      if (!foot) return;
+      if (!state.cart.length) {
+        foot.innerHTML = "";
+        return;
+      }
+      const hasArcItems = state.cart.some(item => item.game === "Arc Raiders");
+      const embarkDone = !hasArcItems || Boolean(state.arcId) || state.arcIdSkipped;
+      const needEmbarkId = hasArcItems && !state.arcId && !state.arcIdSkipped;
+      const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
+      const hasCustom = state.cart.some(item => item.custom);
+      const sameCurrency = state.cart.every(item => item.viewedCurrency === state.cart[0].viewedCurrency);
+      const cartCurrency = sameCurrency ? state.cart[0].viewedCurrency : state.currency;
+      const totalShown = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
+      const bits = [];
+      if (needEmbarkId) {
+        bits.push(`<div class="cart-inline-warn" role="status">Please add your Embark ID before copying the order.</div>`);
+      }
+      const row = (ok, label) => `<div class="cart-checklist-row${ok ? " is-done" : ""}"><span class="chk" aria-hidden="true">${ok ? "✓" : ""}</span><span>${escapeHtml(label)}</span></div>`;
+      bits.push(`<div class="cart-checklist" aria-label="Order checklist">
+        ${row(true, "Services in cart")}
+        ${row(true, "Quantities confirmed")}
+        ${row(embarkDone, hasArcItems ? "Embark ID added (Arc orders)" : "Embark ID (not required for this cart)")}
+        ${row(Boolean(state.cart.length && (total > 0 || hasCustom)), "Total price ready")}
+        ${row(embarkDone, "Discord ticket ready")}
+      </div>`);
+      if (embarkDone && state.cart.length && (total > 0 || hasCustom)) {
+        bits.push(`<div class="cart-ready-banner">Order Ready · Cart total ${escapeHtml(totalShown)}</div>`);
+      }
+      foot.innerHTML = bits.join("");
+    }
+
     function renderCart() {
-      $("cartCount").textContent = state.cart.length;
+      const lineCount = state.cart.reduce((n, item) => n + (item.qty || 1), 0);
+      $("cartCount").textContent = String(lineCount);
       $("clearCart").disabled = !state.cart.length;
       const hasArcItems = state.cart.some(item => item.game === "Arc Raiders");
       if (!state.cart.length) {
         state.arcId = "";
         state.arcIdSkipped = false;
-        $("cartBody").innerHTML = `<div class="empty">Your cart is empty. Select a service and add it to cart first.</div>`;
+        state.clearCartConfirmUntil = 0;
+        $("cartBody").innerHTML = `
+          <div class="cart-empty-card">
+            <div class="cart-empty-icon" aria-hidden="true">🛒</div>
+            <p>Your cart is empty. Choose a service to get started.</p>
+            <button type="button" class="btn-continue" id="continueShoppingEmpty">Continue Shopping</button>
+          </div>`;
+        const c0 = $("continueShoppingEmpty");
+        if (c0) c0.addEventListener("click", continueShopping);
       } else {
         if (!hasArcItems) {
           state.arcId = "";
@@ -7361,35 +7670,68 @@
             ? (item.game === "Valorant" ? "Custom Price" : "CUSTOM")
             : (item.estimated ? `<span class="estimated-tag">Estimated</span>${displayInCurrency(item.total, item.viewedCurrency)}` : displayInCurrency(item.total, item.viewedCurrency));
           const estimateNote = item.estimated ? `<p class="cart-estimate-note">${escapeHtml(PRIVATE_ESTIMATE_NOTE)}</p>` : "";
+          const qty = item.qty && item.qty > 1 ? item.qty : null;
+          const titleSafe = escapeHtml(ui(item.title));
+          const titleLine = qty ? `${titleSafe} <span class="cart-qty-pill">×${qty}</span>` : titleSafe;
           return `
             <article class="cart-item">
               <div class="cart-item-top">
-                <div><h3>${ui(item.title)}</h3><p>Game: ${ui(item.game)}\n${escapeHtml(item.details)}</p>${estimateNote}</div>
+                <div><h3>${titleLine}</h3><p>Game: ${escapeHtml(ui(item.game))}\n${escapeHtml(item.details)}</p>${estimateNote}</div>
                 <div class="price">${priceLabel}</div>
               </div>
               <button class="btn remove" type="button" data-remove="${item.id}">Remove</button>
             </article>
           `;
-        }).join("");
+        }).join("") + `<div class="cart-continue-wrap"><button type="button" class="btn-continue" id="continueShoppingCart">Continue Shopping</button></div>`;
         document.querySelectorAll("[data-remove]").forEach(button => button.addEventListener("click", () => {
           state.cart = state.cart.filter(item => item.id !== button.dataset.remove);
           renderCart();
         }));
+        const c1 = $("continueShoppingCart");
+        if (c1) c1.addEventListener("click", continueShopping);
       }
       const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
       const hasCustom = state.cart.some(item => item.custom);
       const sameCurrency = state.cart.length && state.cart.every(item => item.viewedCurrency === state.cart[0].viewedCurrency);
       const cartCurrency = sameCurrency ? state.cart[0].viewedCurrency : state.currency;
-      $("cartTotal").textContent = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
+      const totalEl = $("cartTotal");
+      if (state.cart.length) {
+        if (lastCartMonetaryTotal !== null && lastCartMonetaryTotal !== total) {
+          totalEl.classList.remove("cart-total-pulse");
+          void totalEl.offsetWidth;
+          totalEl.classList.add("cart-total-pulse");
+          setTimeout(() => totalEl.classList.remove("cart-total-pulse"), 900);
+        }
+        lastCartMonetaryTotal = total;
+      } else {
+        lastCartMonetaryTotal = null;
+      }
+      totalEl.textContent = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
       $("cartUsdHint").textContent = hasCustom ? "Ticket total: " + displayInCurrency(total, cartCurrency) + " + CUSTOM" : "Ticket total: " + displayInCurrency(total, cartCurrency);
+      updateCartFootAlerts();
+      syncClearCartButton();
     }
 
     function clearCart() {
       if (!state.cart.length) return showToast("Cart is already empty.");
-      state.cart = [];
-      renderCart();
-      $("copyStatus").textContent = "Cart cleared.";
-      showToast("Cart cleared.");
+      const now = Date.now();
+      if (state.clearCartConfirmUntil && now < state.clearCartConfirmUntil) {
+        state.clearCartConfirmUntil = 0;
+        state.cart = [];
+        renderCart();
+        $("copyStatus").textContent = "Cart cleared.";
+        showToast("Cart cleared.");
+        return;
+      }
+      state.clearCartConfirmUntil = now + 4500;
+      syncClearCartButton();
+      showToast("Tap Confirm Clear to empty your cart.", 2400);
+      setTimeout(() => {
+        if (Date.now() >= state.clearCartConfirmUntil) {
+          state.clearCartConfirmUntil = 0;
+          syncClearCartButton();
+        }
+      }, 4550);
     }
 
     function escapeHtml(text) {
@@ -7407,6 +7749,16 @@
       $("cartBackdrop").classList.remove("active");
       $("cartBackdrop").setAttribute("aria-hidden", "true");
       document.body.classList.remove("cart-open");
+    }
+
+    function continueShopping() {
+      closeCart();
+      if (state.game) {
+        $("serviceContent")?.classList.remove("hidden");
+        $("serviceContent")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        $("homeGameGrid")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     }
 
     function cartNeedsArcId() {
@@ -7465,7 +7817,9 @@
       const hasEstimate = state.cart.some(item => item.estimated);
       const lines = ["ELYSIUM BOOST - ORDER TICKET", "Discord Ticket: " + DISCORD_URL, "", "ORDER ITEMS:"];
       state.cart.forEach((item, index) => {
+        const qty = item.qty && item.qty > 1 ? item.qty : 0;
         lines.push(`${index + 1}. ${item.game} - ${item.title}`);
+        if (qty) lines.push(`   Quantity: ${qty}`);
         item.details.split("\n").forEach(line => lines.push(`   - ${line}`));
         const priceLine = item.custom
           ? (item.game === "Valorant" ? "Custom Price" : "CUSTOM")
@@ -7568,15 +7922,19 @@
 
     async function copyOrderNow() {
       const statusEl = $("copyStatus");
+      const okToast = () => showToast("Order copied successfully.", 2600, false);
+      const failToast = () => showToast("Copy failed. Please try again.", 3200, true);
       statusEl.textContent = "Preparing cart screenshot...";
       try {
         await loadHtml2Canvas();
       } catch (loadError) {
         try {
           await navigator.clipboard.writeText(ticketText());
-          statusEl.textContent = "Image library unavailable - copied text ticket instead. Paste it into Discord.";
+          statusEl.textContent = "Image library unavailable — text ticket copied. Paste it into Discord.";
+          okToast();
         } catch (textError) {
           statusEl.textContent = "Could not load screenshot tool and clipboard is blocked. Take a manual screenshot of the cart.";
+          failToast();
         }
         return;
       }
@@ -7585,6 +7943,7 @@
         canvas = await captureCartCanvas();
       } catch (captureError) {
         statusEl.textContent = "Screenshot failed. Take a manual screenshot of the cart panel and attach it in Discord.";
+        failToast();
         return;
       }
       try {
@@ -7592,6 +7951,7 @@
         if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
           await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
           statusEl.textContent = "Cart screenshot copied! Paste it into your Discord ticket (Ctrl/Cmd+V).";
+          okToast();
           return;
         }
         throw new Error("Clipboard image write not supported");
@@ -7599,8 +7959,10 @@
         try {
           downloadCanvasAsPng(canvas);
           statusEl.textContent = "Cart screenshot downloaded. Upload it into your Discord ticket.";
+          showToast("Cart image saved — upload it to Discord.", 2800, false);
         } catch (downloadError) {
           statusEl.textContent = "Could not copy or download the cart screenshot. Please take a manual screenshot.";
+          failToast();
         }
       }
     }
@@ -7613,11 +7975,16 @@
       ensureArcId(() => window.open(DISCORD_URL, "_blank", "noopener"));
     }
 
-    function showToast(message) {
-      $("toast").textContent = message;
-      $("toast").classList.add("active");
+    function showToast(message, ms = 2200, isError = false) {
+      const el = $("toast");
+      el.textContent = message;
+      el.classList.toggle("toast--error", Boolean(isError));
+      el.classList.add("active");
       clearTimeout(showToast.timer);
-      showToast.timer = setTimeout(() => $("toast").classList.remove("active"), 1700);
+      showToast.timer = setTimeout(() => {
+        el.classList.remove("active");
+        el.classList.remove("toast--error");
+      }, ms);
     }
 
     function searchEntries(query) {
@@ -7705,7 +8072,7 @@
         return;
       }
       if (!entries.length) {
-        box.innerHTML = `<div class="empty">No matching service found.</div>`;
+        box.innerHTML = `<div class="search-empty-card" role="status"><strong>No matching services found.</strong><span>Try another keyword or open a custom order.</span></div>`;
         box.classList.add("active");
         return;
       }
@@ -7751,6 +8118,8 @@
 
     $("currency").addEventListener("change", () => {
       state.currency = $("currency").value;
+      const label = state.currency === "USD" ? "USD" : state.currency === "EUR" ? "EUR" : state.currency === "GBP" ? "GBP" : state.currency === "TRY" ? "TRY" : state.currency;
+      showToast(`Currency updated to ${label}`, 1800, false);
       if (state.game) {
         renderPopular();
         renderServices();
