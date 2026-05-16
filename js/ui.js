@@ -679,16 +679,20 @@
 
     function renderCart() {
       const lineCount = state.cart.reduce((n, item) => n + (item.qty || 1), 0);
-      $("cartCount").textContent = String(lineCount);
+      const cartCountEl = $("cartCount");
+      if (cartCountEl) cartCountEl.textContent = String(lineCount);
       document.querySelector("#cartBackdrop .drawer")?.classList.toggle("drawer--wide", Boolean(state.cart.length));
-      $("clearCart").disabled = !state.cart.length;
+      const clearCartEl = $("clearCart");
+      if (clearCartEl) clearCartEl.disabled = !state.cart.length;
       const hasArcItems = state.cart.some(item => item.game === "Arc Raiders");
       if (!state.cart.length) {
         state.arcId = "";
         state.arcIdSkipped = false;
         state.clearCartConfirmUntil = 0;
         state.orderPreviewId = "";
-        $("cartBody").innerHTML = `
+        const cartBodyEl = $("cartBody");
+        if (cartBodyEl) {
+          cartBodyEl.innerHTML = `
           <div class="cart-empty-card">
             <div class="cart-empty-icon" aria-hidden="true">✦</div>
             <p class="cart-empty-title">${escapeHtml(ui("Your order is empty"))}</p>
@@ -696,14 +700,17 @@
             <button type="button" class="btn btn-premium" id="browsePopularServices">${escapeHtml(ui("Browse popular services"))}</button>
             <button type="button" class="btn btn-glass cart-empty-secondary" id="continueShoppingEmpty">${escapeHtml(ui("Continue browsing"))}</button>
           </div>`;
-        const bp = $("browsePopularServices");
-        if (bp) bp.addEventListener("click", () => {
-          closeCart();
-          selectGame("arc");
-          requestAnimationFrame(() => $("popularHead")?.scrollIntoView({ behavior: "smooth", block: "start" }));
-        });
-        const c0 = $("continueShoppingEmpty");
-        if (c0) c0.addEventListener("click", continueShopping);
+          const bp = cartBodyEl.querySelector("#browsePopularServices");
+          if (bp) {
+            bp.addEventListener("click", () => {
+              closeCart();
+              selectGame("arc");
+              requestAnimationFrame(() => $("popularHead")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+            });
+          }
+          const c0 = cartBodyEl.querySelector("#continueShoppingEmpty");
+          if (c0) c0.addEventListener("click", continueShopping);
+        }
       } else {
         if (!hasArcItems) {
           state.arcId = "";
@@ -794,23 +801,31 @@
             <div class="cart-continue-wrap order-lines-continue"><button type="button" class="btn-continue" id="continueShoppingCart">${escapeHtml(ui("Continue shopping"))}</button></div>
             <div id="cartCheckoutDock" class="cart-checkout-dock" aria-label="${escapeHtml(ui("Checkout"))}"></div>
           </div>`;
-        $("cartBody").innerHTML = `<div class="order-center">${leftCol}${rightCol}</div>`;
-        document.querySelectorAll("[data-remove]").forEach(button => button.addEventListener("click", () => {
-          state.cart = state.cart.filter(item => item.id !== button.dataset.remove);
-          if (!state.cart.length) state.orderPreviewId = "";
-          persistOrderState();
-          renderCart();
-        }));
-        document.querySelectorAll("[data-adjust]").forEach(button => button.addEventListener("click", () => adjustCartItem(button.dataset.adjust)));
-        document.querySelectorAll("[data-cart-qty-delta]").forEach(button => {
-          button.addEventListener("click", () => {
-            if (button.disabled) return;
-            adjustCartLineQty(button.dataset.cartQtyId, Number(button.dataset.cartQtyDelta));
+        const cartBodyEl = $("cartBody");
+        if (cartBodyEl) {
+          cartBodyEl.innerHTML = `<div class="order-center">${leftCol}${rightCol}</div>`;
+          cartBodyEl.querySelectorAll("[data-remove]").forEach(button =>
+            button.addEventListener("click", () => {
+              state.cart = state.cart.filter(item => item.id !== button.dataset.remove);
+              if (!state.cart.length) state.orderPreviewId = "";
+              persistOrderState();
+              renderCart();
+            })
+          );
+          cartBodyEl.querySelectorAll("[data-adjust]").forEach(button =>
+            button.addEventListener("click", () => adjustCartItem(button.dataset.adjust))
+          );
+          cartBodyEl.querySelectorAll("[data-cart-qty-delta]").forEach(button => {
+            button.addEventListener("click", () => {
+              if (button.disabled) return;
+              adjustCartLineQty(button.dataset.cartQtyId, Number(button.dataset.cartQtyDelta));
+            });
           });
-        });
-        const c1 = $("continueShoppingCart");
-        if (c1) c1.addEventListener("click", continueShopping);
-        $("cartEmbarkEditBtn")?.addEventListener("click", () => openArcIdModal(null));
+          const c1 = cartBodyEl.querySelector("#continueShoppingCart");
+          if (c1) c1.addEventListener("click", continueShopping);
+          const embarkBtn = cartBodyEl.querySelector("#cartEmbarkEditBtn");
+          if (embarkBtn) embarkBtn.addEventListener("click", () => openArcIdModal(null));
+        }
         bindOrderSummaryContext();
       }
       const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
@@ -818,19 +833,29 @@
       const sameCurrency = state.cart.length && state.cart.every(item => item.viewedCurrency === state.cart[0].viewedCurrency);
       const cartCurrency = sameCurrency ? state.cart[0].viewedCurrency : state.currency;
       const totalEl = $("cartTotal");
-      if (state.cart.length) {
-        if (lastCartMonetaryTotal !== null && lastCartMonetaryTotal !== total) {
-          totalEl.classList.remove("cart-total-pulse");
-          void totalEl.offsetWidth;
-          totalEl.classList.add("cart-total-pulse");
-          setTimeout(() => totalEl.classList.remove("cart-total-pulse"), 900);
+      if (totalEl) {
+        if (state.cart.length) {
+          if (lastCartMonetaryTotal !== null && lastCartMonetaryTotal !== total) {
+            totalEl.classList.remove("cart-total-pulse");
+            void totalEl.offsetWidth;
+            totalEl.classList.add("cart-total-pulse");
+            setTimeout(() => totalEl.classList.remove("cart-total-pulse"), 900);
+          }
+          lastCartMonetaryTotal = total;
+        } else {
+          lastCartMonetaryTotal = null;
         }
-        lastCartMonetaryTotal = total;
+        totalEl.textContent = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
       } else {
-        lastCartMonetaryTotal = null;
+        if (state.cart.length) lastCartMonetaryTotal = total;
+        else lastCartMonetaryTotal = null;
       }
-      totalEl.textContent = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
-      $("cartUsdHint").textContent = hasCustom ? "Ticket total: " + displayInCurrency(total, cartCurrency) + " + CUSTOM" : "Ticket total: " + displayInCurrency(total, cartCurrency);
+      const cartUsdHintEl = $("cartUsdHint");
+      if (cartUsdHintEl) {
+        cartUsdHintEl.textContent = hasCustom
+          ? "Ticket total: " + displayInCurrency(total, cartCurrency) + " + CUSTOM"
+          : "Ticket total: " + displayInCurrency(total, cartCurrency);
+      }
       updateCartFootAlerts();
       syncClearCartButton();
       applyDrawerCompactClass();
@@ -870,14 +895,18 @@
 
     function openCart() {
       renderCart();
-      $("cartBackdrop").classList.add("active");
-      $("cartBackdrop").setAttribute("aria-hidden", "false");
+      const backdrop = $("cartBackdrop");
+      if (!backdrop) return;
+      backdrop.classList.add("active");
+      backdrop.setAttribute("aria-hidden", "false");
       document.body.classList.add("cart-open");
     }
 
     function closeCart() {
-      $("cartBackdrop").classList.remove("active");
-      $("cartBackdrop").setAttribute("aria-hidden", "true");
+      const backdrop = $("cartBackdrop");
+      if (!backdrop) return;
+      backdrop.classList.remove("active");
+      backdrop.setAttribute("aria-hidden", "true");
       document.body.classList.remove("cart-open");
     }
 
