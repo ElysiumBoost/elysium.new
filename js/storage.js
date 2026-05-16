@@ -1,4 +1,5 @@
 const ORDER_STATE_KEY = "elyOrderStateV1";
+const NAV_RECOVERY_KEY = "elyRecoveryNavFixV1";
 
 /** Used by cart total pulse in renderCart; must be a single shared binding. */
 var lastCartMonetaryTotal = null;
@@ -62,6 +63,40 @@ function sanitizeNavigationState() {
     if (state.serviceId == null || !g.services.some(s => s.id === state.serviceId && inCat(s))) {
       state.serviceId = g.services.find(s => s.category === state.category)?.id ?? null;
     }
+  } catch (e) {}
+}
+
+/** One-time: patch persisted navigation fields so old builds cannot brick renderAll. */
+function applyNavRecoveryOnce() {
+  try {
+    if (localStorage.getItem(NAV_RECOVERY_KEY) === "1") return;
+    localStorage.setItem(NAV_RECOVERY_KEY, "1");
+    const raw = localStorage.getItem(ORDER_STATE_KEY);
+    if (!raw) return;
+    const j = JSON.parse(raw);
+    let dirty = false;
+    if (j.game != null) {
+      if (!games.some(g => g.id === j.game)) {
+        j.game = null;
+        j.category = null;
+        j.serviceId = null;
+        dirty = true;
+      } else {
+        const g = games.find(x => x.id === j.game);
+        const catList = g.categories || [];
+        const catIds = new Set(catList.map(c => c.id));
+        if (j.category != null && !catIds.has(j.category)) {
+          j.category = catList[0]?.id ?? null;
+          dirty = true;
+        }
+        const effectiveCat = j.category ?? catList[0]?.id;
+        if (j.serviceId != null && !g.services.some(s => s.id === j.serviceId && s.category === effectiveCat)) {
+          j.serviceId = g.services.find(s => s.category === effectiveCat)?.id ?? null;
+          dirty = true;
+        }
+      }
+    }
+    if (dirty) localStorage.setItem(ORDER_STATE_KEY, JSON.stringify(j));
   } catch (e) {}
 }
 

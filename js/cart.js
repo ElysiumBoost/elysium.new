@@ -182,6 +182,17 @@
     const val = id => $(id)?.value || "";
     const num = id => Number(val(id) || 0);
 
+    function resolveSiteUrl(relPath) {
+      if (relPath == null || relPath === "") return relPath;
+      const s = String(relPath).trim();
+      if (/^(https?:|data:|\/\/)/i.test(s)) return s;
+      try {
+        return new URL(s, document.baseURI).href;
+      } catch (e) {
+        return s;
+      }
+    }
+
     function elyValorantThumbFallback(img) {
       elyImagePlaceholder(img);
     }
@@ -256,6 +267,8 @@
       if (!state.game) {
         $("categoryBar").classList.add("hidden");
         $("serviceContent").classList.add("hidden");
+        const cs = $("categoryScroll");
+        if (cs) cs.innerHTML = "";
         renderCart();
         syncBodyGameContext();
         updateTotal();
@@ -268,6 +281,26 @@
       renderDetail();
       renderCart();
       syncBodyGameContext();
+    }
+
+    function applyHashRouteToState() {
+      const id = parseGameHash();
+      if (!id) {
+        if (state.game != null || state.category != null || state.serviceId != null) {
+          state.game = null;
+          state.category = null;
+          state.serviceId = null;
+          renderAll();
+        }
+        return;
+      }
+      if (!games.some(g => g.id === id)) return;
+      const game = games.find(g => g.id === id);
+      state.game = id;
+      state.category = game.categories[0]?.id || "services";
+      state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
+      sanitizeNavigationState();
+      renderAll();
     }
 
     function syncBodyGameContext() {
@@ -359,13 +392,23 @@
         showToast("That game is not available.");
         return;
       }
-      state.game = id;
-      const game = currentGame();
-      state.category = game.categories[0]?.id || "services";
-      state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
+      const slug = GAME_HASH_SLUGS[id];
+      if (!slug) {
+        showToast("That game is not available.");
+        return;
+      }
       closeGameMenu();
-      syncGameHash(id);
-      renderAll();
+      const frag = "#" + slug;
+      if (location.hash === frag) {
+        const game = games.find(g => g.id === id);
+        state.game = id;
+        state.category = game.categories[0]?.id || "services";
+        state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
+        sanitizeNavigationState();
+        renderAll();
+      } else {
+        location.hash = slug;
+      }
       requestAnimationFrame(() => {
         const target = $("serviceHead") || $("serviceContent");
         if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -581,7 +624,7 @@
         $("categoryScroll").innerHTML = game.categories.map(cat => {
           const thumbOpt = cat.thumb || cat.image || cat.bg;
           return `
-        <button class="cat-btn ${cat.id === state.category ? "active" : ""}" type="button" data-cat="${cat.id}" ${cat.bg ? `style="--cat-bg:url('${escapeHtml(cat.bg)}')"` : ""}>
+        <button class="cat-btn ${cat.id === state.category ? "active" : ""}" type="button" data-cat="${cat.id}" ${cat.bg ? `style="--cat-bg:url('${escapeHtml(resolveSiteUrl(cat.bg))}')"` : ""}>
           ${cat.badge ? `<span class="cat-ribbon ${cat.badgeTone || cat.badgeType || "hot"}">${escapeHtml(cat.badge)}</span>` : ""}
           ${categoryArtwork(cat.id, ui(cat.label), thumbOpt)}
           <span class="cat-label">${ui(cat.label)}</span>
@@ -607,7 +650,7 @@
       const cta = $("heroCta");
       if (game) {
         hero.classList.remove("is-home");
-        hero.style.setProperty("--hero-bg", `url("${game.heroBg}")`);
+        hero.style.setProperty("--hero-bg", `url("${resolveSiteUrl(game.heroBg)}")`);
         if (sub) sub.style.display = "none";
         if (cta) cta.style.display = "none";
         $("heroKicker").textContent = ui(game.kicker);
