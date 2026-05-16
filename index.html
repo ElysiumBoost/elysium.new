@@ -4,7 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ELYSIUM BOOST | Premium Game Services</title>
-  <meta name="description" content="ELYSIUM BOOST service builder for Arc Raiders, Valorant, and League of Legends. Customize an order, add it to cart, and copy a Discord ticket.">
+  <meta name="description" content="ELYSIUM BOOST — premium manual game services, verified boosters, Discord ticket orders, and fast support.">
+  <meta name="theme-color" content="#05030d">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ELYSIUM BOOST | Premium Game Services">
+  <meta property="og:description" content="Premium manual game services with verified boosters, clean Discord ticket flow, and fast support.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/ElysiumBoost/ElysiumBoost/main/assets/elysium-mark.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/elysium-mark.webp" type="image/webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -28,9 +35,9 @@
       --purple: #8b5cf6;
       --purple-2: #a78bfa;
       --purple-mid: #7c3aed;
-      --ice: #7dd3fc;
-      --cyan: var(--ice);
-      --green: #34d399;
+      --ice: rgba(167, 180, 220, .72);
+      --cyan: rgba(196, 181, 253, .55);
+      --green: #9b7fd6;
       --gold: #fbbf24;
       --danger: #f43f5e;
       --price: #eef1ff;
@@ -525,10 +532,10 @@
     }
 
     .btn-green {
-      border-color: rgba(52, 211, 153, .5);
-      background: linear-gradient(135deg, #34d399, #059669);
-      color: #04120f;
-      box-shadow: 0 12px 30px rgba(16, 120, 87, .18);
+      border-color: rgba(225, 29, 72, .45);
+      background: linear-gradient(135deg, #6d28d9, #e11d48);
+      color: #fff;
+      box-shadow: 0 12px 30px rgba(17, 24, 39, .45);
     }
 
     .actions {
@@ -4147,7 +4154,7 @@
     .event-switch input:not(.ely-toggle-input) {
       width: 15px;
       height: 15px;
-      accent-color: var(--green);
+      accent-color: var(--purple-2);
     }
 
     .event-switch.event-mode-card input:not(.ely-toggle-input) {
@@ -5251,9 +5258,9 @@
     }
 
     .cart-checklist-row.is-done .chk {
-      border-color: rgba(52, 211, 153, .35);
-      background: rgba(52, 211, 153, .1);
-      color: #6ee7b7;
+      border-color: rgba(255, 209, 102, .45);
+      background: rgba(139, 92, 246, .18);
+      color: #fde68a;
     }
 
     .cart-empty-card {
@@ -5280,6 +5287,398 @@
       font-size: 14px;
       font-weight: 600;
       line-height: 1.5;
+    }
+
+    .cart-empty-title {
+      font-family: var(--display);
+      font-size: 17px;
+      color: var(--text);
+      margin: 0 0 8px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .cart-empty-sub {
+      margin: 0 0 18px !important;
+      font-size: 13px !important;
+      font-weight: 650 !important;
+    }
+
+    .cart-empty-secondary {
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .order-summary-banner {
+      margin-bottom: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(139, 92, 246, .32);
+      background: linear-gradient(145deg, rgba(20, 16, 36, .9), rgba(8, 7, 16, .95));
+    }
+
+    .order-preview-id {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 8px 14px;
+      margin-bottom: 8px;
+    }
+
+    .order-preview-k {
+      font-family: var(--display);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(183, 176, 223, .75);
+    }
+
+    .order-preview-id strong {
+      font-family: var(--display);
+      font-size: 18px;
+      letter-spacing: .12em;
+      color: #fde68a;
+    }
+
+    .trust-inline-mini {
+      margin: 0;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(244, 228, 255, .78);
+    }
+
+    .order-context-panel {
+      margin-bottom: 14px;
+      padding: 12px 14px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(139, 92, 246, .22);
+      background: rgba(8, 7, 18, .55);
+    }
+
+    .order-context-title {
+      font-family: var(--display);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(167, 139, 250, .9);
+      margin: 0 0 10px;
+    }
+
+    .order-context-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 12px;
+    }
+
+    .order-context-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .order-context-field--wide {
+      grid-column: 1 / -1;
+    }
+
+    .order-context-k {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(183, 176, 223, .72);
+    }
+
+    .order-context-select,
+    .order-context-input {
+      min-height: 40px;
+      border-radius: 8px;
+      border: 1px solid rgba(139, 92, 246, .28);
+      background: rgba(14, 12, 24, .9);
+      color: var(--text);
+      padding: 0 10px;
+      font-weight: 700;
+    }
+
+    .order-context-hint {
+      margin: 10px 0 0;
+      font-size: 11px;
+      color: rgba(183, 176, 223, .75);
+      line-height: 1.4;
+    }
+
+    .cart-item-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-compact {
+      min-height: 36px;
+      padding: 0 12px;
+      font-size: 11px;
+    }
+
+    .topbar-discord {
+      margin-right: 4px;
+      padding: 0 11px;
+      min-height: 38px;
+      font-family: var(--display);
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .why-elysium {
+      margin: 32px 0 28px;
+    }
+
+    .why-elysium h2 {
+      font-family: var(--display);
+      font-size: 22px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin: 0 0 16px;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .why-card {
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: inset 0 1px 0 var(--glass-border);
+    }
+
+    .why-card h3 {
+      margin: 0 0 8px;
+      font-family: var(--display);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .why-card p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .faq-home {
+      margin: 0 0 28px;
+    }
+
+    .faq-home h2 {
+      font-family: var(--display);
+      font-size: 22px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin: 0 0 14px;
+    }
+
+    .faq-item {
+      border-radius: 10px;
+      border: 1px solid rgba(139, 92, 246, .22);
+      background: rgba(8, 7, 18, .45);
+      margin-bottom: 8px;
+      padding: 0 12px;
+    }
+
+    .faq-item summary {
+      cursor: pointer;
+      padding: 12px 4px;
+      font-weight: 800;
+      font-size: 14px;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker { display: none; }
+
+    .faq-item p {
+      margin: 0 0 12px;
+      padding-left: 4px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .site-footer-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .site-footer {
+      margin-top: 48px;
+      padding: 28px 0 40px;
+      border-top: 1px solid rgba(139, 92, 246, .18);
+      background: linear-gradient(180deg, transparent, rgba(5, 4, 12, .65));
+    }
+
+    .site-footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .site-footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .site-footer-brand strong {
+      font-family: var(--display);
+      letter-spacing: .08em;
+    }
+
+    .site-footer-brand span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .ely-sticky-order {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 88;
+      max-width: min(360px, calc(100vw - 32px));
+    }
+
+    body.cart-open .ely-sticky-order {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .ely-sticky-order__btn {
+      width: 100%;
+      min-height: 46px;
+      padding: 0 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(139, 92, 246, .45);
+      background: linear-gradient(145deg, rgba(25, 18, 46, .95), rgba(10, 8, 18, .98));
+      color: var(--text);
+      font-family: var(--display);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-align: center;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, .4), 0 0 24px rgba(139, 92, 246, .15);
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease;
+    }
+
+    .ely-sticky-order__btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 209, 102, .4);
+    }
+
+    .ely-support-widget {
+      position: fixed;
+      left: 16px;
+      bottom: 16px;
+      z-index: 87;
+      max-width: 220px;
+      padding: 12px 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(139, 92, 246, .32);
+      background: linear-gradient(165deg, rgba(20, 18, 38, .96), rgba(7, 6, 14, .98));
+      box-shadow: 0 18px 48px rgba(0, 0, 0, .42);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .ely-support-widget strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #e8e0ff;
+      font-family: var(--display);
+      font-size: 12px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .ely-support-widget .btn-mini {
+      margin-top: 10px;
+      width: 100%;
+      min-height: 38px;
+      font-size: 11px;
+    }
+
+    .legal-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(4, 3, 10, .72);
+    }
+
+    .legal-modal-backdrop.active {
+      display: flex;
+    }
+
+    .legal-modal {
+      width: min(520px, 100%);
+      max-height: min(78vh, 640px);
+      overflow: auto;
+      padding: 22px 20px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(139, 92, 246, .4);
+      background: linear-gradient(180deg, rgba(24, 20, 42, .98), rgba(8, 7, 16, .99));
+      box-shadow: 0 28px 80px rgba(0, 0, 0, .55);
+    }
+
+    .legal-modal h2 {
+      margin: 0 0 12px;
+      font-family: var(--display);
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .legal-modal p {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .legal-close {
+      margin-top: 12px;
+      width: 100%;
+    }
+
+    @media (max-width: 720px) {
+      .topbar-discord { display: none; }
+      .order-context-grid { grid-template-columns: 1fr; }
+      .ely-support-widget {
+        left: 10px;
+        bottom: 70px;
+        max-width: calc(100vw - 24px);
+      }
+      .ely-sticky-order {
+        right: 10px;
+        bottom: 10px;
+        left: 10px;
+        max-width: none;
+      }
     }
 
     .btn-continue {
@@ -5461,6 +5860,7 @@
         </button>
         <div class="game-menu-panel" id="gameMenuPanel" role="menu" aria-labelledby="gameMenuBtn" hidden></div>
       </div>
+      <a class="btn btn-glass topbar-discord" data-discord-header href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Discord</a>
       <div class="actions">
         <input class="site-search" id="siteSearch" type="search" placeholder="Search services" aria-label="Search services">
         <button class="btn btn-icon" id="siteSearchBtn" type="button" aria-label="Search" title="Search">
@@ -5516,7 +5916,7 @@
         <div class="trust-bar" aria-label="Trust and guarantees">
           <div class="trust-item">
             <span class="trust-item__ic" aria-hidden="true">&#128666;</span>
-            <div class="trust-item__text"><strong>Manual delivery</strong><span>Human-run services — no bot-only handoffs.</span></div>
+            <div class="trust-item__text"><strong>Manual delivery</strong><span>No cheats. No exploits. Manual service only.</span></div>
           </div>
           <div class="trust-item">
             <span class="trust-item__ic" aria-hidden="true">&#9876;</span>
@@ -5573,6 +5973,28 @@
               <h3>Confirm with support</h3>
               <p>Paste in Discord, confirm Embark ID for Arc if needed, and lock ETA with your booster.</p>
             </article>
+          </div>
+        </section>
+        <section class="why-elysium" aria-labelledby="whyElysiumTitle">
+          <h2 id="whyElysiumTitle">Why ElysiumBoost</h2>
+          <div class="why-grid">
+            <article class="why-card"><h3>Premium manual services</h3><p>Human-delivered orders with clear Discord coordination — never sketchy automation.</p></article>
+            <article class="why-card"><h3>Verified booster team</h3><p>Vetted pros for high-trust carries, coaching, and extracts.</p></article>
+            <article class="why-card"><h3>Clear Discord flow</h3><p>Copy a structured ticket, paste once, confirm details with support.</p></article>
+            <article class="why-card"><h3>Fast support</h3><p>Ticket-first responses so you are never guessing next steps.</p></article>
+            <article class="why-card"><h3>Safe delivery standards</h3><p>We prioritize account respect, transparency, and completion clarity.</p></article>
+          </div>
+        </section>
+        <section class="faq-home" aria-labelledby="faqHomeTitle">
+          <h2 id="faqHomeTitle">FAQ</h2>
+          <div class="faq-list">
+            <details class="faq-item"><summary>Is this service manual?</summary><p>Yes. ElysiumBoost sells manual coordination with boosters — no cheat software sold or promoted.</p></details>
+            <details class="faq-item"><summary>Do you use cheats?</summary><p>No cheats. No exploits. Manual service only.</p></details>
+            <details class="faq-item"><summary>How do I receive my order?</summary><p>After copying your ticket, open Discord, paste into the order channel, and a booster confirms the handoff plan.</p></details>
+            <details class="faq-item"><summary>How long does delivery take?</summary><p>Timelines vary by game and queue. Your ticket lists estimates; support confirms live ETAs.</p></details>
+            <details class="faq-item"><summary>Do I need to share my password?</summary><p>Many services offer self-play or duo. Password sharing is only when a service explicitly requires piloting — always confirm in Discord.</p></details>
+            <details class="faq-item"><summary>What if delivery fails?</summary><p>Reach support in Discord — we document agreements and work toward fair resolutions.</p></details>
+            <details class="faq-item"><summary>How do I open a Discord ticket?</summary><p>Use the Open Discord button, paste the copied ticket, and follow moderator instructions.</p></details>
           </div>
         </section>
         <div class="home-about-pricing" id="homeAboutBlock"></div>
@@ -5645,9 +6067,9 @@
   </main>
 
   <div class="cart-backdrop" id="cartBackdrop" aria-hidden="true">
-    <aside class="drawer" aria-label="Cart">
+    <aside class="drawer" aria-label="Order summary">
       <div class="drawer-head">
-        <h2>Order Cart</h2>
+        <h2 id="drawerTitle">Order summary</h2>
         <div class="drawer-head-right">
           <button type="button" class="btn-cart-compact" id="cartCompactToggle">Simpler layout</button>
           <button class="btn close" id="cartClose" type="button" aria-label="Close cart">&times;</button>
@@ -5657,7 +6079,7 @@
       <div class="drawer-foot">
         <div class="cart-foot-alerts" id="cartFootAlerts" aria-live="polite"></div>
         <div class="summary-total" style="padding:0;border:0;background:transparent">
-          <small>Cart Total</small>
+          <small id="cartTotalLabel">Order total</small>
           <span id="cartTotal">$0.00</span>
           <em id="cartUsdHint">Ticket total: $0.00 USD</em>
         </div>
@@ -5685,10 +6107,53 @@
     </div>
   </div>
 
+  <footer class="site-footer" id="siteFooter">
+    <div class="shell site-footer-inner">
+      <div class="site-footer-brand">
+        <strong>ELYSIUM BOOST</strong>
+        <span>Premium manual game services · Discord ticket flow</span>
+      </div>
+      <div class="site-footer-actions">
+        <a class="btn btn-glass" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Discord</a>
+        <button type="button" class="btn btn-glass" id="footerLegalBtn">Terms &amp; safety</button>
+      </div>
+    </div>
+  </footer>
+
+  <div class="ely-sticky-order" id="stickyOrderChip" hidden>
+    <button type="button" class="ely-sticky-order__btn" id="stickyOrderOpen"><span class="ely-sticky-order__text"></span></button>
+  </div>
+  <aside class="ely-support-widget" aria-label="Discord support">
+    <strong>Support online</strong>
+    <span>Average response · 2–5 minutes</span>
+    <a class="btn btn-premium btn-mini" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Open Discord ticket</a>
+  </aside>
+
+  <div class="legal-modal-backdrop" id="legalModal" aria-hidden="true">
+    <div class="legal-modal" role="dialog" aria-modal="true" aria-labelledby="legalModalTitle">
+      <h2 id="legalModalTitle">Terms, safety &amp; delivery</h2>
+      <p>ELYSIUM BOOST provides manual coordination services. Pricing and scope are confirmed in Discord before play. Customers remain responsible for account security and following each platform’s rules of conduct.</p>
+      <p><strong>No cheats. No exploits. Manual service only.</strong> We do not sell or distribute third-party cheat software.</p>
+      <p>Refunds and redelivery policies are handled case-by-case in Discord according to what was agreed in your ticket. Contact support before disputing a charge elsewhere.</p>
+      <p>Delivery timelines are estimates. Busy periods, rostering, and in-game conditions can shift ETAs — your booster or support will communicate changes.</p>
+      <button type="button" class="btn btn-premium legal-close" id="legalModalClose">Close</button>
+    </div>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
     const DISCORD_URL = "https://discord.com/channels/1499767937974669363/1499796035382415462";
+
+    window.elyPlaceholderSrc = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="480" height="300" viewBox="0 0 480 300"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#120a1c"/><stop offset="100%" stop-color="#07050d"/></linearGradient></defs><rect width="480" height="300" fill="url(#g)" rx="12"/><text x="240" y="142" text-anchor="middle" fill="#a78bfa" font-family="system-ui,sans-serif" font-size="15" font-weight="700">ELYSIUM BOOST</text><text x="240" y="166" text-anchor="middle" fill="#7c6a9e" font-size="11">Premium artwork</text></svg>');
+    function elyImagePlaceholder(img) {
+      if (!img || img.dataset.elyPh === "1") return;
+      img.dataset.elyPh = "1";
+      img.removeAttribute("src");
+      img.src = window.elyPlaceholderSrc;
+      img.alt = img.alt || "ELYSIUM BOOST";
+      img.style.display = "";
+    }
 
     const rates = {
       USD: { symbol: "$", rate: 1 },
@@ -5712,17 +6177,13 @@
       const r = String(rankLabel || "").trim();
       if (r === "Radiant") {
         return [
-          "assets/radiant_3.png",
-          "assets/radiant_3.webp",
-          "assets/radiant.png",
-          "assets/radiant.webp",
           "assets/valorant-radiant-boost.webp"
         ];
       }
       const m = r.match(/^([A-Za-z]+)/);
       if (!m) return [];
       const tier = m[1].toLowerCase();
-      return [`assets/${tier}_3.png`, `assets/${tier}_3.webp`];
+      return [`assets/${tier}_3.webp`];
     }
 
     function applyValorantRankBadgeImage(img, rankLabel) {
@@ -6324,6 +6785,11 @@
       cartDrawerCompact: false,
       pendingBlueprintSearch: null,
       bpTab: "Gun Blueprints",
+      orderPreviewId: "",
+      orderRegion: "EU",
+      orderPlatform: "PC",
+      riotId: "",
+      steamId: "",
       blueprintSelections: {
         "Gun Blueprints": new Set(),
         "Backpack Blueprints": new Set(),
@@ -6332,7 +6798,189 @@
       }
     };
 
+    const ORDER_STATE_KEY = "elyOrderStateV1";
+
     let lastCartMonetaryTotal = null;
+
+    function gameSlugForPreview(gameLabel) {
+      const g = String(gameLabel || "");
+      if (g.includes("Arc")) return "AR";
+      if (g.includes("Valorant")) return "VAL";
+      if (g.includes("Premier")) return "CS2";
+      if (g.includes("Faceit")) return "FCT";
+      if (g.includes("League")) return "LOL";
+      if (g.includes("Warcraft") || g.includes("WoW")) return "WOW";
+      if (g.includes("Boost")) return "BST";
+      return "EB";
+    }
+
+    function ensureOrderPreviewId() {
+      if (!state.cart.length) {
+        state.orderPreviewId = "";
+        return;
+      }
+      if (state.orderPreviewId) return;
+      const first = state.cart[0];
+      const code = gameSlugForPreview(first.game);
+      state.orderPreviewId = "EB-" + code + "-" + String(1000 + Math.floor(Math.random() * 9000)).slice(-4);
+    }
+
+    function persistOrderState() {
+      try {
+        localStorage.setItem(ORDER_STATE_KEY, JSON.stringify({
+          cart: state.cart,
+          currency: state.currency,
+          orderPreviewId: state.orderPreviewId,
+          arcId: state.arcId,
+          arcIdSkipped: state.arcIdSkipped,
+          orderRegion: state.orderRegion,
+          orderPlatform: state.orderPlatform,
+          riotId: state.riotId,
+          steamId: state.steamId,
+          game: state.game,
+          category: state.category,
+          serviceId: state.serviceId
+        }));
+      } catch (e) {}
+    }
+
+    function restoreOrderState() {
+      try {
+        const raw = localStorage.getItem(ORDER_STATE_KEY);
+        if (!raw) return;
+        const j = JSON.parse(raw);
+        if (Array.isArray(j.cart)) state.cart = j.cart;
+        if (j.currency && rates[j.currency]) {
+          state.currency = j.currency;
+          const sel = $("currency");
+          if (sel) sel.value = state.currency;
+        }
+        if (typeof j.orderPreviewId === "string") state.orderPreviewId = j.orderPreviewId;
+        if (typeof j.arcId === "string") state.arcId = j.arcId;
+        if (typeof j.arcIdSkipped === "boolean") state.arcIdSkipped = j.arcIdSkipped;
+        if (typeof j.orderRegion === "string") state.orderRegion = j.orderRegion;
+        if (typeof j.orderPlatform === "string") state.orderPlatform = j.orderPlatform;
+        if (typeof j.riotId === "string") state.riotId = j.riotId;
+        if (typeof j.steamId === "string") state.steamId = j.steamId;
+        const hashGame = parseGameHash();
+        if (!hashGame && j.game && games.some(g => g.id === j.game)) {
+          state.game = j.game;
+          state.category = j.category;
+          state.serviceId = j.serviceId;
+        }
+      } catch (e) {}
+    }
+
+    function deliveryTypeForService(service, gameId) {
+      if (!service) return "Manual delivery via Discord";
+      const f = service.form;
+      if (f && String(f).startsWith("valorant-")) return "Manual — piloted or duo (confirm in Discord)";
+      if (f === "pvp" || f === "coaching") return "Coaching — Discord assisted";
+      if (f === "raid" || f === "expedition") return "In-session / manual delivery";
+      if (f === "fast") return "Manual queue / Discord assisted";
+      return "Manual delivery via Discord";
+    }
+
+    function buildPriceBreakdownText(result) {
+      if (result.arcPriceBreakdown && result.arcPriceBreakdown.rows && result.arcPriceBreakdown.rows.length) {
+        return result.arcPriceBreakdown.rows.map(r => r[0] + ": " + r[1]).join("\n");
+      }
+      if (result.oldTotal && result.oldTotal > (result.total || 0)) {
+        return ["Base: " + moneyUSD(result.oldTotal), "After adjustments: " + moneyUSD(result.total)].join("\n");
+      }
+      return result.total != null ? "Line total: " + moneyUSD(result.total) : "";
+    }
+
+    function playerIdForLineFromState() {
+      const gid = currentGame()?.id;
+      if (gid === "valorant") return state.riotId.trim();
+      if (gid === "premier" || gid === "faceit") return state.steamId.trim();
+      return "";
+    }
+
+    function cartNeedsValorantId() {
+      return state.cart.some(item => item.game === "Valorant");
+    }
+
+    function cartNeedsSteamId() {
+      return state.cart.some(item => item.game === "Premier" || item.game === "Faceit");
+    }
+
+    function validateTicketRequirements() {
+      ensureOrderPreviewId();
+      if (!state.orderRegion) return { ok: false, message: ui("Select your region in the order summary before copying.") };
+      if (!state.orderPlatform) return { ok: false, message: ui("Select your platform in the order summary before copying.") };
+      if (cartNeedsArcId() && !state.arcId && !state.arcIdSkipped) return { ok: true };
+      if (cartNeedsValorantId() && !String(state.riotId || "").trim()) {
+        return { ok: false, message: ui("Add your Riot ID (GameName#TAG) for Valorant orders before copying.") };
+      }
+      if (cartNeedsSteamId() && !String(state.steamId || "").trim()) {
+        return { ok: false, message: ui("Add your Steam profile link for CS2 orders before copying.") };
+      }
+      return { ok: true };
+    }
+
+    function updateStickyOrderChip() {
+      const el = document.getElementById("stickyOrderChip");
+      if (!el) return;
+      if (!state.cart.length) {
+        el.hidden = true;
+        return;
+      }
+      el.hidden = false;
+      const lines = state.cart.reduce((n, item) => n + (item.qty || 1), 0);
+      const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
+      const hasCustom = state.cart.some(item => item.custom);
+      const cur = state.cart[0]?.viewedCurrency || state.currency;
+      const totalStr = hasCustom ? displayInCurrency(total, cur) + " + CUSTOM" : displayInCurrency(total, cur);
+      const label = el.querySelector(".ely-sticky-order__text");
+      if (label) label.textContent = ui("Order") + ": " + lines + " " + ui("items") + " — " + totalStr;
+    }
+
+    function bindOrderSummaryContext() {
+      const r = $("orderRegionSel");
+      const p = $("orderPlatformSel");
+      const ri = $("orderRiotInput");
+      const st = $("orderSteamInput");
+      if (r) {
+        r.value = state.orderRegion;
+        r.onchange = () => {
+          state.orderRegion = r.value;
+          state.cart.forEach(item => { item.region = state.orderRegion; });
+          persistOrderState();
+          updateStickyOrderChip();
+        };
+      }
+      if (p) {
+        p.value = state.orderPlatform;
+        p.onchange = () => {
+          state.orderPlatform = p.value;
+          state.cart.forEach(item => { item.platform = state.orderPlatform; });
+          persistOrderState();
+          updateStickyOrderChip();
+        };
+      }
+      if (ri) {
+        ri.value = state.riotId;
+        ri.oninput = () => {
+          state.riotId = ri.value;
+          state.cart.forEach(item => {
+            if (item.game === "Valorant") item.playerId = state.riotId.trim();
+          });
+          persistOrderState();
+        };
+      }
+      if (st) {
+        st.value = state.steamId;
+        st.oninput = () => {
+          state.steamId = st.value;
+          state.cart.forEach(item => {
+            if (item.game === "Premier" || item.game === "Faceit") item.playerId = state.steamId.trim();
+          });
+          persistOrderState();
+        };
+      }
+    }
 
     function syncCompactToggleLabel() {
       const btn = $("cartCompactToggle");
@@ -6357,14 +7005,7 @@
     const num = id => Number(val(id) || 0);
 
     function elyValorantThumbFallback(img) {
-      const fb = img.getAttribute("data-thumb-fb");
-      if (fb && !img.dataset.thumbFbTried) {
-        img.dataset.thumbFbTried = "1";
-        img.src = fb;
-        return;
-      }
-      img.style.display = "none";
-      img.closest(".service-thumb")?.classList.add("is-cat-thumb-fallback");
+      elyImagePlaceholder(img);
     }
 
     function elyHomeCardFallback(img) {
@@ -6374,7 +7015,7 @@
         img.src = fb;
         return;
       }
-      img.style.display = "none";
+      elyImagePlaceholder(img);
     }
 
     function currentGame() { return games.find(game => game.id === state.game); }
@@ -6459,14 +7100,14 @@
       $("siteSearch").placeholder = ui("Search services");
       $("siteSearchBtn").setAttribute("aria-label", ui("Search"));
       $("siteSearchBtn").setAttribute("title", ui("Search"));
-      $("cartOpen").setAttribute("aria-label", ui("Open cart"));
-      $("cartOpen").setAttribute("title", ui("Open cart"));
+      $("cartOpen").setAttribute("aria-label", ui("Open order summary"));
+      $("cartOpen").setAttribute("title", ui("Order summary"));
       $("gameMenuBtn").setAttribute("aria-label", ui("Games menu"));
       $("gameMenuBtn").setAttribute("title", ui("Games"));
       const gl = $("gameMenuBtn")?.querySelector(".game-menu-btn-label");
       if (gl) gl.textContent = ui("Games");
       $("clearService").textContent = ui("Clear");
-      $("addToCart").textContent = ui("Add to Cart");
+      $("addToCart").textContent = ui("Add to Order");
       $("copyOrder").textContent = ui("Copy Discord Ticket");
       const dlR = $("downloadOrderReceipt");
       if (dlR) dlR.textContent = ui("Download Order Receipt");
@@ -6475,7 +7116,11 @@
       syncCompactToggleLabel();
       document.querySelector('a[href*="1499796035382415462"]').textContent = ui("Open Discord");
       document.querySelector('a[href*="1503176511912542298"]').textContent = ui("Leave Feedback");
-      document.querySelector(".drawer-head h2").textContent = ui("Order Cart");
+      document.querySelector(".drawer-head h2").textContent = ui("Order summary");
+      const ctl = $("cartTotalLabel");
+      if (ctl) ctl.textContent = ui("Order total");
+      const td = document.querySelector(".topbar-discord");
+      if (td) td.textContent = ui("Discord");
     }
 
     function closeGameMenu() {
@@ -6630,7 +7275,7 @@
               </span>
             </button>
             <button type="button" class="home-combo-half" data-home-game="social" aria-label="${escapeHtml(ui("Social"))}, ${escapeHtml(ui("Select"))}">
-              <img class="home-combo-half-media home-combo-half-media--social" src="${escapeHtml(socialImg)}" alt="" loading="lazy" onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='assets/social.png';return;}this.style.display='none';this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
+              <img class="home-combo-half-media home-combo-half-media--social" src="${escapeHtml(socialImg)}" alt="" loading="lazy" onerror="elyImagePlaceholder(this)">
               <span class="home-combo-half-scrim" aria-hidden="true"></span>
               <span class="home-combo-half-content">
                 <h2 class="home-combo-half-h">${ui("Social")}</h2>
@@ -6664,7 +7309,7 @@
       guns: "assets/thumb-guns.webp",
       loadouts: "assets/thumb-loadouts.webp",
       coins: "assets/thumb-coins.webp",
-      seeds: "assets/assorted-seeds.png",
+      seeds: "assets/thumb-seeds.webp",
       depositary: "assets/thumb-depository.webp",
       trials: "assets/thumb-trials.webp",
       raids: "assets/thumb-raids.webp",
@@ -6704,10 +7349,8 @@
       const override = thumbOverride != null && String(thumbOverride).trim() !== "" ? String(thumbOverride).trim() : "";
       const src = override || valThumb || serviceImages[id] || serviceImages.custom;
       const isVal = game && game.id === "valorant";
-      const pngSibling = isVal && /\.webp($|\?)/i.test(src) ? src.replace(/\.webp($|\?)/i, (m, q) => `.png${q || ""}`) : "";
-      const fbAttr = pngSibling && pngSibling !== src ? ` data-thumb-fb="${escapeHtml(pngSibling)}"` : "";
-      const errFn = isVal && fbAttr ? ` onerror="elyValorantThumbFallback(this)"` : ` onerror="this.style.display='none'; this.closest('.service-thumb')?.classList.add('is-cat-thumb-fallback');"`;
-      return `<div class="service-thumb"><img src="${escapeHtml(src)}" alt="${escapeHtml(label)}" loading="eager"${fbAttr}${errFn}></div>`;
+      const errFn = isVal ? ` onerror="elyValorantThumbFallback(this)"` : ` onerror="elyImagePlaceholder(this)"`;
+      return `<div class="service-thumb"><img src="${escapeHtml(src)}" alt="${escapeHtml(label)}" loading="eager"${errFn}></div>`;
     }
     function selectCategory(categoryId) {
       pauseCategoryAuto(3500);
@@ -9207,9 +9850,17 @@
         return;
       }
       state.clearCartConfirmUntil = 0;
+      const cg = currentGame();
+      const pid = playerIdForLineFromState();
+      const metaDel = deliveryTypeForService(service, cg?.id);
+      const etaHint = service?.start || ui("Ask support");
+      const bd = buildPriceBreakdownText(result);
       const newLine = {
         id: String(Date.now() + Math.random()),
-        game: currentGame().label,
+        game: cg.label,
+        gameId: cg.id,
+        serviceId: service.id,
+        categoryId: service.category,
         title: service.cardTitle,
         details: result.details,
         total: result.total,
@@ -9217,7 +9868,13 @@
         custom: Boolean(result.custom),
         estimated: Boolean(result.estimated),
         viewedCurrency: state.currency,
-        language: "EN"
+        language: "EN",
+        region: state.orderRegion,
+        platform: state.orderPlatform,
+        playerId: pid,
+        deliveryType: metaDel,
+        etaHint,
+        priceBreakdown: bd
       };
       const mergeIdx = state.cart.findIndex(it =>
         it.game === newLine.game &&
@@ -9226,7 +9883,10 @@
         it.custom === newLine.custom &&
         it.estimated === newLine.estimated &&
         it.viewedCurrency === newLine.viewedCurrency &&
-        it.language === newLine.language
+        it.language === newLine.language &&
+        it.region === newLine.region &&
+        it.platform === newLine.platform &&
+        (it.playerId || "") === (newLine.playerId || "")
       );
       if (mergeIdx >= 0) {
         state.cart[mergeIdx].total += newLine.total;
@@ -9235,8 +9895,28 @@
       } else {
         state.cart.push(newLine);
       }
+      ensureOrderPreviewId();
+      persistOrderState();
       renderCart();
+      updateStickyOrderChip();
       showToast(result.estimated ? "Estimated order added to cart." : "Added to cart.");
+    }
+
+    function adjustCartItem(lineId) {
+      const item = state.cart.find(i => i.id === lineId);
+      if (!item || !item.gameId || !item.serviceId) return;
+      state.cart = state.cart.filter(i => i.id !== lineId);
+      if (!state.cart.length) state.orderPreviewId = "";
+      persistOrderState();
+      state.game = item.gameId;
+      const g = currentGame();
+      state.category = item.categoryId || g?.categories[0]?.id || state.category;
+      state.serviceId = item.serviceId;
+      syncGameHash(item.gameId);
+      renderAll();
+      closeCart();
+      requestAnimationFrame(() => $("detailSection")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+      showToast(ui("Adjust options below, then add the line again."));
     }
 
     function syncClearCartButton() {
@@ -9282,12 +9962,21 @@
         state.arcId = "";
         state.arcIdSkipped = false;
         state.clearCartConfirmUntil = 0;
+        state.orderPreviewId = "";
         $("cartBody").innerHTML = `
           <div class="cart-empty-card">
-            <div class="cart-empty-icon" aria-hidden="true">🛒</div>
-            <p>Your cart is empty. Choose a service to get started.</p>
-            <button type="button" class="btn-continue" id="continueShoppingEmpty">Continue Shopping</button>
+            <div class="cart-empty-icon" aria-hidden="true">✦</div>
+            <p class="cart-empty-title">${escapeHtml(ui("Your order is empty"))}</p>
+            <p class="cart-empty-sub">${escapeHtml(ui("Choose a service to build your Discord ticket."))}</p>
+            <button type="button" class="btn btn-premium" id="browsePopularServices">${escapeHtml(ui("Browse popular services"))}</button>
+            <button type="button" class="btn btn-glass cart-empty-secondary" id="continueShoppingEmpty">${escapeHtml(ui("Continue browsing"))}</button>
           </div>`;
+        const bp = $("browsePopularServices");
+        if (bp) bp.addEventListener("click", () => {
+          closeCart();
+          selectGame("arc");
+          requestAnimationFrame(() => $("popularHead")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+        });
         const c0 = $("continueShoppingEmpty");
         if (c0) c0.addEventListener("click", continueShopping);
       } else {
@@ -9303,7 +9992,41 @@
             <button type="button" class="cart-embark-btn" id="cartEmbarkEditBtn">${escapeHtml(ui("Add or edit Embark ID"))}</button>
           </div>`
           : "";
-        $("cartBody").innerHTML = embarkBlock + state.cart.map((item, idx) => {
+        ensureOrderPreviewId();
+        const summaryHeader = `
+          <div class="order-summary-banner">
+            <div class="order-preview-id"><span class="order-preview-k">${escapeHtml(ui("Order preview ID"))}</span><strong>${escapeHtml(state.orderPreviewId)}</strong></div>
+            <p class="trust-inline-mini">${escapeHtml(ui("No cheats. No exploits. Manual service only."))}</p>
+          </div>
+          <div class="order-context-panel" role="region" aria-labelledby="orderCtxTitle">
+            <div id="orderCtxTitle" class="order-context-title">${escapeHtml(ui("Order context"))}</div>
+            <div class="order-context-grid">
+              <label class="order-context-field"><span class="order-context-k">${escapeHtml(ui("Region"))}</span>
+                <select id="orderRegionSel" class="order-context-select">
+                  <option value="EU">EU</option>
+                  <option value="NA">NA</option>
+                  <option value="TR">TR</option>
+                  <option value="MENA">MENA</option>
+                  <option value="Other">${escapeHtml(ui("Other"))}</option>
+                </select>
+              </label>
+              <label class="order-context-field"><span class="order-context-k">${escapeHtml(ui("Platform"))}</span>
+                <select id="orderPlatformSel" class="order-context-select">
+                  <option value="PC">PC</option>
+                  <option value="Xbox">Xbox</option>
+                  <option value="PlayStation">PlayStation</option>
+                </select>
+              </label>
+              <label class="order-context-field order-context-field--wide"><span class="order-context-k">${escapeHtml(ui("Riot ID (Valorant)"))}</span>
+                <input id="orderRiotInput" class="order-context-input" type="text" autocomplete="off" placeholder="GameName#TAG">
+              </label>
+              <label class="order-context-field order-context-field--wide"><span class="order-context-k">${escapeHtml(ui("Steam / CS2 profile"))}</span>
+                <input id="orderSteamInput" class="order-context-input" type="url" inputmode="url" autocomplete="off" placeholder="https://steamcommunity.com/id/…">
+                  </label>
+            </div>
+            <p class="order-context-hint">${escapeHtml(ui("We validate required fields before you can copy your Discord ticket."))}</p>
+          </div>`;
+        $("cartBody").innerHTML = summaryHeader + embarkBlock + state.cart.map((item, idx) => {
           const priceLabel = item.custom
             ? (item.game === "Valorant" ? "Custom Price" : "CUSTOM")
             : (item.estimated ? `<span class="estimated-tag">Estimated</span>${displayInCurrency(item.total, item.viewedCurrency)}` : displayInCurrency(item.total, item.viewedCurrency));
@@ -9311,6 +10034,15 @@
           const qty = Math.max(1, item.qty || 1);
           const titleSafe = escapeHtml(ui(item.title));
           const perUnitHint = qty > 1 && !item.custom ? `<div class="cart-receipt-hint">${escapeHtml(ui("Shown as line total for this configuration."))}</div>` : "";
+          const regionDisp = escapeHtml(item.region || state.orderRegion || "—");
+          const platDisp = escapeHtml(item.platform || state.orderPlatform || "—");
+          let pidRaw = item.playerId || "";
+          if (!pidRaw && item.game === "Valorant") pidRaw = state.riotId || "";
+          if (!pidRaw && (item.game === "Premier" || item.game === "Faceit")) pidRaw = state.steamId || "";
+          const pidDisp = escapeHtml(pidRaw || "—");
+          const del = escapeHtml(item.deliveryType || ui("Manual delivery via Discord"));
+          const eta = escapeHtml(item.etaHint || ui("Ask support"));
+          const bdBlock = item.priceBreakdown ? `<div class="cart-receipt-section"><div class="cart-receipt-k">${ui("Price breakdown")}</div><div class="cart-item-detail-body">${escapeHtml(item.priceBreakdown)}</div></div>` : "";
           return `
             <article class="cart-item cart-item--receipt">
               <div class="cart-receipt-head">
@@ -9322,25 +10054,38 @@
                 <div><dt>${ui("Quantity")}</dt><dd>${qty}</dd></div>
                 <div><dt>${ui("Currency")}</dt><dd>${escapeHtml(item.viewedCurrency)}</dd></div>
                 <div><dt>${ui("Line price")}</dt><dd class="cart-item-price-inline">${priceLabel}</dd></div>
+                <div><dt>${ui("Region")}</dt><dd>${regionDisp}</dd></div>
+                <div><dt>${ui("Platform")}</dt><dd>${platDisp}</dd></div>
+                <div><dt>${ui("Player ID")}</dt><dd>${pidDisp}</dd></div>
+                <div><dt>${ui("Delivery type")}</dt><dd>${del}</dd></div>
+                <div><dt>${ui("Est. delivery")}</dt><dd>${eta}</dd></div>
               </dl>
               <div class="cart-receipt-section">
                 <div class="cart-receipt-k">${ui("Selected options")}</div>
                 <div class="cart-item-detail-body">${escapeHtml(item.details)}</div>
               </div>
-              <div class="cart-receipt-delivery"><strong>${ui("Delivery")}</strong>${escapeHtml(ui("Manual handoff via Discord after you paste your ticket — finalize timing and instructions with support."))}</div>
+              ${bdBlock}
+              <div class="cart-receipt-delivery"><strong>${ui("Coordination")}</strong>${escapeHtml(ui("Finalize timing, pilot/duo mode, and safety notes in Discord with support."))}</div>
               ${perUnitHint}
               ${estimateNote}
-              <button class="btn remove" type="button" data-remove="${item.id}">${ui("Remove")}</button>
+              <div class="cart-item-actions">
+                <button type="button" class="btn btn-glass btn-compact" data-adjust="${item.id}">${ui("Edit line")}</button>
+                <button class="btn remove" type="button" data-remove="${item.id}">${ui("Remove")}</button>
+              </div>
             </article>
           `;
         }).join("") + `<div class="cart-continue-wrap"><button type="button" class="btn-continue" id="continueShoppingCart">Continue Shopping</button></div>`;
         document.querySelectorAll("[data-remove]").forEach(button => button.addEventListener("click", () => {
           state.cart = state.cart.filter(item => item.id !== button.dataset.remove);
+          if (!state.cart.length) state.orderPreviewId = "";
+          persistOrderState();
           renderCart();
         }));
+        document.querySelectorAll("[data-adjust]").forEach(button => button.addEventListener("click", () => adjustCartItem(button.dataset.adjust)));
         const c1 = $("continueShoppingCart");
         if (c1) c1.addEventListener("click", continueShopping);
         $("cartEmbarkEditBtn")?.addEventListener("click", () => openArcIdModal(null));
+        bindOrderSummaryContext();
       }
       const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
       const hasCustom = state.cart.some(item => item.custom);
@@ -9364,6 +10109,8 @@
       syncClearCartButton();
       applyDrawerCompactClass();
       syncCompactToggleLabel();
+      persistOrderState();
+      updateStickyOrderChip();
     }
 
     function clearCart() {
@@ -9372,6 +10119,7 @@
       if (state.clearCartConfirmUntil && now < state.clearCartConfirmUntil) {
         state.clearCartConfirmUntil = 0;
         state.cart = [];
+        state.orderPreviewId = "";
         renderCart();
         $("copyStatus").textContent = "Cart cleared.";
         showToast("Cart cleared.");
@@ -9466,14 +10214,19 @@
     }
 
     function ticketText() {
+      ensureOrderPreviewId();
       const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
       const hasCustom = state.cart.some(item => item.custom);
       const hasEstimate = state.cart.some(item => item.estimated);
       const rule = "────────────────────────────────";
       const lines = [
         rule,
-        "ELYSIUM BOOST — ORDER TICKET",
+        "ELYSIUM BOOST — ORDER RECEIPT (DISCORD)",
         rule,
+        "",
+        "Order preview ID: " + state.orderPreviewId,
+        "Region: " + (state.orderRegion || "—"),
+        "Platform: " + (state.orderPlatform || "—"),
         "",
         "Discord channel",
         DISCORD_URL,
@@ -9489,6 +10242,19 @@
         lines.push(`[${index + 1}] ${item.game} — ${item.title}`);
         lines.push(`    Quantity: ${qty}`);
         lines.push(`    Currency: ${item.viewedCurrency}`);
+        lines.push(`    Region: ${item.region || state.orderRegion || "—"}`);
+        lines.push(`    Platform: ${item.platform || state.orderPlatform || "—"}`);
+        const pid = item.playerId || (item.game === "Valorant" ? state.riotId : (item.game === "Premier" || item.game === "Faceit" ? state.steamId : ""));
+        lines.push(`    Player ID: ${pid || "—"}`);
+        lines.push(`    Delivery: ${item.deliveryType || "Manual delivery via Discord"}`);
+        lines.push(`    Est. delivery: ${item.etaHint || "Ask support"}`);
+        if (item.priceBreakdown) {
+          lines.push("    Price detail:");
+          item.priceBreakdown.split("\n").forEach(row => {
+            const t = row.trim();
+            if (t) lines.push(`      • ${t}`);
+          });
+        }
         lines.push(`    Line price: ${priceLine}`);
         lines.push("    Options / details:");
         item.details.split("\n").forEach(line => {
@@ -9502,6 +10268,7 @@
       const totalText = hasCustom ? displayInCurrency(total, currency) + " + CUSTOM" : displayInCurrency(total, currency);
       lines.push(rule);
       lines.push(`${totalLabel}: ${totalText}`);
+      lines.push(`Currency: ${currency}`);
       lines.push(rule);
       const idLine = getArcIdLine();
       if (idLine) {
@@ -9519,7 +10286,13 @@
 
     async function copyOrder() {
       if (!state.cart.length) {
-        $("copyStatus").textContent = "Add an item before copying.";
+        $("copyStatus").textContent = ui("Add an item before copying.");
+        return;
+      }
+      const v = validateTicketRequirements();
+      if (!v.ok) {
+        $("copyStatus").textContent = v.message;
+        showToast(v.message, 3800, true);
         return;
       }
       ensureArcId(copyOrderNow);
@@ -9570,7 +10343,7 @@
       const text = ticketText();
       const statusEl = $("copyStatus");
       const ok = () => {
-        statusEl.textContent = ui("Discord ticket text copied — paste into Discord. For best verification, attach your downloaded order receipt image.");
+        statusEl.textContent = ui("Ticket copied successfully. Open Discord and paste it into your order ticket.");
         showToast(ui("Ticket copied."), 2600, false);
       };
       const fail = () => {
@@ -9896,6 +10669,7 @@
         renderHome();
       }
       renderCart();
+      persistOrderState();
     });
     $("brandHome").addEventListener("click", event => {
       event.preventDefault();
@@ -9921,6 +10695,21 @@
     $("cartOpen").addEventListener("click", openCart);
     $("cartClose").addEventListener("click", closeCart);
     $("copyOrder").addEventListener("click", copyOrder);
+    $("stickyOrderOpen")?.addEventListener("click", () => openCart());
+    $("footerLegalBtn")?.addEventListener("click", () => {
+      $("legalModal")?.classList.add("active");
+      $("legalModal")?.setAttribute("aria-hidden", "false");
+    });
+    $("legalModalClose")?.addEventListener("click", () => {
+      $("legalModal")?.classList.remove("active");
+      $("legalModal")?.setAttribute("aria-hidden", "true");
+    });
+    $("legalModal")?.addEventListener("click", event => {
+      if (event.target === $("legalModal")) {
+        $("legalModal")?.classList.remove("active");
+        $("legalModal")?.setAttribute("aria-hidden", "true");
+      }
+    });
     $("clearCart").addEventListener("click", clearCart);
     $("openDiscord").addEventListener("click", event => {
       event.preventDefault();
@@ -9990,12 +10779,16 @@
         closeGameMenu();
         closeCart();
         closeArcIdModal();
+        $("legalModal")?.classList.remove("active");
+        $("legalModal")?.setAttribute("aria-hidden", "true");
         $("siteSearchResults").classList.remove("active");
       }
     });
 
     updateAudioButton();
+    restoreOrderState();
     restoreGameFromHash();
+    if (state.game) syncGameHash(state.game);
     window.addEventListener("hashchange", () => {
       closeGameMenu();
       const id = parseGameHash();
