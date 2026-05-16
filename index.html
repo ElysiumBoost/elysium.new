@@ -1771,25 +1771,86 @@
     }
 
     .order-card.is-valorant .order-card-body {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) min(340px, 36%);
-      gap: 0 18px;
+      display: flex;
+      flex-direction: column;
       padding: 0 12px 14px;
+      gap: 0;
       align-items: stretch;
     }
 
-    .order-card.is-valorant .order-form {
-      grid-column: 1;
-      grid-row: 1;
-      max-height: min(78vh, 820px);
+    #detailSection.detail--valorant-layout .valorant-cfg-mount {
+      margin-bottom: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(155, 104, 255, .4);
+      background:
+        linear-gradient(175deg, rgba(44, 34, 102, .58), rgba(10, 8, 24, .94)),
+        radial-gradient(90% 60% at 10% 0%, rgba(122, 77, 255, .2), transparent 55%);
+      box-shadow:
+        0 20px 52px rgba(0, 0, 0, .34),
+        inset 0 1px 0 rgba(255, 255, 255, .07),
+        0 0 42px rgba(122, 77, 255, .12);
+      padding: 12px 12px 14px;
+    }
+
+    #detailSection.detail--valorant-layout .valorant-cfg-mount .order-form {
+      padding: 0;
+      margin: 0;
+      max-height: min(78vh, 860px);
       overflow-y: auto;
-      padding-top: 2px;
-      padding-right: 4px;
+      min-height: 0;
+    }
+
+    #detailSection.detail--valorant-layout .detail-left-meta {
+      margin-top: 2px;
+    }
+
+    #detailSection.detail--valorant-layout .detail-title h2 {
+      font-size: clamp(22px, 3.1vw, 34px);
+    }
+
+    #detailSection.detail--valorant-layout .intro {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.48;
+      color: rgba(220, 214, 255, .88);
+    }
+
+    #detailSection.detail--valorant-layout .detail-highlights-wrap,
+    #detailSection.detail--valorant-layout .detail-val-trust {
+      margin-top: 10px;
+      margin-bottom: 0;
+    }
+
+    #detailSection.detail--valorant-layout .detail-highlights-wrap h4,
+    #detailSection.detail--valorant-layout .detail-val-trust h4 {
+      font-size: 13px;
+    }
+
+    #detailSection.detail--valorant-layout .detail-highlights-wrap ul,
+    #detailSection.detail--valorant-layout .detail-val-trust p,
+    #detailSection.detail--valorant-layout .detail-val-trust ul {
+      font-size: 12px;
+    }
+
+    @media (max-width: 1080px) {
+      #detailSection.detail--valorant-layout > .detail-left {
+        display: contents;
+      }
+      #detailSection.detail--valorant-layout .valorant-cfg-mount {
+        grid-row: 1;
+        grid-column: 1;
+      }
+      #detailSection.detail--valorant-layout .order-card {
+        grid-row: 2;
+        grid-column: 1;
+      }
+      #detailSection.detail--valorant-layout .detail-left-meta {
+        grid-row: 3;
+        grid-column: 1;
+      }
     }
 
     .order-card.is-valorant .summary-total {
-      grid-column: 2;
-      grid-row: 1;
       position: sticky;
       top: 92px;
       align-self: start;
@@ -2249,27 +2310,10 @@
       gap: 6px;
     }
 
-    @media (max-width: 900px) {
-      .order-card.is-valorant .order-card-body {
-        grid-template-columns: minmax(0, 1fr) min(300px, 42%);
-        gap: 0 12px;
-      }
-    }
-
-    @media (max-width: 720px) {
-      .order-card.is-valorant .order-card-body {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-      .order-card.is-valorant .order-form {
+    @media (max-width: 1080px) {
+      #detailSection.detail--valorant-layout .valorant-cfg-mount .order-form {
         max-height: none;
         overflow-y: visible;
-      }
-      .order-card.is-valorant .summary-total {
-        grid-column: 1;
-        grid-row: auto;
-        position: relative;
-        top: auto;
       }
     }
 
@@ -3368,6 +3412,8 @@
 
         <section class="detail" id="detailSection" aria-label="Service details">
           <div class="detail-left">
+            <div id="valorantConfiguratorMount" class="valorant-cfg-mount" hidden></div>
+            <div class="detail-left-meta" id="detailLeftMeta">
             <div class="detail-title">
               <div class="detail-icon" id="detailIcon"></div>
               <div>
@@ -3384,6 +3430,7 @@
             <div class="detail-val-trust" id="detailValorantTrust" hidden></div>
             <div class="detail-steps" id="detailSteps"></div>
             <div class="order-feed" id="orderFeed" aria-live="polite"></div>
+            </div>
           </div>
           <aside class="order-card">
             <div class="order-panel-head"><span class="detail-deal" id="detailDeal"></span><button class="btn clear-service" id="clearService" type="button">Clear</button></div>
@@ -4591,6 +4638,7 @@
         if (vt0) { vt0.hidden = true; vt0.innerHTML = ""; }
         renderOrderFeed();
         teardownValorantOrderChrome();
+        syncValorantOrderFormMount(null);
         updateTotal();
         return;
       }
@@ -4600,18 +4648,36 @@
       $("detailDeal").innerHTML = serviceSaleBadge(service);
       const hl = $("detailHighlights");
       const vtr = $("detailValorantTrust");
+      const vg = currentGame()?.id === "valorant";
+      const vForm = service.form && String(service.form).startsWith("valorant-");
       if (hl && vtr) {
-        hl.hidden = true;
-        hl.innerHTML = "";
-        vtr.hidden = true;
-        vtr.innerHTML = "";
+        if (vg && vForm) {
+          const cat = valorantCategoryContent[service.category];
+          if (cat && cat.highlights && cat.highlights.length) {
+            hl.hidden = false;
+            hl.innerHTML = `<h4>${escapeHtml(ui("Highlights"))}</h4><ul>${cat.highlights.map(h => `<li>${escapeHtml(ui(h))}</li>`).join("")}</ul>`;
+            vtr.hidden = false;
+            vtr.innerHTML = `<h4>${escapeHtml(ui(valorantTrustBlock.title))}</h4><p>${escapeHtml(ui(valorantTrustBlock.intro))}</p><ul>${valorantTrustBlock.points.map(p => `<li>${escapeHtml(ui(p))}</li>`).join("")}</ul>`;
+          } else {
+            hl.hidden = true;
+            hl.innerHTML = "";
+            vtr.hidden = true;
+            vtr.innerHTML = "";
+          }
+        } else {
+          hl.hidden = true;
+          hl.innerHTML = "";
+          vtr.hidden = true;
+          vtr.innerHTML = "";
+        }
       }
-      const vgSteps = currentGame()?.id === "valorant";
+      const vgSteps = vg;
       $("detailSteps").innerHTML = vgSteps ? "" : detailSteps(service.form).map(step => `
         <div class="detail-step"><strong>${ui(step.title)}</strong><span>${ui(step.copy)}</span></div>
       `).join("");
       renderOrderFeed();
       $("orderForm").innerHTML = buildForm(service.form);
+      syncValorantOrderFormMount(service);
       setupValorantOrderChrome();
       wireForm(service.form);
       updateTotal();
@@ -4957,6 +5023,28 @@
         ? `<div class="valorant-path-single"><span class="valorant-path-rank">${escapeHtml(left)}</span></div>`
         : `<div class="valorant-path-end"><span class="valorant-path-ph" aria-hidden="true"></span><span class="valorant-path-rank">${escapeHtml(left)}</span></div>${arrow}<div class="valorant-path-end"><span class="valorant-path-ph" aria-hidden="true"></span><span class="valorant-path-rank">${escapeHtml(right)}</span></div>`;
       rail.innerHTML = `<div class="valorant-path-inner">${rightBlock}</div>`;
+    }
+
+    function syncValorantOrderFormMount(service) {
+      const section = $("detailSection");
+      const mount = $("valorantConfiguratorMount");
+      const form = $("orderForm");
+      const body = $("orderCardBody");
+      const sum = $("orderSummaryTotal");
+      if (!section || !mount || !form || !body || !sum) return;
+      const isV = Boolean(
+        service &&
+        currentGame()?.id === "valorant" &&
+        String(service.form || "").startsWith("valorant-")
+      );
+      section.classList.toggle("detail--valorant-layout", isV);
+      if (isV) {
+        mount.hidden = false;
+        mount.appendChild(form);
+      } else {
+        mount.hidden = true;
+        body.insertBefore(form, sum);
+      }
     }
 
     function teardownValorantOrderChrome() {
@@ -5351,11 +5439,11 @@
     }
 
     function wireValorantForm(type) {
-      document.querySelectorAll("#orderCardBody [data-val-mode]").forEach(btn => {
+      document.querySelectorAll("#detailSection [data-val-mode]").forEach(btn => {
         btn.addEventListener("click", () => {
           const modeInput = $("valMode");
           if (modeInput) modeInput.value = btn.dataset.valMode;
-          document.querySelectorAll("#orderCardBody [data-val-mode]").forEach(b => b.classList.toggle("active", b === btn));
+          document.querySelectorAll("#detailSection [data-val-mode]").forEach(b => b.classList.toggle("active", b === btn));
           updateTotal();
         });
       });
@@ -5369,10 +5457,10 @@
           });
         });
       };
-      if (type === "valorant-unrated") bindPills("#orderCardBody [data-val-unrated]", "valUnratedPkg", b => b.dataset.valUnrated || "");
-      if (type === "valorant-leveling") bindPills("#orderCardBody [data-val-level]", "valLevelPkg", b => b.dataset.valLevel || "");
-      if (type === "valorant-battlepass") bindPills("#orderCardBody [data-val-bp]", "valBpPkg", b => b.dataset.valBp || "");
-      if (type === "valorant-coaching") bindPills("#orderCardBody [data-val-coach]", "valCoachPkg", b => b.dataset.valCoach || "");
+      if (type === "valorant-unrated") bindPills("#detailSection [data-val-unrated]", "valUnratedPkg", b => b.dataset.valUnrated || "");
+      if (type === "valorant-leveling") bindPills("#detailSection [data-val-level]", "valLevelPkg", b => b.dataset.valLevel || "");
+      if (type === "valorant-battlepass") bindPills("#detailSection [data-val-bp]", "valBpPkg", b => b.dataset.valBp || "");
+      if (type === "valorant-coaching") bindPills("#detailSection [data-val-coach]", "valCoachPkg", b => b.dataset.valCoach || "");
     }
 
     function wireForm(type) {
@@ -5604,7 +5692,7 @@
         }));
       }
       if (type === "raid") wireRaidForm();
-      const bindRoot = $("orderCardBody") || $("orderForm");
+      const bindRoot = $("detailSection") || $("orderCardBody") || $("orderForm");
       bindRoot.querySelectorAll("input, select, textarea").forEach(input => {
         input.addEventListener("input", updateTotal);
         input.addEventListener("change", updateTotal);
@@ -5913,7 +6001,7 @@
       let pct = 0;
       const paid = [];
       const free = [];
-      const root = $("orderCardBody") || $("orderForm");
+      const root = $("detailSection") || $("orderCardBody") || $("orderForm");
       if (!root) return { pct: 0, paid, free };
       root.querySelectorAll("[data-val-extra-pct]").forEach(input => {
         if (input.type === "checkbox" && input.checked) {
