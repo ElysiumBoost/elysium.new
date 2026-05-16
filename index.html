@@ -40,6 +40,11 @@
       --font: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --display: Rajdhani, Inter, sans-serif;
       --hero-bg: url("assets/ana1.webp"), url("assets/bg-elysium-4k.webp");
+      --crimson: #e11d48;
+      --crimson-deep: #9f1239;
+      --glass: rgba(16, 19, 31, .72);
+      --glass-border: rgba(255, 255, 255, .08);
+      --thumb-aspect: 16 / 10;
     }
 
     * { box-sizing: border-box; }
@@ -93,6 +98,254 @@
     .shell {
       width: min(1240px, calc(100% - 32px));
       margin: 0 auto;
+    }
+
+    .trust-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+      gap: 12px;
+      margin: 0 0 24px;
+      padding: 16px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: inset 0 1px 0 var(--glass-border), 0 16px 48px rgba(0, 0, 0, .22);
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      min-height: 46px;
+    }
+
+    .trust-item__ic {
+      width: 30px;
+      height: 30px;
+      flex-shrink: 0;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+      line-height: 1;
+      background: linear-gradient(135deg, rgba(139, 92, 246, .28), rgba(225, 29, 72, .12));
+      border: 1px solid rgba(139, 92, 246, .32);
+    }
+
+    .trust-item__text {
+      min-width: 0;
+    }
+
+    .trust-item__text strong {
+      display: block;
+      font-family: var(--display);
+      font-size: 11px;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--text);
+      line-height: 1.15;
+    }
+
+    .trust-item__text span {
+      display: block;
+      margin-top: 2px;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .hero-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(240px, 0.82fr);
+      gap: 28px;
+      align-items: center;
+      padding: 44px 0 28px;
+    }
+
+    .hero-text {
+      min-width: 0;
+    }
+
+    .hero.is-home .hero-shell {
+      padding-top: 40px;
+      padding-bottom: 24px;
+    }
+
+    .hero-subtitle {
+      margin: 8px 0 12px;
+      font-family: var(--display);
+      font-size: clamp(17px, 2.1vw, 23px);
+      font-weight: 700;
+      letter-spacing: .055em;
+      text-transform: uppercase;
+      color: var(--price-accent);
+      line-height: 1.25;
+    }
+
+    .hero-cta {
+      margin-top: 20px;
+      min-height: 48px;
+      padding: 0 22px;
+      font-size: 14px;
+    }
+
+    .hero-collage {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      min-height: 228px;
+    }
+
+    .hero-collage__cell {
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(145deg, rgba(20, 24, 39, .88), rgba(7, 10, 16, .94)),
+        url("assets/bg-arc-4k.webp") center / cover no-repeat;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, .32), inset 0 1px 0 var(--glass-border);
+      min-height: 106px;
+    }
+
+    .hero-collage__cell:nth-child(2) {
+      background:
+        linear-gradient(145deg, rgba(20, 24, 39, .88), rgba(7, 10, 16, .94)),
+        url("assets/bg-valorant-4k.webp") center / cover no-repeat;
+    }
+
+    .hero-collage__cell:nth-child(3) {
+      grid-column: span 2;
+      background:
+        linear-gradient(145deg, rgba(20, 24, 39, .86), rgba(7, 10, 16, .94)),
+        url("assets/bg-lol-4k.webp") center / cover no-repeat;
+      min-height: 118px;
+    }
+
+    .how-it-works {
+      margin: 32px 0 24px;
+    }
+
+    .how-it-works > h2 {
+      margin: 0 0 14px;
+      font-family: var(--display);
+      font-size: clamp(22px, 2.8vw, 28px);
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .how-card {
+      padding: 16px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: linear-gradient(165deg, var(--panel), rgba(7, 10, 16, .94));
+      box-shadow: 0 18px 44px rgba(0, 0, 0, .2), inset 0 1px 0 var(--glass-border);
+      min-height: 132px;
+    }
+
+    .how-card__step {
+      font-family: var(--display);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      color: rgba(225, 29, 72, .82);
+      margin-bottom: 8px;
+    }
+
+    .how-card h3 {
+      margin: 0 0 6px;
+      font-family: var(--display);
+      font-size: 14px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      line-height: 1.15;
+    }
+
+    .how-card p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+      font-weight: 600;
+    }
+
+    .home-about-pricing {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .btn-premium {
+      border: 1px solid rgba(225, 29, 72, .38);
+      background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 38%, #be123c 100%);
+      color: #fff;
+      font-family: var(--display);
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      box-shadow: 0 14px 36px rgba(139, 92, 246, .2), 0 8px 24px rgba(190, 18, 60, .1);
+      transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+    }
+
+    .btn-premium:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 44px rgba(139, 92, 246, .26), 0 10px 28px rgba(190, 18, 60, .14);
+      filter: brightness(1.04);
+    }
+
+    .btn-glass {
+      border: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: var(--text);
+      box-shadow: inset 0 1px 0 var(--glass-border);
+    }
+
+    .btn-glass:hover {
+      border-color: var(--line-strong);
+      background: rgba(20, 24, 39, .88);
+    }
+
+    .add-to-cart-main.btn-premium,
+    #copyOrder.btn-premium {
+      width: 100%;
+      min-height: 48px;
+    }
+
+    @media (max-width: 1080px) {
+      .hero-shell {
+        grid-template-columns: 1fr;
+        padding-top: 32px;
+      }
+      .hero-collage {
+        order: -1;
+        max-width: 520px;
+      }
+      .how-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .home-about-pricing {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .trust-bar {
+        grid-template-columns: 1fr 1fr;
+        padding: 12px;
+      }
+      .how-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .topbar {
@@ -211,13 +464,18 @@
       transform: translateY(-1px);
       border-color: rgba(139, 92, 246, .45);
       background: rgba(139, 92, 246, .12);
-      box-shadow: 0 0 20px rgba(125, 211, 252, .08), 0 0 18px rgba(139, 92, 246, .12);
+      box-shadow: 0 0 18px rgba(139, 92, 246, .2), 0 0 22px rgba(255, 209, 102, .06);
     }
 
     .game-menu-item.is-active {
-      border-color: rgba(125, 211, 252, .38);
-      background: rgba(139, 92, 246, .18);
-      box-shadow: 0 0 0 1px rgba(139, 92, 246, .35), 0 10px 28px rgba(0, 0, 0, .32);
+      border-color: rgba(255, 209, 102, .42);
+      background: linear-gradient(135deg, rgba(139, 92, 246, .22), rgba(255, 209, 102, .12));
+      box-shadow: 0 0 0 1px rgba(139, 92, 246, .4), 0 10px 28px rgba(0, 0, 0, .32);
+    }
+
+    .game-menu-btn.has-active-game {
+      border-color: rgba(255, 209, 102, .45);
+      box-shadow: 0 0 0 1px rgba(139, 92, 246, .25), 0 0 22px rgba(139, 92, 246, .2);
     }
 
     .btn, .game-menu-btn, .cat-btn, .service-btn, .tab-btn {
@@ -1341,13 +1599,138 @@
     .popular-card, .service-card {
       position: relative;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      padding: 15px;
     }
 
-    .popular-card { min-height: 184px; }
-    .service-card { min-height: 302px; }
+    .service-card {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 0;
+      min-height: 268px;
+      padding: 0;
+      border-radius: 12px;
+    }
+
+    .service-card__media {
+      flex: 0 0 44%;
+      max-width: 380px;
+      align-self: stretch;
+      background: radial-gradient(circle at 40% 35%, rgba(139, 92, 246, .14), transparent 52%), #06050c;
+      border-right: 1px solid var(--line);
+    }
+
+    .service-card__media .category-thumb {
+      height: 100%;
+      min-height: 220px;
+      border-radius: 0;
+      margin: 0;
+    }
+
+    .service-card__media .service-thumb {
+      min-height: 220px;
+      height: 100%;
+      border-radius: 0;
+      border: 0;
+      background: transparent;
+    }
+
+    .service-card__body {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 18px 14px;
+      gap: 0;
+    }
+
+    .service-card__bullets {
+      margin: 12px 0 0;
+      padding: 0 0 0 1.15em;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    .service-card__bullets li + li {
+      margin-top: 4px;
+    }
+
+    .popular-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      min-height: 200px;
+      padding: 0;
+      border-radius: 12px;
+    }
+
+    .popular-badge {
+      display: inline-flex;
+      align-self: flex-start;
+      margin: 12px 12px 0;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-family: var(--display);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #0c0f18;
+      background: linear-gradient(90deg, #fbbf24, #fde68a);
+      border: 1px solid rgba(251, 191, 36, .55);
+    }
+
+    .popular-card__inner {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      flex: 1;
+      gap: 0;
+      min-height: 0;
+    }
+
+    .popular-card__media {
+      flex: 0 0 40%;
+      max-width: 200px;
+      background: radial-gradient(circle at 40% 35%, rgba(139, 92, 246, .14), transparent 52%), #06050c;
+      border-right: 1px solid var(--line);
+    }
+
+    .popular-card__media .category-thumb {
+      height: 100%;
+      min-height: 180px;
+      margin: 0;
+      border-radius: 0;
+    }
+
+    .popular-card__media .service-thumb {
+      height: 100%;
+      min-height: 180px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .popular-card__body {
+      flex: 1;
+      min-width: 0;
+      padding: 12px 14px 14px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .popular-card__body .price {
+      margin-top: auto;
+      font-size: 22px;
+      padding-top: 10px;
+    }
+
+    .popular-card .service-btn {
+      margin-top: 10px;
+      width: 100%;
+      min-height: 42px;
+    }
 
     .popular-card::before, .service-card::before {
       content: "";
@@ -1383,7 +1766,7 @@
     .category-thumb {
       width: 100%;
       height: auto;
-      aspect-ratio: 340 / 270;
+      aspect-ratio: var(--thumb-aspect);
       padding: 0;
       border: 0;
       border-radius: 8px;
@@ -1396,50 +1779,6 @@
       width: 100%;
       height: 100%;
       border-color: rgba(139, 92, 246, .16);
-    }
-
-    .service-card .category-thumb {
-      width: 100%;
-      height: auto;
-      aspect-ratio: 340 / 270;
-      margin-bottom: 2px;
-    }
-
-    .popular-card {
-      gap: 10px;
-      padding: 12px;
-    }
-
-    .popular-card-head {
-      display: grid;
-      grid-template-columns: 116px minmax(0, 1fr);
-      gap: 12px;
-      align-items: start;
-      min-width: 0;
-    }
-
-    .popular-card .category-thumb {
-      grid-row: 1 / span 2;
-      width: 116px;
-      align-self: start;
-    }
-
-    .popular-card-main {
-      min-width: 0;
-    }
-
-    .popular-card .price {
-      grid-column: 2;
-      justify-self: start;
-      text-align: left;
-      font-size: 22px;
-    }
-
-    .popular-card .service-btn {
-      align-self: end;
-      min-width: 108px;
-      min-height: 38px;
-      margin-left: auto;
     }
 
     .popular-card h3, .service-card h3 {
@@ -1589,9 +1928,9 @@
       display: none;
       justify-content: center;
       width: fit-content;
-      color: #a7ffcf;
-      border-color: rgba(31,210,111,.34);
-      background: rgba(20, 64, 46, .5);
+      color: #ddd6fe;
+      border-color: rgba(139, 92, 246, .45);
+      background: rgba(46, 16, 101, .35);
       animation: softPulse 1.8s ease-in-out infinite;
     }
 
@@ -1600,8 +1939,8 @@
     }
 
     @keyframes softPulse {
-      0%, 100% { transform: translateY(0); box-shadow: 0 0 0 rgba(31,210,111,0); }
-      50% { transform: translateY(-1px); box-shadow: 0 0 18px rgba(31,210,111,.16); }
+      0%, 100% { transform: translateY(0); box-shadow: 0 0 0 rgba(139, 92, 246, 0); }
+      50% { transform: translateY(-1px); box-shadow: 0 0 18px rgba(139, 92, 246, .2); }
     }
 
     .service-grid {
@@ -1617,10 +1956,84 @@
 
     .detail {
       display: grid;
-      grid-template-columns: minmax(0, .92fr) minmax(400px, .56fr);
-      gap: 18px;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 440px);
+      gap: 22px;
       align-items: start;
-      margin-top: 8px;
+      margin-top: 12px;
+    }
+
+    .detail-right {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    #detailSection.detail--valorant-layout .detail-right {
+      display: contents;
+    }
+
+    #detailSection.detail--valorant-layout .detail-feature-thumb {
+      display: none;
+    }
+
+    .detail-feature-thumb {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: linear-gradient(165deg, rgba(12, 10, 22, .9), rgba(7, 10, 16, .97));
+      box-shadow: 0 22px 56px rgba(0, 0, 0, .28), inset 0 1px 0 var(--glass-border);
+    }
+
+    .detail-feature-thumb .service-thumb {
+      aspect-ratio: var(--thumb-aspect);
+      height: auto;
+      min-height: 180px;
+      border: 0;
+      border-radius: 0;
+      background: radial-gradient(circle at 50% 30%, rgba(139, 92, 246, .2), transparent 55%), #06050c;
+    }
+
+    .detail-feature-thumb .service-thumb img {
+      object-fit: cover;
+      object-position: center center;
+    }
+
+    .detail-specs {
+      margin: 14px 0 0;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: inset 0 1px 0 var(--glass-border);
+    }
+
+    .detail-specs:not(:empty) {
+      display: block;
+    }
+
+    .detail-specs h4.detail-specs__k {
+      margin: 14px 0 6px;
+      font-family: var(--display);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(167, 139, 250, .92);
+    }
+
+    .detail-specs h4.detail-specs__k:first-child {
+      margin-top: 0;
+    }
+
+    .detail-specs p {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+      font-weight: 600;
     }
 
     .detail-left {
@@ -1641,23 +2054,12 @@
     .detail-left > * { position: relative; z-index: 1; }
 
     .detail-title {
-      display: grid;
-      grid-template-columns: 150px minmax(0, 1fr);
-      gap: 14px;
-      align-items: center;
+      display: block;
       margin-bottom: 12px;
     }
 
     .detail-icon {
-      width: 150px;
-      height: auto;
-      aspect-ratio: 340 / 270;
-      display: grid;
-      place-items: center;
-      border: 0;
-      border-radius: var(--radius);
-      background: transparent;
-      color: #c8d4f0;
+      display: none;
     }
 
     .detail-icon .service-thumb {
@@ -2145,8 +2547,8 @@
       max-width: 100%;
     }
 
-    .order-card.is-valorant .summary-total .btn.btn-green,
-    .order-card.is-arc-split .summary-total .btn.btn-green {
+    .order-card.is-valorant .summary-total .btn.btn-premium,
+    .order-card.is-arc-split .summary-total .btn.btn-premium {
       margin-top: 4px;
       min-height: 46px;
       box-sizing: border-box;
@@ -4279,11 +4681,130 @@
       font-weight: 800;
       letter-spacing: .1em;
       text-transform: uppercase;
-      color: rgba(191, 252, 255, .78);
+      color: rgba(183, 176, 223, .9);
+    }
+
+    .cart-item--receipt .cart-receipt-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 10px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(139, 92, 246, .22);
+    }
+
+    .cart-item--receipt .cart-receipt-num {
+      flex: none;
+      font-family: var(--display);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      color: rgba(183, 176, 223, .55);
+    }
+
+    .cart-item--receipt .cart-receipt-title {
+      margin: 0;
+      flex: 1;
+      text-align: right;
+      font-family: var(--display);
+      font-size: 16px;
+      line-height: 1.15;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      overflow-wrap: anywhere;
+    }
+
+    .cart-receipt-dl {
+      margin: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .cart-receipt-dl > div {
+      display: grid;
+      grid-template-columns: minmax(92px, 34%) minmax(0, 1fr);
+      gap: 8px 12px;
+      align-items: baseline;
+      font-size: 12px;
+    }
+
+    .cart-receipt-dl dt {
+      margin: 0;
+      font-family: var(--display);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(183, 176, 223, .72);
+    }
+
+    .cart-receipt-dl dd {
+      margin: 0;
+      color: var(--text);
+      font-weight: 650;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    .cart-receipt-section {
+      margin-top: 10px;
+    }
+
+    .cart-receipt-k {
+      margin: 0 0 6px;
+      font-family: var(--display);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(167, 139, 250, .88);
+    }
+
+    .cart-receipt-delivery,
+    .cart-receipt-note {
+      margin: 10px 0 0;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(139, 92, 246, .2);
+      background: rgba(8, 7, 18, .55);
+      font-size: 11px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .cart-receipt-note strong,
+    .cart-receipt-delivery strong {
+      display: block;
+      margin-bottom: 4px;
+      font-family: var(--display);
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(230, 224, 255, .88);
+    }
+
+    .cart-item-price-inline {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: .03em;
+      color: var(--price);
+    }
+
+    .cart-item-price-inline .estimated-tag {
+      margin-right: 6px;
+    }
+
+    .cart-receipt-hint {
+      margin: 6px 0 0;
+      font-size: 11px;
+      line-height: 1.4;
+      color: rgba(183, 176, 223, .78);
     }
 
     .cart-item-detail-body {
-      margin: 8px 0 0;
+      margin: 0;
       color: var(--muted);
       white-space: pre-wrap;
       line-height: 1.5;
@@ -4291,7 +4812,10 @@
       overflow-wrap: anywhere;
       max-height: 168px;
       overflow-y: auto;
-      padding-right: 6px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(139, 92, 246, .14);
+      background: rgba(5, 4, 12, .4);
       scrollbar-width: thin;
     }
 
@@ -4392,7 +4916,7 @@
 
     .copy-status {
       min-height: 20px;
-      color: var(--green);
+      color: rgba(212, 196, 255, .95);
       font-weight: 800;
       font-size: 13px;
     }
@@ -4889,12 +5413,32 @@
         box-shadow: inset 0 14px 28px -18px rgba(0, 0, 0, .45);
       }
       .disabled-btn { width: 100%; min-width: 0; }
-      .popular-card-head { grid-template-columns: 100px minmax(0, 1fr); }
-      .popular-card .category-thumb { width: 100px; }
+      .service-card {
+        flex-direction: column;
+      }
+      .service-card__media {
+        flex: none;
+        max-width: none;
+        width: 100%;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .service-card__media .category-thumb,
+      .service-card__media .service-thumb {
+        min-height: 200px;
+      }
+      .popular-card__inner {
+        flex-direction: column;
+      }
+      .popular-card__media {
+        flex: none;
+        max-width: none;
+        width: 100%;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
       .raid-toggle-grid, .quick-raid-grid { grid-template-columns: 1fr 1fr; }
       .detail-steps { grid-template-columns: 1fr; }
-      .detail-title { grid-template-columns: 1fr; }
-      .detail-icon { width: 150px; height: auto; }
       .quick-head, .section-head { align-items: flex-start; flex-direction: column; }
       .cart-backdrop { padding: 10px; }
       .drawer { height: calc(100svh - 20px); }
@@ -4903,7 +5447,7 @@
   </style>
 </head>
 <body>
-  <audio id="bgMusic" src="assets/elysium-loop.mp3" loop preload="metadata"></audio>
+  <audio id="bgMusic" src="assets/elysium-loop.mp3" loop preload="metadata" muted></audio>
   <header class="topbar">
     <div class="shell topbar-inner">
       <a class="brand" href="#" id="brandHome">
@@ -4931,7 +5475,7 @@
         </select>
         <div class="audio-control" title="Music volume">
           <button class="audio-toggle" id="audioToggle" type="button" aria-label="Toggle music">&#9835;</button>
-          <input class="audio-volume" id="audioVolume" type="range" min="0" max="100" value="22" aria-label="Music volume">
+          <input class="audio-volume" id="audioVolume" type="range" min="0" max="100" value="0" aria-label="Music volume">
         </div>
         <button class="btn cart-button btn-icon" id="cartOpen" type="button" aria-label="Open cart" title="Open cart">
           <svg class="btn-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.65" stroke-linejoin="round" d="M6.5 7h11l-1.1 11H7.6L6.5 7z"/><path fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" d="M9.5 7V6a2.5 2.5 0 015 0v1"/></svg>
@@ -4950,43 +5494,94 @@
   </div>
 
   <main>
-    <section class="hero" id="hero">
-      <div class="shell">
-        <span class="eyebrow" id="heroKicker">Arc Raiders Boost</span>
-        <h1 id="heroTitle">Buy Arc Raiders Services</h1>
-        <p id="heroCopy">Choose a service, customize the order, add it to cart, and copy a clean Discord ticket. Customers can view local currency while booster totals stay in USD.</p>
+    <section class="hero is-home" id="hero">
+      <div class="shell hero-shell">
+        <div class="hero-text">
+          <span class="eyebrow" id="heroKicker">ELYSIUM BOOST</span>
+          <h1 id="heroTitle">ELYSIUM BOOST</h1>
+          <p class="hero-subtitle" id="heroSubtitle">Premium Game Services, Manual Delivery &amp; Fast Discord Support</p>
+          <p id="heroCopy">Choose your game, customize your order, copy your Discord ticket and get matched with a verified booster.</p>
+          <button type="button" class="btn btn-premium hero-cta" id="heroCta">Start Your Order</button>
+        </div>
+        <div class="hero-collage" aria-hidden="true">
+          <div class="hero-collage__cell"></div>
+          <div class="hero-collage__cell"></div>
+          <div class="hero-collage__cell"></div>
+        </div>
       </div>
     </section>
 
     <section class="home-content" id="homeContent">
       <div class="shell">
-        <div class="quick-head" id="popularHead">
+        <div class="trust-bar" aria-label="Trust and guarantees">
+          <div class="trust-item">
+            <span class="trust-item__ic" aria-hidden="true">&#128666;</span>
+            <div class="trust-item__text"><strong>Manual delivery</strong><span>Human-run services — no bot-only handoffs.</span></div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-item__ic" aria-hidden="true">&#9876;</span>
+            <div class="trust-item__text"><strong>No cheats</strong><span>Clean play reputation matters to us.</span></div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-item__ic" aria-hidden="true">&#128274;</span>
+            <div class="trust-item__text"><strong>Safe process</strong><span>Clear steps and Discord confirmation.</span></div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-item__ic" aria-hidden="true">&#9832;</span>
+            <div class="trust-item__text"><strong>Fast Discord support</strong><span>Ticket-first workflow for quick replies.</span></div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-item__ic" aria-hidden="true">&#9733;</span>
+            <div class="trust-item__text"><strong>Verified boosters</strong><span>Vetted pros on premium requests.</span></div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-item__ic" aria-hidden="true">&#9989;</span>
+            <div class="trust-item__text"><strong>Completion guarantee</strong><span>Finish or fair resolution as agreed in Discord.</span></div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-item__ic" aria-hidden="true">&#128196;</span>
+            <div class="trust-item__text"><strong>Secure order confirmation</strong><span>Receipt-style ticket + optional receipt image.</span></div>
+          </div>
+        </div>
+        <div class="quick-head" id="homeGameHead">
           <div>
             <h2>Choose Your Game</h2>
-            <p>Select a game to open the service configurator.</p>
+            <p>Select a game to open the premium service configurator.</p>
           </div>
         </div>
         <div class="home-grid" id="homeGameGrid"></div>
-        <div class="info-grid info-grid--compact">
-          <article class="info-card info-card--compact">
-            <h3>About Us</h3>
-            <p>ELYSIUM BOOST is built as a clean Discord-ticket order desk for premium game services. Pick a service, customize it, and send boosters a readable order summary.</p>
-          </article>
-          <article class="info-card info-card--compact">
-            <h3>How It Works</h3>
-            <p>Choose a game, select a service, adjust options and quantities, add it to cart, then copy the ticket into Discord for confirmation.</p>
-          </article>
-          <article class="info-card info-card--compact">
-            <h3>Clear Pricing</h3>
-            <p>Customers can view prices in their selected currency, and the copied ticket keeps that same currency.</p>
-          </article>
-        </div>
+        <section class="how-it-works" aria-labelledby="howItWorksTitle">
+          <h2 id="howItWorksTitle">How It Works</h2>
+          <div class="how-grid">
+            <article class="how-card">
+              <div class="how-card__step">01</div>
+              <h3>Choose your game</h3>
+              <p>Pick your title from the arena grid or the Games menu — Arc, Valorant, League, WoW, CS2, and more.</p>
+            </article>
+            <article class="how-card">
+              <div class="how-card__step">02</div>
+              <h3>Customize your service</h3>
+              <p>Select the package, options, and quantity. Your live total updates in the currency you choose.</p>
+            </article>
+            <article class="how-card">
+              <div class="how-card__step">03</div>
+              <h3>Copy your Discord ticket</h3>
+              <p>Add to cart, then copy a clean, readable ticket with every line item spelled out for support.</p>
+            </article>
+            <article class="how-card">
+              <div class="how-card__step">04</div>
+              <h3>Confirm with support</h3>
+              <p>Paste in Discord, confirm Embark ID for Arc if needed, and lock ETA with your booster.</p>
+            </article>
+          </div>
+        </section>
+        <div class="home-about-pricing" id="homeAboutBlock"></div>
       </div>
     </section>
 
     <section class="main service-content hidden" id="serviceContent">
       <div class="shell">
-        <div class="quick-head">
+        <div class="quick-head" id="popularHead">
           <div>
             <h2 id="popularTitle">Popular Orders</h2>
             <p id="popularCopy">Fast-start services customers usually choose first.</p>
@@ -5018,6 +5613,7 @@
               </div>
             </div>
             <p class="intro" id="detailIntro"></p>
+            <div class="detail-specs" id="detailSpecs" hidden></div>
             <div id="valorantConfiguratorMount" class="valorant-cfg-mount" hidden></div>
             <div class="detail-left-meta" id="detailLeftMeta">
               <div class="detail-steps" id="detailSteps"></div>
@@ -5026,8 +5622,10 @@
               <div class="detail-val-trust" id="detailValorantTrust" hidden></div>
             </div>
           </div>
-          <aside class="order-card">
-            <div class="order-panel-head"><span class="detail-deal" id="detailDeal"></span><button class="btn clear-service" id="clearService" type="button">Clear</button></div>
+          <div class="detail-right" id="detailRightCol">
+            <div class="detail-feature-thumb" id="detailFeatureThumb" aria-hidden="true"></div>
+            <aside class="order-card">
+            <div class="order-panel-head"><span class="detail-deal" id="detailDeal"></span><button class="btn clear-service btn-glass" id="clearService" type="button">Clear</button></div>
             <div class="order-card-body" id="orderCardBody">
               <div class="order-form" id="orderForm"></div>
               <div class="summary-total" id="orderSummaryTotal">
@@ -5036,10 +5634,11 @@
                 <span id="liveTotal">$0.00</span>
                 <div class="arc-price-breakdown" id="arcPriceBreakdown" hidden></div>
                 <em id="usdHint">Ticket value: $0.00 USD</em>
-                <button class="btn btn-green add-to-cart-main" id="addToCart" type="button">Add to Cart</button>
+                <button class="btn btn-premium add-to-cart-main" id="addToCart" type="button">Add to Cart</button>
               </div>
             </div>
           </aside>
+          </div>
         </section>
       </div>
     </section>
@@ -5063,8 +5662,8 @@
           <em id="cartUsdHint">Ticket total: $0.00 USD</em>
         </div>
         <p class="cart-verify-note" id="cartVerifyNote">For safer order verification, send the generated order receipt image with your Discord ticket.</p>
-        <button class="btn btn-green" id="copyOrder" type="button">Copy Discord Ticket</button>
-        <button class="btn btn-primary" id="downloadOrderReceipt" type="button">Download Order Receipt</button>
+        <button class="btn btn-premium" id="copyOrder" type="button">Copy Discord Ticket</button>
+        <button class="btn btn-glass" id="downloadOrderReceipt" type="button">Download Order Receipt</button>
         <button class="btn" id="clearCart" type="button">Clear Cart</button>
         <a class="btn btn-primary" id="openDiscord" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Open Discord</a>
         <a class="btn" href="https://discord.com/channels/1499767937974669363/1503176511912542298" target="_blank" rel="noopener">Leave Feedback</a>
@@ -5080,7 +5679,7 @@
       <label id="arcIdLabel" for="arcIdInput">Embark ID</label>
       <input id="arcIdInput" type="text" autocomplete="off" placeholder="Name#0000">
       <div class="id-modal-actions">
-        <button class="btn btn-green" id="arcIdDone" type="button" aria-label="Done">&#10003;</button>
+        <button class="btn btn-premium" id="arcIdDone" type="button" aria-label="Save Embark ID">Save</button>
         <button class="btn btn-danger" id="arcIdSkip" type="button" aria-label="Will type it on Discord">&#10005;</button>
       </div>
     </div>
@@ -5940,7 +6539,10 @@
       closeGameMenu();
       syncGameHash(id);
       renderAll();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      requestAnimationFrame(() => {
+        const target = $("serviceHead") || $("serviceContent");
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
     }
 
     function renderGames() {
@@ -5960,6 +6562,8 @@
         })
         .join("");
       setupGameMenuListeners();
+      const gmb = $("gameMenuBtn");
+      if (gmb) gmb.classList.toggle("has-active-game", Boolean(state.game));
     }
 
     function renderHome() {
@@ -6038,22 +6642,18 @@
         </article>`);
       }
       $("homeGameGrid").innerHTML = chunks.join("");
-      document.querySelector(".info-grid").innerHTML = `
+      const ab = $("homeAboutBlock");
+      if (ab) {
+        ab.innerHTML = `
         <article class="info-card info-card--compact">
-          <h3>${ui("About Us")}</h3>
-          <p>${ui("ELYSIUM BOOST is built as a clean Discord-ticket order desk for premium game services. Pick a service, customize it, and send boosters a readable order summary.")}</p>
+          <h3>${ui("About ELYSIUM BOOST")}</h3>
+          <p>${ui("ELYSIUM BOOST provides premium manual game services with verified boosters, clean Discord-ticket order flow and fast support. Every order is handled with safety, clarity and professional delivery standards.")}</p>
         </article>
         <article class="info-card info-card--compact">
-          <h3>${ui("How It Works")}</h3>
-          <p>${ui("Choose a game, select a service, adjust options and quantities, add it to cart, then copy the ticket into Discord for confirmation.")}</p>
-        </article>
-        <article class="info-card info-card--compact">
-          <h3>${ui("Clear Pricing")}</h3>
-          <p>${ui("Customers can view prices in their selected currency, and the copied ticket keeps that same currency.")}</p>
-        </article>
-      `;
-      const ig = document.querySelector(".info-grid");
-      if (ig) ig.classList.add("info-grid--compact");
+          <h3>${ui("Transparent pricing")}</h3>
+          <p>${ui("Browse in your currency. Your cart, ticket, and receipt use the same currency so totals always match.")}</p>
+        </article>`;
+      }
       document.querySelectorAll("[data-home-game]").forEach(button => button.addEventListener("click", () => {
         selectGame(button.dataset.homeGame);
       }));
@@ -6166,6 +6766,8 @@
     function renderHero() {
       const game = currentGame();
       const hero = $("hero");
+      const sub = $("heroSubtitle");
+      const cta = $("heroCta");
       if (game) {
         hero.classList.remove("is-home");
         const vHero = game.id === "valorant" && game.valorantHeroPrimary;
@@ -6175,14 +6777,24 @@
           hero.style.setProperty("--hero-bg", `url("${game.heroBg}")`);
         }
         hero.style.setProperty("--hero-position", game.heroPosition || "center center");
+        if (sub) sub.style.display = "none";
+        if (cta) cta.style.display = "none";
+        $("heroKicker").textContent = ui(game.kicker);
+        $("heroTitle").textContent = ui(game.title);
+        $("heroCopy").textContent = ui(game.copy);
       } else {
         hero.classList.add("is-home");
         hero.style.removeProperty("--hero-bg");
         hero.style.removeProperty("--hero-position");
+        if (sub) {
+          sub.style.display = "";
+          sub.textContent = ui("Premium Game Services, Manual Delivery & Fast Discord Support");
+        }
+        if (cta) cta.style.display = "inline-flex";
+        $("heroKicker").textContent = ui("ELYSIUM BOOST");
+        $("heroTitle").textContent = ui("ELYSIUM BOOST");
+        $("heroCopy").textContent = ui("Choose your game, customize your order, copy your Discord ticket and get matched with a verified booster.");
       }
-      $("heroKicker").textContent = game ? ui(game.kicker) : "ELYSIUM BOOST";
-      $("heroTitle").textContent = game ? ui(game.title) : ui("Choose Your Boosting Arena");
-      $("heroCopy").textContent = game ? ui(game.copy) : ui("Start from the ELYSIUM home screen, choose a game, then build a Discord-ready order with clean pricing and service details.");
     }
 
     function renderPopular() {
@@ -6305,32 +6917,66 @@
       }
     }
 
+    function premiumCardBullets() {
+      return `<ul class="service-card__bullets"><li>${ui("Manual delivery — Discord ticket & verified booster")}</li><li>${ui("Your currency on the ticket and in cart")}</li><li>${ui("No cheats — safety-first process")}</li></ul>`;
+    }
+
+    function buildDetailSpecs(service) {
+      let pkg = "";
+      const vg = currentGame()?.id === "valorant";
+      const vf = service.form && String(service.form).startsWith("valorant-");
+      if (vg && vf) {
+        const cat = typeof valorantCategoryContent !== "undefined" ? valorantCategoryContent[service.category] : null;
+        if (cat && cat.highlights && cat.highlights.length) {
+          pkg = cat.highlights.slice(0, 4).map(h => ui(h)).join(" · ");
+        }
+      }
+      if (!pkg) {
+        const intro = ui(service.intro || "").trim();
+        pkg = intro.length > 12 ? intro.slice(0, 200) + (intro.length > 200 ? "…" : "") : ui("Full delivery as configured in the order panel — tailored options you select below.");
+      }
+      return `
+        <h4 class="detail-specs__k">${ui("Package includes")}</h4>
+        <p>${escapeHtml(pkg)}</p>
+        <h4 class="detail-specs__k">${ui("Delivery method")}</h4>
+        <p>${escapeHtml(ui("Manual coordination through Discord after you paste your ticket — booster assigned by support."))}</p>
+        <h4 class="detail-specs__k">${ui("Safety & guarantee")}</h4>
+        <p>${escapeHtml(ui("Verified boosters, transparent ticket text, and completion terms confirmed in Discord before play."))}</p>
+      `;
+    }
+
     function cardMarkup(service, popular) {
       const serviceVisual = categoryArtwork(service.category || "custom", service.cardTitle);
+      const priceBlock = `${(service.valorantCustomPrice || service.form === "valorant-radiant") ? "" : "<small>From</small>"}${servicePrice(service)}`;
       if (popular) {
         return `
           <article class="popular-card">
-            <div class="popular-card-head">
-              <span class="card-icon category-thumb">${serviceVisual}</span>
-              <div class="popular-card-main">
+            <span class="popular-badge">${ui("Best seller")}</span>
+            <div class="popular-card__inner">
+              <div class="popular-card__media"><span class="category-thumb">${serviceVisual}</span></div>
+              <div class="popular-card__body">
                 <h3>${ui(service.cardTitle)}</h3>
                 <p>${ui(service.short)}</p>
+                ${premiumCardBullets()}
+                <div class="price">${priceBlock}</div>
+                <button class="service-btn btn-premium ${state.serviceId === service.id ? "active" : ""}" type="button" data-service="${service.id}">${ui("View Details")}</button>
               </div>
-              <div class="price">${(service.valorantCustomPrice || service.form === "valorant-radiant") ? "" : "<small>From</small>"}${servicePrice(service)}</div>
             </div>
-            <button class="service-btn ${state.serviceId === service.id ? "active" : ""}" type="button" data-service="${service.id}">${ui("Customize")}</button>
           </article>
         `;
       }
       return `
         <article class="service-card">
-          <div class="card-top"><span class="card-icon category-thumb">${serviceVisual}</span></div>
-          <h3>${ui(service.cardTitle)}</h3>
-          <p>${ui(service.short)}</p>
-          <footer>
-            <div class="price">${(service.valorantCustomPrice || service.form === "valorant-radiant") ? "" : "<small>From</small>"}${servicePrice(service)}</div>
-            <button class="service-btn ${state.serviceId === service.id ? "active" : ""}" type="button" data-service="${service.id}">${ui("Details")}</button>
-          </footer>
+          <div class="service-card__media"><span class="category-thumb">${serviceVisual}</span></div>
+          <div class="service-card__body">
+            <h3>${ui(service.cardTitle)}</h3>
+            <p>${ui(service.short)}</p>
+            ${premiumCardBullets()}
+            <footer>
+              <div class="price">${priceBlock}</div>
+              <button class="service-btn btn-glass ${state.serviceId === service.id ? "active" : ""}" type="button" data-service="${service.id}">${ui("Details")}</button>
+            </footer>
+          </div>
         </article>
       `;
     }
@@ -6364,6 +7010,16 @@
         $("detailDeal").innerHTML = "";
         $("detailSteps").innerHTML = "";
         $("orderForm").innerHTML = "";
+        const dft0 = $("detailFeatureThumb");
+        const ds0 = $("detailSpecs");
+        if (dft0) {
+          dft0.innerHTML = "";
+          dft0.setAttribute("aria-hidden", "true");
+        }
+        if (ds0) {
+          ds0.innerHTML = "";
+          ds0.hidden = true;
+        }
         const hl0 = $("detailHighlights");
         const vt0 = $("detailValorantTrust");
         if (hl0) { hl0.hidden = true; hl0.innerHTML = ""; }
@@ -6373,6 +7029,16 @@
         syncValorantOrderFormMount(null);
         updateTotal();
         return;
+      }
+      const dft = $("detailFeatureThumb");
+      const ds = $("detailSpecs");
+      if (dft) {
+        dft.innerHTML = categoryArtwork(service.category || "custom", service.cardTitle);
+        dft.setAttribute("aria-hidden", "false");
+      }
+      if (ds) {
+        ds.innerHTML = buildDetailSpecs(service);
+        ds.hidden = false;
       }
       $("detailIcon").innerHTML = categoryArtwork(service.category || "custom", service.cardTitle);
       $("detailTitle").textContent = ui(service.title);
@@ -8637,26 +9303,34 @@
             <button type="button" class="cart-embark-btn" id="cartEmbarkEditBtn">${escapeHtml(ui("Add or edit Embark ID"))}</button>
           </div>`
           : "";
-        $("cartBody").innerHTML = embarkBlock + state.cart.map(item => {
+        $("cartBody").innerHTML = embarkBlock + state.cart.map((item, idx) => {
           const priceLabel = item.custom
             ? (item.game === "Valorant" ? "Custom Price" : "CUSTOM")
             : (item.estimated ? `<span class="estimated-tag">Estimated</span>${displayInCurrency(item.total, item.viewedCurrency)}` : displayInCurrency(item.total, item.viewedCurrency));
           const estimateNote = item.estimated ? `<p class="cart-estimate-note">${escapeHtml(PRIVATE_ESTIMATE_NOTE)}</p>` : "";
-          const qty = item.qty && item.qty > 1 ? item.qty : null;
+          const qty = Math.max(1, item.qty || 1);
           const titleSafe = escapeHtml(ui(item.title));
-          const titleLine = qty ? `${titleSafe} <span class="cart-qty-pill">×${qty}</span>` : titleSafe;
+          const perUnitHint = qty > 1 && !item.custom ? `<div class="cart-receipt-hint">${escapeHtml(ui("Shown as line total for this configuration."))}</div>` : "";
           return `
-            <article class="cart-item">
-              <div class="cart-item-top">
-                <div class="cart-item-main">
-                  <h3>${titleLine}</h3>
-                  <p class="cart-item-game">${escapeHtml(ui(item.game))}</p>
-                  <div class="cart-item-detail-body">${escapeHtml(item.details)}</div>
-                  ${estimateNote}
-                </div>
-                <div class="cart-item-price">${priceLabel}</div>
+            <article class="cart-item cart-item--receipt">
+              <div class="cart-receipt-head">
+                <span class="cart-receipt-num">#${idx + 1}</span>
+                <h3 class="cart-receipt-title">${titleSafe}</h3>
               </div>
-              <button class="btn remove" type="button" data-remove="${item.id}">Remove</button>
+              <dl class="cart-receipt-dl">
+                <div><dt>${ui("Game")}</dt><dd>${escapeHtml(ui(item.game))}</dd></div>
+                <div><dt>${ui("Quantity")}</dt><dd>${qty}</dd></div>
+                <div><dt>${ui("Currency")}</dt><dd>${escapeHtml(item.viewedCurrency)}</dd></div>
+                <div><dt>${ui("Line price")}</dt><dd class="cart-item-price-inline">${priceLabel}</dd></div>
+              </dl>
+              <div class="cart-receipt-section">
+                <div class="cart-receipt-k">${ui("Selected options")}</div>
+                <div class="cart-item-detail-body">${escapeHtml(item.details)}</div>
+              </div>
+              <div class="cart-receipt-delivery"><strong>${ui("Delivery")}</strong>${escapeHtml(ui("Manual handoff via Discord after you paste your ticket — finalize timing and instructions with support."))}</div>
+              ${perUnitHint}
+              ${estimateNote}
+              <button class="btn remove" type="button" data-remove="${item.id}">${ui("Remove")}</button>
             </article>
           `;
         }).join("") + `<div class="cart-continue-wrap"><button type="button" class="btn-continue" id="continueShoppingCart">Continue Shopping</button></div>`;
@@ -8795,28 +9469,51 @@
       const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
       const hasCustom = state.cart.some(item => item.custom);
       const hasEstimate = state.cart.some(item => item.estimated);
-      const lines = ["ELYSIUM BOOST - ORDER TICKET", "Discord Ticket: " + DISCORD_URL, "", "ORDER ITEMS:"];
+      const rule = "────────────────────────────────";
+      const lines = [
+        rule,
+        "ELYSIUM BOOST — ORDER TICKET",
+        rule,
+        "",
+        "Discord channel",
+        DISCORD_URL,
+        "",
+        "LINE ITEMS",
+        ""
+      ];
       state.cart.forEach((item, index) => {
-        const qty = item.qty && item.qty > 1 ? item.qty : 0;
-        lines.push(`${index + 1}. ${item.game} - ${item.title}`);
-        if (qty) lines.push(`   Quantity: ${qty}`);
-        item.details.split("\n").forEach(line => lines.push(`   - ${line}`));
+        const qty = Math.max(1, item.qty || 1);
         const priceLine = item.custom
           ? (item.game === "Valorant" ? "Custom Price" : "CUSTOM")
           : (item.estimated ? `Estimated ${displayInCurrency(item.total, item.viewedCurrency)}` : displayInCurrency(item.total, item.viewedCurrency));
-        lines.push(`   Price: ${priceLine}`);
-        lines.push(`   Currency: ${item.viewedCurrency}`);
+        lines.push(`[${index + 1}] ${item.game} — ${item.title}`);
+        lines.push(`    Quantity: ${qty}`);
+        lines.push(`    Currency: ${item.viewedCurrency}`);
+        lines.push(`    Line price: ${priceLine}`);
+        lines.push("    Options / details:");
+        item.details.split("\n").forEach(line => {
+          const t = line.trim();
+          if (t) lines.push(`      • ${t}`);
+        });
         lines.push("");
       });
       const currency = state.cart[0]?.viewedCurrency || state.currency;
-      const totalLabel = hasEstimate ? "ESTIMATED TOTAL" : "TOTAL";
+      const totalLabel = hasEstimate ? "ESTIMATED ORDER TOTAL" : "ORDER TOTAL";
       const totalText = hasCustom ? displayInCurrency(total, currency) + " + CUSTOM" : displayInCurrency(total, currency);
+      lines.push(rule);
       lines.push(`${totalLabel}: ${totalText}`);
+      lines.push(rule);
       const idLine = getArcIdLine();
-      if (idLine) lines.push(idLine);
+      if (idLine) {
+        lines.push("");
+        lines.push(idLine);
+      }
       lines.push("");
-      if (hasEstimate) lines.push(`Customer note: ${PRIVATE_ESTIMATE_NOTE}`);
-      lines.push("Customer note: Please confirm availability, ETA, and final instructions in Discord.");
+      lines.push("NOTES");
+      if (hasEstimate) lines.push(`• ${PRIVATE_ESTIMATE_NOTE}`);
+      lines.push("• Please confirm availability, ETA, and final instructions in Discord.");
+      lines.push("");
+      lines.push("Thank you — ELYSIUM BOOST");
       return lines.join("\n");
     }
 
@@ -9151,24 +9848,40 @@
       renderSiteSearchResults(entries, query);
     }
 
+    const MUSIC_PREF_KEY = "elyBoostMusicPrefV1";
     const bgMusic = $("bgMusic");
     const audioToggle = $("audioToggle");
     const audioVolume = $("audioVolume");
-    let musicStarted = false;
-    bgMusic.volume = Number(audioVolume.value) / 100;
 
-    function updateAudioButton() {
-      audioToggle.innerHTML = bgMusic.paused || bgMusic.muted ? "&#9835;" : "II";
-      audioToggle.setAttribute("aria-label", bgMusic.paused || bgMusic.muted ? "Play music" : "Pause music");
+    function readMusicPref() {
+      try {
+        const raw = localStorage.getItem(MUSIC_PREF_KEY);
+        if (!raw) return { vol: 0 };
+        const j = JSON.parse(raw);
+        return { vol: Math.max(0, Math.min(100, Number(j.vol) || 0)) };
+      } catch (e) {
+        return { vol: 0 };
+      }
     }
 
-    function startMusic() {
-      if (musicStarted || !bgMusic.src) return;
-      musicStarted = true;
-      bgMusic.play().then(updateAudioButton).catch(() => {
-        musicStarted = false;
-        updateAudioButton();
-      });
+    function writeMusicPref() {
+      try {
+        localStorage.setItem(MUSIC_PREF_KEY, JSON.stringify({ vol: Number(audioVolume.value) || 0 }));
+      } catch (e) {}
+    }
+
+    (function initMusicPrefs() {
+      const p = readMusicPref();
+      audioVolume.value = String(p.vol);
+      bgMusic.volume = p.vol / 100;
+    })();
+    bgMusic.muted = true;
+    bgMusic.pause();
+
+    function updateAudioButton() {
+      const off = bgMusic.paused || bgMusic.muted;
+      audioToggle.innerHTML = off ? "&#9835;" : "II";
+      audioToggle.setAttribute("aria-label", off ? ui("Play music") : ui("Pause music"));
     }
 
     $("currency").addEventListener("change", () => {
@@ -9193,6 +9906,16 @@
       renderAll();
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
+    const heroCta = $("heroCta");
+    if (heroCta) {
+      heroCta.addEventListener("click", () => {
+        if (state.game) {
+          $("serviceHead")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else {
+          $("homeGameHead")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    }
     $("addToCart").addEventListener("click", addToCart);
     $("clearService").addEventListener("click", clearServiceForm);
     $("cartOpen").addEventListener("click", openCart);
@@ -9226,17 +9949,27 @@
     audioToggle.addEventListener("click", event => {
       event.stopPropagation();
       if (bgMusic.paused) {
-        musicStarted = false;
-        startMusic();
+        let v = Number(audioVolume.value);
+        if (v <= 0) {
+          v = 45;
+          audioVolume.value = String(v);
+        }
+        bgMusic.volume = v / 100;
+        bgMusic.muted = false;
+        bgMusic.play().then(updateAudioButton).catch(updateAudioButton);
       } else {
         bgMusic.pause();
         updateAudioButton();
       }
+      writeMusicPref();
     });
     audioVolume.addEventListener("input", () => {
-      bgMusic.volume = Number(audioVolume.value) / 100;
-      if (bgMusic.volume > 0) bgMusic.muted = false;
-      startMusic();
+      const v = Number(audioVolume.value);
+      bgMusic.volume = v / 100;
+      bgMusic.muted = v <= 0;
+      if (v <= 0) bgMusic.pause();
+      updateAudioButton();
+      writeMusicPref();
     });
     $("siteSearchBtn").addEventListener("click", runSiteSearch);
     $("siteSearch").addEventListener("input", () => {
