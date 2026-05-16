@@ -263,7 +263,12 @@
       renderHero();
       renderHome();
       if (!state.game) {
-        $("categoryBar")?.classList.add("hidden");
+        const bar = $("categoryBar");
+        if (bar) {
+          bar.classList.add("hidden");
+        }
+        const sc = $("categoryScroll");
+        if (sc) sc.innerHTML = "";
         $("serviceContent")?.classList.add("hidden");
         renderCart();
         syncBodyGameContext();
@@ -505,7 +510,10 @@
         </article>`);
       }
       const hgg = $("homeGameGrid");
-      if (hgg) hgg.innerHTML = chunks.join("");
+      if (hgg) {
+        hgg.innerHTML = chunks.join("");
+      }
+      bindHomeGameGrid();
       const ab = $("homeAboutBlock");
       if (ab) {
         ab.innerHTML = `
@@ -518,9 +526,19 @@
           <p>${ui("Browse in your currency. Your cart, ticket, and receipt use the same currency so totals always match.")}</p>
         </article>`;
       }
-      document.querySelectorAll("[data-home-game]").forEach(button => button.addEventListener("click", () => {
-        selectGame(button.dataset.homeGame);
-      }));
+    }
+
+    function bindHomeGameGrid() {
+      const grid = $("homeGameGrid");
+      if (!grid || grid.dataset.elyHomePickBound === "1") return;
+      grid.dataset.elyHomePickBound = "1";
+      grid.addEventListener("click", event => {
+        const hit = event.target && event.target.closest && event.target.closest("[data-home-game]");
+        if (!hit) return;
+        event.preventDefault();
+        const id = hit.dataset.homeGame;
+        if (id) selectGame(id);
+      });
     }
 
     const serviceImages = {
@@ -637,6 +655,7 @@
       const hero = $("hero");
       const sub = $("heroSubtitle");
       const cta = $("heroCta");
+      if (!hero) return;
       if (game) {
         hero.classList.remove("is-home");
         hero.style.setProperty("--hero-bg", `url("${game.heroBg}")`);

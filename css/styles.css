@@ -701,10 +701,15 @@
       border: 1px solid rgba(255,255,255,.35);
     }
 
+    main {
+      position: relative;
+      z-index: 2;
+    }
+
     .category-bar {
       position: relative;
       top: auto;
-      z-index: 45;
+      z-index: 1;
       background:
         linear-gradient(180deg, rgba(12, 6, 20, .82), rgba(5, 3, 13, .58)),
         linear-gradient(90deg, rgba(28, 8, 18, .2), transparent 28%, transparent 72%, rgba(28, 8, 18, .2));
