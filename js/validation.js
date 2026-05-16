@@ -22,6 +22,14 @@ function cartNeedsSteamId() {
   return state.cart.some(item => item.game === "Premier" || item.game === "Faceit");
 }
 
+function isDiscordTicketReady() {
+  if (!state.cart.length) return false;
+  const v = validateTicketRequirements();
+  if (!v.ok) return false;
+  if (cartNeedsArcId() && !state.arcId && !state.arcIdSkipped) return false;
+  return true;
+}
+
 function validateTicketRequirements() {
   ensureOrderPreviewId();
   if (cartNeedsArcId() && !state.arcId && !state.arcIdSkipped) return { ok: true };

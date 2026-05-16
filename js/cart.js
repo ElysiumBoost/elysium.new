@@ -45,6 +45,12 @@
     }
 
     function bindOrderSummaryContext() {
+      const bumpCartContextUi = () => {
+        try {
+          if (typeof refreshOrderChecklistIfOpen === "function") refreshOrderChecklistIfOpen();
+          if (typeof updateCartFootAlerts === "function") updateCartFootAlerts();
+        } catch (e) {}
+      };
       const r = $("orderRegionSel");
       const p = $("orderPlatformSel");
       const ri = $("orderRiotInput");
@@ -60,6 +66,7 @@
           state.cart.forEach(item => { item.region = state.orderRegion; });
           persistOrderState();
           updateStickyOrderChip();
+          bumpCartContextUi();
         };
       }
       if (p) {
@@ -69,6 +76,7 @@
           state.cart.forEach(item => { item.platform = state.orderPlatform; });
           persistOrderState();
           updateStickyOrderChip();
+          bumpCartContextUi();
         };
       }
       if (ri) {
@@ -79,6 +87,7 @@
             if (item.game === "Valorant") item.playerId = state.riotId.trim();
           });
           persistOrderState();
+          bumpCartContextUi();
         };
       }
       if (st) {
@@ -89,6 +98,7 @@
             if (item.game === "Premier" || item.game === "Faceit") item.playerId = state.steamId.trim();
           });
           persistOrderState();
+          bumpCartContextUi();
         };
       }
       if (lr) {
@@ -99,6 +109,7 @@
             if (item.gameId === "lol") item.playerId = state.lolRiotId.trim();
           });
           persistOrderState();
+          bumpCartContextUi();
         };
       }
       if (ls) {
@@ -106,6 +117,7 @@
         ls.oninput = () => {
           state.lolServer = ls.value;
           persistOrderState();
+          bumpCartContextUi();
         };
       }
       if (wc || wrm) {
@@ -133,6 +145,7 @@
             state.wowCharName = wc.value;
             syncWowCartPlayerIds();
             persistOrderState();
+            bumpCartContextUi();
           };
         }
         if (wrm) {
@@ -141,6 +154,7 @@
             state.wowRealm = wrm.value;
             syncWowCartPlayerIds();
             persistOrderState();
+            bumpCartContextUi();
           };
         }
       }
@@ -275,13 +289,14 @@
       $("addToCart").textContent = ui("Add to Order");
       $("copyOrder").textContent = ui("Copy Discord Ticket");
       const dlR = $("downloadOrderReceipt");
-      if (dlR) dlR.textContent = ui("Download Order Receipt");
+      if (dlR) dlR.textContent = ui("Download Receipt Image");
       const vNote = $("cartVerifyNote");
-      if (vNote) vNote.textContent = ui("For safer order verification, send the generated order receipt image with your Discord ticket.");
+      if (vNote) vNote.textContent = ui("Attach the receipt image to Discord if support requests visual confirmation.");
       syncCompactToggleLabel();
       document.querySelector('a[href*="1499796035382415462"]').textContent = ui("Open Discord");
-      document.querySelector('a[href*="1503176511912542298"]').textContent = ui("Leave Feedback");
-      document.querySelector(".drawer-head h2").textContent = ui("Order summary");
+      const fb = $("cartFeedbackLink");
+      if (fb) fb.textContent = ui("Leave feedback");
+      document.querySelector(".drawer-head h2").textContent = ui("Order center");
       const ctl = $("cartTotalLabel");
       if (ctl) ctl.textContent = ui("Order total");
       const td = document.querySelector(".topbar-discord");

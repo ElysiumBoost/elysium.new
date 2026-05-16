@@ -442,7 +442,96 @@
       const btn = $("clearCart");
       if (!btn) return;
       const pending = state.clearCartConfirmUntil && Date.now() < state.clearCartConfirmUntil;
-      btn.textContent = pending ? ui("Confirm Clear") : ui("Clear Cart");
+      btn.textContent = pending ? ui("Confirm clear") : ui("Clear cart");
+    }
+
+    function buildDiscordNextStepsHtml() {
+      return `
+        <section class="order-discord-panel" aria-label="${escapeHtml(ui("Discord next steps"))}">
+          <h3 class="order-discord-panel__title">${escapeHtml(ui("Discord next steps"))}</h3>
+          <ol class="order-discord-panel__list">
+            <li>${escapeHtml(ui("Copy your ticket text from the Order center."))}</li>
+            <li>${escapeHtml(ui("Open the ELYSIUM BOOST Discord channel."))}</li>
+            <li>${escapeHtml(ui("Paste the ticket and add any notes support requests."))}</li>
+            <li>${escapeHtml(ui("Attach the receipt PNG if moderators ask for a visual confirmation."))}</li>
+          </ol>
+        </section>`;
+    }
+
+    function buildOrderChecklistHtml() {
+      const row = (ok, label) => `<div class="cart-checklist-row${ok ? " is-done" : ""}"><span class="chk" aria-hidden="true">${ok ? "✓" : ""}</span><span>${escapeHtml(label)}</span></div>`;
+      const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
+      const hasCustom = state.cart.some(item => item.custom);
+      const rows = [];
+      rows.push(row(Boolean(state.cart.length), ui("Services selected")));
+      rows.push(row(Boolean(state.cart.length), ui("Quantities confirmed")));
+      const idRows = [];
+      if (cartNeedsArcId()) {
+        idRows.push(row(Boolean(state.arcId) || state.arcIdSkipped, ui("Embark ID (Arc Raiders)")));
+      }
+      if (cartHasGameId("valorant")) {
+        idRows.push(row(
+          Boolean(String(state.riotId || "").trim() && String(state.orderRegion || "").trim() && String(state.orderPlatform || "").trim()),
+          ui("Riot ID & region (Valorant)")
+        ));
+      }
+      if (cartHasGameId("lol")) {
+        idRows.push(row(
+          Boolean(String(state.lolRiotId || "").trim() && String(state.lolServer || "").trim()),
+          ui("Riot ID & server (League of Legends)")
+        ));
+      }
+      if (cartNeedsSteamId()) {
+        idRows.push(row(Boolean(String(state.steamId || "").trim()), ui("Steam / FACEIT profile (CS2)")));
+      }
+      if (cartNeedsWowFields()) {
+        const cn = String(state.wowCharName || state.wowCharacterRealm || "").trim();
+        const rm = String(state.wowRealm || "").trim();
+        idRows.push(row(Boolean(cn && rm), ui("Character & realm (WoW)")));
+      }
+      if (!idRows.length) {
+        idRows.push(row(true, ui("Player / account ID (not required for this order)")));
+      }
+      rows.push(...idRows);
+      rows.push(row(Boolean(state.cart.length && (total > 0 || hasCustom)), ui("Total price ready")));
+      rows.push(row(isDiscordTicketReady(), ui("Discord ticket ready")));
+      return `<section class="order-checklist-card" id="orderChecklistMount" aria-label="${escapeHtml(ui("Order checklist"))}">
+        <h3 class="order-checklist-card__title">${escapeHtml(ui("Order checklist"))}</h3>
+        <div class="cart-checklist cart-checklist--spacious">${rows.join("")}</div>
+      </section>`;
+    }
+
+    function refreshOrderChecklistIfOpen() {
+      const el = $("orderChecklistMount");
+      if (!el || !state.cart.length) return;
+      const t = document.createElement("template");
+      t.innerHTML = buildOrderChecklistHtml().trim();
+      const next = t.content.firstElementChild;
+      if (next) el.replaceWith(next);
+    }
+
+    function layoutOrderCheckoutStrip() {
+      const strip = $("orderCheckoutStrip");
+      const dock = $("cartCheckoutDock");
+      const foot = $("cartDrawerFoot");
+      if (!strip || !foot) return;
+      if (state.cart.length && dock) dock.appendChild(strip);
+      else foot.appendChild(strip);
+    }
+
+    function adjustCartLineQty(lineId, delta) {
+      const item = state.cart.find(i => i.id === lineId);
+      if (!item || item.custom) return;
+      const q0 = Math.max(1, item.qty || 1);
+      const q = Math.max(1, q0 + delta);
+      if (q === q0) return;
+      const unit = item.total / q0;
+      const unitOld = (item.oldTotal || 0) / q0;
+      item.qty = q;
+      item.total = Math.round(unit * q * 10000) / 10000;
+      item.oldTotal = unitOld ? Math.round(unitOld * q * 10000) / 10000 : 0;
+      persistOrderState();
+      renderCart();
     }
 
     function updateCartFootAlerts() {
@@ -452,23 +541,15 @@
         foot.innerHTML = "";
         return;
       }
-      const hasArcItems = state.cart.some(item => item.game === "Arc Raiders");
-      const embarkDone = !hasArcItems || Boolean(state.arcId) || state.arcIdSkipped;
-      const needEmbarkId = hasArcItems && !state.arcId && !state.arcIdSkipped;
-      const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
-      const hasCustom = state.cart.some(item => item.custom);
       const bits = [];
-      if (needEmbarkId) {
-        bits.push(`<div class="cart-inline-warn" role="status">${escapeHtml(ui("Please add your Embark ID before copying the Discord ticket or downloading the order receipt."))}</div>`);
+      const needEmbark = cartNeedsArcId() && !state.arcId && !state.arcIdSkipped;
+      if (needEmbark) {
+        bits.push(`<div class="cart-inline-warn" role="status">${escapeHtml(ui("Arc Raiders orders need an Embark ID (or skip) before copying or downloading the receipt."))}</div>`);
       }
-      const row = (ok, label) => `<div class="cart-checklist-row${ok ? " is-done" : ""}"><span class="chk" aria-hidden="true">${ok ? "✓" : ""}</span><span>${escapeHtml(label)}</span></div>`;
-      bits.push(`<div class="cart-checklist" aria-label="Order checklist">
-        ${row(true, "Services in cart")}
-        ${row(true, "Quantities confirmed")}
-        ${row(embarkDone, hasArcItems ? "Embark ID added (Arc orders)" : "Embark ID (not required for this cart)")}
-        ${row(Boolean(state.cart.length && (total > 0 || hasCustom)), "Total price ready")}
-        ${row(embarkDone, "Discord ticket ready")}
-      </div>`);
+      const v = validateTicketRequirements();
+      if (!v.ok && v.message) {
+        bits.push(`<div class="cart-inline-warn" role="status">${escapeHtml(v.message)}</div>`);
+      }
       foot.innerHTML = bits.join("");
     }
 
@@ -599,6 +680,7 @@
     function renderCart() {
       const lineCount = state.cart.reduce((n, item) => n + (item.qty || 1), 0);
       $("cartCount").textContent = String(lineCount);
+      document.querySelector("#cartBackdrop .drawer")?.classList.toggle("drawer--wide", Boolean(state.cart.length));
       $("clearCart").disabled = !state.cart.length;
       const hasArcItems = state.cart.some(item => item.game === "Arc Raiders");
       if (!state.cart.length) {
@@ -630,19 +712,25 @@
         const embarkBlock = hasArcItems
           ? `<div class="cart-embark-panel" role="region" aria-label="Embark ID">
             <div class="cart-embark-label">${escapeHtml(ui("Embark ID"))}</div>
-            <p class="cart-embark-value">${state.arcId ? escapeHtml(state.arcId) : (state.arcIdSkipped ? escapeHtml(ui("Will type on Discord")) : escapeHtml(ui("Not set — required for receipt image")))}</p>
-            ${!state.arcId ? `<p class="cart-embark-warn">${escapeHtml(ui("Save your Embark ID to download a verified order receipt."))}</p>` : ""}
+            <p class="cart-embark-value">${state.arcId ? escapeHtml(state.arcId) : (state.arcIdSkipped ? escapeHtml(ui("Will type on Discord")) : escapeHtml(ui("Not set — add before receipt download")))}</p>
+            ${!state.arcId ? `<p class="cart-embark-warn">${escapeHtml(ui("Required to copy or download a verified ticket for Arc Raiders."))}</p>` : ""}
             <button type="button" class="cart-embark-btn" id="cartEmbarkEditBtn">${escapeHtml(ui("Add or edit Embark ID"))}</button>
           </div>`
           : "";
         ensureOrderPreviewId();
-        const summaryBanner = `
-          <div class="order-summary-banner">
-            <div class="order-preview-id"><span class="order-preview-k">${escapeHtml(ui("Order preview ID"))}</span><strong>${escapeHtml(state.orderPreviewId)}</strong></div>
-            <p class="trust-inline-mini">${escapeHtml(ui("No cheats. No exploits. Manual service only."))}</p>
+        const leftCol = `
+          <div class="order-center__left">
+            <div class="order-meta-card order-meta-card--preview">
+              <div class="order-meta-k">${escapeHtml(ui("Order preview ID"))}</div>
+              <div class="order-preview-id-strong">${escapeHtml(state.orderPreviewId)}</div>
+            </div>
+            ${embarkBlock}
+            ${orderContextHeaderHtml()}
+            ${buildOrderChecklistHtml()}
+            ${buildDiscordNextStepsHtml()}
+            <p class="order-safety-note">${escapeHtml(ui("No cheats. No exploits. Manual service only."))}</p>
           </div>`;
-        const summaryHeader = summaryBanner + orderContextHeaderHtml();
-        $("cartBody").innerHTML = summaryHeader + embarkBlock + state.cart.map((item, idx) => {
+        const itemBlocks = state.cart.map((item, idx) => {
           const priceLabel = item.custom
             ? (item.game === "Valorant" ? "Custom Price" : "CUSTOM")
             : (item.estimated ? `<span class="estimated-tag">Estimated</span>${displayInCurrency(item.total, item.viewedCurrency)}` : displayInCurrency(item.total, item.viewedCurrency));
@@ -654,6 +742,7 @@
           const eta = escapeHtml(item.etaHint || ui("Ask support"));
           const bdBlock = item.priceBreakdown ? `<div class="cart-receipt-section"><div class="cart-receipt-k">${ui("Price breakdown")}</div><div class="cart-item-detail-body">${escapeHtml(item.priceBreakdown)}</div></div>` : "";
           const acctRows = cartReceiptAccountRows(item);
+          const qtyDisabled = item.custom ? " disabled" : "";
           return `
             <article class="cart-item cart-item--receipt">
               <div class="cart-receipt-head">
@@ -662,7 +751,13 @@
               </div>
               <dl class="cart-receipt-dl">
                 <div><dt>${ui("Game")}</dt><dd>${escapeHtml(ui(item.game))}</dd></div>
-                <div><dt>${ui("Quantity")}</dt><dd>${qty}</dd></div>
+                <div><dt>${ui("Quantity")}</dt><dd>
+                  <div class="cart-qty-control">
+                    <button type="button" class="cart-qty-btn" data-cart-qty-id="${escapeHtml(item.id)}" data-cart-qty-delta="-1" aria-label="${escapeHtml(ui("Decrease quantity"))}"${qtyDisabled}>−</button>
+                    <span class="cart-qty-val">${qty}</span>
+                    <button type="button" class="cart-qty-btn" data-cart-qty-id="${escapeHtml(item.id)}" data-cart-qty-delta="1" aria-label="${escapeHtml(ui("Increase quantity"))}"${qtyDisabled}>+</button>
+                  </div>
+                </dd></div>
                 <div><dt>${ui("Currency")}</dt><dd>${escapeHtml(item.viewedCurrency)}</dd></div>
                 <div><dt>${ui("Line price")}</dt><dd class="cart-item-price-inline">${priceLabel}</dd></div>
                 ${acctRows}
@@ -683,7 +778,18 @@
               </div>
             </article>
           `;
-        }).join("") + `<div class="cart-continue-wrap"><button type="button" class="btn-continue" id="continueShoppingCart">Continue Shopping</button></div>`;
+        }).join("");
+        const rightCol = `
+          <div class="order-center__right">
+            <div class="order-lines-head">
+              <h3 class="order-lines-title">${escapeHtml(ui("Cart items"))}</h3>
+              <p class="order-lines-copy">${escapeHtml(ui("Review every line before copying your Discord ticket."))}</p>
+            </div>
+            <div class="order-lines-list">${itemBlocks}</div>
+            <div class="cart-continue-wrap order-lines-continue"><button type="button" class="btn-continue" id="continueShoppingCart">${escapeHtml(ui("Continue shopping"))}</button></div>
+            <div id="cartCheckoutDock" class="cart-checkout-dock" aria-label="${escapeHtml(ui("Checkout"))}"></div>
+          </div>`;
+        $("cartBody").innerHTML = `<div class="order-center">${leftCol}${rightCol}</div>`;
         document.querySelectorAll("[data-remove]").forEach(button => button.addEventListener("click", () => {
           state.cart = state.cart.filter(item => item.id !== button.dataset.remove);
           if (!state.cart.length) state.orderPreviewId = "";
@@ -691,6 +797,12 @@
           renderCart();
         }));
         document.querySelectorAll("[data-adjust]").forEach(button => button.addEventListener("click", () => adjustCartItem(button.dataset.adjust)));
+        document.querySelectorAll("[data-cart-qty-delta]").forEach(button => {
+          button.addEventListener("click", () => {
+            if (button.disabled) return;
+            adjustCartLineQty(button.dataset.cartQtyId, Number(button.dataset.cartQtyDelta));
+          });
+        });
         const c1 = $("continueShoppingCart");
         if (c1) c1.addEventListener("click", continueShopping);
         $("cartEmbarkEditBtn")?.addEventListener("click", () => openArcIdModal(null));
@@ -720,6 +832,7 @@
       syncCompactToggleLabel();
       persistOrderState();
       updateStickyOrderChip();
+      layoutOrderCheckoutStrip();
     }
 
     function clearCart() {
@@ -736,7 +849,7 @@
       }
       state.clearCartConfirmUntil = now + 4500;
       syncClearCartButton();
-      showToast("Tap Confirm Clear to empty your cart.", 2400);
+      showToast(ui("Tap Confirm clear to empty your cart."), 2400);
       setTimeout(() => {
         if (Date.now() >= state.clearCartConfirmUntil) {
           state.clearCartConfirmUntil = 0;
@@ -894,27 +1007,162 @@
       ensureArcId(copyOrderNow);
     }
 
-    const HTML2CANVAS_CDN = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
-    const HTML2CANVAS_SRI = "sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==";
-    let html2canvasLoader = null;
+    function orderReceiptBlockedMessage() {
+      if (!state.cart.length) return ui("Add items to your cart first.");
+      const v = validateTicketRequirements();
+      if (!v.ok) return v.message;
+      if (cartNeedsArcId() && !String(state.arcId || "").trim() && !state.arcIdSkipped) {
+        return ui("Please add or skip your Embark ID for Arc Raiders before downloading the receipt.");
+      }
+      return "";
+    }
 
-    function loadHtml2Canvas() {
-      if (typeof window.html2canvas === "function") return Promise.resolve();
-      if (html2canvasLoader) return html2canvasLoader;
-      html2canvasLoader = new Promise((resolve, reject) => {
-        const script = document.createElement("script");
-        script.src = HTML2CANVAS_CDN;
-        script.integrity = HTML2CANVAS_SRI;
-        script.crossOrigin = "anonymous";
-        script.referrerPolicy = "no-referrer";
-        script.onload = () => resolve();
-        script.onerror = () => {
-          html2canvasLoader = null;
-          reject(new Error("Could not load html2canvas"));
-        };
-        document.head.appendChild(script);
+    function receiptFilenameFromPreviewId() {
+      ensureOrderPreviewId();
+      const raw = String(state.orderPreviewId || "EB-ORDER").replace(/[^\w-]+/g, "");
+      return `elysium-order-${raw || "preview"}.png`;
+    }
+
+    function wrapReceiptLines(ctx, text, maxWidth) {
+      const lines = [];
+      const paragraphs = String(text || "").split("\n");
+      for (let pi = 0; pi < paragraphs.length; pi++) {
+        const para = paragraphs[pi];
+        const words = para.split(/\s+/).filter(Boolean);
+        let cur = "";
+        for (const w of words) {
+          const test = cur ? `${cur} ${w}` : w;
+          if (ctx.measureText(test).width > maxWidth && cur) {
+            lines.push(cur);
+            cur = w;
+          } else cur = test;
+        }
+        if (cur) lines.push(cur);
+        if (pi < paragraphs.length - 1 && lines.length) lines.push("");
+      }
+      return lines.length ? lines : [""];
+    }
+
+    async function drawPremiumOrderReceiptCanvas() {
+      await document.fonts.ready.catch(() => {});
+      const W = 680;
+      const pad = 34;
+      const inner = W - pad * 2;
+      const scale = 2;
+      const m = document.createElement("canvas").getContext("2d");
+      m.font = "500 15px Rajdhani, Inter, system-ui, sans-serif";
+
+      let y = pad;
+      const blocks = [];
+
+      function addHeading(t) {
+        blocks.push({ t: "h", text: t });
+      }
+      function addMuted(t) {
+        blocks.push({ t: "m", text: t });
+      }
+      function addBody(t) {
+        blocks.push({ t: "b", text: t });
+      }
+
+      addHeading("ELYSIUM BOOST · ORDER RECEIPT");
+      addMuted(`Order preview ID: ${state.orderPreviewId}`);
+      addMuted(`Generated: ${new Date().toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}`);
+
+      state.cart.forEach((item, index) => {
+        const qty = Math.max(1, item.qty || 1);
+        addHeading(`Line ${index + 1}: ${item.title}`);
+        addBody(`Game: ${item.game}`);
+        addBody(`Quantity: ${qty}`);
+        addBody(`Currency: ${item.viewedCurrency}`);
+        addBody(`Region: ${item.region || state.orderRegion || "—"}`);
+        addBody(`Platform: ${item.platform || state.orderPlatform || "—"}`);
+        ticketGameAccountLines(item).forEach(raw => addBody(raw.trim()));
+        addBody(`Delivery method: ${item.deliveryType || "Manual delivery via Discord"}`);
+        addBody(`Estimated delivery: ${item.etaHint || "Ask support"}`);
+        addBody("Selected options:");
+        addBody(item.details || "—");
+        if (item.priceBreakdown) {
+          addBody("Price breakdown:");
+          addBody(item.priceBreakdown);
+        }
+        const priceLine = item.custom
+          ? (item.game === "Valorant" ? "Custom Price" : "CUSTOM")
+          : (item.estimated ? `Estimated ${displayInCurrency(item.total, item.viewedCurrency)}` : displayInCurrency(item.total, item.viewedCurrency));
+        addBody(`Line total: ${priceLine}`);
+        blocks.push({ t: "sp", text: "" });
       });
-      return html2canvasLoader;
+
+      const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
+      const hasCustom = state.cart.some(item => item.custom);
+      const hasEstimate = state.cart.some(item => item.estimated);
+      const sameCurrency = state.cart.length && state.cart.every(item => item.viewedCurrency === state.cart[0].viewedCurrency);
+      const cartCurrency = sameCurrency ? state.cart[0].viewedCurrency : state.currency;
+      const totalText = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
+      addHeading(hasEstimate ? "ESTIMATED ORDER TOTAL" : "ORDER TOTAL");
+      addBody(`${totalText} · ${cartCurrency}`);
+      addBody(`USD reference: ${hasCustom ? moneyUSD(total) + " + CUSTOM" : moneyUSD(total)} USD`);
+      addBody("Safety: No cheats. No exploits. Manual service only.");
+      addMuted("ELYSIUM BOOST · Premium manual game services");
+
+      function measure() {
+        let h = pad;
+        for (const bl of blocks) {
+          m.font = bl.t === "h" ? "700 17px Rajdhani, Inter, system-ui, sans-serif" : bl.t === "m" ? "600 12px Rajdhani, Inter, system-ui, sans-serif" : "500 15px Rajdhani, Inter, system-ui, sans-serif";
+          const lh = bl.t === "h" ? 22 : bl.t === "m" ? 17 : 20;
+          if (bl.t === "sp") {
+            h += 10;
+            continue;
+          }
+          const lines = wrapReceiptLines(m, bl.text, inner);
+          h += lines.length * lh + 10;
+        }
+        return h + pad;
+      }
+
+      const H = Math.max(720, measure());
+      const canvas = document.createElement("canvas");
+      canvas.width = W * scale;
+      canvas.height = H * scale;
+      const ctx = canvas.getContext("2d");
+      ctx.scale(scale, scale);
+      ctx.textBaseline = "top";
+      ctx.fillStyle = "#070510";
+      ctx.fillRect(0, 0, W, H);
+      const bar = ctx.createLinearGradient(0, 0, W, 0);
+      bar.addColorStop(0, "#5b21b6");
+      bar.addColorStop(0.5, "#fbbf24");
+      bar.addColorStop(1, "#9d174d");
+      ctx.fillStyle = bar;
+      ctx.fillRect(0, 0, W, 5);
+
+      y = pad;
+      for (const bl of blocks) {
+        if (bl.t === "sp") {
+          y += 10;
+          continue;
+        }
+        const isH = bl.t === "h";
+        const isM = bl.t === "m";
+        const size = isH ? 17 : isM ? 12 : 15;
+        const weight = isH ? "700" : isM ? "600" : "500";
+        ctx.font = `${weight} ${size}px Rajdhani, Inter, system-ui, sans-serif`;
+        const lh = isH ? 22 : isM ? 17 : 20;
+        const color = isH ? "#e9d5ff" : isM ? "rgba(167, 139, 250, 0.85)" : "#e8ecff";
+        ctx.fillStyle = color;
+        const lines = wrapReceiptLines(ctx, bl.text, inner);
+        for (const ln of lines) {
+          if (ln === "") {
+            y += lh * 0.35;
+            continue;
+          }
+          ctx.fillText(ln, pad, y);
+          y += lh;
+        }
+        y += 10;
+      }
+
+      return canvas;
     }
 
     function fallbackExecCopy(text, ok, fail) {
@@ -954,7 +1202,7 @@
         openCopySuccessModal();
       };
       const fail = () => {
-        statusEl.textContent = ui("Copy failed. Try Download Order Receipt or copy the ticket manually.");
+        statusEl.textContent = ui("Copy failed. Try Download Receipt Image or copy the ticket manually.");
         showToast(ui("Copy failed."), 3200, true);
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -968,114 +1216,25 @@
       copyTicketTextToClipboard();
     }
 
-    function orderReceiptEmbarkBlockedMessage() {
-      if (!state.cart.length) return ui("Add items to your cart first.");
-      if (cartNeedsArcId() && !String(state.arcId || "").trim() && !state.arcIdSkipped) {
-        return ui("Please add your Embark ID before generating the order receipt.");
-      }
-      return "";
-    }
-
-    function buildOrderReceiptNode() {
-      const inner = document.createElement("div");
-      inner.className = "order-receipt-inner";
-      const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
-      const hasCustom = state.cart.some(item => item.custom);
-      const hasEstimate = state.cart.some(item => item.estimated);
-      const sameCurrency = state.cart.length && state.cart.every(item => item.viewedCurrency === state.cart[0].viewedCurrency);
-      const cartCurrency = sameCurrency ? state.cart[0].viewedCurrency : state.currency;
-      const genDate = new Date().toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
-      const needsEmbark = cartNeedsArcId();
-      const embarkInner = needsEmbark
-        ? `<strong>${escapeHtml(ui("Embark ID"))}</strong>${escapeHtml(state.arcId)}`
-        : `<strong>${escapeHtml(ui("In-game ID"))}</strong>${escapeHtml(ui("Not required for this order"))}`;
-      const itemsHtml = state.cart.map((item, index) => {
-        const qty = item.qty && item.qty > 1 ? ` ×${item.qty}` : "";
-        const priceLine = item.custom
-          ? (item.game === "Valorant" ? ui("Custom Price") : "CUSTOM")
-          : (item.estimated ? `${ui("Estimated")} ${displayInCurrency(item.total, item.viewedCurrency)}` : displayInCurrency(item.total, item.viewedCurrency));
-        const langLine = item.language ? `\n${ui("Language")}: ${item.language}` : "";
-        return `<div class="order-receipt-item">
-      <div class="order-receipt-item-head">${index + 1}. ${escapeHtml(item.title)}${escapeHtml(qty)}</div>
-      <div class="order-receipt-item-game">${escapeHtml(ui("Game"))}: ${escapeHtml(item.game)}</div>
-      <div class="order-receipt-item-details">${escapeHtml(item.details)}${escapeHtml(langLine)}</div>
-      <div class="order-receipt-item-price">${escapeHtml(ui("Price"))}: ${escapeHtml(priceLine)}</div>
-      <div class="order-receipt-item-curr">${escapeHtml(ui("Currency"))}: ${escapeHtml(item.viewedCurrency)}</div>
-    </div>`;
-      }).join("");
-      const totalLabel = hasEstimate ? ui("ESTIMATED TOTAL") : ui("TOTAL");
-      const totalText = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
-      const usdHint = hasCustom ? moneyUSD(total) + " + CUSTOM" : moneyUSD(total);
-      inner.innerHTML = `
-    <div class="order-receipt-header">
-      <img class="order-receipt-logo" src="assets/elysium-mark.webp" alt="" width="48" height="48" crossorigin="anonymous">
-      <div class="order-receipt-title-block">
-        <h1>${escapeHtml(ui("ELYSIUM BOOST — ORDER RECEIPT"))}</h1>
-        <p class="order-receipt-meta">${escapeHtml(ui("Generated"))}: ${escapeHtml(genDate)}</p>
-      </div>
-    </div>
-    <div class="order-receipt-section">
-      <h2>${escapeHtml(ui("Customer"))}</h2>
-      <div class="order-receipt-embark-box">${embarkInner}</div>
-    </div>
-    <div class="order-receipt-section">
-      <h2>${escapeHtml(ui("Order items"))}</h2>
-      ${itemsHtml}
-    </div>
-    <div class="order-receipt-totals">
-      <div class="order-receipt-total-line"><span>${escapeHtml(ui("Cart total"))}</span><span>${escapeHtml(totalText)}</span></div>
-      <div class="order-receipt-total-line"><span>${escapeHtml(ui("Selected currency"))}</span><span>${escapeHtml(cartCurrency)}</span></div>
-      <div class="order-receipt-total-line order-receipt-grand"><span>${escapeHtml(totalLabel)}</span><span>${escapeHtml(totalText)}</span></div>
-      <div class="order-receipt-total-line"><span>${escapeHtml(ui("Ticket total (USD reference)"))}</span><span>${escapeHtml(usdHint)} USD</span></div>
-    </div>
-    <p class="order-receipt-foot">${escapeHtml(ui("Generated by ElysiumBoost"))}</p>`;
-      const wrap = document.createElement("div");
-      wrap.className = "order-receipt-capture";
-      wrap.appendChild(inner);
-      return wrap;
-    }
-
-    async function generateOrderReceiptCanvas() {
-      await loadHtml2Canvas();
-      const node = buildOrderReceiptNode();
-      node.style.cssText = "position:fixed;left:0;top:0;z-index:-9999;visibility:hidden;pointer-events:none;";
-      document.body.appendChild(node);
-      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-      try {
-        const h = node.scrollHeight;
-        const w = node.offsetWidth;
-        return await window.html2canvas(node, {
-          backgroundColor: "#0a0721",
-          scale: 2,
-          useCORS: true,
-          logging: false,
-          width: w,
-          height: h
-        });
-      } finally {
-        node.remove();
-      }
-    }
-
     async function downloadOrderReceipt() {
       const statusEl = $("copyStatus");
-      const gate = orderReceiptEmbarkBlockedMessage();
+      const gate = orderReceiptBlockedMessage();
       if (gate) {
         statusEl.textContent = gate;
         showToast(gate, 3400, true);
         return;
       }
-      statusEl.textContent = ui("Generating order receipt...");
+      statusEl.textContent = ui("Generating receipt image...");
       try {
-        const canvas = await generateOrderReceiptCanvas();
-        downloadCanvasAsPng(canvas, `elysium-order-receipt-${Date.now()}.png`);
-        statusEl.textContent = ui("Order receipt downloaded. Attach it to your Discord ticket.");
+        const canvas = await drawPremiumOrderReceiptCanvas();
+        downloadCanvasAsPng(canvas, receiptFilenameFromPreviewId());
+        statusEl.textContent = ui("Receipt downloaded. Attach it to your Discord ticket if asked.");
         showToast(ui("Receipt downloaded."), 2600, false);
         try {
           if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
             const blob = await canvasToBlob(canvas, "image/png");
             await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-            statusEl.textContent = ui("Receipt downloaded and copied — paste the image (Ctrl/Cmd+V) into Discord.");
+            statusEl.textContent = ui("Receipt downloaded and copied — paste the image into Discord if needed.");
           }
         } catch (_) {}
       } catch (e) {

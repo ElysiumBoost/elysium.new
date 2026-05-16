@@ -72,6 +72,7 @@
     $("cartOpen").addEventListener("click", openCart);
     $("cartClose").addEventListener("click", closeCart);
     $("copyOrder").addEventListener("click", copyOrder);
+    $("downloadOrderReceipt")?.addEventListener("click", e => { e.preventDefault(); downloadOrderReceipt(); });
     $("stickyOrderOpen")?.addEventListener("click", () => openCart());
     $("footerLegalBtn")?.addEventListener("click", () => {
       $("legalModal")?.classList.add("active");
@@ -88,6 +89,7 @@
       }
     });
     $("copySuccessClose")?.addEventListener("click", () => closeCopySuccessModal());
+    $("copySuccessReceipt")?.addEventListener("click", () => downloadOrderReceipt());
     $("copySuccessModal")?.addEventListener("click", event => {
       if (event.target === $("copySuccessModal")) closeCopySuccessModal();
     });

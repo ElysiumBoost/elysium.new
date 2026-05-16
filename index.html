@@ -273,29 +273,35 @@
   </main>
 
   <div class="cart-backdrop" id="cartBackdrop" aria-hidden="true">
-    <aside class="drawer" aria-label="Order summary">
+    <aside class="drawer" aria-label="Order center">
       <div class="drawer-head">
-        <h2 id="drawerTitle">Order summary</h2>
+        <h2 id="drawerTitle">Order center</h2>
         <div class="drawer-head-right">
           <button type="button" class="btn-cart-compact" id="cartCompactToggle">Simpler layout</button>
           <button class="btn close" id="cartClose" type="button" aria-label="Close cart">&times;</button>
         </div>
       </div>
       <div class="drawer-body" id="cartBody"></div>
-      <div class="drawer-foot">
-        <div class="cart-foot-alerts" id="cartFootAlerts" aria-live="polite"></div>
-        <div class="summary-total" style="padding:0;border:0;background:transparent">
-          <small id="cartTotalLabel">Order total</small>
-          <span id="cartTotal">$0.00</span>
-          <em id="cartUsdHint">Ticket total: $0.00 USD</em>
+      <div class="drawer-foot" id="cartDrawerFoot">
+        <div class="order-checkout-strip" id="orderCheckoutStrip">
+          <div class="cart-foot-alerts" id="cartFootAlerts" aria-live="polite"></div>
+          <div class="order-summary-totals" id="cartSummaryTotals">
+            <small id="cartTotalLabel">Order total</small>
+            <span id="cartTotal">$0.00</span>
+            <em id="cartUsdHint">Ticket total: $0.00 USD</em>
+          </div>
+          <p class="cart-verify-note" id="cartVerifyNote">Attach the receipt image to Discord if support requests visual confirmation.</p>
+          <div class="order-actions-primary">
+            <button class="btn btn-premium btn-order-copy" id="copyOrder" type="button">Copy Discord Ticket</button>
+            <button class="btn btn-glass btn-order-receipt" id="downloadOrderReceipt" type="button">Download Receipt Image</button>
+            <a class="btn btn-ghost btn-order-discord" id="openDiscord" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Open Discord</a>
+          </div>
+          <div class="order-actions-tertiary">
+            <button class="btn-text" type="button" id="clearCart">Clear cart</button>
+            <a class="btn-text" id="cartFeedbackLink" href="https://discord.com/channels/1499767937974669363/1503176511912542298" target="_blank" rel="noopener">Leave feedback</a>
+          </div>
+          <div class="copy-status" id="copyStatus" aria-live="polite"></div>
         </div>
-        <p class="cart-verify-note" id="cartVerifyNote">For safer order verification, send the generated order receipt image with your Discord ticket.</p>
-        <button class="btn btn-premium" id="copyOrder" type="button">Copy Discord Ticket</button>
-        <button class="btn btn-glass" id="downloadOrderReceipt" type="button">Download Order Receipt</button>
-        <button class="btn" id="clearCart" type="button">Clear Cart</button>
-        <a class="btn btn-primary" id="openDiscord" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Open Discord</a>
-        <a class="btn" href="https://discord.com/channels/1499767937974669363/1503176511912542298" target="_blank" rel="noopener">Leave Feedback</a>
-        <div class="copy-status" id="copyStatus" aria-live="polite"></div>
       </div>
     </aside>
   </div>
@@ -338,16 +344,19 @@
   <div class="legal-modal-backdrop" id="copySuccessModal" aria-hidden="true">
     <div class="legal-modal copy-success-modal" role="dialog" aria-modal="true" aria-labelledby="copySuccessTitle">
       <h2 id="copySuccessTitle">Ticket copied successfully</h2>
-      <p class="copy-success-lead">Your order is on the clipboard. Finish in Discord so support can confirm availability and timing.</p>
+      <p class="copy-success-lead">Your order text is on the clipboard. Finish the handoff in Discord so support can confirm scope, timing, and pricing.</p>
+      <p class="copy-success-sub"><strong>Next steps</strong></p>
       <ol class="copy-success-steps">
         <li>Open Discord</li>
-        <li>Create or open your order ticket</li>
-        <li>Paste the copied receipt</li>
-        <li>Wait for booster confirmation</li>
+        <li>Create an order ticket in the channel</li>
+        <li>Paste your copied order</li>
+        <li>Attach the receipt image if support asks</li>
+        <li>Wait for confirmation before scheduling play</li>
       </ol>
       <div class="copy-success-actions">
-        <a class="btn btn-premium" id="copySuccessDiscord" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Open Discord ticket</a>
-        <button type="button" class="btn btn-glass legal-close" id="copySuccessClose">Close</button>
+        <a class="btn btn-premium" id="copySuccessDiscord" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Open Discord</a>
+        <button type="button" class="btn btn-glass" id="copySuccessReceipt">Download Receipt Image</button>
+        <button type="button" class="btn btn-ghost legal-close" id="copySuccessClose">Close</button>
       </div>
     </div>
   </div>
