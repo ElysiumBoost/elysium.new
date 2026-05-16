@@ -28,7 +28,7 @@
       --radius: 8px;
       --font: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --display: Rajdhani, Inter, sans-serif;
-      --hero-bg: url("assets/ana1.webp"), url("assets/bg-elysium-4k.webp");
+      --hero-bg: url("assets/fallback-purple-bg.webp");
       --crimson: #e11d48;
       --crimson-deep: #9f1239;
       --glass: rgba(16, 19, 31, .72);
@@ -61,8 +61,7 @@
       z-index: -2;
       background:
         linear-gradient(rgba(7, 10, 16, .64), rgba(7, 10, 16, .9)),
-        url("assets/ana1.webp") center center / cover no-repeat,
-        url("assets/bg-elysium-4k.webp") center center / cover no-repeat,
+        url("assets/fallback-purple-bg.webp") center center / cover no-repeat,
         radial-gradient(circle at 50% 42%, rgba(139, 92, 246, .07), transparent 52%),
         radial-gradient(circle at 80% 12%, rgba(125, 211, 252, .03), transparent 38%),
         var(--bg);
@@ -1083,14 +1082,8 @@
       position: absolute;
       inset: 0;
       z-index: 0;
-      background: var(--hero-bg) var(--hero-position, center center) / cover no-repeat;
+      background: var(--hero-bg) center center / cover no-repeat;
       background-attachment: scroll;
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
-      mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
-      -webkit-mask-size: 100% 100%;
-      mask-size: 100% 100%;
-      -webkit-mask-repeat: no-repeat;
-      mask-repeat: no-repeat;
       pointer-events: none;
     }
 
@@ -1099,13 +1092,16 @@
       position: absolute;
       inset: 0;
       z-index: 1;
-      background: linear-gradient(
-        180deg,
-        rgba(5, 3, 13, .34) 0%,
-        transparent 26%,
-        transparent 74%,
-        rgba(5, 3, 13, .4) 100%
-      );
+      background:
+        linear-gradient(
+          180deg,
+          rgba(2, 1, 10, 0.88) 0%,
+          rgba(5, 3, 15, 0.52) 40%,
+          rgba(5, 3, 15, 0.58) 62%,
+          rgba(2, 1, 10, 0.92) 100%
+        ),
+        radial-gradient(ellipse 115% 75% at 50% 0%, rgba(76, 29, 149, 0.26), transparent 58%),
+        radial-gradient(ellipse 70% 55% at 80% 100%, rgba(91, 33, 182, 0.12), transparent 50%);
       pointer-events: none;
     }
 
@@ -1124,10 +1120,15 @@
       inset: 0;
       z-index: 0;
       background:
-        radial-gradient(ellipse 90% 70% at 50% -20%, rgba(139, 92, 246, .28), transparent 52%),
-        radial-gradient(ellipse 55% 45% at 100% 35%, rgba(190, 18, 60, .14), transparent 50%),
-        linear-gradient(180deg, rgba(7, 10, 18, .94) 0%, rgba(5, 3, 13, .72) 42%, rgba(7, 10, 18, .92) 100%),
-        url("assets/bg-elysium-4k.webp") center center / cover no-repeat;
+        linear-gradient(
+          180deg,
+          rgba(2, 1, 10, 0.9) 0%,
+          rgba(5, 3, 15, 0.58) 46%,
+          rgba(2, 1, 10, 0.93) 100%
+        ),
+        radial-gradient(ellipse 120% 70% at 50% -15%, rgba(91, 33, 182, 0.3), transparent 52%),
+        radial-gradient(ellipse 55% 50% at 100% 40%, rgba(190, 18, 60, 0.1), transparent 50%),
+        url("assets/elysium-home-mainmenu-bg.webp") center center / cover no-repeat;
       pointer-events: none;
     }
 
@@ -1195,6 +1196,14 @@
 
     .hero:not(.is-home) p {
       max-width: min(760px, 100%);
+      color: rgba(241, 244, 255, 0.94);
+    }
+
+    .hero:not(.is-home) h1 {
+      color: #faf8ff;
+      text-shadow:
+        0 4px 36px rgba(0, 0, 0, 0.55),
+        0 2px 3px rgba(0, 0, 0, 0.4);
     }
 
     .home-content,
@@ -2665,47 +2674,59 @@
 
     .valorant-path-inner {
       display: flex;
-      align-items: center;
+      align-items: stretch;
       justify-content: center;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
       text-align: center;
     }
 
-    .valorant-path-end {
-      flex: 1 1 88px;
+    .valorant-path-inner--single {
+      justify-content: center;
+    }
+
+    .valorant-path-inner--single .valorant-path-chip {
+      flex: 0 1 auto;
+      max-width: min(360px, 100%);
+    }
+
+    .valorant-path-chip {
+      flex: 1 1 130px;
       min-width: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
-    }
-
-    .valorant-path-single {
-      width: 100%;
-      text-align: center;
-    }
-
-    .valorant-path-ph {
-      width: 44px;
-      height: 44px;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 14px 14px;
       border-radius: 12px;
+      border: 1px solid rgba(139, 92, 246, .4);
       background:
-        radial-gradient(circle at 30% 25%, rgba(125, 211, 252, .22), transparent 55%),
-        linear-gradient(145deg, rgba(139, 92, 246, .45), rgba(20, 16, 48, .9));
-      border: 1px solid rgba(139, 92, 246, .45);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, .25);
+        linear-gradient(165deg, rgba(26, 22, 58, .88), rgba(8, 7, 22, .82));
+      box-shadow:
+        0 12px 32px rgba(0, 0, 0, .28),
+        inset 0 1px 0 rgba(255, 255, 255, .06);
+    }
+
+    .valorant-path-kicker {
+      font-family: var(--display);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(196, 181, 253, .72);
+      line-height: 1.2;
     }
 
     .valorant-path-rank {
       font-family: var(--display);
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: .05em;
+      letter-spacing: .045em;
       text-transform: uppercase;
-      color: #f0eaff;
-      line-height: 1.25;
-      max-width: 160px;
+      color: #f4f0ff;
+      line-height: 1.3;
+      max-width: 100%;
       overflow-wrap: anywhere;
       word-break: break-word;
     }
@@ -2844,142 +2865,43 @@
       gap: 10px;
     }
 
-    .valorant-rank-boost .valorant-rank-row {
+    .valorant-rank-select-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .valorant-rank-tier-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      align-items: stretch;
+      gap: 14px;
     }
 
     @media (max-width: 520px) {
-      .valorant-rank-boost .valorant-rank-row {
+      .valorant-rank-tier-grid {
         grid-template-columns: 1fr;
       }
     }
 
-    .valorant-rank-boost .valorant-rank-card {
-      padding: 14px 12px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(139, 92, 246, .32);
-      background:
-        linear-gradient(165deg, rgba(18, 21, 38, .94), rgba(7, 10, 18, .96));
-      box-shadow:
-        0 14px 40px rgba(0, 0, 0, .3),
-        inset 0 1px 0 rgba(255, 255, 255, .06),
-        0 0 40px rgba(139, 92, 246, .05);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      min-width: 0;
-      min-height: 100%;
-    }
-
-    .valorant-rank-boost .valorant-rank-card-visual {
-      position: relative;
-      flex: 0 0 auto;
-      border-radius: 0;
-      overflow: visible;
-    }
-
-    .valorant-rank-boost .valorant-rank-card-thumb {
-      position: relative;
-      width: 100%;
-      height: 104px;
-      border-radius: 12px;
-      padding: 8px 12px;
-      box-sizing: border-box;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background:
-        radial-gradient(ellipse 70% 60% at 50% 40%, rgba(139, 92, 246, .14), transparent 70%),
-        linear-gradient(180deg, #060b12 0%, #0c121c 48%, #090d16 100%);
-      border: 1px solid rgba(139, 92, 246, .3);
-      box-shadow:
-        inset 0 0 0 1px rgba(0, 0, 0, .5),
-        inset 0 1px 0 rgba(255, 255, 255, .05),
-        0 12px 32px rgba(0, 0, 0, .35);
-      overflow: hidden;
-    }
-
-    .valorant-rank-boost .valorant-rank-card-thumb::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      pointer-events: none;
-      border-radius: inherit;
-      background:
-        radial-gradient(ellipse 90% 85% at 50% 42%, transparent 35%, rgba(7, 10, 18, .72) 100%),
-        linear-gradient(180deg, rgba(7, 10, 18, .12), transparent 40%, rgba(7, 10, 18, .35));
-    }
-
-    .valorant-rank-boost .valorant-rank-card-ph {
-      position: absolute;
-      inset: 7px;
-      width: auto;
-      height: auto;
-      min-height: 0;
-      border-radius: 10px;
-      background:
-        radial-gradient(circle at 50% 36%, rgba(125, 211, 252, .09), transparent 52%),
-        linear-gradient(145deg, rgba(139, 92, 246, .12), rgba(6, 9, 15, .94));
-      border: 1px dashed rgba(139, 92, 246, .2);
-      box-shadow: inset 0 0 24px rgba(0, 0, 0, .4);
-    }
-
-    .valorant-rank-boost .valorant-rank-card-img {
-      position: relative;
-      z-index: 1;
-      max-width: 100%;
-      max-height: 88px;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      object-position: center center;
-      display: none;
-      filter: drop-shadow(0 5px 18px rgba(0, 0, 0, .55));
-    }
-
-    .valorant-rank-boost .valorant-rank-card label {
-      color: rgba(200, 210, 235, .92);
-      font-size: 9px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      font-weight: 800;
-      line-height: 1.2;
-      margin: 0;
-      padding: 0 1px;
-    }
-
-    .valorant-rank-boost .valorant-rank-card select {
-      width: 100%;
-      border-radius: 10px;
-      border: 1px solid rgba(139, 92, 246, .38);
-      background: rgba(14, 17, 28, .96);
-      min-height: 40px;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .02em;
-      line-height: 1.25;
-      color: var(--text);
+    .valorant-rank-boost .valorant-rank-field select {
+      min-height: 44px;
+      font-size: 13px;
+      border-radius: 11px;
     }
 
     .valorant-path-rail--rank-boost .valorant-path-rank {
-      font-size: 10px;
-      font-weight: 750;
-      letter-spacing: .06em;
-      line-height: 1.2;
-      max-width: min(148px, 42vw);
-      overflow-wrap: normal;
-      word-break: normal;
-      hyphens: none;
+      font-size: 11px;
+      letter-spacing: .05em;
+      line-height: 1.35;
     }
 
     @media (max-width: 400px) {
+      .valorant-path-rail--rank-boost .valorant-path-chip {
+        flex: 1 1 100%;
+      }
+
       .valorant-path-rail--rank-boost .valorant-path-rank {
-        max-width: 34vw;
-        font-size: 9px;
+        font-size: 10px;
       }
     }
 
