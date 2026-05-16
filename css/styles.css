@@ -4500,6 +4500,11 @@
       flex: 0 0 auto;
     }
 
+    .summary-total--idle .summary-total-label,
+    .summary-total--idle .add-to-cart-main {
+      display: none;
+    }
+
     .summary-total--idle .usd-hint-text:empty {
       display: none;
     }

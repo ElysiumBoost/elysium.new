@@ -1,3 +1,10 @@
+    const $ = id => document.getElementById(id);
+    const val = id => $(id)?.value || "";
+    const num = id => Number(val(id) || 0);
+    window.$ = $;
+    window.val = val;
+    window.num = num;
+
     function deliveryTypeForService(service, gameId) {
       if (!service) return "Manual delivery via Discord";
       const f = service.form;
@@ -175,12 +182,14 @@
       const game = games.find(g => g.id === id);
       state.game = id;
       state.category = game.categories[0]?.id || "services";
-      state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
+      state.serviceId = null;
     }
 
-    const $ = id => document.getElementById(id);
-    const val = id => $(id)?.value || "";
-    const num = id => Number(val(id) || 0);
+    function servicesInCurrentCategory() {
+      const game = currentGame();
+      if (!game) return [];
+      return game.categories.length ? game.services.filter(service => service.category === state.category) : game.services;
+    }
 
     function elyValorantThumbFallback(img) {
       elyImagePlaceholder(img);
@@ -254,14 +263,14 @@
       renderHero();
       renderHome();
       if (!state.game) {
-        $("categoryBar").classList.add("hidden");
-        $("serviceContent").classList.add("hidden");
+        $("categoryBar")?.classList.add("hidden");
+        $("serviceContent")?.classList.add("hidden");
         renderCart();
         syncBodyGameContext();
         updateTotal();
         return;
       }
-      $("serviceContent").classList.remove("hidden");
+      $("serviceContent")?.classList.remove("hidden");
       renderCategories();
       renderServices();
       renderDetail();
@@ -373,7 +382,7 @@
       state.game = id;
       const game = currentGame();
       state.category = game.categories[0]?.id || "services";
-      state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
+      state.serviceId = null;
       closeGameMenu();
       syncGameHash(id);
       renderAll();
@@ -405,7 +414,7 @@
     }
 
     function renderHome() {
-      $("homeContent").classList.toggle("hidden", Boolean(state.game));
+      $("homeContent")?.classList.toggle("hidden", Boolean(state.game));
       const g = id => games.find(x => x.id === id);
       const homeBlurb = game => {
         const id = game.id;
@@ -494,7 +503,8 @@
           </div>
         </article>`);
       }
-      $("homeGameGrid").innerHTML = chunks.join("");
+      const hgg = $("homeGameGrid");
+      if (hgg) hgg.innerHTML = chunks.join("");
       const ab = $("homeAboutBlock");
       if (ab) {
         ab.innerHTML = `
@@ -564,7 +574,7 @@
       pauseCategoryAuto(3500);
       const game = currentGame();
       state.category = categoryId;
-      state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
+      state.serviceId = null;
       renderCategories();
       renderServices();
       renderDetail();
@@ -576,12 +586,14 @@
 
     function renderCategories() {
       const game = currentGame();
-      $("categoryBar").classList.toggle("hidden", game.categories.length === 0);
-      $("categoryBar").classList.toggle("circle-mode", game.id === "circle");
-      $("categoryBar").classList.toggle("neon-game-cats", game.id === "wow");
+      const scroller = $("categoryScroll");
+      if (!scroller) return;
+      $("categoryBar")?.classList.toggle("hidden", game.categories.length === 0);
+      $("categoryBar")?.classList.toggle("circle-mode", game.id === "circle");
+      $("categoryBar")?.classList.toggle("neon-game-cats", game.id === "wow");
       if (game.id === "wow") {
         const catSvg = wowCategorySvg;
-        $("categoryScroll").innerHTML = game.categories.map(cat => {
+        scroller.innerHTML = game.categories.map(cat => {
           const svg = catSvg(cat.icon);
           const rib = cat.badge ? `<span class="cat-ribbon ${cat.badgeTone || cat.badgeType || "hot"} cat-ribbon--val">${escapeHtml(cat.badge)}</span>` : "";
           const featured = cat.featured ? " cat-btn--featured" : "";
@@ -591,7 +603,7 @@
           </button>`;
         }).join("");
       } else {
-        $("categoryScroll").innerHTML = game.categories.map(cat => {
+        scroller.innerHTML = game.categories.map(cat => {
           const thumbOpt = cat.thumb || cat.image || cat.bg;
           return `
         <button class="cat-btn ${cat.id === state.category ? "active" : ""}" type="button" data-cat="${cat.id}" ${cat.bg ? `style="--cat-bg:url('${escapeHtml(cat.bg)}')"` : ""}>
@@ -649,14 +661,19 @@
 
     function renderServices() {
       const game = currentGame();
+      const head = $("serviceHead");
+      const grid = $("serviceGrid");
+      const titleEl = $("serviceTitle");
+      const copyEl = $("serviceCopy");
+      if (!grid || !titleEl || !copyEl) return;
       const category = game.categories.find(cat => cat.id === state.category);
       const list = game.categories.length ? game.services.filter(service => service.category === state.category) : game.services;
-      $("serviceTitle").textContent = category ? ui(category.label) : ui(game.label) + " " + ui("Services");
-      $("serviceCopy").textContent = game.id === "arc" ? ui("Open a service, customize the order, and add it to cart.") : ui("Select a service and adjust the order panel below.");
+      titleEl.textContent = category ? ui(category.label) : ui(game.label) + " " + ui("Services");
+      copyEl.textContent = game.id === "arc" ? ui("Open a service, customize the order, and add it to cart.") : ui("Select a service and adjust the order panel below.");
       const isEmpty = list.length === 0;
-      $("serviceHead").classList.toggle("is-hidden", list.length <= 1 && !isEmpty);
-      $("serviceGrid").classList.toggle("is-hidden", list.length <= 1 && !isEmpty);
-      $("serviceGrid").innerHTML = isEmpty
+      if (head) head.classList.toggle("is-hidden", list.length <= 1 && !isEmpty);
+      grid.classList.toggle("is-hidden", list.length <= 1 && !isEmpty);
+      grid.innerHTML = isEmpty
         ? `<p class="intro service-empty">${ui("No services available yet.")}</p>`
         : list.map(service => cardMarkup(service, false)).join("");
       bindServiceButtons();
@@ -664,6 +681,9 @@
 
     function bindCategoryArrows() {
       const scroller = $("categoryScroll");
+      const prev = $("catPrev");
+      const next = $("catNext");
+      if (!scroller || !prev || !next) return;
       const clampScroll = left => Math.max(0, Math.min(Math.max(0, scroller.scrollWidth - scroller.clientWidth), left));
       const stepSize = () => {
         const first = scroller.querySelector(".cat-btn");
@@ -680,8 +700,8 @@
         const currentPage = Math.round(scroller.scrollLeft / pageStep);
         scroller.scrollTo({ left: clampScroll((currentPage + direction) * pageStep), behavior: "smooth" });
       };
-      $("catPrev").onclick = () => move(-1);
-      $("catNext").onclick = () => move(1);
+      prev.onclick = () => move(-1);
+      next.onclick = () => move(1);
     }
 
     const categoryMotion = { bound: false, paused: false, pauseUntil: 0, dragging: false, didDrag: false, skipClick: false, blockNextClick: false, startX: 0, startY: 0, startLeft: 0, targetCat: "", direction: 1, raf: 0, progressHideTimer: 0 };
@@ -715,6 +735,7 @@
 
     function setupCategoryMotion() {
       const scroller = $("categoryScroll");
+      if (!scroller) return;
       if (!categoryMotion.bound) {
         categoryMotion.bound = true;
         scroller.addEventListener("mouseenter", () => { categoryMotion.paused = true; });
@@ -873,10 +894,16 @@
         "Quick Use Blueprints": new Set(),
         "Gun Part Blueprints": new Set()
       };
+      const ratingRow = $("detailRating");
       if (!service) {
-        $("detailIcon").innerHTML = categoryArtwork("custom", ui("Valorant"));
-        $("detailTitle").textContent = ui("No services available yet.");
-        $("detailIntro").textContent = "";
+        const list = servicesInCurrentCategory();
+        const emptyCategory = list.length === 0;
+        if (ratingRow) ratingRow.hidden = true;
+        $("detailIcon").innerHTML = categoryArtwork("custom", ui(emptyCategory ? "Services" : "Select a service"));
+        $("detailTitle").textContent = ui(emptyCategory ? "No services available yet." : "Select a service to build your order.");
+        $("detailIntro").textContent = ui(
+          emptyCategory ? "" : "Choose a service from the grid above to see pricing, options, and your live total."
+        );
         $("detailDeal").innerHTML = "";
         $("detailSteps").innerHTML = "";
         $("orderForm").innerHTML = "";
@@ -900,6 +927,7 @@
         updateTotal();
         return;
       }
+      if (ratingRow) ratingRow.hidden = false;
       const dft = $("detailFeatureThumb");
       const ds = $("detailSpecs");
       if (dft) {
