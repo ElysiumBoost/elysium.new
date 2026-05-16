@@ -521,8 +521,11 @@
                   </label>`;
       }
       if (needWow) {
-        grid += `<label class="order-context-field order-context-field--wide"><span class="order-context-k">${escapeHtml(ui("Character / realm"))}</span>
-                <input id="orderWowCharInput" class="order-context-input" type="text" autocomplete="off" placeholder="Name — Realm">
+        grid += `<label class="order-context-field order-context-field--wide"><span class="order-context-k">${escapeHtml(ui("Character name"))}</span>
+                <input id="orderWowCharInput" class="order-context-input" type="text" autocomplete="off" placeholder="Character name">
+              </label>
+              <label class="order-context-field order-context-field--wide"><span class="order-context-k">${escapeHtml(ui("Realm"))}</span>
+                <input id="orderWowRealmInput" class="order-context-input" type="text" autocomplete="off" placeholder="Realm / server">
               </label>`;
       }
       if (!anyField) {
@@ -549,7 +552,12 @@
         rows += `<div><dt>${ui("Steam / friend code")}</dt><dd>${escapeHtml((item.playerId || state.steamId || "").trim() || "—")}</dd></div>`;
       } else if (gid === "wow") {
         rows += `<div><dt>${ui("Region")}</dt><dd>${escapeHtml(item.region || state.orderRegion || "—")}</dd></div>`;
-        rows += `<div><dt>${ui("Character / realm")}</dt><dd>${escapeHtml((item.playerId || state.wowCharacterRealm || "").trim() || "—")}</dd></div>`;
+        {
+          const cn = String(state.wowCharName || "").trim() || (String(item.playerId || "").split(/\s*[—\-]\s*/)[0] || "").trim();
+          const rm = String(state.wowRealm || "").trim() || (String(item.playerId || "").split(/\s*[—\-]\s*/).length > 1 ? String(item.playerId || "").split(/\s*[—\-]\s*/).slice(1).join(" — ").trim() : "") || String(state.wowCharacterRealm || "").trim();
+          rows += `<div><dt>${ui("Character")}</dt><dd>${escapeHtml(cn || "—")}</dd></div>`;
+          rows += `<div><dt>${ui("Realm")}</dt><dd>${escapeHtml(rm || "—")}</dd></div>`;
+        }
       } else if (gid === "arc") {
         const em = state.arcId || (state.arcIdSkipped ? ui("Will type on Discord") : "—");
         rows += `<div><dt>${ui("Embark ID")}</dt><dd>${escapeHtml(em)}</dd></div>`;
@@ -578,7 +586,13 @@
       }
       if (gid === "wow") {
         lines.push(`    WoW region: ${item.region || state.orderRegion || "—"}`);
-        lines.push(`    Character / realm: ${(item.playerId || state.wowCharacterRealm || "").trim() || "—"}`);
+        {
+          const pid = String(item.playerId || state.wowCharacterRealm || "").trim();
+          const cn = String(state.wowCharName || "").trim() || (pid.split(/\s*[—\-]\s*/)[0] || "").trim();
+          const rm = String(state.wowRealm || "").trim() || (pid.split(/\s*[—\-]\s*/).length > 1 ? pid.split(/\s*[—\-]\s*/).slice(1).join(" — ").trim() : "");
+          lines.push(`    Character: ${cn || "—"}`);
+          lines.push(`    Realm: ${rm || "—"}`);
+        }
       }
       return lines;
     }
@@ -759,10 +773,6 @@
       }
     }
 
-    function cartNeedsArcId() {
-      return state.cart.some(item => item.game === "Arc Raiders");
-    }
-
     function getArcIdLine() {
       if (!cartNeedsArcId()) return "";
       const label = "Embark ID";
@@ -926,12 +936,23 @@
       }
     }
 
+    function openCopySuccessModal() {
+      $("copySuccessModal")?.classList.add("active");
+      $("copySuccessModal")?.setAttribute("aria-hidden", "false");
+    }
+
+    function closeCopySuccessModal() {
+      $("copySuccessModal")?.classList.remove("active");
+      $("copySuccessModal")?.setAttribute("aria-hidden", "true");
+    }
+
     function copyTicketTextToClipboard() {
       const text = ticketText();
       const statusEl = $("copyStatus");
       const ok = () => {
         statusEl.textContent = ui("Ticket copied successfully. Open Discord and paste it into your order ticket.");
         showToast(ui("Ticket copied."), 2600, false);
+        openCopySuccessModal();
       };
       const fail = () => {
         statusEl.textContent = ui("Copy failed. Try Download Order Receipt or copy the ticket manually.");
@@ -950,7 +971,7 @@
 
     function orderReceiptEmbarkBlockedMessage() {
       if (!state.cart.length) return ui("Add items to your cart first.");
-      if (cartNeedsArcId() && !String(state.arcId || "").trim()) {
+      if (cartNeedsArcId() && !String(state.arcId || "").trim() && !state.arcIdSkipped) {
         return ui("Please add your Embark ID before generating the order receipt.");
       }
       return "";
@@ -1207,195 +1228,3 @@
       if (entries.length === 1) return openSearchResult(entries[0]);
       renderSiteSearchResults(entries, query);
     }
-
-    const MUSIC_PREF_KEY = "elyBoostMusicPrefV1";
-    const bgMusic = $("bgMusic");
-    const audioToggle = $("audioToggle");
-    const audioVolume = $("audioVolume");
-
-    function readMusicPref() {
-      try {
-        const raw = localStorage.getItem(MUSIC_PREF_KEY);
-        if (!raw) return { vol: 0 };
-        const j = JSON.parse(raw);
-        return { vol: Math.max(0, Math.min(100, Number(j.vol) || 0)) };
-      } catch (e) {
-        return { vol: 0 };
-      }
-    }
-
-    function writeMusicPref() {
-      try {
-        localStorage.setItem(MUSIC_PREF_KEY, JSON.stringify({ vol: Number(audioVolume.value) || 0 }));
-      } catch (e) {}
-    }
-
-    (function initMusicPrefs() {
-      const p = readMusicPref();
-      audioVolume.value = String(p.vol);
-      bgMusic.volume = p.vol / 100;
-    })();
-    bgMusic.muted = true;
-    bgMusic.pause();
-
-    function updateAudioButton() {
-      const off = bgMusic.paused || bgMusic.muted;
-      audioToggle.innerHTML = off ? "&#9835;" : "II";
-      audioToggle.setAttribute("aria-label", off ? ui("Play music") : ui("Pause music"));
-    }
-
-    $("currency").addEventListener("change", () => {
-      state.currency = $("currency").value;
-      const label = state.currency === "USD" ? "USD" : state.currency === "EUR" ? "EUR" : state.currency === "GBP" ? "GBP" : state.currency === "TRY" ? "TRY" : state.currency;
-      showToast(`Currency updated to ${label}`, 1800, false);
-      if (state.game) {
-        renderPopular();
-        renderServices();
-        updateTotal();
-      } else {
-        renderHome();
-      }
-      renderCart();
-      persistOrderState();
-    });
-    $("brandHome").addEventListener("click", event => {
-      event.preventDefault();
-      state.game = null;
-      state.category = null;
-      state.serviceId = null;
-      syncGameHash(null);
-      renderAll();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-    const heroCta = $("heroCta");
-    if (heroCta) {
-      heroCta.addEventListener("click", () => {
-        if (state.game) {
-          $("serviceHead")?.scrollIntoView({ behavior: "smooth", block: "start" });
-        } else {
-          $("homeGameHead")?.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      });
-    }
-    $("addToCart").addEventListener("click", addToCart);
-    $("clearService").addEventListener("click", clearServiceForm);
-    $("cartOpen").addEventListener("click", openCart);
-    $("cartClose").addEventListener("click", closeCart);
-    $("copyOrder").addEventListener("click", copyOrder);
-    $("stickyOrderOpen")?.addEventListener("click", () => openCart());
-    $("footerLegalBtn")?.addEventListener("click", () => {
-      $("legalModal")?.classList.add("active");
-      $("legalModal")?.setAttribute("aria-hidden", "false");
-    });
-    $("legalModalClose")?.addEventListener("click", () => {
-      $("legalModal")?.classList.remove("active");
-      $("legalModal")?.setAttribute("aria-hidden", "true");
-    });
-    $("legalModal")?.addEventListener("click", event => {
-      if (event.target === $("legalModal")) {
-        $("legalModal")?.classList.remove("active");
-        $("legalModal")?.setAttribute("aria-hidden", "true");
-      }
-    });
-    $("clearCart").addEventListener("click", clearCart);
-    $("openDiscord").addEventListener("click", event => {
-      event.preventDefault();
-      openDiscordTicket();
-    });
-    $("arcIdDone").addEventListener("click", () => {
-      const id = val("arcIdInput").trim();
-      if (!id) {
-        showToast("Enter ID or use the red option.");
-        return;
-      }
-      state.arcId = id;
-      state.arcIdSkipped = false;
-      proceedAfterArcId();
-      if (state.cart.length) renderCart();
-    });
-    $("arcIdSkip").addEventListener("click", () => {
-      state.arcId = "";
-      state.arcIdSkipped = true;
-      proceedAfterArcId();
-      if (state.cart.length) renderCart();
-    });
-    $("arcIdModal").addEventListener("click", event => {
-      if (event.target === $("arcIdModal")) closeArcIdModal();
-    });
-    audioToggle.addEventListener("click", event => {
-      event.stopPropagation();
-      if (bgMusic.paused) {
-        let v = Number(audioVolume.value);
-        if (v <= 0) {
-          v = 45;
-          audioVolume.value = String(v);
-        }
-        bgMusic.volume = v / 100;
-        bgMusic.muted = false;
-        bgMusic.play().then(updateAudioButton).catch(updateAudioButton);
-      } else {
-        bgMusic.pause();
-        updateAudioButton();
-      }
-      writeMusicPref();
-    });
-    audioVolume.addEventListener("input", () => {
-      const v = Number(audioVolume.value);
-      bgMusic.volume = v / 100;
-      bgMusic.muted = v <= 0;
-      if (v <= 0) bgMusic.pause();
-      updateAudioButton();
-      writeMusicPref();
-    });
-    $("siteSearchBtn").addEventListener("click", runSiteSearch);
-    $("siteSearch").addEventListener("input", () => {
-      const query = val("siteSearch").trim().toLowerCase();
-      renderSiteSearchResults(query ? searchEntries(query) : [], query);
-    });
-    $("siteSearch").addEventListener("keydown", event => {
-      if (event.key === "Enter") runSiteSearch();
-    });
-    $("cartBackdrop").addEventListener("click", event => { if (event.target === $("cartBackdrop")) closeCart(); });
-    document.addEventListener("click", event => {
-      if (!$("siteSearchResults").contains(event.target) && event.target !== $("siteSearch") && event.target !== $("siteSearchBtn")) {
-        $("siteSearchResults").classList.remove("active");
-      }
-    });
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") {
-        closeGameMenu();
-        closeCart();
-        closeArcIdModal();
-        $("legalModal")?.classList.remove("active");
-        $("legalModal")?.setAttribute("aria-hidden", "true");
-        $("siteSearchResults").classList.remove("active");
-      }
-    });
-
-    updateAudioButton();
-    restoreOrderState();
-    restoreGameFromHash();
-    if (state.game) syncGameHash(state.game);
-    window.addEventListener("hashchange", () => {
-      closeGameMenu();
-      const id = parseGameHash();
-      if (id && games.some(g => g.id === id)) {
-        if (state.game !== id) {
-          const game = games.find(g => g.id === id);
-          state.game = id;
-          state.category = game.categories[0]?.id || "services";
-          state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
-          renderAll();
-        }
-      } else if (!id) {
-        if (state.game) {
-          state.game = null;
-          state.category = null;
-          state.serviceId = null;
-          renderAll();
-        }
-      }
-    });
-    renderAll();
-    startOrderFeed();
-  

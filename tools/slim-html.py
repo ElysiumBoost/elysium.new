@@ -126,8 +126,12 @@ if smi < 0 or smx <= smi:
 scripts = (
     "  <script src=\"js/config.js\"></script>\n"
     "  <script src=\"js/products.js\"></script>\n"
+    "  <script src=\"js/state.js\"></script>\n"
+    "  <script src=\"js/storage.js\"></script>\n"
+    "  <script src=\"js/validation.js\"></script>\n"
     "  <script src=\"js/cart.js\"></script>\n"
     "  <script src=\"js/ui.js\"></script>\n"
+    "  <script src=\"js/main.js\"></script>\n"
 )
 
 out = head_css + mid[:smi] + scripts + mid[smx:]

@@ -1,111 +1,3 @@
-    const state = {
-      game: null,
-      category: null,
-      serviceId: null,
-      currency: "USD",
-      arcId: "",
-      arcIdSkipped: false,
-      pendingArcAction: null,
-      clearCartConfirmUntil: 0,
-      cart: [],
-      cartDrawerCompact: false,
-      pendingBlueprintSearch: null,
-      bpTab: "Gun Blueprints",
-      orderPreviewId: "",
-      orderRegion: "EU",
-      orderPlatform: "PC",
-      riotId: "",
-      steamId: "",
-      lolRiotId: "",
-      lolServer: "",
-      wowCharacterRealm: "",
-      blueprintSelections: {
-        "Gun Blueprints": new Set(),
-        "Backpack Blueprints": new Set(),
-        "Quick Use Blueprints": new Set(),
-        "Gun Part Blueprints": new Set()
-      }
-    };
-
-    const ORDER_STATE_KEY = "elyOrderStateV1";
-
-    let lastCartMonetaryTotal = null;
-
-    function gameSlugForPreview(gameLabel) {
-      const g = String(gameLabel || "");
-      if (g.includes("Arc")) return "AR";
-      if (g.includes("Valorant")) return "VAL";
-      if (g.includes("Premier")) return "CS2";
-      if (g.includes("Faceit")) return "FCT";
-      if (g.includes("League")) return "LOL";
-      if (g.includes("Warcraft") || g.includes("WoW")) return "WOW";
-      if (g.includes("Boost")) return "BST";
-      return "EB";
-    }
-
-    function ensureOrderPreviewId() {
-      if (!state.cart.length) {
-        state.orderPreviewId = "";
-        return;
-      }
-      if (state.orderPreviewId) return;
-      const first = state.cart[0];
-      const code = gameSlugForPreview(first.game);
-      state.orderPreviewId = "EB-" + code + "-" + String(1000 + Math.floor(Math.random() * 9000)).slice(-4);
-    }
-
-    function persistOrderState() {
-      try {
-        localStorage.setItem(ORDER_STATE_KEY, JSON.stringify({
-          cart: state.cart,
-          currency: state.currency,
-          orderPreviewId: state.orderPreviewId,
-          arcId: state.arcId,
-          arcIdSkipped: state.arcIdSkipped,
-          orderRegion: state.orderRegion,
-          orderPlatform: state.orderPlatform,
-          riotId: state.riotId,
-          steamId: state.steamId,
-          lolRiotId: state.lolRiotId,
-          lolServer: state.lolServer,
-          wowCharacterRealm: state.wowCharacterRealm,
-          game: state.game,
-          category: state.category,
-          serviceId: state.serviceId
-        }));
-      } catch (e) {}
-    }
-
-    function restoreOrderState() {
-      try {
-        const raw = localStorage.getItem(ORDER_STATE_KEY);
-        if (!raw) return;
-        const j = JSON.parse(raw);
-        if (Array.isArray(j.cart)) state.cart = j.cart;
-        if (j.currency && rates[j.currency]) {
-          state.currency = j.currency;
-          const sel = $("currency");
-          if (sel) sel.value = state.currency;
-        }
-        if (typeof j.orderPreviewId === "string") state.orderPreviewId = j.orderPreviewId;
-        if (typeof j.arcId === "string") state.arcId = j.arcId;
-        if (typeof j.arcIdSkipped === "boolean") state.arcIdSkipped = j.arcIdSkipped;
-        if (typeof j.orderRegion === "string") state.orderRegion = j.orderRegion;
-        if (typeof j.orderPlatform === "string") state.orderPlatform = j.orderPlatform;
-        if (typeof j.riotId === "string") state.riotId = j.riotId;
-        if (typeof j.steamId === "string") state.steamId = j.steamId;
-        if (typeof j.lolRiotId === "string") state.lolRiotId = j.lolRiotId;
-        if (typeof j.lolServer === "string") state.lolServer = j.lolServer;
-        if (typeof j.wowCharacterRealm === "string") state.wowCharacterRealm = j.wowCharacterRealm;
-        const hashGame = parseGameHash();
-        if (!hashGame && j.game && games.some(g => g.id === j.game)) {
-          state.game = j.game;
-          state.category = j.category;
-          state.serviceId = j.serviceId;
-        }
-      } catch (e) {}
-    }
-
     function deliveryTypeForService(service, gameId) {
       if (!service) return "Manual delivery via Discord";
       const f = service.form;
@@ -131,64 +23,8 @@
       if (gid === "valorant") return state.riotId.trim();
       if (gid === "lol") return state.lolRiotId.trim();
       if (gid === "premier" || gid === "faceit") return state.steamId.trim();
-      if (gid === "wow") return state.wowCharacterRealm.trim();
+      if (gid === "wow") return [state.wowCharName, state.wowRealm].filter(Boolean).join(" — ") || state.wowCharacterRealm.trim();
       return "";
-    }
-
-    function cartHasGameId(gameId) {
-      return state.cart.some(item => item.gameId === gameId);
-    }
-
-    function cartNeedsLolId() {
-      return cartHasGameId("lol");
-    }
-
-    function cartNeedsWowFields() {
-      return cartHasGameId("wow");
-    }
-
-    function cartNeedsValorantId() {
-      return state.cart.some(item => item.game === "Valorant");
-    }
-
-    function cartNeedsSteamId() {
-      return state.cart.some(item => item.game === "Premier" || item.game === "Faceit");
-    }
-
-    function validateTicketRequirements() {
-      ensureOrderPreviewId();
-      if (cartNeedsArcId() && !state.arcId && !state.arcIdSkipped) return { ok: true };
-      if (cartNeedsValorantId()) {
-        if (!String(state.orderRegion || "").trim()) {
-          return { ok: false, message: ui("Select your Riot / Valorant region before copying.") };
-        }
-        if (!String(state.orderPlatform || "").trim()) {
-          return { ok: false, message: ui("Select your platform for Valorant orders before copying.") };
-        }
-        if (!String(state.riotId || "").trim()) {
-          return { ok: false, message: ui("Add your Riot ID (GameName#TAG) for Valorant orders before copying.") };
-        }
-      }
-      if (cartNeedsLolId()) {
-        if (!String(state.lolRiotId || "").trim()) {
-          return { ok: false, message: ui("Add your LoL Riot ID before copying.") };
-        }
-        if (!String(state.lolServer || "").trim()) {
-          return { ok: false, message: ui("Add your LoL server (e.g. EUW, NA) before copying.") };
-        }
-      }
-      if (cartNeedsSteamId() && !String(state.steamId || "").trim()) {
-        return { ok: false, message: ui("Add your Steam profile URL or friend code for CS2 orders before copying.") };
-      }
-      if (cartNeedsWowFields()) {
-        if (!String(state.orderRegion || "").trim()) {
-          return { ok: false, message: ui("Select your WoW region before copying.") };
-        }
-        if (!String(state.wowCharacterRealm || "").trim()) {
-          return { ok: false, message: ui("Add your WoW character and realm before copying.") };
-        }
-      }
-      return { ok: true };
     }
 
     function updateStickyOrderChip() {
@@ -215,7 +51,8 @@
       const st = $("orderSteamInput");
       const lr = $("orderLolRiotInput");
       const ls = $("orderLolServerInput");
-      const wr = $("orderWowCharInput");
+      const wc = $("orderWowCharInput");
+      const wrm = $("orderWowRealmInput");
       if (r) {
         r.value = state.orderRegion;
         r.onchange = () => {
@@ -271,15 +108,41 @@
           persistOrderState();
         };
       }
-      if (wr) {
-        wr.value = state.wowCharacterRealm;
-        wr.oninput = () => {
-          state.wowCharacterRealm = wr.value;
+      if (wc || wrm) {
+        const syncWowCartPlayerIds = () => {
+          const combined = [state.wowCharName, state.wowRealm].map(s => String(s || "").trim()).filter(Boolean).join(" — ");
+          state.wowCharacterRealm = combined;
           state.cart.forEach(item => {
-            if (item.gameId === "wow") item.playerId = state.wowCharacterRealm.trim();
+            if (item.gameId === "wow") item.playerId = combined;
           });
-          persistOrderState();
         };
+        let cn = state.wowCharName || "";
+        let rm = state.wowRealm || "";
+        if (!cn && !rm && state.wowCharacterRealm) {
+          const parts = String(state.wowCharacterRealm).split(/\s*[—\-]\s*/);
+          if (parts.length >= 2) {
+            cn = parts[0].trim();
+            rm = parts.slice(1).join(" — ").trim();
+          } else {
+            cn = state.wowCharacterRealm.trim();
+          }
+        }
+        if (wc) {
+          wc.value = cn;
+          wc.oninput = () => {
+            state.wowCharName = wc.value;
+            syncWowCartPlayerIds();
+            persistOrderState();
+          };
+        }
+        if (wrm) {
+          wrm.value = rm;
+          wrm.oninput = () => {
+            state.wowRealm = wrm.value;
+            syncWowCartPlayerIds();
+            persistOrderState();
+          };
+        }
       }
     }
 

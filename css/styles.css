@@ -5694,6 +5694,31 @@
       width: 100%;
     }
 
+    .copy-success-modal .copy-success-lead {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      margin: 0 0 14px;
+    }
+
+    .copy-success-steps {
+      margin: 0 0 18px;
+      padding-left: 1.2em;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .copy-success-steps li {
+      margin-bottom: 6px;
+    }
+
+    .copy-success-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
     @media (max-width: 720px) {
       .topbar-discord { display: none; }
       .order-context-grid { grid-template-columns: 1fr; }

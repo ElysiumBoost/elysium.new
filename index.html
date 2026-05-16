@@ -298,6 +298,23 @@
     <a class="btn btn-premium btn-mini" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Open Discord ticket</a>
   </aside>
 
+  <div class="legal-modal-backdrop" id="copySuccessModal" aria-hidden="true">
+    <div class="legal-modal copy-success-modal" role="dialog" aria-modal="true" aria-labelledby="copySuccessTitle">
+      <h2 id="copySuccessTitle">Ticket copied successfully</h2>
+      <p class="copy-success-lead">Your order is on the clipboard. Finish in Discord so support can confirm availability and timing.</p>
+      <ol class="copy-success-steps">
+        <li>Open Discord</li>
+        <li>Create or open your order ticket</li>
+        <li>Paste the copied receipt</li>
+        <li>Wait for booster confirmation</li>
+      </ol>
+      <div class="copy-success-actions">
+        <a class="btn btn-premium" id="copySuccessDiscord" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Open Discord ticket</a>
+        <button type="button" class="btn btn-glass legal-close" id="copySuccessClose">Close</button>
+      </div>
+    </div>
+  </div>
+
   <div class="legal-modal-backdrop" id="legalModal" aria-hidden="true">
     <div class="legal-modal" role="dialog" aria-modal="true" aria-labelledby="legalModalTitle">
       <h2 id="legalModalTitle">Terms, safety &amp; delivery</h2>
@@ -313,8 +330,12 @@
 
   <script src="js/config.js"></script>
   <script src="js/products.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/validation.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
 
 </body>
 </html>
