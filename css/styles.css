@@ -389,6 +389,9 @@
       text-transform: uppercase;
       letter-spacing: .06em;
       font-size: 13px;
+      min-height: 42px;
+      height: 42px;
+      box-sizing: border-box;
     }
 
     .game-menu-chevron {

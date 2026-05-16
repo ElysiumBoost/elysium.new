@@ -732,16 +732,20 @@
 
     function renderCart() {
       const lineCount = state.cart.reduce((n, item) => n + (item.qty || 1), 0);
-      $("cartCount").textContent = String(lineCount);
+      const cartCountEl = $("cartCount");
+      const cartBodyEl = $("cartBody");
+      const clearEl = $("clearCart");
+      if (cartCountEl) cartCountEl.textContent = String(lineCount);
       document.querySelector("#cartBackdrop .drawer")?.classList.toggle("drawer--wide", Boolean(state.cart.length));
-      $("clearCart").disabled = !state.cart.length;
+      if (clearEl) clearEl.disabled = !state.cart.length;
       const hasArcItems = state.cart.some(item => item.game === "Arc Raiders");
       if (!state.cart.length) {
         state.arcId = "";
         state.arcIdSkipped = false;
         state.clearCartConfirmUntil = 0;
         state.orderPreviewId = "";
-        $("cartBody").innerHTML = `
+        if (cartBodyEl) {
+          cartBodyEl.innerHTML = `
           <div class="cart-empty-card">
             <div class="cart-empty-icon" aria-hidden="true">✦</div>
             <p class="cart-empty-title">${escapeHtml(ui("Your order is empty"))}</p>
@@ -749,14 +753,15 @@
             <button type="button" class="btn btn-premium" id="browsePopularServices">${escapeHtml(ui("Browse services"))}</button>
             <button type="button" class="btn btn-glass cart-empty-secondary" id="continueShoppingEmpty">${escapeHtml(ui("Continue browsing"))}</button>
           </div>`;
-        const bp = $("browsePopularServices");
-        if (bp) bp.addEventListener("click", () => {
-          closeCart();
-          selectGame("arc");
-          requestAnimationFrame(() => $("serviceHead")?.scrollIntoView({ behavior: "smooth", block: "start" }));
-        });
-        const c0 = $("continueShoppingEmpty");
-        if (c0) c0.addEventListener("click", continueShopping);
+          const bp = $("browsePopularServices");
+          if (bp) bp.addEventListener("click", () => {
+            closeCart();
+            selectGame("arc");
+            requestAnimationFrame(() => $("serviceHead")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+          });
+          const c0 = $("continueShoppingEmpty");
+          if (c0) c0.addEventListener("click", continueShopping);
+        }
       } else {
         if (!hasArcItems) {
           state.arcId = "";
@@ -842,32 +847,35 @@
             <div class="cart-continue-wrap order-lines-continue"><button type="button" class="btn-continue" id="continueShoppingCart">${escapeHtml(ui("Continue shopping"))}</button></div>
             <div id="cartCheckoutDock" class="cart-checkout-dock" aria-label="${escapeHtml(ui("Checkout"))}"></div>
           </div>`;
-        $("cartBody").innerHTML = `<div class="order-center">${leftCol}${rightCol}</div>`;
-        document.querySelectorAll("[data-remove]").forEach(button => button.addEventListener("click", () => {
-          state.cart = state.cart.filter(item => item.id !== button.dataset.remove);
-          if (!state.cart.length) state.orderPreviewId = "";
-          persistOrderState();
-          renderCart();
-        }));
-        document.querySelectorAll("[data-adjust]").forEach(button => button.addEventListener("click", () => adjustCartItem(button.dataset.adjust)));
-        document.querySelectorAll("[data-cart-qty-delta]").forEach(button => {
-          button.addEventListener("click", () => {
-            if (button.disabled) return;
-            adjustCartLineQty(button.dataset.cartQtyId, Number(button.dataset.cartQtyDelta));
+        if (cartBodyEl) {
+          cartBodyEl.innerHTML = `<div class="order-center">${leftCol}${rightCol}</div>`;
+          document.querySelectorAll("[data-remove]").forEach(button => button.addEventListener("click", () => {
+            state.cart = state.cart.filter(item => item.id !== button.dataset.remove);
+            if (!state.cart.length) state.orderPreviewId = "";
+            persistOrderState();
+            renderCart();
+          }));
+          document.querySelectorAll("[data-adjust]").forEach(button => button.addEventListener("click", () => adjustCartItem(button.dataset.adjust)));
+          document.querySelectorAll("[data-cart-qty-delta]").forEach(button => {
+            button.addEventListener("click", () => {
+              if (button.disabled) return;
+              adjustCartLineQty(button.dataset.cartQtyId, Number(button.dataset.cartQtyDelta));
+            });
           });
-        });
-        const c1 = $("continueShoppingCart");
-        if (c1) c1.addEventListener("click", continueShopping);
-        $("cartEmbarkEditBtn")?.addEventListener("click", () => openArcIdModal(null));
-        bindOrderSummaryContext();
+          const c1 = $("continueShoppingCart");
+          if (c1) c1.addEventListener("click", continueShopping);
+          $("cartEmbarkEditBtn")?.addEventListener("click", () => openArcIdModal(null));
+          bindOrderSummaryContext();
+        }
       }
       const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
       const hasCustom = state.cart.some(item => item.custom);
       const sameCurrency = state.cart.length && state.cart.every(item => item.viewedCurrency === state.cart[0].viewedCurrency);
       const cartCurrency = sameCurrency ? state.cart[0].viewedCurrency : state.currency;
       const totalEl = $("cartTotal");
+      const usdHintEl = $("cartUsdHint");
       if (state.cart.length) {
-        if (lastCartMonetaryTotal !== null && lastCartMonetaryTotal !== total) {
+        if (totalEl && lastCartMonetaryTotal !== null && lastCartMonetaryTotal !== total) {
           totalEl.classList.remove("cart-total-pulse");
           void totalEl.offsetWidth;
           totalEl.classList.add("cart-total-pulse");
@@ -877,8 +885,8 @@
       } else {
         lastCartMonetaryTotal = null;
       }
-      totalEl.textContent = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
-      $("cartUsdHint").textContent = hasCustom ? "Ticket total: " + displayInCurrency(total, cartCurrency) + " + CUSTOM" : "Ticket total: " + displayInCurrency(total, cartCurrency);
+      if (totalEl) totalEl.textContent = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
+      if (usdHintEl) usdHintEl.textContent = hasCustom ? "Ticket total: " + displayInCurrency(total, cartCurrency) + " + CUSTOM" : "Ticket total: " + displayInCurrency(total, cartCurrency);
       updateCartFootAlerts();
       syncClearCartButton();
       applyDrawerCompactClass();
@@ -896,7 +904,7 @@
         state.cart = [];
         state.orderPreviewId = "";
         renderCart();
-        $("copyStatus").textContent = "Cart cleared.";
+        $("copyStatus")?.textContent = "Cart cleared.";
         showToast("Cart cleared.");
         return;
       }
@@ -922,14 +930,18 @@
 
     function openCart() {
       renderCart();
-      $("cartBackdrop").classList.add("active");
-      $("cartBackdrop").setAttribute("aria-hidden", "false");
+      const bd = $("cartBackdrop");
+      if (!bd) return;
+      bd.classList.add("active");
+      bd.setAttribute("aria-hidden", "false");
       document.body.classList.add("cart-open");
     }
 
     function closeCart() {
-      $("cartBackdrop").classList.remove("active");
-      $("cartBackdrop").setAttribute("aria-hidden", "true");
+      const bd = $("cartBackdrop");
+      if (!bd) return;
+      bd.classList.remove("active");
+      bd.setAttribute("aria-hidden", "true");
       document.body.classList.remove("cart-open");
     }
 
@@ -1053,12 +1065,12 @@
 
     async function copyOrder() {
       if (!state.cart.length) {
-        $("copyStatus").textContent = ui("Add an item before copying.");
+        $("copyStatus")?.textContent = ui("Add an item before copying.");
         return;
       }
       const v = validateTicketRequirements();
       if (!v.ok) {
-        $("copyStatus").textContent = v.message;
+        $("copyStatus")?.textContent = v.message;
         showToast(v.message, 3800, true);
         return;
       }
@@ -1255,12 +1267,12 @@
       const text = ticketText();
       const statusEl = $("copyStatus");
       const ok = () => {
-        statusEl.textContent = ui("Ticket copied successfully. Open Discord and paste it into your order ticket.");
+        if (statusEl) statusEl.textContent = ui("Ticket copied successfully. Open Discord and paste it into your order ticket.");
         showToast(ui("Ticket copied."), 2600, false);
         openCopySuccessModal();
       };
       const fail = () => {
-        statusEl.textContent = ui("Copy failed. Try Download Receipt Image or copy the ticket manually.");
+        if (statusEl) statusEl.textContent = ui("Copy failed. Try Download Receipt Image or copy the ticket manually.");
         showToast(ui("Copy failed."), 3200, true);
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1278,25 +1290,25 @@
       const statusEl = $("copyStatus");
       const gate = orderReceiptBlockedMessage();
       if (gate) {
-        statusEl.textContent = gate;
+        if (statusEl) statusEl.textContent = gate;
         showToast(gate, 3400, true);
         return;
       }
-      statusEl.textContent = ui("Generating receipt image...");
+      if (statusEl) statusEl.textContent = ui("Generating receipt image...");
       try {
         const canvas = await drawPremiumOrderReceiptCanvas();
         downloadCanvasAsPng(canvas, receiptFilenameFromPreviewId());
-        statusEl.textContent = ui("Receipt downloaded. Attach it to your Discord ticket if asked.");
+        if (statusEl) statusEl.textContent = ui("Receipt downloaded. Attach it to your Discord ticket if asked.");
         showToast(ui("Receipt downloaded."), 2600, false);
         try {
           if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
             const blob = await canvasToBlob(canvas, "image/png");
             await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-            statusEl.textContent = ui("Receipt downloaded and copied — paste the image into Discord if needed.");
+            if (statusEl) statusEl.textContent = ui("Receipt downloaded and copied — paste the image into Discord if needed.");
           }
         } catch (_) {}
       } catch (e) {
-        statusEl.textContent = ui("Could not generate receipt. Try again or copy the text ticket.");
+        if (statusEl) statusEl.textContent = ui("Could not generate receipt. Try again or copy the text ticket.");
         showToast(ui("Receipt generation failed."), 3200, true);
       }
     }
@@ -1318,7 +1330,7 @@
 
     function openDiscordTicket() {
       if (!state.cart.length) {
-        $("copyStatus").textContent = "Add an item before opening Discord.";
+        $("copyStatus")?.textContent = "Add an item before opening Discord.";
         return;
       }
       ensureArcId(() => window.open(DISCORD_URL, "_blank", "noopener"));
@@ -1326,6 +1338,7 @@
 
     function showToast(message, ms = 2200, isError = false) {
       const el = $("toast");
+      if (!el) return;
       el.textContent = message;
       el.classList.toggle("toast--error", Boolean(isError));
       el.classList.add("active");
