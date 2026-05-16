@@ -334,6 +334,7 @@
       position: sticky;
       top: 0;
       z-index: 60;
+      overflow-x: clip;
       background: linear-gradient(180deg, rgba(7, 10, 18, .94), rgba(7, 10, 18, .86));
       border-bottom: 1px solid var(--line);
       box-shadow: 0 10px 40px rgba(0, 0, 0, .42);
@@ -344,7 +345,7 @@
     .topbar-inner {
       min-height: 64px;
       display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-columns: auto auto minmax(0, 1fr) auto;
       gap: 12px;
       align-items: center;
     }
@@ -517,12 +518,21 @@
       justify-content: flex-end;
       gap: 12px;
       flex-wrap: wrap;
+      min-width: 0;
+    }
+
+    .site-search,
+    .currency,
+    .audio-control,
+    .btn-icon,
+    .cart-button {
+      height: 42px;
+      min-height: 42px;
+      box-sizing: border-box;
     }
 
     .site-search {
       width: min(220px, 22vw);
-      height: 42px;
-      min-height: 42px;
       box-sizing: border-box;
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -605,8 +615,6 @@
 
     .currency {
       width: auto;
-      height: 42px;
-      min-height: 42px;
       box-sizing: border-box;
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -621,8 +629,6 @@
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      height: 42px;
-      min-height: 42px;
       box-sizing: border-box;
       padding: 0 10px;
       border: 1px solid rgba(139, 92, 246,.28);
@@ -652,8 +658,6 @@
     .btn-icon {
       width: 42px;
       min-width: 42px;
-      height: 42px;
-      min-height: 42px;
       box-sizing: border-box;
       padding: 0;
       gap: 0;
@@ -676,8 +680,6 @@
       position: relative;
       width: 42px;
       min-width: 42px;
-      height: 42px;
-      min-height: 42px;
       box-sizing: border-box;
       padding: 0;
     }
@@ -1146,7 +1148,10 @@
       position: absolute;
       inset: 0;
       z-index: 0;
-      background: var(--hero-bg) center center / cover no-repeat;
+      background-image: var(--hero-bg);
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
       background-attachment: scroll;
       pointer-events: none;
     }
@@ -1669,11 +1674,6 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
       margin-bottom: 28px;
-    }
-
-    #popularHead p {
-      font-size: 16px;
-      max-width: 52ch;
     }
 
     .popular-card, .service-card, .detail-left, .order-card, .cart-item {
@@ -5875,9 +5875,14 @@
     }
 
     .topbar-discord {
+      justify-self: end;
       margin-right: 4px;
       padding: 0 11px;
-      min-height: 38px;
+      min-height: 42px;
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       font-family: var(--display);
       font-size: 11px;
       letter-spacing: .06em;

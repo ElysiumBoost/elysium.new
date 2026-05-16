@@ -263,7 +263,6 @@
       }
       $("serviceContent").classList.remove("hidden");
       renderCategories();
-      renderPopular();
       renderServices();
       renderDetail();
       renderCart();
@@ -276,27 +275,41 @@
     }
 
     function updateStaticText() {
-      $("siteSearch").placeholder = ui("Search services");
-      $("siteSearchBtn").setAttribute("aria-label", ui("Search"));
-      $("siteSearchBtn").setAttribute("title", ui("Search"));
-      $("cartOpen").setAttribute("aria-label", ui("Open order summary"));
-      $("cartOpen").setAttribute("title", ui("Order summary"));
-      $("gameMenuBtn").setAttribute("aria-label", ui("Games menu"));
-      $("gameMenuBtn").setAttribute("title", ui("Games"));
-      const gl = $("gameMenuBtn")?.querySelector(".game-menu-btn-label");
+      const ss = $("siteSearch");
+      if (ss) ss.placeholder = ui("Search services");
+      const ssb = $("siteSearchBtn");
+      if (ssb) {
+        ssb.setAttribute("aria-label", ui("Search"));
+        ssb.setAttribute("title", ui("Search"));
+      }
+      const co = $("cartOpen");
+      if (co) {
+        co.setAttribute("aria-label", ui("Open order summary"));
+        co.setAttribute("title", ui("Order summary"));
+      }
+      const gmb = $("gameMenuBtn");
+      if (gmb) {
+        gmb.setAttribute("aria-label", ui("Games menu"));
+        gmb.setAttribute("title", ui("Games"));
+      }
+      const gl = gmb?.querySelector(".game-menu-btn-label");
       if (gl) gl.textContent = ui("Games");
-      $("clearService").textContent = ui("Clear");
-      $("addToCart").textContent = ui("Add to Order");
-      $("copyOrder").textContent = ui("Copy Discord Ticket");
+      const cs = $("clearService");
+      if (cs) cs.textContent = ui("Clear");
+      const atc = $("addToCart");
+      if (atc) atc.textContent = ui("Add to Order");
+      const cp = $("copyOrder");
+      if (cp) cp.textContent = ui("Copy Discord Ticket");
       const dlR = $("downloadOrderReceipt");
       if (dlR) dlR.textContent = ui("Download Receipt Image");
       const vNote = $("cartVerifyNote");
       if (vNote) vNote.textContent = ui("Attach the receipt image to Discord if support requests visual confirmation.");
       syncCompactToggleLabel();
-      document.querySelector('a[href*="1499796035382415462"]').textContent = ui("Open Discord");
+      document.querySelectorAll('a[href*="1499796035382415462"]').forEach(a => { a.textContent = ui("Open Discord"); });
       const fb = $("cartFeedbackLink");
       if (fb) fb.textContent = ui("Leave feedback");
-      document.querySelector(".drawer-head h2").textContent = ui("Order center");
+      const dh = document.querySelector(".drawer-head h2");
+      if (dh) dh.textContent = ui("Order center");
       const ctl = $("cartTotalLabel");
       if (ctl) ctl.textContent = ui("Order total");
       const td = document.querySelector(".topbar-discord");
@@ -553,7 +566,6 @@
       state.category = categoryId;
       state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
       renderCategories();
-      renderPopular();
       renderServices();
       renderDetail();
       requestAnimationFrame(() => {
@@ -633,30 +645,6 @@
         $("heroTitle").textContent = ui("ELYSIUM BOOST");
         $("heroCopy").textContent = ui("Choose your game, customize your order, copy your Discord ticket and get matched with a verified booster.");
       }
-    }
-
-    function renderPopular() {
-      const game = currentGame();
-      if (!game) return;
-      if (game.id === "circle" || game.id === "valorant" || game.id === "faceit" || game.id === "premier" || game.id === "social" || game.id === "arc") {
-        $("popularHead").classList.add("is-hidden");
-        $("popularGrid").classList.add("is-hidden");
-        $("popularGrid").innerHTML = "";
-        return;
-      }
-      $("popularTitle").textContent = game.id === "arc" ? ui("Featured Arc Raiders Services") : ui("Popular") + " " + ui(game.label) + " " + ui("Services");
-      $("popularCopy").textContent = game.id === "arc" ? ui("Curated starters — Trials, guns, blueprints, and coins — without repeating your open category.") : ui("Most requested services for this game.");
-      const visibleIds = new Set(game.categories.length
-        ? game.services.filter(service => service.category === state.category).map(service => service.id)
-        : [state.serviceId]);
-      const list = game.popular
-        .map(id => game.services.find(service => service.id === id))
-        .filter(service => service && !visibleIds.has(service.id))
-        .slice(0, 3);
-      $("popularHead").classList.toggle("is-hidden", list.length === 0);
-      $("popularGrid").classList.toggle("is-hidden", list.length === 0);
-      $("popularGrid").innerHTML = list.map(service => cardMarkup(service, true)).join("");
-      bindServiceButtons();
     }
 
     function renderServices() {
@@ -870,7 +858,6 @@
         const service = currentService();
         if (service) state.category = service.category;
         renderCategories();
-        renderPopular();
         renderServices();
         renderDetail();
         ($("detailLeftHead") || $("detailSection")).scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1449,9 +1436,9 @@
       wrap.dataset.valorantOrderChrome = "";
       wrap.className = "valorant-order-chrome";
       const customize = valorantOrderChromeCustomizeInner(svc.form);
-      const pathRailExtra = svc.form === "valorant-rank-boost" ? " valorant-path-rail--rank-boost" : "";
+      const includePathRail = svc.form !== "valorant-rank-boost";
       wrap.innerHTML = `
-        <div id="valorantPathRail" class="valorant-path-rail${pathRailExtra}" aria-live="polite"></div>
+        ${includePathRail ? `<div id="valorantPathRail" class="valorant-path-rail" aria-live="polite"></div>` : ""}
         ${customize ? `<section class="valorant-customize-surface" aria-label="${escapeHtml(ui("Customize"))}"><h4 class="valorant-block-kicker">${escapeHtml(ui("Customize"))}</h4>${customize}</section>` : ""}
         <p class="valorant-mini-promo">${escapeHtml(ui("Manual completion · VPN-safe routing · Discord confirmation on every order."))}</p>
         <div class="valorant-summary-panel valorant-summary-panel--sticky">

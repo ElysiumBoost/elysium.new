@@ -71,7 +71,6 @@
         const label = state.currency === "USD" ? "USD" : state.currency === "EUR" ? "EUR" : state.currency === "GBP" ? "GBP" : state.currency === "TRY" ? "TRY" : state.currency;
         showToast(`Currency updated to ${label}`, 1800, false);
         if (state.game) {
-          renderPopular();
           renderServices();
           updateTotal();
         } else {
