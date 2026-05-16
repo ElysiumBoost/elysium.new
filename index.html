@@ -1320,6 +1320,16 @@
         0 0 0 1px rgba(0, 212, 255, .04);
     }
 
+    .cart-item {
+      position: relative;
+      z-index: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 12px 12px 11px;
+      margin-bottom: 12px;
+    }
+
     .popular-card, .service-card {
       position: relative;
       overflow: hidden;
@@ -4047,6 +4057,43 @@
       gap: 12px;
     }
 
+    .drawer-head {
+      flex-wrap: wrap;
+    }
+
+    .drawer-head-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .btn-cart-compact {
+      padding: 7px 11px;
+      min-height: 36px;
+      border-radius: 8px;
+      border: 1px solid rgba(155, 104, 255, .42);
+      background: rgba(22, 18, 52, .75);
+      color: rgba(231, 226, 255, .95);
+      font-family: var(--display);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .btn-cart-compact:hover {
+      border-color: rgba(255, 209, 102, .45);
+      box-shadow: 0 0 16px rgba(122, 77, 255, .22);
+    }
+
+    .btn-cart-compact:focus-visible {
+      outline: 2px solid rgba(255, 209, 102, .45);
+      outline-offset: 2px;
+    }
+
     .drawer-foot {
       border-top: 1px solid var(--line);
       border-bottom: 0;
@@ -4115,6 +4162,36 @@
       overflow-wrap: anywhere;
     }
 
+    .cart-embark-btn {
+      margin-top: 10px;
+      width: 100%;
+      min-height: 40px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 209, 102, .4);
+      background: linear-gradient(135deg, rgba(122, 77, 255, .28), rgba(20, 17, 49, .88));
+      color: #fff4d4;
+      font-family: var(--display);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease;
+    }
+
+    .cart-embark-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255, 209, 102, .55);
+    }
+
+    .cart-embark-warn {
+      margin: 8px 0 0;
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255, 184, 200, .92);
+      line-height: 1.4;
+    }
+
     .cart-embark-k {
       display: inline-block;
       margin-right: 8px;
@@ -4126,40 +4203,92 @@
       vertical-align: middle;
     }
 
-    .cart-item {
-      padding: 10px;
-      margin-bottom: 8px;
-    }
-
     .cart-item h3 {
       margin: 0;
       font-family: var(--display);
-      font-size: 20px;
-      line-height: 1;
+      font-size: 18px;
+      line-height: 1.12;
       text-transform: uppercase;
       overflow-wrap: anywhere;
+      letter-spacing: .04em;
     }
 
-    .cart-item p {
-      margin: 7px 0 0;
+    .cart-item-game {
+      margin: 6px 0 0;
+      font-family: var(--display);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(191, 252, 255, .78);
+    }
+
+    .cart-item-detail-body {
+      margin: 8px 0 0;
       color: var(--muted);
-      white-space: pre-line;
-      line-height: 1.45;
-      font-size: 13px;
+      white-space: pre-wrap;
+      line-height: 1.5;
+      font-size: 12px;
       overflow-wrap: anywhere;
+      max-height: 168px;
+      overflow-y: auto;
+      padding-right: 6px;
+      scrollbar-width: thin;
+    }
+
+    .drawer--cart-compact .cart-checklist {
+      display: none;
+    }
+
+    .drawer--cart-compact .cart-continue-wrap {
+      display: none;
+    }
+
+    .drawer--cart-compact .cart-foot-alerts {
+      margin-bottom: 0;
+    }
+
+    .drawer--cart-compact .cart-item-detail-body {
+      max-height: 200px;
     }
 
     .cart-item-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(108px, 38%);
       gap: 12px;
+      align-items: start;
+    }
+
+    .cart-item-main {
+      min-width: 0;
+    }
+
+    .cart-item-price {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      font-family: var(--display);
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--gold);
+      text-align: right;
+      line-height: 1.2;
+      letter-spacing: .03em;
+      justify-self: end;
+      word-break: break-word;
+    }
+
+    .cart-item-price .estimated-tag {
+      display: inline-flex;
+      margin: 0 0 6px;
+      vertical-align: middle;
     }
 
     .remove {
-      min-height: 30px;
-      margin-top: 10px;
-      padding: 0 9px;
+      align-self: flex-start;
+      margin-top: 0;
+      min-height: 32px;
+      padding: 0 11px;
       border-color: rgba(255,95,125,.5);
       color: #ffd7df;
       font-size: 11px;
@@ -4207,6 +4336,210 @@
       color: var(--green);
       font-weight: 800;
       font-size: 13px;
+    }
+
+    .cart-verify-note {
+      margin: 0;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(122, 77, 255, .35);
+      background: rgba(12, 10, 32, .55);
+      color: rgba(200, 192, 236, .95);
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.45;
+    }
+
+    .order-receipt-capture {
+      font-family: var(--font);
+      color: #f7f5ff;
+      background: #0a0721;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .order-receipt-inner {
+      width: 560px;
+      max-width: 560px;
+      padding: 26px 24px 20px;
+      border: 2px solid rgba(155, 104, 255, .58);
+      border-radius: 14px;
+      background:
+        radial-gradient(ellipse 80% 40% at 50% 0%, rgba(122, 77, 255, .2), transparent 52%),
+        linear-gradient(180deg, rgba(30, 24, 68, .99), rgba(6, 5, 16, .995));
+      box-shadow:
+        0 0 48px rgba(122, 77, 255, .18),
+        inset 0 1px 0 rgba(255, 255, 255, .07);
+    }
+
+    .order-receipt-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(155, 104, 255, .32);
+    }
+
+    .order-receipt-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, .2);
+      flex-shrink: 0;
+    }
+
+    .order-receipt-title-block h1 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #fff9fc;
+      line-height: 1.15;
+    }
+
+    .order-receipt-meta {
+      margin: 5px 0 0;
+      font-size: 12px;
+      color: rgba(183, 176, 223, .92);
+      font-weight: 600;
+    }
+
+    .order-receipt-section {
+      margin-top: 14px;
+      padding-top: 2px;
+    }
+
+    .order-receipt-section h2 {
+      margin: 0 0 8px;
+      font-family: var(--display);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+      color: rgba(191, 252, 255, .85);
+    }
+
+    .order-receipt-embark-box {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 209, 102, .35);
+      background: rgba(122, 77, 255, .12);
+      font-size: 14px;
+      font-weight: 750;
+      color: #fff6df;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .order-receipt-embark-box strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(255, 209, 102, .88);
+    }
+
+    .order-receipt-item {
+      margin-bottom: 14px;
+      padding: 12px 12px 11px;
+      border-radius: 10px;
+      border: 1px solid rgba(155, 104, 255, .38);
+      background: rgba(12, 10, 32, .55);
+    }
+
+    .order-receipt-item-head {
+      font-family: var(--display);
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: #fdf8ff;
+      line-height: 1.25;
+      margin-bottom: 6px;
+    }
+
+    .order-receipt-item-game {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: rgba(191, 252, 255, .75);
+      margin-bottom: 8px;
+    }
+
+    .order-receipt-item-details {
+      font-size: 12px;
+      line-height: 1.5;
+      color: rgba(220, 214, 248, .95);
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin-bottom: 8px;
+    }
+
+    .order-receipt-item-price {
+      font-family: var(--display);
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: .03em;
+    }
+
+    .order-receipt-item-curr {
+      margin-top: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(183, 176, 223, .88);
+    }
+
+    .order-receipt-totals {
+      margin-top: 8px;
+      padding: 14px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 209, 102, .4);
+      background: rgba(255, 209, 102, .08);
+    }
+
+    .order-receipt-totals .order-receipt-total-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+      font-weight: 750;
+      color: rgba(231, 226, 255, .95);
+      margin-bottom: 6px;
+    }
+
+    .order-receipt-totals .order-receipt-total-line:last-child {
+      margin-bottom: 0;
+    }
+
+    .order-receipt-totals .order-receipt-grand {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(155, 104, 255, .35);
+      font-family: var(--display);
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: .04em;
+    }
+
+    .order-receipt-foot {
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(155, 104, 255, .25);
+      font-size: 11px;
+      font-weight: 750;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: rgba(183, 176, 223, .82);
+      text-align: center;
     }
 
     .toast {
@@ -4298,22 +4631,22 @@
     }
 
     .cart-checklist {
-      padding: 7px 9px;
+      padding: 6px 8px;
       border-radius: 8px;
       border: 1px solid rgba(124, 77, 255, .32);
       background: rgba(12, 10, 32, .72);
       display: grid;
-      gap: 5px;
+      gap: 4px;
     }
 
     .cart-checklist-row {
       display: flex;
       align-items: flex-start;
       gap: 7px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 650;
       color: var(--muted);
-      line-height: 1.3;
+      line-height: 1.35;
     }
 
     .cart-checklist-row.is-done {
@@ -4657,7 +4990,10 @@
     <aside class="drawer" aria-label="Cart">
       <div class="drawer-head">
         <h2>Order Cart</h2>
-        <button class="btn close" id="cartClose" type="button" aria-label="Close cart">&times;</button>
+        <div class="drawer-head-right">
+          <button type="button" class="btn-cart-compact" id="cartCompactToggle">Simpler layout</button>
+          <button class="btn close" id="cartClose" type="button" aria-label="Close cart">&times;</button>
+        </div>
       </div>
       <div class="drawer-body" id="cartBody"></div>
       <div class="drawer-foot">
@@ -4667,7 +5003,9 @@
           <span id="cartTotal">$0.00</span>
           <em id="cartUsdHint">Ticket total: $0.00 USD</em>
         </div>
+        <p class="cart-verify-note" id="cartVerifyNote">For safer order verification, send the generated order receipt image with your Discord ticket.</p>
         <button class="btn btn-green" id="copyOrder" type="button">Copy Discord Ticket</button>
+        <button class="btn btn-primary" id="downloadOrderReceipt" type="button">Download Order Receipt</button>
         <button class="btn" id="clearCart" type="button">Clear Cart</button>
         <a class="btn btn-primary" id="openDiscord" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Open Discord</a>
         <a class="btn" href="https://discord.com/channels/1499767937974669363/1503176511912542298" target="_blank" rel="noopener">Leave Feedback</a>
@@ -5327,6 +5665,7 @@
       pendingArcAction: null,
       clearCartConfirmUntil: 0,
       cart: [],
+      cartDrawerCompact: false,
       pendingBlueprintSearch: null,
       bpTab: "Gun Blueprints",
       blueprintSelections: {
@@ -5338,6 +5677,15 @@
     };
 
     let lastCartMonetaryTotal = null;
+
+    function syncCompactToggleLabel() {
+      const btn = $("cartCompactToggle");
+      if (btn) btn.textContent = state.cartDrawerCompact ? ui("Full layout") : ui("Simpler layout");
+    }
+
+    function applyDrawerCompactClass() {
+      document.querySelector(".drawer")?.classList.toggle("drawer--cart-compact", Boolean(state.cartDrawerCompact));
+    }
 
     function restoreGameFromHash() {
       const id = parseGameHash();
@@ -5464,7 +5812,11 @@
       $("clearService").textContent = ui("Clear");
       $("addToCart").textContent = ui("Add to Cart");
       $("copyOrder").textContent = ui("Copy Discord Ticket");
-      syncClearCartButton();
+      const dlR = $("downloadOrderReceipt");
+      if (dlR) dlR.textContent = ui("Download Order Receipt");
+      const vNote = $("cartVerifyNote");
+      if (vNote) vNote.textContent = ui("For safer order verification, send the generated order receipt image with your Discord ticket.");
+      syncCompactToggleLabel();
       document.querySelector('a[href*="1499796035382415462"]').textContent = ui("Open Discord");
       document.querySelector('a[href*="1503176511912542298"]').textContent = ui("Leave Feedback");
       document.querySelector(".drawer-head h2").textContent = ui("Order Cart");
@@ -8175,7 +8527,7 @@
       const hasCustom = state.cart.some(item => item.custom);
       const bits = [];
       if (needEmbarkId) {
-        bits.push(`<div class="cart-inline-warn" role="status">Please add your Embark ID before copying the order.</div>`);
+        bits.push(`<div class="cart-inline-warn" role="status">${escapeHtml(ui("Please add your Embark ID before copying the Discord ticket or downloading the order receipt."))}</div>`);
       }
       const row = (ok, label) => `<div class="cart-checklist-row${ok ? " is-done" : ""}"><span class="chk" aria-hidden="true">${ok ? "✓" : ""}</span><span>${escapeHtml(label)}</span></div>`;
       bits.push(`<div class="cart-checklist" aria-label="Order checklist">
@@ -8210,11 +8562,12 @@
           state.arcId = "";
           state.arcIdSkipped = false;
         }
-        const showEmbark = hasArcItems && (state.arcId || state.arcIdSkipped);
-        const embarkBlock = showEmbark
+        const embarkBlock = hasArcItems
           ? `<div class="cart-embark-panel" role="region" aria-label="Embark ID">
-            <div class="cart-embark-label">Customer Info</div>
-            <p class="cart-embark-value">${state.arcId ? "Embark ID: " + escapeHtml(state.arcId) : "Embark ID: " + escapeHtml("Will type it on Discord")}</p>
+            <div class="cart-embark-label">${escapeHtml(ui("Embark ID"))}</div>
+            <p class="cart-embark-value">${state.arcId ? escapeHtml(state.arcId) : (state.arcIdSkipped ? escapeHtml(ui("Will type on Discord")) : escapeHtml(ui("Not set — required for receipt image")))}</p>
+            ${!state.arcId ? `<p class="cart-embark-warn">${escapeHtml(ui("Save your Embark ID to download a verified order receipt."))}</p>` : ""}
+            <button type="button" class="cart-embark-btn" id="cartEmbarkEditBtn">${escapeHtml(ui("Add or edit Embark ID"))}</button>
           </div>`
           : "";
         $("cartBody").innerHTML = embarkBlock + state.cart.map(item => {
@@ -8228,8 +8581,13 @@
           return `
             <article class="cart-item">
               <div class="cart-item-top">
-                <div><h3>${titleLine}</h3><p>Game: ${escapeHtml(ui(item.game))}\n${escapeHtml(item.details)}</p>${estimateNote}</div>
-                <div class="price">${priceLabel}</div>
+                <div class="cart-item-main">
+                  <h3>${titleLine}</h3>
+                  <p class="cart-item-game">${escapeHtml(ui(item.game))}</p>
+                  <div class="cart-item-detail-body">${escapeHtml(item.details)}</div>
+                  ${estimateNote}
+                </div>
+                <div class="cart-item-price">${priceLabel}</div>
               </div>
               <button class="btn remove" type="button" data-remove="${item.id}">Remove</button>
             </article>
@@ -8241,6 +8599,7 @@
         }));
         const c1 = $("continueShoppingCart");
         if (c1) c1.addEventListener("click", continueShopping);
+        $("cartEmbarkEditBtn")?.addEventListener("click", () => openArcIdModal(null));
       }
       const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
       const hasCustom = state.cart.some(item => item.custom);
@@ -8262,6 +8621,8 @@
       $("cartUsdHint").textContent = hasCustom ? "Ticket total: " + displayInCurrency(total, cartCurrency) + " + CUSTOM" : "Ticket total: " + displayInCurrency(total, cartCurrency);
       updateCartFootAlerts();
       syncClearCartButton();
+      applyDrawerCompactClass();
+      syncCompactToggleLabel();
     }
 
     function clearCart() {
@@ -8423,37 +8784,159 @@
       return html2canvasLoader;
     }
 
-    async function captureCartCanvas() {
-      const drawer = document.querySelector(".drawer");
-      if (!drawer) throw new Error("Cart drawer not found");
-      const body = $("cartBody");
-      const prevDrawerMaxHeight = drawer.style.maxHeight;
-      const prevDrawerHeight    = drawer.style.height;
-      const prevBodyMaxHeight   = body ? body.style.maxHeight : "";
-      const prevBodyOverflow    = body ? body.style.overflow  : "";
-      drawer.style.maxHeight = "none";
-      drawer.style.height    = "auto";
-      if (body) {
-        body.style.maxHeight = "none";
-        body.style.overflow  = "visible";
-      }
+    function fallbackExecCopy(text, ok, fail) {
       try {
-        await new Promise(resolve => requestAnimationFrame(resolve));
-        return await window.html2canvas(drawer, {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        const done = document.execCommand("copy");
+        ta.remove();
+        if (done) ok();
+        else fail();
+      } catch (e) {
+        fail();
+      }
+    }
+
+    function copyTicketTextToClipboard() {
+      const text = ticketText();
+      const statusEl = $("copyStatus");
+      const ok = () => {
+        statusEl.textContent = ui("Discord ticket text copied — paste into Discord. For best verification, attach your downloaded order receipt image.");
+        showToast(ui("Ticket copied."), 2600, false);
+      };
+      const fail = () => {
+        statusEl.textContent = ui("Copy failed. Try Download Order Receipt or copy the ticket manually.");
+        showToast(ui("Copy failed."), 3200, true);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(ok).catch(() => fallbackExecCopy(text, ok, fail));
+        return;
+      }
+      fallbackExecCopy(text, ok, fail);
+    }
+
+    function copyOrderNow() {
+      copyTicketTextToClipboard();
+    }
+
+    function orderReceiptEmbarkBlockedMessage() {
+      if (!state.cart.length) return ui("Add items to your cart first.");
+      if (cartNeedsArcId() && !String(state.arcId || "").trim()) {
+        return ui("Please add your Embark ID before generating the order receipt.");
+      }
+      return "";
+    }
+
+    function buildOrderReceiptNode() {
+      const inner = document.createElement("div");
+      inner.className = "order-receipt-inner";
+      const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
+      const hasCustom = state.cart.some(item => item.custom);
+      const hasEstimate = state.cart.some(item => item.estimated);
+      const sameCurrency = state.cart.length && state.cart.every(item => item.viewedCurrency === state.cart[0].viewedCurrency);
+      const cartCurrency = sameCurrency ? state.cart[0].viewedCurrency : state.currency;
+      const genDate = new Date().toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+      const needsEmbark = cartNeedsArcId();
+      const embarkInner = needsEmbark
+        ? `<strong>${escapeHtml(ui("Embark ID"))}</strong>${escapeHtml(state.arcId)}`
+        : `<strong>${escapeHtml(ui("In-game ID"))}</strong>${escapeHtml(ui("Not required for this order"))}`;
+      const itemsHtml = state.cart.map((item, index) => {
+        const qty = item.qty && item.qty > 1 ? ` ×${item.qty}` : "";
+        const priceLine = item.custom
+          ? (item.game === "Valorant" ? ui("Custom Price") : "CUSTOM")
+          : (item.estimated ? `${ui("Estimated")} ${displayInCurrency(item.total, item.viewedCurrency)}` : displayInCurrency(item.total, item.viewedCurrency));
+        const langLine = item.language ? `\n${ui("Language")}: ${item.language}` : "";
+        return `<div class="order-receipt-item">
+      <div class="order-receipt-item-head">${index + 1}. ${escapeHtml(item.title)}${escapeHtml(qty)}</div>
+      <div class="order-receipt-item-game">${escapeHtml(ui("Game"))}: ${escapeHtml(item.game)}</div>
+      <div class="order-receipt-item-details">${escapeHtml(item.details)}${escapeHtml(langLine)}</div>
+      <div class="order-receipt-item-price">${escapeHtml(ui("Price"))}: ${escapeHtml(priceLine)}</div>
+      <div class="order-receipt-item-curr">${escapeHtml(ui("Currency"))}: ${escapeHtml(item.viewedCurrency)}</div>
+    </div>`;
+      }).join("");
+      const totalLabel = hasEstimate ? ui("ESTIMATED TOTAL") : ui("TOTAL");
+      const totalText = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
+      const usdHint = hasCustom ? moneyUSD(total) + " + CUSTOM" : moneyUSD(total);
+      inner.innerHTML = `
+    <div class="order-receipt-header">
+      <img class="order-receipt-logo" src="assets/elysium-mark.webp" alt="" width="48" height="48" crossorigin="anonymous">
+      <div class="order-receipt-title-block">
+        <h1>${escapeHtml(ui("ELYSIUM BOOST — ORDER RECEIPT"))}</h1>
+        <p class="order-receipt-meta">${escapeHtml(ui("Generated"))}: ${escapeHtml(genDate)}</p>
+      </div>
+    </div>
+    <div class="order-receipt-section">
+      <h2>${escapeHtml(ui("Customer"))}</h2>
+      <div class="order-receipt-embark-box">${embarkInner}</div>
+    </div>
+    <div class="order-receipt-section">
+      <h2>${escapeHtml(ui("Order items"))}</h2>
+      ${itemsHtml}
+    </div>
+    <div class="order-receipt-totals">
+      <div class="order-receipt-total-line"><span>${escapeHtml(ui("Cart total"))}</span><span>${escapeHtml(totalText)}</span></div>
+      <div class="order-receipt-total-line"><span>${escapeHtml(ui("Selected currency"))}</span><span>${escapeHtml(cartCurrency)}</span></div>
+      <div class="order-receipt-total-line order-receipt-grand"><span>${escapeHtml(totalLabel)}</span><span>${escapeHtml(totalText)}</span></div>
+      <div class="order-receipt-total-line"><span>${escapeHtml(ui("Ticket total (USD reference)"))}</span><span>${escapeHtml(usdHint)} USD</span></div>
+    </div>
+    <p class="order-receipt-foot">${escapeHtml(ui("Generated by ElysiumBoost"))}</p>`;
+      const wrap = document.createElement("div");
+      wrap.className = "order-receipt-capture";
+      wrap.appendChild(inner);
+      return wrap;
+    }
+
+    async function generateOrderReceiptCanvas() {
+      await loadHtml2Canvas();
+      const node = buildOrderReceiptNode();
+      node.style.cssText = "position:fixed;left:0;top:0;z-index:-9999;visibility:hidden;pointer-events:none;";
+      document.body.appendChild(node);
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+      try {
+        const h = node.scrollHeight;
+        const w = node.offsetWidth;
+        return await window.html2canvas(node, {
           backgroundColor: "#0a0721",
-          scale: Math.min(2, window.devicePixelRatio || 1.5),
+          scale: 2,
           useCORS: true,
           logging: false,
-          windowWidth: document.documentElement.clientWidth,
-          windowHeight: document.documentElement.clientHeight
+          width: w,
+          height: h
         });
       } finally {
-        drawer.style.maxHeight = prevDrawerMaxHeight;
-        drawer.style.height    = prevDrawerHeight;
-        if (body) {
-          body.style.maxHeight = prevBodyMaxHeight;
-          body.style.overflow  = prevBodyOverflow;
-        }
+        node.remove();
+      }
+    }
+
+    async function downloadOrderReceipt() {
+      const statusEl = $("copyStatus");
+      const gate = orderReceiptEmbarkBlockedMessage();
+      if (gate) {
+        statusEl.textContent = gate;
+        showToast(gate, 3400, true);
+        return;
+      }
+      statusEl.textContent = ui("Generating order receipt...");
+      try {
+        const canvas = await generateOrderReceiptCanvas();
+        downloadCanvasAsPng(canvas, `elysium-order-receipt-${Date.now()}.png`);
+        statusEl.textContent = ui("Order receipt downloaded. Attach it to your Discord ticket.");
+        showToast(ui("Receipt downloaded."), 2600, false);
+        try {
+          if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+            const blob = await canvasToBlob(canvas, "image/png");
+            await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+            statusEl.textContent = ui("Receipt downloaded and copied — paste the image (Ctrl/Cmd+V) into Discord.");
+          }
+        } catch (_) {}
+      } catch (e) {
+        statusEl.textContent = ui("Could not generate receipt. Try again or copy the text ticket.");
+        showToast(ui("Receipt generation failed."), 3200, true);
       }
     }
 
@@ -8463,60 +8946,13 @@
       });
     }
 
-    function downloadCanvasAsPng(canvas) {
+    function downloadCanvasAsPng(canvas, filename) {
       const link = document.createElement("a");
-      link.download = `elysium-cart-${Date.now()}.png`;
+      link.download = filename || `elysium-order-receipt-${Date.now()}.png`;
       link.href = canvas.toDataURL("image/png");
       document.body.appendChild(link);
       link.click();
       link.remove();
-    }
-
-    async function copyOrderNow() {
-      const statusEl = $("copyStatus");
-      const okToast = () => showToast("Order copied successfully.", 2600, false);
-      const failToast = () => showToast("Copy failed. Please try again.", 3200, true);
-      statusEl.textContent = "Preparing cart screenshot...";
-      try {
-        await loadHtml2Canvas();
-      } catch (loadError) {
-        try {
-          await navigator.clipboard.writeText(ticketText());
-          statusEl.textContent = "Image library unavailable — text ticket copied. Paste it into Discord.";
-          okToast();
-        } catch (textError) {
-          statusEl.textContent = "Could not load screenshot tool and clipboard is blocked. Take a manual screenshot of the cart.";
-          failToast();
-        }
-        return;
-      }
-      let canvas;
-      try {
-        canvas = await captureCartCanvas();
-      } catch (captureError) {
-        statusEl.textContent = "Screenshot failed. Take a manual screenshot of the cart panel and attach it in Discord.";
-        failToast();
-        return;
-      }
-      try {
-        const blob = await canvasToBlob(canvas, "image/png");
-        if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
-          await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-          statusEl.textContent = "Cart screenshot copied! Paste it into your Discord ticket (Ctrl/Cmd+V).";
-          okToast();
-          return;
-        }
-        throw new Error("Clipboard image write not supported");
-      } catch (clipError) {
-        try {
-          downloadCanvasAsPng(canvas);
-          statusEl.textContent = "Cart screenshot downloaded. Upload it into your Discord ticket.";
-          showToast("Cart image saved — upload it to Discord.", 2800, false);
-        } catch (downloadError) {
-          statusEl.textContent = "Could not copy or download the cart screenshot. Please take a manual screenshot.";
-          failToast();
-        }
-      }
     }
 
     function openDiscordTicket() {
