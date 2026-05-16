@@ -501,7 +501,7 @@
       const boost = g("circle");
       const soc = g("social");
       if (boost && soc) {
-        const socialImg = "assets/backgrounds/boost-social-bg.webp";
+        const socialImg = "assets/backgrounds/boost-social-bg.webp?v=bg-files-final1";
         chunks.push(`
         <article class="home-game-card home-combo-card" aria-label="${escapeHtml(ui("Boost+ and Social"))}">
           <div class="home-combo-split">
