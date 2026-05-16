@@ -1756,6 +1756,156 @@
       flex-direction: column;
     }
 
+    .detail-highlights-wrap {
+      margin: 12px 0 14px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(172, 146, 255, .28);
+      background: linear-gradient(145deg, rgba(38, 31, 91, .4), rgba(12, 9, 30, .5));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
+    }
+
+    .detail-highlights-wrap h4 {
+      margin: 0 0 8px;
+      font-family: var(--display);
+      font-size: 14px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .detail-highlights-wrap ul {
+      margin: 0;
+      padding-left: 1.15em;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .detail-highlights-wrap li + li {
+      margin-top: 4px;
+    }
+
+    .detail-val-trust {
+      margin: 0 0 16px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 209, 102, .22);
+      background: linear-gradient(160deg, rgba(58, 42, 18, .35), rgba(12, 9, 30, .55));
+    }
+
+    .detail-val-trust h4 {
+      margin: 0 0 6px;
+      font-family: var(--display);
+      font-size: 15px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .detail-val-trust p {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .detail-val-trust ul {
+      margin: 0;
+      padding-left: 1.1em;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .valorant-order-layout {
+      display: grid;
+      grid-template-columns: 1fr min(300px, 38%);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .valorant-config {
+      display: grid;
+      gap: 12px;
+    }
+
+    .valorant-summary-panel {
+      position: sticky;
+      top: 0;
+      padding: 12px 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(172, 146, 255, .32);
+      background: linear-gradient(180deg, rgba(42, 34, 98, .55), rgba(10, 8, 28, .72));
+      box-shadow: 0 12px 36px rgba(0, 0, 0, .22), inset 0 1px 0 rgba(255, 255, 255, .05);
+    }
+
+    .valorant-summary-panel h4 {
+      margin: 0 0 10px;
+      font-family: var(--display);
+      font-size: 14px;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--cyan);
+    }
+
+    .valorant-summary-dl {
+      margin: 0;
+      display: grid;
+      gap: 6px 10px;
+      font-size: 12px;
+    }
+
+    .valorant-summary-dl div {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      gap: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(122, 77, 255, .15);
+    }
+
+    .valorant-summary-dl dt {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+
+    .valorant-summary-dl dd {
+      margin: 0;
+      color: var(--text);
+      text-align: right;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .valorant-summary-note {
+      margin: 10px 0 0;
+      font-size: 12px;
+      color: var(--gold);
+      line-height: 1.35;
+    }
+
+    .valorant-summary-note.is-warn {
+      color: #ffb8c3;
+    }
+
+    .valorant-extras-grid {
+      display: grid;
+      gap: 6px;
+    }
+
+    @media (max-width: 1080px) {
+      .valorant-order-layout {
+        grid-template-columns: 1fr;
+      }
+      .valorant-summary-panel {
+        position: relative;
+      }
+    }
+
     .order-form {
       padding: 14px;
       display: grid;
@@ -2800,6 +2950,8 @@
               </div>
             </div>
             <p class="intro" id="detailIntro"></p>
+            <div class="detail-highlights-wrap" id="detailHighlights" hidden></div>
+            <div class="detail-val-trust" id="detailValorantTrust" hidden></div>
             <div class="detail-steps" id="detailSteps"></div>
             <div class="order-feed" id="orderFeed" aria-live="polite"></div>
           </div>
@@ -2864,6 +3016,160 @@
       GBP: { symbol: "\u00a3", rate: 0.79 },
       TRY: { symbol: "\u20ba", rate: 32.5 }
     };
+
+    function valorantEurToStoredTotal(eur) {
+      return Number(eur || 0) / rates.EUR.rate;
+    }
+
+    const VALORANT_RANKS = [
+      "Iron I", "Iron II", "Iron III", "Bronze I", "Bronze II", "Bronze III",
+      "Silver I", "Silver II", "Silver III", "Gold I", "Gold II", "Gold III",
+      "Platinum I", "Platinum II", "Platinum III", "Diamond I", "Diamond II", "Diamond III",
+      "Ascendant I", "Ascendant II", "Ascendant III", "Immortal I", "Immortal II", "Immortal III"
+    ];
+
+    const VALORANT_RANK_SEGMENT_EUR = [
+      4.5, 4.9, 5.5, 5.9, 6.4, 7.2, 7.9, 8.7, 9.9, 11.5, 12.9, 15.5, 18.5, 21.5, 26, 32, 38, 46, 58, 72, 95, 130, 170
+    ];
+
+    const valorantPlacementRankEur = {
+      "Unranked": 2.4,
+      "Iron": 2.4,
+      "Bronze": 2.45,
+      "Silver": 2.5,
+      "Gold": 2.54,
+      "Platinum": 2.9,
+      "Diamond I": 3.4,
+      "Diamond II": 3.7,
+      "Diamond III": 4,
+      "Ascendant I": 4.6,
+      "Ascendant II": 5,
+      "Ascendant III": 5.4,
+      "Immortal I": 6.2,
+      "Immortal II": 7,
+      "Immortal III": 8,
+      "Radiant": 10
+    };
+
+    const valorantRankedWinEur = {
+      "Iron I": 2.2, "Iron II": 2.3, "Iron III": 2.4,
+      "Bronze I": 2.5, "Bronze II": 2.6, "Bronze III": 2.7,
+      "Silver I": 2.9, "Silver II": 3.1, "Silver III": 3.3,
+      "Gold I": 3.6, "Gold II": 3.9, "Gold III": 4.2,
+      "Platinum I": 4.8, "Platinum II": 5.2, "Platinum III": 5.6,
+      "Diamond I": 6.5, "Diamond II": 7.2, "Diamond III": 8,
+      "Ascendant I": 9, "Ascendant II": 10, "Ascendant III": 11.5,
+      "Immortal I": 14, "Immortal II": 17, "Immortal III": 21
+    };
+
+    const valorantUnratedPackages = [
+      { id: "u1", label: "1 Game", eur: 2 },
+      { id: "u3", label: "3 Games", eur: 5.5 },
+      { id: "u5", label: "5 Games", eur: 8.5 },
+      { id: "u10", label: "10 Games", eur: 15 },
+      { id: "u20", label: "20 Games", eur: 27 }
+    ];
+
+    const valorantLevelPackages = [
+      { id: "l1", label: "Level 1 to 20", eur: 24.9 },
+      { id: "l5", label: "Level 5 to 20", eur: 19.9 },
+      { id: "l10", label: "Level 10 to 20", eur: 14.9 },
+      { id: "l15", label: "Level 15 to 20", eur: 8.9 }
+    ];
+
+    const valorantBattlePassPackages = [
+      { id: "bp-small", label: "Small Progress Pack", eur: 9.9 },
+      { id: "bp-half", label: "Half Battle Pass", eur: 19.9 },
+      { id: "bp-full", label: "Full Battle Pass", eur: 34.9 },
+      { id: "bp-express", label: "Express Battle Pass", eur: 44.9 }
+    ];
+
+    const valorantCoachingHours = [
+      { id: "c1", label: "1 Hour", eur: 14.9 },
+      { id: "c2", label: "2 Hours", eur: 27.9 },
+      { id: "c3", label: "3 Hours", eur: 39.9 },
+      { id: "c5", label: "5 Hours", eur: 59.9 },
+      { id: "c10", label: "10 Hours", eur: 109.9 }
+    ];
+
+    const valorantExtrasPaid = [
+      { id: "duo", label: "Duo Queue", pct: 0.35 },
+      { id: "otp", label: "OTP Plus", pct: 0.2 },
+      { id: "vip", label: "VIP Booster", pct: 0.25 },
+      { id: "priority", label: "Priority Start", pct: 0.25 },
+      { id: "soloace", label: "Solo Ace", pct: 0.35 },
+      { id: "stream", label: "Stream Games", pct: 0.2 }
+    ];
+
+    const valorantExtrasFree = [
+      { id: "agent", label: "Agent Selection" },
+      { id: "offline", label: "Offline Mode" }
+    ];
+
+    const valorantServers = ["EU", "NA", "LATAM", "BR", "KR", "JP", "AP", "OCE", "MEA"];
+
+    const valorantCategoryContent = {
+      "rank-boosting": {
+        title: "Valorant Rank Boosting",
+        short: "Climb faster with manual, professional rank progression tailored to your account.",
+        intro: "Climb faster and smarter with ElysiumBoost Valorant Rank Boosting. Choose your current rank, set your desired rank, and let our experienced boosters handle the grind with clean, manual and professional gameplay. Perfect for players who want reliable progress without wasting time.",
+        highlights: ["Manual and secure boosting", "Fast rank progression", "Professional Valorant players", "Solo or Duo options", "Flexible order customization", "Privacy-focused service"]
+      },
+      "placement-matches": {
+        title: "Valorant Placement Matches",
+        short: "Strong placement performance for a confident new act or season start.",
+        intro: "Start your new act with confidence through ElysiumBoost Placement Matches. Our boosters help complete your placement games with strong performance, smart decision-making and a safe manual process, giving your account the best possible start for the season.",
+        highlights: ["Great for new act / new season start", "Manual placement gameplay", "Choose your last known rank", "Select 1–5 placement games", "Optional priority and stream extras", "Safe and private service"]
+      },
+      "radiant-boost": {
+        title: "Valorant Radiant Boost",
+        short: "Premium high-rank support with custom planning and elite boosters.",
+        intro: "Push toward the highest level of Valorant with ElysiumBoost Radiant Boost. This premium service is designed for Immortal and high-RR players who need elite-level performance, custom planning and experienced top-tier boosters.",
+        highlights: ["Premium high-rank service", "Custom pricing for each order", "Designed for Immortal and Radiant players", "Elite booster assignment", "Schedule-based planning", "Contact-based custom service"]
+      },
+      "ranked-wins": {
+        title: "Valorant Ranked Wins",
+        short: "Pay per win at your rank — flexible progress without a full boost.",
+        intro: "Need clean wins without committing to a full rank boost? ElysiumBoost Ranked Wins lets you choose your current rank and the number of wins you need. A simple, flexible and effective way to gain progress while keeping full control of your order.",
+        highlights: ["Pay per selected win", "Ideal for steady rank progress", "Manual and safe gameplay", "Available for most ranks", "Solo or Duo options", "Clean order tracking in cart"]
+      },
+      "unrated-games": {
+        title: "Valorant Unrated Games",
+        short: "Casual unrated matches for activity, requirements, or relaxed play.",
+        intro: "Keep your account active, complete match requirements or enjoy casual progress with ElysiumBoost Unrated Games. This service is perfect for non-ranked gameplay, account activity and relaxed match completion without rank pressure.",
+        highlights: ["Casual unrated match completion", "Great for account activity", "No ranked pressure", "Manual gameplay only", "Simple package selection", "Safe and smooth process"]
+      },
+      "account-leveling": {
+        title: "Valorant Account Leveling",
+        short: "Reach ranked-ready levels faster with safe manual leveling packages.",
+        intro: "Unlock ranked access faster with ElysiumBoost Account Leveling. Our team levels your Valorant account manually and safely, helping you reach competitive-ready requirements without spending hours grinding normal matches.",
+        highlights: ["Reach ranked-ready level faster", "Manual account leveling", "Safe gameplay process", "Multiple level packages", "Ideal for new accounts", "Clean and simple order flow"]
+      },
+      "battle-pass": {
+        title: "Valorant Battle Pass Boost",
+        short: "More Battle Pass progress with manual play — pick the package that fits.",
+        intro: "Get more rewards without the grind with ElysiumBoost Battle Pass Boost. Choose your progress package and let our team complete Battle Pass progress manually, helping you unlock more content while saving time.",
+        highlights: ["Faster Battle Pass progress", "Multiple package options", "Manual gameplay", "Great for limited-time rewards", "Express option available", "Save time while unlocking content"]
+      },
+      "coaching": {
+        title: "Valorant Coaching",
+        short: "Personalized sessions for aim, positioning, agents, and game sense.",
+        intro: "Improve your gameplay with personalized ElysiumBoost Valorant Coaching. Work with an experienced player to improve your aim, positioning, decision-making, agent usage and overall game sense with a structured coaching session.",
+        highlights: ["Personalized coaching sessions", "Aim and mechanics improvement", "Positioning and decision-making help", "VOD review option", "Rank improvement planning", "Great for long-term progress"]
+      }
+    };
+
+    const valorantTrustBlock = {
+      title: "Why Choose ElysiumBoost?",
+      intro: "ElysiumBoost focuses on safe, manual and high-quality gaming services. Every Valorant order is handled with privacy, professionalism and clear service structure, so customers can choose exactly what they need with confidence.",
+      points: ["100% manual service", "No cheats, no scripts, no third-party tools", "Secure and privacy-focused process", "Professional experienced players", "Flexible service options", "Premium customer-focused experience"]
+    };
+
+    function valorantGameService(id, categoryId, cardTitle, icon, form, fromEur, extra = null) {
+      const c = valorantCategoryContent[categoryId];
+      const base = gameService(id, categoryId, c.title, cardTitle, icon, valorantEurToStoredTotal(fromEur), "", c.short, c.intro, form);
+      return Object.assign(base, { noDiscount: true, valorantFromEur: fromEur }, extra || {});
+    }
 
     const recentOrders = [
       { label: "20x Tempest Weapon Bundle",          service: "guns",       category: "guns",       type: "item" },
@@ -3013,11 +3319,18 @@
         heroPosition: "center 15%",
         kicker: "Valorant Boost",
         title: "Valorant Services",
-        copy: "Browse Valorant categories, customize placement matches, and build a clean Discord-ready ticket as more services go live.",
+        copy: "Browse every Valorant category, build your order with live EUR-based pricing, and add it to cart — ElysiumBoost keeps the experience dark, premium, and straightforward.",
         categories: valorantCategories,
-        popular: [],
+        popular: ["val-rank", "val-placement", "val-wins", "val-coach"],
         services: [
-          gameService("val-placement", "placement-matches", "Valorant Placement Matches", "Placement Matches", "i-placement", 10.99, " / match", "Placement match support for a cleaner act start.", "Choose the amount of placement matches and add rank, server, and agent notes.")
+          valorantGameService("val-rank", "rank-boosting", "Rank Boosting", "i-rank", "valorant-rank-boost", 4.5),
+          valorantGameService("val-placement", "placement-matches", "Placement Matches", "i-placement", "valorant-placement", 2.4),
+          Object.assign(gameService("val-radiant", "radiant-boost", valorantCategoryContent["radiant-boost"].title, "Radiant Boost", "i-rank", 0, "", valorantCategoryContent["radiant-boost"].short, valorantCategoryContent["radiant-boost"].intro, "valorant-radiant"), { noDiscount: true, valorantCustomPrice: true }),
+          valorantGameService("val-wins", "ranked-wins", "Ranked Wins", "i-win", "valorant-ranked-wins", 2.2),
+          valorantGameService("val-unrated", "unrated-games", "Unrated Games", "i-swift", "valorant-unrated", 2),
+          valorantGameService("val-level", "account-leveling", "Account Leveling", "i-star", "valorant-leveling", 8.9),
+          valorantGameService("val-bp", "battle-pass", "Battle Pass", "i-star", "valorant-battlepass", 9.9),
+          valorantGameService("val-coach", "coaching", "Coaching", "i-coach", "valorant-coaching", 14.9)
         ]
       },
       {
@@ -3314,6 +3627,11 @@
     }
 
     function servicePrice(service) {
+      if (!service) return "";
+      if (service.valorantCustomPrice || service.form === "valorant-radiant") return "Custom Price";
+      if (service.form && String(service.form).startsWith("valorant-") && service.valorantFromEur != null) {
+        return displayMoney(valorantEurToStoredTotal(service.valorantFromEur));
+      }
       if (service.form === "private") return "CUSTOM";
       if (service.form === "loadout") return "CUSTOM";
       if (service.form === "leveling") return "CUSTOM";
@@ -3787,7 +4105,7 @@
                 <h3>${ui(service.cardTitle)}</h3>
                 <p>${ui(service.short)}</p>
               </div>
-              <div class="price"><small>From</small>${servicePrice(service)}</div>
+              <div class="price">${(service.valorantCustomPrice || service.form === "valorant-radiant") ? "" : "<small>From</small>"}${servicePrice(service)}</div>
             </div>
             <button class="service-btn ${state.serviceId === service.id ? "active" : ""}" type="button" data-service="${service.id}">${ui("Customize")}</button>
           </article>
@@ -3799,7 +4117,7 @@
           <h3>${ui(service.cardTitle)}</h3>
           <p>${ui(service.short)}</p>
           <footer>
-            <div class="price"><small>From</small>${servicePrice(service)}</div>
+            <div class="price">${(service.valorantCustomPrice || service.form === "valorant-radiant") ? "" : "<small>From</small>"}${servicePrice(service)}</div>
             <button class="service-btn ${state.serviceId === service.id ? "active" : ""}" type="button" data-service="${service.id}">${ui("Details")}</button>
           </footer>
         </article>
@@ -3835,6 +4153,10 @@
         $("detailDeal").innerHTML = "";
         $("detailSteps").innerHTML = "";
         $("orderForm").innerHTML = "";
+        const hl0 = $("detailHighlights");
+        const vt0 = $("detailValorantTrust");
+        if (hl0) { hl0.hidden = true; hl0.innerHTML = ""; }
+        if (vt0) { vt0.hidden = true; vt0.innerHTML = ""; }
         renderOrderFeed();
         updateTotal();
         return;
@@ -3843,6 +4165,23 @@
       $("detailTitle").textContent = ui(service.title);
       $("detailIntro").textContent = ui(service.intro);
       $("detailDeal").innerHTML = serviceSaleBadge(service);
+      const hl = $("detailHighlights");
+      const vtr = $("detailValorantTrust");
+      if (hl && vtr) {
+        const vg = currentGame()?.id === "valorant";
+        const cat = vg ? valorantCategoryContent[service.category] : null;
+        if (cat && cat.highlights) {
+          hl.hidden = false;
+          hl.innerHTML = `<h4>${escapeHtml(ui("Highlights"))}</h4><ul>${cat.highlights.map(h => `<li>${escapeHtml(ui(h))}</li>`).join("")}</ul>`;
+          vtr.hidden = false;
+          vtr.innerHTML = `<h4>${escapeHtml(ui(valorantTrustBlock.title))}</h4><p>${escapeHtml(ui(valorantTrustBlock.intro))}</p><ul>${valorantTrustBlock.points.map(p => `<li>${escapeHtml(ui(p))}</li>`).join("")}</ul>`;
+        } else {
+          hl.hidden = true;
+          hl.innerHTML = "";
+          vtr.hidden = true;
+          vtr.innerHTML = "";
+        }
+      }
       $("detailSteps").innerHTML = detailSteps(service.form).map(step => `
         <div class="detail-step"><strong>${ui(step.title)}</strong><span>${ui(step.copy)}</span></div>
       `).join("");
@@ -3900,6 +4239,49 @@
           { title: "Ticket Notes", copy: "The copied ticket keeps the boss or puzzle target clear for delivery." }
         ]
       };
+      const valorantSteps = {
+        "valorant-rank-boost": [
+          { title: "Rank Path", copy: "Select your current rank and a higher desired rank; ElysiumBoost sums each transition in EUR with live conversion to your currency." },
+          { title: "Mode & Extras", copy: "Choose Solo or Duo and optional paid extras. Server is captured for reference and does not change the price." },
+          { title: "Review & Cart", copy: "Confirm the order summary, then add the line to your cart with the final total." }
+        ],
+        "valorant-placement": [
+          { title: "Placement Setup", copy: "Choose last known rank, number of placement games (1–5), and Solo or Duo." },
+          { title: "Extras", copy: "Optional paid extras stack as a percentage on the EUR base before currency display." },
+          { title: "Review & Cart", copy: "Check the summary and add the placement package to your cart." }
+        ],
+        "valorant-radiant": [
+          { title: "Radiant Request", copy: "Pick the Radiant service style that fits your account goals." },
+          { title: "Custom Quote", copy: "Pricing is manual and depends on RR, schedule, and server — totals show as Custom Price." },
+          { title: "Contact", copy: "Use Contact Us to reach ElysiumBoost on Discord with your request details." }
+        ],
+        "valorant-ranked-wins": [
+          { title: "Wins Package", copy: "Select your rank and number of wins (1–10). Radiant wins are quoted as Custom Price." },
+          { title: "Mode & Extras", copy: "Toggle Duo or Solo and stack trusted extras as needed." },
+          { title: "Review & Cart", copy: "Add the configured wins line to your cart when the total looks right." }
+        ],
+        "valorant-unrated": [
+          { title: "Package", copy: "Pick a casual unrated package for activity or requirements — no ranked pressure." },
+          { title: "Mode & Extras", copy: "Solo or Duo and optional extras apply on top of the package EUR base." },
+          { title: "Review & Cart", copy: "Confirm the summary and add unrated games to your cart." }
+        ],
+        "valorant-leveling": [
+          { title: "Level Package", copy: "Choose a ready-made level range package priced in EUR." },
+          { title: "Mode & Extras", copy: "Optional extras apply on the package base; server is informational." },
+          { title: "Review & Cart", copy: "Add the leveling package to your cart with one click." }
+        ],
+        "valorant-battlepass": [
+          { title: "Progress Tier", copy: "Select how much Battle Pass progress you want completed manually." },
+          { title: "Express", copy: "Express Battle Pass notes faster completion priority in your summary." },
+          { title: "Review & Cart", copy: "Add the Battle Pass package to your cart when ready." }
+        ],
+        "valorant-coaching": [
+          { title: "Session Length", copy: "Book coaching hours; focus add-ons such as VOD review are free and listed in your summary." },
+          { title: "Focus", copy: "Tick any combination of free focus options — they never change the hourly price." },
+          { title: "Review & Cart", copy: "Add coaching to your cart with your selected duration and notes." }
+        ]
+      };
+      if (valorantSteps[type]) return valorantSteps[type];
       return shared[type] || [
         { title: "Customize", copy: "Select the service options and quantities in the order panel." },
         { title: "Add To Cart", copy: "Review the total and add the configured service to your cart." },
@@ -4032,6 +4414,45 @@
       return `
         <div class="mod-wide"><label for="${prefix}ModType">${ui("Mods")}</label><select id="${prefix}ModType"><option value="none">${ui("No Mods")}</option><option value="blue">${ui("Blue Mods - $0.15 each (was $0.30)")}</option><option value="premium">${ui("Legendary / Epic Mods - $0.25 each (was $0.50)")}</option></select><span class="discount-note">${ui("Mod quantity automatically matches weapon quantity.")}</span></div>
       `;
+    }
+
+    function valorantRankOptionsHtml(ranks, selected) {
+      return ranks.map(r => `<option value="${escapeHtml(r)}"${r === selected ? " selected" : ""}>${escapeHtml(r)}</option>`).join("");
+    }
+
+    function valorantServerSelectHtml() {
+      return `<div><label for="valServer">Server</label><select id="valServer">${valorantServers.map(s => `<option value="${escapeHtml(s)}"${s === "EU" ? " selected" : ""}>${escapeHtml(s)}</option>`).join("")}</select></div>`;
+    }
+
+    function valorantModeHtml() {
+      return `
+        <input type="hidden" id="valMode" value="solo">
+        <div class="field-block"><h4>Mode</h4>
+          <div class="raid-toggle-grid">
+            <button class="raid-pill active" type="button" data-val-mode="solo"><strong>Solo</strong></button>
+            <button class="raid-pill" type="button" data-val-mode="duo"><strong>Duo</strong></button>
+          </div>
+        </div>`;
+    }
+
+    function valorantExtrasHtml(includePaid, includeFree) {
+      let html = `<div class="field-block"><h4>Extras</h4><div class="valorant-extras-grid checks">`;
+      if (includePaid) {
+        valorantExtrasPaid.forEach(ex => {
+          html += `<label class="check-row"><input type="checkbox" data-val-extra-pct="${ex.pct}" data-val-extra-label="${escapeHtml(ex.label)}"><span>${escapeHtml(ex.label)} (+${Math.round(ex.pct * 100)}%)</span></label>`;
+        });
+      }
+      if (includeFree) {
+        valorantExtrasFree.forEach(ex => {
+          html += `<label class="check-row"><input type="checkbox" data-val-extra-free="1" data-val-extra-label="${escapeHtml(ex.label)}"><span>${escapeHtml(ex.label)} — FREE</span></label>`;
+        });
+      }
+      html += `</div></div>`;
+      return html;
+    }
+
+    function valorantSummaryShell() {
+      return `<div class="valorant-summary-panel"><h4>Order Summary</h4><div class="valorant-summary-dl" id="valorantSummaryDl"></div><p class="valorant-summary-note" id="valorantSummaryNote" hidden></p></div>`;
     }
 
     function buildForm(type) {
@@ -4246,6 +4667,142 @@
           ${qtyField("bossQty", "Quantity", 1, 1)}
         `;
       }
+      if (type === "valorant-rank-boost") {
+        const desiredRanks = [...VALORANT_RANKS.slice(1), "Radiant"];
+        return `
+        <div class="valorant-order-layout">
+          <div class="valorant-config">
+            <div class="field-block"><h4>Rank path</h4>
+              <div class="field-grid">
+                <div><label for="valRbCurrent">Current Rank</label><select id="valRbCurrent">${valorantRankOptionsHtml(VALORANT_RANKS, "Silver III")}</select></div>
+                <div><label for="valRbDesired">Desired Rank</label><select id="valRbDesired">${valorantRankOptionsHtml(desiredRanks, "Gold I")}</select></div>
+              </div>
+              <p class="raid-panel-note valorant-summary-note is-warn" id="valRbHint" hidden></p>
+            </div>
+            ${valorantServerSelectHtml()}
+            ${valorantModeHtml()}
+            ${valorantExtrasHtml(true, true)}
+          </div>
+          ${valorantSummaryShell()}
+        </div>`;
+      }
+      if (type === "valorant-placement") {
+        const rankKeys = Object.keys(valorantPlacementRankEur);
+        return `
+        <div class="valorant-order-layout">
+          <div class="valorant-config">
+            <div class="field-block"><h4>Placement setup</h4>
+              <div class="field-grid">
+                <div><label for="valPmRank">Last Known Rank</label><select id="valPmRank">${rankKeys.map(k => `<option value="${escapeHtml(k)}"${k === "Gold" ? " selected" : ""}>${escapeHtml(k)}</option>`).join("")}</select></div>
+                ${qtyField("valPmGames", "Number of Games", 5, 1, 5)}
+              </div>
+            </div>
+            ${valorantServerSelectHtml()}
+            ${valorantModeHtml()}
+            ${valorantExtrasHtml(true, true)}
+          </div>
+          ${valorantSummaryShell()}
+        </div>`;
+      }
+      if (type === "valorant-radiant") {
+        const opts = ["Immortal III → Radiant", "Radiant Push", "Radiant Duo", "Radiant Maintenance"];
+        return `
+        <div class="valorant-order-layout">
+          <div class="valorant-config">
+            <div class="field-block"><h4>Radiant service</h4>
+              <div><label for="valRadOption">Option</label><select id="valRadOption">${opts.map((o, i) => `<option value="${escapeHtml(o)}"${i === 0 ? " selected" : ""}>${escapeHtml(o)}</option>`).join("")}</select></div>
+              <p class="raid-panel-note">Radiant services are handled manually with custom pricing depending on account status, RR, server and schedule.</p>
+            </div>
+            ${valorantServerSelectHtml()}
+            ${valorantModeHtml()}
+          </div>
+          ${valorantSummaryShell()}
+        </div>`;
+      }
+      if (type === "valorant-ranked-wins") {
+        const rwRanks = [...VALORANT_RANKS, "Radiant"];
+        return `
+        <div class="valorant-order-layout">
+          <div class="valorant-config">
+            <div class="field-block"><h4>Ranked wins</h4>
+              <div class="field-grid">
+                <div><label for="valRwRank">Current Rank</label><select id="valRwRank">${valorantRankOptionsHtml(rwRanks, "Gold I")}</select></div>
+                ${qtyField("valRwWins", "Number of Wins", 3, 1, 10)}
+              </div>
+            </div>
+            ${valorantServerSelectHtml()}
+            ${valorantModeHtml()}
+            ${valorantExtrasHtml(true, true)}
+          </div>
+          ${valorantSummaryShell()}
+        </div>`;
+      }
+      if (type === "valorant-unrated") {
+        const pills = valorantUnratedPackages.map(p =>
+          `<button type="button" class="raid-pill${p.id === "u5" ? " active" : ""}" data-val-unrated="${escapeHtml(p.id)}"><strong>${escapeHtml(p.label)}</strong><span>${displayMoney(valorantEurToStoredTotal(p.eur))}</span></button>`).join("");
+        return `
+        <input type="hidden" id="valUnratedPkg" value="u5">
+        <div class="valorant-order-layout">
+          <div class="valorant-config">
+            <div class="field-block"><h4>Package</h4><div class="quick-raid-grid">${pills}</div></div>
+            ${valorantServerSelectHtml()}
+            ${valorantModeHtml()}
+            ${valorantExtrasHtml(true, true)}
+          </div>
+          ${valorantSummaryShell()}
+        </div>`;
+      }
+      if (type === "valorant-leveling") {
+        const pills = valorantLevelPackages.map(p =>
+          `<button type="button" class="raid-pill${p.id === "l1" ? " active" : ""}" data-val-level="${escapeHtml(p.id)}"><strong>${escapeHtml(p.label)}</strong><span>${displayMoney(valorantEurToStoredTotal(p.eur))}</span></button>`).join("");
+        return `
+        <input type="hidden" id="valLevelPkg" value="l1">
+        <div class="valorant-order-layout">
+          <div class="valorant-config">
+            <div class="field-block"><h4>Level package</h4><div class="quick-raid-grid">${pills}</div></div>
+            ${valorantServerSelectHtml()}
+            ${valorantModeHtml()}
+            ${valorantExtrasHtml(true, true)}
+          </div>
+          ${valorantSummaryShell()}
+        </div>`;
+      }
+      if (type === "valorant-battlepass") {
+        const pills = valorantBattlePassPackages.map(p =>
+          `<button type="button" class="raid-pill${p.id === "bp-small" ? " active" : ""}" data-val-bp="${escapeHtml(p.id)}"><strong>${escapeHtml(p.label)}</strong><span>${displayMoney(valorantEurToStoredTotal(p.eur))}</span></button>`).join("");
+        return `
+        <input type="hidden" id="valBpPkg" value="bp-small">
+        <div class="valorant-order-layout">
+          <div class="valorant-config">
+            <div class="field-block"><h4>Battle Pass package</h4><div class="quick-raid-grid">${pills}</div></div>
+            ${valorantServerSelectHtml()}
+            ${valorantModeHtml()}
+            ${valorantExtrasHtml(true, true)}
+          </div>
+          ${valorantSummaryShell()}
+        </div>`;
+      }
+      if (type === "valorant-coaching") {
+        const pills = valorantCoachingHours.map(p =>
+          `<button type="button" class="raid-pill${p.id === "c1" ? " active" : ""}" data-val-coach="${escapeHtml(p.id)}"><strong>${escapeHtml(p.label)}</strong><span>${displayMoney(valorantEurToStoredTotal(p.eur))}</span></button>`).join("");
+        return `
+        <input type="hidden" id="valCoachPkg" value="c1">
+        <div class="valorant-order-layout">
+          <div class="valorant-config">
+            <div class="field-block"><h4>Session length</h4><div class="quick-raid-grid">${pills}</div></div>
+            <div class="field-block"><h4>Free focus options</h4>
+              <div class="checks valorant-extras-grid">
+                <label class="check-row"><input type="checkbox" id="valCoachVod"><span>VOD Review</span></label>
+                <label class="check-row"><input type="checkbox" id="valCoachAim"><span>Aim Training</span></label>
+                <label class="check-row"><input type="checkbox" id="valCoachPlan"><span>Rank Improvement Plan</span></label>
+              </div>
+            </div>
+            ${valorantServerSelectHtml()}
+            ${valorantModeHtml()}
+          </div>
+          ${valorantSummaryShell()}
+        </div>`;
+      }
       return `<div><label for="privateText">Custom Request</label><textarea id="privateText" placeholder="Describe the exact service, quantity, timing, and notes."></textarea></div><div class="badge">Price: CUSTOM</div>`;
     }
 
@@ -4253,7 +4810,33 @@
       return `<div class="field-block"><h4>${title}</h4><div class="field-grid"><div><label for="${prefix}Weapon">Weapon</label><select id="${prefix}Weapon">${weaponOptions(true)}</select></div>${qtyField(prefix + "WeaponQty", "Quantity")}${modFields(prefix)}</div></div>`;
     }
 
+    function wireValorantForm(type) {
+      document.querySelectorAll("#orderForm [data-val-mode]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const modeInput = $("valMode");
+          if (modeInput) modeInput.value = btn.dataset.valMode;
+          document.querySelectorAll("#orderForm [data-val-mode]").forEach(b => b.classList.toggle("active", b === btn));
+          updateTotal();
+        });
+      });
+      const bindPills = (selector, hiddenId, getVal) => {
+        document.querySelectorAll(selector).forEach(btn => {
+          btn.addEventListener("click", () => {
+            const hid = $(hiddenId);
+            if (hid) hid.value = getVal(btn);
+            document.querySelectorAll(selector).forEach(b => b.classList.toggle("active", b === btn));
+            updateTotal();
+          });
+        });
+      };
+      if (type === "valorant-unrated") bindPills("#orderForm [data-val-unrated]", "valUnratedPkg", b => b.dataset.valUnrated || "");
+      if (type === "valorant-leveling") bindPills("#orderForm [data-val-level]", "valLevelPkg", b => b.dataset.valLevel || "");
+      if (type === "valorant-battlepass") bindPills("#orderForm [data-val-bp]", "valBpPkg", b => b.dataset.valBp || "");
+      if (type === "valorant-coaching") bindPills("#orderForm [data-val-coach]", "valCoachPkg", b => b.dataset.valCoach || "");
+    }
+
     function wireForm(type) {
+      if (type && String(type).startsWith("valorant-")) wireValorantForm(type);
       if (type === "blueprints") wireBlueprints();
       if (type === "loadout") {
         const bundleInput = $("loadoutBundle");
@@ -4771,10 +5354,313 @@
         Math.max(0, cap - Math.max(current, 50)) * 3.5;
     }
 
+    function valorantRankBoostSegmentEur(cur, des) {
+      const ci = VALORANT_RANKS.indexOf(cur);
+      if (ci < 0) return { error: "Invalid current rank.", custom: false, baseEur: 0 };
+      if (des === "Radiant") return { error: "", custom: true, baseEur: 0 };
+      const di = VALORANT_RANKS.indexOf(des);
+      if (di < 0) return { error: "Invalid desired rank.", custom: false, baseEur: 0 };
+      if (di <= ci) return { error: "Please select a higher desired rank.", custom: false, baseEur: 0 };
+      let sum = 0;
+      for (let i = ci; i < di; i += 1) {
+        sum += VALORANT_RANK_SEGMENT_EUR[i];
+      }
+      return { error: "", custom: false, baseEur: sum };
+    }
+
+    function valorantExtrasBundle() {
+      let pct = 0;
+      const paid = [];
+      const free = [];
+      document.querySelectorAll("#orderForm [data-val-extra-pct]").forEach(input => {
+        if (input.type === "checkbox" && input.checked) {
+          pct += Number(input.dataset.valExtraPct || 0);
+          paid.push(String(input.dataset.valExtraLabel || ""));
+        }
+      });
+      document.querySelectorAll("#orderForm [data-val-extra-free]").forEach(input => {
+        if (input.type === "checkbox" && input.checked) {
+          free.push(String(input.dataset.valExtraLabel || ""));
+        }
+      });
+      return { pct, paid, free };
+    }
+
+    function valorantCoachFocusLabels() {
+      const labels = [];
+      if ($("valCoachVod")?.checked) labels.push("VOD Review");
+      if ($("valCoachAim")?.checked) labels.push("Aim Training");
+      if ($("valCoachPlan")?.checked) labels.push("Rank Improvement Plan");
+      return labels;
+    }
+
+    function calculateValorant(type, service) {
+      const server = val("valServer") || "EU";
+      const modeLabel = (val("valMode") || "solo") === "duo" ? "Duo" : "Solo";
+      const catTitle = valorantCategoryContent[service.category]?.title || service.cardTitle;
+      let ex = valorantExtrasBundle();
+      if (type === "valorant-coaching") {
+        ex = { pct: 0, paid: [], free: valorantCoachFocusLabels() };
+      }
+      const rows = [];
+      const addRow = (dt, dd) => rows.push({ dt, dd });
+      const detailLines = [];
+      const dPush = (a, b) => detailLines.push(`${a}: ${b}`);
+
+      addRow("Game", "Valorant");
+      addRow("Service Category", catTitle);
+      addRow("Server", server + " (info)");
+      addRow("Mode", modeLabel);
+
+      if (type === "valorant-radiant") {
+        const opt = val("valRadOption");
+        addRow("Selected Options", opt);
+        addRow("Paid Extras", "None");
+        addRow("Free Extras", "None");
+        addRow("Base Price", "Custom Price");
+        addRow("Extras Price", "—");
+        addRow("Discount", "—");
+        addRow("Total Price", "Custom Price");
+        dPush("Game", "Valorant");
+        dPush("Service Category", catTitle);
+        dPush("Selected Options", opt);
+        dPush("Server", server + " (informational)");
+        dPush("Mode", modeLabel);
+        dPush("Paid Extras", "None");
+        dPush("Free Extras", "None");
+        dPush("Base Price", "Custom Price");
+        dPush("Extras Price", "—");
+        dPush("Discount", "—");
+        dPush("Total Price", "Custom Price");
+        return {
+          total: 0,
+          valid: true,
+          custom: true,
+          contactOnly: true,
+          estimated: false,
+          details: detailLines.join("\n"),
+          valorantRows: rows,
+          valorantNote: "",
+          valorantError: ""
+        };
+      }
+
+      let baseEur = 0;
+      let selectedSummary = "";
+      let bpNote = "";
+
+      if (type === "valorant-rank-boost") {
+        const cur = val("valRbCurrent");
+        const des = val("valRbDesired");
+        const rb = valorantRankBoostSegmentEur(cur, des);
+        if (rb.error) {
+          return {
+            total: 0,
+            valid: false,
+            custom: false,
+            estimated: false,
+            details: "",
+            valorantRows: [
+              { dt: "Game", dd: "Valorant" },
+              { dt: "Service Category", dd: catTitle },
+              { dt: "Note", dd: rb.error }
+            ],
+            valorantNote: "",
+            valorantError: rb.error,
+            valorantValRbError: rb.error
+          };
+        }
+        if (rb.custom) {
+          addRow("Current Rank", cur);
+          addRow("Desired Rank", des);
+          addRow("Selected Options", cur + " → " + des);
+          addRow("Paid Extras", ex.paid.join(", ") || "None");
+          addRow("Free Extras", ex.free.join(", ") || "None");
+          addRow("Base Price", "Custom Price");
+          addRow("Extras Price", "—");
+          addRow("Discount", "—");
+          addRow("Total Price", "Custom Price");
+          dPush("Game", "Valorant");
+          dPush("Service Category", catTitle);
+          dPush("Current Rank", cur);
+          dPush("Desired Rank", des);
+          dPush("Server", server + " (informational)");
+          dPush("Mode", modeLabel);
+          dPush("Paid Extras", ex.paid.join(", ") || "None");
+          dPush("Free Extras", ex.free.join(", ") || "None");
+          dPush("Base Price", "Custom Price");
+          dPush("Extras Price", "—");
+          dPush("Discount", "—");
+          dPush("Total Price", "Custom Price");
+          return {
+            total: 0,
+            valid: true,
+            custom: true,
+            contactOnly: true,
+            estimated: false,
+            details: detailLines.join("\n"),
+            valorantRows: rows,
+            valorantNote: "",
+            valorantError: ""
+          };
+        }
+        baseEur = rb.baseEur;
+        selectedSummary = `${cur} → ${des}`;
+        addRow("Current Rank", cur);
+        addRow("Desired Rank", des);
+        addRow("Selected Options", selectedSummary);
+      } else if (type === "valorant-placement") {
+        const rank = val("valPmRank");
+        const games = Math.max(1, Math.min(5, Math.round(num("valPmGames") || 5)));
+        const per = valorantPlacementRankEur[rank];
+        if (per == null) {
+          return {
+            total: 0,
+            valid: false,
+            custom: false,
+            estimated: false,
+            details: "",
+            valorantRows: [{ dt: "Game", dd: "Valorant" }, { dt: "Note", dd: "Select a valid rank." }],
+            valorantNote: "",
+            valorantError: "Select a valid rank."
+          };
+        }
+        baseEur = per * games;
+        selectedSummary = `${rank} × ${games} games`;
+        addRow("Last Known Rank", rank);
+        addRow("Games", String(games));
+        addRow("Selected Options", selectedSummary);
+      } else if (type === "valorant-ranked-wins") {
+        const rank = val("valRwRank");
+        const wins = Math.max(1, Math.min(10, Math.round(num("valRwWins") || 3)));
+        if (rank === "Radiant") {
+          addRow("Current Rank", rank);
+          addRow("Wins", String(wins));
+          addRow("Selected Options", `${rank} — ${wins} wins`);
+          addRow("Paid Extras", ex.paid.join(", ") || "None");
+          addRow("Free Extras", ex.free.join(", ") || "None");
+          addRow("Base Price", "Custom Price");
+          addRow("Extras Price", "—");
+          addRow("Discount", "—");
+          addRow("Total Price", "Custom Price");
+          dPush("Game", "Valorant");
+          dPush("Service Category", catTitle);
+          dPush("Current Rank", rank);
+          dPush("Wins", String(wins));
+          dPush("Server", server + " (informational)");
+          dPush("Mode", modeLabel);
+          dPush("Paid Extras", ex.paid.join(", ") || "None");
+          dPush("Free Extras", ex.free.join(", ") || "None");
+          dPush("Base Price", "Custom Price");
+          dPush("Extras Price", "—");
+          dPush("Discount", "—");
+          dPush("Total Price", "Custom Price");
+          return {
+            total: 0,
+            valid: true,
+            custom: true,
+            contactOnly: true,
+            estimated: false,
+            details: detailLines.join("\n"),
+            valorantRows: rows,
+            valorantNote: "",
+            valorantError: ""
+          };
+        }
+        const per = valorantRankedWinEur[rank];
+        if (per == null) {
+          return {
+            total: 0,
+            valid: false,
+            custom: false,
+            estimated: false,
+            details: "",
+            valorantRows: [{ dt: "Game", dd: "Valorant" }, { dt: "Note", dd: "Invalid rank." }],
+            valorantNote: "",
+            valorantError: "Invalid rank."
+          };
+        }
+        baseEur = per * wins;
+        selectedSummary = `${rank} — ${wins} wins`;
+        addRow("Current Rank", rank);
+        addRow("Wins", String(wins));
+        addRow("Selected Options", selectedSummary);
+      } else if (type === "valorant-unrated") {
+        const id = val("valUnratedPkg") || "u5";
+        const pack = valorantUnratedPackages.find(p => p.id === id) || valorantUnratedPackages[0];
+        baseEur = pack.eur;
+        selectedSummary = pack.label;
+        addRow("Package", pack.label);
+        addRow("Selected Options", pack.label);
+      } else if (type === "valorant-leveling") {
+        const id = val("valLevelPkg") || "l1";
+        const pack = valorantLevelPackages.find(p => p.id === id) || valorantLevelPackages[0];
+        baseEur = pack.eur;
+        selectedSummary = pack.label;
+        addRow("Package", pack.label);
+        addRow("Selected Options", pack.label);
+      } else if (type === "valorant-battlepass") {
+        const id = val("valBpPkg") || "bp-small";
+        const pack = valorantBattlePassPackages.find(p => p.id === id) || valorantBattlePassPackages[0];
+        baseEur = pack.eur;
+        selectedSummary = pack.label;
+        addRow("Package", pack.label);
+        addRow("Selected Options", pack.label);
+        if (pack.id === "bp-express") bpNote = "Faster completion priority included.";
+      } else if (type === "valorant-coaching") {
+        const id = val("valCoachPkg") || "c1";
+        const pack = valorantCoachingHours.find(p => p.id === id) || valorantCoachingHours[0];
+        baseEur = pack.eur;
+        selectedSummary = pack.label;
+        addRow("Duration", pack.label);
+        addRow("Selected Options", pack.label);
+        addRow("Focus (free)", ex.free.join(", ") || "None");
+      }
+
+      const afterEur = baseEur * (1 + ex.pct);
+      const extrasEur = Math.max(0, afterEur - baseEur);
+      const stored = valorantEurToStoredTotal(afterEur);
+      const total = Math.round(stored * 100) / 100;
+
+      addRow("Paid Extras", ex.paid.length ? `${ex.paid.join(", ")} (+${Math.round(ex.pct * 100)}%)` : "None");
+      addRow("Free Extras", ex.free.length ? ex.free.join(", ") : "None");
+      addRow("Base Price", displayMoney(valorantEurToStoredTotal(baseEur)));
+      addRow("Extras Price", extrasEur > 0 ? displayMoney(valorantEurToStoredTotal(extrasEur)) : displayMoney(0));
+      addRow("Discount", "—");
+      addRow("Total Price", displayMoney(stored));
+
+      dPush("Game", "Valorant");
+      dPush("Service Category", catTitle);
+      dPush("Selected Options", selectedSummary);
+      dPush("Server", server + " (informational)");
+      dPush("Mode", modeLabel);
+      dPush("Paid Extras", ex.paid.join(", ") || "None");
+      dPush("Free Extras", ex.free.join(", ") || "None");
+      dPush("Base Price", displayMoney(valorantEurToStoredTotal(baseEur)));
+      dPush("Extras Price", extrasEur > 0 ? displayMoney(valorantEurToStoredTotal(extrasEur)) : displayMoney(0));
+      dPush("Discount", "—");
+      dPush("Total Price", displayMoney(stored));
+
+      return {
+        total,
+        valid: true,
+        custom: false,
+        contactOnly: false,
+        estimated: false,
+        details: detailLines.join("\n"),
+        valorantRows: rows,
+        valorantNote: bpNote,
+        valorantError: ""
+      };
+    }
+
     function calculate() {
       const service = currentService();
       if (!service) return { total: 0, valid: false, details: "", custom: false, estimated: false };
       const type = service.form;
+      if (type && String(type).startsWith("valorant-")) {
+        return calculateValorant(type, service);
+      }
       if (type === "fast") {
         const qty = Math.max(1, num("fastQty"));
         return { total: service.fromUSD * qty, valid: true, details: `Quantity / Hours: ${qty}\nNotes: ${val("fastNote") || "None"}` };
@@ -4982,13 +5868,44 @@
 
     function updateTotal() {
       const result = calculate();
+      const svc = currentService();
+      const vForm = svc?.form && String(svc.form).startsWith("valorant-");
       const old = result.oldTotal && result.oldTotal > result.total ? `<span class="old-total">${displayMoney(result.oldTotal)}</span>` : "";
       const estTag = result.estimated ? `<span class="estimated-tag">Estimated</span>` : "";
-      $("liveTotal").innerHTML = result.custom ? "CUSTOM" : old + displayMoney(result.total) + estTag;
+      const customFace = result.custom && vForm ? "Custom Price" : "CUSTOM";
+      $("liveTotal").innerHTML = result.custom ? customFace : old + displayMoney(result.total) + estTag;
       $("usdHint").textContent = result.custom
-        ? "Ticket value: CUSTOM"
+        ? (vForm ? "Custom Price — contact for final quote" : "Ticket value: CUSTOM")
         : (result.estimated ? "Estimated ticket value: " : "Ticket value: ") + moneyUSD(result.total) + " USD";
       $("addToCart").disabled = !result.valid;
+      $("addToCart").textContent = ui(result.contactOnly || (vForm && result.custom) ? "Contact Us" : "Add to Cart");
+      const dl = $("valorantSummaryDl");
+      const noteEl = $("valorantSummaryNote");
+      const valRbHint = $("valRbHint");
+      if (valRbHint) {
+        if (result.valorantValRbError) {
+          valRbHint.hidden = false;
+          valRbHint.textContent = result.valorantValRbError;
+        } else {
+          valRbHint.hidden = true;
+          valRbHint.textContent = "";
+        }
+      }
+      if (dl && Array.isArray(result.valorantRows)) {
+        dl.innerHTML = result.valorantRows.length
+          ? result.valorantRows.map(({ dt, dd }) => `<div><dt>${escapeHtml(dt)}</dt><dd>${escapeHtml(String(dd))}</dd></div>`).join("")
+          : "";
+      }
+      if (noteEl) {
+        if (result.valorantNote) {
+          noteEl.hidden = false;
+          noteEl.textContent = result.valorantNote;
+          noteEl.classList.remove("is-warn");
+        } else {
+          noteEl.textContent = "";
+          noteEl.hidden = true;
+        }
+      }
     }
 
     function clearServiceForm() {
@@ -5000,6 +5917,12 @@
       const result = calculate();
       if (!result.valid) return showToast("Please customize the service first.");
       const service = currentService();
+      const vForm = service?.form && String(service.form).startsWith("valorant-");
+      if (result.contactOnly || (vForm && result.custom)) {
+        window.open(DISCORD_URL, "_blank", "noopener");
+        showToast("Opening Discord — contact ElysiumBoost with your request.");
+        return;
+      }
       state.cart.push({
         id: String(Date.now() + Math.random()),
         game: currentGame().label,
@@ -5024,7 +5947,7 @@
       } else {
         $("cartBody").innerHTML = state.cart.map(item => {
           const priceLabel = item.custom
-            ? "CUSTOM"
+            ? (item.game === "Valorant" ? "Custom Price" : "CUSTOM")
             : (item.estimated ? `<span class="estimated-tag">Estimated</span>${displayInCurrency(item.total, item.viewedCurrency)}` : displayInCurrency(item.total, item.viewedCurrency));
           const estimateNote = item.estimated ? `<p class="cart-estimate-note">${escapeHtml(PRIVATE_ESTIMATE_NOTE)}</p>` : "";
           return `
@@ -5134,7 +6057,7 @@
         lines.push(`${index + 1}. ${item.game} - ${item.title}`);
         item.details.split("\n").forEach(line => lines.push(`   - ${line}`));
         const priceLine = item.custom
-          ? "CUSTOM"
+          ? (item.game === "Valorant" ? "Custom Price" : "CUSTOM")
           : (item.estimated ? `Estimated ${displayInCurrency(item.total, item.viewedCurrency)}` : displayInCurrency(item.total, item.viewedCurrency));
         lines.push(`   Price: ${priceLine}`);
         lines.push(`   Currency: ${item.viewedCurrency}`);
