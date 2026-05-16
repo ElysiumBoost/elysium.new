@@ -441,7 +441,7 @@
       const boost = g("circle");
       const soc = g("social");
       if (boost && soc) {
-        const socialImg = "assets/social.webp";
+        const socialImg = "assets/boost-social-bg.webp";
         chunks.push(`
         <article class="home-game-card home-combo-card" aria-label="${escapeHtml(ui("Boost+ and Social"))}">
           <div class="home-combo-split">
@@ -593,13 +593,7 @@
       const cta = $("heroCta");
       if (game) {
         hero.classList.remove("is-home");
-        const vHero = game.id === "valorant" && game.valorantHeroPrimary;
-        if (vHero) {
-          hero.style.setProperty("--hero-bg", `url("${game.valorantHeroPrimary}"), url("${game.heroBg}")`);
-        } else {
-          hero.style.setProperty("--hero-bg", `url("${game.heroBg}")`);
-        }
-        hero.style.setProperty("--hero-position", game.heroPosition || "center center");
+        hero.style.setProperty("--hero-bg", `url("${game.heroBg}")`);
         if (sub) sub.style.display = "none";
         if (cta) cta.style.display = "none";
         $("heroKicker").textContent = ui(game.kicker);
@@ -1260,6 +1254,13 @@
       return `<div><label for="valRbRR">${ui("Current RR")}</label><select id="valRbRR">${opts.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join("")}</select></div>`;
     }
 
+    function valorantPathChip(kicker, value) {
+      const k = kicker
+        ? `<span class="valorant-path-kicker">${escapeHtml(kicker)}</span>`
+        : "";
+      return `<div class="valorant-path-chip">${k}<span class="valorant-path-rank">${escapeHtml(value)}</span></div>`;
+    }
+
     function syncValorantPathRail() {
       const rail = $("valorantPathRail");
       if (!rail) return;
@@ -1268,50 +1269,66 @@
       if (!type || !String(type).startsWith("valorant-")) return;
       let left = "";
       let right = "";
+      let leftK = "";
+      let rightK = "";
       if (type === "valorant-rank-boost") {
         left = val("valRbCurrent") || "—";
         right = val("valRbDesired") || "—";
+        leftK = ui("Current");
+        rightK = ui("Desired");
       } else if (type === "valorant-placement") {
         const rank = val("valPmRank") || "—";
         const games = Math.max(1, Math.min(5, Math.round(num("valPmGames") || 5)));
         left = rank;
         right = `${games} ${ui("games")}`;
+        leftK = ui("Rank");
+        rightK = ui("Games");
       } else if (type === "valorant-radiant") {
         left = val("valRadOption") || "—";
         right = "";
+        leftK = ui("Service");
       } else if (type === "valorant-ranked-wins") {
         const rank = val("valRwRank") || "—";
         const wins = Math.max(1, Math.min(10, Math.round(num("valRwWins") || 3)));
         left = rank;
         right = `${wins} ${ui("wins")}`;
+        leftK = ui("Rank");
+        rightK = ui("Wins");
       } else if (type === "valorant-unrated") {
         const id = val("valUnratedPkg") || "u5";
         const pack = valorantUnratedPackages.find(p => p.id === id) || valorantUnratedPackages[0];
         left = pack.label;
         right = displayMoney(valorantEurToStoredTotal(pack.eur));
+        leftK = ui("Package");
+        rightK = ui("Price");
       } else if (type === "valorant-leveling") {
         const id = val("valLevelPkg") || "l1";
         const pack = valorantLevelPackages.find(p => p.id === id) || valorantLevelPackages[0];
         left = pack.label;
         right = displayMoney(valorantEurToStoredTotal(pack.eur));
+        leftK = ui("Package");
+        rightK = ui("Price");
       } else if (type === "valorant-battlepass") {
         const id = val("valBpPkg") || "bp-small";
         const pack = valorantBattlePassPackages.find(p => p.id === id) || valorantBattlePassPackages[0];
         left = pack.label;
         right = displayMoney(valorantEurToStoredTotal(pack.eur));
+        leftK = ui("Package");
+        rightK = ui("Price");
       } else if (type === "valorant-coaching") {
         const id = val("valCoachPkg") || "c1";
         const pack = valorantCoachingHours.find(p => p.id === id) || valorantCoachingHours[0];
         left = pack.label;
         right = "";
+        leftK = ui("Hours");
       }
       const arrow = right === ""
         ? ""
         : `<span class="valorant-path-arrow" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h12m-4-5l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
-      const rightBlock = right === ""
-        ? `<div class="valorant-path-single"><span class="valorant-path-rank">${escapeHtml(left)}</span></div>`
-        : `<div class="valorant-path-end"><span class="valorant-path-ph" aria-hidden="true"></span><span class="valorant-path-rank">${escapeHtml(left)}</span></div>${arrow}<div class="valorant-path-end"><span class="valorant-path-ph" aria-hidden="true"></span><span class="valorant-path-rank">${escapeHtml(right)}</span></div>`;
-      rail.innerHTML = `<div class="valorant-path-inner">${rightBlock}</div>`;
+      const inner = right === ""
+        ? `<div class="valorant-path-inner valorant-path-inner--single">${valorantPathChip(leftK, left)}</div>`
+        : `<div class="valorant-path-inner">${valorantPathChip(leftK, left)}${arrow}${valorantPathChip(rightK, right)}</div>`;
+      rail.innerHTML = inner;
     }
 
     function syncValorantOrderFormMount(service) {
@@ -1640,25 +1657,13 @@
         return `
         <div class="valorant-configurator valorant-rank-boost">
           ${valorantConfiguratorCompactHeader()}
-          <div class="valorant-cfg-stack valorant-cfg-stack--selects">
-            <div class="valorant-rank-row">
-              <div class="valorant-rank-card" data-valorant-rank-card="current">
-                <div class="valorant-rank-card-visual" aria-hidden="true">
-                  <div class="valorant-rank-card-thumb">
-                    <div class="valorant-rank-card-ph"></div>
-                    <img id="valRbCurrentImg" class="valorant-rank-card-img" alt="" decoding="async" loading="eager" width="120" height="96" />
-                  </div>
-                </div>
+          <div class="valorant-rank-select-panel">
+            <div class="valorant-rank-tier-grid">
+              <div class="field-block field-block--tight valorant-rank-field">
                 <label for="valRbCurrent">${ui("Current Rank")}</label>
                 <select id="valRbCurrent">${valorantRankOptionsHtml(VALORANT_RANKS, "Silver III")}</select>
               </div>
-              <div class="valorant-rank-card" data-valorant-rank-card="desired">
-                <div class="valorant-rank-card-visual" aria-hidden="true">
-                  <div class="valorant-rank-card-thumb">
-                    <div class="valorant-rank-card-ph"></div>
-                    <img id="valRbDesiredImg" class="valorant-rank-card-img" alt="" decoding="async" loading="eager" width="120" height="96" />
-                  </div>
-                </div>
+              <div class="field-block field-block--tight valorant-rank-field">
                 <label for="valRbDesired">${ui("Desired Rank")}</label>
                 <select id="valRbDesired">${valorantRankOptionsHtml(desiredRanks, "Gold I")}</select>
               </div>

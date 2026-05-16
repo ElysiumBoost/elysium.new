@@ -28,53 +28,6 @@
       "Ascendant I", "Ascendant II", "Ascendant III", "Immortal I", "Immortal II", "Immortal III"
     ];
 
-    function valorantRankBadgeImageCandidates(rankLabel) {
-      const r = String(rankLabel || "").trim();
-      if (r === "Radiant") {
-        return [
-          "assets/valorant-radiant-boost.webp"
-        ];
-      }
-      const m = r.match(/^([A-Za-z]+)/);
-      if (!m) return [];
-      const tier = m[1].toLowerCase();
-      return [`assets/${tier}_3.webp`];
-    }
-
-    function applyValorantRankBadgeImage(img, rankLabel) {
-      if (!img) return;
-      const wrap = img.closest(".valorant-rank-card-visual");
-      const ph = wrap && wrap.querySelector(".valorant-rank-card-ph");
-      const urls = valorantRankBadgeImageCandidates(rankLabel);
-      let idx = 0;
-      const showPlaceholder = () => {
-        img.removeAttribute("src");
-        img.style.display = "none";
-        if (ph) ph.hidden = false;
-      };
-      const tryNext = () => {
-        if (idx >= urls.length) {
-          showPlaceholder();
-          return;
-        }
-        const url = urls[idx++];
-        img.onload = () => {
-          img.style.display = "block";
-          if (ph) ph.hidden = true;
-        };
-        img.onerror = () => tryNext();
-        img.alt = rankLabel || "";
-        img.src = url;
-      };
-      tryNext();
-    }
-
-    function syncValorantRankBoostRankArt() {
-      if (currentService()?.form !== "valorant-rank-boost") return;
-      applyValorantRankBadgeImage($("valRbCurrentImg"), val("valRbCurrent"));
-      applyValorantRankBadgeImage($("valRbDesiredImg"), val("valRbDesired"));
-    }
-
     const VALORANT_RANK_SEGMENT_EUR = [
       4.5, 4.9, 5.5, 5.9, 6.4, 7.2, 7.9, 8.7, 9.9, 11.5, 12.9, 15.5, 18.5, 21.5, 26, 32, 38, 46, 58, 72, 95, 130, 170
     ];

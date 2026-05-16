@@ -349,7 +349,6 @@
       }
       if (vForm) {
         syncValorantPathRail();
-        syncValorantRankBoostRankArt();
       }
       syncLoadoutQuickBundleHints();
     }
