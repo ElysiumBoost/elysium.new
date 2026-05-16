@@ -45,41 +45,6 @@
     }
 
 
-    const recentOrders = [
-      { label: "20x Tempest Weapon Bundle",          service: "guns",       category: "guns",       type: "item" },
-      { label: "Anvil Blueprint",                     service: "blueprints", category: "blueprints", type: "blueprint" },
-      { label: "Bobcat Blueprint",                    service: "blueprints", category: "blueprints", type: "blueprint" },
-      { label: "Tempest Blueprint",                   service: "blueprints", category: "blueprints", type: "blueprint" },
-      { label: "Vulcano Blueprint",                   service: "blueprints", category: "blueprints", type: "blueprint" },
-      { label: "Venator Blueprint",                   service: "blueprints", category: "blueprints", type: "blueprint" },
-      { label: "Looting Mk.3 Survivor Blueprint",     service: "blueprints", category: "blueprints", type: "blueprint" },
-      { label: "20x Bobcat Weapon Bundle",            service: "guns",       category: "guns",       type: "item" },
-      { label: "10x Bobcat + 10x Vulcano Bundle",     service: "guns",       category: "guns",       type: "item" },
-      { label: "3M Discounted Raider Coins",          service: "coins",      category: "coins",      type: "currency" },
-      { label: "4x Raid Boost",                       service: "raid",       category: "raids",      type: "service" },
-      { label: "6M Discounted Raider Coins",          service: "coins",      category: "coins",      type: "currency" },
-      { label: "20x Looting Mk.3 Survivor Augment",   service: "loadout",    category: "loadouts",   type: "item" },
-      { label: "20x Medium Shield",                   service: "loadout",    category: "loadouts",   type: "item" },
-      { label: "100x Herbal Bandage",                 service: "loadout",    category: "loadouts",   type: "item" },
-      { label: "2,500 Assorted Seeds",                service: "seeds",      category: "seeds",      type: "currency" },
-      { label: "Trials Boost +3 Rank Up",             service: "trials",     category: "trials",     type: "service" },
-      { label: "Scrappy Level 1 to 5",                service: "workshop",   category: "workshop",   type: "service" },
-      { label: "Expedition Boost",                    service: "expedition", category: "expeditions",type: "service" },
-      { label: "10x Canto Weapon Bundle",             service: "guns",       category: "guns",       type: "item" },
-      { label: "10x Venator Weapon Bundle",           service: "guns",       category: "guns",       type: "item" },
-      { label: "20x Anvil Weapon Bundle",             service: "guns",       category: "guns",       type: "item" },
-      { label: "Extended Medium Mag III Blueprint",   service: "blueprints", category: "blueprints", type: "blueprint" },
-      { label: "Extended Light Mag III Blueprint",    service: "blueprints", category: "blueprints", type: "blueprint" },
-      { label: "75x Trigger Nade Bundle",             service: "loadout",    category: "loadouts",   type: "item" },
-      { label: "9M Discounted Raider Coins",          service: "coins",      category: "coins",      type: "currency" },
-      { label: "12M Discounted Raider Coins",         service: "coins",      category: "coins",      type: "currency" },
-      { label: "Queen Boss Clear",                    service: "boss",       category: "bosses",     type: "service" },
-      { label: "PvP Coaching Session",                service: "pvp",        category: "coaching",   type: "service" }
-    ];
-    let recentOrderTimers = [0, 0, 0];
-    const ORDER_FEED_SLOT_MS = [16000, 10000, 20000];
-    let recentOrderLastBatch = [];
-
     const prices = {
       blueprint: .75,
       coins100k: .25,
@@ -157,15 +122,16 @@
     const workshops = ["Gunsmith", "Gear Bench", "Medical Lab", "Explosive Station", "Utility Station", "Refiner"];
     const ranks = ["Rookie I", "Rookie II", "Rookie III", "Tryhard I", "Tryhard II", "Tryhard III", "Wildcard I", "Wildcard II", "Wildcard III", "Daredevil I", "Daredevil II", "Daredevil III", "Hotshot"];
 
+    const valorantCategoryThumb = "assets/backgrounds/valorant-bg.webp";
     const valorantCategories = [
-      { id: "rank-boosting", label: "Rank Boosting", icon: "rank", badge: null, badgeType: null, featured: true, thumb: "assets/valorant-rank-boosting.webp" },
-      { id: "placement-matches", label: "Placement Matches", icon: "placement", badge: null, badgeType: null, featured: false, thumb: "assets/valorant-placement-matches.webp" },
-      { id: "radiant-boost", label: "Radiant Boost", icon: "radiant", badge: "HOT", badgeType: "hot", featured: false, thumb: "assets/valorant-radiant-boost.webp" },
-      { id: "ranked-wins", label: "Ranked Wins", icon: "wins", badge: null, badgeType: null, featured: false, thumb: "assets/valorant-ranked-wins.webp" },
-      { id: "unrated-games", label: "Unrated Games", icon: "unrated", badge: null, badgeType: null, featured: false, thumb: "assets/valorant-unrated-games.webp" },
-      { id: "account-leveling", label: "Account Leveling", icon: "leveling", badge: null, badgeType: null, featured: false, thumb: "assets/valorant-account-leveling.webp" },
-      { id: "battle-pass", label: "Battle Pass", icon: "battle-pass", badge: "NEW", badgeType: "new", featured: false, thumb: "assets/valorant-battle-pass.webp" },
-      { id: "coaching", label: "Coaching", icon: "coaching", badge: null, badgeType: null, featured: false, thumb: "assets/valorant-coaching.webp" }
+      { id: "rank-boosting", label: "Rank Boosting", icon: "rank", badge: null, badgeType: null, featured: true, thumb: valorantCategoryThumb },
+      { id: "placement-matches", label: "Placement Matches", icon: "placement", badge: null, badgeType: null, featured: false, thumb: valorantCategoryThumb },
+      { id: "radiant-boost", label: "Radiant Boost", icon: "radiant", badge: "HOT", badgeType: "hot", featured: false, thumb: valorantCategoryThumb },
+      { id: "ranked-wins", label: "Ranked Wins", icon: "wins", badge: null, badgeType: null, featured: false, thumb: valorantCategoryThumb },
+      { id: "unrated-games", label: "Unrated Games", icon: "unrated", badge: null, badgeType: null, featured: false, thumb: valorantCategoryThumb },
+      { id: "account-leveling", label: "Account Leveling", icon: "leveling", badge: null, badgeType: null, featured: false, thumb: valorantCategoryThumb },
+      { id: "battle-pass", label: "Battle Pass", icon: "battle-pass", badge: "NEW", badgeType: "new", featured: false, thumb: valorantCategoryThumb },
+      { id: "coaching", label: "Coaching", icon: "coaching", badge: null, badgeType: null, featured: false, thumb: valorantCategoryThumb }
     ];
 
     const wowCategories = [
@@ -353,7 +319,7 @@
           { id: "expeditions", label: "Expedition Boost", icon: "i-expedition", badge: "HOT", badgeTone: "hot" },
           { id: "custom", label: "Private Order", icon: "i-private" }
         ],
-        popular: ["trials", "guns", "blueprints", "coins"],
+        popular: [],
         services: [
           arcService("blueprints", "blueprints", "Buy Arc Raiders Blueprints", "All Blueprints", "i-blueprint", .75, " each", "Discounted blueprints, now $0.75 each instead of $1.50.", "30-60 Minutes", "blueprints", 1.50),
           arcService("guns", "guns", "Buy Arc Raiders Weapons", "All Guns", "i-gun", .50, " each", "Discounted weapons and mods with automatic attachment quantity.", "30-60 Minutes", "guns", 1.00),

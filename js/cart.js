@@ -191,10 +191,6 @@
       return game.categories.length ? game.services.filter(service => service.category === state.category) : game.services;
     }
 
-    function elyValorantThumbFallback(img) {
-      elyImagePlaceholder(img);
-    }
-
     function elyHomeCardFallback(img) {
       const fb = img.getAttribute("data-home-card-fb");
       if (fb && !img.dataset.homeCardFbTried) {
@@ -557,13 +553,13 @@
       expeditions: "assets/thumb-expedition.webp",
       custom: "assets/thumb-private-order.webp",
       services: "assets/thumb-private-order.webp",
-      "rank-boosting": "assets/valorant-rank-boosting.webp",
-      "placement-matches": "assets/valorant-placement-matches.webp",
-      "radiant-boost": "assets/valorant-radiant-boost.webp",
-      "ranked-wins": "assets/valorant-ranked-wins.webp",
-      "unrated-games": "assets/valorant-unrated-games.webp",
-      "account-leveling": "assets/valorant-account-leveling.webp",
-      "battle-pass": "assets/valorant-battle-pass.webp",
+      "rank-boosting": "assets/backgrounds/valorant-bg.webp",
+      "placement-matches": "assets/backgrounds/valorant-bg.webp",
+      "radiant-boost": "assets/backgrounds/valorant-bg.webp",
+      "ranked-wins": "assets/backgrounds/valorant-bg.webp",
+      "unrated-games": "assets/backgrounds/valorant-bg.webp",
+      "account-leveling": "assets/backgrounds/valorant-bg.webp",
+      "battle-pass": "assets/backgrounds/valorant-bg.webp",
       "mythic-plus": "assets/thumb-private-order.webp",
       "raid-calendar": "assets/thumb-raids.webp",
       arena: "assets/thumb-private-order.webp",
@@ -585,9 +581,7 @@
       }
       const override = thumbOverride != null && String(thumbOverride).trim() !== "" ? String(thumbOverride).trim() : "";
       const src = override || valThumb || serviceImages[id] || serviceImages.custom;
-      const isVal = game && game.id === "valorant";
-      const errFn = isVal ? ` onerror="elyValorantThumbFallback(this)"` : ` onerror="elyImagePlaceholder(this)"`;
-      return `<div class="service-thumb"><img src="${escapeHtml(src)}" alt="${escapeHtml(label)}" loading="eager"${errFn}></div>`;
+      return `<div class="service-thumb"><img src="${escapeHtml(src)}" alt="${escapeHtml(label)}" loading="eager" onerror="elyImagePlaceholder(this)"></div>`;
     }
     function selectCategory(categoryId) {
       pauseCategoryAuto(3500);
@@ -696,7 +690,7 @@
       grid.classList.toggle("is-hidden", list.length <= 1 && !isEmpty);
       grid.innerHTML = isEmpty
         ? `<p class="intro service-empty">${ui("No services available yet.")}</p>`
-        : list.map(service => cardMarkup(service, false)).join("");
+        : list.map(service => cardMarkup(service)).join("");
       bindServiceButtons();
     }
 
@@ -857,27 +851,10 @@
       `;
     }
 
-    function cardMarkup(service, popular) {
+    function cardMarkup(service) {
       const serviceVisual = categoryArtwork(service.category || "custom", service.cardTitle);
       const activeCard = state.serviceId === service.id ? " is-active" : "";
       const priceBlock = `${(service.valorantCustomPrice || service.form === "valorant-radiant") ? "" : "<small>From</small>"}${servicePrice(service)}`;
-      if (popular) {
-        return `
-          <article class="popular-card${activeCard}">
-            <span class="popular-badge">${ui("Best seller")}</span>
-            <div class="popular-card__inner">
-              <div class="popular-card__media"><span class="category-thumb">${serviceVisual}</span></div>
-              <div class="popular-card__body">
-                <h3>${ui(service.cardTitle)}</h3>
-                <p>${ui(service.short)}</p>
-                ${premiumCardBullets()}
-                <div class="price">${priceBlock}</div>
-                <button class="service-btn btn-premium ${state.serviceId === service.id ? "active" : ""}" type="button" data-service="${service.id}">${ui("View Details")}</button>
-              </div>
-            </div>
-          </article>
-        `;
-      }
       return `
         <article class="service-card${activeCard}">
           <div class="service-card__media"><span class="category-thumb">${serviceVisual}</span></div>
@@ -942,7 +919,6 @@
         const vt0 = $("detailValorantTrust");
         if (hl0) { hl0.hidden = true; hl0.innerHTML = ""; }
         if (vt0) { vt0.hidden = true; vt0.innerHTML = ""; }
-        renderOrderFeed();
         teardownValorantOrderChrome();
         syncValorantOrderFormMount(null);
         updateTotal();
@@ -992,7 +968,6 @@
       $("detailSteps").innerHTML = vgSteps ? "" : detailSteps(service.form).map(step => `
         <div class="detail-step"><strong>${ui(step.title)}</strong><span>${ui(step.copy)}</span></div>
       `).join("");
-      renderOrderFeed();
       $("orderForm").innerHTML = buildForm(service.form);
       syncValorantOrderFormMount(service);
       setupValorantOrderChrome();
@@ -1096,118 +1071,6 @@
         { title: "Add To Cart", copy: "Review the total and add the configured service to your cart." },
         { title: "Copy Ticket", copy: "Paste the clean order summary into Discord for boosters confirmation." }
       ];
-    }
-
-    function recentOrderType(order) {
-      return order?.type || "item";
-    }
-
-    function pickRecentOrders() {
-      const picked = [];
-      const used = new Set();
-      let previousType = recentOrderLastBatch.length ? recentOrderType(recentOrderLastBatch[recentOrderLastBatch.length - 1]) : "";
-      for (let slot = 0; slot < 3; slot += 1) {
-        let candidates = recentOrders.filter(order => !used.has(order.label) && order.type !== previousType);
-        if (!candidates.length) candidates = recentOrders.filter(order => !used.has(order.label));
-        const choice = candidates[Math.floor(Math.random() * candidates.length)] || recentOrders[Math.floor(Math.random() * recentOrders.length)];
-        picked.push(choice);
-        used.add(choice.label);
-        previousType = choice.type;
-      }
-      recentOrderLastBatch = picked;
-      return picked;
-    }
-
-    function pickSingleRecentOrder(slotIndex) {
-      const blocked = new Set();
-      for (let i = 0; i < 3; i += 1) {
-        if (i !== slotIndex && recentOrderLastBatch[i]) blocked.add(recentOrderLastBatch[i].label);
-      }
-      const cur = recentOrderLastBatch[slotIndex];
-      let candidates = recentOrders.filter(o => !blocked.has(o.label));
-      if (cur) {
-        const alt = candidates.filter(o => o.label !== cur.label);
-        if (alt.length) candidates = alt;
-      }
-      if (!candidates.length) candidates = recentOrders.filter(o => !blocked.has(o.label));
-      if (!candidates.length) candidates = recentOrders.slice();
-      return candidates[Math.floor(Math.random() * candidates.length)];
-    }
-
-    function renderOrderFeedSlot(slotIndex) {
-      const feed = $("orderFeed");
-      if (!feed) return;
-      const game = currentGame();
-      if (!game || game.id !== "arc") return;
-      const cards = feed.querySelectorAll(".order-feed-card");
-      if (cards.length !== 3 || slotIndex < 0 || slotIndex > 2) {
-        renderOrderFeed();
-        return;
-      }
-      const newOrder = pickSingleRecentOrder(slotIndex);
-      recentOrderLastBatch[slotIndex] = newOrder;
-      const card = cards[slotIndex];
-      card.classList.add("is-changing");
-      window.setTimeout(() => {
-        card.dataset.feedService = newOrder.service;
-        card.dataset.feedCategory = newOrder.category;
-        card.setAttribute("aria-label", "Open " + newOrder.label);
-        const strong = card.querySelector("strong");
-        if (strong) strong.textContent = newOrder.label;
-        card.classList.remove("is-changing");
-      }, 360);
-    }
-
-    function bindOrderFeedClicks() {
-      const feed = $("orderFeed");
-      if (!feed || feed.dataset.feedDelegated === "1") return;
-      feed.dataset.feedDelegated = "1";
-      feed.addEventListener("click", event => {
-        const card = event.target.closest(".order-feed-card[data-feed-service]");
-        if (!card) return;
-        openRecentOrder(card.dataset.feedService, card.dataset.feedCategory);
-      });
-    }
-
-    function openRecentOrder(serviceId, categoryId) {
-      const arc = games.find(game => game.id === "arc");
-      if (!arc) return;
-      const service = arc.services.find(s => s.id === serviceId);
-      if (!service) return;
-      state.game = "arc";
-      state.category = categoryId || service.category;
-      state.serviceId = service.id;
-      syncGameHash("arc");
-      renderAll();
-      requestAnimationFrame(() => {
-        $("detailSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    }
-
-    function renderOrderFeed() {
-      const feed = $("orderFeed");
-      if (!feed) return;
-      const game = currentGame();
-      if (!game || game.id !== "arc") {
-        feed.innerHTML = "";
-        return;
-      }
-      const entries = pickRecentOrders();
-      const html = entries.map(order => `
-        <button class="order-feed-card" type="button" data-feed-service="${escapeHtml(order.service)}" data-feed-category="${escapeHtml(order.category)}" aria-label="Open ${escapeHtml(order.label)}">
-          <small><span class="live-dot" aria-hidden="true"></span>Raider Just Ordered!</small>
-          <strong>${escapeHtml(order.label)}</strong>
-        </button>
-      `).join("");
-      feed.innerHTML = html;
-      bindOrderFeedClicks();
-    }
-
-    function startOrderFeed() {
-      recentOrderTimers.forEach(id => window.clearInterval(id));
-      recentOrderTimers = ORDER_FEED_SLOT_MS.map((ms, slot) => window.setInterval(() => {
-        renderOrderFeedSlot(slot);
-      }, ms));
     }
 
     function qtyField(id, label, value = 0, min = 0, max = null) {
