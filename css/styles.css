@@ -28,7 +28,7 @@
       --radius: 8px;
       --font: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --display: Rajdhani, Inter, sans-serif;
-      --hero-bg: url("../assets/backgrounds/fallback-purple-bg.webp?v=bg-files-final1");
+      --hero-bg: url("../assets/backgrounds/fallback-purple-bg.webp?v=main-fallback-bg-replace1");
       --crimson: #e11d48;
       --crimson-deep: #9f1239;
       --glass: rgba(16, 19, 31, .72);
@@ -61,7 +61,7 @@
       z-index: -2;
       background:
         linear-gradient(rgba(7, 10, 16, .64), rgba(7, 10, 16, .9)),
-        url("../assets/backgrounds/fallback-purple-bg.webp?v=bg-files-final1") center center / cover no-repeat,
+        url("../assets/backgrounds/fallback-purple-bg.webp?v=main-fallback-bg-replace1") center center / cover no-repeat,
         radial-gradient(circle at 50% 42%, rgba(139, 92, 246, .07), transparent 52%),
         radial-gradient(circle at 80% 12%, rgba(125, 211, 252, .03), transparent 38%),
         var(--bg);
@@ -1140,7 +1140,7 @@
         ),
         radial-gradient(ellipse 120% 70% at 50% -15%, rgba(91, 33, 182, 0.3), transparent 52%),
         radial-gradient(ellipse 55% 50% at 100% 40%, rgba(190, 18, 60, 0.1), transparent 50%),
-        url("../assets/backgrounds/elysium-home-mainmenu-bg.webp?v=bg-files-final1") center center / cover no-repeat;
+        url("../assets/backgrounds/elysium-home-mainmenu-bg.webp?v=main-fallback-bg-replace1") center center / cover no-repeat;
       pointer-events: none;
     }
 
