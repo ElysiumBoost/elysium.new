@@ -8484,7 +8484,7 @@
       $("siteSearchResults").classList.remove("active");
       syncGameHash(state.game);
       renderAll();
-      $("detailSection").scrollIntoView({ behavior: "smooth", block: "start" });
+      ($("detailLeftHead") || $("detailSection")).scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function renderSiteSearchResults(entries, query) {
