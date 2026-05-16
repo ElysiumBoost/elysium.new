@@ -1772,17 +1772,19 @@
 
     .order-card.is-valorant .order-card-body {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) min(360px, 38%);
-      gap: 0 20px;
-      padding: 0 14px 14px;
+      grid-template-columns: minmax(0, 1fr) min(340px, 36%);
+      gap: 0 18px;
+      padding: 0 12px 14px;
       align-items: stretch;
     }
 
     .order-card.is-valorant .order-form {
       grid-column: 1;
       grid-row: 1;
-      max-height: min(74vh, 760px);
-      padding-top: 4px;
+      max-height: min(78vh, 820px);
+      overflow-y: auto;
+      padding-top: 2px;
+      padding-right: 4px;
     }
 
     .order-card.is-valorant .summary-total {
@@ -1793,19 +1795,19 @@
       align-self: start;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      padding: 16px 16px 18px;
+      gap: 8px;
+      padding: 14px 14px 16px;
       margin: 0;
       border-top: none;
-      border-radius: 12px;
-      border: 1px solid rgba(155, 104, 255, .38);
+      border-radius: 14px;
+      border: 1px solid rgba(155, 104, 255, .42);
       background:
-        linear-gradient(165deg, rgba(52, 40, 120, .55), rgba(12, 9, 30, .88)),
-        radial-gradient(120% 80% at 100% 0%, rgba(122, 77, 255, .22), transparent 55%);
+        linear-gradient(168deg, rgba(48, 36, 118, .62), rgba(8, 6, 22, .92)),
+        radial-gradient(130% 90% at 100% 0%, rgba(122, 77, 255, .28), transparent 58%);
       box-shadow:
-        0 20px 50px rgba(0, 0, 0, .35),
-        inset 0 1px 0 rgba(255, 255, 255, .06),
-        0 0 40px rgba(122, 77, 255, .12);
+        0 22px 56px rgba(0, 0, 0, .38),
+        inset 0 1px 0 rgba(255, 255, 255, .07),
+        0 0 48px rgba(122, 77, 255, .14);
     }
 
     .order-card.is-valorant .summary-total small {
@@ -1818,7 +1820,7 @@
 
     .order-card.is-valorant .summary-total #liveTotal {
       font-family: var(--display);
-      font-size: clamp(26px, 3.2vw, 34px);
+      font-size: clamp(24px, 3vw, 32px);
       color: var(--gold);
       letter-spacing: .03em;
     }
@@ -1832,7 +1834,128 @@
     .valorant-order-chrome {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
+    }
+
+    .valorant-path-rail {
+      padding: 10px 10px 12px;
+      border-radius: 11px;
+      border: 1px solid rgba(122, 77, 255, .35);
+      background: linear-gradient(180deg, rgba(30, 24, 72, .75), rgba(12, 10, 28, .55));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
+    }
+
+    .valorant-path-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+
+    .valorant-path-end {
+      flex: 1 1 88px;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .valorant-path-single {
+      width: 100%;
+      text-align: center;
+    }
+
+    .valorant-path-ph {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(191, 252, 255, .22), transparent 55%),
+        linear-gradient(145deg, rgba(122, 77, 255, .45), rgba(20, 16, 48, .9));
+      border: 1px solid rgba(155, 104, 255, .45);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .25);
+    }
+
+    .valorant-path-rank {
+      font-family: var(--display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: #f0eaff;
+      line-height: 1.25;
+      max-width: 140px;
+    }
+
+    .valorant-path-arrow {
+      flex: 0 0 auto;
+      color: rgba(255, 209, 102, .85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .valorant-customize-surface {
+      padding: 10px 10px 4px;
+      border-radius: 11px;
+      border: 1px solid rgba(122, 77, 255, .28);
+      background: rgba(14, 11, 32, .55);
+    }
+
+    .valorant-block-kicker {
+      margin: 0 0 8px;
+      font-family: var(--display);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(191, 252, 255, .82);
+    }
+
+    .valorant-mini-promo {
+      margin: 0;
+      padding: 8px 10px;
+      border-radius: 9px;
+      border: 1px dashed rgba(122, 77, 255, .35);
+      font-size: 10px;
+      line-height: 1.45;
+      color: var(--muted);
+      letter-spacing: .02em;
+    }
+
+    .valorant-right-trust-foot {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 14px;
+      margin: 0;
+      padding: 0 0 2px;
+      list-style: none;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(183, 176, 223, .78);
+    }
+
+    .valorant-right-trust-foot li {
+      position: relative;
+      padding-left: 12px;
+    }
+
+    .valorant-right-trust-foot li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 6px;
+      height: 6px;
+      margin-top: -3px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(122, 77, 255, .95), rgba(122, 77, 255, .2));
+      box-shadow: 0 0 10px rgba(122, 77, 255, .55);
     }
 
     .valorant-summary-panel--sticky {
@@ -1845,88 +1968,138 @@
     .valorant-summary-panel--sticky .valorant-summary-title {
       margin: 0 0 4px;
       font-family: var(--display);
-      font-size: 13px;
+      font-size: 12px;
       letter-spacing: .1em;
       text-transform: uppercase;
       color: #e8e2ff;
     }
 
     .valorant-price-divider {
-      margin: 4px 0 2px;
+      margin: 2px 0 0;
       border: 0;
-      border-top: 1px solid rgba(122, 77, 255, .28);
+      border-top: 1px solid rgba(122, 77, 255, .32);
       opacity: 1;
     }
 
     .valorant-configurator {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 10px;
       min-width: 0;
     }
 
-    .valorant-cfg-hero {
-      padding: 4px 2px 2px;
-      border-bottom: 1px solid rgba(122, 77, 255, .2);
+    .valorant-cfg-compact-head {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 0 2px 8px;
+      border-bottom: 1px solid rgba(122, 77, 255, .22);
       margin-bottom: 2px;
     }
 
-    .valorant-cfg-title {
-      margin: 0 0 8px;
+    .valorant-cfg-eyebrow {
       font-family: var(--display);
-      font-size: clamp(22px, 2.4vw, 30px);
-      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(191, 252, 255, .65);
+    }
+
+    .valorant-cfg-name {
+      font-family: var(--display);
+      font-size: 15px;
       letter-spacing: .06em;
       text-transform: uppercase;
       color: #fdfbff;
-      line-height: 1.05;
-      text-shadow: 0 8px 26px rgba(0, 0, 0, .55);
-    }
-
-    .valorant-cfg-lead {
-      margin: 0 0 10px;
-      font-family: var(--font);
-      font-size: 13px;
-      font-weight: 400;
-      line-height: 1.5;
-      color: rgba(183, 176, 223, .95);
-      max-width: 52em;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .valorant-cfg-trust-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .valorant-trust-chip {
-      display: inline-flex;
-      align-items: center;
-      padding: 4px 9px;
-      border-radius: 999px;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      color: rgba(255, 247, 230, .92);
-      border: 1px solid rgba(255, 209, 102, .28);
-      background: rgba(122, 77, 255, .14);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+      line-height: 1.15;
     }
 
     .valorant-cfg-stack {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .valorant-configurator .field-block {
+    .valorant-cfg-stack--selects {
+      gap: 10px;
+    }
+
+    .valorant-rank-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 520px) {
+      .valorant-rank-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .valorant-rank-card {
+      padding: 12px 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(155, 104, 255, .34);
+      background:
+        linear-gradient(180deg, rgba(38, 31, 91, .5), rgba(10, 8, 28, .78));
+      box-shadow:
+        0 12px 32px rgba(0, 0, 0, .22),
+        inset 0 1px 0 rgba(255, 255, 255, .05);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .valorant-rank-card-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+    }
+
+    .valorant-rank-card label {
+      color: #dcd6ff;
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .valorant-rank-card select {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid rgba(155, 104, 255, .45);
+      background: rgba(22, 18, 52, .94);
+      min-height: 42px;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .valorant-inline-kicker {
+      margin: 0 0 8px;
+      font-family: var(--display);
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(191, 252, 255, .78);
+    }
+
+    .valorant-pill-grid {
+      gap: 8px;
+    }
+
+    .valorant-micro-note {
+      margin: 8px 0 0;
+      font-size: 11px;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    .valorant-configurator .field-block,
+    .order-card.is-valorant .valorant-panel-tight {
       margin: 0;
-      padding: 14px 16px 16px;
+      padding: 12px 14px 14px;
       border-radius: 12px;
       border: 1px solid rgba(155, 104, 255, .32);
       background:
@@ -1936,42 +2109,86 @@
         inset 0 1px 0 rgba(255, 255, 255, .05);
     }
 
-    .valorant-configurator .field-block h4 {
-      margin: 0 0 12px;
-      font-family: var(--display);
-      font-size: 13px;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--cyan);
+    .valorant-configurator .field-block--tight {
+      padding: 11px 13px 13px;
     }
 
-    .valorant-configurator label {
+    .valorant-configurator .field-block h4,
+    .order-card.is-valorant .valorant-panel-tight h4 {
+      margin: 0 0 10px;
+      font-family: var(--display);
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(191, 252, 255, .82);
+    }
+
+    .valorant-configurator label,
+    .order-card.is-valorant .valorant-order-chrome label {
       color: #dcd6ff;
       font-size: 11px;
       letter-spacing: .06em;
     }
 
     .valorant-configurator select,
-    .valorant-configurator input[type="number"] {
+    .valorant-configurator input[type="number"],
+    .order-card.is-valorant .valorant-order-chrome select {
       border-radius: 10px;
       border: 1px solid rgba(155, 104, 255, .42);
       background: rgba(22, 18, 52, .92);
       min-height: 44px;
       box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .25);
+      width: 100%;
+      max-width: 100%;
+      color: var(--text);
     }
 
     .valorant-configurator select:focus,
-    .valorant-configurator input[type="number"]:focus {
+    .valorant-configurator input[type="number"]:focus,
+    .order-card.is-valorant .valorant-order-chrome select:focus {
       border-color: rgba(191, 252, 255, .55);
       box-shadow: 0 0 0 3px rgba(122, 77, 255, .18);
     }
 
-    .valorant-configurator .raid-toggle-grid {
+    .valorant-configurator .field-grid--rr {
+      grid-template-columns: 1fr;
+    }
+
+    .valorant-configurator .raid-toggle-grid,
+    .order-card.is-valorant .valorant-mode-pills {
       gap: 8px;
     }
 
-    .valorant-configurator .raid-panel-note {
-      margin-top: 10px;
+    .order-card.is-valorant .valorant-mode-pills .raid-pill {
+      flex: 1 1 44%;
+    }
+
+    .valorant-extras-toggle .check-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 9px;
+      border: 1px solid rgba(122, 77, 255, .22);
+      background: rgba(8, 6, 22, .45);
+    }
+
+    .valorant-extras-toggle .check-row span {
+      flex: 1 1 auto;
+      font-size: 12px;
+      color: var(--text);
+    }
+
+    .valorant-extras-toggle .check-row input {
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--purple);
+    }
+
+    .valorant-coach-focus .check-row span {
+      font-size: 12px;
     }
 
     .valorant-rb-hint {
@@ -1984,15 +2201,18 @@
     .valorant-summary-dl {
       margin: 0;
       display: grid;
-      gap: 6px 10px;
+      gap: 5px 8px;
       font-size: 12px;
+      max-height: min(38vh, 320px);
+      overflow-y: auto;
+      padding-right: 2px;
     }
 
     .valorant-summary-dl div {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
       gap: 8px;
-      padding-bottom: 6px;
+      padding-bottom: 5px;
       border-bottom: 1px solid rgba(122, 77, 255, .15);
     }
 
@@ -2002,20 +2222,20 @@
       font-weight: 700;
       letter-spacing: .04em;
       text-transform: uppercase;
-      font-size: 10px;
+      font-size: 9px;
     }
 
     .valorant-summary-dl dd {
       margin: 0;
       color: var(--text);
       text-align: right;
-      font-size: 12px;
+      font-size: 11px;
       line-height: 1.35;
     }
 
     .valorant-summary-note {
-      margin: 10px 0 0;
-      font-size: 12px;
+      margin: 8px 0 0;
+      font-size: 11px;
       color: var(--gold);
       line-height: 1.35;
     }
@@ -2029,13 +2249,21 @@
       gap: 6px;
     }
 
-    @media (max-width: 1080px) {
+    @media (max-width: 900px) {
+      .order-card.is-valorant .order-card-body {
+        grid-template-columns: minmax(0, 1fr) min(300px, 42%);
+        gap: 0 12px;
+      }
+    }
+
+    @media (max-width: 720px) {
       .order-card.is-valorant .order-card-body {
         grid-template-columns: 1fr;
-        gap: 14px;
+        gap: 12px;
       }
       .order-card.is-valorant .order-form {
         max-height: none;
+        overflow-y: visible;
       }
       .order-card.is-valorant .summary-total {
         grid-column: 1;
@@ -4373,27 +4601,19 @@
       const hl = $("detailHighlights");
       const vtr = $("detailValorantTrust");
       if (hl && vtr) {
-        const vg = currentGame()?.id === "valorant";
-        const cat = vg ? valorantCategoryContent[service.category] : null;
-        if (cat && cat.highlights) {
-          hl.hidden = false;
-          hl.innerHTML = `<h4>${escapeHtml(ui("Highlights"))}</h4><ul>${cat.highlights.map(h => `<li>${escapeHtml(ui(h))}</li>`).join("")}</ul>`;
-          vtr.hidden = false;
-          vtr.innerHTML = `<h4>${escapeHtml(ui(valorantTrustBlock.title))}</h4><p>${escapeHtml(ui(valorantTrustBlock.intro))}</p><ul>${valorantTrustBlock.points.map(p => `<li>${escapeHtml(ui(p))}</li>`).join("")}</ul>`;
-        } else {
-          hl.hidden = true;
-          hl.innerHTML = "";
-          vtr.hidden = true;
-          vtr.innerHTML = "";
-        }
+        hl.hidden = true;
+        hl.innerHTML = "";
+        vtr.hidden = true;
+        vtr.innerHTML = "";
       }
-      $("detailSteps").innerHTML = detailSteps(service.form).map(step => `
+      const vgSteps = currentGame()?.id === "valorant";
+      $("detailSteps").innerHTML = vgSteps ? "" : detailSteps(service.form).map(step => `
         <div class="detail-step"><strong>${ui(step.title)}</strong><span>${ui(step.copy)}</span></div>
       `).join("");
       renderOrderFeed();
       $("orderForm").innerHTML = buildForm(service.form);
-      wireForm(service.form);
       setupValorantOrderChrome();
+      wireForm(service.form);
       updateTotal();
     }
 
@@ -4633,8 +4853,8 @@
     function valorantModeHtml() {
       return `
         <input type="hidden" id="valMode" value="solo">
-        <div class="field-block"><h4>Mode</h4>
-          <div class="raid-toggle-grid">
+        <div class="field-block valorant-panel-tight"><h4>Mode</h4>
+          <div class="raid-toggle-grid valorant-mode-pills">
             <button class="raid-pill active" type="button" data-val-mode="solo"><strong>Solo</strong></button>
             <button class="raid-pill" type="button" data-val-mode="duo"><strong>Duo</strong></button>
           </div>
@@ -4642,7 +4862,7 @@
     }
 
     function valorantExtrasHtml(includePaid, includeFree) {
-      let html = `<div class="field-block"><h4>Extras</h4><div class="valorant-extras-grid checks">`;
+      let html = `<div class="field-block valorant-panel-tight"><h4>Extras</h4><div class="valorant-extras-grid checks valorant-extras-toggle">`;
       if (includePaid) {
         valorantExtrasPaid.forEach(ex => {
           html += `<label class="check-row"><input type="checkbox" data-val-extra-pct="${ex.pct}" data-val-extra-label="${escapeHtml(ex.label)}"><span>${escapeHtml(ex.label)} (+${Math.round(ex.pct * 100)}%)</span></label>`;
@@ -4657,20 +4877,86 @@
       return html;
     }
 
-    function valorantConfiguratorHeaderHTML() {
+    function valorantConfiguratorCompactHeader() {
       const game = currentGame();
       const svc = currentService();
       if (!game || game.id !== "valorant" || !svc?.category || !String(svc.form || "").startsWith("valorant-")) return "";
-      const c = valorantCategoryContent[svc.category];
-      if (!c) return "";
-      const chips = (c.highlights || []).slice(0, 3).map(h =>
-        `<span class="valorant-trust-chip">${escapeHtml(ui(h))}</span>`).join("");
       return `
-        <header class="valorant-cfg-hero">
-          <h3 class="valorant-cfg-title">${escapeHtml(ui(c.title))}</h3>
-          <p class="valorant-cfg-lead">${escapeHtml(ui(c.intro))}</p>
-          <div class="valorant-cfg-trust-row">${chips}</div>
+        <header class="valorant-cfg-compact-head">
+          <span class="valorant-cfg-eyebrow">${escapeHtml(ui("Valorant"))}</span>
+          <strong class="valorant-cfg-name">${escapeHtml(ui(svc.cardTitle))}</strong>
         </header>`;
+    }
+
+    function valorantOrderChromeCustomizeInner(type) {
+      if (type === "valorant-rank-boost") return `${valorantModeHtml()}${valorantExtrasHtml(true, true)}`;
+      if (type === "valorant-placement") return `${valorantModeHtml()}${valorantExtrasHtml(true, true)}`;
+      if (type === "valorant-radiant") return valorantModeHtml();
+      if (type === "valorant-ranked-wins") return `${valorantModeHtml()}${valorantExtrasHtml(true, true)}`;
+      if (type === "valorant-unrated") return `${valorantModeHtml()}${valorantExtrasHtml(true, true)}`;
+      if (type === "valorant-leveling") return `${valorantModeHtml()}${valorantExtrasHtml(true, true)}`;
+      if (type === "valorant-battlepass") return `${valorantModeHtml()}${valorantExtrasHtml(true, true)}`;
+      if (type === "valorant-coaching") return `${valorantServerSelectHtml()}${valorantModeHtml()}`;
+      return "";
+    }
+
+    function valorantRRSelectHtml() {
+      const opts = ["0–20 RR", "21–40 RR", "41–60 RR", "61–80 RR", "81–100 RR"];
+      return `<div><label for="valRbRR">${ui("Current RR")}</label><select id="valRbRR">${opts.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join("")}</select></div>`;
+    }
+
+    function syncValorantPathRail() {
+      const rail = $("valorantPathRail");
+      if (!rail) return;
+      const svc = currentService();
+      const type = svc?.form;
+      if (!type || !String(type).startsWith("valorant-")) return;
+      let left = "";
+      let right = "";
+      if (type === "valorant-rank-boost") {
+        left = val("valRbCurrent") || "—";
+        right = val("valRbDesired") || "—";
+      } else if (type === "valorant-placement") {
+        const rank = val("valPmRank") || "—";
+        const games = Math.max(1, Math.min(5, Math.round(num("valPmGames") || 5)));
+        left = rank;
+        right = `${games} ${ui("games")}`;
+      } else if (type === "valorant-radiant") {
+        left = val("valRadOption") || "—";
+        right = "";
+      } else if (type === "valorant-ranked-wins") {
+        const rank = val("valRwRank") || "—";
+        const wins = Math.max(1, Math.min(10, Math.round(num("valRwWins") || 3)));
+        left = rank;
+        right = `${wins} ${ui("wins")}`;
+      } else if (type === "valorant-unrated") {
+        const id = val("valUnratedPkg") || "u5";
+        const pack = valorantUnratedPackages.find(p => p.id === id) || valorantUnratedPackages[0];
+        left = pack.label;
+        right = displayMoney(valorantEurToStoredTotal(pack.eur));
+      } else if (type === "valorant-leveling") {
+        const id = val("valLevelPkg") || "l1";
+        const pack = valorantLevelPackages.find(p => p.id === id) || valorantLevelPackages[0];
+        left = pack.label;
+        right = displayMoney(valorantEurToStoredTotal(pack.eur));
+      } else if (type === "valorant-battlepass") {
+        const id = val("valBpPkg") || "bp-small";
+        const pack = valorantBattlePassPackages.find(p => p.id === id) || valorantBattlePassPackages[0];
+        left = pack.label;
+        right = displayMoney(valorantEurToStoredTotal(pack.eur));
+      } else if (type === "valorant-coaching") {
+        const id = val("valCoachPkg") || "c1";
+        const pack = valorantCoachingHours.find(p => p.id === id) || valorantCoachingHours[0];
+        left = pack.label;
+        right = "";
+      }
+      const arrow = right === ""
+        ? ""
+        : `<span class="valorant-path-arrow" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h12m-4-5l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+      const rightBlock = right === ""
+        ? `<div class="valorant-path-single"><span class="valorant-path-rank">${escapeHtml(left)}</span></div>`
+        : `<div class="valorant-path-end"><span class="valorant-path-ph" aria-hidden="true"></span><span class="valorant-path-rank">${escapeHtml(left)}</span></div>${arrow}<div class="valorant-path-end"><span class="valorant-path-ph" aria-hidden="true"></span><span class="valorant-path-rank">${escapeHtml(right)}</span></div>`;
+      rail.innerHTML = `<div class="valorant-path-inner">${rightBlock}</div>`;
     }
 
     function teardownValorantOrderChrome() {
@@ -4690,13 +4976,22 @@
       const wrap = document.createElement("div");
       wrap.dataset.valorantOrderChrome = "";
       wrap.className = "valorant-order-chrome";
+      const customize = valorantOrderChromeCustomizeInner(svc.form);
       wrap.innerHTML = `
+        <div id="valorantPathRail" class="valorant-path-rail" aria-live="polite"></div>
+        ${customize ? `<section class="valorant-customize-surface" aria-label="${escapeHtml(ui("Customize"))}"><h4 class="valorant-block-kicker">${escapeHtml(ui("Customize"))}</h4>${customize}</section>` : ""}
+        <p class="valorant-mini-promo">${escapeHtml(ui("Manual completion · VPN-safe routing · Discord confirmation on every order."))}</p>
         <div class="valorant-summary-panel valorant-summary-panel--sticky">
-          <h4 class="valorant-summary-title">${escapeHtml(ui("Order summary"))}</h4>
+          <h4 class="valorant-summary-title">${escapeHtml(ui("Breakdown"))}</h4>
           <div class="valorant-summary-dl" id="valorantSummaryDl"></div>
           <p class="valorant-summary-note" id="valorantSummaryNote" hidden></p>
         </div>
         <hr class="valorant-price-divider" aria-hidden="true">
+        <ul class="valorant-right-trust-foot">
+          <li>${escapeHtml(ui("Secure"))}</li>
+          <li>${escapeHtml(ui("Private"))}</li>
+          <li>${escapeHtml(ui("Pro boosters"))}</li>
+        </ul>
       `;
       summary.insertBefore(wrap, summary.firstChild);
     }
@@ -4917,18 +5212,29 @@
         const desiredRanks = [...VALORANT_RANKS.slice(1), "Radiant"];
         return `
         <div class="valorant-configurator">
-          ${valorantConfiguratorHeaderHTML()}
-          <div class="valorant-cfg-stack">
-            <div class="field-block"><h4>Rank path</h4>
-              <div class="field-grid">
-                <div><label for="valRbCurrent">Current Rank</label><select id="valRbCurrent">${valorantRankOptionsHtml(VALORANT_RANKS, "Silver III")}</select></div>
-                <div><label for="valRbDesired">Desired Rank</label><select id="valRbDesired">${valorantRankOptionsHtml(desiredRanks, "Gold I")}</select></div>
+          ${valorantConfiguratorCompactHeader()}
+          <div class="valorant-cfg-stack valorant-cfg-stack--selects">
+            <div class="valorant-rank-row">
+              <div class="valorant-rank-card" data-valorant-rank-card="current">
+                <div class="valorant-rank-card-visual" aria-hidden="true">
+                  <div class="valorant-rank-card-ph"></div>
+                </div>
+                <label for="valRbCurrent">${ui("Current Rank")}</label>
+                <select id="valRbCurrent">${valorantRankOptionsHtml(VALORANT_RANKS, "Silver III")}</select>
+              </div>
+              <div class="valorant-rank-card" data-valorant-rank-card="desired">
+                <div class="valorant-rank-card-visual" aria-hidden="true">
+                  <div class="valorant-rank-card-ph"></div>
+                </div>
+                <label for="valRbDesired">${ui("Desired Rank")}</label>
+                <select id="valRbDesired">${valorantRankOptionsHtml(desiredRanks, "Gold I")}</select>
               </div>
             </div>
+            <div class="field-block field-block--tight">
+              <div class="field-grid field-grid--rr">${valorantRRSelectHtml()}</div>
+            </div>
             <p class="valorant-rb-hint" id="valRbHint" hidden></p>
-            ${valorantServerSelectHtml()}
-            ${valorantModeHtml()}
-            ${valorantExtrasHtml(true, true)}
+            <div class="field-block field-block--tight">${valorantServerSelectHtml()}</div>
           </div>
         </div>`;
       }
@@ -4936,17 +5242,15 @@
         const rankKeys = Object.keys(valorantPlacementRankEur);
         return `
         <div class="valorant-configurator">
-          ${valorantConfiguratorHeaderHTML()}
-          <div class="valorant-cfg-stack">
-            <div class="field-block"><h4>Placement setup</h4>
+          ${valorantConfiguratorCompactHeader()}
+          <div class="valorant-cfg-stack valorant-cfg-stack--selects">
+            <div class="field-block field-block--tight">
               <div class="field-grid">
-                <div><label for="valPmRank">Last Known Rank</label><select id="valPmRank">${rankKeys.map(k => `<option value="${escapeHtml(k)}"${k === "Gold" ? " selected" : ""}>${escapeHtml(k)}</option>`).join("")}</select></div>
-                ${qtyField("valPmGames", "Number of Games", 5, 1, 5)}
+                <div><label for="valPmRank">${ui("Last Known Rank")}</label><select id="valPmRank">${rankKeys.map(k => `<option value="${escapeHtml(k)}"${k === "Gold" ? " selected" : ""}>${escapeHtml(k)}</option>`).join("")}</select></div>
+                ${qtyField("valPmGames", ui("Number of Games"), 5, 1, 5)}
               </div>
             </div>
-            ${valorantServerSelectHtml()}
-            ${valorantModeHtml()}
-            ${valorantExtrasHtml(true, true)}
+            <div class="field-block field-block--tight">${valorantServerSelectHtml()}</div>
           </div>
         </div>`;
       }
@@ -4954,14 +5258,14 @@
         const opts = ["Immortal III → Radiant", "Radiant Push", "Radiant Duo", "Radiant Maintenance"];
         return `
         <div class="valorant-configurator">
-          ${valorantConfiguratorHeaderHTML()}
-          <div class="valorant-cfg-stack">
-            <div class="field-block"><h4>Radiant service</h4>
-              <div><label for="valRadOption">Option</label><select id="valRadOption">${opts.map((o, i) => `<option value="${escapeHtml(o)}"${i === 0 ? " selected" : ""}>${escapeHtml(o)}</option>`).join("")}</select></div>
-              <p class="raid-panel-note">Radiant services are handled manually with custom pricing depending on account status, RR, server and schedule.</p>
+          ${valorantConfiguratorCompactHeader()}
+          <div class="valorant-cfg-stack valorant-cfg-stack--selects">
+            <div class="field-block field-block--tight">
+              <label for="valRadOption">${ui("Service")}</label>
+              <select id="valRadOption">${opts.map((o, i) => `<option value="${escapeHtml(o)}"${i === 0 ? " selected" : ""}>${escapeHtml(o)}</option>`).join("")}</select>
+              <p class="valorant-micro-note">${escapeHtml(ui("Custom quote — final price confirmed in Discord."))}</p>
             </div>
-            ${valorantServerSelectHtml()}
-            ${valorantModeHtml()}
+            <div class="field-block field-block--tight">${valorantServerSelectHtml()}</div>
           </div>
         </div>`;
       }
@@ -4969,17 +5273,15 @@
         const rwRanks = [...VALORANT_RANKS, "Radiant"];
         return `
         <div class="valorant-configurator">
-          ${valorantConfiguratorHeaderHTML()}
-          <div class="valorant-cfg-stack">
-            <div class="field-block"><h4>Ranked wins</h4>
+          ${valorantConfiguratorCompactHeader()}
+          <div class="valorant-cfg-stack valorant-cfg-stack--selects">
+            <div class="field-block field-block--tight">
               <div class="field-grid">
-                <div><label for="valRwRank">Current Rank</label><select id="valRwRank">${valorantRankOptionsHtml(rwRanks, "Gold I")}</select></div>
-                ${qtyField("valRwWins", "Number of Wins", 3, 1, 10)}
+                <div><label for="valRwRank">${ui("Current Rank")}</label><select id="valRwRank">${valorantRankOptionsHtml(rwRanks, "Gold I")}</select></div>
+                ${qtyField("valRwWins", ui("Number of Wins"), 3, 1, 10)}
               </div>
             </div>
-            ${valorantServerSelectHtml()}
-            ${valorantModeHtml()}
-            ${valorantExtrasHtml(true, true)}
+            <div class="field-block field-block--tight">${valorantServerSelectHtml()}</div>
           </div>
         </div>`;
       }
@@ -4989,12 +5291,10 @@
         return `
         <input type="hidden" id="valUnratedPkg" value="u5">
         <div class="valorant-configurator">
-          ${valorantConfiguratorHeaderHTML()}
-          <div class="valorant-cfg-stack">
-            <div class="field-block"><h4>Package</h4><div class="quick-raid-grid">${pills}</div></div>
-            ${valorantServerSelectHtml()}
-            ${valorantModeHtml()}
-            ${valorantExtrasHtml(true, true)}
+          ${valorantConfiguratorCompactHeader()}
+          <div class="valorant-cfg-stack valorant-cfg-stack--selects">
+            <div class="field-block field-block--tight"><h4 class="valorant-inline-kicker">${ui("Package")}</h4><div class="quick-raid-grid valorant-pill-grid">${pills}</div></div>
+            <div class="field-block field-block--tight">${valorantServerSelectHtml()}</div>
           </div>
         </div>`;
       }
@@ -5004,12 +5304,10 @@
         return `
         <input type="hidden" id="valLevelPkg" value="l1">
         <div class="valorant-configurator">
-          ${valorantConfiguratorHeaderHTML()}
-          <div class="valorant-cfg-stack">
-            <div class="field-block"><h4>Level package</h4><div class="quick-raid-grid">${pills}</div></div>
-            ${valorantServerSelectHtml()}
-            ${valorantModeHtml()}
-            ${valorantExtrasHtml(true, true)}
+          ${valorantConfiguratorCompactHeader()}
+          <div class="valorant-cfg-stack valorant-cfg-stack--selects">
+            <div class="field-block field-block--tight"><h4 class="valorant-inline-kicker">${ui("Level range")}</h4><div class="quick-raid-grid valorant-pill-grid">${pills}</div></div>
+            <div class="field-block field-block--tight">${valorantServerSelectHtml()}</div>
           </div>
         </div>`;
       }
@@ -5019,12 +5317,10 @@
         return `
         <input type="hidden" id="valBpPkg" value="bp-small">
         <div class="valorant-configurator">
-          ${valorantConfiguratorHeaderHTML()}
-          <div class="valorant-cfg-stack">
-            <div class="field-block"><h4>Battle Pass package</h4><div class="quick-raid-grid">${pills}</div></div>
-            ${valorantServerSelectHtml()}
-            ${valorantModeHtml()}
-            ${valorantExtrasHtml(true, true)}
+          ${valorantConfiguratorCompactHeader()}
+          <div class="valorant-cfg-stack valorant-cfg-stack--selects">
+            <div class="field-block field-block--tight"><h4 class="valorant-inline-kicker">${ui("Battle Pass")}</h4><div class="quick-raid-grid valorant-pill-grid">${pills}</div></div>
+            <div class="field-block field-block--tight">${valorantServerSelectHtml()}</div>
           </div>
         </div>`;
       }
@@ -5034,18 +5330,16 @@
         return `
         <input type="hidden" id="valCoachPkg" value="c1">
         <div class="valorant-configurator">
-          ${valorantConfiguratorHeaderHTML()}
-          <div class="valorant-cfg-stack">
-            <div class="field-block"><h4>Session length</h4><div class="quick-raid-grid">${pills}</div></div>
-            <div class="field-block"><h4>Free focus options</h4>
-              <div class="checks valorant-extras-grid">
-                <label class="check-row"><input type="checkbox" id="valCoachVod"><span>VOD Review</span></label>
-                <label class="check-row"><input type="checkbox" id="valCoachAim"><span>Aim Training</span></label>
-                <label class="check-row"><input type="checkbox" id="valCoachPlan"><span>Rank Improvement Plan</span></label>
+          ${valorantConfiguratorCompactHeader()}
+          <div class="valorant-cfg-stack valorant-cfg-stack--selects">
+            <div class="field-block field-block--tight"><h4 class="valorant-inline-kicker">${ui("Duration")}</h4><div class="quick-raid-grid valorant-pill-grid">${pills}</div></div>
+            <div class="field-block field-block--tight"><h4 class="valorant-inline-kicker">${ui("Focus")}</h4>
+              <div class="checks valorant-extras-grid valorant-coach-focus">
+                <label class="check-row"><input type="checkbox" id="valCoachVod"><span>${ui("VOD Review")}</span></label>
+                <label class="check-row"><input type="checkbox" id="valCoachAim"><span>${ui("Aim Training")}</span></label>
+                <label class="check-row"><input type="checkbox" id="valCoachPlan"><span>${ui("Rank Improvement Plan")}</span></label>
               </div>
             </div>
-            ${valorantServerSelectHtml()}
-            ${valorantModeHtml()}
           </div>
         </div>`;
       }
@@ -5057,11 +5351,11 @@
     }
 
     function wireValorantForm(type) {
-      document.querySelectorAll("#orderForm [data-val-mode]").forEach(btn => {
+      document.querySelectorAll("#orderCardBody [data-val-mode]").forEach(btn => {
         btn.addEventListener("click", () => {
           const modeInput = $("valMode");
           if (modeInput) modeInput.value = btn.dataset.valMode;
-          document.querySelectorAll("#orderForm [data-val-mode]").forEach(b => b.classList.toggle("active", b === btn));
+          document.querySelectorAll("#orderCardBody [data-val-mode]").forEach(b => b.classList.toggle("active", b === btn));
           updateTotal();
         });
       });
@@ -5075,10 +5369,10 @@
           });
         });
       };
-      if (type === "valorant-unrated") bindPills("#orderForm [data-val-unrated]", "valUnratedPkg", b => b.dataset.valUnrated || "");
-      if (type === "valorant-leveling") bindPills("#orderForm [data-val-level]", "valLevelPkg", b => b.dataset.valLevel || "");
-      if (type === "valorant-battlepass") bindPills("#orderForm [data-val-bp]", "valBpPkg", b => b.dataset.valBp || "");
-      if (type === "valorant-coaching") bindPills("#orderForm [data-val-coach]", "valCoachPkg", b => b.dataset.valCoach || "");
+      if (type === "valorant-unrated") bindPills("#orderCardBody [data-val-unrated]", "valUnratedPkg", b => b.dataset.valUnrated || "");
+      if (type === "valorant-leveling") bindPills("#orderCardBody [data-val-level]", "valLevelPkg", b => b.dataset.valLevel || "");
+      if (type === "valorant-battlepass") bindPills("#orderCardBody [data-val-bp]", "valBpPkg", b => b.dataset.valBp || "");
+      if (type === "valorant-coaching") bindPills("#orderCardBody [data-val-coach]", "valCoachPkg", b => b.dataset.valCoach || "");
     }
 
     function wireForm(type) {
@@ -5310,7 +5604,8 @@
         }));
       }
       if (type === "raid") wireRaidForm();
-      $("orderForm").querySelectorAll("input, select, textarea").forEach(input => {
+      const bindRoot = $("orderCardBody") || $("orderForm");
+      bindRoot.querySelectorAll("input, select, textarea").forEach(input => {
         input.addEventListener("input", updateTotal);
         input.addEventListener("change", updateTotal);
       });
@@ -5618,13 +5913,15 @@
       let pct = 0;
       const paid = [];
       const free = [];
-      document.querySelectorAll("#orderForm [data-val-extra-pct]").forEach(input => {
+      const root = $("orderCardBody") || $("orderForm");
+      if (!root) return { pct: 0, paid, free };
+      root.querySelectorAll("[data-val-extra-pct]").forEach(input => {
         if (input.type === "checkbox" && input.checked) {
           pct += Number(input.dataset.valExtraPct || 0);
           paid.push(String(input.dataset.valExtraLabel || ""));
         }
       });
-      document.querySelectorAll("#orderForm [data-val-extra-free]").forEach(input => {
+      root.querySelectorAll("[data-val-extra-free]").forEach(input => {
         if (input.type === "checkbox" && input.checked) {
           free.push(String(input.dataset.valExtraLabel || ""));
         }
@@ -5717,8 +6014,10 @@
           };
         }
         if (rb.custom) {
+          const rr = val("valRbRR") || "—";
           addRow("Current Rank", cur);
           addRow("Desired Rank", des);
+          addRow("Current RR", rr);
           addRow("Selected Options", cur + " → " + des);
           addRow("Paid Extras", ex.paid.join(", ") || "None");
           addRow("Free Extras", ex.free.join(", ") || "None");
@@ -5730,6 +6029,7 @@
           dPush("Service Category", catTitle);
           dPush("Current Rank", cur);
           dPush("Desired Rank", des);
+          dPush("Current RR", rr);
           dPush("Server", server + " (informational)");
           dPush("Mode", modeLabel);
           dPush("Paid Extras", ex.paid.join(", ") || "None");
@@ -5752,8 +6052,10 @@
         }
         baseEur = rb.baseEur;
         selectedSummary = `${cur} → ${des}`;
+        const rr = val("valRbRR") || "—";
         addRow("Current Rank", cur);
         addRow("Desired Rank", des);
+        addRow("Current RR", rr);
         addRow("Selected Options", selectedSummary);
       } else if (type === "valorant-placement") {
         const rank = val("valPmRank");
@@ -5877,6 +6179,7 @@
 
       dPush("Game", "Valorant");
       dPush("Service Category", catTitle);
+      if (type === "valorant-rank-boost") dPush("Current RR", val("valRbRR") || "—");
       dPush("Selected Options", selectedSummary);
       dPush("Server", server + " (informational)");
       dPush("Mode", modeLabel);
@@ -6152,6 +6455,7 @@
           noteEl.hidden = true;
         }
       }
+      if (vForm) syncValorantPathRail();
     }
 
     function clearServiceForm() {
