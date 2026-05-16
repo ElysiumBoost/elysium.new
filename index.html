@@ -1207,6 +1207,41 @@
       text-transform: uppercase;
     }
 
+    .info-grid--compact {
+      margin-top: 12px;
+      gap: 10px;
+    }
+
+    .info-card--compact {
+      padding: 12px 14px;
+    }
+
+    .info-card--compact h3 {
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+
+    .info-card--compact p {
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .detail-left-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .detail-left-meta .order-feed {
+      margin-top: 0;
+    }
+
+    body[data-ely-game="arc"] .detail-left-meta .intro {
+      margin-top: 0;
+      padding-top: 10px;
+      border-top: 1px solid rgba(172, 146, 255, .18);
+    }
+
     .info-card p {
       margin: 0;
       color: var(--muted);
@@ -1657,7 +1692,9 @@
       gap: 10px;
     }
 
-    .order-feed-card {
+    .order-feed:empty {
+      display: none;
+    }
       min-height: 62px;
       padding: 10px 12px;
       border: 1px solid rgba(255,184,88,.25);
@@ -2354,7 +2391,7 @@
     .valorant-configurator .qty-stepper {
       border-radius: 10px;
       border: 1px solid rgba(155, 104, 255, .42);
-      min-height: 44px;
+      min-height: 48px;
       box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .22);
     }
 
@@ -2549,6 +2586,26 @@
       scrollbar-color: rgba(172,146,255,.62) rgba(12,8,31,.34);
     }
 
+    .order-form::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    .order-form::-webkit-scrollbar-track {
+      background: rgba(12, 8, 31, .45);
+      border-radius: 999px;
+    }
+
+    .order-form::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, rgba(155, 104, 255, .55), rgba(122, 77, 255, .42));
+      border-radius: 999px;
+      border: 2px solid rgba(12, 8, 31, .5);
+    }
+
+    .order-form::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, rgba(191, 252, 255, .35), rgba(155, 104, 255, .55));
+    }
+
     .add-to-cart-main {
       width: 100%;
       margin-top: 10px;
@@ -2615,6 +2672,10 @@
       border-radius: 9px;
       background: rgba(255,255,255,.035);
       padding: 12px;
+    }
+
+    .coin-panel input[type="range"] {
+      accent-color: var(--purple);
     }
 
     .coin-readout {
@@ -2831,10 +2892,10 @@
 
     .qty-stepper {
       display: grid;
-      grid-template-columns: 44px minmax(0, 1fr) 44px;
+      grid-template-columns: 48px minmax(0, 1fr) 48px;
       align-items: stretch;
       gap: 0;
-      min-height: 44px;
+      min-height: 48px;
       border-radius: 10px;
       border: 1px solid rgba(155, 104, 255, .38);
       background: linear-gradient(180deg, rgba(38, 31, 91, .55), rgba(12, 9, 32, .88));
@@ -2845,7 +2906,7 @@
     }
 
     .qty-stepper--wide {
-      grid-template-columns: 44px minmax(0, 1fr) 44px;
+      grid-template-columns: 48px minmax(0, 1fr) 48px;
     }
 
     .qty-step {
@@ -2912,12 +2973,12 @@
       padding: 0 8px;
       text-align: center;
       font-family: var(--display);
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 800;
       letter-spacing: .04em;
       color: var(--text);
       background: rgba(6, 4, 18, .35);
-      min-height: 44px;
+      min-height: 48px;
       box-shadow: none;
       -moz-appearance: textfield;
     }
@@ -3051,6 +3112,56 @@
       border-color: rgba(255, 209, 102, .42);
       color: #fff6df;
       box-shadow: inset 0 0 18px rgba(255, 209, 102, .08), 0 10px 24px rgba(0, 0, 0, .22);
+    }
+
+    body[data-ely-game="arc"] #orderForm .field-block h4 {
+      color: rgba(255, 232, 188, .96);
+      font-size: 16px;
+      letter-spacing: .07em;
+    }
+
+    body[data-ely-game="arc"] #orderForm .field-block {
+      border-color: rgba(155, 104, 255, .28);
+      background: rgba(255, 255, 255, .03);
+    }
+
+    body[data-ely-game="arc"] .order-card .summary-total span {
+      color: var(--gold);
+      text-shadow: 0 0 22px rgba(255, 209, 102, .2);
+    }
+
+    body[data-ely-game="arc"] .detail-title h2 {
+      color: #fff9f4;
+      text-shadow: 0 0 28px rgba(122, 77, 255, .2);
+    }
+
+    body[data-ely-game="arc"] .intro {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(200, 192, 236, .92);
+      line-height: 1.5;
+      max-width: 720px;
+    }
+
+    body[data-ely-game="arc"] .detail-step {
+      min-height: 62px;
+      padding: 9px 10px;
+    }
+
+    body[data-ely-game="arc"] .detail-step strong {
+      font-size: 14px;
+      color: rgba(255, 232, 188, .95);
+    }
+
+    body[data-ely-game="arc"] .detail-step span {
+      font-size: 11px;
+    }
+
+    @media (min-width: 1081px) {
+      body[data-ely-game="arc"] .order-card {
+        top: 108px;
+        max-height: calc(100vh - 120px);
+      }
     }
 
     @media (max-width: 720px) {
@@ -3833,20 +3944,20 @@
         <div class="quick-head" id="popularHead">
           <div>
             <h2>Choose Your Game</h2>
-            <p>Select a game first. The page will switch to that game's services and background.</p>
+            <p>Select a game to open the service configurator.</p>
           </div>
         </div>
         <div class="home-grid" id="homeGameGrid"></div>
-        <div class="info-grid">
-          <article class="info-card">
+        <div class="info-grid info-grid--compact">
+          <article class="info-card info-card--compact">
             <h3>About Us</h3>
             <p>ELYSIUM BOOST is built as a clean Discord-ticket order desk for premium game services. Pick a service, customize it, and send boosters a readable order summary.</p>
           </article>
-          <article class="info-card">
+          <article class="info-card info-card--compact">
             <h3>How It Works</h3>
             <p>Choose a game, select a service, adjust options and quantities, add it to cart, then copy the ticket into Discord for confirmation.</p>
           </article>
-          <article class="info-card">
+          <article class="info-card info-card--compact">
             <h3>Clear Pricing</h3>
             <p>Customers can view prices in their selected currency, and the copied ticket keeps that same currency.</p>
           </article>
@@ -3889,11 +4000,11 @@
             </div>
             <div id="valorantConfiguratorMount" class="valorant-cfg-mount" hidden></div>
             <div class="detail-left-meta" id="detailLeftMeta">
+              <div class="detail-steps" id="detailSteps"></div>
+              <div class="order-feed" id="orderFeed" aria-live="polite"></div>
               <p class="intro" id="detailIntro"></p>
               <div class="detail-highlights-wrap" id="detailHighlights" hidden></div>
               <div class="detail-val-trust" id="detailValorantTrust" hidden></div>
-              <div class="detail-steps" id="detailSteps"></div>
-              <div class="order-feed" id="orderFeed" aria-live="polite"></div>
             </div>
           </div>
           <aside class="order-card">
@@ -4610,6 +4721,7 @@
         $("categoryBar").classList.add("hidden");
         $("serviceContent").classList.add("hidden");
         renderCart();
+        syncBodyGameContext();
         return;
       }
       $("serviceContent").classList.remove("hidden");
@@ -4618,6 +4730,12 @@
       renderServices();
       renderDetail();
       renderCart();
+      syncBodyGameContext();
+    }
+
+    function syncBodyGameContext() {
+      if (state.game) document.body.dataset.elyGame = state.game;
+      else delete document.body.dataset.elyGame;
     }
 
     function updateStaticText() {
@@ -4797,19 +4915,21 @@
       }
       $("homeGameGrid").innerHTML = chunks.join("");
       document.querySelector(".info-grid").innerHTML = `
-        <article class="info-card">
+        <article class="info-card info-card--compact">
           <h3>${ui("About Us")}</h3>
           <p>${ui("ELYSIUM BOOST is built as a clean Discord-ticket order desk for premium game services. Pick a service, customize it, and send boosters a readable order summary.")}</p>
         </article>
-        <article class="info-card">
+        <article class="info-card info-card--compact">
           <h3>${ui("How It Works")}</h3>
           <p>${ui("Choose a game, select a service, adjust options and quantities, add it to cart, then copy the ticket into Discord for confirmation.")}</p>
         </article>
-        <article class="info-card">
+        <article class="info-card info-card--compact">
           <h3>${ui("Clear Pricing")}</h3>
           <p>${ui("Customers can view prices in their selected currency, and the copied ticket keeps that same currency.")}</p>
         </article>
       `;
+      const ig = document.querySelector(".info-grid");
+      if (ig) ig.classList.add("info-grid--compact");
       document.querySelectorAll("[data-home-game]").forEach(button => button.addEventListener("click", () => {
         selectGame(button.dataset.homeGame);
       }));
@@ -7211,7 +7331,7 @@
         const embarkBlock = showEmbark
           ? `<div class="cart-embark-panel" role="region" aria-label="Embark ID">
             <div class="cart-embark-label">Customer Info</div>
-            <p class="cart-embark-value"><span class="cart-embark-k">Embark ID</span>${state.arcId ? escapeHtml(state.arcId) : escapeHtml("Will type it on Discord")}</p>
+            <p class="cart-embark-value">${state.arcId ? "Embark ID: " + escapeHtml(state.arcId) : "Embark ID: " + escapeHtml("Will type it on Discord")}</p>
           </div>`
           : "";
         $("cartBody").innerHTML = embarkBlock + state.cart.map(item => {
