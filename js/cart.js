@@ -411,6 +411,7 @@
         if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
       });
     }
+    window.selectGame = selectGame;
 
     function renderGames() {
       closeGameMenu();

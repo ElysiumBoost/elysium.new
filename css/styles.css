@@ -1339,6 +1339,22 @@
       pointer-events: none;
     }
 
+    .home-game-card::after {
+      pointer-events: none;
+    }
+
+    .home-game-card img,
+    .home-game-card__body,
+    .home-game-card__body * {
+      pointer-events: none;
+    }
+
+    .home-combo-half img,
+    .home-combo-half .home-combo-half-content,
+    .home-combo-half .home-combo-half-content * {
+      pointer-events: none;
+    }
+
     .home-game-card.coming-soon {
       cursor: not-allowed;
       filter: none;

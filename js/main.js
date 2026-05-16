@@ -87,14 +87,29 @@
       }
     }
 
-    function elyNavigateHomeGameId(id) {
+    function openHomeGameFromCard(card) {
+      if (!card) return;
+      const id = card.dataset.homeGame;
       if (!id) return;
+
       if (typeof selectGame === "function") {
         selectGame(id);
-      } else if (typeof GAME_HASH_SLUGS !== "undefined" && GAME_HASH_SLUGS[id]) {
-        window.location.hash = "#" + GAME_HASH_SLUGS[id];
-      } else {
-        window.location.hash = "#game-" + id;
+        return;
+      }
+
+      const slugMap = {
+        arc: "arc-raiders",
+        valorant: "valorant",
+        wow: "world-of-warcraft",
+        lol: "league-of-legends",
+        premier: "premier",
+        faceit: "faceit",
+        circle: "boost-plus",
+        social: "social"
+      };
+
+      if (slugMap[id]) {
+        window.location.hash = "#" + slugMap[id];
       }
     }
 
@@ -220,11 +235,16 @@
     }
 
     document.addEventListener("click", event => {
-      const pick = event.target.closest("[data-home-game]");
-      if (pick) {
-        event.preventDefault();
-        elyNavigateHomeGameId(pick.dataset.homeGame);
-      }
+      const card = event.target.closest("[data-home-game]");
+      if (!card) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      openHomeGameFromCard(card);
+    });
+
+    document.addEventListener("click", event => {
       const sr = $("siteSearchResults");
       const ss = $("siteSearch");
       const ssb = $("siteSearchBtn");
@@ -235,14 +255,18 @@
     });
 
     document.addEventListener("keydown", event => {
-      if (event.key === "Enter" || event.key === " ") {
-        const pick = event.target.closest("[data-home-game]");
-        if (pick) {
-          event.preventDefault();
-          elyNavigateHomeGameId(pick.dataset.homeGame);
-          return;
-        }
-      }
+      if (event.key !== "Enter" && event.key !== " ") return;
+
+      const card = event.target.closest("[data-home-game]");
+      if (!card) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      openHomeGameFromCard(card);
+    });
+
+    document.addEventListener("keydown", event => {
       if (event.key === "Escape") {
         closeGameMenu();
         closeCart();
