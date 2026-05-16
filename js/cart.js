@@ -479,11 +479,12 @@
       const soc = g("social");
       if (boost && soc) {
         const socialImg = "assets/backgrounds/boost-social-bg.webp";
+        const boostHomeCardBg = "assets/backgrounds/fallback-purple-bg.webp";
         chunks.push(`
         <article class="home-game-card home-combo-card" aria-label="${escapeHtml(ui("Boost+ and Social"))}">
           <div class="home-combo-split">
             <button type="button" class="home-combo-half" data-home-game="circle" aria-label="${escapeHtml(gameAria("Boost+"))}">
-              <img class="home-combo-half-media" src="${escapeHtml(boost.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
+              <img class="home-combo-half-media" src="${escapeHtml(boostHomeCardBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
               <span class="home-combo-half-scrim" aria-hidden="true"></span>
               <span class="home-combo-half-content">
                 <h2 class="home-combo-half-h">${ui("Boost+")}</h2>
@@ -639,6 +640,7 @@
       if (game) {
         hero.classList.remove("is-home");
         hero.style.setProperty("--hero-bg", `url("${game.heroBg}")`);
+        hero.style.setProperty("--hero-position", game.heroPosition || "center center");
         if (sub) sub.style.display = "none";
         if (cta) cta.style.display = "none";
         $("heroKicker").textContent = ui(game.kicker);

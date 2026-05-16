@@ -60,10 +60,10 @@
       inset: 0;
       z-index: -2;
       background:
-        linear-gradient(rgba(7, 10, 16, .64), rgba(7, 10, 16, .9)),
-        url("../assets/backgrounds/fallback-purple-bg.webp") center center / cover no-repeat,
-        radial-gradient(circle at 50% 42%, rgba(139, 92, 246, .07), transparent 52%),
-        radial-gradient(circle at 80% 12%, rgba(125, 211, 252, .03), transparent 38%),
+        linear-gradient(rgba(5, 3, 13, .72), rgba(7, 10, 16, .88)),
+        url("../assets/backgrounds/elysium-home-mainmenu-bg.webp") center center / cover no-repeat,
+        radial-gradient(circle at 50% 42%, rgba(139, 92, 246, .06), transparent 52%),
+        radial-gradient(circle at 80% 12%, rgba(125, 211, 252, .025), transparent 38%),
         var(--bg);
       pointer-events: none;
     }
@@ -1150,7 +1150,7 @@
       z-index: 0;
       background-image: var(--hero-bg);
       background-size: cover;
-      background-position: center center;
+      background-position: var(--hero-position, center center);
       background-repeat: no-repeat;
       background-attachment: scroll;
       pointer-events: none;
@@ -1164,13 +1164,13 @@
       background:
         linear-gradient(
           180deg,
-          rgba(2, 1, 10, 0.88) 0%,
-          rgba(5, 3, 15, 0.52) 40%,
-          rgba(5, 3, 15, 0.58) 62%,
-          rgba(2, 1, 10, 0.92) 100%
+          rgba(0, 0, 0, 0.48) 0%,
+          rgba(0, 0, 0, 0.38) 38%,
+          rgba(0, 0, 0, 0.42) 62%,
+          rgba(5, 3, 13, 0.52) 100%
         ),
-        radial-gradient(ellipse 115% 75% at 50% 0%, rgba(76, 29, 149, 0.26), transparent 58%),
-        radial-gradient(ellipse 70% 55% at 80% 100%, rgba(91, 33, 182, 0.12), transparent 50%);
+        radial-gradient(ellipse 115% 75% at 50% 0%, rgba(76, 29, 149, 0.2), transparent 58%),
+        radial-gradient(ellipse 70% 55% at 82% 100%, rgba(91, 33, 182, 0.1), transparent 50%);
       pointer-events: none;
     }
 
@@ -1191,12 +1191,12 @@
       background:
         linear-gradient(
           180deg,
-          rgba(2, 1, 10, 0.9) 0%,
-          rgba(5, 3, 15, 0.58) 46%,
-          rgba(2, 1, 10, 0.93) 100%
+          rgba(5, 3, 13, 0.55) 0%,
+          rgba(5, 3, 15, 0.42) 48%,
+          rgba(5, 3, 13, 0.68) 100%
         ),
-        radial-gradient(ellipse 120% 70% at 50% -15%, rgba(91, 33, 182, 0.3), transparent 52%),
-        radial-gradient(ellipse 55% 50% at 100% 40%, rgba(190, 18, 60, 0.1), transparent 50%),
+        radial-gradient(ellipse 120% 70% at 50% -15%, rgba(91, 33, 182, 0.22), transparent 52%),
+        radial-gradient(ellipse 55% 50% at 100% 40%, rgba(190, 18, 60, 0.08), transparent 50%),
         url("../assets/backgrounds/elysium-home-mainmenu-bg.webp") center center / cover no-repeat;
       pointer-events: none;
     }
