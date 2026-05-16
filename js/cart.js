@@ -1,13 +1,8 @@
-    window.$ = window.$ || function elyDomId(id) {
-      return document.getElementById(id);
-    };
-    window.val = window.val || function elyVal(id) {
-      const el = window.$(id);
-      return el ? el.value : "";
-    };
-    const $ = window.$;
-    const val = window.val;
+    const $ = id => document.getElementById(id);
+    const val = id => $(id)?.value || "";
     const num = id => Number(val(id) || 0);
+    window.$ = $;
+    window.val = val;
     window.num = num;
 
     function deliveryTypeForService(service, gameId) {
@@ -262,26 +257,20 @@
       return `<span class="price-old">${displayMoney(old)}</span> ${displayMoney(service.fromUSD)} ${service.suffix || ""} - ${percent}% off`;
     }
 
+    const ELY_ALLOWED_GAME_IDS = ["arc", "valorant", "wow", "lol", "premier", "faceit", "circle", "social"];
+
+    function sanitizeNavigationState() {
+      const gid = state.game;
+      const allowed = ELY_ALLOWED_GAME_IDS.includes(gid);
+      const inCatalog = typeof games !== "undefined" && games.some && games.some(g => g.id === gid);
+      if (!allowed || !inCatalog || !currentGame()) {
+        state.game = null;
+        state.category = null;
+        state.serviceId = null;
+      }
+    }
+
     function renderAll() {
-      try {
-        if (typeof games !== "undefined" && Array.isArray(games)) {
-          if (state.game && !games.some(g => g.id === state.game)) {
-            state.game = null;
-            state.category = null;
-            state.serviceId = null;
-          } else if (state.game) {
-            const g = currentGame();
-            if (!g) {
-              state.game = null;
-              state.category = null;
-              state.serviceId = null;
-            } else if (g.categories && g.categories.length && state.category && !g.categories.some(c => c.id === state.category)) {
-              state.category = g.categories[0].id;
-              state.serviceId = null;
-            }
-          }
-        }
-      } catch (e) {}
       updateStaticText();
       renderGames();
       renderHero();
@@ -294,11 +283,13 @@
         const sc = $("categoryScroll");
         if (sc) sc.innerHTML = "";
         $("serviceContent")?.classList.add("hidden");
+        $("detailSection")?.classList.add("is-hidden");
         renderCart();
         syncBodyGameContext();
         updateTotal();
         return;
       }
+      $("detailSection")?.classList.remove("is-hidden");
       $("serviceContent")?.classList.remove("hidden");
       renderCategories();
       renderServices();
@@ -553,7 +544,7 @@
     }
 
     function bindHomeGameGrid() {
-      /* delegation: main.js document click [data-home-game] */
+      /* Home grid: document-level [data-home-game] delegation in main.js */
     }
 
     const serviceImages = {
@@ -607,7 +598,6 @@
     function selectCategory(categoryId) {
       pauseCategoryAuto(3500);
       const game = currentGame();
-      if (!game) return;
       state.category = categoryId;
       state.serviceId = null;
       renderCategories();
@@ -621,9 +611,13 @@
 
     function renderCategories() {
       const game = currentGame();
-      if (!game) return;
       const scroller = $("categoryScroll");
       if (!scroller) return;
+      if (!game || !Array.isArray(game.categories)) {
+        $("categoryBar")?.classList.add("hidden");
+        scroller.innerHTML = "";
+        return;
+      }
       $("categoryBar")?.classList.toggle("hidden", game.categories.length === 0);
       $("categoryBar")?.classList.toggle("circle-mode", game.id === "circle");
       $("categoryBar")?.classList.toggle("neon-game-cats", game.id === "wow");
@@ -699,12 +693,11 @@
 
     function renderServices() {
       const game = currentGame();
-      if (!game) return;
       const head = $("serviceHead");
       const grid = $("serviceGrid");
       const titleEl = $("serviceTitle");
       const copyEl = $("serviceCopy");
-      if (!grid || !titleEl || !copyEl) return;
+      if (!game || !grid || !titleEl || !copyEl) return;
       const category = game.categories.find(cat => cat.id === state.category);
       const list = game.categories.length ? game.services.filter(service => service.category === state.category) : game.services;
       titleEl.textContent = category ? ui(category.label) : ui(game.label) + " " + ui("Services");

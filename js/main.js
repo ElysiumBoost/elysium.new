@@ -70,6 +70,34 @@
       });
     }
 
+    function runSafeRenderAll() {
+      try {
+        renderAll();
+      } catch (error) {
+        console.error("renderAll failed, falling back to homepage cards:", error);
+        state.game = null;
+        state.category = null;
+        state.serviceId = null;
+        document.getElementById("homeContent")?.classList.remove("hidden");
+        document.getElementById("serviceContent")?.classList.add("hidden");
+        document.getElementById("categoryBar")?.classList.add("hidden");
+        const cs = document.getElementById("categoryScroll");
+        if (cs) cs.innerHTML = "";
+        document.getElementById("detailSection")?.classList.add("is-hidden");
+      }
+    }
+
+    function elyNavigateHomeGameId(id) {
+      if (!id) return;
+      if (typeof selectGame === "function") {
+        selectGame(id);
+      } else if (typeof GAME_HASH_SLUGS !== "undefined" && GAME_HASH_SLUGS[id]) {
+        window.location.hash = "#" + GAME_HASH_SLUGS[id];
+      } else {
+        window.location.hash = "#game-" + id;
+      }
+    }
+
     const currencyEl = $("currency");
     if (currencyEl) {
       currencyEl.addEventListener("change", () => {
@@ -95,7 +123,7 @@
         state.category = null;
         state.serviceId = null;
         syncGameHash(null);
-        renderAll();
+        runSafeRenderAll();
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
     }
@@ -192,6 +220,11 @@
     }
 
     document.addEventListener("click", event => {
+      const pick = event.target.closest("[data-home-game]");
+      if (pick) {
+        event.preventDefault();
+        elyNavigateHomeGameId(pick.dataset.homeGame);
+      }
       const sr = $("siteSearchResults");
       const ss = $("siteSearch");
       const ssb = $("siteSearchBtn");
@@ -202,6 +235,14 @@
     });
 
     document.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        const pick = event.target.closest("[data-home-game]");
+        if (pick) {
+          event.preventDefault();
+          elyNavigateHomeGameId(pick.dataset.homeGame);
+          return;
+        }
+      }
       if (event.key === "Escape") {
         closeGameMenu();
         closeCart();
@@ -216,9 +257,12 @@
     updateAudioButton();
     restoreOrderState();
     cleanStaleCart();
-    persistOrderState();
     restoreGameFromHash();
+    sanitizeNavigationState();
     if (state.game) syncGameHash(state.game);
+    else syncGameHash(null);
+    persistOrderState();
+
     window.addEventListener("hashchange", () => {
       closeGameMenu();
       const id = parseGameHash();
@@ -228,37 +272,20 @@
           state.game = id;
           state.category = game.categories[0]?.id || "services";
           state.serviceId = null;
-          renderAll();
+          runSafeRenderAll();
         }
       } else if (!id) {
         if (state.game) {
           state.game = null;
           state.category = null;
           state.serviceId = null;
-          renderAll();
+          runSafeRenderAll();
         }
       }
     });
-    if (!window.elyHomeGameDelegation) {
-      window.elyHomeGameDelegation = true;
-      document.addEventListener("click", event => {
-        const card = event.target.closest && event.target.closest("[data-home-game]");
-        if (!card || !card.dataset.homeGame) return;
-        if (typeof selectGame !== "function") return;
-        event.preventDefault();
-        selectGame(card.dataset.homeGame);
-      });
-    }
+    runSafeRenderAll();
     try {
-      renderAll();
-    } catch (err) {
-      console.error("ELY renderAll:", err);
-      try {
-        state.game = null;
-        state.category = null;
-        state.serviceId = null;
-        renderAll();
-      } catch (err2) {
-        console.error("ELY renderAll recovery failed:", err2);
-      }
+      if (typeof startOrderFeed === "function") startOrderFeed();
+    } catch (e2) {
+      console.error("startOrderFeed failed:", e2);
     }
