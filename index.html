@@ -1846,14 +1846,16 @@
       flex-direction: column;
     }
 
-    .order-card.is-valorant {
+    .order-card.is-valorant,
+    .order-card.is-arc-split {
       top: 88px;
       max-height: calc(100vh - 100px);
       overflow: visible;
       align-self: start;
     }
 
-    .order-card.is-valorant .order-panel-head {
+    .order-card.is-valorant .order-panel-head,
+    .order-card.is-arc-split .order-panel-head {
       flex-shrink: 0;
     }
 
@@ -1865,7 +1867,8 @@
       min-width: 0;
     }
 
-    .order-card.is-valorant .order-card-body {
+    .order-card.is-valorant .order-card-body,
+    .order-card.is-arc-split .order-card-body {
       display: flex;
       flex-direction: column;
       padding: 0 12px 14px;
@@ -2010,7 +2013,8 @@
       }
     }
 
-    .order-card.is-valorant .summary-total {
+    .order-card.is-valorant .summary-total,
+    .order-card.is-arc-split .summary-total {
       position: relative;
       top: auto;
       align-self: stretch;
@@ -2065,7 +2069,8 @@
       background: linear-gradient(180deg, rgba(191, 252, 255, .35), rgba(155, 104, 255, .95));
     }
 
-    .order-card.is-valorant .summary-total > small {
+    .order-card.is-valorant .summary-total > small,
+    .order-card.is-arc-split .summary-total > small {
       flex-shrink: 0;
       margin-top: 0;
       font-family: var(--display);
@@ -2075,11 +2080,13 @@
       font-size: 11px;
     }
 
-    .order-card.is-valorant .summary-total > #liveTotal {
+    .order-card.is-valorant .summary-total > #liveTotal,
+    .order-card.is-arc-split .summary-total > #liveTotal {
       flex-shrink: 0;
     }
 
-    .order-card.is-valorant .summary-total > #usdHint {
+    .order-card.is-valorant .summary-total > #usdHint,
+    .order-card.is-arc-split .summary-total > #usdHint {
       flex-shrink: 0;
     }
 
@@ -2092,7 +2099,8 @@
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
     }
 
-    .order-card.is-valorant .summary-total #liveTotal {
+    .order-card.is-valorant .summary-total #liveTotal,
+    .order-card.is-arc-split .summary-total #liveTotal {
       display: block;
       font-family: var(--display);
       font-size: clamp(24px, 3vw, 32px);
@@ -2104,7 +2112,8 @@
       overflow-wrap: anywhere;
     }
 
-    .order-card.is-valorant .summary-total #usdHint {
+    .order-card.is-valorant .summary-total #usdHint,
+    .order-card.is-arc-split .summary-total #usdHint {
       font-size: 11px;
       color: var(--muted);
       line-height: 1.35;
@@ -2113,11 +2122,60 @@
       max-width: 100%;
     }
 
-    .order-card.is-valorant .summary-total .btn.btn-green {
+    .order-card.is-valorant .summary-total .btn.btn-green,
+    .order-card.is-arc-split .summary-total .btn.btn-green {
       margin-top: 4px;
       min-height: 46px;
       box-sizing: border-box;
       flex-shrink: 0;
+    }
+
+    .arc-order-preview {
+      flex-shrink: 0;
+      margin: 0 0 2px;
+      padding: 10px 12px;
+      border-radius: 11px;
+      border: 1px solid rgba(122, 77, 255, .28);
+      background: rgba(8, 6, 22, .48);
+      max-height: min(36vh, 300px);
+      overflow-x: hidden;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(122, 77, 255, .5) rgba(10, 8, 26, .85);
+    }
+
+    .arc-order-preview::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .arc-order-preview::-webkit-scrollbar-thumb {
+      background: rgba(155, 104, 255, .55);
+      border-radius: 999px;
+    }
+
+    .arc-order-preview__title {
+      margin: 0 0 8px;
+      font-family: var(--display);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--cyan);
+    }
+
+    .arc-order-preview__line {
+      margin: 0;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(122, 77, 255, .14);
+      font-size: 11px;
+      line-height: 1.45;
+      color: rgba(231, 226, 255, .92);
+      overflow-wrap: anywhere;
+    }
+
+    .arc-order-preview__line:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
     }
 
     .valorant-order-chrome {
@@ -2479,31 +2537,18 @@
       flex: 1 1 44%;
     }
 
-    .valorant-extras-toggle .check-row {
-      display: flex;
-      align-items: center;
+    .valorant-extras-toggle .ely-toggle-row {
       justify-content: space-between;
-      gap: 10px;
-      padding: 8px 10px;
-      border-radius: 9px;
-      border: 1px solid rgba(122, 77, 255, .22);
-      background: rgba(8, 6, 22, .45);
+      gap: 12px;
     }
 
-    .valorant-extras-toggle .check-row span {
+    .valorant-extras-toggle .ely-toggle-label {
       flex: 1 1 auto;
       font-size: 12px;
       color: var(--text);
     }
 
-    .valorant-extras-toggle .check-row input {
-      flex: 0 0 auto;
-      width: 18px;
-      height: 18px;
-      accent-color: var(--purple);
-    }
-
-    .valorant-coach-focus .check-row span {
+    .valorant-coach-focus .ely-toggle-label {
       font-size: 12px;
     }
 
@@ -3586,13 +3631,13 @@
       z-index: 1;
     }
 
-    .event-switch input {
+    .event-switch input:not(.ely-toggle-input) {
       width: 15px;
       height: 15px;
       accent-color: var(--gold);
     }
 
-    .event-switch.event-mode-card input {
+    .event-switch.event-mode-card input:not(.ely-toggle-input) {
       appearance: none;
       -webkit-appearance: none;
       width: 22px;
@@ -3607,7 +3652,7 @@
       transition: background .15s ease, border-color .15s ease, box-shadow .15s ease;
     }
 
-    .event-switch.event-mode-card input:checked {
+    .event-switch.event-mode-card input:not(.ely-toggle-input):checked {
       border-color: rgba(255,214,128,.95);
       background: linear-gradient(135deg, #ffd675, #ff994d);
       box-shadow: inset 0 0 12px rgba(255,184,88,.32), 0 0 16px rgba(255,184,88,.42);
@@ -3662,16 +3707,138 @@
       overflow: hidden;
     }
 
-    .check-row input {
+    .check-row input:not(.ely-toggle-input) {
       width: 16px;
       min-height: 16px;
-      accent-color: var(--green);
+      accent-color: var(--purple);
       flex: 0 0 auto;
     }
 
-    .check-row span {
+    .check-row span:not(.ely-toggle-ui):not(.ely-toggle-thumb):not(.ely-toggle-track):not(.ely-toggle-label) {
       min-width: 0;
       overflow-wrap: anywhere;
+    }
+
+    .ely-toggle-row {
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 42px;
+      padding: 10px 12px;
+      border: 1px solid rgba(155, 104, 255, .38);
+      border-radius: 11px;
+      background: linear-gradient(148deg, rgba(44, 36, 102, .5), rgba(8, 6, 22, .78));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07);
+      transition: border-color .2s ease, box-shadow .2s ease, transform .18s ease;
+    }
+
+    .ely-toggle-row:hover {
+      border-color: rgba(155, 104, 255, .58);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 0 22px rgba(122, 77, 255, .18);
+    }
+
+    .ely-toggle-input {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      width: 44px;
+      height: 28px;
+      margin: 0;
+      opacity: 0;
+      cursor: pointer;
+      transform: translateY(-50%);
+      z-index: 2;
+    }
+
+    .ely-toggle-row:has(.ely-toggle-input:focus-visible) {
+      outline: 2px solid rgba(255, 209, 102, .55);
+      outline-offset: 2px;
+    }
+
+    .ely-toggle-ui {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .ely-toggle-track {
+      display: block;
+      width: 44px;
+      height: 26px;
+      border-radius: 999px;
+      background: rgba(10, 8, 26, .92);
+      border: 1px solid rgba(122, 77, 255, .4);
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, .5);
+      position: relative;
+      transition: background .22s ease, border-color .22s ease, box-shadow .22s ease;
+    }
+
+    .ely-toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(165deg, #dcd5ff, #7a4dff 52%, #4a2c9e);
+      box-shadow: 0 0 16px rgba(122, 77, 255, .5), 0 2px 6px rgba(0, 0, 0, .4);
+      transition: transform .22s ease, background .22s ease, box-shadow .22s ease;
+    }
+
+    .ely-toggle-input:checked + .ely-toggle-ui .ely-toggle-track {
+      background: linear-gradient(90deg, rgba(48, 32, 118, .95), rgba(122, 77, 255, .78));
+      border-color: rgba(191, 252, 255, .32);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1), 0 0 24px rgba(122, 77, 255, .38);
+    }
+
+    .ely-toggle-input:checked + .ely-toggle-ui .ely-toggle-thumb {
+      transform: translateX(18px);
+      background: linear-gradient(165deg, #fff9e6, #ffd166 42%, #9b68ff);
+      box-shadow: 0 0 20px rgba(255, 209, 102, .42), 0 2px 8px rgba(0, 0, 0, .28);
+    }
+
+    .ely-toggle-label {
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: 13px;
+      font-weight: 650;
+      color: #f3efff;
+      line-height: 1.38;
+      overflow-wrap: anywhere;
+      pointer-events: none;
+    }
+
+    .event-switch.event-mode-card.ely-event-mode {
+      gap: 14px;
+    }
+
+    .event-switch.event-mode-card.ely-event-mode .ely-toggle-input {
+      left: 14px;
+    }
+
+    .event-switch.event-mode-card.ely-event-mode .ely-event-mode-label {
+      flex: 1 1 auto;
+      position: relative;
+      z-index: 1;
+      font-size: 14px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      font-weight: 900;
+      color: #ffe7b8;
+      margin: 0;
+      pointer-events: none;
+    }
+
+    .event-switch.event-mode-card.ely-event-mode .ely-toggle-ui {
+      position: relative;
+      z-index: 1;
+    }
+
+    .event-switch.event-mode-card.ely-event-mode::before {
+      z-index: 0;
     }
 
     .summary-total span {
@@ -4244,10 +4411,12 @@
         position: static;
         max-height: none;
       }
-      .order-card.is-valorant .order-card-body {
+      .order-card.is-valorant .order-card-body,
+      .order-card.is-arc-split .order-card-body {
         overflow: visible;
       }
-      .order-card.is-valorant .summary-total {
+      .order-card.is-valorant .summary-total,
+      .order-card.is-arc-split .summary-total {
         flex: none;
         max-height: none;
         overflow: visible;
@@ -4298,7 +4467,7 @@
   </style>
 </head>
 <body>
-  <audio id="bgMusic" src="assets/elysium-loop.mp3" loop preload="auto" autoplay></audio>
+  <audio id="bgMusic" src="assets/elysium-loop.mp3" loop preload="metadata"></audio>
   <header class="topbar">
     <div class="shell topbar-inner">
       <a class="brand" href="#" id="brandHome">
@@ -4412,11 +4581,11 @@
                 </div>
               </div>
             </div>
+            <p class="intro" id="detailIntro"></p>
             <div id="valorantConfiguratorMount" class="valorant-cfg-mount" hidden></div>
             <div class="detail-left-meta" id="detailLeftMeta">
               <div class="detail-steps" id="detailSteps"></div>
               <div class="order-feed" id="orderFeed" aria-live="polite"></div>
-              <p class="intro" id="detailIntro"></p>
               <div class="detail-highlights-wrap" id="detailHighlights" hidden></div>
               <div class="detail-val-trust" id="detailValorantTrust" hidden></div>
             </div>
@@ -4426,6 +4595,7 @@
             <div class="order-card-body" id="orderCardBody">
               <div class="order-form" id="orderForm"></div>
               <div class="summary-total" id="orderSummaryTotal">
+                <div class="arc-order-preview" id="arcOrderSummaryPreview" hidden></div>
                 <small>Total</small>
                 <span id="liveTotal">$0.00</span>
                 <div class="arc-price-breakdown" id="arcPriceBreakdown" hidden></div>
@@ -5408,12 +5578,17 @@
     }
     function selectCategory(categoryId) {
       pauseCategoryAuto(3500);
+      const game = currentGame();
       state.category = categoryId;
-      state.serviceId = currentGame().services.find(service => service.category === state.category)?.id ?? null;
+      state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
       renderCategories();
       renderPopular();
       renderServices();
       renderDetail();
+      requestAnimationFrame(() => {
+        const target = $("detailLeftHead") || $("serviceHead");
+        if (target && game?.categories?.length) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
     }
 
     function renderCategories() {
@@ -5631,7 +5806,7 @@
         renderPopular();
         renderServices();
         renderDetail();
-        $("detailSection").scrollIntoView({ behavior: "smooth", block: "start" });
+        ($("detailLeftHead") || $("detailSection")).scrollIntoView({ behavior: "smooth", block: "start" });
       }));
     }
 
@@ -5990,6 +6165,11 @@
       return `<option value="none">${ui("No Mods")}</option><option value="blue">${ui("Blue Mods - $0.15 each (was $0.30)")}</option><option value="premium">${ui("Legendary / Epic Mods - $0.25 each (was $0.50)")}</option>`;
     }
 
+    function elyToggleRow(inputAttrs, labelInnerHtml, checked = false) {
+      const c = checked ? " checked" : "";
+      return `<label class="check-row ely-toggle-row"><input type="checkbox" class="ely-toggle-input"${c} ${inputAttrs}><span class="ely-toggle-ui" aria-hidden="true"><span class="ely-toggle-track"><span class="ely-toggle-thumb"></span></span></span><span class="ely-toggle-label">${labelInnerHtml}</span></label>`;
+    }
+
     function valorantRankOptionsHtml(ranks, selected) {
       return ranks.map(r => `<option value="${escapeHtml(r)}"${r === selected ? " selected" : ""}>${escapeHtml(r)}</option>`).join("");
     }
@@ -6013,12 +6193,12 @@
       let html = `<div class="field-block valorant-panel-tight"><h4>Extras</h4><div class="valorant-extras-grid checks valorant-extras-toggle">`;
       if (includePaid) {
         valorantExtrasPaid.forEach(ex => {
-          html += `<label class="check-row"><input type="checkbox" data-val-extra-pct="${ex.pct}" data-val-extra-label="${escapeHtml(ex.label)}"><span>${escapeHtml(ex.label)} (+${Math.round(ex.pct * 100)}%)</span></label>`;
+          html += elyToggleRow(`data-val-extra-pct="${ex.pct}" data-val-extra-label="${escapeHtml(ex.label)}"`, `${escapeHtml(ex.label)} (+${Math.round(ex.pct * 100)}%)`, false);
         });
       }
       if (includeFree) {
         valorantExtrasFree.forEach(ex => {
-          html += `<label class="check-row"><input type="checkbox" data-val-extra-free="1" data-val-extra-label="${escapeHtml(ex.label)}"><span>${escapeHtml(ex.label)} — FREE</span></label>`;
+          html += elyToggleRow(`data-val-extra-free="1" data-val-extra-label="${escapeHtml(ex.label)}"`, `${escapeHtml(ex.label)} — FREE`, false);
         });
       }
       html += `</div></div>`;
@@ -6114,13 +6294,25 @@
       const body = $("orderCardBody");
       const sum = $("orderSummaryTotal");
       if (!section || !mount || !form || !body || !sum) return;
-      const isV = Boolean(
+      const game = currentGame();
+      const isValorantForm = Boolean(
         service &&
-        currentGame()?.id === "valorant" &&
+        game?.id === "valorant" &&
         String(service.form || "").startsWith("valorant-")
       );
-      section.classList.toggle("detail--valorant-layout", isV);
-      if (isV) {
+      const isArcConfigurator = Boolean(service && game?.id === "arc");
+      const split = isValorantForm || isArcConfigurator;
+      const card = document.querySelector(".order-card");
+      section.classList.toggle("detail--valorant-layout", split);
+      if (card) {
+        if (!split) {
+          card.classList.remove("is-valorant", "is-arc-split");
+        } else {
+          card.classList.toggle("is-valorant", isValorantForm);
+          card.classList.toggle("is-arc-split", isArcConfigurator && !isValorantForm);
+        }
+      }
+      if (split) {
         mount.hidden = false;
         mount.appendChild(form);
       } else {
@@ -6283,11 +6475,11 @@
           <div class="field-block"><h4>Quick Use Bundles</h4><div class="field-grid equal-grid equal-grid--bundles">${loadoutBundleQtyField("bandageQty", "5x Herbal Bandage", 5)}${loadoutBundleQtyField("nadeQty", "3x Trigger Nade", 3)}${loadoutBundleQtyField("rechargerQty", "5x Shield Recharger", 5)}${loadoutBundleQtyField("surgeRechargerQty", "5x Surge Shield Recharger", 5)}</div></div>
         `;
       }
-      if (type === "trials") {
+        if (type === "trials") {
         return `
           <div class="checks">
-            <label class="check-row"><input id="trialAllStars" type="checkbox" checked><span>Weekly All 3 Star Trials - ${moneyUSD(prices.trialsBase)}</span></label>
-            <label class="check-row"><input id="trialRankUp" type="checkbox"><span>Rank Up Service Base - ${moneyUSD(prices.trialsBase)}</span></label>
+            ${elyToggleRow('id="trialAllStars"', `Weekly All 3 Star Trials - ${moneyUSD(prices.trialsBase)}`, true)}
+            ${elyToggleRow('id="trialRankUp"', `Rank Up Service Base - ${moneyUSD(prices.trialsBase)}`, false)}
           </div>
           <div class="field-grid">
             <div><label for="trialRank">Current Rank</label><select id="trialRank">${ranks.map(rank => `<option value="${rank}">${rank}</option>`).join("")}</select></div>
@@ -6355,7 +6547,7 @@
               </div>
               <div class="range-ticks range-ticks--anchored range-ticks--workshop"><span style="left:0%"><i></i>1</span><span style="left:50%"><i></i>2</span><span style="left:100%"><i></i>3</span></div>
             </div>
-            <div style="margin-top:10px"><label>Workshop</label><div class="checks">${workshops.map(name => `<label class="check-row"><input type="checkbox" value="${name}" data-workshop="${name}"><span>${name} - ${moneyUSD(prices.workshopBench)}</span></label>`).join("")}</div></div>
+            <div style="margin-top:10px"><label>Workshop</label><div class="checks">${workshops.map(name => elyToggleRow(`type="checkbox" value="${escapeHtml(name)}" data-workshop="${escapeHtml(name)}"`, `${escapeHtml(name)} - ${moneyUSD(prices.workshopBench)}`, false)).join("")}</div></div>
             <p class="raid-panel-note">Each full 1 to 3 workbench upgrade is ${moneyUSD(prices.workshopBench)}. Partial level steps are calculated from the selected range.</p>
           </div>
           <div class="field-block is-hidden" data-workshop-panel="scrappy">
@@ -6389,7 +6581,7 @@
           </div>
           <div class="field-block">
             <div class="field-block-head"><h4>Raid Amount</h4></div>
-            <label class="event-switch event-mode-card is-block" style="--event-bg:url('assets/event-mod.webp')"><input id="raidEventMode" type="checkbox"><span>Event Mode</span></label>
+            <label class="event-switch event-mode-card is-block ely-event-mode" style="--event-bg:url('assets/event-mod.webp')"><input id="raidEventMode" type="checkbox" class="ely-toggle-input"><span class="ely-toggle-ui" aria-hidden="true"><span class="ely-toggle-track"><span class="ely-toggle-thumb"></span></span></span><span class="ely-event-mode-label">Event Mode</span></label>
             <input id="raidCount" type="hidden" value="2">
             <div class="quick-raid-grid">${raidPackageButtons}</div>
             <p class="raid-panel-note">Event Mode adds ${moneyUSD(prices.event)} per selected raid when enabled.</p>
@@ -6397,7 +6589,7 @@
         `;
       }
       if (type === "expedition") {
-        return `<div><label>Expedition Stages</label><div class="checks">${stages.map(([name, price]) => `<label class="check-row"><input type="checkbox" value="${price}" data-stage="${name}"><span>${name} - ${moneyUSD(price)}</span></label>`).join("")}</div></div>`;
+        return `<div><label>Expedition Stages</label><div class="checks">${stages.map(([name, price]) => elyToggleRow(`type="checkbox" value="${price}" data-stage="${escapeHtml(name)}"`, `${escapeHtml(name)} - ${moneyUSD(price)}`, false)).join("")}</div></div>`;
       }
       if (type === "boss") {
         return `
@@ -6542,9 +6734,9 @@
             <div class="field-block field-block--tight"><h4 class="valorant-inline-kicker">${ui("Duration")}</h4><div class="quick-raid-grid valorant-pill-grid">${pills}</div></div>
             <div class="field-block field-block--tight"><h4 class="valorant-inline-kicker">${ui("Focus")}</h4>
               <div class="checks valorant-extras-grid valorant-coach-focus">
-                <label class="check-row"><input type="checkbox" id="valCoachVod"><span>${ui("VOD Review")}</span></label>
-                <label class="check-row"><input type="checkbox" id="valCoachAim"><span>${ui("Aim Training")}</span></label>
-                <label class="check-row"><input type="checkbox" id="valCoachPlan"><span>${ui("Rank Improvement Plan")}</span></label>
+                ${elyToggleRow('id="valCoachVod"', ui("VOD Review"), false)}
+                ${elyToggleRow('id="valCoachAim"', ui("Aim Training"), false)}
+                ${elyToggleRow('id="valCoachPlan"', ui("Rank Improvement Plan"), false)}
               </div>
             </div>
           </div>
@@ -6914,7 +7106,7 @@
         }
         const selected = state.blueprintSelections[state.bpTab];
         const list = blueprintGroups[state.bpTab].filter(name => matchesBlueprintQuery(name, query));
-        $("bpContent").innerHTML = `<div class="scroll-list">${list.map(name => `<label class="check-row"><input type="checkbox" value="${name}" ${selected.has(name) ? "checked" : ""}><span>${displayItemName(name)}</span></label>`).join("") || `<div class="empty">${ui("No blueprint found.")}</div>`}</div>`;
+        $("bpContent").innerHTML = `<div class="scroll-list">${list.map(name => elyToggleRow(`type="checkbox" value="${escapeHtml(name)}"`, escapeHtml(displayItemName(name)), selected.has(name))).join("") || `<div class="empty">${ui("No blueprint found.")}</div>`}</div>`;
         $("bpContent").querySelectorAll("input").forEach(input => input.addEventListener("change", () => {
           input.checked ? selected.add(input.value) : selected.delete(input.value);
           updateTotal();
@@ -7728,6 +7920,30 @@
           br.innerHTML = "";
         }
       }
+      const arcPrev = $("arcOrderSummaryPreview");
+      if (arcPrev) {
+        const arcSplit = document.querySelector(".order-card.is-arc-split");
+        if (
+          arcSplit &&
+          currentGame()?.id === "arc" &&
+          result.details &&
+          String(result.details).trim() &&
+          !result.custom &&
+          !result.contactOnly
+        ) {
+          const lines = String(result.details).split("\n").map(s => s.trim()).filter(Boolean);
+          if (lines.length) {
+            arcPrev.hidden = false;
+            arcPrev.innerHTML = `<div class="arc-order-preview__title">${escapeHtml(ui("Breakdown"))}</div>${lines.map(l => `<p class="arc-order-preview__line">${escapeHtml(l)}</p>`).join("")}`;
+          } else {
+            arcPrev.hidden = true;
+            arcPrev.innerHTML = "";
+          }
+        } else {
+          arcPrev.hidden = true;
+          arcPrev.innerHTML = "";
+        }
+      }
       $("addToCart").disabled = !result.valid;
       $("addToCart").textContent = ui(result.contactOnly || (vForm && result.custom) ? "Contact Us" : "Add to Cart");
       const dl = $("valorantSummaryDl");
@@ -8390,7 +8606,6 @@
       if (bgMusic.volume > 0) bgMusic.muted = false;
       startMusic();
     });
-    document.addEventListener("pointerdown", startMusic, { once: true });
     $("siteSearchBtn").addEventListener("click", runSiteSearch);
     $("siteSearch").addEventListener("input", () => {
       const query = val("siteSearch").trim().toLowerCase();
@@ -8438,7 +8653,6 @@
     });
     renderAll();
     startOrderFeed();
-    startMusic();
   </script>
 </body>
 </html>
