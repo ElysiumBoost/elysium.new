@@ -3693,6 +3693,9 @@
       border-bottom: 0;
       align-items: stretch;
       flex-direction: column;
+      flex-shrink: 0;
+      background: linear-gradient(180deg, rgba(10, 8, 26, .65), rgba(18, 14, 45, .995));
+      box-shadow: 0 -16px 40px rgba(0, 0, 0, .42);
     }
 
     .drawer-head h2 {
@@ -3705,6 +3708,7 @@
 
     .drawer-body {
       flex: 1;
+      min-height: 0;
       overflow: auto;
       padding: 14px;
     }
