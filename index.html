@@ -3844,8 +3844,8 @@
       blueMod: .15,
       premiumMod: .25,
       seeds100: .40,
-      augment: .25,
-      shield: .25,
+      augment: .35,
+      shield: .35,
       bandageBundle: .25,
       nadeBundle: .20,
       rechargerBundle: .15,
@@ -5316,6 +5316,7 @@
             </div>
           </div>
           ${weaponBlock("Primary Weapon", "primary")}
+          ${weaponBlock("Secondary Weapon", "secondary")}
           <div class="field-block"><h4>Gear</h4><div class="field-grid equal-grid">${qtyField("augmentQty", "Looting Mk. 3 (Survivor) Augment Qty")}${qtyField("shieldQty", "Medium Shield Qty")}</div></div>
           <div class="field-block"><h4>Quick Use Bundles</h4><div class="field-grid equal-grid">${qtyField("bandageQty", "5x Herbal Bandage")}${qtyField("nadeQty", "3x Trigger Nade")}${qtyField("rechargerQty", "5x Shield Recharger")}${qtyField("surgeRechargerQty", "5x Surge Shield Recharger")}</div></div>
         `;
@@ -5633,7 +5634,7 @@
           $("primaryWeaponQty").value = count;
           updateTotal();
         }));
-        ["primaryWeapon", "primaryWeaponQty", "primaryModType", "augmentQty", "shieldQty", "bandageQty", "nadeQty", "rechargerQty", "surgeRechargerQty"].forEach(id => {
+        ["primaryWeapon", "primaryWeaponQty", "primaryModType", "secondaryWeapon", "secondaryWeaponQty", "secondaryModType", "augmentQty", "shieldQty", "bandageQty", "nadeQty", "rechargerQty", "surgeRechargerQty"].forEach(id => {
           $(id)?.addEventListener("input", event => {
             if (event.target.id !== "primaryWeapon") clearBundle();
           });
@@ -6609,6 +6610,7 @@
 
     function calcLoadout() {
       const primary = calcWeapon("primary");
+      const secondary = calcWeapon("secondary");
       const bundleSize = Math.max(0, num("loadoutBundle"));
       const bundleExtra = bundleSize ? (bundleSize * prices.augment) + (bundleSize * prices.shield) + ((bundleSize * 5) / 5 * prices.rechargerBundle) + ((bundleSize * 5) / 5 * prices.bandageBundle) : 0;
       const extras = [
@@ -6619,10 +6621,11 @@
         ["5x Shield Recharger Bundle", num("rechargerQty"), prices.rechargerBundle],
         ["5x Surge Shield Recharger Bundle", num("surgeRechargerQty"), prices.surgeRechargerBundle]
       ];
-      const total = primary.total + bundleExtra + extras.reduce((sum, [, qty, price]) => sum + Math.max(0, qty) * price, 0);
+      const total = primary.total + secondary.total + bundleExtra + extras.reduce((sum, [, qty, price]) => sum + Math.max(0, qty) * price, 0);
       const details = [
         bundleSize ? `Special Bundle: ${bundleSize}x\nBundle Items: ${bundleSize}x ${primary.weapon}, ${bundleSize}x Looting Mk. 3 (Survivor) Augment, ${bundleSize}x Medium Shield, ${bundleSize * 5}x Shield Recharger, ${bundleSize * 5}x Herbal` : "",
         weaponDetail("Primary", primary),
+        weaponDetail("Secondary", secondary),
         ...extras.filter(([, qty]) => qty > 0).map(([name, qty]) => `${qty}x ${name}`)
       ].filter(Boolean).join("\n") || "No loadout items selected";
       return { total, valid: total > 0, details };
