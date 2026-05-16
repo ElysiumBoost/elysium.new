@@ -2727,40 +2727,138 @@
 
     .coin-readout {
       display: flex;
-      align-items: end;
+      align-items: flex-end;
       justify-content: space-between;
-      gap: 12px;
+      gap: 14px;
+      flex-wrap: wrap;
     }
 
-    .coin-readout strong {
-      color: var(--green);
+    .coin-readout-main {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+      flex: 1 1 220px;
+    }
+
+    .coin-readout-main > label {
       font-family: var(--display);
-      font-size: 28px;
-      line-height: 1;
-      letter-spacing: .02em;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(191, 252, 255, .9);
     }
 
-    .coin-readout strong .discounted-tag {
+    .coin-amount-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 10px 12px;
+    }
+
+    .coin-amount-value {
+      font-family: var(--display);
+      font-size: clamp(28px, 4.2vw, 42px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: .04em;
+      color: var(--gold);
+      text-shadow: 0 0 28px rgba(255, 209, 102, .2);
+    }
+
+    .coin-amount-row .discounted-tag {
       display: none;
-      margin-left: 8px;
-      vertical-align: middle;
+      margin-left: 0;
       color: #ffe8a8;
       font-family: var(--font);
-      font-size: 10px;
+      font-size: 11px;
+      font-weight: 900;
       letter-spacing: .08em;
       text-transform: uppercase;
       animation: softPulse 1.8s ease-in-out infinite;
     }
 
-    .coin-readout strong .discounted-tag.active {
+    .coin-amount-row .discounted-tag.active {
       display: inline-flex;
     }
 
-    .coin-readout span {
+    .coin-readout-limits {
       color: var(--muted);
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 700;
       text-align: right;
+      line-height: 1.4;
+      max-width: 220px;
+    }
+
+    .coin-readout > div > label {
+      font-family: var(--display);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: rgba(191, 252, 255, .88);
+    }
+
+    .coin-readout > div strong {
+      display: block;
+      margin-top: 6px;
+      font-family: var(--display);
+      font-size: clamp(22px, 3.2vw, 32px);
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: .03em;
+      line-height: 1.1;
+    }
+
+    .coin-readout > span:not(.coin-readout-limits) {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-align: right;
+      line-height: 1.4;
+      max-width: 220px;
+    }
+
+    .arc-price-breakdown {
+      width: 100%;
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(155, 104, 255, .28);
+      background: rgba(10, 8, 28, .62);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+    }
+
+    .arc-price-breakdown__row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 4px;
+      font-size: 12px;
+      font-weight: 650;
+      color: var(--muted);
+    }
+
+    .arc-price-breakdown__row:first-child {
+      margin-top: 0;
+    }
+
+    .arc-price-breakdown__row--final {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(155, 104, 255, .22);
+      font-family: var(--display);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .arc-price-breakdown__row--final span:last-child {
+      color: var(--gold);
+      font-size: 15px;
     }
 
     .range-ticks {
@@ -3071,69 +3169,53 @@
 
     .coin-range-wrap {
       display: grid;
-      gap: 8px;
-      padding: 4px 2px 0;
+      gap: 4px;
+      padding: 2px 2px 0;
     }
 
-    .coin-range-markers {
+    .coin-slider-ticks {
       position: relative;
-      height: 34px;
-      margin: 0 10px 2px;
+      height: 26px;
+      margin: 2px 10px 0;
       pointer-events: none;
     }
 
-    .coin-tier-marker {
+    .coin-slider-mark {
       position: absolute;
-      top: 0;
+      left: var(--m-left, 0%);
+      bottom: 2px;
       transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 3px;
-      z-index: 1;
+      gap: 4px;
     }
 
-    .coin-tier-marker__badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      padding: 2px 7px 3px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 209, 102, .42);
-      background: linear-gradient(180deg, rgba(58, 41, 101, .9), rgba(16, 11, 37, .96));
+    .coin-slider-mark__tick {
+      width: 2px;
+      height: 10px;
+      border-radius: 1px;
+      background: rgba(155, 104, 255, .55);
+      box-shadow: 0 0 10px rgba(122, 77, 255, .3);
+    }
+
+    .coin-slider-mark__label {
       font-family: var(--display);
-      font-size: 9px;
-      font-weight: 900;
-      letter-spacing: .08em;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .07em;
       text-transform: uppercase;
-      color: #ffecc4;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, .28), 0 0 12px rgba(255, 209, 102, .12);
+      color: rgba(183, 176, 223, .88);
+      white-space: nowrap;
     }
 
-    .coin-tier-marker__glyph {
-      font-size: 8px;
-      line-height: 1;
+    .coin-slider-mark.is-active .coin-slider-mark__tick {
+      background: linear-gradient(180deg, var(--gold), rgba(255, 209, 102, .45));
+      box-shadow: 0 0 14px rgba(255, 209, 102, .35);
+    }
+
+    .coin-slider-mark.is-active .coin-slider-mark__label {
       color: var(--gold);
-      opacity: .95;
-    }
-
-    .coin-tier-marker__nub {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      border: 1px solid rgba(155, 104, 255, .55);
-      background: radial-gradient(circle at 30% 25%, rgba(255, 209, 102, .55), rgba(122, 77, 255, .55));
-      box-shadow: 0 0 10px rgba(122, 77, 255, .35);
-    }
-
-    .coin-tier-marker.is-active .coin-tier-marker__nub {
-      box-shadow: 0 0 14px rgba(255, 209, 102, .45), 0 0 10px rgba(122, 77, 255, .4);
-      border-color: rgba(255, 209, 102, .65);
-    }
-
-    .coin-tier-marker.is-active .coin-tier-marker__badge {
-      border-color: rgba(191, 252, 255, .45);
-      animation: softPulse 2.2s ease-in-out infinite;
     }
 
     .coin-range-input {
@@ -3143,8 +3225,8 @@
     }
 
     .coin-discount-guidance {
-      min-height: 40px;
-      padding: 9px 12px;
+      min-height: 34px;
+      padding: 7px 10px;
       border-radius: 10px;
       border: 1px solid rgba(155, 104, 255, .28);
       background: linear-gradient(180deg, rgba(38, 31, 91, .38), rgba(10, 8, 28, .72));
@@ -3172,7 +3254,7 @@
       background: rgba(255, 255, 255, .03);
     }
 
-    body[data-ely-game="arc"] .order-card .summary-total span {
+    body[data-ely-game="arc"] .order-card .summary-total > #liveTotal {
       color: var(--gold);
       text-shadow: 0 0 22px rgba(255, 209, 102, .2);
     }
@@ -3212,28 +3294,94 @@
     }
 
     @media (max-width: 720px) {
-      .coin-range-markers {
-        height: 38px;
-        margin: 0 6px 0;
+      .coin-slider-ticks {
+        height: 28px;
+        margin: 2px 6px 0;
       }
 
-      .coin-tier-marker__badge {
-        font-size: 8px;
-        padding: 2px 5px;
+      .coin-slider-mark__label {
+        font-size: 9px;
       }
     }
 
-    .mod-wide {
-      grid-column: 1 / -1;
+    .loadout-weapon-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: end;
+      gap: 12px;
     }
 
-    .discount-note {
-      display: block;
-      margin-top: 5px;
-      color: var(--gold);
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: .03em;
+    .ely-form-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .ely-form-cell > label {
+      font-family: var(--display);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: rgba(191, 252, 255, .88);
+    }
+
+    .loadout-mod-hint {
+      margin: 10px 0 0;
+      padding: 8px 11px;
+      border-radius: 8px;
+      border: 1px solid rgba(155, 104, 255, .22);
+      background: rgba(12, 10, 32, .48);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 720px) {
+      .loadout-weapon-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .field-grid.equal-grid--bundles {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .field-grid.equal-grid--bundles > .qty-field--bundle {
+      min-width: 0;
+      min-height: 0;
+      margin: 0;
+      padding: 12px;
+      border: 1px solid rgba(155, 104, 255, .28);
+      border-radius: 10px;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(122, 77, 255, .14), transparent 55%),
+        linear-gradient(180deg, rgba(38, 31, 91, .42), rgba(10, 8, 28, .82));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06);
+      justify-content: flex-start;
+      gap: 8px;
+    }
+
+    .field-grid.equal-grid--bundles > .qty-field--bundle .qty-stepper--bundle {
+      width: 100%;
+      grid-template-columns: 46px minmax(0, 1fr) 46px;
+      min-height: 48px;
+    }
+
+    .field-grid.equal-grid--bundles > .qty-field--bundle > label {
+      min-height: 2.6em;
+      display: flex;
+      align-items: flex-end;
+      line-height: 1.25;
+    }
+
+    @media (max-width: 720px) {
+      .field-grid.equal-grid--bundles {
+        grid-template-columns: 1fr;
+      }
     }
 
     .bp-search-row {
@@ -3694,6 +3842,7 @@
       align-items: stretch;
       flex-direction: column;
       flex-shrink: 0;
+      gap: 8px;
       background: linear-gradient(180deg, rgba(10, 8, 26, .65), rgba(18, 14, 45, .995));
       box-shadow: 0 -16px 40px rgba(0, 0, 0, .42);
     }
@@ -3722,9 +3871,9 @@
     }
 
     .cart-embark-panel {
-      margin: 0 0 14px;
-      padding: 14px 16px;
-      border-radius: 12px;
+      margin: 0 0 10px;
+      padding: 11px 13px;
+      border-radius: 10px;
       border: 1px solid rgba(155, 104, 255, .48);
       background:
         radial-gradient(circle at 12% 20%, rgba(122, 77, 255, .22), transparent 42%),
@@ -3747,7 +3896,7 @@
     .cart-embark-value {
       margin: 0;
       font-family: var(--display);
-      font-size: 21px;
+      font-size: 19px;
       font-weight: 800;
       letter-spacing: .03em;
       line-height: 1.3;
@@ -3767,8 +3916,8 @@
     }
 
     .cart-item {
-      padding: 12px;
-      margin-bottom: 10px;
+      padding: 10px;
+      margin-bottom: 8px;
     }
 
     .cart-item h3 {
@@ -3901,8 +4050,8 @@
     .cart-foot-alerts {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-bottom: 4px;
+      gap: 6px;
+      margin-bottom: 2px;
     }
 
     .cart-foot-alerts:empty {
@@ -3910,12 +4059,12 @@
     }
 
     .cart-inline-warn {
-      padding: 12px 14px;
-      border-radius: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
       border: 1px solid rgba(255, 95, 125, .42);
       background: linear-gradient(135deg, rgba(130, 31, 52, .35), rgba(18, 14, 45, .92));
       color: #ffe8ee;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 750;
       line-height: 1.45;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
@@ -3938,22 +4087,22 @@
     }
 
     .cart-checklist {
-      padding: 12px 14px;
-      border-radius: 10px;
+      padding: 7px 9px;
+      border-radius: 8px;
       border: 1px solid rgba(155, 104, 255, .32);
       background: rgba(12, 10, 32, .72);
       display: grid;
-      gap: 8px;
+      gap: 5px;
     }
 
     .cart-checklist-row {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      font-size: 13px;
+      gap: 7px;
+      font-size: 12px;
       font-weight: 650;
       color: var(--muted);
-      line-height: 1.35;
+      line-height: 1.3;
     }
 
     .cart-checklist-row.is-done {
@@ -3962,12 +4111,12 @@
 
     .cart-checklist-row .chk {
       flex: 0 0 auto;
-      width: 20px;
-      height: 20px;
-      border-radius: 6px;
+      width: 17px;
+      height: 17px;
+      border-radius: 5px;
       display: grid;
       place-items: center;
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 900;
       border: 1px solid rgba(172, 146, 255, .35);
       background: rgba(255, 255, 255, .04);
@@ -4279,6 +4428,7 @@
               <div class="summary-total" id="orderSummaryTotal">
                 <small>Total</small>
                 <span id="liveTotal">$0.00</span>
+                <div class="arc-price-breakdown" id="arcPriceBreakdown" hidden></div>
                 <em id="usdHint">Ticket value: $0.00 USD</em>
                 <button class="btn btn-green add-to-cart-main" id="addToCart" type="button">Add to Cart</button>
               </div>
@@ -4561,11 +4711,17 @@
     ];
 
     function coinTier(amount) {
-      return coinTiers.find(tier => tier.amount === amount) || null;
+      for (let i = coinTiers.length - 1; i >= 0; i--) {
+        if (amount >= coinTiers[i].amount) return coinTiers[i];
+      }
+      return null;
     }
 
     function seedTier(amount) {
-      return seedTiers.find(tier => tier.amount === amount) || null;
+      for (let i = seedTiers.length - 1; i >= 0; i--) {
+        if (amount >= seedTiers[i].amount) return seedTiers[i];
+      }
+      return null;
     }
 
     function nextCoinTier(amount) {
@@ -5830,10 +5986,8 @@
       return weapons.filter(weapon => includeNone || weapon !== "No Weapon").map(weapon => `<option value="${weapon}">${displayItemName(weapon)}</option>`).join("");
     }
 
-    function modFields(prefix) {
-      return `
-        <div class="mod-wide"><label for="${prefix}ModType">${ui("Mods")}</label><select id="${prefix}ModType"><option value="none">${ui("No Mods")}</option><option value="blue">${ui("Blue Mods - $0.15 each (was $0.30)")}</option><option value="premium">${ui("Legendary / Epic Mods - $0.25 each (was $0.50)")}</option></select><span class="discount-note">${ui("Mod quantity automatically matches weapon quantity.")}</span></div>
-      `;
+    function modTierOptionsHtml() {
+      return `<option value="none">${ui("No Mods")}</option><option value="blue">${ui("Blue Mods - $0.15 each (was $0.30)")}</option><option value="premium">${ui("Legendary / Epic Mods - $0.25 each (was $0.50)")}</option>`;
     }
 
     function valorantRankOptionsHtml(ranks, selected) {
@@ -6025,21 +6179,27 @@
       }
       if (type === "coins") {
         const tierButtons = coinTiers.map(tier => `<button class="raid-pill" type="button" data-coin-deal="${tier.amount}"><strong>${tier.label}<small>Popular deal, ${Math.round(tier.discount * 100)}% off</small></strong><span>${moneyUSD(tier.amount / 100000 * prices.coins100k * (1 - tier.discount))}</span></button>`).join("");
-        const coinMarkersHtml = coinTiers.map(tier => {
+        const coinMarksHtml = coinTiers.map(tier => {
           const left = rangeTierMarkerPct(tier.amount, COIN_SLIDER_MIN, COIN_SLIDER_MAX);
           const pct = Math.round(tier.discount * 100);
-          return `<span class="coin-tier-marker" data-tier-amount="${tier.amount}" style="left:${left}%"><span class="coin-tier-marker__badge"><span class="coin-tier-marker__glyph" aria-hidden="true">★</span>${pct}%</span><span class="coin-tier-marker__nub" title="Deal tier at ${tier.amount.toLocaleString()} coins"></span></span>`;
+          return `<span class="coin-slider-mark" data-tier-amount="${tier.amount}" style="--m-left:${left}%"><span class="coin-slider-mark__tick"></span><span class="coin-slider-mark__label">${pct}%</span></span>`;
         }).join("");
         return `
           <div class="coin-panel">
             <input id="coinDeal" type="hidden" value="">
             <div class="coin-readout">
-              <div><label for="coinAmount">Raider Coins</label><strong><span id="coinLabel">100,000</span><span class="discounted-tag" id="coinDiscountTag">${ui("Discounted")}</span></strong></div>
-              <span>100k minimum<br>12M maximum</span>
+              <div class="coin-readout-main">
+                <label for="coinAmount">${ui("Raider Coins")}</label>
+                <div class="coin-amount-row">
+                  <span id="coinLabel" class="coin-amount-value">100,000</span>
+                  <span class="discounted-tag" id="coinDiscountTag">${ui("Discounted")}</span>
+                </div>
+              </div>
+              <span class="coin-readout-limits">${ui("100k minimum")} · ${ui("12M maximum")}</span>
             </div>
             <div class="coin-range-wrap">
-              <div class="coin-range-markers" aria-hidden="true">${coinMarkersHtml}</div>
               <input id="coinAmount" class="coin-range-input" type="range" min="${COIN_SLIDER_MIN}" max="${COIN_SLIDER_MAX}" step="100000" value="100000">
+              <div class="coin-slider-ticks" aria-hidden="true">${coinMarksHtml}</div>
             </div>
             <div class="coin-discount-guidance" id="coinDiscountGuidance" role="status" aria-live="polite"></div>
             <div class="coin-quick-grid coin-quick-grid--four">${tierButtons}</div>
@@ -6049,21 +6209,27 @@
       }
       if (type === "seeds") {
         const seedButtons = seedTiers.map(tier => `<button class="raid-pill" type="button" data-seed-deal="${tier.amount}"><strong>${tier.label}<small>Bulk deal, ${Math.round(tier.discount * 100)}% off</small></strong><span>${moneyUSD(tier.amount / 100 * prices.seeds100 * (1 - tier.discount))}</span></button>`).join("");
-        const seedMarkersHtml = seedTiers.map(tier => {
+        const seedMarksHtml = seedTiers.map(tier => {
           const left = rangeTierMarkerPct(tier.amount, SEED_SLIDER_MIN, SEED_SLIDER_MAX);
           const pct = Math.round(tier.discount * 100);
-          return `<span class="coin-tier-marker" data-seed-tier-amount="${tier.amount}" style="left:${left}%"><span class="coin-tier-marker__badge"><span class="coin-tier-marker__glyph" aria-hidden="true">★</span>${pct}%</span><span class="coin-tier-marker__nub" title="Bulk tier at ${tier.amount.toLocaleString()} seeds"></span></span>`;
+          return `<span class="coin-slider-mark" data-seed-tier-amount="${tier.amount}" style="--m-left:${left}%"><span class="coin-slider-mark__tick"></span><span class="coin-slider-mark__label">${pct}%</span></span>`;
         }).join("");
         return `
           <div class="coin-panel">
             <input id="seedDeal" type="hidden" value="">
             <div class="coin-readout">
-              <div><label for="seedAmount">Assorted Seeds</label><strong><span id="seedLabel">100</span><span class="discounted-tag" id="seedDiscountTag">${ui("Discounted")}</span></strong></div>
-              <span>100 minimum<br>2,000 maximum</span>
+              <div class="coin-readout-main">
+                <label for="seedAmount">${ui("Assorted Seeds")}</label>
+                <div class="coin-amount-row">
+                  <span id="seedLabel" class="coin-amount-value">100</span>
+                  <span class="discounted-tag" id="seedDiscountTag">${ui("Discounted")}</span>
+                </div>
+              </div>
+              <span class="coin-readout-limits">${ui("100 minimum")} · ${ui("2,000 maximum")}</span>
             </div>
             <div class="coin-range-wrap">
-              <div class="coin-range-markers" aria-hidden="true">${seedMarkersHtml}</div>
               <input id="seedAmount" class="coin-range-input" type="range" min="${SEED_SLIDER_MIN}" max="${SEED_SLIDER_MAX}" step="100" value="100">
+              <div class="coin-slider-ticks" aria-hidden="true">${seedMarksHtml}</div>
             </div>
             <div class="coin-discount-guidance" id="seedDiscountGuidance" role="status" aria-live="polite"></div>
             <div class="coin-quick-grid">${seedButtons}</div>
@@ -6099,7 +6265,7 @@
         `;
       }
       if (type === "guns") {
-        return `<div class="field-grid"><div><label for="gunWeapon">${ui("Weapon")}</label><select id="gunWeapon">${weaponOptions(false)}</select></div>${qtyField("gunQty", ui("Quantity"), 1, 1)}${modFields("gun")}<button class="btn" id="bundle20" type="button" style="grid-column:1/-1">20x Weapon + Legendary / Epic Mods (-10%)</button></div>`;
+        return `<div class="field-grid loadout-weapon-grid"><div class="ely-form-cell"><label for="gunWeapon">${ui("Weapon")}</label><select id="gunWeapon">${weaponOptions(false)}</select></div><div class="ely-form-cell"><label for="gunModType">${ui("Mods")}</label><select id="gunModType">${modTierOptionsHtml()}</select></div>${qtyField("gunQty", ui("Quantity"), 1, 1)}</div><p class="loadout-mod-hint" role="note">${ui("Mod quantity automatically matches weapon quantity.")}</p><button class="btn" id="bundle20" type="button" style="width:100%;margin-top:10px">20x Weapon + Legendary / Epic Mods (-10%)</button>`;
       }
       if (type === "loadout") {
         return `
@@ -6114,7 +6280,7 @@
           ${weaponBlock("Primary Weapon", "primary")}
           ${weaponBlock("Secondary Weapon", "secondary")}
           <div class="field-block"><h4>Gear</h4><div class="field-grid equal-grid">${qtyField("augmentQty", "Looting Mk. 3 (Survivor) Augment Qty")}${qtyField("shieldQty", "Medium Shield Qty")}</div></div>
-          <div class="field-block"><h4>Quick Use Bundles</h4><div class="field-grid equal-grid">${loadoutBundleQtyField("bandageQty", "5x Herbal Bandage", 5)}${loadoutBundleQtyField("nadeQty", "3x Trigger Nade", 3)}${loadoutBundleQtyField("rechargerQty", "5x Shield Recharger", 5)}${loadoutBundleQtyField("surgeRechargerQty", "5x Surge Shield Recharger", 5)}</div></div>
+          <div class="field-block"><h4>Quick Use Bundles</h4><div class="field-grid equal-grid equal-grid--bundles">${loadoutBundleQtyField("bandageQty", "5x Herbal Bandage", 5)}${loadoutBundleQtyField("nadeQty", "3x Trigger Nade", 3)}${loadoutBundleQtyField("rechargerQty", "5x Shield Recharger", 5)}${loadoutBundleQtyField("surgeRechargerQty", "5x Surge Shield Recharger", 5)}</div></div>
         `;
       }
       if (type === "trials") {
@@ -6388,7 +6554,7 @@
     }
 
     function weaponBlock(title, prefix) {
-      return `<div class="field-block"><h4>${title}</h4><div class="field-grid"><div><label for="${prefix}Weapon">Weapon</label><select id="${prefix}Weapon">${weaponOptions(true)}</select></div>${qtyField(prefix + "WeaponQty", "Quantity")}${modFields(prefix)}</div></div>`;
+      return `<div class="field-block"><h4>${escapeHtml(title)}</h4><div class="field-grid loadout-weapon-grid"><div class="ely-form-cell"><label for="${prefix}Weapon">${ui("Weapon")}</label><select id="${prefix}Weapon">${weaponOptions(true)}</select></div><div class="ely-form-cell"><label for="${prefix}ModType">${ui("Mods")}</label><select id="${prefix}ModType">${modTierOptionsHtml()}</select></div>${qtyField(prefix + "WeaponQty", ui("Quantity"))}</div><p class="loadout-mod-hint" role="note">${ui("Mod quantity automatically matches weapon quantity.")}</p></div>`;
     }
 
     function wireValorantForm(type) {
@@ -6571,14 +6737,15 @@
               const need = next.amount - amount;
               msg = `Add ${need.toLocaleString()} more coins for ${Math.round(next.discount * 100)}% OFF (tier at ${next.amount.toLocaleString()})`;
             } else {
-              msg = "Slide to a ★ pin on the track for bundled savings.";
+              msg = "Slide past a deal threshold on the track for bundled savings.";
             }
             guide.textContent = msg;
             guide.classList.toggle("is-unlocked", Boolean(tier));
           }
-          document.querySelectorAll("#orderForm .coin-tier-marker[data-tier-amount]").forEach(el => {
+          document.querySelectorAll("#orderForm .coin-slider-mark[data-tier-amount]").forEach(el => {
             const ta = Number(el.dataset.tierAmount);
-            el.classList.toggle("is-active", Boolean(tier) && amount === ta);
+            const applied = coinTier(amount);
+            el.classList.toggle("is-active", Boolean(applied) && applied.amount === ta);
           });
           $("coinLabel").textContent = amount.toLocaleString();
           updateTotal();
@@ -6611,14 +6778,15 @@
               const need = next.amount - amount;
               msg = `Add ${need.toLocaleString()} more seeds for ${Math.round(next.discount * 100)}% OFF (tier at ${next.amount.toLocaleString()})`;
             } else {
-              msg = "Slide to a ★ pin for bulk savings.";
+              msg = "Slide past a bulk threshold on the track for extra savings.";
             }
             guide.textContent = msg;
             guide.classList.toggle("is-unlocked", Boolean(tier));
           }
-          document.querySelectorAll("#orderForm .coin-tier-marker[data-seed-tier-amount]").forEach(el => {
+          document.querySelectorAll("#orderForm .coin-slider-mark[data-seed-tier-amount]").forEach(el => {
             const ta = Number(el.dataset.seedTierAmount);
-            el.classList.toggle("is-active", Boolean(tier) && amount === ta);
+            const applied = seedTier(amount);
+            el.classList.toggle("is-active", Boolean(applied) && applied.amount === ta);
           });
           $("seedLabel").textContent = amount.toLocaleString();
           updateTotal();
@@ -7305,12 +7473,26 @@
         const base = amount / 100000 * prices.coins100k;
         const tier = coinTier(amount);
         const discount = tier ? base * tier.discount : 0;
-        const percentLabel = tier ? Math.round(tier.discount * 100) : 0;
+        const final = base - discount;
+        const pct = tier ? Math.round(tier.discount * 100) : 0;
+        const rows = tier
+          ? [
+              ["Subtotal", displayMoney(base)],
+              [`Discount (${pct}%)`, "-" + displayMoney(discount)],
+              ["Final total", displayMoney(final)]
+            ]
+          : [];
         return {
-          total: base - discount,
+          total: final,
           oldTotal: tier ? base : 0,
           valid: amount >= 100000,
-          details: `${amount.toLocaleString()} Raider Coins${tier ? `\nPopular Deal Discount: -${moneyUSD(discount)} USD (${percentLabel}%)` : ""}`
+          details: [
+            `${amount.toLocaleString()} Raider Coins`,
+            tier ? `Subtotal: ${moneyUSD(base)} USD` : "",
+            tier ? `Discount (${pct}%): -${moneyUSD(discount)} USD` : "",
+            tier ? `Final: ${moneyUSD(final)} USD` : ""
+          ].filter(Boolean).join("\n"),
+          arcPriceBreakdown: rows.length ? { rows } : null
         };
       }
       if (type === "seeds") {
@@ -7318,12 +7500,26 @@
         const base = amount / 100 * prices.seeds100;
         const tier = seedTier(amount);
         const discount = tier ? base * tier.discount : 0;
-        const percentLabel = tier ? Math.round(tier.discount * 100) : 0;
+        const final = base - discount;
+        const pct = tier ? Math.round(tier.discount * 100) : 0;
+        const rows = tier
+          ? [
+              ["Subtotal", displayMoney(base)],
+              [`Discount (${pct}%)`, "-" + displayMoney(discount)],
+              ["Final total", displayMoney(final)]
+            ]
+          : [];
         return {
-          total: base - discount,
+          total: final,
           oldTotal: tier ? base : 0,
           valid: amount >= 100,
-          details: `${amount.toLocaleString()} Assorted Seeds${tier ? `\nBulk Deal Discount: -${moneyUSD(discount)} USD (${percentLabel}%)` : ""}`
+          details: [
+            `${amount.toLocaleString()} Assorted Seeds`,
+            tier ? `Subtotal: ${moneyUSD(base)} USD` : "",
+            tier ? `Bulk discount (${pct}%): -${moneyUSD(discount)} USD` : "",
+            tier ? `Final: ${moneyUSD(final)} USD` : ""
+          ].filter(Boolean).join("\n"),
+          arcPriceBreakdown: rows.length ? { rows } : null
         };
       }
       if (type === "depositary") {
@@ -7519,6 +7715,19 @@
       $("usdHint").textContent = result.custom
         ? (vForm ? "Custom Price — contact for final quote" : "Ticket value: CUSTOM")
         : (result.estimated ? "Estimated ticket value: " : "Ticket value: ") + moneyUSD(result.total) + " USD";
+      const br = $("arcPriceBreakdown");
+      if (br) {
+        if (result.arcPriceBreakdown && result.arcPriceBreakdown.rows && result.arcPriceBreakdown.rows.length) {
+          br.hidden = false;
+          br.innerHTML = result.arcPriceBreakdown.rows.map(([k, v], idx, arr) => {
+            const fin = idx === arr.length - 1;
+            return `<div class="arc-price-breakdown__row${fin ? " arc-price-breakdown__row--final" : ""}"><span>${escapeHtml(k)}</span><span>${escapeHtml(v)}</span></div>`;
+          }).join("");
+        } else {
+          br.hidden = true;
+          br.innerHTML = "";
+        }
+      }
       $("addToCart").disabled = !result.valid;
       $("addToCart").textContent = ui(result.contactOnly || (vForm && result.custom) ? "Contact Us" : "Add to Cart");
       const dl = $("valorantSummaryDl");
@@ -7619,9 +7828,6 @@
       const needEmbarkId = hasArcItems && !state.arcId && !state.arcIdSkipped;
       const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
       const hasCustom = state.cart.some(item => item.custom);
-      const sameCurrency = state.cart.every(item => item.viewedCurrency === state.cart[0].viewedCurrency);
-      const cartCurrency = sameCurrency ? state.cart[0].viewedCurrency : state.currency;
-      const totalShown = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
       const bits = [];
       if (needEmbarkId) {
         bits.push(`<div class="cart-inline-warn" role="status">Please add your Embark ID before copying the order.</div>`);
@@ -7634,9 +7840,6 @@
         ${row(Boolean(state.cart.length && (total > 0 || hasCustom)), "Total price ready")}
         ${row(embarkDone, "Discord ticket ready")}
       </div>`);
-      if (embarkDone && state.cart.length && (total > 0 || hasCustom)) {
-        bits.push(`<div class="cart-ready-banner">Order Ready · Cart total ${escapeHtml(totalShown)}</div>`);
-      }
       foot.innerHTML = bits.join("");
     }
 
