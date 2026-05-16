@@ -93,7 +93,11 @@
       if (!id) return;
 
       if (typeof selectGame === "function") {
-        selectGame(id);
+        try {
+          selectGame(id);
+        } catch (error) {
+          console.error("[selectGame failed]", error);
+        }
         return;
       }
 
