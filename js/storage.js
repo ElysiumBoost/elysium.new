@@ -69,7 +69,7 @@ function restoreOrderState() {
     if (Array.isArray(j.cart)) state.cart = j.cart;
     if (j.currency && rates[j.currency]) {
       state.currency = j.currency;
-      const sel = typeof window !== "undefined" && typeof window.$ === "function" ? window.$("currency") : document.getElementById("currency");
+      const sel = $("currency");
       if (sel) sel.value = state.currency;
     }
     if (typeof j.orderPreviewId === "string") state.orderPreviewId = j.orderPreviewId;

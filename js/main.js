@@ -191,59 +191,6 @@
       });
     }
 
-    function openHomeGameCardTarget(card) {
-      if (!card) return;
-      const id = card.getAttribute("data-home-game");
-      if (!id) return;
-
-      if (typeof window.selectGame === "function") {
-        window.selectGame(id);
-        return;
-      }
-
-      if (typeof selectGame === "function") {
-        selectGame(id);
-        return;
-      }
-
-      const fallbackSlugs = {
-        arc: "arc-raiders",
-        valorant: "valorant",
-        wow: "world-of-warcraft",
-        lol: "league-of-legends",
-        premier: "premier",
-        faceit: "faceit",
-        circle: "boost-plus",
-        social: "social"
-      };
-
-      if (fallbackSlugs[id]) {
-        window.location.hash = "#" + fallbackSlugs[id];
-      }
-    }
-
-    document.addEventListener("click", event => {
-      const card = event.target.closest("[data-home-game]");
-      if (!card) return;
-
-      event.preventDefault();
-      event.stopPropagation();
-
-      openHomeGameCardTarget(card);
-    }, true);
-
-    document.addEventListener("keydown", event => {
-      if (event.key !== "Enter" && event.key !== " ") return;
-
-      const card = event.target.closest("[data-home-game]");
-      if (!card) return;
-
-      event.preventDefault();
-      event.stopPropagation();
-
-      openHomeGameCardTarget(card);
-    }, true);
-
     document.addEventListener("click", event => {
       const sr = $("siteSearchResults");
       const ss = $("siteSearch");
@@ -293,4 +240,3 @@
       }
     });
     renderAll();
-    startOrderFeed();

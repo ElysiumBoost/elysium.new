@@ -181,19 +181,14 @@
       if (!id || !games.some(g => g.id === id)) return;
       const game = games.find(g => g.id === id);
       state.game = id;
-      state.category = game.categories?.[0]?.id || "services";
+      state.category = game.categories[0]?.id || "services";
       state.serviceId = null;
     }
 
     function servicesInCurrentCategory() {
       const game = currentGame();
-      if (!game || !Array.isArray(game.services)) return [];
-      const cats = Array.isArray(game.categories) ? game.categories : [];
-      return cats.length ? game.services.filter(service => service.category === state.category) : game.services;
-    }
-
-    function elyValorantThumbFallback(img) {
-      elyImagePlaceholder(img);
+      if (!game) return [];
+      return game.categories.length ? game.services.filter(service => service.category === state.category) : game.services;
     }
 
     function elyHomeCardFallback(img) {
@@ -271,13 +266,11 @@
         const sc = $("categoryScroll");
         if (sc) sc.innerHTML = "";
         $("serviceContent")?.classList.add("hidden");
-        $("detailSection")?.classList.add("is-hidden");
         renderCart();
         syncBodyGameContext();
         updateTotal();
         return;
       }
-      $("detailSection")?.classList.remove("is-hidden");
       $("serviceContent")?.classList.remove("hidden");
       renderCategories();
       renderServices();
@@ -383,23 +376,22 @@
     }
 
     function selectGame(id) {
-      const game = games.find(g => g.id === id);
-      if (!game) {
-        console.error("Unknown game id", id);
+      if (!games.some(g => g.id === id)) {
+        showToast("That game is not available.");
         return;
       }
       state.game = id;
-      state.category = game.categories?.[0]?.id || "services";
+      const game = currentGame();
+      state.category = game.categories[0]?.id || "services";
       state.serviceId = null;
       closeGameMenu();
       syncGameHash(id);
       renderAll();
-      document.getElementById("serviceContent")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
+      requestAnimationFrame(() => {
+        const target = $("serviceHead") || $("serviceContent");
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
       });
     }
-    window.selectGame = selectGame;
 
     function renderGames() {
       closeGameMenu();
@@ -425,6 +417,7 @@
     function renderHome() {
       $("homeContent")?.classList.toggle("hidden", Boolean(state.game));
       const g = id => games.find(x => x.id === id);
+      const homeCardBgFallback = "assets/backgrounds/fallback-purple-bg.webp";
       const homeBlurb = game => {
         const id = game.id;
         const map = {
@@ -439,80 +432,33 @@
         };
         return map[id] || (game.copy && game.copy.split(".")[0] + ".") || "";
       };
+      const homeCardTitle = game => {
+        if (game.id === "premier") return "CS2 Premier";
+        if (game.id === "faceit") return "CS2 Faceit";
+        if (game.id === "circle") return "Boost+";
+        return game.label;
+      };
+      const homeCardImageSrc = game => {
+        if (game.id === "circle") return homeCardBgFallback;
+        return game.heroBg;
+      };
       const gameAria = label => `${ui("View")} ${ui(label)} ${ui("services")}`;
       const renderHomeSingleCard = game => {
-        const media = game.id === "valorant" && game.homeCardMedia
-          ? `<img class="home-game-media" src="${escapeHtml(game.homeCardMedia)}" alt="${escapeHtml(ui(game.label))}" loading="eager" data-home-card-fb="${escapeHtml(game.heroBg)}" onerror="elyHomeCardFallback(this)">`
-          : `<img class="home-game-media" src="${escapeHtml(game.heroBg)}" alt="${escapeHtml(ui(game.label))}" loading="eager">`;
+        const title = homeCardTitle(game);
+        const imgSrc = homeCardImageSrc(game);
+        const eager = ["arc", "valorant", "wow", "lol"].includes(game.id);
+        const media = game.id === "valorant"
+          ? `<img class="home-game-media" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(ui(title))}" loading="${eager ? "eager" : "lazy"}" data-home-card-fb="${escapeHtml(homeCardBgFallback)}" onerror="elyHomeCardFallback(this)">`
+          : `<img class="home-game-media" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(ui(title))}" loading="${eager ? "eager" : "lazy"}">`;
         return `
-        <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(gameAria(game.label))}">
+        <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(gameAria(title))}">
           ${media}
-          <h2>${ui(game.label)}</h2>
+          <h2>${ui(title)}</h2>
           <p class="home-game-blurb">${escapeHtml(ui(homeBlurb(game)))}</p>
-          <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
         </button>`;
       };
-      const chunks = [];
-      ["arc", "valorant", "wow", "lol"].forEach(id => {
-        const game = g(id);
-        if (game) chunks.push(renderHomeSingleCard(game));
-      });
-      const prem = g("premier");
-      const face = g("faceit");
-      if (prem && face) {
-        chunks.push(`
-        <article class="home-game-card home-combo-card" aria-label="${escapeHtml(ui("CS2 Premier and Faceit"))}">
-          <div class="home-combo-split">
-            <button type="button" class="home-combo-half" data-home-game="premier" aria-label="${escapeHtml(gameAria("CS2 Premier"))}">
-              <img class="home-combo-half-media" src="${escapeHtml(prem.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
-              <span class="home-combo-half-scrim" aria-hidden="true"></span>
-              <span class="home-combo-half-content">
-                <h2 class="home-combo-half-h">${ui("CS2 Premier")}</h2>
-                <p class="home-combo-half-p">${escapeHtml(ui(homeBlurb(prem)))}</p>
-                <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
-              </span>
-            </button>
-            <button type="button" class="home-combo-half" data-home-game="faceit" aria-label="${escapeHtml(gameAria("CS2 Faceit"))}">
-              <img class="home-combo-half-media" src="${escapeHtml(face.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
-              <span class="home-combo-half-scrim" aria-hidden="true"></span>
-              <span class="home-combo-half-content">
-                <h2 class="home-combo-half-h">${ui("CS2 Faceit")}</h2>
-                <p class="home-combo-half-p">${escapeHtml(ui(homeBlurb(face)))}</p>
-                <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
-              </span>
-            </button>
-          </div>
-        </article>`);
-      }
-      const boost = g("circle");
-      const soc = g("social");
-      if (boost && soc) {
-        const socialImg = "assets/backgrounds/boost-social-bg.webp";
-        const boostHomeCardBg = "assets/backgrounds/fallback-purple-bg.webp";
-        chunks.push(`
-        <article class="home-game-card home-combo-card" aria-label="${escapeHtml(ui("Boost+ and Social"))}">
-          <div class="home-combo-split">
-            <button type="button" class="home-combo-half" data-home-game="circle" aria-label="${escapeHtml(gameAria("Boost+"))}">
-              <img class="home-combo-half-media" src="${escapeHtml(boostHomeCardBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
-              <span class="home-combo-half-scrim" aria-hidden="true"></span>
-              <span class="home-combo-half-content">
-                <h2 class="home-combo-half-h">${ui("Boost+")}</h2>
-                <p class="home-combo-half-p">${escapeHtml(ui(homeBlurb(boost)))}</p>
-                <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
-              </span>
-            </button>
-            <button type="button" class="home-combo-half" data-home-game="social" aria-label="${escapeHtml(gameAria("Social"))}">
-              <img class="home-combo-half-media home-combo-half-media--social" src="${escapeHtml(socialImg)}" alt="" loading="lazy" onerror="elyImagePlaceholder(this)">
-              <span class="home-combo-half-scrim" aria-hidden="true"></span>
-              <span class="home-combo-half-content">
-                <h2 class="home-combo-half-h">${ui("Social")}</h2>
-                <p class="home-combo-half-p">${escapeHtml(ui(homeBlurb(soc)))}</p>
-                <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
-              </span>
-            </button>
-          </div>
-        </article>`);
-      }
+      const homeOrder = ["arc", "valorant", "wow", "lol", "premier", "faceit", "circle", "social"];
+      const chunks = homeOrder.map(id => g(id)).filter(Boolean).map(renderHomeSingleCard);
       const hgg = $("homeGameGrid");
       if (hgg) {
         hgg.innerHTML = chunks.join("");
@@ -533,7 +479,16 @@
     }
 
     function bindHomeGameGrid() {
-      /* Home grid: document-level [data-home-game] delegation in main.js */
+      const grid = $("homeGameGrid");
+      if (!grid || grid.dataset.elyHomePickBound === "1") return;
+      grid.dataset.elyHomePickBound = "1";
+      grid.addEventListener("click", event => {
+        const hit = event.target && event.target.closest && event.target.closest("[data-home-game]");
+        if (!hit) return;
+        event.preventDefault();
+        const id = hit.dataset.homeGame;
+        if (id) selectGame(id);
+      });
     }
 
     const serviceImages = {
@@ -580,9 +535,7 @@
       }
       const override = thumbOverride != null && String(thumbOverride).trim() !== "" ? String(thumbOverride).trim() : "";
       const src = override || valThumb || serviceImages[id] || serviceImages.custom;
-      const isVal = game && game.id === "valorant";
-      const errFn = isVal ? ` onerror="elyValorantThumbFallback(this)"` : ` onerror="elyImagePlaceholder(this)"`;
-      return `<div class="service-thumb"><img src="${escapeHtml(src)}" alt="${escapeHtml(label)}" loading="eager"${errFn}></div>`;
+      return `<div class="service-thumb"><img src="${escapeHtml(src)}" alt="${escapeHtml(label)}" loading="eager" onerror="elyImagePlaceholder(this)"></div>`;
     }
     function selectCategory(categoryId) {
       pauseCategoryAuto(3500);
@@ -600,12 +553,6 @@
 
     function renderCategories() {
       const game = currentGame();
-      if (!game || !Array.isArray(game.categories)) {
-        $("categoryBar")?.classList.add("hidden");
-        const scroll = $("categoryScroll");
-        if (scroll) scroll.innerHTML = "";
-        return;
-      }
       const scroller = $("categoryScroll");
       if (!scroller) return;
       $("categoryBar")?.classList.toggle("hidden", game.categories.length === 0);
@@ -683,20 +630,13 @@
 
     function renderServices() {
       const game = currentGame();
-      if (!game || !Array.isArray(game.services)) return;
       const head = $("serviceHead");
       const grid = $("serviceGrid");
       const titleEl = $("serviceTitle");
       const copyEl = $("serviceCopy");
       if (!grid || !titleEl || !copyEl) return;
-      const cats = Array.isArray(game.categories) ? game.categories : [];
-      if (cats.length) {
-        if (!state.category || !cats.some(c => c.id === state.category)) {
-          state.category = cats[0]?.id || "services";
-        }
-      }
-      const category = cats.find(cat => cat.id === state.category);
-      const list = cats.length ? game.services.filter(service => service.category === state.category) : game.services;
+      const category = game.categories.find(cat => cat.id === state.category);
+      const list = game.categories.length ? game.services.filter(service => service.category === state.category) : game.services;
       titleEl.textContent = category ? ui(category.label) : ui(game.label) + " " + ui("Services");
       copyEl.textContent = game.id === "arc" ? ui("Open a service, customize the order, and add it to cart.") : ui("Select a service and adjust the order panel below.");
       const isEmpty = list.length === 0;
@@ -950,7 +890,6 @@
         const vt0 = $("detailValorantTrust");
         if (hl0) { hl0.hidden = true; hl0.innerHTML = ""; }
         if (vt0) { vt0.hidden = true; vt0.innerHTML = ""; }
-        renderOrderFeed();
         teardownValorantOrderChrome();
         syncValorantOrderFormMount(null);
         updateTotal();
@@ -999,8 +938,7 @@
       const vgSteps = vg;
       $("detailSteps").innerHTML = vgSteps ? "" : detailSteps(service.form).map(step => `
         <div class="detail-step"><strong>${ui(step.title)}</strong><span>${ui(step.copy)}</span></div>
-      `).join("");
-      renderOrderFeed();
+`).join("");
       $("orderForm").innerHTML = buildForm(service.form);
       syncValorantOrderFormMount(service);
       setupValorantOrderChrome();
@@ -1104,118 +1042,6 @@
         { title: "Add To Cart", copy: "Review the total and add the configured service to your cart." },
         { title: "Copy Ticket", copy: "Paste the clean order summary into Discord for boosters confirmation." }
       ];
-    }
-
-    function recentOrderType(order) {
-      return order?.type || "item";
-    }
-
-    function pickRecentOrders() {
-      const picked = [];
-      const used = new Set();
-      let previousType = recentOrderLastBatch.length ? recentOrderType(recentOrderLastBatch[recentOrderLastBatch.length - 1]) : "";
-      for (let slot = 0; slot < 3; slot += 1) {
-        let candidates = recentOrders.filter(order => !used.has(order.label) && order.type !== previousType);
-        if (!candidates.length) candidates = recentOrders.filter(order => !used.has(order.label));
-        const choice = candidates[Math.floor(Math.random() * candidates.length)] || recentOrders[Math.floor(Math.random() * recentOrders.length)];
-        picked.push(choice);
-        used.add(choice.label);
-        previousType = choice.type;
-      }
-      recentOrderLastBatch = picked;
-      return picked;
-    }
-
-    function pickSingleRecentOrder(slotIndex) {
-      const blocked = new Set();
-      for (let i = 0; i < 3; i += 1) {
-        if (i !== slotIndex && recentOrderLastBatch[i]) blocked.add(recentOrderLastBatch[i].label);
-      }
-      const cur = recentOrderLastBatch[slotIndex];
-      let candidates = recentOrders.filter(o => !blocked.has(o.label));
-      if (cur) {
-        const alt = candidates.filter(o => o.label !== cur.label);
-        if (alt.length) candidates = alt;
-      }
-      if (!candidates.length) candidates = recentOrders.filter(o => !blocked.has(o.label));
-      if (!candidates.length) candidates = recentOrders.slice();
-      return candidates[Math.floor(Math.random() * candidates.length)];
-    }
-
-    function renderOrderFeedSlot(slotIndex) {
-      const feed = $("orderFeed");
-      if (!feed) return;
-      const game = currentGame();
-      if (!game || game.id !== "arc") return;
-      const cards = feed.querySelectorAll(".order-feed-card");
-      if (cards.length !== 3 || slotIndex < 0 || slotIndex > 2) {
-        renderOrderFeed();
-        return;
-      }
-      const newOrder = pickSingleRecentOrder(slotIndex);
-      recentOrderLastBatch[slotIndex] = newOrder;
-      const card = cards[slotIndex];
-      card.classList.add("is-changing");
-      window.setTimeout(() => {
-        card.dataset.feedService = newOrder.service;
-        card.dataset.feedCategory = newOrder.category;
-        card.setAttribute("aria-label", "Open " + newOrder.label);
-        const strong = card.querySelector("strong");
-        if (strong) strong.textContent = newOrder.label;
-        card.classList.remove("is-changing");
-      }, 360);
-    }
-
-    function bindOrderFeedClicks() {
-      const feed = $("orderFeed");
-      if (!feed || feed.dataset.feedDelegated === "1") return;
-      feed.dataset.feedDelegated = "1";
-      feed.addEventListener("click", event => {
-        const card = event.target.closest(".order-feed-card[data-feed-service]");
-        if (!card) return;
-        openRecentOrder(card.dataset.feedService, card.dataset.feedCategory);
-      });
-    }
-
-    function openRecentOrder(serviceId, categoryId) {
-      const arc = games.find(game => game.id === "arc");
-      if (!arc) return;
-      const service = arc.services.find(s => s.id === serviceId);
-      if (!service) return;
-      state.game = "arc";
-      state.category = categoryId || service.category;
-      state.serviceId = service.id;
-      syncGameHash("arc");
-      renderAll();
-      requestAnimationFrame(() => {
-        $("detailSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    }
-
-    function renderOrderFeed() {
-      const feed = $("orderFeed");
-      if (!feed) return;
-      const game = currentGame();
-      if (!game || game.id !== "arc") {
-        feed.innerHTML = "";
-        return;
-      }
-      const entries = pickRecentOrders();
-      const html = entries.map(order => `
-        <button class="order-feed-card" type="button" data-feed-service="${escapeHtml(order.service)}" data-feed-category="${escapeHtml(order.category)}" aria-label="Open ${escapeHtml(order.label)}">
-          <small><span class="live-dot" aria-hidden="true"></span>Raider Just Ordered!</small>
-          <strong>${escapeHtml(order.label)}</strong>
-        </button>
-      `).join("");
-      feed.innerHTML = html;
-      bindOrderFeedClicks();
-    }
-
-    function startOrderFeed() {
-      recentOrderTimers.forEach(id => window.clearInterval(id));
-      recentOrderTimers = ORDER_FEED_SLOT_MS.map((ms, slot) => window.setInterval(() => {
-        renderOrderFeedSlot(slot);
-      }, ms));
     }
 
     function qtyField(id, label, value = 0, min = 0, max = null) {

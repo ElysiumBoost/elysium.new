@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=arc-nav-fix1">
+  <link rel="stylesheet" href="css/styles.css?v=recovery-arc-val-working1">
 
 </head>
 <body>
@@ -120,72 +120,7 @@
             <p>Pick a title to open services, customize your order, and build your Discord ticket.</p>
           </div>
         </div>
-        <div class="home-grid" id="homeGameGrid">
-          <button class="home-game-card" type="button" data-home-game="arc" aria-label="Open Arc Raiders services">
-            <img class="home-game-media" src="assets/backgrounds/arc-raiders-bg.webp" alt="" loading="eager" onerror="elyImagePlaceholder(this)">
-            <span class="home-game-card__body">
-              <strong>Arc Raiders</strong>
-              <small>Manual boosting, coins, blueprints, weapons, trials, raids.</small>
-              <em>View services</em>
-            </span>
-          </button>
-          <button class="home-game-card" type="button" data-home-game="valorant" aria-label="Open Valorant services">
-            <img class="home-game-media" src="assets/backgrounds/valorant-bg.webp" alt="" loading="eager" onerror="elyImagePlaceholder(this)">
-            <span class="home-game-card__body">
-              <strong>Valorant</strong>
-              <small>Rank paths, placements, wins, and coaching. Live pricing in your currency.</small>
-              <em>View services</em>
-            </span>
-          </button>
-          <button class="home-game-card" type="button" data-home-game="wow" aria-label="Open World of Warcraft services">
-            <img class="home-game-media" src="assets/backgrounds/wow-bg.webp" alt="" loading="lazy" onerror="elyImagePlaceholder(this)">
-            <span class="home-game-card__body">
-              <strong>World of Warcraft</strong>
-              <small>Mythic+, raids, arena, and more. Hub expands as listings go live.</small>
-              <em>View services</em>
-            </span>
-          </button>
-          <button class="home-game-card" type="button" data-home-game="lol" aria-label="Open League of Legends services">
-            <img class="home-game-media" src="assets/backgrounds/lol-bg.webp" alt="" loading="lazy" onerror="elyImagePlaceholder(this)">
-            <span class="home-game-card__body">
-              <strong>League of Legends</strong>
-              <small>Wins, duo queue, and coaching — compact orders with Discord confirmation.</small>
-              <em>View services</em>
-            </span>
-          </button>
-          <button class="home-game-card" type="button" data-home-game="premier" aria-label="Open CS2 Premier services">
-            <img class="home-game-media" src="assets/backgrounds/cs2-premier-bg.webp" alt="" loading="lazy" onerror="elyImagePlaceholder(this)">
-            <span class="home-game-card__body">
-              <strong>CS2 Premier</strong>
-              <small>CS2 Premier matchmaking services when listings go live.</small>
-              <em>View services</em>
-            </span>
-          </button>
-          <button class="home-game-card" type="button" data-home-game="faceit" aria-label="Open CS2 Faceit services">
-            <img class="home-game-media" src="assets/backgrounds/cs2-faceit-bg.webp" alt="" loading="lazy" onerror="elyImagePlaceholder(this)">
-            <span class="home-game-card__body">
-              <strong>CS2 Faceit</strong>
-              <small>FACEIT CS2 — readable tickets and booster coordination.</small>
-              <em>View services</em>
-            </span>
-          </button>
-          <button class="home-game-card" type="button" data-home-game="circle" aria-label="Open Boost+ services">
-            <img class="home-game-media" src="assets/backgrounds/fallback-purple-bg.webp" alt="" loading="lazy" onerror="elyImagePlaceholder(this)">
-            <span class="home-game-card__body">
-              <strong>Boost+</strong>
-              <small>Teammate sessions for League, Valorant, and selected packages.</small>
-              <em>View services</em>
-            </span>
-          </button>
-          <button class="home-game-card" type="button" data-home-game="social" aria-label="Open Social services">
-            <img class="home-game-media" src="assets/backgrounds/boost-social-bg.webp" alt="" loading="lazy" onerror="elyImagePlaceholder(this)">
-            <span class="home-game-card__body">
-              <strong>Social</strong>
-              <small>Companion and social services — clear requests in Discord.</small>
-              <em>View services</em>
-            </span>
-          </button>
-        </div>
+        <div class="home-grid" id="homeGameGrid"></div>
         <section class="how-it-works" aria-labelledby="howItWorksTitle">
           <h2 id="howItWorksTitle">How It Works</h2>
           <div class="how-grid">
@@ -289,7 +224,7 @@
         </div>
         <div class="service-grid" id="serviceGrid"></div>
 
-        <section class="detail is-hidden" id="detailSection" aria-label="Service details">
+        <section class="detail" id="detailSection" aria-label="Service details">
           <div class="detail-left">
             <div class="detail-left-head" id="detailLeftHead">
               <div class="detail-title">
@@ -308,7 +243,6 @@
             <div id="valorantConfiguratorMount" class="valorant-cfg-mount" hidden></div>
             <div class="detail-left-meta" id="detailLeftMeta">
               <div class="detail-steps" id="detailSteps"></div>
-              <div class="order-feed" id="orderFeed" aria-live="polite"></div>
               <div class="detail-highlights-wrap" id="detailHighlights" hidden></div>
               <div class="detail-val-trust" id="detailValorantTrust" hidden></div>
             </div>
@@ -437,14 +371,14 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="js/config.js?v=arc-nav-fix1"></script>
-  <script src="js/products.js?v=arc-nav-fix1"></script>
-  <script src="js/state.js?v=arc-nav-fix1"></script>
-  <script src="js/storage.js?v=arc-nav-fix1"></script>
-  <script src="js/validation.js?v=arc-nav-fix1"></script>
-  <script src="js/cart.js?v=arc-nav-fix1"></script>
-  <script src="js/ui.js?v=arc-nav-fix1"></script>
-  <script src="js/main.js?v=direct-home-click1"></script>
+  <script src="js/config.js?v=recovery-arc-val-working1"></script>
+  <script src="js/products.js?v=recovery-arc-val-working1"></script>
+  <script src="js/state.js?v=recovery-arc-val-working1"></script>
+  <script src="js/storage.js?v=recovery-arc-val-working1"></script>
+  <script src="js/validation.js?v=recovery-arc-val-working1"></script>
+  <script src="js/cart.js?v=recovery-arc-val-working1"></script>
+  <script src="js/ui.js?v=recovery-arc-val-working1"></script>
+  <script src="js/main.js?v=recovery-arc-val-working1"></script>
 
 </body>
 </html>
