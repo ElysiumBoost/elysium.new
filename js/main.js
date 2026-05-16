@@ -239,4 +239,26 @@
         }
       }
     });
-    renderAll();
+    if (!window.elyHomeGameDelegation) {
+      window.elyHomeGameDelegation = true;
+      document.addEventListener("click", event => {
+        const card = event.target.closest && event.target.closest("[data-home-game]");
+        if (!card || !card.dataset.homeGame) return;
+        if (typeof selectGame !== "function") return;
+        event.preventDefault();
+        selectGame(card.dataset.homeGame);
+      });
+    }
+    try {
+      renderAll();
+    } catch (err) {
+      console.error("ELY renderAll:", err);
+      try {
+        state.game = null;
+        state.category = null;
+        state.serviceId = null;
+        renderAll();
+      } catch (err2) {
+        console.error("ELY renderAll recovery failed:", err2);
+      }
+    }
