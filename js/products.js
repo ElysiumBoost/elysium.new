@@ -122,16 +122,15 @@
     const workshops = ["Gunsmith", "Gear Bench", "Medical Lab", "Explosive Station", "Utility Station", "Refiner"];
     const ranks = ["Rookie I", "Rookie II", "Rookie III", "Tryhard I", "Tryhard II", "Tryhard III", "Wildcard I", "Wildcard II", "Wildcard III", "Daredevil I", "Daredevil II", "Daredevil III", "Hotshot"];
 
-    const valorantCategoryThumb = "assets/backgrounds/valorant-bg.webp";
     const valorantCategories = [
-      { id: "rank-boosting", label: "Rank Boosting", icon: "rank", badge: null, badgeType: null, featured: true, thumb: valorantCategoryThumb },
-      { id: "placement-matches", label: "Placement Matches", icon: "placement", badge: null, badgeType: null, featured: false, thumb: valorantCategoryThumb },
-      { id: "radiant-boost", label: "Radiant Boost", icon: "radiant", badge: "HOT", badgeType: "hot", featured: false, thumb: valorantCategoryThumb },
-      { id: "ranked-wins", label: "Ranked Wins", icon: "wins", badge: null, badgeType: null, featured: false, thumb: valorantCategoryThumb },
-      { id: "unrated-games", label: "Unrated Games", icon: "unrated", badge: null, badgeType: null, featured: false, thumb: valorantCategoryThumb },
-      { id: "account-leveling", label: "Account Leveling", icon: "leveling", badge: null, badgeType: null, featured: false, thumb: valorantCategoryThumb },
-      { id: "battle-pass", label: "Battle Pass", icon: "battle-pass", badge: "NEW", badgeType: "new", featured: false, thumb: valorantCategoryThumb },
-      { id: "coaching", label: "Coaching", icon: "coaching", badge: null, badgeType: null, featured: false, thumb: valorantCategoryThumb }
+      { id: "rank-boosting", label: "Rank Boosting", icon: "rank", badge: null, badgeType: null, featured: true, thumb: "assets/valorant-rank-boosting.webp" },
+      { id: "placement-matches", label: "Placement Matches", icon: "placement", badge: null, badgeType: null, featured: false, thumb: "assets/valorant-placement-matches.webp" },
+      { id: "radiant-boost", label: "Radiant Boost", icon: "radiant", badge: "HOT", badgeType: "hot", featured: false, thumb: "assets/valorant-radiant-boost.webp" },
+      { id: "ranked-wins", label: "Ranked Wins", icon: "wins", badge: null, badgeType: null, featured: false, thumb: "assets/valorant-ranked-wins.webp" },
+      { id: "unrated-games", label: "Unrated Games", icon: "unrated", badge: null, badgeType: null, featured: false, thumb: "assets/valorant-unrated-games.webp" },
+      { id: "account-leveling", label: "Account Leveling", icon: "leveling", badge: null, badgeType: null, featured: false, thumb: "assets/valorant-account-leveling.webp" },
+      { id: "battle-pass", label: "Battle Pass", icon: "battle-pass", badge: "NEW", badgeType: "new", featured: false, thumb: "assets/valorant-battle-pass.webp" },
+      { id: "coaching", label: "Coaching", icon: "coaching", badge: null, badgeType: null, featured: false, thumb: "assets/valorant-coaching.webp" }
     ];
 
     const wowCategories = [
@@ -319,7 +318,7 @@
           { id: "expeditions", label: "Expedition Boost", icon: "i-expedition", badge: "HOT", badgeTone: "hot" },
           { id: "custom", label: "Private Order", icon: "i-private" }
         ],
-        popular: [],
+        popular: ["trials", "guns", "blueprints", "coins"],
         services: [
           arcService("blueprints", "blueprints", "Buy Arc Raiders Blueprints", "All Blueprints", "i-blueprint", .75, " each", "Discounted blueprints, now $0.75 each instead of $1.50.", "30-60 Minutes", "blueprints", 1.50),
           arcService("guns", "guns", "Buy Arc Raiders Weapons", "All Guns", "i-gun", .50, " each", "Discounted weapons and mods with automatic attachment quantity.", "30-60 Minutes", "guns", 1.00),

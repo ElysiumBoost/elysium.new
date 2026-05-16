@@ -1,3 +1,8 @@
+    function setCopyStatus(text) {
+      const el = $("copyStatus");
+      if (el) el.textContent = text;
+    }
+
     function calculate() {
       const service = currentService();
       if (!service) return { total: 0, valid: false, details: "", custom: false, estimated: false };
@@ -904,7 +909,7 @@
         state.cart = [];
         state.orderPreviewId = "";
         renderCart();
-        $("copyStatus")?.textContent = "Cart cleared.";
+        setCopyStatus("Cart cleared.");
         showToast("Cart cleared.");
         return;
       }
@@ -1065,12 +1070,12 @@
 
     async function copyOrder() {
       if (!state.cart.length) {
-        $("copyStatus")?.textContent = ui("Add an item before copying.");
+        setCopyStatus(ui("Add an item before copying."));
         return;
       }
       const v = validateTicketRequirements();
       if (!v.ok) {
-        $("copyStatus")?.textContent = v.message;
+        setCopyStatus(v.message);
         showToast(v.message, 3800, true);
         return;
       }
@@ -1330,7 +1335,7 @@
 
     function openDiscordTicket() {
       if (!state.cart.length) {
-        $("copyStatus")?.textContent = "Add an item before opening Discord.";
+        setCopyStatus("Add an item before opening Discord.");
         return;
       }
       ensureArcId(() => window.open(DISCORD_URL, "_blank", "noopener"));

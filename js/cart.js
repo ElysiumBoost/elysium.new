@@ -417,6 +417,7 @@
     function renderHome() {
       $("homeContent")?.classList.toggle("hidden", Boolean(state.game));
       const g = id => games.find(x => x.id === id);
+      const homeCardBgFallback = "assets/backgrounds/fallback-purple-bg.webp";
       const homeBlurb = game => {
         const id = game.id;
         const map = {
@@ -431,80 +432,33 @@
         };
         return map[id] || (game.copy && game.copy.split(".")[0] + ".") || "";
       };
+      const homeCardTitle = game => {
+        if (game.id === "premier") return "CS2 Premier";
+        if (game.id === "faceit") return "CS2 Faceit";
+        if (game.id === "circle") return "Boost+";
+        return game.label;
+      };
+      const homeCardImageSrc = game => {
+        if (game.id === "circle") return homeCardBgFallback;
+        return game.heroBg;
+      };
       const gameAria = label => `${ui("View")} ${ui(label)} ${ui("services")}`;
       const renderHomeSingleCard = game => {
-        const media = game.id === "valorant" && game.homeCardMedia
-          ? `<img class="home-game-media" src="${escapeHtml(game.homeCardMedia)}" alt="${escapeHtml(ui(game.label))}" loading="eager" data-home-card-fb="${escapeHtml(game.heroBg)}" onerror="elyHomeCardFallback(this)">`
-          : `<img class="home-game-media" src="${escapeHtml(game.heroBg)}" alt="${escapeHtml(ui(game.label))}" loading="eager">`;
+        const title = homeCardTitle(game);
+        const imgSrc = homeCardImageSrc(game);
+        const eager = ["arc", "valorant", "wow", "lol"].includes(game.id);
+        const media = game.id === "valorant"
+          ? `<img class="home-game-media" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(ui(title))}" loading="${eager ? "eager" : "lazy"}" data-home-card-fb="${escapeHtml(homeCardBgFallback)}" onerror="elyHomeCardFallback(this)">`
+          : `<img class="home-game-media" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(ui(title))}" loading="${eager ? "eager" : "lazy"}">`;
         return `
-        <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(gameAria(game.label))}">
+        <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(gameAria(title))}">
           ${media}
-          <h2>${ui(game.label)}</h2>
+          <h2>${ui(title)}</h2>
           <p class="home-game-blurb">${escapeHtml(ui(homeBlurb(game)))}</p>
-          <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
         </button>`;
       };
-      const chunks = [];
-      ["arc", "valorant", "wow", "lol"].forEach(id => {
-        const game = g(id);
-        if (game) chunks.push(renderHomeSingleCard(game));
-      });
-      const prem = g("premier");
-      const face = g("faceit");
-      if (prem && face) {
-        chunks.push(`
-        <article class="home-game-card home-combo-card" aria-label="${escapeHtml(ui("CS2 Premier and Faceit"))}">
-          <div class="home-combo-split">
-            <button type="button" class="home-combo-half" data-home-game="premier" aria-label="${escapeHtml(gameAria("CS2 Premier"))}">
-              <img class="home-combo-half-media" src="${escapeHtml(prem.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
-              <span class="home-combo-half-scrim" aria-hidden="true"></span>
-              <span class="home-combo-half-content">
-                <h2 class="home-combo-half-h">${ui("CS2 Premier")}</h2>
-                <p class="home-combo-half-p">${escapeHtml(ui(homeBlurb(prem)))}</p>
-                <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
-              </span>
-            </button>
-            <button type="button" class="home-combo-half" data-home-game="faceit" aria-label="${escapeHtml(gameAria("CS2 Faceit"))}">
-              <img class="home-combo-half-media" src="${escapeHtml(face.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
-              <span class="home-combo-half-scrim" aria-hidden="true"></span>
-              <span class="home-combo-half-content">
-                <h2 class="home-combo-half-h">${ui("CS2 Faceit")}</h2>
-                <p class="home-combo-half-p">${escapeHtml(ui(homeBlurb(face)))}</p>
-                <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
-              </span>
-            </button>
-          </div>
-        </article>`);
-      }
-      const boost = g("circle");
-      const soc = g("social");
-      if (boost && soc) {
-        const socialImg = "assets/backgrounds/boost-social-bg.webp";
-        const boostHomeCardBg = "assets/backgrounds/fallback-purple-bg.webp";
-        chunks.push(`
-        <article class="home-game-card home-combo-card" aria-label="${escapeHtml(ui("Boost+ and Social"))}">
-          <div class="home-combo-split">
-            <button type="button" class="home-combo-half" data-home-game="circle" aria-label="${escapeHtml(gameAria("Boost+"))}">
-              <img class="home-combo-half-media" src="${escapeHtml(boostHomeCardBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
-              <span class="home-combo-half-scrim" aria-hidden="true"></span>
-              <span class="home-combo-half-content">
-                <h2 class="home-combo-half-h">${ui("Boost+")}</h2>
-                <p class="home-combo-half-p">${escapeHtml(ui(homeBlurb(boost)))}</p>
-                <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
-              </span>
-            </button>
-            <button type="button" class="home-combo-half" data-home-game="social" aria-label="${escapeHtml(gameAria("Social"))}">
-              <img class="home-combo-half-media home-combo-half-media--social" src="${escapeHtml(socialImg)}" alt="" loading="lazy" onerror="elyImagePlaceholder(this)">
-              <span class="home-combo-half-scrim" aria-hidden="true"></span>
-              <span class="home-combo-half-content">
-                <h2 class="home-combo-half-h">${ui("Social")}</h2>
-                <p class="home-combo-half-p">${escapeHtml(ui(homeBlurb(soc)))}</p>
-                <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
-              </span>
-            </button>
-          </div>
-        </article>`);
-      }
+      const homeOrder = ["arc", "valorant", "wow", "lol", "premier", "faceit", "circle", "social"];
+      const chunks = homeOrder.map(id => g(id)).filter(Boolean).map(renderHomeSingleCard);
       const hgg = $("homeGameGrid");
       if (hgg) {
         hgg.innerHTML = chunks.join("");
@@ -553,13 +507,13 @@
       expeditions: "assets/thumb-expedition.webp",
       custom: "assets/thumb-private-order.webp",
       services: "assets/thumb-private-order.webp",
-      "rank-boosting": "assets/backgrounds/valorant-bg.webp",
-      "placement-matches": "assets/backgrounds/valorant-bg.webp",
-      "radiant-boost": "assets/backgrounds/valorant-bg.webp",
-      "ranked-wins": "assets/backgrounds/valorant-bg.webp",
-      "unrated-games": "assets/backgrounds/valorant-bg.webp",
-      "account-leveling": "assets/backgrounds/valorant-bg.webp",
-      "battle-pass": "assets/backgrounds/valorant-bg.webp",
+      "rank-boosting": "assets/valorant-rank-boosting.webp",
+      "placement-matches": "assets/valorant-placement-matches.webp",
+      "radiant-boost": "assets/valorant-radiant-boost.webp",
+      "ranked-wins": "assets/valorant-ranked-wins.webp",
+      "unrated-games": "assets/valorant-unrated-games.webp",
+      "account-leveling": "assets/valorant-account-leveling.webp",
+      "battle-pass": "assets/valorant-battle-pass.webp",
       "mythic-plus": "assets/thumb-private-order.webp",
       "raid-calendar": "assets/thumb-raids.webp",
       arena: "assets/thumb-private-order.webp",
@@ -690,7 +644,7 @@
       grid.classList.toggle("is-hidden", list.length <= 1 && !isEmpty);
       grid.innerHTML = isEmpty
         ? `<p class="intro service-empty">${ui("No services available yet.")}</p>`
-        : list.map(service => cardMarkup(service)).join("");
+        : list.map(service => cardMarkup(service, false)).join("");
       bindServiceButtons();
     }
 
@@ -851,10 +805,27 @@
       `;
     }
 
-    function cardMarkup(service) {
+    function cardMarkup(service, popular) {
       const serviceVisual = categoryArtwork(service.category || "custom", service.cardTitle);
       const activeCard = state.serviceId === service.id ? " is-active" : "";
       const priceBlock = `${(service.valorantCustomPrice || service.form === "valorant-radiant") ? "" : "<small>From</small>"}${servicePrice(service)}`;
+      if (popular) {
+        return `
+          <article class="popular-card${activeCard}">
+            <span class="popular-badge">${ui("Best seller")}</span>
+            <div class="popular-card__inner">
+              <div class="popular-card__media"><span class="category-thumb">${serviceVisual}</span></div>
+              <div class="popular-card__body">
+                <h3>${ui(service.cardTitle)}</h3>
+                <p>${ui(service.short)}</p>
+                ${premiumCardBullets()}
+                <div class="price">${priceBlock}</div>
+                <button class="service-btn btn-premium ${state.serviceId === service.id ? "active" : ""}" type="button" data-service="${service.id}">${ui("View Details")}</button>
+              </div>
+            </div>
+          </article>
+        `;
+      }
       return `
         <article class="service-card${activeCard}">
           <div class="service-card__media"><span class="category-thumb">${serviceVisual}</span></div>
@@ -967,7 +938,7 @@
       const vgSteps = vg;
       $("detailSteps").innerHTML = vgSteps ? "" : detailSteps(service.form).map(step => `
         <div class="detail-step"><strong>${ui(step.title)}</strong><span>${ui(step.copy)}</span></div>
-      `).join("");
+`).join("");
       $("orderForm").innerHTML = buildForm(service.form);
       syncValorantOrderFormMount(service);
       setupValorantOrderChrome();
