@@ -1,0 +1,1401 @@
+    function calculate() {
+      const service = currentService();
+      if (!service) return { total: 0, valid: false, details: "", custom: false, estimated: false };
+      const type = service.form;
+      if (type && String(type).startsWith("valorant-")) {
+        return calculateValorant(type, service);
+      }
+      if (type === "fast") {
+        const qty = Math.max(1, num("fastQty"));
+        return { total: service.fromUSD * qty, valid: true, details: `Quantity / Hours: ${qty}\nNotes: ${val("fastNote") || "None"}` };
+      }
+      if (type === "blueprints") {
+        const groups = Object.entries(state.blueprintSelections).map(([group, set]) => [group, Array.from(set).sort()]);
+        const all = groups.flatMap(([, list]) => list);
+        const details = groups.map(([group, list]) => list.length ? `${displayItemName(group)}: ${displayItemList(list)}` : "").filter(Boolean).join("\n") || "No blueprints selected";
+        return { total: all.length * prices.blueprint, oldTotal: all.length * 1.50, valid: all.length > 0, details };
+      }
+      if (type === "coins") {
+        const amount = Math.max(100000, Math.min(12000000, num("coinAmount")));
+        const base = amount / 100000 * prices.coins100k;
+        const tier = coinTier(amount);
+        const discount = tier ? base * tier.discount : 0;
+        const final = base - discount;
+        const pct = tier ? Math.round(tier.discount * 100) : 0;
+        const rows = tier
+          ? [
+              ["Subtotal", displayMoney(base)],
+              [`Discount (${pct}%)`, "-" + displayMoney(discount)],
+              ["Final total", displayMoney(final)]
+            ]
+          : [];
+        return {
+          total: final,
+          oldTotal: tier ? base : 0,
+          valid: amount >= 100000,
+          details: [
+            `${amount.toLocaleString()} Raider Coins`,
+            tier ? `Subtotal: ${moneyUSD(base)} USD` : "",
+            tier ? `Discount (${pct}%): -${moneyUSD(discount)} USD` : "",
+            tier ? `Final: ${moneyUSD(final)} USD` : ""
+          ].filter(Boolean).join("\n"),
+          arcPriceBreakdown: rows.length ? { rows } : null
+        };
+      }
+      if (type === "seeds") {
+        const amount = Math.max(100, Math.min(2000, num("seedAmount")));
+        const base = amount / 100 * prices.seeds100;
+        const tier = seedTier(amount);
+        const discount = tier ? base * tier.discount : 0;
+        const final = base - discount;
+        const pct = tier ? Math.round(tier.discount * 100) : 0;
+        const rows = tier
+          ? [
+              ["Subtotal", displayMoney(base)],
+              [`Discount (${pct}%)`, "-" + displayMoney(discount)],
+              ["Final total", displayMoney(final)]
+            ]
+          : [];
+        return {
+          total: final,
+          oldTotal: tier ? base : 0,
+          valid: amount >= 100,
+          details: [
+            `${amount.toLocaleString()} Assorted Seeds`,
+            tier ? `Subtotal: ${moneyUSD(base)} USD` : "",
+            tier ? `Bulk discount (${pct}%): -${moneyUSD(discount)} USD` : "",
+            tier ? `Final: ${moneyUSD(final)} USD` : ""
+          ].filter(Boolean).join("\n"),
+          arcPriceBreakdown: rows.length ? { rows } : null
+        };
+      }
+      if (type === "depositary") {
+        const slots = Math.max(1, num("depositaryCustom"));
+        return { total: slots * prices.depositarySlot, valid: slots >= 1, details: `Depositary Slots: ${slots}\nRate: ${moneyUSD(prices.depositarySlot)} per slot\n50 Slot Package: ${moneyUSD(50 * prices.depositarySlot)}\n280 Slot Maximum: ${moneyUSD(280 * prices.depositarySlot)}` };
+      }
+      if (type === "guns") {
+        const line = calcWeapon("gun", true);
+        const isBundle20 = line.weaponQty === 20 && line.modQty === 20 && line.modType === "premium";
+        const discount = isBundle20 ? line.total * .10 : 0;
+        const details = [
+          `${line.weaponQty}x ${line.weapon}`,
+          line.modQty > 0 ? `${line.modQty}x ${modLabel(line.modType)} (auto-matched to weapon qty)` : "",
+          isBundle20 ? `20x Bundle Discount: -${moneyUSD(discount)} USD (10%)` : ""
+        ].filter(Boolean).join("\n");
+        return { total: line.total - discount, oldTotal: line.total, valid: line.total > 0, details };
+      }
+      if (type === "loadout") return calcLoadout();
+      if (type === "trials") {
+        const allStars = Boolean($("trialAllStars")?.checked);
+        const rankUp = Boolean($("trialRankUp")?.checked);
+        const selected = $("trialOption").selectedOptions[0];
+        const optionLabel = selected?.dataset.label || "No Rank Up";
+        const optionPrice = rankUp ? Number(selected?.dataset.price || 0) : 0;
+        const basePrice = (allStars ? prices.trialsBase : 0) + (rankUp ? prices.trialsBase : 0);
+        return {
+          total: basePrice + optionPrice,
+          valid: allStars || rankUp,
+          details: `Weekly All 3 Stars: ${allStars ? "Yes" : "No"}\nRank Up Service: ${rankUp ? "Yes" : "No"}\nCurrent Rank: ${val("trialRank")}\nRank Option: ${rankUp ? optionLabel : "None"}\nRank Option Price: ${moneyUSD(optionPrice)}`
+        };
+      }
+      if (type === "pvp") {
+        const hours = Math.max(1, Math.min(6, num("pvpHours")));
+        const mode = val("pvpMode") === "trio" ? "Trio" : "Duo";
+        const focus = val("coachFocus") === "pve" ? "PvE Coaching" : "PvP Coaching";
+        const notes = val("coachNotes").trim();
+        return { total: hours * (mode === "Trio" ? 30 : 20), valid: true, details: `${focus}\nSession: ${mode}\nHours: ${hours}\nMaximum: 6 hours per ticket${notes ? `\nCoaching Notes: ${notes}` : ""}` };
+      }
+      if (type === "leveling") {
+        const current = Math.max(1, Math.min(74, num("currentLevel")));
+        const target = Math.max(1, Math.min(75, num("targetLevel")));
+        const speed = Number(val("speed"));
+        const total = levelCost(current, target) * speed;
+        const oldTotal = oldLevelCost(current, target) * speed * 0.90;
+        return {
+          total,
+          oldTotal: oldTotal > total ? oldTotal : 0,
+          valid: target > current,
+          details: `Current Level: ${current}\nTarget Level: ${target}\nSpeed: ${$("speed").selectedOptions[0].textContent}`
+        };
+      }
+      if (type === "workshop") {
+        if (val("workshopBundle") === "1") {
+          const workshopTotal = prices.workshopMax;
+          const scrappyTotal = 5 * prices.scrappyLevel;
+          const subtotal = workshopTotal + scrappyTotal;
+          const discount = subtotal * .10;
+          return {
+            total: subtotal - discount,
+            valid: true,
+            details: `Max Bundle: Workshop + Scrappy\nWorkshops: All 6 workbenches - ${moneyUSD(workshopTotal)}\nScrappy Level: 5 - ${moneyUSD(scrappyTotal)}\nBundle Discount: -${moneyUSD(discount)} USD (10%)`
+          };
+        }
+        const mode = val("workshopMode") || "workshop";
+        if (mode === "scrappy") {
+          const from = Math.max(1, Math.min(5, num("scrappyFrom")));
+          const to = Math.max(1, Math.min(5, num("scrappyTo")));
+          const levels = Math.max(1, to - from + 1);
+          return {
+            total: levels * prices.scrappyLevel,
+            valid: to > from,
+            details: `Mode: Scrappy Leveling\nFrom Level: ${from}\nTo Level: ${to}\nSelected Levels: ${levels}\nRate: ${moneyUSD(prices.scrappyLevel)} per level`
+          };
+        }
+        const from = Number(val("workshopFrom"));
+        const to = Number(val("workshopTo"));
+        const selected = Array.from(document.querySelectorAll("#orderForm [data-workshop]:checked")).map(input => input.value);
+        const levels = Math.max(0, to - from);
+        const levelMultiplier = levels / 2;
+        const fullTotal = selected.length === workshops.length ? prices.workshopMax : selected.length * prices.workshopBench;
+        const subtotal = fullTotal * levelMultiplier;
+        const workshopDiscountRate = 0.25;
+        const discount = subtotal * workshopDiscountRate;
+        const total = subtotal - discount;
+        return {
+          total,
+          oldTotal: subtotal > total ? subtotal : 0,
+          valid: selected.length > 0 && levels > 0,
+          details: `From Level: ${from}\nTo Level: ${to}\nWorkshops: ${selected.join(", ") || "None"}\nUnit Rate: ${moneyUSD(prices.workshopBench)} per workbench\nAll 6 Workbench Package: ${moneyUSD(prices.workshopMax)}\nSubtotal: ${moneyUSD(subtotal)}\nWorkshop Discount: -${moneyUSD(discount)} USD (25%)`
+        };
+      }
+      if (type === "raid") return calcRaid();
+      if (type === "expedition") {
+        const selected = Array.from(document.querySelectorAll("#orderForm [data-stage]:checked")).map(input => ({ name: input.dataset.stage, price: Number(input.value) }));
+        const total = selected.reduce((sum, item) => sum + item.price, 0);
+        return { total, valid: selected.length > 0, details: selected.map(item => `${item.name} - ${moneyUSD(item.price)}`).join("\n") || "No expedition stages selected" };
+      }
+      if (type === "boss") {
+        const qty = Math.max(1, num("bossQty"));
+        return { total: qty * 20, valid: true, details: `${qty}x ${val("boss")}` };
+      }
+      const req = val("privateText").trim();
+      if (!req) return { total: 0, valid: false, custom: true, details: "Custom request to be discussed in Discord" };
+      const estimate = estimatePrivateOrder(req);
+      const hasEstimate = estimate.total > 0;
+      const detailLines = [`Request: ${req}`];
+      if (hasEstimate) {
+        detailLines.push("");
+        detailLines.push("Estimated breakdown:");
+        estimate.lines.forEach(line => detailLines.push(`- ${line}`));
+        detailLines.push(`Estimated Total: ${moneyUSD(estimate.total)} USD`);
+      }
+      detailLines.push("");
+      detailLines.push(`Note: ${PRIVATE_ESTIMATE_NOTE}`);
+      return {
+        total: estimate.total,
+        valid: true,
+        custom: !hasEstimate,
+        estimated: hasEstimate,
+        details: detailLines.join("\n")
+      };
+    }
+
+    function calcLoadout() {
+      const primary = calcWeapon("primary");
+      const secondary = calcWeapon("secondary");
+      const bundleSize = Math.max(0, num("loadoutBundle"));
+      const bundleExtra = bundleSize ? (bundleSize * prices.augment) + (bundleSize * prices.shield) + ((bundleSize * 5) / 5 * prices.rechargerBundle) + ((bundleSize * 5) / 5 * prices.bandageBundle) : 0;
+      const augmentQty = Math.max(0, num("augmentQty"));
+      const shieldQty = Math.max(0, num("shieldQty"));
+      const bandageBundles = Math.max(0, num("bandageQty"));
+      const nadeBundles = Math.max(0, num("nadeQty"));
+      const rechargerBundles = Math.max(0, num("rechargerQty"));
+      const surgeBundles = Math.max(0, num("surgeRechargerQty"));
+      const extrasSubtotal =
+        augmentQty * prices.augment +
+        shieldQty * prices.shield +
+        bandageBundles * prices.bandageBundle +
+        nadeBundles * prices.nadeBundle +
+        rechargerBundles * prices.rechargerBundle +
+        surgeBundles * prices.surgeRechargerBundle;
+      const total = primary.total + secondary.total + bundleExtra + extrasSubtotal;
+      const detailParts = [
+        bundleSize ? `Special Bundle: ${bundleSize}x\nBundle Items: ${bundleSize}x ${primary.weapon}, ${bundleSize}x Looting Mk. 3 (Survivor) Augment, ${bundleSize}x Medium Shield, ${bundleSize * 5}x Shield Recharger, ${bundleSize * 5}x Herbal` : "",
+        weaponDetail("Primary", primary),
+        weaponDetail("Secondary", secondary),
+        augmentQty > 0 ? `${augmentQty}x Looting Mk. 3 (Survivor) Augment` : "",
+        shieldQty > 0 ? `${shieldQty}x Medium Shield` : "",
+        loadoutBundleDetailLine(bandageBundles, 5, "Herbal Bandage"),
+        loadoutBundleDetailLine(nadeBundles, 3, "Trigger Nade"),
+        loadoutBundleDetailLine(rechargerBundles, 5, "Shield Recharger"),
+        loadoutBundleDetailLine(surgeBundles, 5, "Surge Shield Recharger")
+      ];
+      const details = detailParts.filter(Boolean).join("\n") || "No loadout items selected";
+      return { total, valid: total > 0, details };
+    }
+
+    function weaponDetail(label, line) {
+      return [
+        line.weaponQty > 0 ? `${label}: ${line.weaponQty}x ${line.weapon}` : "",
+        line.modQty > 0 && line.modType !== "none" ? `${label} Mods: ${line.modQty}x ${modLabel(line.modType)}` : ""
+      ].filter(Boolean).join("\n");
+    }
+
+    function calcRaid() {
+      const packageQty = Math.max(2, Math.min(12, num("raidCount") || 2));
+      const raidQty = packageQty;
+      const eventOn = Boolean($("raidEventMode")?.checked);
+      const team = document.querySelector("#orderForm [data-raid-team].active")?.dataset.raidTeam || "duo";
+      const teamLabel = team === "trio" ? "Trio (+50%)" : "Duo";
+      const teamMultiplier = team === "trio" ? 1.5 : 1;
+      const raidTotal = raidQty * prices.raid * teamMultiplier;
+      const eventTotal = eventOn ? raidQty * prices.event : 0;
+      const total = raidTotal + eventTotal;
+      const details = [
+        `Team: ${teamLabel}`,
+        `Raid Count: ${raidQty}`,
+        `Map Preference: Any Map`,
+        `Event Mode: ${eventOn ? `On (+${moneyUSD(eventTotal)} USD)` : "Off"}`,
+        "Rule: only successful raids count; failed runs are retried or compensated."
+      ].join("\n");
+      return { total, valid: raidQty > 0, details };
+    }
+
+    function updateTotal() {
+      const wrap = $("orderSummaryTotal");
+      const svc = currentService();
+      if (!svc) {
+        if (wrap) wrap.classList.add("summary-total--idle");
+        $("liveTotal").textContent = ui("Select a service to build your order.");
+        $("usdHint").textContent = "";
+        $("addToCart").disabled = true;
+        const br = $("arcPriceBreakdown");
+        if (br) {
+          br.hidden = true;
+          br.innerHTML = "";
+        }
+        const arcPrev = $("arcOrderSummaryPreview");
+        if (arcPrev) {
+          arcPrev.hidden = true;
+          arcPrev.innerHTML = "";
+        }
+        return;
+      }
+      if (wrap) wrap.classList.remove("summary-total--idle");
+      const result = calculate();
+      const vForm = svc?.form && String(svc.form).startsWith("valorant-");
+      const old = result.oldTotal && result.oldTotal > result.total ? `<span class="old-total">${displayMoney(result.oldTotal)}</span>` : "";
+      const estTag = result.estimated ? `<span class="estimated-tag">Estimated</span>` : "";
+      const customFace = result.custom && vForm ? "Custom Price" : "CUSTOM";
+      $("liveTotal").innerHTML = result.custom ? customFace : old + displayMoney(result.total) + estTag;
+      $("usdHint").textContent = result.custom
+        ? (vForm ? "Custom Price — contact for final quote" : "Ticket value: CUSTOM")
+        : (result.estimated ? "Estimated ticket value: " : "Ticket value: ") + moneyUSD(result.total) + " USD";
+      const br = $("arcPriceBreakdown");
+      if (br) {
+        if (result.arcPriceBreakdown && result.arcPriceBreakdown.rows && result.arcPriceBreakdown.rows.length) {
+          br.hidden = false;
+          br.innerHTML = result.arcPriceBreakdown.rows.map(([k, v], idx, arr) => {
+            const fin = idx === arr.length - 1;
+            return `<div class="arc-price-breakdown__row${fin ? " arc-price-breakdown__row--final" : ""}"><span>${escapeHtml(k)}</span><span>${escapeHtml(v)}</span></div>`;
+          }).join("");
+        } else {
+          br.hidden = true;
+          br.innerHTML = "";
+        }
+      }
+      const arcPrev = $("arcOrderSummaryPreview");
+      if (arcPrev) {
+        const arcSplit = document.querySelector(".order-card.is-arc-split");
+        if (
+          arcSplit &&
+          currentGame()?.id === "arc" &&
+          result.details &&
+          String(result.details).trim() &&
+          !result.custom &&
+          !result.contactOnly
+        ) {
+          const lines = String(result.details).split("\n").map(s => s.trim()).filter(Boolean);
+          if (lines.length) {
+            arcPrev.hidden = false;
+            arcPrev.innerHTML = `<div class="arc-order-preview__title">${escapeHtml(ui("Breakdown"))}</div>${lines.map(l => `<p class="arc-order-preview__line">${escapeHtml(l)}</p>`).join("")}`;
+          } else {
+            arcPrev.hidden = true;
+            arcPrev.innerHTML = "";
+          }
+        } else {
+          arcPrev.hidden = true;
+          arcPrev.innerHTML = "";
+        }
+      }
+      $("addToCart").disabled = !result.valid;
+      $("addToCart").textContent = ui(result.contactOnly || (vForm && result.custom) ? "Contact Us" : "Add to Cart");
+      const dl = $("valorantSummaryDl");
+      const noteEl = $("valorantSummaryNote");
+      const valRbHint = $("valRbHint");
+      if (valRbHint) {
+        if (result.valorantValRbError) {
+          valRbHint.hidden = false;
+          valRbHint.textContent = result.valorantValRbError;
+        } else {
+          valRbHint.hidden = true;
+          valRbHint.textContent = "";
+        }
+      }
+      if (dl && Array.isArray(result.valorantRows)) {
+        dl.innerHTML = result.valorantRows.length
+          ? result.valorantRows.map(({ dt, dd }) => `<div><dt>${escapeHtml(dt)}</dt><dd>${escapeHtml(String(dd))}</dd></div>`).join("")
+          : "";
+      }
+      if (noteEl) {
+        if (result.valorantNote) {
+          noteEl.hidden = false;
+          noteEl.textContent = result.valorantNote;
+          noteEl.classList.remove("is-warn");
+        } else {
+          noteEl.textContent = "";
+          noteEl.hidden = true;
+        }
+      }
+      if (vForm) {
+        syncValorantPathRail();
+        syncValorantRankBoostRankArt();
+      }
+      syncLoadoutQuickBundleHints();
+    }
+
+    function clearServiceForm() {
+      renderDetail();
+      showToast("Service form cleared.");
+    }
+
+    function addToCart() {
+      const result = calculate();
+      if (!result.valid) return showToast("Please customize the service first.");
+      const service = currentService();
+      const vForm = service?.form && String(service.form).startsWith("valorant-");
+      if (result.contactOnly || (vForm && result.custom)) {
+        window.open(DISCORD_URL, "_blank", "noopener");
+        showToast("Opening Discord — contact ElysiumBoost with your request.");
+        return;
+      }
+      state.clearCartConfirmUntil = 0;
+      const cg = currentGame();
+      const pid = playerIdForLineFromState();
+      const metaDel = deliveryTypeForService(service, cg?.id);
+      const etaHint = service?.start || ui("Ask support");
+      const bd = buildPriceBreakdownText(result);
+      const newLine = {
+        id: String(Date.now() + Math.random()),
+        game: cg.label,
+        gameId: cg.id,
+        serviceId: service.id,
+        categoryId: service.category,
+        title: service.cardTitle,
+        details: result.details,
+        total: result.total,
+        oldTotal: result.oldTotal || 0,
+        custom: Boolean(result.custom),
+        estimated: Boolean(result.estimated),
+        viewedCurrency: state.currency,
+        language: "EN",
+        region: state.orderRegion,
+        platform: state.orderPlatform,
+        playerId: pid,
+        deliveryType: metaDel,
+        etaHint,
+        priceBreakdown: bd
+      };
+      const mergeIdx = state.cart.findIndex(it =>
+        it.game === newLine.game &&
+        it.title === newLine.title &&
+        it.details === newLine.details &&
+        it.custom === newLine.custom &&
+        it.estimated === newLine.estimated &&
+        it.viewedCurrency === newLine.viewedCurrency &&
+        it.language === newLine.language &&
+        it.region === newLine.region &&
+        it.platform === newLine.platform &&
+        (it.playerId || "") === (newLine.playerId || "")
+      );
+      if (mergeIdx >= 0) {
+        state.cart[mergeIdx].total += newLine.total;
+        state.cart[mergeIdx].oldTotal = (state.cart[mergeIdx].oldTotal || 0) + (newLine.oldTotal || 0);
+        state.cart[mergeIdx].qty = (state.cart[mergeIdx].qty || 1) + 1;
+      } else {
+        state.cart.push(newLine);
+      }
+      ensureOrderPreviewId();
+      persistOrderState();
+      renderCart();
+      updateStickyOrderChip();
+      showToast(result.estimated ? "Estimated order added to cart." : "Added to cart.");
+    }
+
+    function adjustCartItem(lineId) {
+      const item = state.cart.find(i => i.id === lineId);
+      if (!item || !item.gameId || !item.serviceId) return;
+      state.cart = state.cart.filter(i => i.id !== lineId);
+      if (!state.cart.length) state.orderPreviewId = "";
+      persistOrderState();
+      state.game = item.gameId;
+      const g = currentGame();
+      state.category = item.categoryId || g?.categories[0]?.id || state.category;
+      state.serviceId = item.serviceId;
+      syncGameHash(item.gameId);
+      renderAll();
+      closeCart();
+      requestAnimationFrame(() => $("detailSection")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+      showToast(ui("Adjust options below, then add the line again."));
+    }
+
+    function syncClearCartButton() {
+      const btn = $("clearCart");
+      if (!btn) return;
+      const pending = state.clearCartConfirmUntil && Date.now() < state.clearCartConfirmUntil;
+      btn.textContent = pending ? ui("Confirm Clear") : ui("Clear Cart");
+    }
+
+    function updateCartFootAlerts() {
+      const foot = $("cartFootAlerts");
+      if (!foot) return;
+      if (!state.cart.length) {
+        foot.innerHTML = "";
+        return;
+      }
+      const hasArcItems = state.cart.some(item => item.game === "Arc Raiders");
+      const embarkDone = !hasArcItems || Boolean(state.arcId) || state.arcIdSkipped;
+      const needEmbarkId = hasArcItems && !state.arcId && !state.arcIdSkipped;
+      const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
+      const hasCustom = state.cart.some(item => item.custom);
+      const bits = [];
+      if (needEmbarkId) {
+        bits.push(`<div class="cart-inline-warn" role="status">${escapeHtml(ui("Please add your Embark ID before copying the Discord ticket or downloading the order receipt."))}</div>`);
+      }
+      const row = (ok, label) => `<div class="cart-checklist-row${ok ? " is-done" : ""}"><span class="chk" aria-hidden="true">${ok ? "✓" : ""}</span><span>${escapeHtml(label)}</span></div>`;
+      bits.push(`<div class="cart-checklist" aria-label="Order checklist">
+        ${row(true, "Services in cart")}
+        ${row(true, "Quantities confirmed")}
+        ${row(embarkDone, hasArcItems ? "Embark ID added (Arc orders)" : "Embark ID (not required for this cart)")}
+        ${row(Boolean(state.cart.length && (total > 0 || hasCustom)), "Total price ready")}
+        ${row(embarkDone, "Discord ticket ready")}
+      </div>`);
+      foot.innerHTML = bits.join("");
+    }
+
+    function orderContextHeaderHtml() {
+      const needVal = cartHasGameId("valorant");
+      const needLol = cartHasGameId("lol");
+      const needSteam = cartNeedsSteamId();
+      const needWow = cartHasGameId("wow");
+      const needRegion = needVal || needWow || needLol;
+      const needPlatform = needVal;
+      const anyField = needRegion || needPlatform || needSteam || needWow || needVal || needLol;
+      let grid = "";
+      if (needRegion) {
+        grid += `<label class="order-context-field"><span class="order-context-k">${escapeHtml(ui("Region"))}</span>
+                <select id="orderRegionSel" class="order-context-select">
+                  <option value="EU">EU</option>
+                  <option value="NA">NA</option>
+                  <option value="TR">TR</option>
+                  <option value="MENA">MENA</option>
+                  <option value="Other">${escapeHtml(ui("Other"))}</option>
+                </select>
+              </label>`;
+      }
+      if (needPlatform) {
+        grid += `<label class="order-context-field"><span class="order-context-k">${escapeHtml(ui("Platform"))}</span>
+                <select id="orderPlatformSel" class="order-context-select">
+                  <option value="PC">PC</option>
+                  <option value="Xbox">Xbox</option>
+                  <option value="PlayStation">PlayStation</option>
+                </select>
+              </label>`;
+      }
+      if (needVal) {
+        grid += `<label class="order-context-field order-context-field--wide"><span class="order-context-k">${escapeHtml(ui("Riot ID (Valorant)"))}</span>
+                <input id="orderRiotInput" class="order-context-input" type="text" autocomplete="off" placeholder="GameName#TAG">
+              </label>`;
+      }
+      if (needLol) {
+        grid += `<label class="order-context-field order-context-field--wide"><span class="order-context-k">${escapeHtml(ui("Riot ID (League)"))}</span>
+                <input id="orderLolRiotInput" class="order-context-input" type="text" autocomplete="off" placeholder="Summoner#TAG">
+              </label>
+              <label class="order-context-field order-context-field--wide"><span class="order-context-k">${escapeHtml(ui("LoL server"))}</span>
+                <input id="orderLolServerInput" class="order-context-input" type="text" autocomplete="off" placeholder="EUW, NA, EUNE…">
+              </label>`;
+      }
+      if (needSteam) {
+        grid += `<label class="order-context-field order-context-field--wide"><span class="order-context-k">${escapeHtml(ui("Steam profile or friend code"))}</span>
+                <input id="orderSteamInput" class="order-context-input" type="text" inputmode="text" autocomplete="off" placeholder="Profile URL or Steam friend code">
+                  </label>`;
+      }
+      if (needWow) {
+        grid += `<label class="order-context-field order-context-field--wide"><span class="order-context-k">${escapeHtml(ui("Character / realm"))}</span>
+                <input id="orderWowCharInput" class="order-context-input" type="text" autocomplete="off" placeholder="Name — Realm">
+              </label>`;
+      }
+      if (!anyField) {
+        return `<div class="order-context-panel order-context-panel--minimal" role="region"><p class="order-context-hint">${escapeHtml(ui("Use Embark ID above for Arc Raiders. This cart has no extra account fields."))}</p></div>`;
+      }
+      return `<div class="order-context-panel" role="region" aria-labelledby="orderCtxTitle">
+            <div id="orderCtxTitle" class="order-context-title">${escapeHtml(ui("Order context"))}</div>
+            <div class="order-context-grid">${grid}</div>
+            <p class="order-context-hint">${escapeHtml(ui("We validate required fields before you can copy your Discord ticket."))}</p>
+          </div>`;
+    }
+
+    function cartReceiptAccountRows(item) {
+      const gid = item.gameId;
+      let rows = "";
+      if (gid === "valorant") {
+        rows += `<div><dt>${ui("Region")}</dt><dd>${escapeHtml(item.region || state.orderRegion || "—")}</dd></div>`;
+        rows += `<div><dt>${ui("Platform")}</dt><dd>${escapeHtml(item.platform || state.orderPlatform || "—")}</dd></div>`;
+        rows += `<div><dt>${ui("Riot ID")}</dt><dd>${escapeHtml((item.playerId || state.riotId || "").trim() || "—")}</dd></div>`;
+      } else if (gid === "lol") {
+        rows += `<div><dt>${ui("Riot ID")}</dt><dd>${escapeHtml((item.playerId || state.lolRiotId || "").trim() || "—")}</dd></div>`;
+        rows += `<div><dt>${ui("Server")}</dt><dd>${escapeHtml(state.lolServer || "—")}</dd></div>`;
+      } else if (gid === "premier" || gid === "faceit") {
+        rows += `<div><dt>${ui("Steam / friend code")}</dt><dd>${escapeHtml((item.playerId || state.steamId || "").trim() || "—")}</dd></div>`;
+      } else if (gid === "wow") {
+        rows += `<div><dt>${ui("Region")}</dt><dd>${escapeHtml(item.region || state.orderRegion || "—")}</dd></div>`;
+        rows += `<div><dt>${ui("Character / realm")}</dt><dd>${escapeHtml((item.playerId || state.wowCharacterRealm || "").trim() || "—")}</dd></div>`;
+      } else if (gid === "arc") {
+        const em = state.arcId || (state.arcIdSkipped ? ui("Will type on Discord") : "—");
+        rows += `<div><dt>${ui("Embark ID")}</dt><dd>${escapeHtml(em)}</dd></div>`;
+      }
+      return rows;
+    }
+
+    function ticketGameAccountLines(item) {
+      const gid = item.gameId;
+      const lines = [];
+      if (gid === "arc") {
+        const em = state.arcId || (state.arcIdSkipped ? "Will type on Discord" : "—");
+        lines.push(`    Embark ID: ${em}`);
+      }
+      if (gid === "valorant") {
+        lines.push(`    Riot ID: ${(item.playerId || state.riotId || "").trim() || "—"}`);
+        lines.push(`    Valorant region: ${item.region || state.orderRegion || "—"}`);
+        lines.push(`    Platform: ${item.platform || state.orderPlatform || "—"}`);
+      }
+      if (gid === "lol") {
+        lines.push(`    LoL Riot ID: ${(item.playerId || state.lolRiotId || "").trim() || "—"}`);
+        lines.push(`    LoL server: ${state.lolServer || "—"}`);
+      }
+      if (gid === "premier" || gid === "faceit") {
+        lines.push(`    Steam / friend code: ${(item.playerId || state.steamId || "").trim() || "—"}`);
+      }
+      if (gid === "wow") {
+        lines.push(`    WoW region: ${item.region || state.orderRegion || "—"}`);
+        lines.push(`    Character / realm: ${(item.playerId || state.wowCharacterRealm || "").trim() || "—"}`);
+      }
+      return lines;
+    }
+
+    function renderCart() {
+      const lineCount = state.cart.reduce((n, item) => n + (item.qty || 1), 0);
+      $("cartCount").textContent = String(lineCount);
+      $("clearCart").disabled = !state.cart.length;
+      const hasArcItems = state.cart.some(item => item.game === "Arc Raiders");
+      if (!state.cart.length) {
+        state.arcId = "";
+        state.arcIdSkipped = false;
+        state.clearCartConfirmUntil = 0;
+        state.orderPreviewId = "";
+        $("cartBody").innerHTML = `
+          <div class="cart-empty-card">
+            <div class="cart-empty-icon" aria-hidden="true">✦</div>
+            <p class="cart-empty-title">${escapeHtml(ui("Your order is empty"))}</p>
+            <p class="cart-empty-sub">${escapeHtml(ui("Choose a service to build your Discord ticket."))}</p>
+            <button type="button" class="btn btn-premium" id="browsePopularServices">${escapeHtml(ui("Browse popular services"))}</button>
+            <button type="button" class="btn btn-glass cart-empty-secondary" id="continueShoppingEmpty">${escapeHtml(ui("Continue browsing"))}</button>
+          </div>`;
+        const bp = $("browsePopularServices");
+        if (bp) bp.addEventListener("click", () => {
+          closeCart();
+          selectGame("arc");
+          requestAnimationFrame(() => $("popularHead")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+        });
+        const c0 = $("continueShoppingEmpty");
+        if (c0) c0.addEventListener("click", continueShopping);
+      } else {
+        if (!hasArcItems) {
+          state.arcId = "";
+          state.arcIdSkipped = false;
+        }
+        const embarkBlock = hasArcItems
+          ? `<div class="cart-embark-panel" role="region" aria-label="Embark ID">
+            <div class="cart-embark-label">${escapeHtml(ui("Embark ID"))}</div>
+            <p class="cart-embark-value">${state.arcId ? escapeHtml(state.arcId) : (state.arcIdSkipped ? escapeHtml(ui("Will type on Discord")) : escapeHtml(ui("Not set — required for receipt image")))}</p>
+            ${!state.arcId ? `<p class="cart-embark-warn">${escapeHtml(ui("Save your Embark ID to download a verified order receipt."))}</p>` : ""}
+            <button type="button" class="cart-embark-btn" id="cartEmbarkEditBtn">${escapeHtml(ui("Add or edit Embark ID"))}</button>
+          </div>`
+          : "";
+        ensureOrderPreviewId();
+        const summaryBanner = `
+          <div class="order-summary-banner">
+            <div class="order-preview-id"><span class="order-preview-k">${escapeHtml(ui("Order preview ID"))}</span><strong>${escapeHtml(state.orderPreviewId)}</strong></div>
+            <p class="trust-inline-mini">${escapeHtml(ui("No cheats. No exploits. Manual service only."))}</p>
+          </div>`;
+        const summaryHeader = summaryBanner + orderContextHeaderHtml();
+        $("cartBody").innerHTML = summaryHeader + embarkBlock + state.cart.map((item, idx) => {
+          const priceLabel = item.custom
+            ? (item.game === "Valorant" ? "Custom Price" : "CUSTOM")
+            : (item.estimated ? `<span class="estimated-tag">Estimated</span>${displayInCurrency(item.total, item.viewedCurrency)}` : displayInCurrency(item.total, item.viewedCurrency));
+          const estimateNote = item.estimated ? `<p class="cart-estimate-note">${escapeHtml(PRIVATE_ESTIMATE_NOTE)}</p>` : "";
+          const qty = Math.max(1, item.qty || 1);
+          const titleSafe = escapeHtml(ui(item.title));
+          const perUnitHint = qty > 1 && !item.custom ? `<div class="cart-receipt-hint">${escapeHtml(ui("Shown as line total for this configuration."))}</div>` : "";
+          const del = escapeHtml(item.deliveryType || ui("Manual delivery via Discord"));
+          const eta = escapeHtml(item.etaHint || ui("Ask support"));
+          const bdBlock = item.priceBreakdown ? `<div class="cart-receipt-section"><div class="cart-receipt-k">${ui("Price breakdown")}</div><div class="cart-item-detail-body">${escapeHtml(item.priceBreakdown)}</div></div>` : "";
+          const acctRows = cartReceiptAccountRows(item);
+          return `
+            <article class="cart-item cart-item--receipt">
+              <div class="cart-receipt-head">
+                <span class="cart-receipt-num">#${idx + 1}</span>
+                <h3 class="cart-receipt-title">${titleSafe}</h3>
+              </div>
+              <dl class="cart-receipt-dl">
+                <div><dt>${ui("Game")}</dt><dd>${escapeHtml(ui(item.game))}</dd></div>
+                <div><dt>${ui("Quantity")}</dt><dd>${qty}</dd></div>
+                <div><dt>${ui("Currency")}</dt><dd>${escapeHtml(item.viewedCurrency)}</dd></div>
+                <div><dt>${ui("Line price")}</dt><dd class="cart-item-price-inline">${priceLabel}</dd></div>
+                ${acctRows}
+                <div><dt>${ui("Delivery type")}</dt><dd>${del}</dd></div>
+                <div><dt>${ui("Est. delivery")}</dt><dd>${eta}</dd></div>
+              </dl>
+              <div class="cart-receipt-section">
+                <div class="cart-receipt-k">${ui("Selected options")}</div>
+                <div class="cart-item-detail-body">${escapeHtml(item.details)}</div>
+              </div>
+              ${bdBlock}
+              <div class="cart-receipt-delivery"><strong>${ui("Coordination")}</strong>${escapeHtml(ui("Finalize timing, pilot/duo mode, and safety notes in Discord with support."))}</div>
+              ${perUnitHint}
+              ${estimateNote}
+              <div class="cart-item-actions">
+                <button type="button" class="btn btn-glass btn-compact" data-adjust="${item.id}">${ui("Edit line")}</button>
+                <button class="btn remove" type="button" data-remove="${item.id}">${ui("Remove")}</button>
+              </div>
+            </article>
+          `;
+        }).join("") + `<div class="cart-continue-wrap"><button type="button" class="btn-continue" id="continueShoppingCart">Continue Shopping</button></div>`;
+        document.querySelectorAll("[data-remove]").forEach(button => button.addEventListener("click", () => {
+          state.cart = state.cart.filter(item => item.id !== button.dataset.remove);
+          if (!state.cart.length) state.orderPreviewId = "";
+          persistOrderState();
+          renderCart();
+        }));
+        document.querySelectorAll("[data-adjust]").forEach(button => button.addEventListener("click", () => adjustCartItem(button.dataset.adjust)));
+        const c1 = $("continueShoppingCart");
+        if (c1) c1.addEventListener("click", continueShopping);
+        $("cartEmbarkEditBtn")?.addEventListener("click", () => openArcIdModal(null));
+        bindOrderSummaryContext();
+      }
+      const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
+      const hasCustom = state.cart.some(item => item.custom);
+      const sameCurrency = state.cart.length && state.cart.every(item => item.viewedCurrency === state.cart[0].viewedCurrency);
+      const cartCurrency = sameCurrency ? state.cart[0].viewedCurrency : state.currency;
+      const totalEl = $("cartTotal");
+      if (state.cart.length) {
+        if (lastCartMonetaryTotal !== null && lastCartMonetaryTotal !== total) {
+          totalEl.classList.remove("cart-total-pulse");
+          void totalEl.offsetWidth;
+          totalEl.classList.add("cart-total-pulse");
+          setTimeout(() => totalEl.classList.remove("cart-total-pulse"), 900);
+        }
+        lastCartMonetaryTotal = total;
+      } else {
+        lastCartMonetaryTotal = null;
+      }
+      totalEl.textContent = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
+      $("cartUsdHint").textContent = hasCustom ? "Ticket total: " + displayInCurrency(total, cartCurrency) + " + CUSTOM" : "Ticket total: " + displayInCurrency(total, cartCurrency);
+      updateCartFootAlerts();
+      syncClearCartButton();
+      applyDrawerCompactClass();
+      syncCompactToggleLabel();
+      persistOrderState();
+      updateStickyOrderChip();
+    }
+
+    function clearCart() {
+      if (!state.cart.length) return showToast("Cart is already empty.");
+      const now = Date.now();
+      if (state.clearCartConfirmUntil && now < state.clearCartConfirmUntil) {
+        state.clearCartConfirmUntil = 0;
+        state.cart = [];
+        state.orderPreviewId = "";
+        renderCart();
+        $("copyStatus").textContent = "Cart cleared.";
+        showToast("Cart cleared.");
+        return;
+      }
+      state.clearCartConfirmUntil = now + 4500;
+      syncClearCartButton();
+      showToast("Tap Confirm Clear to empty your cart.", 2400);
+      setTimeout(() => {
+        if (Date.now() >= state.clearCartConfirmUntil) {
+          state.clearCartConfirmUntil = 0;
+          syncClearCartButton();
+        }
+      }, 4550);
+    }
+
+    function escapeHtml(text) {
+      return String(text).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
+    }
+
+    function openCart() {
+      renderCart();
+      $("cartBackdrop").classList.add("active");
+      $("cartBackdrop").setAttribute("aria-hidden", "false");
+      document.body.classList.add("cart-open");
+    }
+
+    function closeCart() {
+      $("cartBackdrop").classList.remove("active");
+      $("cartBackdrop").setAttribute("aria-hidden", "true");
+      document.body.classList.remove("cart-open");
+    }
+
+    function continueShopping() {
+      closeCart();
+      if (state.game) {
+        $("serviceContent")?.classList.remove("hidden");
+        $("serviceContent")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        $("homeGameGrid")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function cartNeedsArcId() {
+      return state.cart.some(item => item.game === "Arc Raiders");
+    }
+
+    function getArcIdLine() {
+      if (!cartNeedsArcId()) return "";
+      const label = "Embark ID";
+      if (state.arcId) return `${label}: ${state.arcId}`;
+      if (state.arcIdSkipped) return `${label}: Will type it on Discord`;
+      return "";
+    }
+
+    function updateArcIdModalText() {
+      $("arcIdTitle").textContent = "Embark ID";
+      $("arcIdCopy").textContent = "Add your in-game ID before copying or opening the Discord ticket.";
+      $("arcIdLabel").textContent = "Embark ID";
+      $("arcIdInput").placeholder = "Name#0000";
+      $("arcIdDone").setAttribute("aria-label", "Done");
+      $("arcIdSkip").setAttribute("aria-label", "Will type it on Discord");
+    }
+
+    function openArcIdModal(action) {
+      state.pendingArcAction = action;
+      updateArcIdModalText();
+      $("arcIdInput").value = state.arcId || "";
+      $("arcIdModal").classList.add("active");
+      $("arcIdModal").setAttribute("aria-hidden", "false");
+      setTimeout(() => $("arcIdInput").focus(), 30);
+    }
+
+    function closeArcIdModal() {
+      $("arcIdModal").classList.remove("active");
+      $("arcIdModal").setAttribute("aria-hidden", "true");
+    }
+
+    function proceedAfterArcId() {
+      const action = state.pendingArcAction;
+      state.pendingArcAction = null;
+      closeArcIdModal();
+      if (typeof action === "function") action();
+    }
+
+    function ensureArcId(action) {
+      if (!cartNeedsArcId() || state.arcId || state.arcIdSkipped) {
+        action();
+        return;
+      }
+      openArcIdModal(action);
+    }
+
+    function ticketText() {
+      ensureOrderPreviewId();
+      const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
+      const hasCustom = state.cart.some(item => item.custom);
+      const hasEstimate = state.cart.some(item => item.estimated);
+      const rule = "────────────────────────────────";
+      const lines = [
+        rule,
+        "ELYSIUM BOOST — ORDER RECEIPT (DISCORD)",
+        rule,
+        "",
+        "Order preview ID: " + state.orderPreviewId,
+        "Game-specific account fields are listed per line item below.",
+        "",
+        "Discord channel",
+        DISCORD_URL,
+        "",
+        "LINE ITEMS",
+        ""
+      ];
+      state.cart.forEach((item, index) => {
+        const qty = Math.max(1, item.qty || 1);
+        const priceLine = item.custom
+          ? (item.game === "Valorant" ? "Custom Price" : "CUSTOM")
+          : (item.estimated ? `Estimated ${displayInCurrency(item.total, item.viewedCurrency)}` : displayInCurrency(item.total, item.viewedCurrency));
+        lines.push(`[${index + 1}] ${item.game} — ${item.title}`);
+        lines.push(`    Quantity: ${qty}`);
+        lines.push(`    Currency: ${item.viewedCurrency}`);
+        ticketGameAccountLines(item).forEach(line => lines.push(line));
+        lines.push(`    Delivery: ${item.deliveryType || "Manual delivery via Discord"}`);
+        lines.push(`    Est. delivery: ${item.etaHint || "Ask support"}`);
+        if (item.priceBreakdown) {
+          lines.push("    Price detail:");
+          item.priceBreakdown.split("\n").forEach(row => {
+            const t = row.trim();
+            if (t) lines.push(`      • ${t}`);
+          });
+        }
+        lines.push(`    Line price: ${priceLine}`);
+        lines.push("    Options / details:");
+        item.details.split("\n").forEach(line => {
+          const t = line.trim();
+          if (t) lines.push(`      • ${t}`);
+        });
+        lines.push("");
+      });
+      const currency = state.cart[0]?.viewedCurrency || state.currency;
+      const totalLabel = hasEstimate ? "ESTIMATED ORDER TOTAL" : "ORDER TOTAL";
+      const totalText = hasCustom ? displayInCurrency(total, currency) + " + CUSTOM" : displayInCurrency(total, currency);
+      lines.push(rule);
+      lines.push(`${totalLabel}: ${totalText}`);
+      lines.push(`Currency: ${currency}`);
+      lines.push(rule);
+      lines.push("");
+      lines.push("NOTES");
+      if (hasEstimate) lines.push(`• ${PRIVATE_ESTIMATE_NOTE}`);
+      lines.push("• Please confirm availability, ETA, and final instructions in Discord.");
+      lines.push("");
+      lines.push("Thank you — ELYSIUM BOOST");
+      return lines.join("\n");
+    }
+
+    async function copyOrder() {
+      if (!state.cart.length) {
+        $("copyStatus").textContent = ui("Add an item before copying.");
+        return;
+      }
+      const v = validateTicketRequirements();
+      if (!v.ok) {
+        $("copyStatus").textContent = v.message;
+        showToast(v.message, 3800, true);
+        return;
+      }
+      ensureArcId(copyOrderNow);
+    }
+
+    const HTML2CANVAS_CDN = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+    const HTML2CANVAS_SRI = "sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==";
+    let html2canvasLoader = null;
+
+    function loadHtml2Canvas() {
+      if (typeof window.html2canvas === "function") return Promise.resolve();
+      if (html2canvasLoader) return html2canvasLoader;
+      html2canvasLoader = new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = HTML2CANVAS_CDN;
+        script.integrity = HTML2CANVAS_SRI;
+        script.crossOrigin = "anonymous";
+        script.referrerPolicy = "no-referrer";
+        script.onload = () => resolve();
+        script.onerror = () => {
+          html2canvasLoader = null;
+          reject(new Error("Could not load html2canvas"));
+        };
+        document.head.appendChild(script);
+      });
+      return html2canvasLoader;
+    }
+
+    function fallbackExecCopy(text, ok, fail) {
+      try {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        const done = document.execCommand("copy");
+        ta.remove();
+        if (done) ok();
+        else fail();
+      } catch (e) {
+        fail();
+      }
+    }
+
+    function copyTicketTextToClipboard() {
+      const text = ticketText();
+      const statusEl = $("copyStatus");
+      const ok = () => {
+        statusEl.textContent = ui("Ticket copied successfully. Open Discord and paste it into your order ticket.");
+        showToast(ui("Ticket copied."), 2600, false);
+      };
+      const fail = () => {
+        statusEl.textContent = ui("Copy failed. Try Download Order Receipt or copy the ticket manually.");
+        showToast(ui("Copy failed."), 3200, true);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(ok).catch(() => fallbackExecCopy(text, ok, fail));
+        return;
+      }
+      fallbackExecCopy(text, ok, fail);
+    }
+
+    function copyOrderNow() {
+      copyTicketTextToClipboard();
+    }
+
+    function orderReceiptEmbarkBlockedMessage() {
+      if (!state.cart.length) return ui("Add items to your cart first.");
+      if (cartNeedsArcId() && !String(state.arcId || "").trim()) {
+        return ui("Please add your Embark ID before generating the order receipt.");
+      }
+      return "";
+    }
+
+    function buildOrderReceiptNode() {
+      const inner = document.createElement("div");
+      inner.className = "order-receipt-inner";
+      const total = state.cart.reduce((sum, item) => sum + (item.custom ? 0 : item.total), 0);
+      const hasCustom = state.cart.some(item => item.custom);
+      const hasEstimate = state.cart.some(item => item.estimated);
+      const sameCurrency = state.cart.length && state.cart.every(item => item.viewedCurrency === state.cart[0].viewedCurrency);
+      const cartCurrency = sameCurrency ? state.cart[0].viewedCurrency : state.currency;
+      const genDate = new Date().toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+      const needsEmbark = cartNeedsArcId();
+      const embarkInner = needsEmbark
+        ? `<strong>${escapeHtml(ui("Embark ID"))}</strong>${escapeHtml(state.arcId)}`
+        : `<strong>${escapeHtml(ui("In-game ID"))}</strong>${escapeHtml(ui("Not required for this order"))}`;
+      const itemsHtml = state.cart.map((item, index) => {
+        const qty = item.qty && item.qty > 1 ? ` ×${item.qty}` : "";
+        const priceLine = item.custom
+          ? (item.game === "Valorant" ? ui("Custom Price") : "CUSTOM")
+          : (item.estimated ? `${ui("Estimated")} ${displayInCurrency(item.total, item.viewedCurrency)}` : displayInCurrency(item.total, item.viewedCurrency));
+        const langLine = item.language ? `\n${ui("Language")}: ${item.language}` : "";
+        return `<div class="order-receipt-item">
+      <div class="order-receipt-item-head">${index + 1}. ${escapeHtml(item.title)}${escapeHtml(qty)}</div>
+      <div class="order-receipt-item-game">${escapeHtml(ui("Game"))}: ${escapeHtml(item.game)}</div>
+      <div class="order-receipt-item-details">${escapeHtml(item.details)}${escapeHtml(langLine)}</div>
+      <div class="order-receipt-item-price">${escapeHtml(ui("Price"))}: ${escapeHtml(priceLine)}</div>
+      <div class="order-receipt-item-curr">${escapeHtml(ui("Currency"))}: ${escapeHtml(item.viewedCurrency)}</div>
+    </div>`;
+      }).join("");
+      const totalLabel = hasEstimate ? ui("ESTIMATED TOTAL") : ui("TOTAL");
+      const totalText = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
+      const usdHint = hasCustom ? moneyUSD(total) + " + CUSTOM" : moneyUSD(total);
+      inner.innerHTML = `
+    <div class="order-receipt-header">
+      <img class="order-receipt-logo" src="assets/elysium-mark.webp" alt="" width="48" height="48" crossorigin="anonymous">
+      <div class="order-receipt-title-block">
+        <h1>${escapeHtml(ui("ELYSIUM BOOST — ORDER RECEIPT"))}</h1>
+        <p class="order-receipt-meta">${escapeHtml(ui("Generated"))}: ${escapeHtml(genDate)}</p>
+      </div>
+    </div>
+    <div class="order-receipt-section">
+      <h2>${escapeHtml(ui("Customer"))}</h2>
+      <div class="order-receipt-embark-box">${embarkInner}</div>
+    </div>
+    <div class="order-receipt-section">
+      <h2>${escapeHtml(ui("Order items"))}</h2>
+      ${itemsHtml}
+    </div>
+    <div class="order-receipt-totals">
+      <div class="order-receipt-total-line"><span>${escapeHtml(ui("Cart total"))}</span><span>${escapeHtml(totalText)}</span></div>
+      <div class="order-receipt-total-line"><span>${escapeHtml(ui("Selected currency"))}</span><span>${escapeHtml(cartCurrency)}</span></div>
+      <div class="order-receipt-total-line order-receipt-grand"><span>${escapeHtml(totalLabel)}</span><span>${escapeHtml(totalText)}</span></div>
+      <div class="order-receipt-total-line"><span>${escapeHtml(ui("Ticket total (USD reference)"))}</span><span>${escapeHtml(usdHint)} USD</span></div>
+    </div>
+    <p class="order-receipt-foot">${escapeHtml(ui("Generated by ElysiumBoost"))}</p>`;
+      const wrap = document.createElement("div");
+      wrap.className = "order-receipt-capture";
+      wrap.appendChild(inner);
+      return wrap;
+    }
+
+    async function generateOrderReceiptCanvas() {
+      await loadHtml2Canvas();
+      const node = buildOrderReceiptNode();
+      node.style.cssText = "position:fixed;left:0;top:0;z-index:-9999;visibility:hidden;pointer-events:none;";
+      document.body.appendChild(node);
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+      try {
+        const h = node.scrollHeight;
+        const w = node.offsetWidth;
+        return await window.html2canvas(node, {
+          backgroundColor: "#0a0721",
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          width: w,
+          height: h
+        });
+      } finally {
+        node.remove();
+      }
+    }
+
+    async function downloadOrderReceipt() {
+      const statusEl = $("copyStatus");
+      const gate = orderReceiptEmbarkBlockedMessage();
+      if (gate) {
+        statusEl.textContent = gate;
+        showToast(gate, 3400, true);
+        return;
+      }
+      statusEl.textContent = ui("Generating order receipt...");
+      try {
+        const canvas = await generateOrderReceiptCanvas();
+        downloadCanvasAsPng(canvas, `elysium-order-receipt-${Date.now()}.png`);
+        statusEl.textContent = ui("Order receipt downloaded. Attach it to your Discord ticket.");
+        showToast(ui("Receipt downloaded."), 2600, false);
+        try {
+          if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+            const blob = await canvasToBlob(canvas, "image/png");
+            await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+            statusEl.textContent = ui("Receipt downloaded and copied — paste the image (Ctrl/Cmd+V) into Discord.");
+          }
+        } catch (_) {}
+      } catch (e) {
+        statusEl.textContent = ui("Could not generate receipt. Try again or copy the text ticket.");
+        showToast(ui("Receipt generation failed."), 3200, true);
+      }
+    }
+
+    function canvasToBlob(canvas, type) {
+      return new Promise((resolve, reject) => {
+        canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("Canvas export failed")), type);
+      });
+    }
+
+    function downloadCanvasAsPng(canvas, filename) {
+      const link = document.createElement("a");
+      link.download = filename || `elysium-order-receipt-${Date.now()}.png`;
+      link.href = canvas.toDataURL("image/png");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    function openDiscordTicket() {
+      if (!state.cart.length) {
+        $("copyStatus").textContent = "Add an item before opening Discord.";
+        return;
+      }
+      ensureArcId(() => window.open(DISCORD_URL, "_blank", "noopener"));
+    }
+
+    function showToast(message, ms = 2200, isError = false) {
+      const el = $("toast");
+      el.textContent = message;
+      el.classList.toggle("toast--error", Boolean(isError));
+      el.classList.add("active");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => {
+        el.classList.remove("active");
+        el.classList.remove("toast--error");
+      }, ms);
+    }
+
+    function searchEntries(query) {
+      const entries = [];
+      const pushGameServices = game => {
+        if (!game || !game.services) return;
+        game.services.forEach(service => {
+          const category = game.categories?.find(cat => cat.id === service.category)?.label || service.category;
+          const haystack = [service.title, service.cardTitle, service.short, service.intro, service.category, category, service.form, game.label].join(" ").toLowerCase();
+          if (haystack.includes(query)) {
+            entries.push({
+              type: "service",
+              gameId: game.id,
+              serviceId: service.id,
+              categoryId: service.category,
+              title: service.cardTitle,
+              meta: `${game.label} / ${category} / ${service.cardTitle}`
+            });
+          }
+        });
+      };
+      pushGameServices(games.find(g => g.id === "arc"));
+      pushGameServices(games.find(g => g.id === "valorant"));
+      pushGameServices(games.find(g => g.id === "wow"));
+      pushGameServices(games.find(g => g.id === "circle"));
+      pushGameServices(games.find(g => g.id === "lol"));
+      pushGameServices(games.find(g => g.id === "faceit"));
+      pushGameServices(games.find(g => g.id === "premier"));
+      pushGameServices(games.find(g => g.id === "social"));
+      const pushCategoryHits = game => {
+        if (!game || !game.categories?.length) return;
+        game.categories.forEach(cat => {
+          const lab = ui(cat.label).toLowerCase();
+          if (cat.id.toLowerCase().includes(query) || lab.includes(query)) {
+            entries.push({
+              type: "category",
+              gameId: game.id,
+              categoryId: cat.id,
+              title: ui(cat.label),
+              meta: `${game.label} / ${ui(cat.label)}`
+            });
+          }
+        });
+      };
+      pushCategoryHits(games.find(g => g.id === "valorant"));
+      pushCategoryHits(games.find(g => g.id === "wow"));
+      Object.entries(blueprintGroups).forEach(([tab, names]) => {
+        const matches = names.filter(name => name.toLowerCase().includes(query) || trName(name).toLowerCase().includes(query));
+        if (matches.length) {
+          entries.push({
+            type: "blueprint",
+            serviceId: "blueprints",
+            categoryId: "blueprints",
+            bpTab: tab,
+            bpQuery: query,
+            title: tab,
+            meta: `Blueprints / ${matches.slice(0, 3).join(", ")}${matches.length > 3 ? "..." : ""}`
+          });
+        }
+      });
+      return entries.slice(0, 10);
+    }
+
+    function openSearchResult(entry) {
+      state.game = entry.gameId || "arc";
+      state.category = entry.categoryId;
+      if (entry.type === "category") {
+        const g = games.find(x => x.id === state.game);
+        state.serviceId = g?.services.find(s => s.category === state.category)?.id ?? null;
+      } else {
+        state.serviceId = entry.serviceId;
+      }
+      if (entry.type === "blueprint") state.pendingBlueprintSearch = { tab: entry.bpTab, query: entry.bpQuery };
+      $("siteSearchResults").classList.remove("active");
+      syncGameHash(state.game);
+      renderAll();
+      ($("detailLeftHead") || $("detailSection")).scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function renderSiteSearchResults(entries, query) {
+      const box = $("siteSearchResults");
+      if (!query) {
+        box.classList.remove("active");
+        box.innerHTML = "";
+        return;
+      }
+      if (!entries.length) {
+        box.innerHTML = `<div class="search-empty-card" role="status"><strong>No matching services found.</strong><span>Try another keyword or open a custom order.</span></div>`;
+        box.classList.add("active");
+        return;
+      }
+      box.innerHTML = entries.map((entry, index) => `
+        <button class="search-result-btn" type="button" data-search-index="${index}">
+          <strong>${escapeHtml(entry.title)}</strong>
+          <span>${escapeHtml(entry.meta)}</span>
+        </button>
+      `).join("");
+      box.classList.add("active");
+      box.querySelectorAll("[data-search-index]").forEach(button => {
+        button.addEventListener("click", () => openSearchResult(entries[Number(button.dataset.searchIndex)]));
+      });
+    }
+
+    function runSiteSearch() {
+      const query = val("siteSearch").trim().toLowerCase();
+      if (!query) return;
+      const entries = searchEntries(query);
+      if (entries.length === 1) return openSearchResult(entries[0]);
+      renderSiteSearchResults(entries, query);
+    }
+
+    const MUSIC_PREF_KEY = "elyBoostMusicPrefV1";
+    const bgMusic = $("bgMusic");
+    const audioToggle = $("audioToggle");
+    const audioVolume = $("audioVolume");
+
+    function readMusicPref() {
+      try {
+        const raw = localStorage.getItem(MUSIC_PREF_KEY);
+        if (!raw) return { vol: 0 };
+        const j = JSON.parse(raw);
+        return { vol: Math.max(0, Math.min(100, Number(j.vol) || 0)) };
+      } catch (e) {
+        return { vol: 0 };
+      }
+    }
+
+    function writeMusicPref() {
+      try {
+        localStorage.setItem(MUSIC_PREF_KEY, JSON.stringify({ vol: Number(audioVolume.value) || 0 }));
+      } catch (e) {}
+    }
+
+    (function initMusicPrefs() {
+      const p = readMusicPref();
+      audioVolume.value = String(p.vol);
+      bgMusic.volume = p.vol / 100;
+    })();
+    bgMusic.muted = true;
+    bgMusic.pause();
+
+    function updateAudioButton() {
+      const off = bgMusic.paused || bgMusic.muted;
+      audioToggle.innerHTML = off ? "&#9835;" : "II";
+      audioToggle.setAttribute("aria-label", off ? ui("Play music") : ui("Pause music"));
+    }
+
+    $("currency").addEventListener("change", () => {
+      state.currency = $("currency").value;
+      const label = state.currency === "USD" ? "USD" : state.currency === "EUR" ? "EUR" : state.currency === "GBP" ? "GBP" : state.currency === "TRY" ? "TRY" : state.currency;
+      showToast(`Currency updated to ${label}`, 1800, false);
+      if (state.game) {
+        renderPopular();
+        renderServices();
+        updateTotal();
+      } else {
+        renderHome();
+      }
+      renderCart();
+      persistOrderState();
+    });
+    $("brandHome").addEventListener("click", event => {
+      event.preventDefault();
+      state.game = null;
+      state.category = null;
+      state.serviceId = null;
+      syncGameHash(null);
+      renderAll();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    const heroCta = $("heroCta");
+    if (heroCta) {
+      heroCta.addEventListener("click", () => {
+        if (state.game) {
+          $("serviceHead")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else {
+          $("homeGameHead")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    }
+    $("addToCart").addEventListener("click", addToCart);
+    $("clearService").addEventListener("click", clearServiceForm);
+    $("cartOpen").addEventListener("click", openCart);
+    $("cartClose").addEventListener("click", closeCart);
+    $("copyOrder").addEventListener("click", copyOrder);
+    $("stickyOrderOpen")?.addEventListener("click", () => openCart());
+    $("footerLegalBtn")?.addEventListener("click", () => {
+      $("legalModal")?.classList.add("active");
+      $("legalModal")?.setAttribute("aria-hidden", "false");
+    });
+    $("legalModalClose")?.addEventListener("click", () => {
+      $("legalModal")?.classList.remove("active");
+      $("legalModal")?.setAttribute("aria-hidden", "true");
+    });
+    $("legalModal")?.addEventListener("click", event => {
+      if (event.target === $("legalModal")) {
+        $("legalModal")?.classList.remove("active");
+        $("legalModal")?.setAttribute("aria-hidden", "true");
+      }
+    });
+    $("clearCart").addEventListener("click", clearCart);
+    $("openDiscord").addEventListener("click", event => {
+      event.preventDefault();
+      openDiscordTicket();
+    });
+    $("arcIdDone").addEventListener("click", () => {
+      const id = val("arcIdInput").trim();
+      if (!id) {
+        showToast("Enter ID or use the red option.");
+        return;
+      }
+      state.arcId = id;
+      state.arcIdSkipped = false;
+      proceedAfterArcId();
+      if (state.cart.length) renderCart();
+    });
+    $("arcIdSkip").addEventListener("click", () => {
+      state.arcId = "";
+      state.arcIdSkipped = true;
+      proceedAfterArcId();
+      if (state.cart.length) renderCart();
+    });
+    $("arcIdModal").addEventListener("click", event => {
+      if (event.target === $("arcIdModal")) closeArcIdModal();
+    });
+    audioToggle.addEventListener("click", event => {
+      event.stopPropagation();
+      if (bgMusic.paused) {
+        let v = Number(audioVolume.value);
+        if (v <= 0) {
+          v = 45;
+          audioVolume.value = String(v);
+        }
+        bgMusic.volume = v / 100;
+        bgMusic.muted = false;
+        bgMusic.play().then(updateAudioButton).catch(updateAudioButton);
+      } else {
+        bgMusic.pause();
+        updateAudioButton();
+      }
+      writeMusicPref();
+    });
+    audioVolume.addEventListener("input", () => {
+      const v = Number(audioVolume.value);
+      bgMusic.volume = v / 100;
+      bgMusic.muted = v <= 0;
+      if (v <= 0) bgMusic.pause();
+      updateAudioButton();
+      writeMusicPref();
+    });
+    $("siteSearchBtn").addEventListener("click", runSiteSearch);
+    $("siteSearch").addEventListener("input", () => {
+      const query = val("siteSearch").trim().toLowerCase();
+      renderSiteSearchResults(query ? searchEntries(query) : [], query);
+    });
+    $("siteSearch").addEventListener("keydown", event => {
+      if (event.key === "Enter") runSiteSearch();
+    });
+    $("cartBackdrop").addEventListener("click", event => { if (event.target === $("cartBackdrop")) closeCart(); });
+    document.addEventListener("click", event => {
+      if (!$("siteSearchResults").contains(event.target) && event.target !== $("siteSearch") && event.target !== $("siteSearchBtn")) {
+        $("siteSearchResults").classList.remove("active");
+      }
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closeGameMenu();
+        closeCart();
+        closeArcIdModal();
+        $("legalModal")?.classList.remove("active");
+        $("legalModal")?.setAttribute("aria-hidden", "true");
+        $("siteSearchResults").classList.remove("active");
+      }
+    });
+
+    updateAudioButton();
+    restoreOrderState();
+    restoreGameFromHash();
+    if (state.game) syncGameHash(state.game);
+    window.addEventListener("hashchange", () => {
+      closeGameMenu();
+      const id = parseGameHash();
+      if (id && games.some(g => g.id === id)) {
+        if (state.game !== id) {
+          const game = games.find(g => g.id === id);
+          state.game = id;
+          state.category = game.categories[0]?.id || "services";
+          state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
+          renderAll();
+        }
+      } else if (!id) {
+        if (state.game) {
+          state.game = null;
+          state.category = null;
+          state.serviceId = null;
+          renderAll();
+        }
+      }
+    });
+    renderAll();
+    startOrderFeed();
+  
