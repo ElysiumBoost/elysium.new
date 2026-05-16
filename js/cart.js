@@ -379,16 +379,31 @@
     function renderHome() {
       $("homeContent").classList.toggle("hidden", Boolean(state.game));
       const g = id => games.find(x => x.id === id);
+      const homeBlurb = game => {
+        const id = game.id;
+        const map = {
+          arc: "Manual boosting for Arc — coins, blueprints, weapons, trials, raids. Discord-confirmed handoffs.",
+          valorant: "Rank paths, placements, wins, and coaching. Live pricing in your currency.",
+          wow: "Mythic+, raids, arena, and more. Hub expands as listings go live.",
+          lol: "Wins, duo queue, and coaching — compact orders with Discord confirmation.",
+          premier: "CS2 Premier matchmaking services when listings go live.",
+          faceit: "FACEIT CS2 — readable tickets and booster coordination.",
+          circle: "Boost+ teammate sessions for League, Valorant, and selected packages.",
+          social: "Companion and social services — clear requests in Discord."
+        };
+        return map[id] || (game.copy && game.copy.split(".")[0] + ".") || "";
+      };
+      const gameAria = label => `${ui("View")} ${ui(label)} ${ui("services")}`;
       const renderHomeSingleCard = game => {
         const media = game.id === "valorant" && game.homeCardMedia
           ? `<img class="home-game-media" src="${escapeHtml(game.homeCardMedia)}" alt="${escapeHtml(ui(game.label))}" loading="eager" data-home-card-fb="${escapeHtml(game.heroBg)}" onerror="elyHomeCardFallback(this)">`
           : `<img class="home-game-media" src="${escapeHtml(game.heroBg)}" alt="${escapeHtml(ui(game.label))}" loading="eager">`;
         return `
-        <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(ui(game.label))}, ${escapeHtml(ui("Select"))}">
+        <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(gameAria(game.label))}">
           ${media}
           <h2>${ui(game.label)}</h2>
-          <p>${ui(game.copy)}</p>
-          <span class="btn btn-primary">${ui("Select")}</span>
+          <p class="home-game-blurb">${escapeHtml(ui(homeBlurb(game)))}</p>
+          <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
         </button>`;
       };
       const chunks = [];
@@ -400,24 +415,24 @@
       const face = g("faceit");
       if (prem && face) {
         chunks.push(`
-        <article class="home-game-card home-combo-card" aria-label="${escapeHtml(ui("CS2 Services"))}">
+        <article class="home-game-card home-combo-card" aria-label="${escapeHtml(ui("CS2 Premier and Faceit"))}">
           <div class="home-combo-split">
-            <button type="button" class="home-combo-half" data-home-game="premier" aria-label="${escapeHtml(ui("CS2 Premier"))}, ${escapeHtml(ui("Select"))}">
+            <button type="button" class="home-combo-half" data-home-game="premier" aria-label="${escapeHtml(gameAria("CS2 Premier"))}">
               <img class="home-combo-half-media" src="${escapeHtml(prem.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
               <span class="home-combo-half-scrim" aria-hidden="true"></span>
               <span class="home-combo-half-content">
                 <h2 class="home-combo-half-h">${ui("CS2 Premier")}</h2>
-                <p class="home-combo-half-p">${escapeHtml(ui("CS2 Premier matchmaking — customize and copy a clean Discord ticket when listings go live."))}</p>
-                <span class="btn btn-primary home-combo-mini">${ui("Select")}</span>
+                <p class="home-combo-half-p">${escapeHtml(ui(homeBlurb(prem)))}</p>
+                <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
               </span>
             </button>
-            <button type="button" class="home-combo-half" data-home-game="faceit" aria-label="${escapeHtml(ui("CS2 Faceit"))}, ${escapeHtml(ui("Select"))}">
+            <button type="button" class="home-combo-half" data-home-game="faceit" aria-label="${escapeHtml(gameAria("CS2 Faceit"))}">
               <img class="home-combo-half-media" src="${escapeHtml(face.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
               <span class="home-combo-half-scrim" aria-hidden="true"></span>
               <span class="home-combo-half-content">
                 <h2 class="home-combo-half-h">${ui("CS2 Faceit")}</h2>
-                <p class="home-combo-half-p">${escapeHtml(ui("FACEIT CS2 services — build readable orders and paste your ticket when listings appear here."))}</p>
-                <span class="btn btn-primary home-combo-mini">${ui("Select")}</span>
+                <p class="home-combo-half-p">${escapeHtml(ui(homeBlurb(face)))}</p>
+                <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
               </span>
             </button>
           </div>
@@ -428,24 +443,24 @@
       if (boost && soc) {
         const socialImg = "assets/social.webp";
         chunks.push(`
-        <article class="home-game-card home-combo-card" aria-label="${escapeHtml(ui("Boost+ / Social"))}">
+        <article class="home-game-card home-combo-card" aria-label="${escapeHtml(ui("Boost+ and Social"))}">
           <div class="home-combo-split">
-            <button type="button" class="home-combo-half" data-home-game="circle" aria-label="${escapeHtml(ui("Boost+"))}, ${escapeHtml(ui("Select"))}">
+            <button type="button" class="home-combo-half" data-home-game="circle" aria-label="${escapeHtml(gameAria("Boost+"))}">
               <img class="home-combo-half-media" src="${escapeHtml(boost.heroBg)}" alt="" loading="lazy" onerror="this.style.display='none'; this.closest('.home-combo-half')?.classList.add('is-media-fallback');">
               <span class="home-combo-half-scrim" aria-hidden="true"></span>
               <span class="home-combo-half-content">
                 <h2 class="home-combo-half-h">${ui("Boost+")}</h2>
-                <p class="home-combo-half-p">${escapeHtml(ui("Premium teammate sessions for League, Valorant, and E-Girl packages — Discord-ready orders."))}</p>
-                <span class="btn btn-primary home-combo-mini">${ui("Select")}</span>
+                <p class="home-combo-half-p">${escapeHtml(ui(homeBlurb(boost)))}</p>
+                <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
               </span>
             </button>
-            <button type="button" class="home-combo-half" data-home-game="social" aria-label="${escapeHtml(ui("Social"))}, ${escapeHtml(ui("Select"))}">
+            <button type="button" class="home-combo-half" data-home-game="social" aria-label="${escapeHtml(gameAria("Social"))}">
               <img class="home-combo-half-media home-combo-half-media--social" src="${escapeHtml(socialImg)}" alt="" loading="lazy" onerror="elyImagePlaceholder(this)">
               <span class="home-combo-half-scrim" aria-hidden="true"></span>
               <span class="home-combo-half-content">
                 <h2 class="home-combo-half-h">${ui("Social")}</h2>
-                <p class="home-combo-half-p">${escapeHtml(ui("Companion and community services — choose a social pick and send a clear Discord request."))}</p>
-                <span class="btn btn-primary home-combo-mini">${ui("Select")}</span>
+                <p class="home-combo-half-p">${escapeHtml(ui(homeBlurb(soc)))}</p>
+                <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
               </span>
             </button>
           </div>
@@ -614,8 +629,8 @@
         $("popularGrid").innerHTML = "";
         return;
       }
-      $("popularTitle").textContent = game.id === "arc" ? ui("Popular Arc Raiders Orders") : ui("Popular") + " " + ui(game.label) + " " + ui("Services");
-      $("popularCopy").textContent = game.id === "arc" ? ui("Fast picks rotate between Trials, All Guns, Blueprints, and Raider Coins without repeating the selected category.") : ui("Most requested services for this game.");
+      $("popularTitle").textContent = game.id === "arc" ? ui("Featured Arc Raiders Services") : ui("Popular") + " " + ui(game.label) + " " + ui("Services");
+      $("popularCopy").textContent = game.id === "arc" ? ui("Curated starters — Trials, guns, blueprints, and coins — without repeating your open category.") : ui("Most requested services for this game.");
       const visibleIds = new Set(game.categories.length
         ? game.services.filter(service => service.category === state.category).map(service => service.id)
         : [state.serviceId]);
