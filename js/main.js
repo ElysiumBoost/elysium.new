@@ -234,5 +234,26 @@
         }
       }
     });
+
+    window.selectGame = selectGame;
+    if (!window.__elyHomeGameDelegated) {
+      window.__elyHomeGameDelegated = true;
+      document.addEventListener(
+        "click",
+        event => {
+          const card = event.target.closest("[data-home-game]");
+          if (!card) return;
+          const home = $("homeContent");
+          if (!home || home.classList.contains("hidden")) return;
+          event.preventDefault();
+          const id = card.getAttribute("data-home-game");
+          if (!id || !games.some(g => g.id === id)) return;
+          if (typeof selectGame === "function") selectGame(id);
+          else if (typeof window.selectGame === "function") window.selectGame(id);
+        },
+        true
+      );
+    }
+
     renderAll();
     startOrderFeed();

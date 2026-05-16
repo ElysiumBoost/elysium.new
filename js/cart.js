@@ -293,10 +293,12 @@
       const vNote = $("cartVerifyNote");
       if (vNote) vNote.textContent = ui("Attach the receipt image to Discord if support requests visual confirmation.");
       syncCompactToggleLabel();
-      document.querySelector('a[href*="1499796035382415462"]').textContent = ui("Open Discord");
+      const discA = document.querySelector('a[href*="1499796035382415462"]');
+      if (discA) discA.textContent = ui("Open Discord");
       const fb = $("cartFeedbackLink");
       if (fb) fb.textContent = ui("Leave feedback");
-      document.querySelector(".drawer-head h2").textContent = ui("Order center");
+      const drawerH = document.querySelector(".drawer-head h2");
+      if (drawerH) drawerH.textContent = ui("Order center");
       const ctl = $("cartTotalLabel");
       if (ctl) ctl.textContent = ui("Order total");
       const td = document.querySelector(".topbar-discord");
@@ -494,9 +496,6 @@
           <p>${ui("Browse in your currency. Your cart, ticket, and receipt use the same currency so totals always match.")}</p>
         </article>`;
       }
-      document.querySelectorAll("[data-home-game]").forEach(button => button.addEventListener("click", () => {
-        selectGame(button.dataset.homeGame);
-      }));
     }
 
     const serviceImages = {
