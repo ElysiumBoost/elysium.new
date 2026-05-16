@@ -452,7 +452,7 @@
           <ol class="order-discord-panel__list">
             <li>${escapeHtml(ui("Copy your ticket text from the Order center."))}</li>
             <li>${escapeHtml(ui("Open the ELYSIUM BOOST Discord channel."))}</li>
-            <li>${escapeHtml(ui("Paste the ticket and add any notes support requests."))}</li>
+            <li>${escapeHtml(ui("Paste the ticket and add any notes your booster or support requests."))}</li>
             <li>${escapeHtml(ui("Attach the receipt PNG if moderators ask for a visual confirmation."))}</li>
           </ol>
         </section>`;
