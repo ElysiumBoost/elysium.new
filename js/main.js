@@ -1,3 +1,9 @@
+    const $ =
+      typeof window.$ === "function"
+        ? window.$
+        : function elyDomId(id) {
+            return document.getElementById(id);
+          };
     const MUSIC_PREF_KEY = "elyBoostMusicPrefV1";
     const bgMusic = $("bgMusic");
     const audioToggle = $("audioToggle");
@@ -221,7 +227,7 @@
           const game = games.find(g => g.id === id);
           state.game = id;
           state.category = game.categories[0]?.id || "services";
-          state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
+          state.serviceId = null;
           renderAll();
         }
       } else if (!id) {

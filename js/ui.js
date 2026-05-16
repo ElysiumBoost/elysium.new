@@ -253,12 +253,15 @@
 
     function updateTotal() {
       const wrap = $("orderSummaryTotal");
+      const liveEl = $("liveTotal");
+      const usdEl = $("usdHint");
+      const atc = $("addToCart");
       const svc = currentService();
       if (!svc) {
         if (wrap) wrap.classList.add("summary-total--idle");
-        $("liveTotal").textContent = ui("Select a service to build your order.");
-        $("usdHint").textContent = "";
-        $("addToCart").disabled = true;
+        if (liveEl) liveEl.textContent = ui("Select a service to build your order.");
+        if (usdEl) usdEl.textContent = "";
+        if (atc) atc.disabled = true;
         const br = $("arcPriceBreakdown");
         if (br) {
           br.hidden = true;
@@ -273,14 +276,59 @@
       }
       if (wrap) wrap.classList.remove("summary-total--idle");
       const result = calculate();
+      const incomplete =
+        !result.valid &&
+        !result.custom &&
+        !result.contactOnly &&
+        Number(result.total) === 0;
+      if (incomplete) {
+        if (wrap) wrap.classList.add("summary-total--idle");
+        if (liveEl) liveEl.textContent = ui("Complete the options above to see your total.");
+        if (usdEl) usdEl.textContent = "";
+        if (atc) atc.disabled = true;
+        const br = $("arcPriceBreakdown");
+        if (br) {
+          br.hidden = true;
+          br.innerHTML = "";
+        }
+        const arcPrev = $("arcOrderSummaryPreview");
+        if (arcPrev) {
+          arcPrev.hidden = true;
+          arcPrev.innerHTML = "";
+        }
+        const dl = $("valorantSummaryDl");
+        const noteEl = $("valorantSummaryNote");
+        const valRbHint = $("valRbHint");
+        if (valRbHint) {
+          if (result.valorantValRbError) {
+            valRbHint.hidden = false;
+            valRbHint.textContent = result.valorantValRbError;
+          } else {
+            valRbHint.hidden = true;
+            valRbHint.textContent = "";
+          }
+        }
+        if (dl && Array.isArray(result.valorantRows)) dl.innerHTML = "";
+        if (noteEl) {
+          noteEl.textContent = "";
+          noteEl.hidden = true;
+        }
+        if (svc?.form && String(svc.form).startsWith("valorant-") && typeof syncValorantPathRail === "function") {
+          syncValorantPathRail();
+        }
+        return;
+      }
+      if (wrap) wrap.classList.remove("summary-total--idle");
       const vForm = svc?.form && String(svc.form).startsWith("valorant-");
       const old = result.oldTotal && result.oldTotal > result.total ? `<span class="old-total">${displayMoney(result.oldTotal)}</span>` : "";
       const estTag = result.estimated ? `<span class="estimated-tag">Estimated</span>` : "";
       const customFace = result.custom && vForm ? "Custom Price" : "CUSTOM";
-      $("liveTotal").innerHTML = result.custom ? customFace : old + displayMoney(result.total) + estTag;
-      $("usdHint").textContent = result.custom
-        ? (vForm ? "Custom Price — contact for final quote" : "Ticket value: CUSTOM")
-        : (result.estimated ? "Estimated ticket value: " : "Ticket value: ") + moneyUSD(result.total) + " USD";
+      if (liveEl) liveEl.innerHTML = result.custom ? customFace : old + displayMoney(result.total) + estTag;
+      if (usdEl) {
+        usdEl.textContent = result.custom
+          ? (vForm ? "Custom Price — contact for final quote" : "Ticket value: CUSTOM")
+          : (result.estimated ? "Estimated ticket value: " : "Ticket value: ") + moneyUSD(result.total) + " USD";
+      }
       const br = $("arcPriceBreakdown");
       if (br) {
         if (result.arcPriceBreakdown && result.arcPriceBreakdown.rows && result.arcPriceBreakdown.rows.length) {
@@ -318,8 +366,10 @@
           arcPrev.innerHTML = "";
         }
       }
-      $("addToCart").disabled = !result.valid;
-      $("addToCart").textContent = ui(result.contactOnly || (vForm && result.custom) ? "Contact Us" : "Add to Cart");
+      if (atc) {
+        atc.disabled = !result.valid;
+        atc.textContent = ui(result.contactOnly || (vForm && result.custom) ? "Contact Us" : "Add to Cart");
+      }
       const dl = $("valorantSummaryDl");
       const noteEl = $("valorantSummaryNote");
       const valRbHint = $("valRbHint");
@@ -354,6 +404,9 @@
     }
 
     function clearServiceForm() {
+      state.serviceId = null;
+      if (typeof renderCategories === "function") renderCategories();
+      if (typeof renderServices === "function") renderServices();
       renderDetail();
       showToast("Service form cleared.");
     }
@@ -1343,8 +1396,7 @@
       state.game = entry.gameId || "arc";
       state.category = entry.categoryId;
       if (entry.type === "category") {
-        const g = games.find(x => x.id === state.game);
-        state.serviceId = g?.services.find(s => s.category === state.category)?.id ?? null;
+        state.serviceId = null;
       } else {
         state.serviceId = entry.serviceId;
       }
