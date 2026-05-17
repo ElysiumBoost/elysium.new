@@ -84,8 +84,8 @@
       blueprint: .75,
       coins100k: .25,
       weapon: .50,
-      blueMod: .15,
-      premiumMod: .25,
+      blueMod: .05,
+      premiumMod: .10,
       seeds100: .40,
       augment: .35,
       shield: .35,
@@ -147,12 +147,32 @@
     }
 
     const blueprintGroups = {
-      "Gun Blueprints": ["Anvil", "Bettina", "Bobcat", "Burletta", "Dolabra", "Equalizer", "Hullcracker", "Il Toro", "Jupiter", "Osprey", "Canto", "Vulcano", "Torrente", "Tempest", "Venator"],
+      "Gun Blueprints": ["Anvil", "Aphelion", "Bettina", "Bobcat", "Burletta", "Dolabra", "Equalizer", "Hullcracker", "Il Toro", "Jupiter", "Osprey", "Canto", "Vulcano", "Torrente", "Tempest", "Venator", "Renegade"],
       "Backpack Blueprints": ["Combat Mk.3 (Flanking)", "Combat Mk.3 (Aggressive)", "Tactical Mk.3 (Defensive)", "Tactical Mk.3 (Healing)", "Looting Mk.3 (Survivor)", "Looting Mk.3 (Safekeeper)", "Tactical Mk.3 (Revival)", "Tactical Mk.3 (Smoke)"],
       "Quick Use Blueprints": ["Barricade Kit", "Explosive Mine", "Defibrillator", "White Flag", "Crash Mat", "Powered Descender", "Vita Shot", "Vita Spray", "Wolfpack", "Snap Hook", "Smoke Grenade", "Showstopper", "Lure Grenade", "Deadline", "Seeker Grenade", "Trailblazer", "Gas Mine", "Pulse Mine", "Fireworks Box", "Blue Light Stick", "Green Light Stick", "Yellow Light Stick", "Red Light Stick", "Remote Raider Flare", "Surge Coil", "Tagging Grenade", "Jolt Mine", "Blaze Grenade", "Trigger 'Nade"],
       "Gun Part Blueprints": ["Angled Grip II", "Angled Grip III", "Compensator II", "Extended Barrel", "Extended Light Magazine II", "Extended Medium Magazine II", "Extended Shotgun Magazine II", "Lightweight Stock", "Muzzle Brake II", "Padded Stock", "Shotgun Choke II", "Silencer I", "Silencer II", "Stable Stock II", "Heavy Gun Parts", "Compensator III", "Extended Light Magazine III", "Extended Medium Magazine III", "Extended Shotgun Magazine III", "Muzzle Brake III", "Shotgun Choke III", "Shotgun Silencer", "Stable Stock III", "Vertical Grip III", "Complex Gun Parts"]
     };
-    const weapons = ["No Weapon", "Anvil", "Bettina", "Bobcat", "Burletta", "Dolabra", "Equalizer", "Hullcracker", "Il Toro", "Jupiter", "Osprey", "Renegade", "Canto", "Vulcano", "Torrente", "Tempest", "Venator"];
+    const weapons = ["No Weapon", "Anvil", "Aphelion", "Bettina", "Bobcat", "Burletta", "Canto", "Dolabra", "Equalizer", "Hullcracker", "Il Toro", "Jupiter", "Osprey", "Renegade", "Tempest", "Torrente", "Venator", "Vulcano"];
+
+    function weaponBasePriceUsd(name) {
+      const w = String(name || "").trim();
+      if (!w || w === "No Weapon") return 0;
+      const tier30 = new Set(["Anvil", "Burletta", "Il Toro"]);
+      const tier40 = new Set(["Venator", "Renegade", "Torrente", "Canto", "Osprey"]);
+      const tier50 = new Set(["Tempest", "Bobcat", "Vulcano", "Bettina", "Hullcracker"]);
+      const tier60 = new Set(["Dolabra", "Jupiter", "Equalizer", "Aphelion"]);
+      if (tier30.has(w)) return 0.30;
+      if (tier40.has(w)) return 0.40;
+      if (tier50.has(w)) return 0.50;
+      if (tier60.has(w)) return 0.60;
+      return prices.weapon;
+    }
+
+    function weaponAllowsArcMods(name) {
+      const w = String(name || "").trim();
+      if (!w || w === "No Weapon") return false;
+      return !new Set(["Dolabra", "Jupiter", "Equalizer"]).has(w);
+    }
     const stages = [["Foundation", 10], ["Core Systems", 10], ["Framework", 10], ["Outfitting", 10], ["Load Stage", 15]];
     const workshops = ["Gunsmith", "Gear Bench", "Medical Lab", "Explosive Station", "Utility Station", "Refiner"];
     const ranks = ["Rookie I", "Rookie II", "Rookie III", "Tryhard I", "Tryhard II", "Tryhard III", "Wildcard I", "Wildcard II", "Wildcard III", "Daredevil I", "Daredevil II", "Daredevil III", "Hotshot"];

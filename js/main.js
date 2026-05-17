@@ -2,6 +2,9 @@
     const bgMusic = $("bgMusic");
     const audioToggle = $("audioToggle");
     const audioVolume = $("audioVolume");
+    const audioControl = $("audioControl");
+    const audioPop = $("audioPop");
+    const audioPopTrigger = $("audioPopTrigger");
 
     function readMusicPref() {
       try {
@@ -28,7 +31,15 @@
       audioToggle.setAttribute("aria-label", off ? ui("Play music") : ui("Pause music"));
     }
 
-    if (bgMusic && audioToggle && audioVolume) {
+    function setAudioPopOpen(open) {
+      if (!audioPop || !audioPopTrigger || !audioControl) return;
+      audioPop.hidden = !open;
+      audioPopTrigger.setAttribute("aria-expanded", open ? "true" : "false");
+      audioControl.classList.toggle("audio-control--open", open);
+      audioPopTrigger.textContent = open ? "\u25B2" : "\u25BC";
+    }
+
+    if (bgMusic && audioToggle && audioVolume && audioControl && audioPop && audioPopTrigger) {
       (function initMusicPrefs() {
         const p = readMusicPref();
         audioVolume.value = String(p.vol);
@@ -61,6 +72,18 @@
         if (v <= 0) bgMusic.pause();
         updateAudioButton();
         writeMusicPref();
+      });
+
+      audioPopTrigger.addEventListener("click", e => {
+        e.preventDefault();
+        e.stopPropagation();
+        setAudioPopOpen(audioPop.hidden);
+      });
+
+      document.addEventListener("click", e => {
+        if (audioPop.hidden) return;
+        if (audioControl.contains(e.target)) return;
+        setAudioPopOpen(false);
       });
     }
 
@@ -200,6 +223,7 @@
 
     document.addEventListener("keydown", event => {
       if (event.key === "Escape") {
+        setAudioPopOpen(false);
         closeGameMenu();
         closeCart();
         closeArcIdModal();

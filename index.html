@@ -35,14 +35,18 @@
   <audio id="bgMusic" src="assets/elysium-loop.mp3" loop preload="metadata" muted></audio>
   <header class="topbar">
     <div class="shell topbar-inner">
-      <a class="brand" href="#" id="brandHome">
-        <img
-          src="assets/elysium-logo.webp"
-          srcset="assets/elysium-logo-128.webp 128w, assets/elysium-logo-256.webp 256w, assets/elysium-logo-512.webp 512w"
-          sizes="(max-width: 720px) min(44vw, 170px) 220px"
-          alt="ELYSIUM BOOST"
-          loading="eager"
-          decoding="async">
+      <a class="brand" href="#" id="brandHome" aria-label="Elysium Boost — home">
+        <span class="brand-mark-wrap">
+          <img
+            class="brand-mark"
+            src="assets/elysium-mark.webp"
+            width="120"
+            height="120"
+            alt=""
+            loading="eager"
+            decoding="async">
+        </span>
+        <span class="brand-wordmark">Elysium Boost</span>
       </a>
       <div class="game-menu-wrap" id="gameTabs" aria-label="Choose game">
         <button class="btn game-menu-btn" type="button" id="gameMenuBtn" aria-expanded="false" aria-controls="gameMenuPanel" aria-haspopup="true">
@@ -51,7 +55,6 @@
         </button>
         <div class="game-menu-panel" id="gameMenuPanel" role="menu" aria-labelledby="gameMenuBtn" hidden></div>
       </div>
-      <a class="btn btn-glass topbar-discord" data-discord-header href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Discord</a>
       <div class="actions">
         <input class="site-search" id="siteSearch" type="search" placeholder="Search services" aria-label="Search services">
         <button class="btn btn-icon" id="siteSearchBtn" type="button" aria-label="Search" title="Search">
@@ -64,12 +67,16 @@
           <option value="GBP">&pound; GBP</option>
           <option value="TRY">&#8378; TRY</option>
         </select>
-        <div class="audio-control" title="Music volume">
+        <div class="audio-control" id="audioControl" title="Music">
           <button class="audio-toggle" id="audioToggle" type="button" aria-label="Toggle music">&#9835;</button>
-          <input class="audio-volume" id="audioVolume" type="range" min="0" max="100" value="0" aria-label="Music volume">
+          <button type="button" class="audio-pop-trigger" id="audioPopTrigger" aria-label="Show music volume" aria-expanded="false" aria-controls="audioPop">&#9660;</button>
+          <div class="audio-pop" id="audioPop" hidden>
+            <label class="sr-only" for="audioVolume">Music volume</label>
+            <input class="audio-volume" id="audioVolume" type="range" min="0" max="100" value="0" aria-label="Music volume">
+          </div>
         </div>
         <button class="btn cart-button btn-icon" id="cartOpen" type="button" aria-label="Open cart" title="Open cart">
-          <svg class="btn-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.65" stroke-linejoin="round" d="M6.5 7h11l-1.1 11H7.6L6.5 7z"/><path fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" d="M9.5 7V6a2.5 2.5 0 015 0v1"/></svg>
+          <svg class="cart-icon-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9.2a2 2 0 01-2 1.8H8.4a2 2 0 01-2-1.6L5 4H4"/><circle cx="9" cy="20" r="1.35"/><circle cx="17" cy="20" r="1.35"/></svg>
           <span class="cart-count" id="cartCount">0</span>
         </button>
       </div>
@@ -89,12 +96,11 @@
       <div class="shell hero-shell">
         <div class="hero-text">
           <span class="eyebrow hero-eyebrow" id="heroKicker">Manual · Discord-confirmed</span>
-          <h1 id="heroTitle">Premium Game Boosting, Delivered Manually.</h1>
+          <h1 id="heroTitle">Premium Game Boosting</h1>
           <p class="hero-subtitle" id="heroSubtitle">Safe Discord-confirmed services for Arc Raiders, Valorant and more.</p>
           <p class="hero-lead" id="heroCopy">Choose your game, configure your order, and our team confirms everything with you before play.</p>
-          <div class="hero-cta-row" id="heroCtaRow">
+          <div class="hero-cta-row hero-cta-row--solo" id="heroCtaRow">
             <button type="button" class="btn btn-premium hero-cta" id="heroCta">Start Order</button>
-            <a class="btn btn-glass hero-cta-secondary" id="heroDiscord" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Join Discord</a>
           </div>
         </div>
       </div>
