@@ -80,7 +80,12 @@
   <div class="category-bar" id="categoryBar">
     <div class="shell category-shell">
       <button class="btn cat-arrow" id="catPrev" type="button" aria-label="Previous categories">&lsaquo;</button>
-      <div class="category-scroll" id="categoryScroll"></div>
+      <div class="category-scroll-column">
+        <div class="category-scroll" id="categoryScroll"></div>
+        <div class="category-drag-indicator" id="categoryDragIndicator" aria-hidden="true">
+          <span class="category-drag-indicator__thumb" id="categoryDragIndicatorThumb"></span>
+        </div>
+      </div>
       <button class="btn cat-arrow" id="catNext" type="button" aria-label="Next categories">&rsaquo;</button>
     </div>
   </div>

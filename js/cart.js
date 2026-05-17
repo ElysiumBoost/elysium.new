@@ -738,7 +738,68 @@
       $("catNext").onclick = () => move(1);
     }
 
-    const categoryMotion = { bound: false, paused: false, pauseUntil: 0, dragging: false, didDrag: false, skipClick: false, startX: 0, startLeft: 0, targetCat: "", direction: 1, raf: 0 };
+    const categoryMotion = {
+      bound: false,
+      paused: false,
+      pauseUntil: 0,
+      dragging: false,
+      didDrag: false,
+      skipClick: false,
+      startX: 0,
+      startY: 0,
+      startLeft: 0,
+      targetCat: "",
+      direction: 1,
+      raf: 0,
+      pointerId: null,
+      indicatorHideTimer: null,
+      dragThresholdPx: 8
+    };
+
+    function suppressNextCategoryStripClick(scroller) {
+      const kill = e => {
+        if (!e.target.closest?.("#categoryScroll")) return;
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+      };
+      scroller.addEventListener("click", kill, { capture: true, once: true });
+    }
+
+    function updateCategoryDragIndicator() {
+      const scroller = $("categoryScroll");
+      const thumb = $("categoryDragIndicatorThumb");
+      if (!scroller || !thumb) return;
+      const denom = scroller.scrollWidth || 1;
+      const vis = scroller.clientWidth;
+      const thumbWpct = Math.max(10, Math.min(100, (vis / denom) * 100));
+      const maxScroll = Math.max(0, scroller.scrollWidth - vis);
+      const ratio = maxScroll <= 0 ? 0 : scroller.scrollLeft / maxScroll;
+      const travel = Math.max(0, 100 - thumbWpct);
+      thumb.style.width = thumbWpct + "%";
+      thumb.style.marginLeft = ratio * travel + "%";
+    }
+
+    function showCategoryDragIndicator() {
+      const el = $("categoryDragIndicator");
+      if (!el) return;
+      if (categoryMotion.indicatorHideTimer) {
+        clearTimeout(categoryMotion.indicatorHideTimer);
+        categoryMotion.indicatorHideTimer = null;
+      }
+      el.classList.add("is-active");
+      updateCategoryDragIndicator();
+    }
+
+    function scheduleHideCategoryDragIndicator() {
+      const el = $("categoryDragIndicator");
+      if (!el) return;
+      if (categoryMotion.indicatorHideTimer) clearTimeout(categoryMotion.indicatorHideTimer);
+      categoryMotion.indicatorHideTimer = setTimeout(() => {
+        categoryMotion.indicatorHideTimer = null;
+        el.classList.remove("is-active");
+      }, 900);
+    }
 
     function pauseCategoryAuto(ms = 4000) {
       categoryMotion.pauseUntil = Date.now() + ms;
@@ -751,33 +812,62 @@
         scroller.addEventListener("mouseenter", () => { categoryMotion.paused = true; });
         scroller.addEventListener("mouseleave", () => { categoryMotion.paused = false; });
         scroller.addEventListener("wheel", () => pauseCategoryAuto(7000), { passive: true });
+        scroller.addEventListener("scroll", () => {
+          if ($("categoryDragIndicator")?.classList.contains("is-active")) updateCategoryDragIndicator();
+        }, { passive: true });
         scroller.addEventListener("pointerdown", event => {
+          if (event.pointerType === "mouse" && event.button !== 0) return;
           categoryMotion.dragging = true;
           categoryMotion.didDrag = false;
           categoryMotion.startX = event.clientX;
+          categoryMotion.startY = event.clientY;
           categoryMotion.startLeft = scroller.scrollLeft;
           categoryMotion.targetCat = event.target.closest("[data-cat]")?.dataset.cat || "";
+          categoryMotion.pointerId = event.pointerId;
           scroller.classList.add("dragging");
           pauseCategoryAuto(8000);
-          scroller.setPointerCapture?.(event.pointerId);
+          try {
+            scroller.setPointerCapture(event.pointerId);
+          } catch (e) {}
         });
         scroller.addEventListener("pointermove", event => {
           if (!categoryMotion.dragging) return;
-          const delta = event.clientX - categoryMotion.startX;
-          if (Math.abs(delta) > 5) categoryMotion.didDrag = true;
-          scroller.scrollLeft = categoryMotion.startLeft - delta;
+          const dx = event.clientX - categoryMotion.startX;
+          const dy = event.clientY - categoryMotion.startY;
+          if (Math.hypot(dx, dy) > categoryMotion.dragThresholdPx) {
+            categoryMotion.didDrag = true;
+            showCategoryDragIndicator();
+          }
+          if (categoryMotion.didDrag) {
+            scroller.scrollLeft = categoryMotion.startLeft - dx;
+            updateCategoryDragIndicator();
+          }
         });
         const stopDrag = event => {
+          const wasDrag = categoryMotion.didDrag;
           const shouldSelect = !categoryMotion.didDrag && categoryMotion.targetCat;
           categoryMotion.dragging = false;
           scroller.classList.remove("dragging");
-          scroller.releasePointerCapture?.(event.pointerId);
+          if (categoryMotion.pointerId != null) {
+            try {
+              if (scroller.hasPointerCapture?.(categoryMotion.pointerId)) scroller.releasePointerCapture(categoryMotion.pointerId);
+            } catch (e) {}
+            categoryMotion.pointerId = null;
+          }
           pauseCategoryAuto(6000);
+          if (wasDrag) {
+            suppressNextCategoryStripClick(scroller);
+            updateCategoryDragIndicator();
+            scheduleHideCategoryDragIndicator();
+          } else if ($("categoryDragIndicator")?.classList.contains("is-active")) {
+            scheduleHideCategoryDragIndicator();
+          }
           if (shouldSelect) {
             categoryMotion.skipClick = true;
             selectCategory(categoryMotion.targetCat);
           }
           categoryMotion.targetCat = "";
+          setTimeout(() => { categoryMotion.didDrag = false; }, 0);
         };
         scroller.addEventListener("pointerup", stopDrag);
         scroller.addEventListener("pointercancel", stopDrag);
