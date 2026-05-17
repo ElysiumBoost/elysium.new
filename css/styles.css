@@ -785,6 +785,15 @@
       gap: 8px;
     }
 
+    .category-scroll-column {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0;
+      align-self: stretch;
+    }
+
     .category-scroll {
       min-height: 124px;
       display: flex;
@@ -799,6 +808,7 @@
       overscroll-behavior-inline: contain;
       cursor: grab;
       user-select: none;
+      touch-action: pan-x;
     }
 
     .category-scroll.dragging {
@@ -807,6 +817,35 @@
     }
 
     .category-scroll::-webkit-scrollbar { display: none; }
+
+    .category-drag-indicator {
+      flex: 0 0 auto;
+      height: 3px;
+      margin-top: 4px;
+      border-radius: 999px;
+      background: rgba(18, 14, 40, .72);
+      box-shadow: inset 0 0 0 1px rgba(139, 92, 246, .12);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .45s ease;
+      overflow: hidden;
+      align-self: stretch;
+    }
+
+    .category-drag-indicator.is-active {
+      opacity: 1;
+    }
+
+    .category-drag-indicator__thumb {
+      display: block;
+      height: 100%;
+      width: 35%;
+      min-width: 18px;
+      border-radius: inherit;
+      background: linear-gradient(90deg, rgba(124, 58, 237, .95), rgba(56, 189, 248, .88));
+      box-shadow: 0 0 14px rgba(139, 92, 246, .25);
+      transition: margin-left .08s linear, width .08s linear;
+    }
 
     .cat-arrow {
       width: 40px;
