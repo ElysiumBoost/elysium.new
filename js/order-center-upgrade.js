@@ -1,7 +1,9 @@
 (function () {
  "use strict";
 
- const COMING_SOON_GAMES = new Set(["circle", "wow", "premier", "faceit"]);
+ const COMING_SOON_GAMES =
+  window.ELY_COMING_SOON_GAME_IDS instanceof Set ? window.ELY_COMING_SOON_GAME_IDS : new Set(["circle", "wow", "cs2"]);
+ window.ELY_COMING_SOON_GAME_IDS = COMING_SOON_GAMES;
 
  function captureOrderFormSnapshot() {
  const root = document.getElementById("orderForm");
@@ -71,7 +73,7 @@
  const rid = String(item.playerId || state.lolRiotId || "").trim();
  if (rid) lines.push(`LoL Riot ID: ${rid}`);
  }
- if (gid === "premier" || gid === "faceit") {
+ if (gid === "premier" || gid === "faceit" || gid === "cs2") {
  lines.push(`Steam / friend code: ${(item.playerId || state.steamId || "").trim() || "—"}`);
  }
  if (gid === "wow") {
@@ -102,7 +104,7 @@
  } else if (gid === "lol") {
  const rid = String(item.playerId || state.lolRiotId || "").trim();
  if (rid) inner += row("Riot ID", escapeHtml(rid));
- } else if (gid === "premier" || gid === "faceit") {
+ } else if (gid === "premier" || gid === "faceit" || gid === "cs2") {
  inner += row(
  "Steam / friend code",
  escapeHtml((item.playerId || state.steamId || "").trim() || "—")
