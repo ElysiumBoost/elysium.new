@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -29,6 +29,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css?v=social-card-live1">
+  <link rel="stylesheet" href="css/order-center.css?v=order-center-v2">
 
 </head>
 <body>
@@ -64,12 +65,12 @@
         <select class="currency" id="currency" aria-label="Currency">
           <option value="USD">$ USD</option>
           <option value="EUR">&euro; EUR</option>
-          <option value="GBP">&pound; GBP</option>
-          <option value="TRY">&#8378; TRY</option>
+          <option value="GBP">£ GBP</option>
+          <option value="TRY">₺ TRY</option>
         </select>
         <div class="audio-control" id="audioControl" title="Music">
-          <button class="audio-toggle" id="audioToggle" type="button" aria-label="Toggle music">&#9835;</button>
-          <button type="button" class="audio-pop-trigger" id="audioPopTrigger" aria-label="Show music volume" aria-expanded="false" aria-controls="audioPop">&#9660;</button>
+          <button class="audio-toggle" id="audioToggle" type="button" aria-label="Toggle music">♫</button>
+          <button type="button" class="audio-pop-trigger" id="audioPopTrigger" aria-label="Show music volume" aria-expanded="false" aria-controls="audioPop">▼</button>
           <div class="audio-pop" id="audioPop" hidden>
             <label class="sr-only" for="audioVolume">Music volume</label>
             <input class="audio-volume" id="audioVolume" type="range" min="0" max="100" value="0" aria-label="Music volume">
@@ -85,14 +86,14 @@
 
   <div class="category-bar" id="categoryBar">
     <div class="shell category-shell">
-      <button class="btn cat-arrow" id="catPrev" type="button" aria-label="Previous categories">&lsaquo;</button>
+      <button class="btn cat-arrow" id="catPrev" type="button" aria-label="Previous categories">‹</button>
       <div class="category-scroll-column">
         <div class="category-scroll" id="categoryScroll"></div>
         <div class="category-drag-indicator" id="categoryDragIndicator" aria-hidden="true">
           <span class="category-drag-indicator__thumb" id="categoryDragIndicatorThumb"></span>
         </div>
       </div>
-      <button class="btn cat-arrow" id="catNext" type="button" aria-label="Next categories">&rsaquo;</button>
+      <button class="btn cat-arrow" id="catNext" type="button" aria-label="Next categories">›</button>
     </div>
   </div>
 
@@ -130,7 +131,7 @@
             </article>
             <article class="how-card">
               <div class="how-card__step">02</div>
-              <h3>Configure &amp; cart</h3>
+              <h3>Configure & cart</h3>
               <p>Set options and quantity; pricing updates instantly in your currency.</p>
             </article>
             <article class="how-card">
@@ -156,8 +157,8 @@
             </article>
             <article class="home-trust-mini">
               <h3>What customers say</h3>
-              <p class="home-trust-quote">&ldquo;Clean ticket format and fast Discord replies — felt professional end to end.&rdquo;</p>
-              <span class="home-trust-quote-src">Verified buyer · Arc &amp; Valorant</span>
+              <p class="home-trust-quote">“Clean ticket format and fast Discord replies — felt professional end to end.”</p>
+              <span class="home-trust-quote-src">Verified buyer · Arc & Valorant</span>
             </article>
             <article class="home-trust-mini">
               <h3>Support-first</h3>
@@ -204,7 +205,7 @@
                 <div>
                   <h2 id="detailTitle">Service Details</h2>
                   <div class="rating rating--premium">
-                    <span class="rating-score" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                    <span class="rating-score" aria-hidden="true">★★★★★</span>
                     <span class="rating-text">4.9/5 Discord Support</span>
                   </div>
                 </div>
@@ -247,8 +248,8 @@
       <div class="drawer-head">
         <h2 id="drawerTitle">Order center</h2>
         <div class="drawer-head-right">
-          <button type="button" class="btn-cart-compact" id="cartCompactToggle" aria-pressed="false" aria-label="Toggle compact order layout">Simpler layout</button>
-          <button class="btn close" id="cartClose" type="button" aria-label="Close cart">&times;</button>
+          <button type="button" class="btn btn-glass btn-clear-cart-head" id="clearCart">Clear cart</button>
+          <button class="btn close" id="cartClose" type="button" aria-label="Close cart">×</button>
         </div>
       </div>
       <div class="drawer-body" id="cartBody"></div>
@@ -262,13 +263,10 @@
           </div>
           <p class="cart-verify-note" id="cartVerifyNote">Attach the receipt image only if support asks.</p>
           <div class="order-actions-primary">
-            <button class="btn btn-checkout-primary btn-order-copy" id="copyOrder" type="button">Copy Order &amp; Open Discord</button>
+            <button class="btn btn-checkout-primary btn-order-copy" id="copyOrder" type="button">Copy Order & Open Discord</button>
           </div>
           <div class="order-actions-secondary">
             <button type="button" class="btn-text btn-receipt-link" id="downloadOrderReceipt">Download Receipt Image</button>
-          </div>
-          <div class="order-actions-tertiary">
-            <button class="btn-text btn-clear-cart-muted" type="button" id="clearCart">Clear cart</button>
           </div>
           <div class="copy-status" id="copyStatus" aria-live="polite"></div>
           <a id="openDiscord" class="cart-open-discord-anchor" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Open Discord</a>
@@ -285,7 +283,7 @@
       <input id="arcIdInput" type="text" autocomplete="off" placeholder="Name#0000">
       <div class="id-modal-actions">
         <button class="btn btn-premium" id="arcIdDone" type="button" aria-label="Save Embark ID">Save</button>
-        <button class="btn btn-danger" id="arcIdSkip" type="button" aria-label="Will type it on Discord">&#10005;</button>
+        <button class="btn btn-danger" id="arcIdSkip" type="button" aria-label="Will type it on Discord">✕</button>
       </div>
     </div>
   </div>
@@ -298,7 +296,7 @@
       </div>
       <div class="site-footer-actions">
         <a class="btn btn-glass" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Discord</a>
-        <button type="button" class="btn btn-glass" id="footerLegalBtn">Terms &amp; safety</button>
+        <button type="button" class="btn btn-glass" id="footerLegalBtn">Terms & safety</button>
       </div>
     </div>
   </footer>
@@ -332,7 +330,7 @@
 
   <div class="legal-modal-backdrop" id="legalModal" aria-hidden="true">
     <div class="legal-modal" role="dialog" aria-modal="true" aria-labelledby="legalModalTitle">
-      <h2 id="legalModalTitle">Terms, safety &amp; delivery</h2>
+      <h2 id="legalModalTitle">Terms, safety & delivery</h2>
       <p>ELYSIUM BOOST provides manual coordination services. Pricing and scope are confirmed in Discord before play. Customers remain responsible for account security and following each platform’s rules of conduct.</p>
       <p><strong>No cheats. No exploits. Manual service only.</strong> We do not sell or distribute third-party cheat software.</p>
       <p>Refunds and redelivery policies are handled case-by-case in Discord according to what was agreed in your ticket. Contact support before disputing a charge elsewhere.</p>
@@ -345,15 +343,13 @@
 
   <script src="js/config.js?v=social-card-live1"></script>
   <script src="js/products.js?v=social-card-live1"></script>
-  <script src="js/state.js?v=social-card-live1"></script>
+  <script src="js/state.js?v=order-center-v2"></script>
   <script src="js/storage.js?v=social-card-live1"></script>
-  <script src="js/validation.js?v=social-card-live1"></script>
+  <script src="js/validation.js?v=order-center-v2"></script>
   <script src="js/cart.js?v=social-card-live1"></script>
   <script src="js/ui.js?v=social-card-live1"></script>
   <script src="js/main.js?v=social-card-live1"></script>
+  <script src="js/order-center-upgrade.js?v=order-center-v2"></script>
 
 </body>
 </html>
-
-
-
