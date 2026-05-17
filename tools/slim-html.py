@@ -46,7 +46,7 @@ TRUST_OLD = """        <div class="trust-bar" aria-label="Trust and guarantees">
           </div>
         </div>"""
 
-TRUST_IMG = """        <div class="trust-bar" aria-label="Trust and guarantees">
+TRUST_BANNER = """        <div class="trust-bar" aria-label="Trust and guarantees">
           <div class="trust-badge">
             <img class="trust-badge__img" src="assets/manual-delivery.webp" alt="Manual Delivery" loading="eager" decoding="async">
           </div>
@@ -67,12 +67,69 @@ TRUST_IMG = """        <div class="trust-bar" aria-label="Trust and guarantees">
           </div>
         </div>"""
 
-if "trust-badge__img" in html:
+TRUST_CARDS = """        <div class="trust-bar" aria-label="Trust and guarantees">
+          <article class="trust-card">
+            <div class="trust-card__icon" aria-hidden="true">
+              <img class="trust-card__icon-img" src="assets/manual-delivery.webp" alt="" width="72" height="72" loading="eager" decoding="async">
+            </div>
+            <div class="trust-card__body">
+              <h3 class="trust-card__title">Manual Delivery</h3>
+              <p class="trust-card__micro">Handled by real boosters</p>
+            </div>
+          </article>
+          <article class="trust-card">
+            <div class="trust-card__icon" aria-hidden="true">
+              <img class="trust-card__icon-img" src="assets/no-cheats.webp" alt="" width="72" height="72" loading="eager" decoding="async">
+            </div>
+            <div class="trust-card__body">
+              <h3 class="trust-card__title">No Cheats</h3>
+              <p class="trust-card__micro">Legit service only</p>
+            </div>
+          </article>
+          <article class="trust-card">
+            <div class="trust-card__icon" aria-hidden="true">
+              <img class="trust-card__icon-img" src="assets/safe-process.webp" alt="" width="72" height="72" loading="eager" decoding="async">
+            </div>
+            <div class="trust-card__body">
+              <h3 class="trust-card__title">Safe Process</h3>
+              <p class="trust-card__micro">Account-safe workflow</p>
+            </div>
+          </article>
+          <article class="trust-card">
+            <div class="trust-card__icon" aria-hidden="true">
+              <img class="trust-card__icon-img" src="assets/fast-support.webp" alt="" width="72" height="72" loading="eager" decoding="async">
+            </div>
+            <div class="trust-card__body">
+              <h3 class="trust-card__title">Fast Support</h3>
+              <p class="trust-card__micro">Discord assistance</p>
+            </div>
+          </article>
+          <article class="trust-card">
+            <div class="trust-card__icon" aria-hidden="true">
+              <img class="trust-card__icon-img" src="assets/verified-boosters.webp" alt="" width="72" height="72" loading="lazy" decoding="async">
+            </div>
+            <div class="trust-card__body">
+              <h3 class="trust-card__title">Verified Boosters</h3>
+              <p class="trust-card__micro">Trusted expert team</p>
+            </div>
+          </article>
+          <article class="trust-card">
+            <div class="trust-card__icon" aria-hidden="true">
+              <img class="trust-card__icon-img" src="assets/completion-guarantee.webp" alt="" width="72" height="72" loading="lazy" decoding="async">
+            </div>
+            <div class="trust-card__body">
+              <h3 class="trust-card__title">Completion Guarantee</h3>
+              <p class="trust-card__micro">Finished as promised</p>
+            </div>
+          </article>
+        </div>"""
+
+if 'class="trust-card"' in html:
     pass
 elif TRUST_OLD in html:
-    html = html.replace(TRUST_OLD, TRUST_IMG, 1)
-elif TRUST_NEW in html:
-    html = html.replace(TRUST_NEW, TRUST_IMG, 1)
+    html = html.replace(TRUST_OLD, TRUST_CARDS, 1)
+elif TRUST_BANNER in html:
+    html = html.replace(TRUST_BANNER, TRUST_CARDS, 1)
 else:
     raise SystemExit("trust-bar block not found for replacement")
 
