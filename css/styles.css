@@ -89,104 +89,6 @@
       margin: 0 auto;
     }
 
-    .trust-bar {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(198px, 100%), 1fr));
-      gap: 14px;
-      margin: 0 0 40px;
-      padding: 0;
-      border: none;
-      background: none;
-      box-shadow: none;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-      align-items: stretch;
-      width: 100%;
-      min-width: 0;
-    }
-
-    .trust-card {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      min-height: 118px;
-      margin: 0;
-      padding: 16px 18px;
-      border-radius: 14px;
-      border: 1px solid rgba(139, 92, 246, .42);
-      background:
-        linear-gradient(150deg, rgba(24, 20, 48, .52) 0%, rgba(10, 12, 26, .58) 45%, rgba(16, 10, 28, .42) 100%),
-        rgba(12, 14, 28, .35);
-      backdrop-filter: blur(16px) saturate(1.25);
-      -webkit-backdrop-filter: blur(16px) saturate(1.25);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, .08),
-        0 16px 44px rgba(0, 0, 0, .34),
-        0 0 28px rgba(139, 92, 246, .12),
-        0 0 0 1px rgba(244, 63, 94, .06);
-      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-    }
-
-    .trust-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(167, 139, 250, .65);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, .1),
-        0 22px 52px rgba(0, 0, 0, .4),
-        0 0 36px rgba(139, 92, 246, .22),
-        0 0 24px rgba(244, 63, 94, .08),
-        0 0 0 1px rgba(244, 63, 94, .1);
-    }
-
-    .trust-card__icon {
-      flex: 0 0 auto;
-      width: 52px;
-      height: 52px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid rgba(139, 92, 246, .38);
-      background: radial-gradient(circle at 32% 28%, rgba(139, 92, 246, .22), rgba(7, 10, 18, .65));
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07);
-      color: var(--gold);
-    }
-
-    .trust-card__icon-svg {
-      width: 26px;
-      height: 26px;
-      display: block;
-      flex-shrink: 0;
-    }
-
-    .trust-card__body {
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 4px;
-    }
-
-    .trust-card__title {
-      margin: 0;
-      font-family: var(--display);
-      font-size: clamp(13px, 1.25vw, 15px);
-      font-weight: 800;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      line-height: 1.2;
-      color: var(--text);
-    }
-
-    .trust-card__micro {
-      margin: 0;
-      font-family: var(--font);
-      font-size: 12px;
-      line-height: 1.4;
-      font-weight: 600;
-      color: rgba(183, 176, 223, .88);
-    }
-
     .hero-shell {
       display: block;
       padding: 0;
@@ -337,33 +239,9 @@
       .feedback-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
-      .trust-bar {
-        gap: 12px 14px;
-      }
-      .trust-card {
-        min-height: 104px;
-        padding: 14px 16px;
-      }
-      .trust-card__icon {
-        width: 52px;
-        height: 52px;
-      }
     }
 
     @media (max-width: 720px) {
-      .trust-card {
-        gap: 12px;
-        padding: 14px 14px;
-        min-height: 100px;
-      }
-      .trust-card__icon {
-        width: 48px;
-        height: 48px;
-      }
-      .trust-card__icon-svg {
-        width: 24px;
-        height: 24px;
-      }
       .how-grid {
         grid-template-columns: 1fr;
       }
@@ -1675,7 +1553,7 @@
     }
 
     #homeGameHead {
-      margin-top: 8px;
+      margin-top: 12px;
     }
 
     .popular-grid {
@@ -5713,13 +5591,6 @@
       font-size: 18px;
       letter-spacing: .12em;
       color: #fde68a;
-    }
-
-    .trust-inline-mini {
-      margin: 0;
-      font-size: 11px;
-      font-weight: 700;
-      color: rgba(244, 228, 255, .78);
     }
 
     .order-context-panel {
