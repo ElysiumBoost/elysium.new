@@ -1,4 +1,4 @@
-    function fastService(id, title, icon, price, short, intro) {
+﻿    function fastService(id, title, icon, price, short, intro) {
       return {
         id, category: "services", title, cardTitle: title, icon, fromUSD: price, suffix: "", short, start: "By Request", form: "fast", intro
       };
@@ -230,7 +230,7 @@
         heroPosition: "center 15%",
         kicker: "Valorant",
         title: "Rank calculator & boosts",
-        copy: "Dial in rank paths, placements, and wins with live pricing — then confirm everything in Discord.",
+        copy: "Dial in rank paths, placements, and wins with live pricing â€” then confirm everything in Discord.",
         categories: valorantCategories,
         popular: ["val-rank", "val-placement", "val-wins", "val-coach"],
         services: [
@@ -253,33 +253,10 @@
         heroPosition: "center center",
         kicker: "Boost+",
         title: "Boost+ Teammate Services",
-        copy: "Choose League, Valorant, or E-Girl teammate services and copy a clean Discord ticket.",
-        categories: [
-          { id: "circle-lol", label: "League of Legends", icon: "i-circle", bg: "assets/backgrounds/lol-bg.webp?v=social-card-live1" },
-          { id: "circle-valorant", label: "Valorant", icon: "i-circle", bg: "assets/backgrounds/valorant-bg.webp?v=social-card-live1" },
-          { id: "circle-egirl", label: "E-Girl", icon: "i-egirl", bg: "assets/backgrounds/boost-social-bg.webp?v=social-card-live1" }
-        ],
-        popular: ["circle-val-pistol", "circle-lol-first", "circle-egirl-chill"],
-        services: [
-          gameService("circle-lol-first", "circle-lol", "League of Legends First Blood", "First Blood", "i-win", 15.99, "", "Play 3 games with a Grandmaster+ teammate.", "Set package quantity and add lane, server, and schedule notes."),
-          gameService("circle-lol-duodiff", "circle-lol", "League of Legends Duo Diff", "Duo Diff", "i-coach", 24.99, "", "Play 5 games with a Grandmaster+ teammate.", "Set package quantity and add lane, role, and schedule notes."),
-          gameService("circle-lol-full", "circle-lol", "League of Legends Full Clear", "Full Clear", "i-star", 45.99, "", "Play 10 games with a Grandmaster+ teammate.", "Set package quantity and add account, server, and lane notes."),
-          gameService("circle-lol-duo", "circle-lol", "League of Legends Duo", "Duo", "i-coach", 5.99, " / game", "Play with a Master+ teammate.", "Choose game quantity and add role and server notes."),
-          gameService("circle-lol-ultra", "circle-lol", "League of Legends Duo Ultra", "Duo Ultra", "i-coach", 8.50, " / game", "Play with a Grandmaster+ teammate.", "Choose game quantity and add preferred lane."),
-          gameService("circle-lol-coach", "circle-lol", "League of Legends Coaching", "Coaching", "i-coach", 15.99, " / game", "Get coached by a Grandmaster+ teammate.", "Choose game quantity and coaching focus."),
-          gameService("circle-val-pistol", "circle-valorant", "Valorant Pistol Round", "Pistol Round", "i-gamepad", 40.99, "", "Play 3 hours with a Radiant teammate.", "Add rank, server, role, and schedule notes."),
-          gameService("circle-val-clutch", "circle-valorant", "Valorant Clutch Up", "Clutch Up", "i-win", 60.99, "", "Play 5 hours with a Radiant teammate.", "Add queue, server, and account notes."),
-          gameService("circle-val-overtime", "circle-valorant", "Valorant Overtime", "Overtime", "i-swift", 80.99, "", "Play 8 hours with a Radiant teammate.", "Add rank, server, and schedule notes."),
-          gameService("circle-val-duo", "circle-valorant", "Valorant Duo Ultra", "Duo Ultra", "i-coach", 8.99, " / game", "Learn and duo with a Radiant teammate.", "Choose game quantity and add role notes."),
-          gameService("circle-val-trio", "circle-valorant", "Valorant Trio Ultra", "Trio Ultra", "i-coach", 15.99, " / game", "Play with two Radiant teammates.", "Choose game quantity and add server notes."),
-          gameService("circle-val-coach", "circle-valorant", "Valorant Coaching", "Coaching", "i-coach", 13.99, " / game", "Get coached by a Radiant teammate.", "Choose game quantity and focus areas."),
-          gameService("circle-egirl-chill", "circle-egirl", "E-Girl Duo Chill", "Duo Chill", "i-egirl", 7.99, " / 30 min", "Chill, chat, or watch with a teammate.", "Choose session count and add game/platform notes."),
-          gameService("circle-egirl-zombies", "circle-egirl", "E-Girl Squad Zombies", "Squad Zombies", "i-egirl", 8.99, " / 60 min", "Play zombies with skilled teammates.", "Choose session count and add platform notes."),
-          gameService("circle-egirl-lol", "circle-egirl", "E-Girl League Duo Normal", "League Duo Normal", "i-egirl", 5.99, " / game", "Play a normal game with a teammate.", "Choose game quantity and add server/lane notes."),
-          gameService("circle-egirl-aram", "circle-egirl", "E-Girl ARAM", "ARAM", "i-egirl", 5.99, " / game", "Play ARAM with a teammate.", "Choose game quantity and add server notes."),
-          gameService("circle-egirl-valorant", "circle-egirl", "E-Girl Valorant", "Valorant Gamer Girl", "i-egirl", 7.99, " / game", "Hang out and play Valorant.", "Choose game quantity and add server/rank notes."),
-          gameService("circle-egirl-fortnite", "circle-egirl", "E-Girl Fortnite", "Fortnite Gamer Girl", "i-egirl", 7.49, " / 30 min", "Hang out and play Fortnite.", "Choose session count and add platform notes.")
-        ]
+        copy: "Boost+ teammate sessions are coming soon â€” ordering opens after listings go live.",
+        categories: [],
+        popular: [],
+        services: []
       },
       {
         id: "social",
@@ -328,29 +305,15 @@
         services: []
       },
       {
-        id: "faceit",
-        label: "Faceit",
-        tabIcon: "i-star",
-        homeCardImage: "assets/backgrounds/cs2-faceit-home-card.webp?v=social-card-live1",
-        heroBg: "assets/backgrounds/cs2-faceit-bg.webp?v=social-card-live1",
-        heroPosition: "center center",
-        kicker: "CS2 Faceit",
-        title: "CS2 Faceit Services",
-        copy: "FACEIT hub preview. Live listings will appear here soon.",
-        categories: [],
-        popular: [],
-        services: []
-      },
-      {
-        id: "premier",
-        label: "Premier",
+        id: "cs2",
+        label: "Counter-Strike 2",
         tabIcon: "i-star",
         homeCardImage: "assets/backgrounds/cs2-premier-home-card.webp?v=social-card-live1",
         heroBg: "assets/backgrounds/cs2-premier-bg.webp?v=social-card-live1",
         heroPosition: "center center",
-        kicker: "CS2 Premier",
-        title: "CS2 Premier Services",
-        copy: "Premier matchmaking hub preview. Services will be listed here soon.",
+        kicker: "Counter-Strike 2",
+        title: "Counter-Strike 2",
+        copy: "Premier and FACEIT CS2 services are coming soon â€” one hub for matchmaking and competitive queues.",
         categories: [],
         popular: [],
         services: []
@@ -364,11 +327,11 @@
         heroPosition: "center center",
         kicker: "Arc Raiders",
         title: "Premium extraction marketplace",
-        copy: "Loot, currencies, blueprints, and raid services — configure in-site, then lock details with our team in Discord.",
+        copy: "Loot, currencies, blueprints, and raid services â€” configure in-site, then lock details with our team in Discord.",
         categories: [
           { id: "blueprints", label: "Blueprints", icon: "i-blueprint", badge: "HOT", badgeTone: "hot", microBadge: "Manual Delivery" },
           { id: "guns", label: "Weapons & Gear", icon: "i-gun", badge: "PRICE DROP", badgeTone: "price-drop", microBadge: "In-Raid Delivery" },
-          { id: "loadouts", label: "Loadout & Augments", icon: "i-loadout", badge: "POPULAR", badgeTone: "popular", microBadge: "Shields · Extras" },
+          { id: "loadouts", label: "Loadout & Augments", icon: "i-loadout", badge: "POPULAR", badgeTone: "popular", microBadge: "Shields Â· Extras" },
           { id: "coins", label: "Raider Coins", icon: "i-coins", badge: "PRICE DROP", badgeTone: "price-drop", microBadge: "Fast Discord" },
           { id: "seeds", label: "Assorted Seeds", icon: "i-coins", badge: "NEW", badgeTone: "new", microBadge: "Bulk deals" },
           { id: "depositary", label: "Depositary", icon: "i-depository", microBadge: "Secure storage" },
@@ -401,15 +364,14 @@
       }
     ];
 
-    const GAME_DROPDOWN_ORDER = ["arc", "valorant", "wow", "lol", "premier", "faceit", "circle", "social"];
+    const GAME_DROPDOWN_ORDER = ["arc", "valorant", "wow", "lol", "cs2", "social", "circle"];
     const GAME_HASH_SLUGS = {
       arc: "arc-raiders",
       valorant: "valorant",
       wow: "world-of-warcraft",
       circle: "boost-plus",
       lol: "league-of-legends",
-      faceit: "faceit",
-      premier: "premier",
+      cs2: "counter-strike-2",
       social: "social"
     };
     const HASH_TO_GAME_ID = (() => {
@@ -421,6 +383,11 @@
       map.wow = "wow";
       map.lol = "lol";
       map.circle = "circle";
+      map.premier = "cs2";
+      map.faceit = "cs2";
+      map["cs2-premier"] = "cs2";
+      map["cs2-faceit"] = "cs2";
+      map.cs2 = "cs2";
       return map;
     })();
 
@@ -442,4 +409,8 @@
       const nextUrl = base + frag;
       if (location.hash !== frag) history.replaceState(null, "", nextUrl);
     }
+
+    /** Single source for â€œordering disabledâ€ titles; used before order-center-upgrade loads. */
+    window.ELY_COMING_SOON_GAME_IDS = new Set(["circle", "wow", "cs2"]);
+
 
