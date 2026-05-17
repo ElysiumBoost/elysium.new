@@ -364,7 +364,7 @@
       }
     ];
 
-    const GAME_DROPDOWN_ORDER = ["arc", "valorant", "wow", "lol", "cs2", "social", "circle"];
+    const GAME_DROPDOWN_ORDER = ["arc", "valorant", "lol", "tft", "wow", "cs2", "circle", "social"];
     const GAME_HASH_SLUGS = {
       arc: "arc-raiders",
       valorant: "valorant",
@@ -412,5 +412,6 @@
 
     /** Single source for â€œordering disabledâ€ titles; used before order-center-upgrade loads. */
     window.ELY_COMING_SOON_GAME_IDS = new Set(["circle", "wow", "cs2"]);
+
 
 
