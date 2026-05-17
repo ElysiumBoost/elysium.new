@@ -276,16 +276,18 @@
     }
 
     .brand img {
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
+      display: block;
+      width: auto;
+      height: 46px;
+      max-width: min(220px, 34vw);
+      border-radius: 0;
       object-fit: contain;
-      object-position: center center;
+      object-position: left center;
       border: none;
       box-shadow: none;
-      background: radial-gradient(circle at 45% 38%, rgba(139, 92, 246, .24), rgba(7, 10, 18, .15) 55%, transparent 78%);
+      background: none;
+      padding: 0;
       flex: 0 0 auto;
-      padding: 3px;
     }
 
     .brand strong {
@@ -6238,8 +6240,8 @@
     @media (max-width: 720px) {
       .shell { width: min(100% - 24px, 1260px); }
       .brand img {
-        width: 44px;
-        height: 44px;
+        height: 40px;
+        max-width: min(180px, 48vw);
       }
       .brand strong { font-size: 19px; }
       .actions {
