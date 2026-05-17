@@ -1337,6 +1337,10 @@
       return rel ? resolveSiteUrl(rel) : "";
     }
 
+    function valorantRadiantBoostTierImageUrl() {
+      return resolveSiteUrl("assets/rank-immortal.png");
+    }
+
     function valorantPathChip(kicker, value, tierImageUrl) {
       const k = kicker
         ? `<span class="valorant-path-kicker">${escapeHtml(kicker)}</span>`
@@ -1371,7 +1375,13 @@
       } else if (type === "valorant-placement") {
         apply("valPmRankTierImg", val("valPmRank"));
       } else if (type === "valorant-radiant") {
-        apply("valRadOptionTierImg", val("valRadOption"));
+        const img = $("valRadOptionTierImg");
+        if (!img) return;
+        const shell = img.closest(".valorant-rank-thumb-shell");
+        const url = valorantRadiantBoostTierImageUrl();
+        img.src = url;
+        img.alt = ui("Immortal");
+        shell?.classList.remove("is-empty");
       }
     }
 
@@ -1406,7 +1416,7 @@
         left = val("valRadOption") || "—";
         right = "";
         leftK = ui("Service");
-        leftTierImg = valorantRankTierImageUrl(left);
+        leftTierImg = valorantRadiantBoostTierImageUrl();
       } else if (type === "valorant-ranked-wins") {
         const rank = val("valRwRank") || "—";
         const wins = Math.max(1, Math.min(10, Math.round(num("valRwWins") || 3)));
