@@ -116,7 +116,7 @@
       if (typeof syncCompactToggleLabel === "function") syncCompactToggleLabel();
       if (typeof persistOrderState === "function") persistOrderState();
     });
-    $("copyOrder")?.addEventListener("click", copyOrder);
+    $("copyOrder")?.addEventListener("click", () => copyOrder(true));
     $("downloadOrderReceipt")?.addEventListener("click", e => {
       e.preventDefault();
       if (typeof downloadOrderReceipt === "function") downloadOrderReceipt();
@@ -146,10 +146,6 @@
       if (m && event.target === m) closeCopySuccessModal();
     });
     $("clearCart")?.addEventListener("click", clearCart);
-    $("openDiscord")?.addEventListener("click", event => {
-      event.preventDefault();
-      openDiscordTicket();
-    });
     $("arcIdDone")?.addEventListener("click", () => {
       const id = val("arcIdInput").trim();
       if (!id) {
