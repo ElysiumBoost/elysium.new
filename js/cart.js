@@ -1254,9 +1254,12 @@
       }, ms));
     }
 
-    function qtyField(id, label, value = 0, min = 0, max = null) {
+    function qtyField(id, label, value = 0, min = 0, max = null, hideLabel = false) {
       const maxAttr = max != null ? ` max="${max}"` : "";
-      return `<div class="qty-field"><label for="${id}">${label}</label><div class="qty-stepper" data-qty-wrap>
+      const lab = hideLabel
+        ? `<label class="sr-only" for="${id}">${escapeHtml(String(label))}</label>`
+        : `<label for="${id}">${label}</label>`;
+      return `<div class="qty-field">${lab}<div class="qty-stepper" data-qty-wrap>
         <button type="button" class="qty-step qty-step--minus" data-qty-for="${id}" data-qty-step="-1" aria-label="Decrease quantity"><span class="qty-step-glyph" aria-hidden="true">−</span></button>
         <input id="${id}" class="qty-stepper-input" type="number" inputmode="numeric" min="${min}"${maxAttr} value="${value}">
         <button type="button" class="qty-step qty-step--plus" data-qty-for="${id}" data-qty-step="1" aria-label="Increase quantity"><span class="qty-step-glyph" aria-hidden="true">+</span></button>
@@ -1341,8 +1344,10 @@
       return ranks.map(r => `<option value="${escapeHtml(r)}"${r === selected ? " selected" : ""}>${escapeHtml(r)}</option>`).join("");
     }
 
-    function valorantServerSelectHtml() {
-      return `<div><label for="valServer">Server</label><select id="valServer">${valorantServers.map(s => `<option value="${escapeHtml(s)}"${s === "EU" ? " selected" : ""}>${escapeHtml(s)}</option>`).join("")}</select></div>`;
+    function valorantServerSelectHtml(omitLabel = false) {
+      const sel = `<select id="valServer">${valorantServers.map(s => `<option value="${escapeHtml(s)}"${s === "EU" ? " selected" : ""}>${escapeHtml(s)}</option>`).join("")}</select>`;
+      if (omitLabel) return `<div class="valorant-server-field">${sel}</div>`;
+      return `<div><label for="valServer">Server</label>${sel}</div>`;
     }
 
     function valorantModeHtml() {
@@ -1907,24 +1912,24 @@
       if (type === "valorant-placement") {
         const rankKeys = Object.keys(valorantPlacementRankEur);
         return `
-        <div class="valorant-configurator">
+        <div class="valorant-configurator valorant-configurator--placement-panels">
           ${valorantConfiguratorCompactHeader()}
-          <div class="valorant-cfg-stack valorant-cfg-stack--selects">
-            <div class="field-block field-block--tight">
-              <div class="field-grid">
-                <div class="valorant-rank-select-cell">
-                  <label for="valPmRank">${ui("Last Known Rank")}</label>
-                  <div class="valorant-rank-pick">
-                    <div class="valorant-rank-thumb-shell is-empty" aria-hidden="true">
-                      <img id="valPmRankTierImg" class="valorant-rank-tier-img" alt="" decoding="async" loading="lazy" />
-                    </div>
-                    <select id="valPmRank">${rankKeys.map(k => `<option value="${escapeHtml(k)}"${k === "Gold" ? " selected" : ""}>${escapeHtml(k)}</option>`).join("")}</select>
-                  </div>
+          <div class="valorant-pm-grid">
+            <div class="valorant-panel-card valorant-panel-card--pm-rank">
+              <h4 class="valorant-panel-card__title">${escapeHtml(ui("Last Known Rank"))}</h4>
+              <div class="valorant-rank-pick valorant-rank-pick--panel">
+                <div class="valorant-rank-thumb-shell is-empty" aria-hidden="true">
+                  <img id="valPmRankTierImg" class="valorant-rank-tier-img" alt="" decoding="async" loading="lazy" />
                 </div>
-                ${qtyField("valPmGames", ui("Number of Games"), 5, 1, 5)}
+                <select id="valPmRank">${rankKeys.map(k => `<option value="${escapeHtml(k)}"${k === "Gold" ? " selected" : ""}>${escapeHtml(k)}</option>`).join("")}</select>
               </div>
             </div>
-            <div class="field-block field-block--tight">${valorantServerSelectHtml()}</div>
+            <div class="valorant-panel-card valorant-panel-card--pm-meta">
+              <h4 class="valorant-panel-card__title">${escapeHtml(ui("Server"))}</h4>
+              ${valorantServerSelectHtml(true)}
+              <h4 class="valorant-panel-card__title valorant-panel-card__title--sub">${escapeHtml(ui("Number of Games"))}</h4>
+              ${qtyField("valPmGames", ui("Number of Games"), 5, 1, 5, true)}
+            </div>
           </div>
         </div>`;
       }
@@ -1978,16 +1983,40 @@
         </div>`;
       }
       if (type === "valorant-leveling") {
-        const pills = valorantLevelPackages.map(p =>
-          `<button type="button" class="raid-pill${p.id === "l1" ? " active" : ""}" data-val-level="${escapeHtml(p.id)}"><strong>${escapeHtml(p.label)}</strong><span>${displayMoney(valorantEurToStoredTotal(p.eur))}</span></button>`).join("");
+        const lvlIntro = (typeof valorantCategoryContent !== "undefined" && valorantCategoryContent["account-leveling"])
+          ? String(valorantCategoryContent["account-leveling"].short || "").trim()
+          : "";
         return `
         <input type="hidden" id="valLevelPkg" value="l1">
-        <div class="valorant-configurator">
+        <div class="valorant-configurator valorant-configurator--leveling-panels">
           ${valorantConfiguratorCompactHeader()}
-          <div class="valorant-cfg-stack valorant-cfg-stack--selects">
-            <div class="field-block field-block--tight"><h4 class="valorant-inline-kicker">${ui("Level range")}</h4><div class="quick-raid-grid valorant-pill-grid">${pills}</div></div>
-            <div class="field-block field-block--tight">${valorantServerSelectHtml()}</div>
+          ${lvlIntro ? `<p class="valorant-leveling-lead">${escapeHtml(lvlIntro)}</p>` : ""}
+          <div class="valorant-panel-card valorant-panel-card--leveling">
+            <div class="field-grid valorant-leveling-grid">
+              <div class="ely-form-cell">
+                <label for="valLevelFrom">${ui("Current Level")}</label>
+                <select id="valLevelFrom">
+                  <option value="1" selected>1</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                </select>
+              </div>
+              <div class="ely-form-cell">
+                <label for="valLevelTo">${ui("Target Level")}</label>
+                <select id="valLevelTo">
+                  <option value="20" selected>20</option>
+                </select>
+              </div>
+            </div>
+            <div class="ely-form-cell valorant-leveling-speed">
+              <label for="valLevelSpeed">${ui("Speed")}</label>
+              <select id="valLevelSpeed">
+                <option value="standard">${ui("Standard")}</option>
+              </select>
+            </div>
           </div>
+          <div class="field-block field-block--tight valorant-leveling-server">${valorantServerSelectHtml()}</div>
         </div>`;
       }
       if (type === "valorant-battlepass") {
@@ -2078,7 +2107,23 @@
         });
       };
       if (type === "valorant-unrated") bindPills("#detailSection [data-val-unrated]", "valUnratedPkg", b => b.dataset.valUnrated || "");
-      if (type === "valorant-leveling") bindPills("#detailSection [data-val-level]", "valLevelPkg", b => b.dataset.valLevel || "");
+      if (type === "valorant-leveling") {
+        const syncLevelPkg = () => {
+          const from = Number(val("valLevelFrom") || 1);
+          const map = { 1: "l1", 5: "l5", 10: "l10", 15: "l15" };
+          const hid = $("valLevelPkg");
+          if (hid) hid.value = map[from] || "l1";
+          updateTotal();
+        };
+        const applyPkgToFrom = () => {
+          const id = val("valLevelPkg") || "l1";
+          const rev = { l1: "1", l5: "5", l10: "10", l15: "15" };
+          const el = $("valLevelFrom");
+          if (el) el.value = rev[id] || "1";
+        };
+        applyPkgToFrom();
+        $("valLevelFrom")?.addEventListener("change", syncLevelPkg);
+      }
       if (type === "valorant-battlepass") bindPills("#detailSection [data-val-bp]", "valBpPkg", b => b.dataset.valBp || "");
       if (type === "valorant-coaching") bindPills("#detailSection [data-val-coach]", "valCoachPkg", b => b.dataset.valCoach || "");
     }
