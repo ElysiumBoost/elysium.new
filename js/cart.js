@@ -1317,11 +1317,62 @@
       return `<div><label for="valRbRR">${ui("Current RR")}</label><select id="valRbRR">${opts.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join("")}</select></div>`;
     }
 
-    function valorantPathChip(kicker, value) {
+    function valorantRankTierAssetRel(rankLabel) {
+      if (rankLabel == null || rankLabel === "" || rankLabel === "—") return "";
+      const norm = String(rankLabel).trim().toLowerCase();
+      if (norm === "unranked" || norm === "radiant") return "";
+      if (norm.startsWith("iron")) return "assets/rank-iron.png";
+      if (norm.startsWith("bronze")) return "assets/rank-bronze.png";
+      if (norm.startsWith("silver")) return "assets/rank-silver.png";
+      if (norm.startsWith("gold")) return "assets/rank-gold.png";
+      if (norm.startsWith("platinum")) return "assets/rank-platinum.png";
+      if (norm.startsWith("diamond")) return "assets/rank-diamond.png";
+      if (norm.startsWith("ascendant")) return "assets/rank-ascendant.png";
+      if (norm.startsWith("immortal")) return "assets/rank-immortal.png";
+      return "";
+    }
+
+    function valorantRankTierImageUrl(rankLabel) {
+      const rel = valorantRankTierAssetRel(rankLabel);
+      return rel ? resolveSiteUrl(rel) : "";
+    }
+
+    function valorantPathChip(kicker, value, tierImageUrl) {
       const k = kicker
         ? `<span class="valorant-path-kicker">${escapeHtml(kicker)}</span>`
         : "";
-      return `<div class="valorant-path-chip">${k}<span class="valorant-path-rank">${escapeHtml(value)}</span></div>`;
+      const visual = tierImageUrl
+        ? `<div class="valorant-path-rank-visual"><img class="valorant-path-rank-img" src="${escapeHtml(tierImageUrl)}" alt="${escapeHtml(value)}" decoding="async" loading="lazy" /></div>`
+        : "";
+      return `<div class="valorant-path-chip">${k}${visual}<span class="valorant-path-rank">${escapeHtml(value)}</span></div>`;
+    }
+
+    function syncValorantRankFieldThumbnails() {
+      const svc = currentService();
+      const type = svc?.form;
+      const apply = (imgId, rankVal) => {
+        const img = $(imgId);
+        if (!img) return;
+        const url = valorantRankTierImageUrl(rankVal || "");
+        const shell = img.closest(".valorant-rank-thumb-shell");
+        if (!url) {
+          img.removeAttribute("src");
+          img.alt = "";
+          shell?.classList.add("is-empty");
+          return;
+        }
+        img.src = url;
+        img.alt = String(rankVal || "");
+        shell?.classList.remove("is-empty");
+      };
+      if (type === "valorant-rank-boost") {
+        apply("valRbCurrentTierImg", val("valRbCurrent"));
+        apply("valRbDesiredTierImg", val("valRbDesired"));
+      } else if (type === "valorant-placement") {
+        apply("valPmRankTierImg", val("valPmRank"));
+      } else if (type === "valorant-ranked-wins") {
+        apply("valRwRankTierImg", val("valRwRank"));
+      }
     }
 
     function syncValorantPathRail() {
@@ -1334,11 +1385,15 @@
       let right = "";
       let leftK = "";
       let rightK = "";
+      let leftTierImg = "";
+      let rightTierImg = "";
       if (type === "valorant-rank-boost") {
         left = val("valRbCurrent") || "—";
         right = val("valRbDesired") || "—";
         leftK = ui("Current");
         rightK = ui("Desired");
+        leftTierImg = valorantRankTierImageUrl(left);
+        rightTierImg = valorantRankTierImageUrl(right);
       } else if (type === "valorant-placement") {
         const rank = val("valPmRank") || "—";
         const games = Math.max(1, Math.min(5, Math.round(num("valPmGames") || 5)));
@@ -1346,6 +1401,7 @@
         right = `${games} ${ui("games")}`;
         leftK = ui("Rank");
         rightK = ui("Games");
+        leftTierImg = valorantRankTierImageUrl(left);
       } else if (type === "valorant-radiant") {
         left = val("valRadOption") || "—";
         right = "";
@@ -1357,6 +1413,7 @@
         right = `${wins} ${ui("wins")}`;
         leftK = ui("Rank");
         rightK = ui("Wins");
+        leftTierImg = valorantRankTierImageUrl(left);
       } else if (type === "valorant-unrated") {
         const id = val("valUnratedPkg") || "u5";
         const pack = valorantUnratedPackages.find(p => p.id === id) || valorantUnratedPackages[0];
@@ -1389,9 +1446,10 @@
         ? ""
         : `<span class="valorant-path-arrow" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h12m-4-5l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
       const inner = right === ""
-        ? `<div class="valorant-path-inner valorant-path-inner--single">${valorantPathChip(leftK, left)}</div>`
-        : `<div class="valorant-path-inner">${valorantPathChip(leftK, left)}${arrow}${valorantPathChip(rightK, right)}</div>`;
+        ? `<div class="valorant-path-inner valorant-path-inner--single">${valorantPathChip(leftK, left, leftTierImg)}</div>`
+        : `<div class="valorant-path-inner">${valorantPathChip(leftK, left, leftTierImg)}${arrow}${valorantPathChip(rightK, right, rightTierImg)}</div>`;
       rail.innerHTML = inner;
+      syncValorantRankFieldThumbnails();
     }
 
     function syncValorantOrderFormMount(service) {
@@ -1446,7 +1504,8 @@
       wrap.dataset.valorantOrderChrome = "";
       wrap.className = "valorant-order-chrome";
       const customize = valorantOrderChromeCustomizeInner(svc.form);
-      const pathRailExtra = svc.form === "valorant-rank-boost" ? " valorant-path-rail--rank-boost" : "";
+      const rankTierRail = svc.form === "valorant-rank-boost" || svc.form === "valorant-placement" || svc.form === "valorant-ranked-wins";
+      const pathRailExtra = `${rankTierRail ? " valorant-path-rail--rank-tier-icons" : ""}${svc.form === "valorant-rank-boost" ? " valorant-path-rail--rank-boost" : ""}`;
       wrap.innerHTML = `
         <div id="valorantPathRail" class="valorant-path-rail${pathRailExtra}" aria-live="polite"></div>
         ${customize ? `<section class="valorant-customize-surface" aria-label="${escapeHtml(ui("Customize"))}"><h4 class="valorant-block-kicker">${escapeHtml(ui("Customize"))}</h4>${customize}</section>` : ""}
@@ -1724,11 +1783,21 @@
             <div class="valorant-rank-tier-grid">
               <div class="field-block field-block--tight valorant-rank-field">
                 <label for="valRbCurrent">${ui("Current Rank")}</label>
-                <select id="valRbCurrent">${valorantRankOptionsHtml(VALORANT_RANKS, "Silver III")}</select>
+                <div class="valorant-rank-pick">
+                  <div class="valorant-rank-thumb-shell is-empty" aria-hidden="true">
+                    <img id="valRbCurrentTierImg" class="valorant-rank-tier-img" alt="" decoding="async" loading="eager" />
+                  </div>
+                  <select id="valRbCurrent">${valorantRankOptionsHtml(VALORANT_RANKS, "Silver III")}</select>
+                </div>
               </div>
               <div class="field-block field-block--tight valorant-rank-field">
                 <label for="valRbDesired">${ui("Desired Rank")}</label>
-                <select id="valRbDesired">${valorantRankOptionsHtml(desiredRanks, "Gold I")}</select>
+                <div class="valorant-rank-pick">
+                  <div class="valorant-rank-thumb-shell is-empty" aria-hidden="true">
+                    <img id="valRbDesiredTierImg" class="valorant-rank-tier-img" alt="" decoding="async" loading="lazy" />
+                  </div>
+                  <select id="valRbDesired">${valorantRankOptionsHtml(desiredRanks, "Gold I")}</select>
+                </div>
               </div>
             </div>
             <div class="field-block field-block--tight">
@@ -1747,7 +1816,15 @@
           <div class="valorant-cfg-stack valorant-cfg-stack--selects">
             <div class="field-block field-block--tight">
               <div class="field-grid">
-                <div><label for="valPmRank">${ui("Last Known Rank")}</label><select id="valPmRank">${rankKeys.map(k => `<option value="${escapeHtml(k)}"${k === "Gold" ? " selected" : ""}>${escapeHtml(k)}</option>`).join("")}</select></div>
+                <div class="valorant-rank-select-cell">
+                  <label for="valPmRank">${ui("Last Known Rank")}</label>
+                  <div class="valorant-rank-pick">
+                    <div class="valorant-rank-thumb-shell is-empty" aria-hidden="true">
+                      <img id="valPmRankTierImg" class="valorant-rank-tier-img" alt="" decoding="async" loading="lazy" />
+                    </div>
+                    <select id="valPmRank">${rankKeys.map(k => `<option value="${escapeHtml(k)}"${k === "Gold" ? " selected" : ""}>${escapeHtml(k)}</option>`).join("")}</select>
+                  </div>
+                </div>
                 ${qtyField("valPmGames", ui("Number of Games"), 5, 1, 5)}
               </div>
             </div>
@@ -1778,7 +1855,15 @@
           <div class="valorant-cfg-stack valorant-cfg-stack--selects">
             <div class="field-block field-block--tight">
               <div class="field-grid">
-                <div><label for="valRwRank">${ui("Current Rank")}</label><select id="valRwRank">${valorantRankOptionsHtml(rwRanks, "Gold I")}</select></div>
+                <div class="valorant-rank-select-cell">
+                  <label for="valRwRank">${ui("Current Rank")}</label>
+                  <div class="valorant-rank-pick">
+                    <div class="valorant-rank-thumb-shell is-empty" aria-hidden="true">
+                      <img id="valRwRankTierImg" class="valorant-rank-tier-img" alt="" decoding="async" loading="lazy" />
+                    </div>
+                    <select id="valRwRank">${valorantRankOptionsHtml(rwRanks, "Gold I")}</select>
+                  </div>
+                </div>
                 ${qtyField("valRwWins", ui("Number of Wins"), 3, 1, 10)}
               </div>
             </div>
