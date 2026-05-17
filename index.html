@@ -36,7 +36,13 @@
   <header class="topbar">
     <div class="shell topbar-inner">
       <a class="brand" href="#" id="brandHome">
-        <img src="assets/elysium-mark.webp" alt="ELYSIUM BOOST logo">
+        <img
+          src="assets/elysium-logo.webp"
+          srcset="assets/elysium-logo-128.webp 128w, assets/elysium-logo-256.webp 256w, assets/elysium-logo-512.webp 512w"
+          sizes="(max-width: 720px) min(44vw, 170px) 220px"
+          alt="ELYSIUM BOOST"
+          loading="eager"
+          decoding="async">
         <strong>ELYSIUM BOOST</strong>
       </a>
       <div class="game-menu-wrap" id="gameTabs" aria-label="Choose game">
