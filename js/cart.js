@@ -334,15 +334,11 @@
       if (vNote) vNote.textContent = ui("Attach the receipt image only if support asks.");
       syncCompactToggleLabel();
       const discA = document.querySelector('a[href*="1499796035382415462"]');
-      if (discA && discA.id !== "heroDiscord") discA.textContent = ui("Open Discord");
-      const heroD = $("heroDiscord");
-      if (heroD) heroD.textContent = ui("Join Discord");
+      if (discA) discA.textContent = ui("Open Discord");
       const drawerH = document.querySelector(".drawer-head h2");
       if (drawerH) drawerH.textContent = ui("Order center");
       const ctl = $("cartTotalLabel");
       if (ctl) ctl.textContent = ui("Final total");
-      const td = document.querySelector(".topbar-discord");
-      if (td) td.textContent = ui("Discord");
     }
 
     function closeGameMenu() {
@@ -630,7 +626,12 @@
       } else {
         $("categoryScroll").innerHTML = game.categories.map(cat => {
           const thumbOpt = cat.thumb || cat.image || cat.bg;
-          const micro = cat.microBadge ? `<span class="cat-micro">${escapeHtml(ui(cat.microBadge))}</span>` : "";
+          const micro =
+            game.id === "arc"
+              ? ""
+              : cat.microBadge
+                ? `<span class="cat-micro">${escapeHtml(ui(cat.microBadge))}</span>`
+                : "";
           return `
         <button class="cat-btn ${cat.id === state.category ? "active" : ""}" type="button" data-cat="${cat.id}" ${cat.bg ? `style="--cat-bg:url('${escapeHtml(resolveSiteUrl(cat.bg))}')"` : ""}>
           ${cat.badge ? `<span class="cat-ribbon ${cat.badgeTone || cat.badgeType || "hot"}">${escapeHtml(cat.badge)}</span>` : ""}
@@ -656,27 +657,32 @@
       const game = currentGame();
       const hero = $("hero");
       const sub = $("heroSubtitle");
+      const lead = $("heroCopy");
+      const kicker = $("heroKicker");
       const row = $("heroCtaRow");
       if (game) {
         hero.classList.remove("is-home");
         hero.style.setProperty("--hero-bg", `url("${resolveSiteUrl(game.heroBg)}")`);
+        if (kicker) kicker.style.display = "";
         if (sub) sub.style.display = "none";
-        if (row) row.style.display = "none";
+        if (lead) lead.style.display = "";
         $("heroKicker").textContent = ui(game.kicker);
         $("heroTitle").textContent = ui(game.title);
         $("heroCopy").textContent = ui(game.copy);
+        if (row) row.style.display = "none";
       } else {
         hero.classList.add("is-home");
         hero.style.removeProperty("--hero-bg");
         hero.style.removeProperty("--hero-position");
-        if (sub) {
-          sub.style.display = "";
-          sub.textContent = ui("Safe Discord-confirmed services for Arc Raiders, Valorant and more.");
+        if (kicker) kicker.style.display = "";
+        if (sub) sub.style.display = "";
+        if (lead) lead.style.display = "";
+        if (row) {
+          row.style.display = "";
+          row.style.justifyContent = "center";
         }
-        if (row) row.style.display = "";
-        $("heroKicker").textContent = ui("Manual · Discord-confirmed");
-        $("heroTitle").textContent = ui("Premium Game Boosting, Delivered Manually.");
-        $("heroCopy").textContent = ui("Choose your game, configure your order, and our team confirms everything with you before play.");
+        $("heroTitle").textContent = ui("Premium Game Boosting");
+        $("heroCopy").textContent = "";
       }
     }
 
@@ -1233,7 +1239,7 @@
     }
 
     function modTierOptionsHtml() {
-      return `<option value="none">${ui("No Mods")}</option><option value="blue">${ui("Blue Mods - $0.15 each (was $0.30)")}</option><option value="premium">${ui("Legendary / Epic Mods - $0.25 each (was $0.50)")}</option>`;
+      return `<option value="none">${ui("No Mods")}</option><option value="blue">${ui("Blue Mods - +$0.05 each")}</option><option value="premium">${ui("Legendary / Epic Mods - +$0.10 each")}</option>`;
     }
 
     function elyToggleRow(inputAttrs, labelInnerHtml, checked = false) {
@@ -1441,7 +1447,7 @@
       }
       const arrow = right === ""
         ? ""
-        : `<span class="valorant-path-arrow" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h12m-4-5l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+        : `<span class="valorant-path-arrow" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12h12m-4-5l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
       const inner = right === ""
         ? `<div class="valorant-path-inner valorant-path-inner--single">${valorantPathChip(leftK, left, leftTierImg)}</div>`
         : `<div class="valorant-path-inner">${valorantPathChip(leftK, left, leftTierImg)}${arrow}${valorantPathChip(rightK, right, rightTierImg)}</div>`;
@@ -1621,16 +1627,18 @@
         `;
       }
       if (type === "guns") {
-        return `<div class="field-grid loadout-weapon-grid"><div class="ely-form-cell"><label for="gunWeapon">${ui("Weapon")}</label><select id="gunWeapon">${weaponOptions(false)}</select></div><div class="ely-form-cell"><label for="gunModType">${ui("Mods")}</label><select id="gunModType">${modTierOptionsHtml()}</select></div>${qtyField("gunQty", ui("Quantity"), 1, 1)}</div><p class="loadout-mod-hint" role="note">${ui("Mod quantity automatically matches weapon quantity.")}</p><button class="btn" id="bundle20" type="button" style="width:100%;margin-top:10px">20x Weapon + Legendary / Epic Mods (-10%)</button>`;
+        const bundleUnit = weaponBasePriceUsd("Anvil") + prices.augment + prices.shield + prices.rechargerBundle + prices.bandageBundle;
+        return `<div class="field-grid loadout-weapon-grid"><div class="ely-form-cell"><label for="gunWeapon">${ui("Weapon")}</label><select id="gunWeapon">${weaponOptions(false)}</select></div><div class="ely-form-cell ely-form-cell--arc-mods" data-arc-mod-cell="gun"><label for="gunModType">${ui("Mods")}</label><select id="gunModType">${modTierOptionsHtml()}</select></div>${qtyField("gunQty", ui("Quantity"), 1, 1)}</div><p class="loadout-mod-hint" data-arc-mod-hint="gun" role="note">${ui("Mod quantity automatically matches weapon quantity.")}</p><div class="guns-bundle-wrap" id="gunsBundleWrap"><button class="btn" id="bundle20" type="button" style="width:100%;margin-top:10px">20x Weapon + Legendary / Epic Mods (-10%)</button></div>`;
       }
       if (type === "loadout") {
+        const bundleUnit = weaponBasePriceUsd("Anvil") + prices.augment + prices.shield + prices.rechargerBundle + prices.bandageBundle;
         return `
           <input id="loadoutBundle" type="hidden" value="0">
           <div class="field-block">
             <h4>Special Bundle</h4>
             <div class="bundle-grid">
-              <button class="raid-pill" type="button" data-loadout-bundle="10"><strong>10x Bundle<small>10 weapon, 10 Looting Mk. 3 (Survivor) Augment, 10 Medium Shield, 50 Shield Recharger, 50 Herbal</small></strong><span>${moneyUSD(10 * (prices.weapon + prices.augment + prices.shield + prices.rechargerBundle + prices.bandageBundle))}</span></button>
-              <button class="raid-pill" type="button" data-loadout-bundle="20"><strong>20x Bundle<small>20 weapon, 20 Looting Mk. 3 (Survivor) Augment, 20 Medium Shield, 100 Shield Recharger, 100 Herbal</small></strong><span>${moneyUSD(20 * (prices.weapon + prices.augment + prices.shield + prices.rechargerBundle + prices.bandageBundle))}</span></button>
+              <button class="raid-pill" type="button" data-loadout-bundle="10"><strong>10x Bundle<small>10 weapon, 10 Looting Mk. 3 (Survivor) Augment, 10 Medium Shield, 50 Shield Recharger, 50 Herbal</small></strong><span>${moneyUSD(10 * bundleUnit)}</span></button>
+              <button class="raid-pill" type="button" data-loadout-bundle="20"><strong>20x Bundle<small>20 weapon, 20 Looting Mk. 3 (Survivor) Augment, 20 Medium Shield, 100 Shield Recharger, 100 Herbal</small></strong><span>${moneyUSD(20 * bundleUnit)}</span></button>
             </div>
           </div>
           ${weaponBlock("Primary Weapon", "primary")}
@@ -1927,8 +1935,37 @@
       return `<div><label for="privateText">Custom Request</label><textarea id="privateText" placeholder="Describe the exact service, quantity, timing, and notes."></textarea></div><div class="badge">Price: CUSTOM</div>`;
     }
 
+    function syncArcWeaponModUi() {
+      const form = $("orderForm");
+      if (!form) return;
+      const svc = currentService();
+      const t = svc?.form;
+      if (t === "guns") {
+        const allow = weaponAllowsArcMods(val("gunWeapon"));
+        const cell = form.querySelector('[data-arc-mod-cell="gun"]');
+        const hint = form.querySelector('[data-arc-mod-hint="gun"]');
+        const bundle = $("gunsBundleWrap");
+        const modSel = $("gunModType");
+        if (!allow && modSel) modSel.value = "none";
+        if (cell) cell.style.display = allow ? "" : "none";
+        if (hint) hint.style.display = allow ? "" : "none";
+        if (bundle) bundle.style.display = allow ? "" : "none";
+      }
+      if (t === "loadout") {
+        ["primary", "secondary"].forEach(prefix => {
+          const allow = weaponAllowsArcMods(val(prefix + "Weapon"));
+          const cell = form.querySelector(`[data-arc-mod-cell="${prefix}"]`);
+          const hint = form.querySelector(`[data-arc-mod-hint="${prefix}"]`);
+          const modSel = $(prefix + "ModType");
+          if (!allow && modSel) modSel.value = "none";
+          if (cell) cell.style.display = allow ? "" : "none";
+          if (hint) hint.style.display = allow ? "" : "none";
+        });
+      }
+    }
+
     function weaponBlock(title, prefix) {
-      return `<div class="field-block"><h4>${escapeHtml(title)}</h4><div class="field-grid loadout-weapon-grid"><div class="ely-form-cell"><label for="${prefix}Weapon">${ui("Weapon")}</label><select id="${prefix}Weapon">${weaponOptions(true)}</select></div><div class="ely-form-cell"><label for="${prefix}ModType">${ui("Mods")}</label><select id="${prefix}ModType">${modTierOptionsHtml()}</select></div>${qtyField(prefix + "WeaponQty", ui("Quantity"))}</div><p class="loadout-mod-hint" role="note">${ui("Mod quantity automatically matches weapon quantity.")}</p></div>`;
+      return `<div class="field-block"><h4>${escapeHtml(title)}</h4><div class="field-grid loadout-weapon-grid"><div class="ely-form-cell"><label for="${prefix}Weapon">${ui("Weapon")}</label><select id="${prefix}Weapon">${weaponOptions(true)}</select></div><div class="ely-form-cell ely-form-cell--arc-mods" data-arc-mod-cell="${prefix}"><label for="${prefix}ModType">${ui("Mods")}</label><select id="${prefix}ModType">${modTierOptionsHtml()}</select></div>${qtyField(prefix + "WeaponQty", ui("Quantity"))}</div><p class="loadout-mod-hint" data-arc-mod-hint="${prefix}" role="note">${ui("Mod quantity automatically matches weapon quantity.")}</p></div>`;
     }
 
     function wireValorantForm(type) {
@@ -2184,10 +2221,10 @@
         $("depositaryCustom").addEventListener("input", () => syncSlots("depositaryCustom"));
         syncSlots("depositaryCustom");
       }
-      if (type === "guns") $("bundle20").addEventListener("click", () => {
+      if (type === "guns") $("bundle20")?.addEventListener("click", () => {
         $("gunQty").value = 20;
-        $("gunModType").value = "premium";
-        $("bundle20").classList.add("active");
+        if ($("gunModType")) $("gunModType").value = "premium";
+        $("bundle20")?.classList.add("active");
         updateTotal();
       });
       if (type === "trials") {
@@ -2231,6 +2268,16 @@
         input.addEventListener("change", updateTotal);
       });
       wireQtySteppers(bindRoot);
+      if (type === "guns" || type === "loadout") {
+        const bumpArcMods = () => {
+          syncArcWeaponModUi();
+          updateTotal();
+        };
+        $("gunWeapon")?.addEventListener("change", bumpArcMods);
+        $("primaryWeapon")?.addEventListener("change", bumpArcMods);
+        $("secondaryWeapon")?.addEventListener("change", bumpArcMods);
+        syncArcWeaponModUi();
+      }
     }
 
     function wireRaidForm() {
@@ -2348,15 +2395,17 @@
     function calcWeapon(prefix, simple = false) {
       const weapon = val(simple ? "gunWeapon" : prefix + "Weapon");
       const weaponQty = Math.max(0, num(simple ? "gunQty" : prefix + "WeaponQty"));
-      const modType = val(prefix + "ModType");
+      let modType = val(simple ? "gunModType" : prefix + "ModType");
       const finalWeaponQty = weapon === "No Weapon" ? 0 : weaponQty;
+      if (!weaponAllowsArcMods(weapon)) modType = "none";
       const modQty = modType === "none" ? 0 : finalWeaponQty;
+      const base = weaponBasePriceUsd(weapon);
       return {
         weapon,
         weaponQty: finalWeaponQty,
         modType,
         modQty,
-        total: finalWeaponQty * prices.weapon + modQty * modPrice(modType)
+        total: finalWeaponQty * base + modQty * modPrice(modType)
       };
     }
 
@@ -2410,7 +2459,7 @@
       tryMatch(/(\d+)\s*x?\s*(?:weapons?|guns?)\b/g, m => {
         const qty = parseInt(m[1], 10);
         if (!qty) return;
-        const cost = qty * prices.weapon;
+        const cost = qty * 0.45;
         result.total += cost;
         result.lines.push(`${qty}x Weapons ≈ ${moneyUSD(cost)}`);
       });
