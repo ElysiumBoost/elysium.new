@@ -3038,6 +3038,18 @@
       margin-top: 12px;
     }
 
+    .valorant-panel-card--rw-rank .valorant-rw-rank-select select {
+      width: 100%;
+    }
+
+    .valorant-panel-card--coaching .qty-field {
+      margin-bottom: 4px;
+    }
+
+    .valorant-panel-card--coaching .valorant-panel-tight {
+      margin-top: 8px;
+    }
+
     .valorant-customize-surface {
       padding: 10px 10px 4px;
       border-radius: 11px;
@@ -3316,6 +3328,34 @@
     .valorant-configurator .raid-toggle-grid,
     .order-card.is-valorant .valorant-mode-pills {
       gap: 8px;
+    }
+
+    .valorant-mode-pills--with-duo-hint {
+      align-items: flex-end;
+    }
+
+    .valorant-mode-duo-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 5px;
+      flex: 1 1 44%;
+      min-width: 0;
+    }
+
+    .valorant-duo-extra-hint {
+      font-family: var(--display);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+      color: rgba(255, 209, 102, 0.88);
+      line-height: 1.15;
+    }
+
+    .valorant-mode-duo-wrap .raid-pill {
+      flex: 1 1 auto;
     }
 
     .order-card.is-valorant .valorant-mode-pills .raid-pill {
