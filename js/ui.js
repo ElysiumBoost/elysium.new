@@ -752,7 +752,7 @@
           const perUnitHint = qty > 1 && !item.custom ? `<div class="cart-receipt-hint">${escapeHtml(ui("Shown as line total for this configuration."))}</div>` : "";
           const del = escapeHtml(item.deliveryType || ui("Manual delivery via Discord"));
           const eta = escapeHtml(item.etaHint || ui("Ask support"));
-          const bdBlock = item.priceBreakdown ? `<div class="cart-receipt-section"><div class="cart-receipt-k">${ui("Price breakdown")}</div><div class="cart-item-detail-body">${escapeHtml(item.priceBreakdown)}</div></div>` : "";
+          const bdBlock = item.priceBreakdown ? `<div class="cart-receipt-section cart-receipt-section--breakdown"><div class="cart-receipt-k">${ui("Price breakdown")}</div><div class="cart-item-detail-body">${escapeHtml(item.priceBreakdown)}</div></div>` : "";
           const acctRows = cartReceiptAccountRows(item);
           const qtyDisabled = item.custom ? " disabled" : "";
           return `
@@ -773,8 +773,8 @@
                 <div><dt>${ui("Currency")}</dt><dd>${escapeHtml(item.viewedCurrency)}</dd></div>
                 <div><dt>${ui("Line price")}</dt><dd class="cart-item-price-inline">${priceLabel}</dd></div>
                 ${acctRows}
-                <div><dt>${ui("Delivery type")}</dt><dd>${del}</dd></div>
-                <div><dt>${ui("Est. delivery")}</dt><dd>${eta}</dd></div>
+                <div class="cart-receipt-dl-row cart-receipt-dl-row--extra"><dt>${ui("Delivery type")}</dt><dd>${del}</dd></div>
+                <div class="cart-receipt-dl-row cart-receipt-dl-row--extra"><dt>${ui("Est. delivery")}</dt><dd>${eta}</dd></div>
               </dl>
               <div class="cart-receipt-section">
                 <div class="cart-receipt-k">${ui("Selected options")}</div>
