@@ -110,6 +110,12 @@
     $("clearService")?.addEventListener("click", clearServiceForm);
     $("cartOpen")?.addEventListener("click", openCart);
     $("cartClose")?.addEventListener("click", closeCart);
+    $("cartCompactToggle")?.addEventListener("click", () => {
+      state.cartDrawerCompact = !state.cartDrawerCompact;
+      if (typeof applyDrawerCompactClass === "function") applyDrawerCompactClass();
+      if (typeof syncCompactToggleLabel === "function") syncCompactToggleLabel();
+      if (typeof persistOrderState === "function") persistOrderState();
+    });
     $("copyOrder")?.addEventListener("click", copyOrder);
     $("downloadOrderReceipt")?.addEventListener("click", e => {
       e.preventDefault();

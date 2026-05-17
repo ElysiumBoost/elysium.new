@@ -119,7 +119,8 @@ function persistOrderState() {
       wowRealm: state.wowRealm,
       game: state.game,
       category: state.category,
-      serviceId: state.serviceId
+      serviceId: state.serviceId,
+      cartDrawerCompact: Boolean(state.cartDrawerCompact)
     }));
   } catch (e) {}
 }
@@ -156,6 +157,7 @@ function restoreOrderState() {
         state.wowCharName = state.wowCharacterRealm.trim();
       }
     }
+    if (typeof j.cartDrawerCompact === "boolean") state.cartDrawerCompact = j.cartDrawerCompact;
     const hashGame = parseGameHash();
     if (!hashGame && j.game && games.some(g => g.id === j.game)) {
       state.game = j.game;

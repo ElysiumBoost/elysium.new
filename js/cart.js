@@ -162,7 +162,13 @@
 
     function syncCompactToggleLabel() {
       const btn = $("cartCompactToggle");
-      if (btn) btn.textContent = state.cartDrawerCompact ? ui("Full layout") : ui("Simpler layout");
+      if (!btn) return;
+      btn.textContent = state.cartDrawerCompact ? ui("Full layout") : ui("Simpler layout");
+      btn.setAttribute("aria-pressed", state.cartDrawerCompact ? "true" : "false");
+      btn.setAttribute(
+        "aria-label",
+        state.cartDrawerCompact ? ui("Switch to full order layout") : ui("Switch to simpler cart layout")
+      );
     }
 
     function applyDrawerCompactClass() {

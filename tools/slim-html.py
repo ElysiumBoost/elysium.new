@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Replace inline CSS/JS in index.html with external assets; fix OG + trust copy."""
+"""Replace inline CSS/JS in index.html with external assets; fix OG image."""
 from __future__ import annotations
 
 import pathlib
@@ -14,67 +14,6 @@ html = re.sub(
     html,
     count=1,
 )
-
-TRUST_OLD = """        <div class="trust-bar" aria-label="Trust and guarantees">
-          <div class="trust-item">
-            <span class="trust-item__ic" aria-hidden="true">&#128666;</span>
-            <div class="trust-item__text"><strong>Manual delivery</strong><span>No cheats. No exploits. Manual service only.</span></div>
-          </div>
-          <div class="trust-item">
-            <span class="trust-item__ic" aria-hidden="true">&#9876;</span>
-            <div class="trust-item__text"><strong>No cheats</strong><span>Clean play reputation matters to us.</span></div>
-          </div>
-          <div class="trust-item">
-            <span class="trust-item__ic" aria-hidden="true">&#128274;</span>
-            <div class="trust-item__text"><strong>Safe process</strong><span>Clear steps and Discord confirmation.</span></div>
-          </div>
-          <div class="trust-item">
-            <span class="trust-item__ic" aria-hidden="true">&#9832;</span>
-            <div class="trust-item__text"><strong>Fast Discord support</strong><span>Ticket-first workflow for quick replies.</span></div>
-          </div>
-          <div class="trust-item">
-            <span class="trust-item__ic" aria-hidden="true">&#9733;</span>
-            <div class="trust-item__text"><strong>Verified boosters</strong><span>Vetted pros on premium requests.</span></div>
-          </div>
-          <div class="trust-item">
-            <span class="trust-item__ic" aria-hidden="true">&#9989;</span>
-            <div class="trust-item__text"><strong>Completion guarantee</strong><span>Finish or fair resolution as agreed in Discord.</span></div>
-          </div>
-          <div class="trust-item">
-            <span class="trust-item__ic" aria-hidden="true">&#128196;</span>
-            <div class="trust-item__text"><strong>Secure order confirmation</strong><span>Receipt-style ticket + optional receipt image.</span></div>
-          </div>
-        </div>"""
-
-TRUST_IMG = """        <div class="trust-bar" aria-label="Trust and guarantees">
-          <div class="trust-badge">
-            <img class="trust-badge__img" src="assets/manual-delivery.webp" alt="Manual Delivery" loading="eager" decoding="async">
-          </div>
-          <div class="trust-badge">
-            <img class="trust-badge__img" src="assets/no-cheats.webp" alt="No Cheats" loading="eager" decoding="async">
-          </div>
-          <div class="trust-badge">
-            <img class="trust-badge__img" src="assets/safe-process.webp" alt="Safe Process" loading="eager" decoding="async">
-          </div>
-          <div class="trust-badge">
-            <img class="trust-badge__img" src="assets/fast-support.webp" alt="Fast Support" loading="eager" decoding="async">
-          </div>
-          <div class="trust-badge">
-            <img class="trust-badge__img" src="assets/verified-boosters.webp" alt="Verified Boosters" loading="eager" decoding="async">
-          </div>
-          <div class="trust-badge">
-            <img class="trust-badge__img" src="assets/completion-guarantee.webp" alt="Completion Guarantee" loading="eager" decoding="async">
-          </div>
-        </div>"""
-
-if "trust-badge__img" in html:
-    pass
-elif TRUST_OLD in html:
-    html = html.replace(TRUST_OLD, TRUST_IMG, 1)
-elif TRUST_NEW in html:
-    html = html.replace(TRUST_NEW, TRUST_IMG, 1)
-else:
-    raise SystemExit("trust-bar block not found for replacement")
 
 RATING_OLD = """                  <div class="rating">
                     <span>Excellent</span>
