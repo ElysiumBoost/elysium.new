@@ -84,13 +84,8 @@
       { id: "bp-express", label: "Express Battle Pass", eur: 44.9 }
     ];
 
-    const valorantCoachingHours = [
-      { id: "c1", label: "1 Hour", eur: 14.9 },
-      { id: "c2", label: "2 Hours", eur: 27.9 },
-      { id: "c3", label: "3 Hours", eur: 39.9 },
-      { id: "c5", label: "5 Hours", eur: 59.9 },
-      { id: "c10", label: "10 Hours", eur: 109.9 }
-    ];
+    /** Per-hour EUR for Valorant coaching (1–10 hours in the configurator). */
+    const valorantCoachingHourlyEur = 14.9;
 
     const valorantExtrasPaid = [
       { id: "duo", label: "Duo Queue", pct: 0.35 },

@@ -1129,7 +1129,7 @@
           { title: "Review & Cart", copy: "Add the Battle Pass package to your cart when ready." }
         ],
         "valorant-coaching": [
-          { title: "Session Length", copy: "Book coaching hours; focus add-ons such as VOD review are free and listed in your summary." },
+          { title: "Session Length", copy: "Choose 1–10 coaching hours (stepper); focus options such as VOD review are free and listed in your summary." },
           { title: "Focus", copy: "Tick any combination of free focus options — they never change the hourly price." },
           { title: "Review & Cart", copy: "Add coaching to your cart with your selected duration and notes." }
         ]
@@ -1354,9 +1354,12 @@
       return `
         <input type="hidden" id="valMode" value="solo">
         <div class="field-block valorant-panel-tight"><h4>Mode</h4>
-          <div class="raid-toggle-grid valorant-mode-pills">
+          <div class="raid-toggle-grid valorant-mode-pills valorant-mode-pills--with-duo-hint">
             <button class="raid-pill active" type="button" data-val-mode="solo"><strong>Solo</strong></button>
-            <button class="raid-pill" type="button" data-val-mode="duo"><strong>Duo</strong></button>
+            <div class="valorant-mode-duo-wrap">
+              <span class="valorant-duo-extra-hint">+15% extra</span>
+              <button class="raid-pill" type="button" data-val-mode="duo"><strong>Duo</strong></button>
+            </div>
           </div>
         </div>`;
     }
@@ -1396,7 +1399,7 @@
       if (type === "valorant-unrated") return `${valorantModeHtml()}${valorantExtrasHtml(true, true)}`;
       if (type === "valorant-leveling") return `${valorantModeHtml()}${valorantExtrasHtml(true, true)}`;
       if (type === "valorant-battlepass") return `${valorantModeHtml()}${valorantExtrasHtml(true, true)}`;
-      if (type === "valorant-coaching") return `${valorantServerSelectHtml()}${valorantModeHtml()}`;
+      if (type === "valorant-coaching") return "";
       return "";
     }
 
@@ -1534,11 +1537,10 @@
         leftK = ui("Package");
         rightK = ui("Price");
       } else if (type === "valorant-coaching") {
-        const id = val("valCoachPkg") || "c1";
-        const pack = valorantCoachingHours.find(p => p.id === id) || valorantCoachingHours[0];
-        left = pack.label;
+        const hours = Math.max(1, Math.min(10, Math.round(num("valCoachHours") || 1)));
+        left = `${hours} ${hours === 1 ? ui("hour") : ui("hours")}`;
         right = "";
-        leftK = ui("Hours");
+        leftK = ui("Session");
       }
       const arrow = right === ""
         ? ""
@@ -1956,16 +1958,22 @@
       if (type === "valorant-ranked-wins") {
         const rwRanks = [...VALORANT_RANKS, "Radiant"];
         return `
-        <div class="valorant-configurator">
+        <div class="valorant-configurator valorant-configurator--placement-panels">
           ${valorantConfiguratorCompactHeader()}
-          <div class="valorant-cfg-stack valorant-cfg-stack--selects">
-            <div class="field-block field-block--tight">
-              <div class="field-grid">
-                <div><label for="valRwRank">${ui("Current Rank")}</label><select id="valRwRank">${valorantRankOptionsHtml(rwRanks, "Gold I")}</select></div>
-                ${qtyField("valRwWins", ui("Number of Wins"), 3, 1, 10)}
+          <div class="valorant-pm-grid">
+            <div class="valorant-panel-card valorant-panel-card--rw-rank">
+              <h4 class="valorant-panel-card__title">${escapeHtml(ui("Current Rank"))}</h4>
+              <div class="valorant-rw-rank-select">
+                <label class="sr-only" for="valRwRank">${escapeHtml(ui("Current Rank"))}</label>
+                <select id="valRwRank">${valorantRankOptionsHtml(rwRanks, "Gold I")}</select>
               </div>
             </div>
-            <div class="field-block field-block--tight">${valorantServerSelectHtml()}</div>
+            <div class="valorant-panel-card valorant-panel-card--pm-meta">
+              <h4 class="valorant-panel-card__title">${escapeHtml(ui("Server"))}</h4>
+              ${valorantServerSelectHtml(true)}
+              <h4 class="valorant-panel-card__title valorant-panel-card__title--sub">${escapeHtml(ui("Number of Wins"))}</h4>
+              ${qtyField("valRwWins", ui("Number of Wins"), 3, 1, 10, true)}
+            </div>
           </div>
         </div>`;
       }
@@ -2033,22 +2041,24 @@
         </div>`;
       }
       if (type === "valorant-coaching") {
-        const pills = valorantCoachingHours.map(p =>
-          `<button type="button" class="raid-pill${p.id === "c1" ? " active" : ""}" data-val-coach="${escapeHtml(p.id)}"><strong>${escapeHtml(p.label)}</strong><span>${displayMoney(valorantEurToStoredTotal(p.eur))}</span></button>`).join("");
+        const coachIntro = (typeof valorantCategoryContent !== "undefined" && valorantCategoryContent.coaching)
+          ? String(valorantCategoryContent.coaching.short || "").trim()
+          : "";
         return `
-        <input type="hidden" id="valCoachPkg" value="c1">
-        <div class="valorant-configurator">
+        <div class="valorant-configurator valorant-configurator--coaching-panels">
           ${valorantConfiguratorCompactHeader()}
-          <div class="valorant-cfg-stack valorant-cfg-stack--selects">
-            <div class="field-block field-block--tight"><h4 class="valorant-inline-kicker">${ui("Duration")}</h4><div class="quick-raid-grid valorant-pill-grid">${pills}</div></div>
-            <div class="field-block field-block--tight"><h4 class="valorant-inline-kicker">${ui("Focus")}</h4>
-              <div class="checks valorant-extras-grid valorant-coach-focus">
-                ${elyToggleRow('id="valCoachVod"', ui("VOD Review"), false)}
-                ${elyToggleRow('id="valCoachAim"', ui("Aim Training"), false)}
-                ${elyToggleRow('id="valCoachPlan"', ui("Rank Improvement Plan"), false)}
-              </div>
+          ${coachIntro ? `<p class="valorant-leveling-lead">${escapeHtml(coachIntro)}</p>` : ""}
+          <div class="valorant-panel-card valorant-panel-card--coaching">
+            ${qtyField("valCoachHours", ui("Hours"), 1, 1, 10)}
+            ${valorantModeHtml()}
+            <h4 class="valorant-panel-card__title valorant-panel-card__title--sub">${escapeHtml(ui("Focus"))}</h4>
+            <div class="checks valorant-extras-grid valorant-coach-focus">
+              ${elyToggleRow('id="valCoachVod"', ui("VOD Review"), false)}
+              ${elyToggleRow('id="valCoachAim"', ui("Aim Training"), false)}
+              ${elyToggleRow('id="valCoachPlan"', ui("Rank Improvement Plan"), false)}
             </div>
           </div>
+          <div class="field-block field-block--tight valorant-leveling-server">${valorantServerSelectHtml()}</div>
         </div>`;
       }
       return `<div><label for="privateText">Custom Request</label><textarea id="privateText" placeholder="Describe the exact service, quantity, timing, and notes."></textarea></div><div class="badge">Price: CUSTOM</div>`;
@@ -2125,7 +2135,13 @@
         $("valLevelFrom")?.addEventListener("change", syncLevelPkg);
       }
       if (type === "valorant-battlepass") bindPills("#detailSection [data-val-bp]", "valBpPkg", b => b.dataset.valBp || "");
-      if (type === "valorant-coaching") bindPills("#detailSection [data-val-coach]", "valCoachPkg", b => b.dataset.valCoach || "");
+      if (type === "valorant-coaching") {
+        $("valCoachHours")?.addEventListener("input", () => {
+          const el = $("valCoachHours");
+          if (!el) return;
+          el.value = String(Math.max(1, Math.min(10, Math.round(Number(el.value || 1)))));
+        });
+      }
     }
 
     function wireForm(type) {
@@ -2962,23 +2978,26 @@
         addRow("Selected Options", pack.label);
         if (pack.id === "bp-express") bpNote = "Faster completion priority included.";
       } else if (type === "valorant-coaching") {
-        const id = val("valCoachPkg") || "c1";
-        const pack = valorantCoachingHours.find(p => p.id === id) || valorantCoachingHours[0];
-        baseEur = pack.eur;
-        selectedSummary = pack.label;
-        addRow("Duration", pack.label);
-        addRow("Selected Options", pack.label);
+        const hours = Math.max(1, Math.min(10, Math.round(num("valCoachHours") || 1)));
+        baseEur = hours * valorantCoachingHourlyEur;
+        selectedSummary = `${hours} ${hours === 1 ? ui("hour") : ui("hours")}`;
+        addRow("Hours", String(hours));
+        addRow("Selected Options", selectedSummary);
         addRow("Focus (free)", ex.free.join(", ") || "None");
       }
 
-      const afterEur = baseEur * (1 + ex.pct);
-      const extrasEur = Math.max(0, afterEur - baseEur);
+      const duoEligible = type !== "valorant-radiant";
+      const duoMult = duoEligible && (val("valMode") || "solo") === "duo" ? 1.15 : 1;
+      const baseAfterDuo = baseEur * duoMult;
+      const afterEur = baseAfterDuo * (1 + ex.pct);
+      const extrasEur = Math.max(0, afterEur - baseAfterDuo);
       const stored = valorantEurToStoredTotal(afterEur);
       const total = Math.round(stored * 100) / 100;
 
       addRow("Paid Extras", ex.paid.length ? `${ex.paid.join(", ")} (+${Math.round(ex.pct * 100)}%)` : "None");
       addRow("Free Extras", ex.free.length ? ex.free.join(", ") : "None");
       addRow("Base Price", displayMoney(valorantEurToStoredTotal(baseEur)));
+      if (duoMult > 1) addRow("Duo (+15%)", displayMoney(valorantEurToStoredTotal(baseEur * (duoMult - 1))));
       addRow("Extras Price", extrasEur > 0 ? displayMoney(valorantEurToStoredTotal(extrasEur)) : displayMoney(0));
       addRow("Discount", "—");
       addRow("Total Price", displayMoney(stored));
@@ -2992,6 +3011,7 @@
       dPush("Paid Extras", ex.paid.join(", ") || "None");
       dPush("Free Extras", ex.free.join(", ") || "None");
       dPush("Base Price", displayMoney(valorantEurToStoredTotal(baseEur)));
+      if (duoMult > 1) dPush("Duo (+15%)", displayMoney(valorantEurToStoredTotal(baseEur * (duoMult - 1))));
       dPush("Extras Price", extrasEur > 0 ? displayMoney(valorantEurToStoredTotal(extrasEur)) : displayMoney(0));
       dPush("Discount", "—");
       dPush("Total Price", displayMoney(stored));
