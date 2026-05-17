@@ -449,25 +449,27 @@
     function renderHome() {
       $("homeContent").classList.toggle("hidden", Boolean(state.game));
       const g = id => games.find(x => x.id === id);
+
       const homeBlurb = game => {
         const id = game.id;
         const map = {
-          arc: "Manual boosting for Arc â€” coins, blueprints, weapons, trials, raids. Discord-confirmed handoffs.",
+          arc: "Manual boosting for Arc — coins, blueprints, weapons, trials, raids. Discord-confirmed handoffs.",
           valorant: "Rank paths, placements, wins, and coaching. Live pricing in your currency.",
+          lol: "Wins, duo queue, and coaching — compact orders with Discord confirmation.",
+          tft: "Teamfight Tactics services and offers will be available here soon.",
           wow: "Mythic+, raids, arena, and more. Hub expands as listings go live.",
-          lol: "Wins, duo queue, and coaching â€” compact orders with Discord confirmation.",
-          cs2: "Premier and FACEIT queues in one hub â€” listings open soon.",
-          circle: "Boost+ teammate sessions are on the way â€” ordering opens after listings go live.",
-          social: "Companion and social services â€” clear requests in Discord."
+          cs2: "Premier and FACEIT queues in one hub. CS2 listings open soon.",
+          circle: "Boost+ teammate sessions are on the way. Full ordering opens after listings go live.",
+          social: "Companion and social services — clear requests in Discord."
         };
         return map[id] || (game.copy && game.copy.split(".")[0] + ".") || "";
       };
+
       const gameAria = label => `${ui("View")} ${ui(label)} ${ui("services")}`;
       const homeCardSrc = game => (game.homeCardImage || game.heroBg);
+
       const renderHomeSingleCard = game => {
-        const media = game.id === "valorant" && game.homeCardMedia
-          ? `<img class="home-game-media" src="${escapeHtml(game.homeCardMedia)}" alt="${escapeHtml(ui(game.label))}" loading="eager" data-home-card-fb="${escapeHtml(game.heroBg)}" onerror="elyHomeCardFallback(this)">`
-          : `<img class="home-game-media" src="${escapeHtml(homeCardSrc(game))}" alt="${escapeHtml(ui(game.label))}" loading="eager" data-home-card-fb="${escapeHtml(game.heroBg)}" onerror="elyHomeCardFallback(this)">`;
+        const media = `<img class="home-game-media" src="${escapeHtml(homeCardSrc(game))}" alt="${escapeHtml(ui(game.label))}" loading="eager" data-home-card-fb="${escapeHtml(game.heroBg)}" onerror="elyHomeCardFallback(this)">`;
         return `
         <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(gameAria(game.label))}">
           ${media}
@@ -476,27 +478,15 @@
           <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
         </button>`;
       };
+
       const chunks = [];
-      ["arc", "valorant", "wow", "lol", "cs2", "social"].forEach(id => {
+      ["arc", "valorant", "lol", "tft", "wow", "cs2", "circle", "social"].forEach(id => {
         const game = g(id);
         if (game) chunks.push(renderHomeSingleCard(game));
       });
-      const boost = g("circle");
-      if (boost) {
-        const media = `<img class="home-game-media" src="${escapeHtml(homeCardSrc(boost))}" alt="${escapeHtml(ui(boost.label))}" loading="lazy" data-home-card-fb="${escapeHtml(boost.heroBg)}" onerror="elyHomeCardFallback(this)">`;
-        chunks.push(`
-        <button class="home-game-card home-game-card--boost-featured" type="button" data-home-game="${boost.id}" aria-label="${escapeHtml(gameAria(boost.label))}">
-          ${media}
-          <h2>${ui(boost.label)}</h2>
-          <p class="home-game-blurb">${escapeHtml(ui(homeBlurb(boost)))}</p>
-          <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
-        </button>`);
-      }
-      const gridEl = $("homeGameGrid");
-      if (gridEl) {
-        gridEl.classList.add("home-grid--featured-last");
-        gridEl.innerHTML = chunks.join("");
-      }
+
+      $("homeGameGrid").innerHTML = chunks.join("");
+
       const ab = $("homeAboutBlock");
       if (ab) {
         ab.innerHTML = `
@@ -510,7 +500,6 @@
         </article>`;
       }
     }
-
     const serviceImages = {
       blueprints: "assets/thumb-blueprints.webp",
       guns: "assets/thumb-guns.webp",
@@ -3000,5 +2989,6 @@
         valorantError: ""
       };
     }
+
 
 
