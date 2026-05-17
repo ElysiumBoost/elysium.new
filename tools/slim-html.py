@@ -46,36 +46,35 @@ TRUST_OLD = """        <div class="trust-bar" aria-label="Trust and guarantees">
           </div>
         </div>"""
 
-TRUST_NEW = """        <div class="trust-bar" aria-label="Trust and guarantees">
-          <div class="trust-item">
-            <span class="trust-item__ic" aria-hidden="true">&#128666;</span>
-            <div class="trust-item__text"><strong>Manual Delivery</strong></div>
+TRUST_IMG = """        <div class="trust-bar" aria-label="Trust and guarantees">
+          <div class="trust-badge">
+            <img class="trust-badge__img" src="assets/manual-delivery.webp" alt="Manual Delivery" loading="eager" decoding="async">
           </div>
-          <div class="trust-item">
-            <span class="trust-item__ic" aria-hidden="true">&#9876;</span>
-            <div class="trust-item__text"><strong>No Cheats</strong></div>
+          <div class="trust-badge">
+            <img class="trust-badge__img" src="assets/no-cheats.webp" alt="No Cheats" loading="eager" decoding="async">
           </div>
-          <div class="trust-item">
-            <span class="trust-item__ic" aria-hidden="true">&#128274;</span>
-            <div class="trust-item__text"><strong>Safe Process</strong></div>
+          <div class="trust-badge">
+            <img class="trust-badge__img" src="assets/safe-process.webp" alt="Safe Process" loading="eager" decoding="async">
           </div>
-          <div class="trust-item">
-            <span class="trust-item__ic" aria-hidden="true">&#9832;</span>
-            <div class="trust-item__text"><strong>Fast Support</strong></div>
+          <div class="trust-badge">
+            <img class="trust-badge__img" src="assets/fast-support.webp" alt="Fast Support" loading="eager" decoding="async">
           </div>
-          <div class="trust-item">
-            <span class="trust-item__ic" aria-hidden="true">&#9733;</span>
-            <div class="trust-item__text"><strong>Verified Boosters</strong></div>
+          <div class="trust-badge">
+            <img class="trust-badge__img" src="assets/verified-boosters.webp" alt="Verified Boosters" loading="eager" decoding="async">
           </div>
-          <div class="trust-item">
-            <span class="trust-item__ic" aria-hidden="true">&#9989;</span>
-            <div class="trust-item__text"><strong>Completion Guarantee</strong></div>
+          <div class="trust-badge">
+            <img class="trust-badge__img" src="assets/completion-guarantee.webp" alt="Completion Guarantee" loading="eager" decoding="async">
           </div>
         </div>"""
 
-if TRUST_OLD not in html:
+if "trust-badge__img" in html:
+    pass
+elif TRUST_OLD in html:
+    html = html.replace(TRUST_OLD, TRUST_IMG, 1)
+elif TRUST_NEW in html:
+    html = html.replace(TRUST_NEW, TRUST_IMG, 1)
+else:
     raise SystemExit("trust-bar block not found for replacement")
-html = html.replace(TRUST_OLD, TRUST_NEW, 1)
 
 RATING_OLD = """                  <div class="rating">
                     <span>Excellent</span>
