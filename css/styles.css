@@ -2958,6 +2958,12 @@
       border-radius: 11px;
     }
 
+    .valorant-configurator:not(.valorant-rank-boost) .valorant-rank-pick select {
+      min-height: 44px;
+      font-size: 13px;
+      border-radius: 11px;
+    }
+
     .valorant-path-rail--rank-boost .valorant-path-rank {
       font-size: 11px;
       letter-spacing: .05em;

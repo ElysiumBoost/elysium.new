@@ -1370,8 +1370,8 @@
         apply("valRbDesiredTierImg", val("valRbDesired"));
       } else if (type === "valorant-placement") {
         apply("valPmRankTierImg", val("valPmRank"));
-      } else if (type === "valorant-ranked-wins") {
-        apply("valRwRankTierImg", val("valRwRank"));
+      } else if (type === "valorant-radiant") {
+        apply("valRadOptionTierImg", val("valRadOption"));
       }
     }
 
@@ -1406,6 +1406,7 @@
         left = val("valRadOption") || "—";
         right = "";
         leftK = ui("Service");
+        leftTierImg = valorantRankTierImageUrl(left);
       } else if (type === "valorant-ranked-wins") {
         const rank = val("valRwRank") || "—";
         const wins = Math.max(1, Math.min(10, Math.round(num("valRwWins") || 3)));
@@ -1413,7 +1414,6 @@
         right = `${wins} ${ui("wins")}`;
         leftK = ui("Rank");
         rightK = ui("Wins");
-        leftTierImg = valorantRankTierImageUrl(left);
       } else if (type === "valorant-unrated") {
         const id = val("valUnratedPkg") || "u5";
         const pack = valorantUnratedPackages.find(p => p.id === id) || valorantUnratedPackages[0];
@@ -1504,7 +1504,7 @@
       wrap.dataset.valorantOrderChrome = "";
       wrap.className = "valorant-order-chrome";
       const customize = valorantOrderChromeCustomizeInner(svc.form);
-      const rankTierRail = svc.form === "valorant-rank-boost" || svc.form === "valorant-placement" || svc.form === "valorant-ranked-wins";
+      const rankTierRail = svc.form === "valorant-rank-boost" || svc.form === "valorant-placement" || svc.form === "valorant-radiant";
       const pathRailExtra = `${rankTierRail ? " valorant-path-rail--rank-tier-icons" : ""}${svc.form === "valorant-rank-boost" ? " valorant-path-rail--rank-boost" : ""}`;
       wrap.innerHTML = `
         <div id="valorantPathRail" class="valorant-path-rail${pathRailExtra}" aria-live="polite"></div>
@@ -1840,7 +1840,12 @@
           <div class="valorant-cfg-stack valorant-cfg-stack--selects">
             <div class="field-block field-block--tight">
               <label for="valRadOption">${ui("Service")}</label>
-              <select id="valRadOption">${opts.map((o, i) => `<option value="${escapeHtml(o)}"${i === 0 ? " selected" : ""}>${escapeHtml(o)}</option>`).join("")}</select>
+              <div class="valorant-rank-pick">
+                <div class="valorant-rank-thumb-shell is-empty" aria-hidden="true">
+                  <img id="valRadOptionTierImg" class="valorant-rank-tier-img" alt="" decoding="async" loading="lazy" />
+                </div>
+                <select id="valRadOption">${opts.map((o, i) => `<option value="${escapeHtml(o)}"${i === 0 ? " selected" : ""}>${escapeHtml(o)}</option>`).join("")}</select>
+              </div>
               <p class="valorant-micro-note">${escapeHtml(ui("Custom quote — final price confirmed in Discord."))}</p>
             </div>
             <div class="field-block field-block--tight">${valorantServerSelectHtml()}</div>
@@ -1855,15 +1860,7 @@
           <div class="valorant-cfg-stack valorant-cfg-stack--selects">
             <div class="field-block field-block--tight">
               <div class="field-grid">
-                <div class="valorant-rank-select-cell">
-                  <label for="valRwRank">${ui("Current Rank")}</label>
-                  <div class="valorant-rank-pick">
-                    <div class="valorant-rank-thumb-shell is-empty" aria-hidden="true">
-                      <img id="valRwRankTierImg" class="valorant-rank-tier-img" alt="" decoding="async" loading="lazy" />
-                    </div>
-                    <select id="valRwRank">${valorantRankOptionsHtml(rwRanks, "Gold I")}</select>
-                  </div>
-                </div>
+                <div><label for="valRwRank">${ui("Current Rank")}</label><select id="valRwRank">${valorantRankOptionsHtml(rwRanks, "Gold I")}</select></div>
                 ${qtyField("valRwWins", ui("Number of Wins"), 3, 1, 10)}
               </div>
             </div>
