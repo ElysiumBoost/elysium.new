@@ -325,21 +325,22 @@
       const gl = $("gameMenuBtn")?.querySelector(".game-menu-btn-label");
       if (gl) gl.textContent = ui("Games");
       $("clearService").textContent = ui("Clear");
-      $("addToCart").textContent = ui("Add to Order");
-      $("copyOrder").textContent = ui("Copy Discord Ticket");
+      $("addToCart").textContent = ui("Add to Cart");
+      const copyBtn = $("copyOrder");
+      if (copyBtn) copyBtn.textContent = ui("Copy Order & Open Discord");
       const dlR = $("downloadOrderReceipt");
       if (dlR) dlR.textContent = ui("Download Receipt Image");
       const vNote = $("cartVerifyNote");
-      if (vNote) vNote.textContent = ui("Attach the receipt image to Discord if support requests visual confirmation.");
+      if (vNote) vNote.textContent = ui("Attach the receipt image only if support asks.");
       syncCompactToggleLabel();
       const discA = document.querySelector('a[href*="1499796035382415462"]');
-      if (discA) discA.textContent = ui("Open Discord");
-      const fb = $("cartFeedbackLink");
-      if (fb) fb.textContent = ui("Leave feedback");
+      if (discA && discA.id !== "heroDiscord") discA.textContent = ui("Open Discord");
+      const heroD = $("heroDiscord");
+      if (heroD) heroD.textContent = ui("Join Discord");
       const drawerH = document.querySelector(".drawer-head h2");
       if (drawerH) drawerH.textContent = ui("Order center");
       const ctl = $("cartTotalLabel");
-      if (ctl) ctl.textContent = ui("Order total");
+      if (ctl) ctl.textContent = ui("Final total");
       const td = document.querySelector(".topbar-discord");
       if (td) td.textContent = ui("Discord");
     }
@@ -629,11 +630,13 @@
       } else {
         $("categoryScroll").innerHTML = game.categories.map(cat => {
           const thumbOpt = cat.thumb || cat.image || cat.bg;
+          const micro = cat.microBadge ? `<span class="cat-micro">${escapeHtml(ui(cat.microBadge))}</span>` : "";
           return `
         <button class="cat-btn ${cat.id === state.category ? "active" : ""}" type="button" data-cat="${cat.id}" ${cat.bg ? `style="--cat-bg:url('${escapeHtml(resolveSiteUrl(cat.bg))}')"` : ""}>
           ${cat.badge ? `<span class="cat-ribbon ${cat.badgeTone || cat.badgeType || "hot"}">${escapeHtml(cat.badge)}</span>` : ""}
           ${categoryArtwork(cat.id, ui(cat.label), thumbOpt)}
           <span class="cat-label">${ui(cat.label)}</span>
+          ${micro}
         </button>`;
         }).join("");
       }
@@ -653,12 +656,12 @@
       const game = currentGame();
       const hero = $("hero");
       const sub = $("heroSubtitle");
-      const cta = $("heroCta");
+      const row = $("heroCtaRow");
       if (game) {
         hero.classList.remove("is-home");
         hero.style.setProperty("--hero-bg", `url("${resolveSiteUrl(game.heroBg)}")`);
         if (sub) sub.style.display = "none";
-        if (cta) cta.style.display = "none";
+        if (row) row.style.display = "none";
         $("heroKicker").textContent = ui(game.kicker);
         $("heroTitle").textContent = ui(game.title);
         $("heroCopy").textContent = ui(game.copy);
@@ -668,37 +671,21 @@
         hero.style.removeProperty("--hero-position");
         if (sub) {
           sub.style.display = "";
-          sub.textContent = ui("Premium Game Services, Manual Delivery & Fast Discord Support");
+          sub.textContent = ui("Safe Discord-confirmed services for Arc Raiders, Valorant and more.");
         }
-        if (cta) cta.style.display = "inline-flex";
-        $("heroKicker").textContent = ui("ELYSIUM BOOST");
-        $("heroTitle").textContent = ui("ELYSIUM BOOST");
-        $("heroCopy").textContent = ui("Choose your game, customize your order, copy your Discord ticket and get matched with a verified booster.");
+        if (row) row.style.display = "";
+        $("heroKicker").textContent = ui("Manual · Discord-confirmed");
+        $("heroTitle").textContent = ui("Premium Game Boosting, Delivered Manually.");
+        $("heroCopy").textContent = ui("Choose your game, configure your order, and our team confirms everything with you before play.");
       }
     }
 
     function renderPopular() {
       const game = currentGame();
       if (!game) return;
-      if (game.id === "circle" || game.id === "valorant" || game.id === "faceit" || game.id === "premier" || game.id === "social" || game.id === "arc") {
-        $("popularHead").classList.add("is-hidden");
-        $("popularGrid").classList.add("is-hidden");
-        $("popularGrid").innerHTML = "";
-        return;
-      }
-      $("popularTitle").textContent = game.id === "arc" ? ui("Featured Arc Raiders Services") : ui("Popular") + " " + ui(game.label) + " " + ui("Services");
-      $("popularCopy").textContent = game.id === "arc" ? ui("Curated starters — Trials, guns, blueprints, and coins — without repeating your open category.") : ui("Most requested services for this game.");
-      const visibleIds = new Set(game.categories.length
-        ? game.services.filter(service => service.category === state.category).map(service => service.id)
-        : [state.serviceId]);
-      const list = game.popular
-        .map(id => game.services.find(service => service.id === id))
-        .filter(service => service && !visibleIds.has(service.id))
-        .slice(0, 3);
-      $("popularHead").classList.toggle("is-hidden", list.length === 0);
-      $("popularGrid").classList.toggle("is-hidden", list.length === 0);
-      $("popularGrid").innerHTML = list.map(service => cardMarkup(service, true)).join("");
-      bindServiceButtons();
+      $("popularHead")?.classList.add("is-hidden");
+      $("popularGrid")?.classList.add("is-hidden");
+      if ($("popularGrid")) $("popularGrid").innerHTML = "";
     }
 
     function renderServices() {
@@ -706,7 +693,7 @@
       const category = game.categories.find(cat => cat.id === state.category);
       const list = game.categories.length ? game.services.filter(service => service.category === state.category) : game.services;
       $("serviceTitle").textContent = category ? ui(category.label) : ui(game.label) + " " + ui("Services");
-      $("serviceCopy").textContent = game.id === "arc" ? ui("Open a service, customize the order, and add it to cart.") : ui("Select a service and adjust the order panel below.");
+      $("serviceCopy").textContent = game.id === "arc" ? ui("Premium marketplace for loot, currencies, and raid services — open a card to quote and cart.") : ui("Select a service and adjust the order panel below.");
       const isEmpty = list.length === 0;
       $("serviceHead").classList.toggle("is-hidden", list.length <= 1 && !isEmpty);
       $("serviceGrid").classList.toggle("is-hidden", list.length <= 1 && !isEmpty);
@@ -1789,6 +1776,7 @@
         return `
         <div class="valorant-configurator valorant-rank-boost">
           ${valorantConfiguratorCompactHeader()}
+          <h4 class="valorant-flow-kicker">${escapeHtml(ui("Configure your rank"))}</h4>
           <div class="valorant-rank-select-panel">
             <div class="valorant-rank-tier-grid">
               <div class="field-block field-block--tight valorant-rank-field">

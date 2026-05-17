@@ -697,15 +697,14 @@
             <div class="cart-empty-icon" aria-hidden="true">✦</div>
             <p class="cart-empty-title">${escapeHtml(ui("Your order is empty"))}</p>
             <p class="cart-empty-sub">${escapeHtml(ui("Choose a service to build your Discord ticket."))}</p>
-            <button type="button" class="btn btn-premium" id="browsePopularServices">${escapeHtml(ui("Browse popular services"))}</button>
+            <button type="button" class="btn btn-premium" id="browsePopularServices">${escapeHtml(ui("Browse games"))}</button>
             <button type="button" class="btn btn-glass cart-empty-secondary" id="continueShoppingEmpty">${escapeHtml(ui("Continue browsing"))}</button>
           </div>`;
           const bp = cartBodyEl.querySelector("#browsePopularServices");
           if (bp) {
             bp.addEventListener("click", () => {
               closeCart();
-              selectGame("arc");
-              requestAnimationFrame(() => $("popularHead")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+              requestAnimationFrame(() => $("homeGameHead")?.scrollIntoView({ behavior: "smooth", block: "start" }));
             });
           }
           const c0 = cartBodyEl.querySelector("#continueShoppingEmpty");
@@ -1028,7 +1027,7 @@
       return lines.join("\n");
     }
 
-    async function copyOrder() {
+    async function copyOrder(openDiscordAfter) {
       if (!state.cart.length) {
         const cs = $("copyStatus");
         if (cs) cs.textContent = ui("Add an item before copying.");
@@ -1041,7 +1040,8 @@
         showToast(v.message, 3800, true);
         return;
       }
-      ensureArcId(copyOrderNow);
+      const flag = Boolean(openDiscordAfter);
+      ensureArcId(() => copyOrderNow(flag));
     }
 
     function orderReceiptBlockedMessage() {
@@ -1230,12 +1230,13 @@
       $("copySuccessModal")?.setAttribute("aria-hidden", "true");
     }
 
-    function copyTicketTextToClipboard() {
+    function copyTicketTextToClipboard(openDiscordAfter) {
       const text = ticketText();
       const statusEl = $("copyStatus");
       const ok = () => {
         if (statusEl) statusEl.textContent = ui("Ticket copied successfully. Open Discord and paste it into your order ticket.");
         showToast(ui("Ticket copied."), 2600, false);
+        if (openDiscordAfter && typeof DISCORD_URL === "string") window.open(DISCORD_URL, "_blank", "noopener");
         openCopySuccessModal();
       };
       const fail = () => {
@@ -1249,8 +1250,8 @@
       fallbackExecCopy(text, ok, fail);
     }
 
-    function copyOrderNow() {
-      copyTicketTextToClipboard();
+    function copyOrderNow(openDiscordAfter) {
+      copyTicketTextToClipboard(Boolean(openDiscordAfter));
     }
 
     async function downloadOrderReceipt() {

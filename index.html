@@ -43,7 +43,6 @@
           alt="ELYSIUM BOOST"
           loading="eager"
           decoding="async">
-        <strong>ELYSIUM BOOST</strong>
       </a>
       <div class="game-menu-wrap" id="gameTabs" aria-label="Choose game">
         <button class="btn game-menu-btn" type="button" id="gameMenuBtn" aria-expanded="false" aria-controls="gameMenuPanel" aria-haspopup="true">
@@ -89,11 +88,14 @@
     <section class="hero is-home" id="hero">
       <div class="shell hero-shell">
         <div class="hero-text">
-          <span class="eyebrow" id="heroKicker">ELYSIUM BOOST</span>
-          <h1 id="heroTitle">ELYSIUM BOOST</h1>
-          <p class="hero-subtitle" id="heroSubtitle">Premium Game Services, Manual Delivery &amp; Fast Discord Support</p>
-          <p id="heroCopy">Choose your game, customize your order, copy your Discord ticket and get matched with a verified booster.</p>
-          <button type="button" class="btn btn-premium hero-cta" id="heroCta">Start Your Order</button>
+          <span class="eyebrow hero-eyebrow" id="heroKicker">Manual · Discord-confirmed</span>
+          <h1 id="heroTitle">Premium Game Boosting, Delivered Manually.</h1>
+          <p class="hero-subtitle" id="heroSubtitle">Safe Discord-confirmed services for Arc Raiders, Valorant and more.</p>
+          <p class="hero-lead" id="heroCopy">Choose your game, configure your order, and our team confirms everything with you before play.</p>
+          <div class="hero-cta-row" id="heroCtaRow">
+            <button type="button" class="btn btn-premium hero-cta" id="heroCta">Start Order</button>
+            <a class="btn btn-glass hero-cta-secondary" id="heroDiscord" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Join Discord</a>
+          </div>
         </div>
       </div>
     </section>
@@ -103,97 +105,62 @@
         <div class="quick-head" id="homeGameHead">
           <div>
             <h2>Choose Your Game</h2>
-            <p>Pick a title to open services, customize your order, and build your Discord ticket.</p>
+            <p>Open a title, pick a service, and review your live total before checkout.</p>
           </div>
         </div>
         <div class="home-grid" id="homeGameGrid"></div>
-        <section class="how-it-works" aria-labelledby="howItWorksTitle">
+        <section class="how-it-works how-it-works--compact" aria-labelledby="howItWorksTitle">
           <h2 id="howItWorksTitle">How It Works</h2>
-          <div class="how-grid">
+          <div class="how-grid how-grid--tight">
             <article class="how-card">
               <div class="how-card__step">01</div>
-              <h3>Choose your game</h3>
-              <p>Pick your title from the arena grid or the Games menu — Arc, Valorant, League, WoW, CS2, and more.</p>
+              <h3>Pick your game</h3>
+              <p>Arc Raiders, Valorant, League, WoW, CS2, and more — from the grid or Games menu.</p>
             </article>
             <article class="how-card">
               <div class="how-card__step">02</div>
-              <h3>Customize your service</h3>
-              <p>Select the package, options, and quantity. Your live total updates in the currency you choose.</p>
+              <h3>Configure &amp; cart</h3>
+              <p>Set options and quantity; pricing updates instantly in your currency.</p>
             </article>
             <article class="how-card">
               <div class="how-card__step">03</div>
-              <h3>Copy your Discord ticket</h3>
-              <p>Add to cart, then copy a clean, readable ticket with every line item spelled out for support.</p>
-            </article>
-            <article class="how-card">
-              <div class="how-card__step">04</div>
-              <h3>Confirm with support</h3>
-              <p>Paste in Discord, confirm Embark ID for Arc if needed, and lock ETA with your booster.</p>
+              <h3>Discord confirmation</h3>
+              <p>We confirm scope, timing, and delivery details with you in Discord before play.</p>
             </article>
           </div>
         </section>
-        <section class="why-elysium" aria-labelledby="whyElysiumTitle">
-          <h2 id="whyElysiumTitle">Why ElysiumBoost</h2>
-          <div class="why-grid">
-            <article class="why-card"><h3>Premium manual services</h3><p>Human-delivered orders with clear Discord coordination — never sketchy automation.</p></article>
-            <article class="why-card"><h3>Verified booster team</h3><p>Vetted pros for high-trust carries, coaching, and extracts.</p></article>
-            <article class="why-card"><h3>Clear Discord flow</h3><p>Copy a structured ticket, paste once, confirm details with support.</p></article>
-            <article class="why-card"><h3>Fast support</h3><p>Ticket-first responses so you are never guessing next steps.</p></article>
-            <article class="why-card"><h3>Safe delivery standards</h3><p>We prioritize account respect, transparency, and completion clarity.</p></article>
-          </div>
-        </section>
-        <section class="delivery-proof-home" aria-labelledby="deliveryProofTitle">
-          <h2 id="deliveryProofTitle">Delivery Proof &amp; Order Confirmation</h2>
-          <p class="section-lead">Every order is confirmed through Discord. Support reviews scope, timing, and completion so nothing is left ambiguous.</p>
-          <div class="delivery-proof-grid">
-            <article class="delivery-proof-card">
-              <h3>Ticket-first confirmation</h3>
-              <p>Paste your copied receipt into Discord so boosters see the exact line items, currency, and options you chose.</p>
+        <section class="home-trust-compact" aria-labelledby="trustCompactTitle">
+          <h2 id="trustCompactTitle">Why players trust us</h2>
+          <p class="home-trust-lead">Manual service, verified boosters, and ticket-first support — every order confirmed in Discord.</p>
+          <ul class="home-trust-pills" aria-label="Service promises">
+            <li><span>Manual Delivery</span></li>
+            <li><span>Fast Discord Support</span></li>
+            <li><span>No cheats · No exploits</span></li>
+            <li><span>Clear completion standards</span></li>
+          </ul>
+          <div class="home-trust-mini-grid">
+            <article class="home-trust-mini">
+              <h3>Delivery proof</h3>
+              <p>Your ticket is the agreement. Proof is available when it matters for the service.</p>
             </article>
-            <article class="delivery-proof-card">
-              <h3>Proof when it matters</h3>
-              <p>For applicable services, delivery proof can be provided. Your ticket stays the source of truth for what was agreed.</p>
+            <article class="home-trust-mini">
+              <h3>What customers say</h3>
+              <p class="home-trust-quote">&ldquo;Clean ticket format and fast Discord replies — felt professional end to end.&rdquo;</p>
+              <span class="home-trust-quote-src">Verified buyer · Arc &amp; Valorant</span>
             </article>
-            <article class="delivery-proof-card">
-              <h3>Closed with clarity</h3>
-              <p>Support checks completion expectations before an order is considered done — no silent hand-offs.</p>
+            <article class="home-trust-mini">
+              <h3>Support-first</h3>
+              <p>Questions or timing changes go through Discord so nothing is left ambiguous.</p>
             </article>
           </div>
         </section>
-        <section class="verified-feedback-home" aria-labelledby="verifiedFeedbackTitle">
-          <h2 id="verifiedFeedbackTitle">Verified Customer Feedback</h2>
-          <p class="section-lead">Recent orders — discreet summaries from real Discord ticket flows.</p>
-          <div class="feedback-grid">
-            <article class="feedback-card">
-              <span class="feedback-badge">Verified customer</span>
-              <div class="feedback-meta"><strong>Arc Raiders</strong> · Trials &amp; rank options</div>
-              <p>&ldquo;Clean ticket format, booster confirmed timing within minutes. Manual run felt professional.&rdquo;</p>
-              <div class="feedback-eta">Delivery: same evening</div>
-            </article>
-            <article class="feedback-card">
-              <span class="feedback-badge">Verified customer</span>
-              <div class="feedback-meta"><strong>Valorant</strong> · Rank boost</div>
-              <p>&ldquo;EUR pricing matched what I saw in cart. Duo queue went smoothly — no account drama.&rdquo;</p>
-              <div class="feedback-eta">Delivery: 2 days</div>
-            </article>
-            <article class="feedback-card">
-              <span class="feedback-badge">Verified customer</span>
-              <div class="feedback-meta"><strong>Arc Raiders</strong> · Raider Coins</div>
-              <p>&ldquo;Order preview ID in the receipt made Discord handoff simple. Support answered fast.&rdquo;</p>
-              <div class="feedback-eta">Delivery: under 45 min</div>
-            </article>
-          </div>
-        </section>
-        <section class="faq-home" aria-labelledby="faqHomeTitle">
+        <section class="faq-home faq-home--compact" aria-labelledby="faqHomeTitle">
           <h2 id="faqHomeTitle">FAQ</h2>
           <div class="faq-list">
-            <details class="faq-item"><summary>Is this service manual?</summary><p>Yes. ElysiumBoost sells manual coordination with boosters — no cheat software sold or promoted.</p></details>
-            <details class="faq-item"><summary>Do you use cheats?</summary><p>No cheats. No exploits. Manual service only.</p></details>
-            <details class="faq-item"><summary>How do I receive my order?</summary><p>After copying your ticket, open Discord, paste into the order channel, and a booster confirms the handoff plan.</p></details>
-            <details class="faq-item"><summary>How long does delivery take?</summary><p>Timelines vary by game and queue. Your ticket lists estimates; support confirms live ETAs.</p></details>
-            <details class="faq-item"><summary>Do I need to share my password?</summary><p>Many services offer self-play or duo. Password sharing is only when a service explicitly requires piloting — always confirm in Discord.</p></details>
-            <details class="faq-item"><summary>What if delivery fails?</summary><p>Reach support in Discord — we document agreements and work toward fair resolutions.</p></details>
-            <details class="faq-item"><summary>How do I open a Discord ticket?</summary><p>Use the Open Discord button, paste the copied ticket, and follow moderator instructions.</p></details>
+            <details class="faq-item"><summary>Is everything manual?</summary><p>Yes — human-coordinated services. We do not sell or promote cheat software.</p></details>
+            <details class="faq-item"><summary>How do I complete my purchase?</summary><p>Review your cart, copy your order, open Discord, and paste for support confirmation.</p></details>
+            <details class="faq-item"><summary>How fast is delivery?</summary><p>ETAs depend on game and queue; support confirms live timing in your ticket.</p></details>
+            <details class="faq-item"><summary>Do I need my password?</summary><p>Many services offer self-play or duo. Piloting is only when the service requires it — confirm in Discord.</p></details>
           </div>
         </section>
         <div class="home-about-pricing" id="homeAboutBlock"></div>
@@ -202,13 +169,13 @@
 
     <section class="main service-content hidden" id="serviceContent">
       <div class="shell">
-        <div class="quick-head" id="popularHead">
+        <div class="quick-head is-hidden" id="popularHead" hidden>
           <div>
-            <h2 id="popularTitle">Popular Orders</h2>
-            <p id="popularCopy">Fast-start services customers usually choose first.</p>
+            <h2 id="popularTitle">Popular</h2>
+            <p id="popularCopy"></p>
           </div>
         </div>
-        <div class="popular-grid" id="popularGrid"></div>
+        <div class="popular-grid is-hidden" id="popularGrid" hidden></div>
 
         <div class="section-head" id="serviceHead">
           <div>
@@ -250,11 +217,11 @@
               <div class="order-form" id="orderForm"></div>
               <div class="summary-total summary-total--idle" id="orderSummaryTotal">
                 <div class="arc-order-preview" id="arcOrderSummaryPreview" hidden></div>
-                <small class="summary-total-label">Total</small>
+                <small class="summary-total-label">Final total</small>
                 <span id="liveTotal" class="live-total-text"></span>
                 <div class="arc-price-breakdown" id="arcPriceBreakdown" hidden></div>
                 <em id="usdHint" class="usd-hint-text"></em>
-                <button class="btn btn-premium add-to-cart-main" id="addToCart" type="button">Add to Cart</button>
+                <button class="btn btn-purchase add-to-cart-main" id="addToCart" type="button">Add to Cart</button>
               </div>
             </div>
           </aside>
@@ -278,21 +245,22 @@
         <div class="order-checkout-strip" id="orderCheckoutStrip">
           <div class="cart-foot-alerts" id="cartFootAlerts" aria-live="polite"></div>
           <div class="order-summary-totals" id="cartSummaryTotals">
-            <small id="cartTotalLabel">Order total</small>
+            <small id="cartTotalLabel">Final total</small>
             <span id="cartTotal">$0.00</span>
             <em id="cartUsdHint">Ticket total: $0.00 USD</em>
           </div>
-          <p class="cart-verify-note" id="cartVerifyNote">Attach the receipt image to Discord if support requests visual confirmation.</p>
+          <p class="cart-verify-note" id="cartVerifyNote">Attach the receipt image only if support asks.</p>
           <div class="order-actions-primary">
-            <button class="btn btn-premium btn-order-copy" id="copyOrder" type="button">Copy Discord Ticket</button>
-            <button class="btn btn-glass btn-order-receipt" id="downloadOrderReceipt" type="button">Download Receipt Image</button>
-            <a class="btn btn-ghost btn-order-discord" id="openDiscord" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Open Discord</a>
+            <button class="btn btn-checkout-primary btn-order-copy" id="copyOrder" type="button">Copy Order &amp; Open Discord</button>
+          </div>
+          <div class="order-actions-secondary">
+            <button type="button" class="btn-text btn-receipt-link" id="downloadOrderReceipt">Download Receipt Image</button>
           </div>
           <div class="order-actions-tertiary">
-            <button class="btn-text" type="button" id="clearCart">Clear cart</button>
-            <a class="btn-text" id="cartFeedbackLink" href="https://discord.com/channels/1499767937974669363/1503176511912542298" target="_blank" rel="noopener">Leave feedback</a>
+            <button class="btn-text btn-clear-cart-muted" type="button" id="clearCart">Clear cart</button>
           </div>
           <div class="copy-status" id="copyStatus" aria-live="polite"></div>
+          <a id="openDiscord" class="cart-open-discord-anchor" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Open Discord</a>
         </div>
       </div>
     </aside>
@@ -336,19 +304,17 @@
   <div class="legal-modal-backdrop" id="copySuccessModal" aria-hidden="true">
     <div class="legal-modal copy-success-modal" role="dialog" aria-modal="true" aria-labelledby="copySuccessTitle">
       <h2 id="copySuccessTitle">Ticket copied successfully</h2>
-      <p class="copy-success-lead">Your order text is on the clipboard. Finish the handoff in Discord so support can confirm scope, timing, and pricing.</p>
-      <p class="copy-success-sub"><strong>Next steps</strong></p>
+      <p class="copy-success-lead">Open Discord, paste your order, and wait for support confirmation.</p>
       <ol class="copy-success-steps">
         <li>Open Discord</li>
-        <li>Create an order ticket in the channel</li>
-        <li>Paste your copied order</li>
-        <li>Attach the receipt image if support asks</li>
-        <li>Wait for confirmation before scheduling play</li>
+        <li>Paste your order</li>
+        <li>Wait for confirmation</li>
       </ol>
+      <p class="copy-success-receipt-note">Attach the receipt image only if support asks.</p>
       <div class="copy-success-actions">
-        <a class="btn btn-premium" id="copySuccessDiscord" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Open Discord</a>
-        <button type="button" class="btn btn-glass" id="copySuccessReceipt">Download Receipt Image</button>
-        <button type="button" class="btn btn-ghost legal-close" id="copySuccessClose">Close</button>
+        <a class="btn btn-premium copy-success-discord-primary" id="copySuccessDiscord" href="https://discord.com/channels/1499767937974669363/1499796035382415462" target="_blank" rel="noopener">Open Discord</a>
+        <button type="button" class="btn btn-glass copy-success-receipt-secondary" id="copySuccessReceipt">Download Receipt Image</button>
+        <button type="button" class="btn btn-ghost legal-close copy-success-close-tertiary" id="copySuccessClose">Close</button>
       </div>
     </div>
   </div>
