@@ -2678,6 +2678,105 @@
         inset 0 1px 0 rgba(255, 255, 255, .06);
     }
 
+    .valorant-path-rank-visual {
+      width: 100%;
+      max-width: 92px;
+      height: 68px;
+      margin: 2px auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .valorant-path-rank-img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      object-position: center;
+      filter: drop-shadow(0 4px 16px rgba(124, 58, 237, .35));
+    }
+
+    .valorant-path-rail--rank-tier-icons.valorant-path-rail--rank-boost .valorant-path-rank-visual {
+      max-width: 84px;
+      height: 62px;
+    }
+
+    .valorant-rank-pick {
+      display: flex;
+      align-items: stretch;
+      gap: 10px;
+      margin-top: 6px;
+      min-width: 0;
+    }
+
+    .valorant-rank-thumb-shell {
+      flex: 0 0 76px;
+      width: 76px;
+      min-height: 76px;
+      align-self: stretch;
+      border-radius: 12px;
+      border: 1px solid rgba(139, 92, 246, .38);
+      background:
+        radial-gradient(ellipse 80% 70% at 50% 22%, rgba(139, 92, 246, .14), transparent 52%),
+        linear-gradient(165deg, rgba(26, 22, 58, .74), rgba(8, 7, 22, .88));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .06),
+        0 10px 26px rgba(0, 0, 0, .22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      box-sizing: border-box;
+      transition: opacity .2s ease;
+    }
+
+    .valorant-rank-thumb-shell.is-empty {
+      opacity: .45;
+    }
+
+    .valorant-rank-thumb-shell.is-empty .valorant-rank-tier-img {
+      visibility: hidden;
+    }
+
+    .valorant-rank-tier-img {
+      width: 100%;
+      height: 100%;
+      max-height: 72px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+    }
+
+    .valorant-rank-pick select {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .valorant-rank-select-cell {
+      min-width: 0;
+    }
+
+    @media (max-width: 520px) {
+      .valorant-rank-pick {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .valorant-rank-thumb-shell {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: none;
+        min-height: 72px;
+      }
+
+      .valorant-configurator .field-grid .valorant-rank-select-cell {
+        grid-column: 1 / -1;
+      }
+    }
+
     .valorant-path-kicker {
       font-family: var(--display);
       font-size: 10px;
@@ -2853,7 +2952,13 @@
       }
     }
 
-    .valorant-rank-boost .valorant-rank-field select {
+    .valorant-rank-boost .valorant-rank-field .valorant-rank-pick select {
+      min-height: 44px;
+      font-size: 13px;
+      border-radius: 11px;
+    }
+
+    .valorant-configurator:not(.valorant-rank-boost) .valorant-rank-pick select {
       min-height: 44px;
       font-size: 13px;
       border-radius: 11px;
