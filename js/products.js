@@ -291,6 +291,20 @@
         ]
       },
       {
+        id: "tft",
+        label: "Teamfight Tactics",
+        tabIcon: "i-star",
+        homeCardImage: "assets/backgrounds/tft-home-card.webp?v=home-tft-final2",
+        heroBg: "assets/backgrounds/tft-home-card.webp?v=home-tft-final2",
+        heroPosition: "center center",
+        kicker: "Teamfight Tactics",
+        title: "Teamfight Tactics",
+        copy: "Teamfight Tactics services are coming soon — TFT listings will open here after the hub is ready.",
+        categories: [],
+        popular: [],
+        services: []
+      },
+      {
         id: "wow",
         label: "World of Warcraft",
         tabIcon: "i-star",
@@ -371,6 +385,7 @@
       wow: "world-of-warcraft",
       circle: "boost-plus",
       lol: "league-of-legends",
+      tft: "teamfight-tactics",
       cs2: "counter-strike-2",
       social: "social"
     };
@@ -382,6 +397,8 @@
       map.arc = "arc";
       map.wow = "wow";
       map.lol = "lol";
+      map.tft = "tft";
+      map["teamfight-tactics"] = "tft";
       map.circle = "circle";
       map.premier = "cs2";
       map.faceit = "cs2";
@@ -412,6 +429,7 @@
 
     /** Single source for â€œordering disabledâ€ titles; used before order-center-upgrade loads. */
     window.ELY_COMING_SOON_GAME_IDS = new Set(["circle", "wow", "cs2"]);
+
 
 
 
