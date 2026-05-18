@@ -302,12 +302,16 @@
         copy: "Teamfight Tactics services are available now. Choose Coaching, Double Up, or Rank Up and confirm details through Discord.",
         categories: [
           { id: "rank-up", label: "Rank Up", icon: "i-rank", badge: "POPULAR", badgeTone: "recommended", microBadge: "From $7", thumb: "assets/tft-rank-up.webp" },
-          { id: "tft-placement", label: "Placement Matches", icon: "i-rank", badge: "NEW", badgeTone: "new", microBadge: "By request", thumb: "assets/tft-placement-matches.webp" }
+          { id: "tft-placement", label: "Placement Matches", icon: "i-rank", badge: "NEW", badgeTone: "new", microBadge: "By request", thumb: "assets/tft-placement-matches.webp" },
+          { id: "coaching", label: "Coaching", icon: "i-coach", badge: "NEW", badgeTone: "new", microBadge: "Personal guidance", thumb: "assets/tft-coaching.webp" },
+          { id: "double-up", label: "Double Up", icon: "i-star", badge: "NEW", badgeTone: "new", microBadge: "Duo mode", thumb: "assets/tft-double-up.webp" }
         ],
         popular: [],
         services: [
           { ...gameService("tft-rank-up", "rank-up", "TFT Rank Up", "TFT Rank Up", "i-rank", 7, "", "Rank Up starts at $7 per division. Live price calculator included.", "Choose your current and desired TFT rank for a live total. Iron\u2013Platinum: $7/div, Emerald: $10/div, Diamond: $12/div, Master+: $17/step. Gamer Girl add-on: +$6.", "tft-rank-up"), thumb: "assets/tft-rank-up.webp" },
-          { ...gameService("tft-placement-matches", "tft-placement", "TFT Placement Matches", "TFT Placement Matches", "i-rank", 0, "", "Placement Matches by request. Price confirmed in Discord.", "Get your TFT placement matches handled by a verified booster. Details and price are confirmed through your Discord ticket."), thumb: "assets/tft-placement-matches.webp" }
+          { ...gameService("tft-placement-matches", "tft-placement", "TFT Placement Matches", "TFT Placement Matches", "i-rank", 0, "", "Placement Matches by request. Price confirmed in Discord.", "Get your TFT placement matches handled by a verified booster. Details and price are confirmed through your Discord ticket."), thumb: "assets/tft-placement-matches.webp" },
+          { ...gameService("tft-coaching", "coaching", "TFT Coaching", "TFT Coaching", "i-coach", 10, "", "Piloted Duo Coaching starts at $10. Selfplay option will be added next.", "Improve your TFT decision-making, economy, positioning, comp choices, and late-game execution with a manual coaching request."), thumb: "assets/tft-coaching.webp" },
+          { ...gameService("tft-double-up", "double-up", "TFT Double Up", "TFT Double Up", "i-star", 0, "", "Double Up mode service is available by request.", "Play or request support for TFT Double Up mode. Full options and pricing will be added after Rank Up and Coaching are finalized."), thumb: "assets/tft-double-up.webp" }
         ]
       },
       {
