@@ -299,10 +299,18 @@
         heroPosition: "center center",
         kicker: "Teamfight Tactics",
         title: "Teamfight Tactics",
-        copy: "Teamfight Tactics services are coming soon — TFT listings will open here after the hub is ready.",
-        categories: [],
+        copy: "Teamfight Tactics services are coming soon — choose Coaching, Double Up, or Rank Up. Full ordering opens after listings go live.",
+        categories: [
+          { id: "coaching", label: "Coaching", icon: "i-coach", badge: "NEW", badgeTone: "new", microBadge: "Personal guidance", thumb: "assets/tft-coaching.webp" },
+          { id: "double-up", label: "Double Up", icon: "i-star", badge: "NEW", badgeTone: "new", microBadge: "Duo mode", thumb: "assets/tft-double-up.webp" },
+          { id: "rank-up", label: "Rank Up", icon: "i-rank", badge: "COMING SOON", badgeTone: "recommended", microBadge: "Rank climb", thumb: "assets/tft-rank-up.webp" }
+        ],
         popular: [],
-        services: []
+        services: [
+          gameService("tft-coaching", "coaching", "TFT Coaching", "TFT Coaching", "i-coach", 0, "", "Personal TFT coaching service coming soon.", "Improve your TFT decision-making, economy, positioning, comp choices, and late-game execution with a manual coaching request."),
+          gameService("tft-double-up", "double-up", "TFT Double Up", "TFT Double Up", "i-star", 0, "", "Double Up mode service coming soon.", "Play or request support for TFT Double Up mode. Full options and pricing will be added soon."),
+          gameService("tft-rank-up", "rank-up", "TFT Rank Up", "TFT Rank Up", "i-rank", 0, "", "TFT ranked climb service coming soon.", "TFT ranked climb service. Rank options and pricing will be added after the TFT section is finalized.")
+        ]
       },
       {
         id: "wow",
@@ -428,7 +436,8 @@
     }
 
     /** Single source for â€œordering disabledâ€ titles; used before order-center-upgrade loads. */
-    window.ELY_COMING_SOON_GAME_IDS = new Set(["circle", "wow", "cs2"]);
+    window.ELY_COMING_SOON_GAME_IDS = new Set(["circle", "wow", "cs2", "tft"]);
+
 
 
 
