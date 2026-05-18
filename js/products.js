@@ -436,7 +436,8 @@
     }
 
     /** Single source for â€œordering disabledâ€ titles; used before order-center-upgrade loads. */
-    window.ELY_COMING_SOON_GAME_IDS = new Set(["circle", "wow", "cs2", "tft"]);
+    window.ELY_COMING_SOON_GAME_IDS = new Set(["circle", "wow", "cs2"]);
+
 
 
 
