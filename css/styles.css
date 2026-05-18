@@ -1370,12 +1370,12 @@
     }
 
     .home-game-card {
-      min-height: 300px;
+      min-height: 280px;
       border: 1px solid var(--line);
       border-radius: 14px;
       background: #08051a;
       box-shadow: 0 22px 64px rgba(0,0,0,.35);
-      padding: 22px 22px 20px;
+      padding: 18px 18px 17px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
@@ -1487,8 +1487,15 @@
     }
 
     .home-game-hint {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       margin: 0;
+      min-height: 34px;
+      padding: 9px 12px 8px;
+      border: 1px solid rgba(251, 191, 36, .34);
+      border-radius: 999px;
+      background: rgba(8, 6, 22, .58);
       font-family: var(--display);
       font-size: 11px;
       font-weight: 800;
@@ -2664,8 +2671,8 @@
       min-height: 0;
       max-height: 100%;
       overflow: hidden;
-      gap: 12px;
-      padding: 14px 14px 16px;
+      gap: 10px;
+      padding: 12px 12px 14px;
       margin: 0;
       border-top: none;
       border-radius: 14px;
@@ -2743,7 +2750,7 @@
     .order-card.is-arc-split .summary-total #liveTotal {
       display: block;
       font-family: var(--display);
-      font-size: clamp(24px, 3vw, 32px);
+      font-size: clamp(21px, 2.4vw, 28px);
       color: var(--price);
       letter-spacing: .03em;
       line-height: 1.12;
@@ -2765,7 +2772,7 @@
     .order-card.is-valorant .summary-total .btn.btn-premium,
     .order-card.is-arc-split .summary-total .btn.btn-premium {
       margin-top: 4px;
-      min-height: 46px;
+      min-height: 42px;
       box-sizing: border-box;
       flex-shrink: 0;
     }
@@ -2940,8 +2947,8 @@
     .valorant-rank-tier-img {
       width: auto;
       height: auto;
-      max-width: 112px;
-      max-height: 86px;
+      max-width: 98px;
+      max-height: 74px;
       object-fit: contain;
       object-position: center;
       display: block;
@@ -3032,7 +3039,7 @@
     }
 
     .valorant-panel-card {
-      padding: 14px 16px;
+      padding: 12px 13px;
       border-radius: 12px;
       border: 1px solid rgba(139, 92, 246, .34);
       background: linear-gradient(165deg, rgba(22, 18, 48, .78), rgba(8, 7, 20, .88));
@@ -3042,7 +3049,7 @@
     }
 
     .valorant-panel-card__title {
-      margin: 0 0 12px;
+      margin: 0 0 10px;
       font-family: var(--display);
       font-size: 10px;
       font-weight: 800;
@@ -3053,7 +3060,7 @@
     }
 
     .valorant-panel-card__title--sub {
-      margin: 14px 0 10px;
+      margin: 12px 0 8px;
     }
 
     .valorant-panel-card .valorant-server-field select {
@@ -3300,7 +3307,7 @@
     .valorant-configurator .field-block,
     .order-card.is-valorant .valorant-panel-tight {
       margin: 0;
-      padding: 12px 14px 14px;
+      padding: 10px 12px 12px;
       border-radius: 12px;
       border: 1px solid rgba(139, 92, 246, .32);
       background:
@@ -3311,7 +3318,7 @@
     }
 
     .valorant-configurator .field-block--tight {
-      padding: 11px 13px 13px;
+      padding: 10px 12px 12px;
     }
 
     .valorant-configurator .field-block h4,
@@ -3338,7 +3345,7 @@
       border-radius: 10px;
       border: 1px solid rgba(139, 92, 246, .42);
       background: rgba(22, 18, 52, .92);
-      min-height: 44px;
+      min-height: 40px;
       box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .25);
       width: 100%;
       max-width: 100%;
@@ -3348,7 +3355,7 @@
     .valorant-configurator .qty-stepper {
       border-radius: 10px;
       border: 1px solid rgba(139, 92, 246, .42);
-      min-height: 48px;
+      min-height: 42px;
       box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .22);
     }
 
@@ -3383,6 +3390,11 @@
     .valorant-configurator .raid-toggle-grid,
     .order-card.is-valorant .valorant-mode-pills {
       gap: 8px;
+    }
+
+    .valorant-configurator .raid-pill {
+      min-height: 42px;
+      padding: 9px 11px;
     }
 
     .valorant-mode-pills--with-duo-hint {
@@ -4018,10 +4030,10 @@
 
     .qty-stepper {
       display: grid;
-      grid-template-columns: 48px minmax(0, 1fr) 48px;
+      grid-template-columns: 44px minmax(0, 1fr) 44px;
       align-items: stretch;
       gap: 0;
-      min-height: 48px;
+      min-height: 44px;
       border-radius: 10px;
       border: 1px solid rgba(139, 92, 246, .38);
       background: linear-gradient(180deg, rgba(18, 21, 38, .55), rgba(12, 9, 32, .88));
@@ -4032,7 +4044,7 @@
     }
 
     .qty-stepper--wide {
-      grid-template-columns: 48px minmax(0, 1fr) 48px;
+      grid-template-columns: 44px minmax(0, 1fr) 44px;
     }
 
     .qty-step {
@@ -4043,7 +4055,7 @@
       align-items: center;
       justify-content: center;
       font-family: var(--display);
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 800;
       line-height: 1;
       color: #c4b5fd;
@@ -4053,7 +4065,11 @@
     }
 
     .qty-step .qty-step-glyph {
-      font-size: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 1em;
+      font-size: 22px;
       font-weight: 900;
       line-height: 1;
       pointer-events: none;
@@ -4104,7 +4120,7 @@
       letter-spacing: .04em;
       color: var(--text);
       background: rgba(6, 4, 18, .35);
-      min-height: 48px;
+      min-height: 44px;
       box-shadow: none;
       -moz-appearance: textfield;
     }

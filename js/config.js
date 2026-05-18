@@ -87,19 +87,8 @@
     /** Per-hour EUR for Valorant coaching (1–10 hours in the configurator). */
     const valorantCoachingHourlyEur = 14.9;
 
-    const valorantExtrasPaid = [
-      { id: "duo", label: "Duo Queue", pct: 0.35 },
-      { id: "otp", label: "OTP Plus", pct: 0.2 },
-      { id: "vip", label: "VIP Booster", pct: 0.25 },
-      { id: "priority", label: "Priority Start", pct: 0.25 },
-      { id: "soloace", label: "Solo Ace", pct: 0.35 },
-      { id: "stream", label: "Stream Games", pct: 0.2 }
-    ];
-
-    const valorantExtrasFree = [
-      { id: "agent", label: "Agent Selection" },
-      { id: "offline", label: "Offline Mode" }
-    ];
+    const valorantExtrasPaid = [];
+    const valorantExtrasFree = [];
 
     const valorantServers = ["EU", "NA", "LATAM", "BR", "KR", "JP", "AP", "OCE", "MEA"];
 

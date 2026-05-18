@@ -473,8 +473,6 @@
         return `
         <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(gameAria(game.label))}">
           ${media}
-          <h2>${ui(game.label)}</h2>
-          <p class="home-game-blurb">${escapeHtml(ui(homeBlurb(game)))}</p>
           <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
         </button>`;
       };
@@ -1223,7 +1221,7 @@
         ? `<label class="sr-only" for="${id}">${escapeHtml(String(label))}</label>`
         : `<label for="${id}">${label}</label>`;
       return `<div class="qty-field">${lab}<div class="qty-stepper" data-qty-wrap>
-        <button type="button" class="qty-step qty-step--minus" data-qty-for="${id}" data-qty-step="-1" aria-label="Decrease quantity"><span class="qty-step-glyph" aria-hidden="true">âˆ’</span></button>
+        <button type="button" class="qty-step qty-step--minus" data-qty-for="${id}" data-qty-step="-1" aria-label="Decrease quantity"><span class="qty-step-glyph" aria-hidden="true">−</span></button>
         <input id="${id}" class="qty-stepper-input" type="number" inputmode="numeric" min="${min}"${maxAttr} value="${value}">
         <button type="button" class="qty-step qty-step--plus" data-qty-for="${id}" data-qty-step="1" aria-label="Increase quantity"><span class="qty-step-glyph" aria-hidden="true">+</span></button>
       </div></div>`;
@@ -1234,7 +1232,7 @@
       return `<div class="qty-field qty-field--bundle" data-bundle-for="${id}">
         <label for="${id}">${bundleLabel}</label>
         <div class="qty-stepper qty-stepper--bundle" data-qty-wrap>
-          <button type="button" class="qty-step qty-step--minus" data-qty-for="${id}" data-qty-step="-1" aria-label="Decrease bundle quantity"><span class="qty-step-glyph" aria-hidden="true">âˆ’</span></button>
+          <button type="button" class="qty-step qty-step--minus" data-qty-for="${id}" data-qty-step="-1" aria-label="Decrease bundle quantity"><span class="qty-step-glyph" aria-hidden="true">−</span></button>
           <input id="${id}" class="qty-stepper-input" type="number" inputmode="numeric" min="${min}"${maxAttr} value="${value}">
           <button type="button" class="qty-step qty-step--plus" data-qty-for="${id}" data-qty-step="1" aria-label="Increase bundle quantity"><span class="qty-step-glyph" aria-hidden="true">+</span></button>
         </div>
@@ -1355,14 +1353,6 @@
     }
 
     function valorantOrderChromeCustomizeInner(type) {
-      if (type === "valorant-rank-boost") return `${valorantModeHtml()}${valorantExtrasHtml(true, true)}`;
-      if (type === "valorant-placement") return `${valorantModeHtml()}${valorantExtrasHtml(true, true)}`;
-      if (type === "valorant-radiant") return valorantModeHtml();
-      if (type === "valorant-ranked-wins") return `${valorantModeHtml()}${valorantExtrasHtml(true, true)}`;
-      if (type === "valorant-unrated") return `${valorantModeHtml()}${valorantExtrasHtml(true, true)}`;
-      if (type === "valorant-leveling") return `${valorantModeHtml()}${valorantExtrasHtml(true, true)}`;
-      if (type === "valorant-battlepass") return `${valorantModeHtml()}${valorantExtrasHtml(true, true)}`;
-      if (type === "valorant-coaching") return "";
       return "";
     }
 
@@ -1428,6 +1418,8 @@
         apply("valRbDesiredTierImg", val("valRbDesired"));
       } else if (type === "valorant-placement") {
         apply("valPmRankTierImg", val("valPmRank"));
+      } else if (type === "valorant-ranked-wins") {
+        apply("valRwRankTierImg", val("valRwRank"));
       } else if (type === "valorant-radiant") {
         const img = $("valRadOptionTierImg");
         if (!img) return;
@@ -1440,6 +1432,7 @@
     }
 
     function syncValorantPathRail() {
+      syncValorantRankFieldThumbnails();
       const rail = $("valorantPathRail");
       if (!rail) return;
       const svc = currentService();
@@ -1512,7 +1505,6 @@
         ? `<div class="valorant-path-inner valorant-path-inner--single">${valorantPathChip(leftK, left, leftTierImg)}</div>`
         : `<div class="valorant-path-inner">${valorantPathChip(leftK, left, leftTierImg)}${arrow}${valorantPathChip(rightK, right, rightTierImg)}</div>`;
       rail.innerHTML = inner;
-      syncValorantRankFieldThumbnails();
     }
 
     function syncValorantOrderFormMount(service) {
@@ -1566,31 +1558,7 @@
       teardownValorantOrderChrome();
       if (game?.id !== "valorant" || !svc?.form?.startsWith?.("valorant-")) return;
       card.classList.add("is-valorant");
-      const wrap = document.createElement("div");
-      wrap.dataset.valorantOrderChrome = "";
-      wrap.className = "valorant-order-chrome";
-      const customize = valorantOrderChromeCustomizeInner(svc.form);
-      const rankTierRail = svc.form === "valorant-rank-boost" || svc.form === "valorant-placement" || svc.form === "valorant-radiant";
-      const pathRailExtra = `${rankTierRail ? " valorant-path-rail--rank-tier-icons" : ""}${svc.form === "valorant-rank-boost" ? " valorant-path-rail--rank-boost" : ""}`;
-      wrap.innerHTML = `
-        <div id="valorantPathRail" class="valorant-path-rail${pathRailExtra}" aria-live="polite"></div>
-        ${customize ? `<section class="valorant-customize-surface" aria-label="${escapeHtml(ui("Customize"))}"><h4 class="valorant-block-kicker">${escapeHtml(ui("Customize"))}</h4>${customize}</section>` : ""}
-        <p class="valorant-mini-promo">${escapeHtml(ui("Manual completion · VPN-safe routing · Discord confirmation on every order."))}</p>
-        <div class="valorant-summary-panel valorant-summary-panel--sticky">
-          <h4 class="valorant-summary-title">${escapeHtml(ui("Breakdown"))}</h4>
-          <div class="valorant-summary-dl" id="valorantSummaryDl"></div>
-          <p class="valorant-summary-note" id="valorantSummaryNote" hidden></p>
-        </div>
-        <hr class="valorant-price-divider" aria-hidden="true">
-        <ul class="valorant-right-trust-foot">
-          <li>${escapeHtml(ui("Secure"))}</li>
-          <li>${escapeHtml(ui("Private"))}</li>
-          <li>${escapeHtml(ui("Pro boosters"))}</li>
-        </ul>
-      `;
-      summary.insertBefore(wrap, summary.firstChild);
     }
-
     function buildForm(type) {
       if (type === "fast") {
         return `<div class="field-grid">${qtyField("fastQty", "Quantity / Hours", 1, 1)}<div><label for="fastNote">Order Notes</label><input id="fastNote" placeholder="Rank, server, role, schedule"></div></div>`;
@@ -1675,7 +1643,7 @@
               <div class="depositary-custom-row">
                 <label for="depositaryCustom">Custom</label>
                 <div class="qty-stepper qty-stepper--wide" data-qty-wrap>
-                  <button type="button" class="qty-step qty-step--minus" data-qty-for="depositaryCustom" data-qty-step="-1" aria-label="Decrease slots"><span class="qty-step-glyph" aria-hidden="true">âˆ’</span></button>
+                  <button type="button" class="qty-step qty-step--minus" data-qty-for="depositaryCustom" data-qty-step="-1" aria-label="Decrease slots"><span class="qty-step-glyph" aria-hidden="true">−</span></button>
                   <input id="depositaryCustom" class="qty-stepper-input" type="number" min="1" max="999" step="1" value="60">
                   <button type="button" class="qty-step qty-step--plus" data-qty-for="depositaryCustom" data-qty-step="1" aria-label="Increase slots"><span class="qty-step-glyph" aria-hidden="true">+</span></button>
                 </div>
@@ -1741,7 +1709,7 @@
             </div>
           </div>
           <div class="qty-field"><label for="pvpHours">Hours</label><div class="qty-stepper" data-qty-wrap>
-            <button type="button" class="qty-step qty-step--minus" data-qty-for="pvpHours" data-qty-step="-1" aria-label="Decrease hours"><span class="qty-step-glyph" aria-hidden="true">âˆ’</span></button>
+            <button type="button" class="qty-step qty-step--minus" data-qty-for="pvpHours" data-qty-step="-1" aria-label="Decrease hours"><span class="qty-step-glyph" aria-hidden="true">−</span></button>
             <input id="pvpHours" class="qty-stepper-input" type="number" min="1" max="6" value="1">
             <button type="button" class="qty-step qty-step--plus" data-qty-for="pvpHours" data-qty-step="1" aria-label="Increase hours"><span class="qty-step-glyph" aria-hidden="true">+</span></button>
           </div></div>
@@ -1881,19 +1849,6 @@
             <label for="tftServer">Server</label>
             <select id="tftServer">${srvOpts}</select>
           </div>
-          <p class="tft-form-section-label tft-form-section-label--sub">Add-ons</p>
-          <div class="tft-addon-row">
-            ${elyToggleRow('id="tftGamerGirl"', 'Gamer Girl <span class="tft-addon-chip">+$6</span>', false)}
-          </div>
-          <div class="tft-addon-row">
-            ${elyToggleRow('id="tftSoloOnly"', 'Solo Only <span class="tft-addon-chip tft-addon-chip--free">Included</span>', false)}
-          </div>
-          <div class="tft-addon-row">
-            ${elyToggleRow('id="tftAppearOffline"', 'Appear Offline <span class="tft-addon-chip tft-addon-chip--free">Included</span>', false)}
-          </div>
-          <div class="tft-addon-row">
-            ${elyToggleRow('id="tftExpress"', 'Express <span class="tft-addon-chip">+20%</span>', false)}
-          </div>
           <p class="valorant-rb-hint" id="tftRankHint" hidden></p>
         </div>`;
       }
@@ -1984,9 +1939,14 @@
           <div class="valorant-pm-grid">
             <div class="valorant-panel-card valorant-panel-card--rw-rank">
               <h4 class="valorant-panel-card__title">${escapeHtml(ui("Current Rank"))}</h4>
-              <div class="valorant-rw-rank-select">
-                <label class="sr-only" for="valRwRank">${escapeHtml(ui("Current Rank"))}</label>
-                <select id="valRwRank">${valorantRankOptionsHtml(rwRanks, "Gold I")}</select>
+              <div class="valorant-rank-pick valorant-rank-pick--panel">
+                <div class="valorant-rank-thumb-shell is-empty" aria-hidden="true">
+                  <img id="valRwRankTierImg" class="valorant-rank-tier-img" alt="" decoding="async" loading="lazy" />
+                </div>
+                <div class="valorant-rw-rank-select">
+                  <label class="sr-only" for="valRwRank">${escapeHtml(ui("Current Rank"))}</label>
+                  <select id="valRwRank">${valorantRankOptionsHtml(rwRanks, "Gold I")}</select>
+                </div>
               </div>
             </div>
             <div class="valorant-panel-card valorant-panel-card--pm-meta">
@@ -2195,12 +2155,14 @@
       const addToCartBtn = $("addToCart");
       if (addToCartBtn) {
         const form = $("orderForm");
+        const sectionLabel = form?.querySelector(".tft-form-section-label--sub");
+        const addonRows = Array.from(form?.querySelectorAll(".tft-addon-row") || []);
+        if (!sectionLabel && !addonRows.length) return;
         const slot = document.createElement("div");
         slot.id = "tftAddonsInCard";
         slot.className = "tft-addons-in-card";
-        const sectionLabel = form?.querySelector(".tft-form-section-label--sub");
         if (sectionLabel) slot.appendChild(sectionLabel);
-        Array.from(form?.querySelectorAll(".tft-addon-row") || []).forEach(row => slot.appendChild(row));
+        addonRows.forEach(row => slot.appendChild(row));
         addToCartBtn.parentElement.insertBefore(slot, addToCartBtn);
       }
     }
@@ -2786,7 +2748,6 @@
       const curDiv = noDiv.has(curRank) ? null : (val("tftCurrentDiv") || "IV");
       const desDiv = noDiv.has(desRank) ? null : (val("tftDesiredDiv") || "IV");
       const server = val("tftServer") || "EU";
-      const gamerGirl = Boolean($("tftGamerGirl")?.checked);
       const curIdx = TFT_RANK_STEPS.findIndex(function(s) { return s.rank === curRank && s.div === curDiv; });
       const desIdx = TFT_RANK_STEPS.findIndex(function(s) { return s.rank === desRank && s.div === desDiv; });
       if (curIdx < 0 || desIdx < 0) {
@@ -2797,7 +2758,7 @@
       }
       let base = 0;
       for (let i = curIdx; i < desIdx; i++) base += tftStepCost(TFT_RANK_STEPS[i].rank);
-      const total = base + (gamerGirl ? 6 : 0);
+      const total = base;
       const curLabel = curDiv ? curRank + " " + curDiv : curRank;
       const desLabel = desDiv ? desRank + " " + desDiv : desRank;
       const details = [
@@ -2806,7 +2767,6 @@
         "Current Rank: " + curLabel,
         "Desired Rank: " + desLabel,
         "Server: " + server,
-        "Gamer Girl: " + (gamerGirl ? "Yes" : "No"),
         "Total: $" + total + " USD"
       ].join("\n");
       return { total: total, valid: true, custom: false, details: details, tftRankError: "" };

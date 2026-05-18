@@ -308,7 +308,7 @@
         ],
         popular: [],
         services: [
-          { ...gameService("tft-rank-up", "rank-up", "TFT Rank Up", "TFT Rank Up", "i-rank", 7, "", "Rank Up starts at $7 per division. Live price calculator included.", "Choose your current and desired TFT rank for a live total. Iron\u2013Platinum: $7/div, Emerald: $10/div, Diamond: $12/div, Master+: $17/step. Gamer Girl add-on: +$6.", "tft-rank-up"), thumb: "assets/tft-rank-up.webp" },
+          { ...gameService("tft-rank-up", "rank-up", "TFT Rank Up", "TFT Rank Up", "i-rank", 7, "", "Rank Up starts at $7 per division. Live price calculator included.", "Choose your current and desired TFT rank for a live total. Iron\u2013Platinum: $7/div, Emerald: $10/div, Diamond: $12/div, Master+: $17/step.", "tft-rank-up"), thumb: "assets/tft-rank-up.webp" },
           { ...gameService("tft-placement-matches", "tft-placement", "TFT Placement Matches", "TFT Placement Matches", "i-rank", 0, "", "Placement Matches by request. Price confirmed in Discord.", "Get your TFT placement matches handled by a verified booster. Details and price are confirmed through your Discord ticket."), thumb: "assets/tft-placement-matches.webp" },
           { ...gameService("tft-coaching", "coaching", "TFT Coaching", "TFT Coaching", "i-coach", 10, "", "Piloted Duo Coaching starts at $10. Selfplay option will be added next.", "Improve your TFT decision-making, economy, positioning, comp choices, and late-game execution with a manual coaching request."), thumb: "assets/tft-coaching.webp" },
           { ...gameService("tft-double-up", "double-up", "TFT Double Up", "TFT Double Up", "i-star", 0, "", "Double Up mode service is available by request.", "Play or request support for TFT Double Up mode. Full options and pricing will be added after Rank Up and Coaching are finalized."), thumb: "assets/tft-double-up.webp" }
@@ -354,8 +354,8 @@
         copy: "Loot, currencies, blueprints, and raid services — configure in-site, then lock details with our team in Discord.",
         categories: [
           { id: "blueprints", label: "Blueprints", icon: "i-blueprint", badge: "HOT", badgeTone: "hot", microBadge: "Manual Delivery" },
-          { id: "guns", label: "Weapons & Gear", icon: "i-gun", badge: "PRICE DROP", badgeTone: "price-drop", microBadge: "In-Raid Delivery" },
-          { id: "loadouts", label: "Loadout & Augments", icon: "i-loadout", badge: "POPULAR", badgeTone: "popular", microBadge: "Shields · Extras" },
+          { id: "guns", label: "All Weapons", icon: "i-gun", badge: "PRICE DROP", badgeTone: "price-drop", microBadge: "In-Raid Delivery" },
+          { id: "loadouts", label: "Custom Loadout", icon: "i-loadout", badge: "POPULAR", badgeTone: "popular", microBadge: "Shields · Extras" },
           { id: "coins", label: "Raider Coins", icon: "i-coins", badge: "PRICE DROP", badgeTone: "price-drop", microBadge: "Fast Discord" },
           { id: "seeds", label: "Assorted Seeds", icon: "i-coins", badge: "NEW", badgeTone: "new", microBadge: "Bulk deals" },
           { id: "depositary", label: "Depositary", icon: "i-depository", microBadge: "Secure storage" },
