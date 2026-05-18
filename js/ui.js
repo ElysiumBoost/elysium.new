@@ -5,6 +5,7 @@
       if (type && String(type).startsWith("valorant-")) {
         return calculateValorant(type, service);
       }
+      if (type === "tft-rank-up") return calculateTFTRankUp(service);
       if (type === "fast") {
         const qty = Math.max(1, num("fastQty"));
         return { total: service.fromUSD * qty, valid: true, details: `Quantity / Hours: ${qty}\nNotes: ${val("fastNote") || "None"}` };
@@ -330,6 +331,16 @@
         } else {
           valRbHint.hidden = true;
           valRbHint.textContent = "";
+        }
+      }
+      const tftRankHint = $("tftRankHint");
+      if (tftRankHint) {
+        if (result.tftRankError) {
+          tftRankHint.hidden = false;
+          tftRankHint.textContent = result.tftRankError;
+        } else {
+          tftRankHint.hidden = true;
+          tftRankHint.textContent = "";
         }
       }
       if (dl && Array.isArray(result.valorantRows)) {

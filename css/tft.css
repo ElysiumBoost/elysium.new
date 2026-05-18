@@ -1,0 +1,28 @@
+/* TFT Rank Up form — scoped to .tft-rank-up-form */
+
+.tft-rank-up-form .tft-div-wrap {
+  display: block;
+  margin-top: 10px;
+}
+
+.tft-rank-up-form .tft-div-wrap.tft-div-wrap--hidden {
+  display: none;
+}
+
+.tft-rank-up-form .tft-addon-row {
+  display: flex;
+  align-items: center;
+}
+
+.tft-addon-chip {
+  display: inline-block;
+  background: rgba(255, 209, 102, .15);
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 5px;
+  margin-left: 5px;
+  letter-spacing: .03em;
+  vertical-align: middle;
+}

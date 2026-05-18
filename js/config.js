@@ -103,6 +103,23 @@
 
     const valorantServers = ["EU", "NA", "LATAM", "BR", "KR", "JP", "AP", "OCE", "MEA"];
 
+    const TFT_RANKS = ["Iron","Bronze","Silver","Gold","Platinum","Emerald","Diamond","Master","Grandmaster","Challenger"];
+    const TFT_DIVISIONS = ["IV","III","II","I"];
+    const TFT_RANK_STEPS = (function() {
+      const steps = [];
+      ["Iron","Bronze","Silver","Gold","Platinum","Emerald","Diamond"].forEach(function(rank) {
+        ["IV","III","II","I"].forEach(function(div) { steps.push({ rank: rank, div: div }); });
+      });
+      ["Master","Grandmaster","Challenger"].forEach(function(rank) { steps.push({ rank: rank, div: null }); });
+      return steps;
+    })();
+    function tftStepCost(rank) {
+      if (rank === "Master" || rank === "Grandmaster") return 17;
+      if (rank === "Diamond") return 12;
+      if (rank === "Emerald") return 10;
+      return 7;
+    }
+
     const valorantCategoryContent = {
       "rank-boosting": {
         title: "Valorant Rank Boosting",

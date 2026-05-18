@@ -309,7 +309,7 @@
         services: [
           { ...gameService("tft-coaching", "coaching", "TFT Coaching", "TFT Coaching", "i-coach", 10, "", "Piloted Duo Coaching starts at $10. Selfplay option will be added next.", "Improve your TFT decision-making, economy, positioning, comp choices, and late-game execution with a manual coaching request."), thumb: "assets/tft-coaching.webp" },
           { ...gameService("tft-double-up", "double-up", "TFT Double Up", "TFT Double Up", "i-star", 0, "", "Double Up mode service is available by request.", "Play or request support for TFT Double Up mode. Full options and pricing will be added after Rank Up and Coaching are finalized."), thumb: "assets/tft-double-up.webp" },
-          { ...gameService("tft-rank-up", "rank-up", "TFT Rank Up", "TFT Rank Up", "i-rank", 7, "", "Rank Up starts at $7 per division from Bronze to Platinum.", "TFT Rank Up pricing: Bronze–Platinum $7 per division, Platinum–Diamond $10, Diamond–Master $12, Master+ $17. Full calculator will be added next."), thumb: "assets/tft-rank-up.webp" }
+          { ...gameService("tft-rank-up", "rank-up", "TFT Rank Up", "TFT Rank Up", "i-rank", 7, "", "Rank Up starts at $7 per division. Live price calculator included.", "Choose your current and desired TFT rank for a live total. Iron\u2013Platinum: $7/div, Emerald: $10/div, Diamond: $12/div, Master+: $17/step. Gamer Girl add-on: +$6.", "tft-rank-up"), thumb: "assets/tft-rank-up.webp" }
         ]
       },
       {

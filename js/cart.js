@@ -1837,6 +1837,41 @@
           ${qtyField("bossQty", "Quantity", 1, 1)}
         `;
       }
+      if (type === "tft-rank-up") {
+        const rankOpts = TFT_RANKS.map((r, i) => `<option value="${escapeHtml(r)}"${i === 1 ? " selected" : ""}>${escapeHtml(r)}</option>`).join("");
+        const desRankOpts = TFT_RANKS.map((r, i) => `<option value="${escapeHtml(r)}"${i === 4 ? " selected" : ""}>${escapeHtml(r)}</option>`).join("");
+        const divOpts = TFT_DIVISIONS.map(d => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join("");
+        const srvOpts = valorantServers.map(s => `<option value="${escapeHtml(s)}"${s === "EU" ? " selected" : ""}>${escapeHtml(s)}</option>`).join("");
+        return `
+        <div class="valorant-configurator tft-rank-up-form">
+          <div class="valorant-rank-tier-grid">
+            <div class="field-block field-block--tight valorant-rank-field">
+              <label for="tftCurrentRank">Current Rank</label>
+              <select id="tftCurrentRank">${rankOpts}</select>
+              <span id="tftCurrentDivWrap" class="tft-div-wrap">
+                <label for="tftCurrentDiv">Division</label>
+                <select id="tftCurrentDiv">${divOpts}</select>
+              </span>
+            </div>
+            <div class="field-block field-block--tight valorant-rank-field">
+              <label for="tftDesiredRank">Desired Rank</label>
+              <select id="tftDesiredRank">${desRankOpts}</select>
+              <span id="tftDesiredDivWrap" class="tft-div-wrap">
+                <label for="tftDesiredDiv">Division</label>
+                <select id="tftDesiredDiv">${divOpts}</select>
+              </span>
+            </div>
+          </div>
+          <div class="field-block field-block--tight">
+            <label for="tftServer">Server</label>
+            <select id="tftServer">${srvOpts}</select>
+          </div>
+          <div class="field-block field-block--tight tft-addon-row">
+            ${elyToggleRow('id="tftGamerGirl"', 'Gamer Girl <span class="tft-addon-chip">+$6</span>', false)}
+          </div>
+          <p class="valorant-rb-hint" id="tftRankHint" hidden></p>
+        </div>`;
+      }
       if (type === "valorant-rank-boost") {
         const desiredRanks = [...VALORANT_RANKS.slice(1), "Radiant"];
         return `
@@ -2105,8 +2140,25 @@
       }
     }
 
+    function wireTFTRankUpForm() {
+      const noDiv = new Set(["Master","Grandmaster","Challenger"]);
+      function syncDivVisibility() {
+        const curRank = val("tftCurrentRank") || "";
+        const desRank = val("tftDesiredRank") || "";
+        const curWrap = $("tftCurrentDivWrap");
+        const desWrap = $("tftDesiredDivWrap");
+        if (curWrap) curWrap.classList.toggle("tft-div-wrap--hidden", noDiv.has(curRank));
+        if (desWrap) desWrap.classList.toggle("tft-div-wrap--hidden", noDiv.has(desRank));
+        updateTotal();
+      }
+      $("tftCurrentRank")?.addEventListener("change", syncDivVisibility);
+      $("tftDesiredRank")?.addEventListener("change", syncDivVisibility);
+      syncDivVisibility();
+    }
+
     function wireForm(type) {
       if (type && String(type).startsWith("valorant-")) wireValorantForm(type);
+      if (type === "tft-rank-up") wireTFTRankUpForm();
       if (type === "blueprints") wireBlueprints();
       if (type === "loadout") {
         const bundleInput = $("loadoutBundle");
@@ -2676,6 +2728,39 @@
       return Math.max(0, Math.min(cap, 25) - current) * 2 +
         Math.max(0, Math.min(cap, 50) - Math.max(current, 25)) * 2.5 +
         Math.max(0, cap - Math.max(current, 50)) * 3.5;
+    }
+
+    function calculateTFTRankUp(service) {
+      const noDiv = new Set(["Master","Grandmaster","Challenger"]);
+      const curRank = val("tftCurrentRank") || "Bronze";
+      const desRank = val("tftDesiredRank") || "Gold";
+      const curDiv = noDiv.has(curRank) ? null : (val("tftCurrentDiv") || "IV");
+      const desDiv = noDiv.has(desRank) ? null : (val("tftDesiredDiv") || "IV");
+      const server = val("tftServer") || "EU";
+      const gamerGirl = Boolean($("tftGamerGirl")?.checked);
+      const curIdx = TFT_RANK_STEPS.findIndex(function(s) { return s.rank === curRank && s.div === curDiv; });
+      const desIdx = TFT_RANK_STEPS.findIndex(function(s) { return s.rank === desRank && s.div === desDiv; });
+      if (curIdx < 0 || desIdx < 0) {
+        return { total: 0, valid: false, details: "", custom: false, tftRankError: "Invalid rank selection." };
+      }
+      if (desIdx <= curIdx) {
+        return { total: 0, valid: false, details: "", custom: false, tftRankError: "Desired rank must be higher than current rank." };
+      }
+      let base = 0;
+      for (let i = curIdx; i < desIdx; i++) base += tftStepCost(TFT_RANK_STEPS[i].rank);
+      const total = base + (gamerGirl ? 6 : 0);
+      const curLabel = curDiv ? curRank + " " + curDiv : curRank;
+      const desLabel = desDiv ? desRank + " " + desDiv : desRank;
+      const details = [
+        "Game: Teamfight Tactics",
+        "Service: TFT Rank Up",
+        "Current Rank: " + curLabel,
+        "Desired Rank: " + desLabel,
+        "Server: " + server,
+        "Gamer Girl: " + (gamerGirl ? "Yes" : "No"),
+        "Total: $" + total + " USD"
+      ].join("\n");
+      return { total: total, valid: true, custom: false, details: details, tftRankError: "" };
     }
 
     function valorantRankBoostSegmentEur(cur, des) {
