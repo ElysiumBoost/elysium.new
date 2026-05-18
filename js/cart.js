@@ -1842,34 +1842,38 @@
         `;
       }
       if (type === "tft-rank-up") {
+        const rankOptsCur = TFT_RANKS.map((r, i) => `<option value="${escapeHtml(r)}"${i === 1 ? " selected" : ""}>${escapeHtml(r)}</option>`).join("");
+        const rankOptsDes = TFT_RANKS.map((r, i) => `<option value="${escapeHtml(r)}"${i === 3 ? " selected" : ""}>${escapeHtml(r)}</option>`).join("");
+        const divOpts = TFT_DIVISIONS.map(d => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join("");
         const srvOpts = valorantServers.map(s => `<option value="${escapeHtml(s)}"${s === "EU" ? " selected" : ""}>${escapeHtml(s)}</option>`).join("");
-        const rankBtns = defaultRank => TFT_RANKS.map(r => {
-          const slug = r.toLowerCase();
-          const active = r === defaultRank ? " active" : "";
-          return `<button type="button" class="tft-rank-btn${active}" data-rank="${escapeHtml(r)}" aria-label="${escapeHtml(r)}"><span class="tft-rank-img-wrap"><img src="assets/${escapeHtml(slug)}.webp" alt="${escapeHtml(r)}" class="tft-rank-img" loading="lazy" onerror="this.style.display='none'"></span><span class="tft-rank-name">${escapeHtml(r)}</span></button>`;
-        }).join("");
-        const divBtns = TFT_DIVISIONS.map(d => `<button type="button" class="tft-div-btn${d === "IV" ? " active" : ""}" data-div="${escapeHtml(d)}">${escapeHtml(d)}</button>`).join("");
         return `
         <div class="valorant-configurator tft-rank-up-form">
-          <p class="tft-form-section-label">Rank Configuration</p>
-          <div class="tft-rank-step">
-            <p class="tft-step-label"><span class="tft-step-num">01</span> Current Rank</p>
-            <div class="tft-rank-grid" id="tftCurrentRankGrid">${rankBtns("Bronze")}</div>
-            <input type="hidden" id="tftCurrentRank" value="Bronze">
-            <div id="tftCurrentDivWrap" class="tft-div-wrap">
-              <span class="tft-div-label">Division</span>
-              <div class="tft-div-btns" id="tftCurrentDivBtns">${divBtns}</div>
-              <input type="hidden" id="tftCurrentDiv" value="IV">
+          <div class="valorant-rank-tier-grid">
+            <div class="field-block field-block--tight valorant-rank-field">
+              <p class="tft-step-label"><span class="tft-step-num">01</span> Current Rank</p>
+              <div class="valorant-rank-pick">
+                <div class="valorant-rank-thumb-shell is-empty" aria-hidden="true">
+                  <img id="tftCurrentRankImg" class="valorant-rank-tier-img" alt="" decoding="async" loading="eager">
+                </div>
+                <select id="tftCurrentRank">${rankOptsCur}</select>
+              </div>
+              <div id="tftCurrentDivWrap" class="tft-div-wrap">
+                <label for="tftCurrentDiv">Division</label>
+                <select id="tftCurrentDiv">${divOpts}</select>
+              </div>
             </div>
-          </div>
-          <div class="tft-rank-step">
-            <p class="tft-step-label"><span class="tft-step-num">02</span> Desired Rank</p>
-            <div class="tft-rank-grid" id="tftDesiredRankGrid">${rankBtns("Gold")}</div>
-            <input type="hidden" id="tftDesiredRank" value="Gold">
-            <div id="tftDesiredDivWrap" class="tft-div-wrap">
-              <span class="tft-div-label">Division</span>
-              <div class="tft-div-btns" id="tftDesiredDivBtns">${divBtns}</div>
-              <input type="hidden" id="tftDesiredDiv" value="IV">
+            <div class="field-block field-block--tight valorant-rank-field">
+              <p class="tft-step-label"><span class="tft-step-num">02</span> Desired Rank</p>
+              <div class="valorant-rank-pick">
+                <div class="valorant-rank-thumb-shell is-empty" aria-hidden="true">
+                  <img id="tftDesiredRankImg" class="valorant-rank-tier-img" alt="" decoding="async" loading="lazy">
+                </div>
+                <select id="tftDesiredRank">${rankOptsDes}</select>
+              </div>
+              <div id="tftDesiredDivWrap" class="tft-div-wrap">
+                <label for="tftDesiredDiv">Division</label>
+                <select id="tftDesiredDiv">${divOpts}</select>
+              </div>
             </div>
           </div>
           <div class="field-block field-block--tight">
@@ -2162,6 +2166,18 @@
 
     function wireTFTRankUpForm() {
       const noDiv = new Set(["Master","Grandmaster","Challenger"]);
+      function syncTFTRankImages() {
+        [["tftCurrentRankImg", "tftCurrentRank"], ["tftDesiredRankImg", "tftDesiredRank"]].forEach(([imgId, selectId]) => {
+          const img = $(imgId);
+          if (!img) return;
+          const shell = img.closest(".valorant-rank-thumb-shell");
+          const rank = val(selectId);
+          if (!rank) { img.removeAttribute("src"); img.alt = ""; shell?.classList.add("is-empty"); return; }
+          img.src = resolveSiteUrl("assets/" + rank.toLowerCase() + ".webp");
+          img.alt = rank;
+          shell?.classList.remove("is-empty");
+        });
+      }
       function syncDivVisibility() {
         const curRank = val("tftCurrentRank") || "";
         const desRank = val("tftDesiredRank") || "";
@@ -2171,48 +2187,9 @@
         if (desWrap) desWrap.classList.toggle("tft-div-wrap--hidden", noDiv.has(desRank));
         updateTotal();
       }
-      function activateRankBtn(gridId, rank) {
-        const grid = $(gridId);
-        if (!grid) return;
-        grid.querySelectorAll(".tft-rank-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.rank === rank));
-      }
-      function activateDivBtn(btnsId, div) {
-        const el = $(btnsId);
-        if (!el) return;
-        el.querySelectorAll(".tft-div-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.div === div));
-      }
-      $("tftCurrentRankGrid")?.querySelectorAll(".tft-rank-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const hid = $("tftCurrentRank");
-          if (hid) hid.value = btn.dataset.rank;
-          activateRankBtn("tftCurrentRankGrid", btn.dataset.rank);
-          syncDivVisibility();
-        });
-      });
-      $("tftDesiredRankGrid")?.querySelectorAll(".tft-rank-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const hid = $("tftDesiredRank");
-          if (hid) hid.value = btn.dataset.rank;
-          activateRankBtn("tftDesiredRankGrid", btn.dataset.rank);
-          syncDivVisibility();
-        });
-      });
-      $("tftCurrentDivBtns")?.querySelectorAll(".tft-div-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const hid = $("tftCurrentDiv");
-          if (hid) hid.value = btn.dataset.div;
-          activateDivBtn("tftCurrentDivBtns", btn.dataset.div);
-          updateTotal();
-        });
-      });
-      $("tftDesiredDivBtns")?.querySelectorAll(".tft-div-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const hid = $("tftDesiredDiv");
-          if (hid) hid.value = btn.dataset.div;
-          activateDivBtn("tftDesiredDivBtns", btn.dataset.div);
-          updateTotal();
-        });
-      });
+      $("tftCurrentRank")?.addEventListener("change", () => { syncTFTRankImages(); syncDivVisibility(); });
+      $("tftDesiredRank")?.addEventListener("change", () => { syncTFTRankImages(); syncDivVisibility(); });
+      syncTFTRankImages();
       syncDivVisibility();
     }
 
