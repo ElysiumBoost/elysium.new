@@ -246,10 +246,15 @@
   flex-shrink: 0;
 }
 
-/* Rank image — TFT assets are square, allow slightly taller display */
+/* Rank image — square TFT assets; multiply blend removes white bg */
+.tft-rank-up-form .valorant-rank-thumb-shell {
+  background: transparent;
+}
+
 .tft-rank-up-form .valorant-rank-tier-img {
   max-width: 100px;
   max-height: 100px;
+  mix-blend-mode: multiply;
 }
 
 /* Division select spacing inside the div-wrap */
@@ -259,4 +264,26 @@
   font-weight: 600;
   color: var(--muted);
   margin-bottom: 4px;
+}
+
+/* ============================================================
+   TFT add-ons injected into the order card (above Add to Cart)
+   ============================================================ */
+
+.tft-addons-in-card {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0 6px;
+  border-top: 1px solid rgba(122, 77, 255, .15);
+  margin-bottom: 8px;
+  gap: 0;
+}
+
+.tft-addons-in-card .tft-form-section-label--sub {
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+
+.tft-addons-in-card .tft-addon-row {
+  padding: 3px 0;
 }

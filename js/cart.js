@@ -1554,6 +1554,7 @@
     function teardownValorantOrderChrome() {
       document.querySelector(".order-card")?.classList.remove("is-valorant", "is-tft-split");
       document.querySelectorAll("[data-valorant-order-chrome]").forEach(n => n.remove());
+      $("tftAddonsInCard")?.remove();
     }
 
     function setupValorantOrderChrome() {
@@ -2191,6 +2192,17 @@
       $("tftDesiredRank")?.addEventListener("change", () => { syncTFTRankImages(); syncDivVisibility(); });
       syncTFTRankImages();
       syncDivVisibility();
+      const addToCartBtn = $("addToCart");
+      if (addToCartBtn) {
+        const form = $("orderForm");
+        const slot = document.createElement("div");
+        slot.id = "tftAddonsInCard";
+        slot.className = "tft-addons-in-card";
+        const sectionLabel = form?.querySelector(".tft-form-section-label--sub");
+        if (sectionLabel) slot.appendChild(sectionLabel);
+        Array.from(form?.querySelectorAll(".tft-addon-row") || []).forEach(row => slot.appendChild(row));
+        addToCartBtn.parentElement.insertBefore(slot, addToCartBtn);
+      }
     }
 
     function wireForm(type) {
