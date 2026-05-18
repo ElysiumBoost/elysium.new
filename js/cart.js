@@ -1,8 +1,8 @@
-﻿    function deliveryTypeForService(service, gameId) {
+    function deliveryTypeForService(service, gameId) {
       if (!service) return "Manual delivery via Discord";
       const f = service.form;
-      if (f && String(f).startsWith("valorant-")) return "Manual â€” piloted or duo (confirm in Discord)";
-      if (f === "pvp" || f === "coaching") return "Coaching â€” Discord assisted";
+      if (f && String(f).startsWith("valorant-")) return "Manual — piloted or duo (confirm in Discord)";
+      if (f === "pvp" || f === "coaching") return "Coaching — Discord assisted";
       if (f === "raid" || f === "expedition") return "In-session / manual delivery";
       if (f === "fast") return "Manual queue / Discord assisted";
       return "Manual delivery via Discord";
@@ -23,7 +23,7 @@
       if (gid === "valorant") return state.riotId.trim();
       if (gid === "lol") return state.lolRiotId.trim();
       if (gid === "cs2" || gid === "premier" || gid === "faceit") return state.steamId.trim();
-      if (gid === "wow") return [state.wowCharName, state.wowRealm].filter(Boolean).join(" â€” ") || state.wowCharacterRealm.trim();
+      if (gid === "wow") return [state.wowCharName, state.wowRealm].filter(Boolean).join(" — ") || state.wowCharacterRealm.trim();
       return "";
     }
 
@@ -41,7 +41,7 @@
       const cur = state.cart[0]?.viewedCurrency || state.currency;
       const totalStr = hasCustom ? displayInCurrency(total, cur) + " + CUSTOM" : displayInCurrency(total, cur);
       const label = el.querySelector(".ely-sticky-order__text");
-      if (label) label.textContent = ui("Order") + ": " + lines + " " + ui("items") + " â€” " + totalStr;
+      if (label) label.textContent = ui("Order") + ": " + lines + " " + ui("items") + " — " + totalStr;
     }
 
     function bindOrderSummaryContext() {
@@ -131,7 +131,7 @@
       }
       if (wc || wrm) {
         const syncWowCartPlayerIds = () => {
-          const combined = [state.wowCharName, state.wowRealm].map(s => String(s || "").trim()).filter(Boolean).join(" â€” ");
+          const combined = [state.wowCharName, state.wowRealm].map(s => String(s || "").trim()).filter(Boolean).join(" — ");
           state.wowCharacterRealm = combined;
           state.cart.forEach(item => {
             if (item.gameId === "wow") item.playerId = combined;
@@ -140,10 +140,10 @@
         let cn = state.wowCharName || "";
         let rm = state.wowRealm || "";
         if (!cn && !rm && state.wowCharacterRealm) {
-          const parts = String(state.wowCharacterRealm).split(/\s*[â€”\-]\s*/);
+          const parts = String(state.wowCharacterRealm).split(/\s*[—\-]\s*/);
           if (parts.length >= 2) {
             cn = parts[0].trim();
-            rm = parts.slice(1).join(" â€” ").trim();
+            rm = parts.slice(1).join(" — ").trim();
           } else {
             cn = state.wowCharacterRealm.trim();
           }
@@ -657,7 +657,7 @@
       const category = game.categories.find(cat => cat.id === state.category);
       const list = game.categories.length ? game.services.filter(service => service.category === state.category) : game.services;
       $("serviceTitle").textContent = category ? ui(category.label) : ui(game.label) + " " + ui("Services");
-      $("serviceCopy").textContent = game.id === "arc" ? ui("Premium marketplace for loot, currencies, and raid services â€” open a card to quote and cart.") : ui("Select a service and adjust the order panel below.");
+      $("serviceCopy").textContent = game.id === "arc" ? ui("Premium marketplace for loot, currencies, and raid services — open a card to quote and cart.") : ui("Select a service and adjust the order panel below.");
       const isEmpty = list.length === 0;
       $("serviceHead").classList.toggle("is-hidden", list.length <= 1 && !isEmpty);
       $("serviceGrid").classList.toggle("is-hidden", list.length <= 1 && !isEmpty);
@@ -839,7 +839,7 @@
     }
 
     function premiumCardBullets() {
-      return `<ul class="service-card__bullets"><li>${ui("Manual delivery â€” Discord ticket & verified booster")}</li><li>${ui("Your currency on the ticket and in cart")}</li><li>${ui("No cheats â€” safety-first process")}</li></ul>`;
+      return `<ul class="service-card__bullets"><li>${ui("Manual delivery — Discord ticket & verified booster")}</li><li>${ui("Your currency on the ticket and in cart")}</li><li>${ui("No cheats — safety-first process")}</li></ul>`;
     }
 
     function buildDetailSpecs(service) {
@@ -849,18 +849,18 @@
       if (vg && vf) {
         const cat = typeof valorantCategoryContent !== "undefined" ? valorantCategoryContent[service.category] : null;
         if (cat && cat.highlights && cat.highlights.length) {
-          pkg = cat.highlights.slice(0, 4).map(h => ui(h)).join(" Â· ");
+          pkg = cat.highlights.slice(0, 4).map(h => ui(h)).join(" · ");
         }
       }
       if (!pkg) {
         const intro = ui(service.intro || "").trim();
-        pkg = intro.length > 12 ? intro.slice(0, 200) + (intro.length > 200 ? "â€¦" : "") : ui("Full delivery as configured in the order panel â€” tailored options you select below.");
+        pkg = intro.length > 12 ? intro.slice(0, 200) + (intro.length > 200 ? "…" : "") : ui("Full delivery as configured in the order panel — tailored options you select below.");
       }
       return `
         <h4 class="detail-specs__k">${ui("Package includes")}</h4>
         <p>${escapeHtml(pkg)}</p>
         <h4 class="detail-specs__k">${ui("Delivery method")}</h4>
-        <p>${escapeHtml(ui("Manual coordination through Discord after you paste your ticket â€” booster assigned by support."))}</p>
+        <p>${escapeHtml(ui("Manual coordination through Discord after you paste your ticket — booster assigned by support."))}</p>
         <h4 class="detail-specs__k">${ui("Safety & guarantee")}</h4>
         <p>${escapeHtml(ui("Verified boosters, transparent ticket text, and completion terms confirmed in Discord before play."))}</p>
       `;
@@ -1062,22 +1062,22 @@
           { title: "Review & Cart", copy: "Confirm the order summary, then add the line to your cart with the final total." }
         ],
         "valorant-placement": [
-          { title: "Placement Setup", copy: "Choose last known rank, number of placement games (1â€“5), and Solo or Duo." },
+          { title: "Placement Setup", copy: "Choose last known rank, number of placement games (1–5), and Solo or Duo." },
           { title: "Extras", copy: "Optional paid extras stack as a percentage on the EUR base before currency display." },
           { title: "Review & Cart", copy: "Check the summary and add the placement package to your cart." }
         ],
         "valorant-radiant": [
           { title: "Radiant Request", copy: "Pick the Radiant service style that fits your account goals." },
-          { title: "Custom Quote", copy: "Pricing is manual and depends on RR, schedule, and server â€” totals show as Custom Price." },
+          { title: "Custom Quote", copy: "Pricing is manual and depends on RR, schedule, and server — totals show as Custom Price." },
           { title: "Contact", copy: "Use Contact Us to reach ElysiumBoost on Discord with your request details." }
         ],
         "valorant-ranked-wins": [
-          { title: "Wins Package", copy: "Select your rank and number of wins (1â€“10). Radiant wins are quoted as Custom Price." },
+          { title: "Wins Package", copy: "Select your rank and number of wins (1–10). Radiant wins are quoted as Custom Price." },
           { title: "Mode & Extras", copy: "Toggle Duo or Solo and stack trusted extras as needed." },
           { title: "Review & Cart", copy: "Add the configured wins line to your cart when the total looks right." }
         ],
         "valorant-unrated": [
-          { title: "Package", copy: "Pick a casual unrated package for activity or requirements â€” no ranked pressure." },
+          { title: "Package", copy: "Pick a casual unrated package for activity or requirements — no ranked pressure." },
           { title: "Mode & Extras", copy: "Solo or Duo and optional extras apply on top of the package EUR base." },
           { title: "Review & Cart", copy: "Confirm the summary and add unrated games to your cart." }
         ],
@@ -1092,8 +1092,8 @@
           { title: "Review & Cart", copy: "Add the Battle Pass package to your cart when ready." }
         ],
         "valorant-coaching": [
-          { title: "Session Length", copy: "Choose 1â€“10 coaching hours (stepper); focus options such as VOD review are free and listed in your summary." },
-          { title: "Focus", copy: "Tick any combination of free focus options â€” they never change the hourly price." },
+          { title: "Session Length", copy: "Choose 1–10 coaching hours (stepper); focus options such as VOD review are free and listed in your summary." },
+          { title: "Focus", copy: "Tick any combination of free focus options — they never change the hourly price." },
           { title: "Review & Cart", copy: "Add coaching to your cart with your selected duration and notes." }
         ]
       };
@@ -1336,7 +1336,7 @@
       }
       if (includeFree) {
         valorantExtrasFree.forEach(ex => {
-          html += elyToggleRow(`data-val-extra-free="1" data-val-extra-label="${escapeHtml(ex.label)}"`, `${escapeHtml(ex.label)} â€” FREE`, false);
+          html += elyToggleRow(`data-val-extra-free="1" data-val-extra-label="${escapeHtml(ex.label)}"`, `${escapeHtml(ex.label)} — FREE`, false);
         });
       }
       html += `</div></div>`;
@@ -1367,12 +1367,12 @@
     }
 
     function valorantRRSelectHtml() {
-      const opts = ["0â€“20 RR", "21â€“40 RR", "41â€“60 RR", "61â€“80 RR", "81â€“100 RR"];
+      const opts = ["0–20 RR", "21–40 RR", "41–60 RR", "61–80 RR", "81–100 RR"];
       return `<div><label for="valRbRR">${ui("Current RR")}</label><select id="valRbRR">${opts.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join("")}</select></div>`;
     }
 
     function valorantRankTierAssetRel(rankLabel) {
-      if (rankLabel == null || rankLabel === "" || rankLabel === "â€”") return "";
+      if (rankLabel == null || rankLabel === "" || rankLabel === "—") return "";
       const norm = String(rankLabel).trim().toLowerCase();
       if (norm === "unranked" || norm === "radiant") return "";
       if (norm.startsWith("iron")) return "assets/rank-iron.png";
@@ -1452,14 +1452,14 @@
       let leftTierImg = "";
       let rightTierImg = "";
       if (type === "valorant-rank-boost") {
-        left = val("valRbCurrent") || "â€”";
-        right = val("valRbDesired") || "â€”";
+        left = val("valRbCurrent") || "—";
+        right = val("valRbDesired") || "—";
         leftK = ui("Current");
         rightK = ui("Desired");
         leftTierImg = valorantRankTierImageUrl(left);
         rightTierImg = valorantRankTierImageUrl(right);
       } else if (type === "valorant-placement") {
-        const rank = val("valPmRank") || "â€”";
+        const rank = val("valPmRank") || "—";
         const games = Math.max(1, Math.min(5, Math.round(num("valPmGames") || 5)));
         left = rank;
         right = `${games} ${ui("games")}`;
@@ -1467,12 +1467,12 @@
         rightK = ui("Games");
         leftTierImg = valorantRankTierImageUrl(left);
       } else if (type === "valorant-radiant") {
-        left = val("valRadOption") || "â€”";
+        left = val("valRadOption") || "—";
         right = "";
         leftK = ui("Service");
         leftTierImg = valorantRadiantBoostTierImageUrl();
       } else if (type === "valorant-ranked-wins") {
-        const rank = val("valRwRank") || "â€”";
+        const rank = val("valRwRank") || "—";
         const wins = Math.max(1, Math.min(10, Math.round(num("valRwWins") || 3)));
         left = rank;
         right = `${wins} ${ui("wins")}`;
@@ -1575,7 +1575,7 @@
       wrap.innerHTML = `
         <div id="valorantPathRail" class="valorant-path-rail${pathRailExtra}" aria-live="polite"></div>
         ${customize ? `<section class="valorant-customize-surface" aria-label="${escapeHtml(ui("Customize"))}"><h4 class="valorant-block-kicker">${escapeHtml(ui("Customize"))}</h4>${customize}</section>` : ""}
-        <p class="valorant-mini-promo">${escapeHtml(ui("Manual completion Â· VPN-safe routing Â· Discord confirmation on every order."))}</p>
+        <p class="valorant-mini-promo">${escapeHtml(ui("Manual completion · VPN-safe routing · Discord confirmation on every order."))}</p>
         <div class="valorant-summary-panel valorant-summary-panel--sticky">
           <h4 class="valorant-summary-title">${escapeHtml(ui("Breakdown"))}</h4>
           <div class="valorant-summary-dl" id="valorantSummaryDl"></div>
@@ -1620,7 +1620,7 @@
                   <span class="discounted-tag" id="coinDiscountTag">${ui("Discounted")}</span>
                 </div>
               </div>
-              <span class="coin-readout-limits">${ui("100k minimum")} Â· ${ui("12M maximum")}</span>
+              <span class="coin-readout-limits">${ui("100k minimum")} · ${ui("12M maximum")}</span>
             </div>
             <div class="coin-range-wrap">
               <input id="coinAmount" class="coin-range-input" type="range" min="${COIN_SLIDER_MIN}" max="${COIN_SLIDER_MAX}" step="100000" value="100000">
@@ -1650,7 +1650,7 @@
                   <span class="discounted-tag" id="seedDiscountTag">${ui("Discounted")}</span>
                 </div>
               </div>
-              <span class="coin-readout-limits">${ui("100 minimum")} Â· ${ui("2,000 maximum")}</span>
+              <span class="coin-readout-limits">${ui("100 minimum")} · ${ui("2,000 maximum")}</span>
             </div>
             <div class="coin-range-wrap">
               <input id="seedAmount" class="coin-range-input" type="range" min="${SEED_SLIDER_MIN}" max="${SEED_SLIDER_MAX}" step="100" value="100">
@@ -1957,7 +1957,7 @@
         </div>`;
       }
       if (type === "valorant-radiant") {
-        const opts = ["Immortal III â†’ Radiant", "Radiant Push", "Radiant Duo", "Radiant Maintenance"];
+        const opts = ["Immortal III → Radiant", "Radiant Push", "Radiant Duo", "Radiant Maintenance"];
         return `
         <div class="valorant-configurator">
           ${valorantConfiguratorCompactHeader()}
@@ -1970,7 +1970,7 @@
                 </div>
                 <select id="valRadOption">${opts.map((o, i) => `<option value="${escapeHtml(o)}"${i === 0 ? " selected" : ""}>${escapeHtml(o)}</option>`).join("")}</select>
               </div>
-              <p class="valorant-micro-note">${escapeHtml(ui("Custom quote â€” final price confirmed in Discord."))}</p>
+              <p class="valorant-micro-note">${escapeHtml(ui("Custom quote — final price confirmed in Discord."))}</p>
             </div>
             <div class="field-block field-block--tight">${valorantServerSelectHtml()}</div>
           </div>
@@ -2355,8 +2355,8 @@
             if (tier) {
               const pct = Math.round(tier.discount * 100);
               msg = `Discount unlocked: ${pct}% OFF`;
-              if (next) msg += ` Â· Next: ${Math.round(next.discount * 100)}% OFF at ${next.amount.toLocaleString()} coins`;
-              else msg += " Â· Highest tier on slider.";
+              if (next) msg += ` · Next: ${Math.round(next.discount * 100)}% OFF at ${next.amount.toLocaleString()} coins`;
+              else msg += " · Highest tier on slider.";
             } else if (next) {
               const need = next.amount - amount;
               msg = `Add ${need.toLocaleString()} more coins for ${Math.round(next.discount * 100)}% OFF (tier at ${next.amount.toLocaleString()})`;
@@ -2396,8 +2396,8 @@
             if (tier) {
               const pct = Math.round(tier.discount * 100);
               msg = `Bulk discount unlocked: ${pct}% OFF`;
-              if (next) msg += ` Â· Next: ${Math.round(next.discount * 100)}% OFF at ${next.amount.toLocaleString()} seeds`;
-              else msg += " Â· Highest tier on slider.";
+              if (next) msg += ` · Next: ${Math.round(next.discount * 100)}% OFF at ${next.amount.toLocaleString()} seeds`;
+              else msg += " · Highest tier on slider.";
             } else if (next) {
               const need = next.amount - amount;
               msg = `Add ${need.toLocaleString()} more seeds for ${Math.round(next.discount * 100)}% OFF (tier at ${next.amount.toLocaleString()})`;
@@ -2725,7 +2725,7 @@
         result.lines.push(`${qty}x Workshop Benches â‰ˆ ${moneyUSD(cost)}`);
       });
 
-      tryMatch(/scrappy\s*(?:level\s*)?(\d+)\s*(?:to|->|â€“|â€”)\s*(\d+)/g, m => {
+      tryMatch(/scrappy\s*(?:level\s*)?(\d+)\s*(?:to|->|–|—)\s*(\d+)/g, m => {
         const from = parseInt(m[1], 10);
         const to = parseInt(m[2], 10);
         if (to <= from) return;
@@ -2734,7 +2734,7 @@
         result.lines.push(`Scrappy ${from} to ${to} â‰ˆ ${moneyUSD(cost)}`);
       });
 
-      tryMatch(/(?:level|lvl)\s*(\d+)\s*(?:to|->|â€“|â€”)\s*(\d+)/g, m => {
+      tryMatch(/(?:level|lvl)\s*(\d+)\s*(?:to|->|–|—)\s*(\d+)/g, m => {
         const from = parseInt(m[1], 10);
         const to = parseInt(m[2], 10);
         if (to <= from) return;
@@ -2878,8 +2878,8 @@
         addRow("Paid Extras", "None");
         addRow("Free Extras", "None");
         addRow("Base Price", "Custom Price");
-        addRow("Extras Price", "â€”");
-        addRow("Discount", "â€”");
+        addRow("Extras Price", "—");
+        addRow("Discount", "—");
         addRow("Total Price", "Custom Price");
         dPush("Game", "Valorant");
         dPush("Service Category", catTitle);
@@ -2889,8 +2889,8 @@
         dPush("Paid Extras", "None");
         dPush("Free Extras", "None");
         dPush("Base Price", "Custom Price");
-        dPush("Extras Price", "â€”");
-        dPush("Discount", "â€”");
+        dPush("Extras Price", "—");
+        dPush("Discount", "—");
         dPush("Total Price", "Custom Price");
         return {
           total: 0,
@@ -2931,16 +2931,16 @@
           };
         }
         if (rb.custom) {
-          const rr = val("valRbRR") || "â€”";
+          const rr = val("valRbRR") || "—";
           addRow("Current Rank", cur);
           addRow("Desired Rank", des);
           addRow("Current RR", rr);
-          addRow("Selected Options", cur + " â†’ " + des);
+          addRow("Selected Options", cur + " → " + des);
           addRow("Paid Extras", ex.paid.join(", ") || "None");
           addRow("Free Extras", ex.free.join(", ") || "None");
           addRow("Base Price", "Custom Price");
-          addRow("Extras Price", "â€”");
-          addRow("Discount", "â€”");
+          addRow("Extras Price", "—");
+          addRow("Discount", "—");
           addRow("Total Price", "Custom Price");
           dPush("Game", "Valorant");
           dPush("Service Category", catTitle);
@@ -2952,8 +2952,8 @@
           dPush("Paid Extras", ex.paid.join(", ") || "None");
           dPush("Free Extras", ex.free.join(", ") || "None");
           dPush("Base Price", "Custom Price");
-          dPush("Extras Price", "â€”");
-          dPush("Discount", "â€”");
+          dPush("Extras Price", "—");
+          dPush("Discount", "—");
           dPush("Total Price", "Custom Price");
           return {
             total: 0,
@@ -2968,8 +2968,8 @@
           };
         }
         baseEur = rb.baseEur;
-        selectedSummary = `${cur} â†’ ${des}`;
-        const rr = val("valRbRR") || "â€”";
+        selectedSummary = `${cur} → ${des}`;
+        const rr = val("valRbRR") || "—";
         addRow("Current Rank", cur);
         addRow("Desired Rank", des);
         addRow("Current RR", rr);
@@ -2991,7 +2991,7 @@
           };
         }
         baseEur = per * games;
-        selectedSummary = `${rank} Ã— ${games} games`;
+        selectedSummary = `${rank} × ${games} games`;
         addRow("Last Known Rank", rank);
         addRow("Games", String(games));
         addRow("Selected Options", selectedSummary);
@@ -3001,12 +3001,12 @@
         if (rank === "Radiant") {
           addRow("Current Rank", rank);
           addRow("Wins", String(wins));
-          addRow("Selected Options", `${rank} â€” ${wins} wins`);
+          addRow("Selected Options", `${rank} — ${wins} wins`);
           addRow("Paid Extras", ex.paid.join(", ") || "None");
           addRow("Free Extras", ex.free.join(", ") || "None");
           addRow("Base Price", "Custom Price");
-          addRow("Extras Price", "â€”");
-          addRow("Discount", "â€”");
+          addRow("Extras Price", "—");
+          addRow("Discount", "—");
           addRow("Total Price", "Custom Price");
           dPush("Game", "Valorant");
           dPush("Service Category", catTitle);
@@ -3017,8 +3017,8 @@
           dPush("Paid Extras", ex.paid.join(", ") || "None");
           dPush("Free Extras", ex.free.join(", ") || "None");
           dPush("Base Price", "Custom Price");
-          dPush("Extras Price", "â€”");
-          dPush("Discount", "â€”");
+          dPush("Extras Price", "—");
+          dPush("Discount", "—");
           dPush("Total Price", "Custom Price");
           return {
             total: 0,
@@ -3046,7 +3046,7 @@
           };
         }
         baseEur = per * wins;
-        selectedSummary = `${rank} â€” ${wins} wins`;
+        selectedSummary = `${rank} — ${wins} wins`;
         addRow("Current Rank", rank);
         addRow("Wins", String(wins));
         addRow("Selected Options", selectedSummary);
@@ -3094,12 +3094,12 @@
       addRow("Base Price", displayMoney(valorantEurToStoredTotal(baseEur)));
       if (duoMult > 1) addRow("Duo (+15%)", displayMoney(valorantEurToStoredTotal(baseEur * (duoMult - 1))));
       addRow("Extras Price", extrasEur > 0 ? displayMoney(valorantEurToStoredTotal(extrasEur)) : displayMoney(0));
-      addRow("Discount", "â€”");
+      addRow("Discount", "—");
       addRow("Total Price", displayMoney(stored));
 
       dPush("Game", "Valorant");
       dPush("Service Category", catTitle);
-      if (type === "valorant-rank-boost") dPush("Current RR", val("valRbRR") || "â€”");
+      if (type === "valorant-rank-boost") dPush("Current RR", val("valRbRR") || "—");
       dPush("Selected Options", selectedSummary);
       dPush("Server", server + " (informational)");
       dPush("Mode", modeLabel);
@@ -3108,7 +3108,7 @@
       dPush("Base Price", displayMoney(valorantEurToStoredTotal(baseEur)));
       if (duoMult > 1) dPush("Duo (+15%)", displayMoney(valorantEurToStoredTotal(baseEur * (duoMult - 1))));
       dPush("Extras Price", extrasEur > 0 ? displayMoney(valorantEurToStoredTotal(extrasEur)) : displayMoney(0));
-      dPush("Discount", "â€”");
+      dPush("Discount", "—");
       dPush("Total Price", displayMoney(stored));
 
       return {

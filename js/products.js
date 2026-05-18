@@ -1,4 +1,4 @@
-﻿    function fastService(id, title, icon, price, short, intro) {
+    function fastService(id, title, icon, price, short, intro) {
       return {
         id, category: "services", title, cardTitle: title, icon, fromUSD: price, suffix: "", short, start: "By Request", form: "fast", intro
       };
@@ -230,7 +230,7 @@
         heroPosition: "center 15%",
         kicker: "Valorant",
         title: "Rank calculator & boosts",
-        copy: "Dial in rank paths, placements, and wins with live pricing â€” then confirm everything in Discord.",
+        copy: "Dial in rank paths, placements, and wins with live pricing — then confirm everything in Discord.",
         categories: valorantCategories,
         popular: ["val-rank", "val-placement", "val-wins", "val-coach"],
         services: [
@@ -253,7 +253,7 @@
         heroPosition: "center center",
         kicker: "Boost+",
         title: "Boost+ Teammate Services",
-        copy: "Boost+ teammate sessions are coming soon â€” ordering opens after listings go live.",
+        copy: "Boost+ teammate sessions are coming soon — ordering opens after listings go live.",
         categories: [],
         popular: [],
         services: []
@@ -337,7 +337,7 @@
         heroPosition: "center center",
         kicker: "Counter-Strike 2",
         title: "Counter-Strike 2",
-        copy: "Premier and FACEIT CS2 services are coming soon â€” one hub for matchmaking and competitive queues.",
+        copy: "Premier and FACEIT CS2 services are coming soon — one hub for matchmaking and competitive queues.",
         categories: [],
         popular: [],
         services: []
@@ -351,11 +351,11 @@
         heroPosition: "center center",
         kicker: "Arc Raiders",
         title: "Premium extraction marketplace",
-        copy: "Loot, currencies, blueprints, and raid services â€” configure in-site, then lock details with our team in Discord.",
+        copy: "Loot, currencies, blueprints, and raid services — configure in-site, then lock details with our team in Discord.",
         categories: [
           { id: "blueprints", label: "Blueprints", icon: "i-blueprint", badge: "HOT", badgeTone: "hot", microBadge: "Manual Delivery" },
           { id: "guns", label: "Weapons & Gear", icon: "i-gun", badge: "PRICE DROP", badgeTone: "price-drop", microBadge: "In-Raid Delivery" },
-          { id: "loadouts", label: "Loadout & Augments", icon: "i-loadout", badge: "POPULAR", badgeTone: "popular", microBadge: "Shields Â· Extras" },
+          { id: "loadouts", label: "Loadout & Augments", icon: "i-loadout", badge: "POPULAR", badgeTone: "popular", microBadge: "Shields · Extras" },
           { id: "coins", label: "Raider Coins", icon: "i-coins", badge: "PRICE DROP", badgeTone: "price-drop", microBadge: "Fast Discord" },
           { id: "seeds", label: "Assorted Seeds", icon: "i-coins", badge: "NEW", badgeTone: "new", microBadge: "Bulk deals" },
           { id: "depositary", label: "Depositary", icon: "i-depository", microBadge: "Secure storage" },
@@ -437,7 +437,7 @@
       if (location.hash !== frag) history.replaceState(null, "", nextUrl);
     }
 
-    /** Single source for â€œordering disabledâ€ titles; used before order-center-upgrade loads. */
+    /** Single source for “ordering disabled” titles; used before order-center-upgrade loads. */
     window.ELY_COMING_SOON_GAME_IDS = new Set(["circle", "wow", "cs2"]);
 
 
