@@ -1401,6 +1401,10 @@
       pointer-events: none;
     }
 
+    .home-game-card[data-home-game="cs2"] .home-game-media {
+      object-position: 28% center;
+    }
+
     .home-game-card::before {
       content: "";
       position: absolute;

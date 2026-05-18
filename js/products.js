@@ -332,7 +332,7 @@
         id: "cs2",
         label: "Counter-Strike 2",
         tabIcon: "i-star",
-        homeCardImage: "assets/backgrounds/cs2-premier-home-card.webp?v=social-card-live1",
+        homeCardImage: "assets/cs2-bg.webp",
         heroBg: "assets/backgrounds/cs2-premier-bg.webp?v=social-card-live1",
         heroPosition: "center center",
         kicker: "Counter-Strike 2",
