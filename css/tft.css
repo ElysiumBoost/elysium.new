@@ -142,3 +142,70 @@
   letter-spacing: .03em;
   vertical-align: middle;
 }
+
+.tft-addon-chip--free {
+  background: rgba(122, 77, 255, .18);
+  color: var(--purple-2, #9b68ff);
+}
+
+/* ============================================================
+   TFT Rank Up form — section labels
+   ============================================================ */
+
+.tft-form-section-label {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 14px 0 6px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(122, 77, 255, .18);
+}
+
+.tft-rank-up-form > .tft-form-section-label:first-child {
+  margin-top: 2px;
+}
+
+.tft-form-section-label--sub {
+  margin-top: 20px;
+}
+
+/* Full-width stacked field blocks inside TFT form */
+.tft-rank-up-form .field-block {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Add-on row spacing */
+.tft-rank-up-form .tft-addon-row {
+  padding: 5px 0;
+}
+
+/* ============================================================
+   TFT — "Secure Order Summary" label on the right panel
+   ============================================================ */
+
+.order-card.is-tft-split .order-card-body::before {
+  content: "\1F512\00A0 Secure Order Summary";
+  display: block;
+  flex: 0 0 auto;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: .8;
+  padding: 10px 0 8px;
+  border-bottom: 1px solid rgba(255, 209, 102, .12);
+  margin-bottom: 4px;
+}
+
+/* Mobile — single column, summary flows below form naturally */
+@media (max-width: 1080px) {
+  .order-card.is-tft-split .order-card-body::before {
+    display: none;
+  }
+}

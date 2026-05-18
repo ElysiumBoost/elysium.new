@@ -1848,30 +1848,39 @@
         const srvOpts = valorantServers.map(s => `<option value="${escapeHtml(s)}"${s === "EU" ? " selected" : ""}>${escapeHtml(s)}</option>`).join("");
         return `
         <div class="valorant-configurator tft-rank-up-form">
-          <div class="valorant-rank-tier-grid">
-            <div class="field-block field-block--tight valorant-rank-field">
-              <label for="tftCurrentRank">Current Rank</label>
-              <select id="tftCurrentRank">${rankOpts}</select>
-              <span id="tftCurrentDivWrap" class="tft-div-wrap">
-                <label for="tftCurrentDiv">Division</label>
-                <select id="tftCurrentDiv">${divOpts}</select>
-              </span>
-            </div>
-            <div class="field-block field-block--tight valorant-rank-field">
-              <label for="tftDesiredRank">Desired Rank</label>
-              <select id="tftDesiredRank">${desRankOpts}</select>
-              <span id="tftDesiredDivWrap" class="tft-div-wrap">
-                <label for="tftDesiredDiv">Division</label>
-                <select id="tftDesiredDiv">${divOpts}</select>
-              </span>
-            </div>
+          <p class="tft-form-section-label">Rank Configuration</p>
+          <div class="field-block field-block--tight">
+            <label for="tftCurrentRank">Current Rank</label>
+            <select id="tftCurrentRank">${rankOpts}</select>
+            <span id="tftCurrentDivWrap" class="tft-div-wrap">
+              <label for="tftCurrentDiv">Division</label>
+              <select id="tftCurrentDiv">${divOpts}</select>
+            </span>
+          </div>
+          <div class="field-block field-block--tight">
+            <label for="tftDesiredRank">Desired Rank</label>
+            <select id="tftDesiredRank">${desRankOpts}</select>
+            <span id="tftDesiredDivWrap" class="tft-div-wrap">
+              <label for="tftDesiredDiv">Division</label>
+              <select id="tftDesiredDiv">${divOpts}</select>
+            </span>
           </div>
           <div class="field-block field-block--tight">
             <label for="tftServer">Server</label>
             <select id="tftServer">${srvOpts}</select>
           </div>
-          <div class="field-block field-block--tight tft-addon-row">
+          <p class="tft-form-section-label tft-form-section-label--sub">Add-ons</p>
+          <div class="tft-addon-row">
             ${elyToggleRow('id="tftGamerGirl"', 'Gamer Girl <span class="tft-addon-chip">+$6</span>', false)}
+          </div>
+          <div class="tft-addon-row">
+            ${elyToggleRow('id="tftSoloOnly"', 'Solo Only <span class="tft-addon-chip tft-addon-chip--free">Included</span>', false)}
+          </div>
+          <div class="tft-addon-row">
+            ${elyToggleRow('id="tftAppearOffline"', 'Appear Offline <span class="tft-addon-chip tft-addon-chip--free">Included</span>', false)}
+          </div>
+          <div class="tft-addon-row">
+            ${elyToggleRow('id="tftExpress"', 'Express <span class="tft-addon-chip">+20%</span>', false)}
           </div>
           <p class="valorant-rb-hint" id="tftRankHint" hidden></p>
         </div>`;
