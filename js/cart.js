@@ -568,6 +568,7 @@
       $("categoryBar").classList.toggle("hidden", game.categories.length === 0);
       $("categoryBar").classList.toggle("circle-mode", game.id === "circle");
       $("categoryBar").classList.toggle("neon-game-cats", game.id === "wow");
+      $("categoryBar").classList.toggle("tft-cats", game.id === "tft");
       if (game.id === "wow") {
         const catSvg = wowCategorySvg;
         $("categoryScroll").innerHTML = game.categories.map(cat => {
@@ -1527,15 +1528,17 @@
         String(service.form || "").startsWith("valorant-")
       );
       const isArcConfigurator = Boolean(service && game?.id === "arc");
-      const split = isValorantForm || isArcConfigurator;
+      const isTftForm = Boolean(service && game?.id === "tft");
+      const split = isValorantForm || isArcConfigurator || isTftForm;
       const card = document.querySelector(".order-card");
       section.classList.toggle("detail--valorant-layout", split);
       if (card) {
         if (!split) {
-          card.classList.remove("is-valorant", "is-arc-split");
+          card.classList.remove("is-valorant", "is-arc-split", "is-tft-split");
         } else {
           card.classList.toggle("is-valorant", isValorantForm);
           card.classList.toggle("is-arc-split", isArcConfigurator && !isValorantForm);
+          card.classList.toggle("is-tft-split", isTftForm && !isValorantForm && !isArcConfigurator);
         }
       }
       if (split) {
@@ -1548,7 +1551,7 @@
     }
 
     function teardownValorantOrderChrome() {
-      document.querySelector(".order-card")?.classList.remove("is-valorant");
+      document.querySelector(".order-card")?.classList.remove("is-valorant", "is-tft-split");
       document.querySelectorAll("[data-valorant-order-chrome]").forEach(n => n.remove());
     }
 

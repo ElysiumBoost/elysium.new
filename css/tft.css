@@ -1,3 +1,119 @@
+/* ============================================================
+   TFT — Category bar layout
+   ============================================================ */
+
+/* Hide carousel arrows — TFT has only 3 centered cards */
+.category-bar.tft-cats .cat-arrow {
+  display: none;
+}
+
+/* Remove the side arrow columns from the shell grid */
+.category-bar.tft-cats .category-shell {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 152px;
+}
+
+.category-bar.tft-cats .category-scroll {
+  min-height: 152px;
+  justify-content: center;
+  gap: 16px;
+  padding: 14px 16px;
+}
+
+/* Wider, taller TFT category cards */
+.category-bar.tft-cats .cat-btn {
+  width: 210px;
+  min-width: 180px;
+  min-height: 148px;
+}
+
+.category-bar.tft-cats .cat-btn .service-thumb {
+  height: 108px;
+}
+
+.category-bar.tft-cats .cat-btn .service-thumb img {
+  object-fit: cover;
+}
+
+.category-bar.tft-cats .cat-label {
+  font-size: 14px;
+  letter-spacing: .05em;
+  text-align: center;
+}
+
+.category-bar.tft-cats .cat-micro {
+  text-align: center;
+  font-size: 10px;
+}
+
+/* Premium gold active state for TFT cards */
+.category-bar.tft-cats .cat-btn.active {
+  border-color: rgba(255, 209, 102, .55);
+  box-shadow:
+    0 0 0 1px rgba(255, 209, 102, .18),
+    0 18px 42px rgba(0, 0, 0, .4),
+    0 0 28px rgba(255, 209, 102, .1),
+    inset 0 1px 0 rgba(255, 255, 255, .14);
+}
+
+/* ============================================================
+   TFT — Detail panel (sticky order card on desktop)
+   ============================================================ */
+
+.order-card.is-tft-split {
+  position: sticky;
+  top: 88px;
+  max-height: calc(100vh - 100px);
+  overflow: visible;
+  align-self: start;
+}
+
+.order-card.is-tft-split .order-panel-head {
+  flex-shrink: 0;
+}
+
+.order-card.is-tft-split .order-card-body {
+  display: flex;
+  flex-direction: column;
+  padding: 0 12px 14px;
+  gap: 0;
+  align-items: stretch;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Mobile resets — mirrors global .is-valorant mobile reset */
+@media (max-width: 1080px) {
+  .order-card.is-tft-split .order-card-body {
+    overflow: visible;
+  }
+  .order-card.is-tft-split .summary-total {
+    flex: none;
+    max-height: none;
+    overflow: visible;
+  }
+  .category-bar.tft-cats .cat-btn {
+    width: 180px;
+    min-width: 150px;
+  }
+}
+
+@media (max-width: 520px) {
+  .category-bar.tft-cats .category-scroll {
+    flex-wrap: wrap;
+    overflow-x: hidden;
+  }
+  .category-bar.tft-cats .cat-btn {
+    width: calc(50% - 10px);
+    min-width: 130px;
+  }
+}
+
+/* ============================================================
+   TFT Rank Up form — scoped to .tft-rank-up-form
+   ============================================================ */
+
 /* TFT Rank Up form — scoped to .tft-rank-up-form */
 
 .tft-rank-up-form .tft-div-wrap {
