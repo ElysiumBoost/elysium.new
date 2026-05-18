@@ -254,7 +254,8 @@
 .tft-rank-up-form .valorant-rank-tier-img {
   max-width: 100px;
   max-height: 100px;
-  mix-blend-mode: multiply;
+  mix-blend-mode: normal;
+  filter: none;
 }
 
 /* Division select spacing inside the div-wrap */
