@@ -518,6 +518,7 @@
       services: "assets/thumb-private-order.webp",
       "rank-boosting": "assets/valorant-rank-boosting.webp",
       "placement-matches": "assets/valorant-placement-matches.webp",
+      "tft-placement": "assets/tft-placement-matches.webp",
       "radiant-boost": "assets/valorant-radiant-boost.webp",
       "ranked-wins": "assets/valorant-ranked-wins.webp",
       "unrated-games": "assets/valorant-unrated-games.webp",
