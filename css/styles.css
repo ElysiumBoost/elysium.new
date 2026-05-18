@@ -7228,3 +7228,26 @@
   min-width: 180px;
   max-width: 180px;
 }
+
+/* Force-hide TFT category arrows */
+.category-shell.is-static-centered #catPrev,
+.category-shell.is-static-centered #catNext,
+.category-shell.is-static-centered .cat-arrow {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.category-shell.is-static-centered {
+  display: flex;
+  justify-content: center !important;
+}
+
+.category-shell.is-static-centered .category-scroll-column {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.category-shell.is-static-centered .category-scroll {
+  justify-content: center !important;
+}

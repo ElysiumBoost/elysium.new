@@ -299,11 +299,11 @@
         heroPosition: "center center",
         kicker: "Teamfight Tactics",
         title: "Teamfight Tactics",
-        copy: "Teamfight Tactics services are coming soon — choose Coaching, Double Up, or Rank Up. Full ordering opens after listings go live.",
+        copy: "Teamfight Tactics services are available now. Choose Coaching, Double Up, or Rank Up and confirm details through Discord.",
         categories: [
           { id: "coaching", label: "Coaching", icon: "i-coach", badge: "NEW", badgeTone: "new", microBadge: "Personal guidance", thumb: "assets/tft-coaching.webp" },
           { id: "double-up", label: "Double Up", icon: "i-star", badge: "NEW", badgeTone: "new", microBadge: "Duo mode", thumb: "assets/tft-double-up.webp" },
-          { id: "rank-up", label: "Rank Up", icon: "i-rank", badge: "COMING SOON", badgeTone: "recommended", microBadge: "Rank climb", thumb: "assets/tft-rank-up.webp" }
+          { id: "rank-up", label: "Rank Up", icon: "i-rank", badge: "POPULAR", badgeTone: "recommended", microBadge: "From $7", thumb: "assets/tft-rank-up.webp" }
         ],
         popular: [],
         services: [
@@ -437,6 +437,7 @@
 
     /** Single source for â€œordering disabledâ€ titles; used before order-center-upgrade loads. */
     window.ELY_COMING_SOON_GAME_IDS = new Set(["circle", "wow", "cs2"]);
+
 
 
 
