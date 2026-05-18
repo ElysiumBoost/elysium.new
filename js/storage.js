@@ -8,6 +8,7 @@ function gameSlugForPreview(gameLabel) {
   const g = String(gameLabel || "");
   if (g.includes("Arc")) return "AR";
   if (g.includes("Valorant")) return "VAL";
+  if (g.includes("Counter-Strike") || g.includes("CS2")) return "CS2";
   if (g.includes("Premier")) return "CS2";
   if (g.includes("Faceit")) return "FCT";
   if (g.includes("League")) return "LOL";
@@ -76,6 +77,10 @@ function applyNavRecoveryOnce() {
     const j = JSON.parse(raw);
     let dirty = false;
     if (j.game != null) {
+      if (j.game === "premier" || j.game === "faceit") {
+        j.game = "cs2";
+        dirty = true;
+      }
       if (!games.some(g => g.id === j.game)) {
         j.game = null;
         j.category = null;
@@ -130,7 +135,15 @@ function restoreOrderState() {
     const raw = localStorage.getItem(ORDER_STATE_KEY);
     if (!raw) return;
     const j = JSON.parse(raw);
-    if (Array.isArray(j.cart)) state.cart = j.cart;
+    if (Array.isArray(j.cart)) {
+      j.cart.forEach(it => {
+        if (it && (it.gameId === "premier" || it.gameId === "faceit")) {
+          it.gameId = "cs2";
+          it.game = "Counter-Strike 2";
+        }
+      });
+      state.cart = j.cart;
+    }
     if (j.currency && rates[j.currency]) {
       state.currency = j.currency;
       const sel = $("currency");
@@ -158,6 +171,7 @@ function restoreOrderState() {
       }
     }
     if (typeof j.cartDrawerCompact === "boolean") state.cartDrawerCompact = j.cartDrawerCompact;
+    if (j.game === "premier" || j.game === "faceit") j.game = "cs2";
     const hashGame = parseGameHash();
     if (!hashGame && j.game && games.some(g => g.id === j.game)) {
       state.game = j.game;

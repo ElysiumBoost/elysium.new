@@ -609,7 +609,10 @@
               </label>`;
       }
       if (!anyField) {
-        return `<div class="order-context-panel order-context-panel--minimal" role="region"><p class="order-context-hint">${escapeHtml(ui("Use Embark ID above for Arc Raiders. This cart has no extra account fields."))}</p></div>`;
+        const hint = cartNeedsArcId()
+          ? ui("Use Embark ID above for Arc Raiders. This cart has no extra account fields.")
+          : ui("No extra account fields are required for this order.");
+        return `<div class="order-context-panel order-context-panel--minimal" role="region"><p class="order-context-hint">${escapeHtml(hint)}</p></div>`;
       }
       return `<div class="order-context-panel" role="region" aria-labelledby="orderCtxTitle">
             <div id="orderCtxTitle" class="order-context-title">${escapeHtml(ui("Order context"))}</div>
@@ -628,7 +631,7 @@
       } else if (gid === "lol") {
         rows += `<div><dt>${ui("Riot ID")}</dt><dd>${escapeHtml((item.playerId || state.lolRiotId || "").trim() || "—")}</dd></div>`;
         rows += `<div><dt>${ui("Server")}</dt><dd>${escapeHtml(state.lolServer || "—")}</dd></div>`;
-      } else if (gid === "premier" || gid === "faceit") {
+      } else if (gid === "premier" || gid === "faceit" || gid === "cs2") {
         rows += `<div><dt>${ui("Steam / friend code")}</dt><dd>${escapeHtml((item.playerId || state.steamId || "").trim() || "—")}</dd></div>`;
       } else if (gid === "wow") {
         rows += `<div><dt>${ui("Region")}</dt><dd>${escapeHtml(item.region || state.orderRegion || "—")}</dd></div>`;
@@ -661,7 +664,7 @@
         lines.push(`    LoL Riot ID: ${(item.playerId || state.lolRiotId || "").trim() || "—"}`);
         lines.push(`    LoL server: ${state.lolServer || "—"}`);
       }
-      if (gid === "premier" || gid === "faceit") {
+      if (gid === "premier" || gid === "faceit" || gid === "cs2") {
         lines.push(`    Steam / friend code: ${(item.playerId || state.steamId || "").trim() || "—"}`);
       }
       if (gid === "wow") {
@@ -1339,10 +1342,7 @@
       pushGameServices(games.find(g => g.id === "arc"));
       pushGameServices(games.find(g => g.id === "valorant"));
       pushGameServices(games.find(g => g.id === "wow"));
-      pushGameServices(games.find(g => g.id === "circle"));
       pushGameServices(games.find(g => g.id === "lol"));
-      pushGameServices(games.find(g => g.id === "faceit"));
-      pushGameServices(games.find(g => g.id === "premier"));
       pushGameServices(games.find(g => g.id === "social"));
       const pushCategoryHits = game => {
         if (!game || !game.categories?.length) return;

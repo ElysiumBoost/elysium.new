@@ -1357,6 +1357,18 @@
       margin: 26px 0 48px;
     }
 
+    .home-grid.home-grid--featured-last {
+      align-items: stretch;
+    }
+
+    .home-game-card.home-game-card--boost-featured {
+      grid-column: 1 / -1;
+      max-width: min(920px, 100%);
+      width: 100%;
+      justify-self: center;
+      min-height: 260px;
+    }
+
     .home-game-card {
       min-height: 300px;
       border: 1px solid var(--line);

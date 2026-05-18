@@ -129,7 +129,10 @@
       });
     }
 
-    $("addToCart")?.addEventListener("click", addToCart);
+    $("addToCart")?.addEventListener("click", () => {
+      const fn = window.addToCart;
+      if (typeof fn === "function") fn();
+    });
     $("clearService")?.addEventListener("click", clearServiceForm);
     $("cartOpen")?.addEventListener("click", openCart);
     $("cartClose")?.addEventListener("click", closeCart);
