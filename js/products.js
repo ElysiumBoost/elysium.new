@@ -301,10 +301,10 @@
         title: "Teamfight Tactics",
         copy: "Teamfight Tactics services are available now. Choose from Rank Up, Placement Matches, Coaching, or Double Up and confirm details through Discord.",
         categories: [
-          { id: "rank-up", label: "Rank Up", icon: "i-rank", badge: "POPULAR", badgeTone: "recommended", microBadge: "From $7", thumb: "assets/tft-rank-up.webp" },
-          { id: "tft-placement", label: "Placement Matches", icon: "i-rank", badge: "NEW", badgeTone: "new", microBadge: "★★★★★ 4.9/5", thumb: "assets/tft-placement-matches.webp" },
-          { id: "coaching", label: "Coaching", icon: "i-coach", badge: "NEW", badgeTone: "new", microBadge: "Personal guidance", thumb: "assets/tft-coaching.webp" },
-          { id: "double-up", label: "Double Up", icon: "i-star", badge: "NEW", badgeTone: "new", microBadge: "Duo mode", thumb: "assets/tft-double-up.webp" }
+          { id: "rank-up", label: "Rank Up", icon: "i-rank", badge: "POPULAR", badgeTone: "recommended", thumb: "assets/tft-rank-up.webp" },
+          { id: "tft-placement", label: "Placement Matches", icon: "i-rank", badge: "NEW", badgeTone: "new", thumb: "assets/tft-placement-matches.webp" },
+          { id: "coaching", label: "Coaching", icon: "i-coach", badge: "NEW", badgeTone: "new", thumb: "assets/tft-coaching.webp" },
+          { id: "double-up", label: "Double Up", icon: "i-star", badge: "NEW", badgeTone: "new", thumb: "assets/tft-double-up.webp" }
         ],
         popular: [],
         services: [
