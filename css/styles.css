@@ -311,10 +311,18 @@
     .topbar-inner {
       min-height: 70px;
       display: grid;
-      grid-template-columns: minmax(190px, auto) minmax(120px, 1fr) minmax(280px, auto);
+      grid-template-columns: minmax(0, auto) minmax(260px, 1fr) minmax(280px, auto);
       align-items: center;
       column-gap: 18px;
       row-gap: 10px;
+    }
+
+    .brand-zone {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      justify-self: start;
     }
 
     .brand {
@@ -325,6 +333,34 @@
       justify-self: start;
       text-decoration: none;
       color: inherit;
+    }
+
+    .primary-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(12px, 2.2vw, 26px);
+      min-width: 0;
+      justify-self: center;
+    }
+
+    .primary-nav a {
+      color: rgba(247, 245, 255, .82);
+      font-family: var(--display);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color .18s ease, text-shadow .18s ease;
+    }
+
+    .primary-nav a:hover,
+    .primary-nav a:focus-visible {
+      color: #fff;
+      text-shadow: 0 0 18px rgba(139, 92, 246, .32);
+      outline: none;
     }
 
     .brand-mark-wrap {
@@ -374,6 +410,10 @@
       .brand-mark {
         width: 48px;
         height: 48px;
+      }
+      .game-menu-btn {
+        padding: 0 10px;
+        font-size: 12px;
       }
     }
 
@@ -6675,7 +6715,7 @@
         gap: 10px 12px;
         grid-template-columns: minmax(0, 1fr) auto;
       }
-      .brand {
+      .brand-zone {
         grid-column: 1;
         grid-row: 1;
       }
@@ -6685,7 +6725,7 @@
         justify-self: end;
         max-width: min(100%, 520px);
       }
-      .game-menu-wrap {
+      .primary-nav {
         grid-column: 1 / -1;
         grid-row: 2;
         justify-self: center;
@@ -6727,6 +6767,20 @@
         justify-content: flex-end;
         align-items: center;
         padding: 5px;
+      }
+      .brand-zone {
+        gap: 8px;
+      }
+      .primary-nav {
+        width: 100%;
+        justify-content: center;
+        gap: 12px;
+        overflow-x: auto;
+        padding-bottom: 2px;
+      }
+      .primary-nav a {
+        font-size: 12px;
+        letter-spacing: .045em;
       }
       .site-search { width: min(100%, 220px); flex: 1 1 160px; min-width: 0; height: 42px; min-height: 42px; }
       #siteSearchBtn { width: auto; flex: 0 0 auto; }

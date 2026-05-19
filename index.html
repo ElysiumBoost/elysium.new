@@ -36,26 +36,34 @@
 <body>
   <header class="topbar">
     <div class="shell topbar-inner">
-      <a class="brand" href="#" id="brandHome" aria-label="Elysium Boost – home">
-        <span class="brand-mark-wrap brand-mark-wrap--plain">
-          <img
-            class="brand-mark"
-            src="assets/elysiumlogo-transparent.webp?v=site-logo-v2"
-            width="56"
-            height="56"
-            alt=""
-            loading="eager"
-            decoding="async">
-        </span>
-        <span class="brand-wordmark">Elysium Boost</span>
-      </a>
-      <div class="game-menu-wrap" id="gameTabs" aria-label="Choose game">
-        <button class="btn game-menu-btn" type="button" id="gameMenuBtn" aria-expanded="false" aria-controls="gameMenuPanel" aria-haspopup="true">
-          <span class="game-menu-btn-label">Games</span>
-          <svg class="game-menu-chevron" viewBox="0 0 24 24" aria-hidden="true" width="14" height="14"><path fill="currentColor" d="M6.5 9.2 12 15l5.5-5.8L18 10l-6 6.3a1 1 0 0 1-1.45 0L6 10l.5-.8z"/></svg>
-        </button>
-        <div class="game-menu-panel" id="gameMenuPanel" role="menu" aria-labelledby="gameMenuBtn" hidden></div>
+      <div class="brand-zone">
+        <a class="brand" href="#" id="brandHome" aria-label="Elysium Boost – home">
+          <span class="brand-mark-wrap brand-mark-wrap--plain">
+            <img
+              class="brand-mark"
+              src="assets/elysiumlogo-transparent.webp?v=site-logo-v2"
+              width="56"
+              height="56"
+              alt=""
+              loading="eager"
+              decoding="async">
+          </span>
+          <span class="brand-wordmark">Elysium Boost</span>
+        </a>
+        <div class="game-menu-wrap" id="gameTabs" aria-label="Choose service">
+          <button class="btn game-menu-btn" type="button" id="gameMenuBtn" aria-expanded="false" aria-controls="gameMenuPanel" aria-haspopup="true">
+            <span class="game-menu-btn-label">Services</span>
+            <svg class="game-menu-chevron" viewBox="0 0 24 24" aria-hidden="true" width="14" height="14"><path fill="currentColor" d="M6.5 9.2 12 15l5.5-5.8L18 10l-6 6.3a1 1 0 0 1-1.45 0L6 10l.5-.8z"/></svg>
+          </button>
+          <div class="game-menu-panel" id="gameMenuPanel" role="menu" aria-labelledby="gameMenuBtn" hidden></div>
+        </div>
       </div>
+      <nav class="primary-nav" aria-label="Primary">
+        <a href="#homeAboutBlock">About Us</a>
+        <a href="#howItWorksTitle">How It Works</a>
+        <a href="#trustCompactTitle">Reviews</a>
+        <a href="#faqHomeTitle">FAQ</a>
+      </nav>
       <div class="actions">
         <input class="site-search" id="siteSearch" type="search" placeholder="Search services" aria-label="Search services">
         <button class="btn btn-icon" id="siteSearchBtn" type="button" aria-label="Search" title="Search">
@@ -95,10 +103,10 @@
         <div class="hero-text">
           <span class="eyebrow hero-eyebrow" id="heroKicker">Manual · Discord-confirmed</span>
           <h1 id="heroTitle">Premium Game Boosting</h1>
-          <p class="hero-subtitle" id="heroSubtitle">Safe Discord-confirmed services for Arc Raiders, Valorant and more.</p>
+          <p class="hero-subtitle" id="heroSubtitle">Built for serious gamers who want fast, safe, and reliable progress — with clear service options and manual support.</p>
           <p class="hero-lead" id="heroCopy">Choose your game, configure your order, and our team confirms everything with you before play.</p>
           <div class="hero-cta-row hero-cta-row--solo" id="heroCtaRow">
-            <button type="button" class="btn btn-premium hero-cta" id="heroCta">Start Order</button>
+            <button type="button" class="btn btn-premium hero-cta" id="heroCta">Boost</button>
           </div>
         </div>
       </div>
@@ -344,7 +352,6 @@
 
 </body>
 </html>
-
 
 
 

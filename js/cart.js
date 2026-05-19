@@ -329,10 +329,10 @@
       $("siteSearchBtn").setAttribute("title", ui("Search"));
       $("cartOpen").setAttribute("aria-label", ui("Open order summary"));
       $("cartOpen").setAttribute("title", ui("Order summary"));
-      $("gameMenuBtn").setAttribute("aria-label", ui("Games menu"));
-      $("gameMenuBtn").setAttribute("title", ui("Games"));
+      $("gameMenuBtn").setAttribute("aria-label", ui("Services menu"));
+      $("gameMenuBtn").setAttribute("title", ui("Services"));
       const gl = $("gameMenuBtn")?.querySelector(".game-menu-btn-label");
-      if (gl) gl.textContent = ui("Games");
+      if (gl) gl.textContent = ui("Services");
       $("clearService").textContent = ui("Clear");
       $("addToCart").textContent = ui("Add to Cart");
       const copyBtn = $("copyOrder");
