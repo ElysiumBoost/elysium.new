@@ -478,7 +478,7 @@
       };
 
       const chunks = [];
-      ["arc", "valorant", "lol", "tft", "wow", "cs2", "circle", "social"].forEach(id => {
+      ["arc", "valorant", "cs2", "lol", "tft", "social"].forEach(id => {
         const game = g(id);
         if (game) chunks.push(renderHomeSingleCard(game));
       });
@@ -487,15 +487,7 @@
 
       const ab = $("homeAboutBlock");
       if (ab) {
-        ab.innerHTML = `
-        <article class="info-card info-card--compact">
-          <h3>${ui("About ELYSIUM BOOST")}</h3>
-          <p>${ui("ELYSIUM BOOST provides premium manual game services with verified boosters, clean Discord-ticket order flow and fast support. Every order is handled with safety, clarity and professional delivery standards.")}</p>
-        </article>
-        <article class="info-card info-card--compact">
-          <h3>${ui("Transparent pricing")}</h3>
-          <p>${ui("Browse in your currency. Your cart, ticket, and receipt use the same currency so totals always match.")}</p>
-        </article>`;
+        ab.innerHTML = "";
       }
     }
     const serviceImages = {
