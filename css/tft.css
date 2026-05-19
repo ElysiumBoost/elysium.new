@@ -268,6 +268,246 @@
 }
 
 /* ============================================================
+   TFT Rank Up — layout + card cleanup (mirrors Valorant patterns)
+   Scoped: body[data-ely-game="tft"] only — do not touch Valorant rules
+   ============================================================ */
+
+/* Checkout — one outer .order-card frame, flat summary interior (Valorant pattern) */
+body[data-ely-game="tft"] .order-card .summary-total {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+body[data-ely-game="tft"] .order-card .order-card-body {
+  gap: 10px;
+  padding: 0 14px 14px;
+}
+
+body[data-ely-game="tft"] .order-card .order-panel-head {
+  padding: 10px 14px 0;
+}
+
+body[data-ely-game="tft"] .order-card .order-card-body::before {
+  border-bottom-color: rgba(139, 92, 246, .22);
+  margin-bottom: 2px;
+}
+
+/* CUSTOMIZE panel — no inner card */
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > h4 {
+  margin: 0 0 12px;
+  padding: 0;
+}
+
+/* E-Girl row — flat row, divider only */
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-row {
+  margin: 0;
+  padding: 14px 0 8px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  border-top: 1px solid rgba(139, 92, 246, .22);
+}
+
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-row.check-row,
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-row.ely-toggle-row {
+  border: 0;
+  border-top: 1px solid rgba(139, 92, 246, .22);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  min-height: 38px;
+  padding: 8px 0;
+}
+
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-row.check-row:hover,
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-row.ely-toggle-row:hover {
+  border: 0;
+  border-top: 1px solid rgba(139, 92, 246, .22);
+  background: rgba(139, 92, 246, .08);
+  box-shadow: none;
+  transform: none;
+}
+
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-row.ely-toggle-row:has(.ely-toggle-input:checked),
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-row.check-row:has(input:checked) {
+  border: 0 !important;
+  border-top: 1px solid rgba(139, 92, 246, .22) !important;
+  background: rgba(139, 92, 246, .08) !important;
+  box-shadow: none !important;
+}
+
+/* Piloted / Selfplay row — flat wrapper, pills keep their own borders */
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-buttons {
+  margin: 0;
+  padding: 14px 0 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  border-top: 1px solid rgba(139, 92, 246, .22);
+}
+
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel .order-option-buttons .raid-pill {
+  background:
+    radial-gradient(circle at 16% 16%, rgba(139, 92, 246, .1), transparent 38%),
+    linear-gradient(180deg, rgba(20, 24, 39, .72), rgba(12, 10, 22, .9));
+}
+
+/* Selfplay +50% label — not the live price span */
+body[data-ely-game="tft"] .order-card .summary-total .order-option-buttons .raid-pill span {
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  color: rgba(255, 209, 102, 0.88) !important;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  text-shadow: none;
+}
+
+body[data-ely-game="tft"] .order-card .summary-total > .summary-total-label {
+  border-top: 1px solid rgba(139, 92, 246, .22);
+  padding-top: 14px;
+  margin-top: 2px;
+}
+
+/* Left configurator — single outer .valorant-cfg-mount, flat rank/server sections */
+body[data-ely-game="tft"] #detailSection.detail--valorant-layout .valorant-cfg-mount {
+  padding: 14px;
+}
+
+body[data-ely-game="tft"] #detailSection.detail--valorant-layout .valorant-cfg-mount .tft-rank-up-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+body[data-ely-game="tft"] #detailSection.detail--valorant-layout .valorant-cfg-mount .tft-rank-up-form .field-block,
+body[data-ely-game="tft"] #detailSection.detail--valorant-layout .valorant-cfg-mount .tft-rank-up-form .field-block--tight {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body[data-ely-game="tft"] #detailSection.detail--valorant-layout .valorant-cfg-mount .tft-rank-up-form .valorant-rank-tier-grid {
+  gap: 12px 18px;
+  padding-bottom: 4px;
+}
+
+body[data-ely-game="tft"] #detailSection.detail--valorant-layout .valorant-cfg-mount .tft-rank-up-form > .field-block {
+  padding-top: 14px;
+  border-top: 1px solid rgba(139, 92, 246, .22);
+}
+
+/* Desktop — centered two-column grid (matches Valorant layout model) */
+@media (min-width: 1081px) {
+  body[data-ely-game="tft"] #detailSection.detail--valorant-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 350px;
+    gap: 24px;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    align-items: stretch;
+    justify-content: center;
+  }
+
+  body[data-ely-game="tft"] #detailSection.detail--valorant-layout > .detail-left,
+  body[data-ely-game="tft"] #detailSection.detail--valorant-layout > .detail-right {
+    display: contents;
+  }
+
+  body[data-ely-game="tft"] #detailSection.detail--valorant-layout .detail-feature-thumb {
+    display: none;
+  }
+
+  /* Full-width rows above config + checkout */
+  body[data-ely-game="tft"] #detailSection.detail--valorant-layout .detail-left-head {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  body[data-ely-game="tft"] #detailSection.detail--valorant-layout #detailSpecs {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Row 3: configurator (col 1) + checkout (col 2) — equal height via stretch */
+  body[data-ely-game="tft"] #detailSection.detail--valorant-layout .valorant-cfg-mount {
+    grid-column: 1;
+    grid-row: 3;
+    min-width: 0;
+    width: 100%;
+    align-self: stretch;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  body[data-ely-game="tft"] #detailSection.detail--valorant-layout .order-card {
+    grid-column: 2;
+    grid-row: 3;
+    width: 100%;
+    max-width: 350px;
+    justify-self: stretch;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    box-sizing: border-box;
+  }
+
+  body[data-ely-game="tft"] #detailSection.detail--valorant-layout .order-card .order-panel-head {
+    flex: 0 0 auto;
+  }
+
+  body[data-ely-game="tft"] #detailSection.detail--valorant-layout .order-card .order-card-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  body[data-ely-game="tft"] #detailSection.detail--valorant-layout .order-card .order-form:empty {
+    display: none;
+  }
+
+  body[data-ely-game="tft"] #detailSection.detail--valorant-layout .order-card .summary-total {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 0;
+  }
+
+  body[data-ely-game="tft"] #detailSection.detail--valorant-layout .detail-left-meta {
+    grid-column: 1 / -1;
+    grid-row: 4;
+  }
+}
+
+/* ============================================================
    TFT add-ons injected into the order card (above Add to Cart)
    ============================================================ */
 
