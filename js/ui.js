@@ -792,7 +792,7 @@
                 <div class="cart-receipt-dl-row cart-receipt-dl-row--extra"><dt>${ui("Est. delivery")}</dt><dd>${eta}</dd></div>
               </dl>
               <div class="cart-receipt-section">
-                <div class="cart-receipt-k">${ui("Selected options")}</div>
+                <div class="cart-receipt-k">${ui("Order details")}</div>
                 <div class="cart-item-detail-body">${escapeHtml(item.details)}</div>
               </div>
               ${bdBlock}

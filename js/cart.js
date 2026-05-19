@@ -1454,7 +1454,7 @@
       );
       const isArcConfigurator = Boolean(service && game?.id === "arc");
       const isTftForm = Boolean(service && game?.id === "tft");
-      const split = isValorantForm || isArcConfigurator || isTftForm;
+      const split = Boolean(service);
       const card = document.querySelector(".order-card");
       section.classList.toggle("detail--valorant-layout", split);
       if (card) {

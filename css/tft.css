@@ -61,9 +61,9 @@
    ============================================================ */
 
 .order-card.is-tft-split {
-  position: sticky;
-  top: 88px;
-  max-height: calc(100vh - 100px);
+  position: static;
+  top: auto;
+  max-height: none;
   overflow: visible;
   align-self: start;
 }
