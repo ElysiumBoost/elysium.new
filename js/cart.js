@@ -473,6 +473,7 @@
         return `
         <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(gameAria(game.label))}">
           ${media}
+          <span class="home-game-label">${escapeHtml(ui(game.label))}</span>
           <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
         </button>`;
       };
