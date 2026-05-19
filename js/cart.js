@@ -1208,12 +1208,14 @@
       let html = `<div class="field-block valorant-panel-tight"><h4>Extras</h4><div class="valorant-extras-grid checks valorant-extras-toggle">`;
       if (includePaid) {
         valorantExtrasPaid.forEach(ex => {
-          html += elyToggleRow(`data-val-extra-pct="${ex.pct}" data-val-extra-label="${escapeHtml(ex.label)}"`, `${escapeHtml(ex.label)} (+${Math.round(ex.pct * 100)}%)`, false);
+          const tip = ex.tip ? ` title="${escapeHtml(ex.tip)}" data-tip="${escapeHtml(ex.tip)}"` : "";
+          html += elyToggleRow(`data-val-extra-pct="${ex.pct}" data-val-extra-label="${escapeHtml(ex.label)}"${tip}`, `${escapeHtml(ex.label)} (+${Math.round(ex.pct * 100)}%)`, false);
         });
       }
       if (includeFree) {
         valorantExtrasFree.forEach(ex => {
-          html += elyToggleRow(`data-val-extra-free="1" data-val-extra-label="${escapeHtml(ex.label)}"`, `${escapeHtml(ex.label)} — FREE`, false);
+          const tip = ex.tip ? ` title="${escapeHtml(ex.tip)}" data-tip="${escapeHtml(ex.tip)}"` : "";
+          html += elyToggleRow(`data-val-extra-free="1" data-val-extra-label="${escapeHtml(ex.label)}"${tip}`, `${escapeHtml(ex.label)} - FREE`, false);
         });
       }
       html += `</div></div>`;
@@ -1229,6 +1231,15 @@
           </div>
           <input id="${id}" class="ely-level-range" type="range" min="${min}" max="${max}" step="1" value="${value}">
         </div>`;
+    }
+
+    function tftPlacementMatchRate(rank) {
+      const key = String(rank || "None").toLowerCase();
+      if (key === "master" || key === "grandmaster" || key === "challenger") return 20;
+      if (key === "diamond") return 14;
+      if (key === "platinum" || key === "emerald") return 12;
+      if (key === "silver" || key === "gold") return 8;
+      return 6;
     }
 
     function valorantLevelPairHtml(startId, targetId, startLabel, targetLabel, startValue, targetValue, startMax, targetMax) {
@@ -1257,19 +1268,31 @@
         </div>`;
     }
 
-    function tftOrderOptionsHtml() {
+    function tftOrderOptionsHtml(type = "") {
+      const coaching = type === "tft-coaching";
       return `
         <div class="order-options-panel" data-order-options-panel>
           <h4>Customize</h4>
-          <label class="check-row ely-toggle-row order-option-row">
+          <label class="check-row ely-toggle-row order-option-row" title="Request a preferred E-girl style assistant where available." data-tip="Adds a preferred E-girl style assistant where available.">
             <input id="tftEgirl" type="checkbox" class="ely-toggle-input">
             <span class="ely-toggle-ui" aria-hidden="true"><span class="ely-toggle-track"><span class="ely-toggle-thumb"></span></span></span>
             <span class="ely-toggle-label">E-girl (+$5)</span>
           </label>
+          ${coaching ? `
+          <label class="check-row ely-toggle-row order-option-row" title="Prioritize the session schedule when a coach is available." data-tip="Prioritizes your coaching schedule when available.">
+            <input id="tftExpress" type="checkbox" class="ely-toggle-input">
+            <span class="ely-toggle-ui" aria-hidden="true"><span class="ely-toggle-track"><span class="ely-toggle-thumb"></span></span></span>
+            <span class="ely-toggle-label">Express (+20%)</span>
+          </label>
+          <label class="check-row ely-toggle-row order-option-row" title="Ask the coach to include VOD review notes in Discord." data-tip="Adds VOD review notes to your coaching request.">
+            <input id="tftVodReview" type="checkbox" class="ely-toggle-input">
+            <span class="ely-toggle-ui" aria-hidden="true"><span class="ely-toggle-track"><span class="ely-toggle-thumb"></span></span></span>
+            <span class="ely-toggle-label">VOD Review</span>
+          </label>` : ""}
           <input id="tftPlayMode" type="hidden" value="piloted">
           <div class="order-option-buttons" role="group" aria-label="TFT play mode">
-            <button type="button" class="raid-pill active" data-tft-play-mode="piloted"><strong>Piloted</strong></button>
-            <button type="button" class="raid-pill" data-tft-play-mode="selfplay"><strong>Selfplay</strong><span>+50%</span></button>
+            <button type="button" class="raid-pill active" data-tft-play-mode="piloted" title="Booster plays on the account after Discord confirmation." data-tip="Booster plays manually after Discord confirmation."><strong>Piloted</strong></button>
+            <button type="button" class="raid-pill" data-tft-play-mode="selfplay" title="You play while the booster guides or queues with you." data-tip="You play while the booster guides or supports you."><strong>Selfplay</strong><span>+50%</span></button>
           </div>
         </div>`;
     }
@@ -1493,8 +1516,8 @@
         card.classList.add("is-valorant");
         const html = valorantOrderOptionsHtml(svc.form);
         if (html) summary.insertAdjacentHTML("afterbegin", html);
-      } else if (game?.id === "tft" && ["tft-rank-up", "tft-placement"].includes(String(svc?.form || ""))) {
-        summary.insertAdjacentHTML("afterbegin", tftOrderOptionsHtml());
+      } else if (game?.id === "tft" && ["tft-rank-up", "tft-placement", "tft-coaching"].includes(String(svc?.form || ""))) {
+        summary.insertAdjacentHTML("afterbegin", tftOrderOptionsHtml(String(svc?.form || "")));
       }
     }
     function buildForm(type) {
@@ -1727,6 +1750,7 @@
             <input id="raidCount" type="hidden" value="2">
             <div class="quick-raid-grid">${raidPackageButtons}</div>
             <p class="raid-panel-note">Event Mode adds ${moneyUSD(prices.event)} per selected raid when enabled.</p>
+            <p class="raid-panel-note raid-gift-note">If a raid fails, we will provide a free weapon gift.</p>
           </div>
         `;
       }
@@ -1769,6 +1793,10 @@
                 <label for="tftCurrentDiv">Division</label>
                 <select id="tftCurrentDiv">${divOpts}</select>
               </div>
+              <div id="tftCurrentLpWrap" class="tft-lp-wrap">
+                <label for="tftCurrentLp">Current LP</label>
+                <input id="tftCurrentLp" type="number" min="0" max="999" step="1" value="0" inputmode="numeric">
+              </div>
             </div>
             <div class="field-block field-block--tight valorant-rank-field">
               <p class="tft-step-label"><span class="tft-step-num">02</span> Desired Rank</p>
@@ -1793,15 +1821,39 @@
       }
       if (type === "tft-placement") {
         const srvOpts = valorantServers.map(s => `<option value="${escapeHtml(s)}"${s === "EU" ? " selected" : ""}>${escapeHtml(s)}</option>`).join("");
+        const rankOpts = ["None", ...TFT_RANKS].map(r => `<option value="${escapeHtml(r)}">${escapeHtml(r)}</option>`).join("");
         return `
         <div class="valorant-configurator tft-placement-form">
           <div class="field-block field-block--tight">
             <h4 class="valorant-inline-kicker">Placement Matches</h4>
-            ${compactRangeField("tftPlacementMatches", "Matches", 5, 1, 5)}
+            <label for="tftPlacementLastRank">Last Rank</label>
+            <select id="tftPlacementLastRank">${rankOpts}</select>
+            <div class="tft-placement-rate" aria-live="polite">
+              <span>5 matches</span>
+              <strong id="tftPlacementRate">$6 / match</strong>
+            </div>
           </div>
           <div class="field-block field-block--tight">
             <label for="tftPlacementServer">Server</label>
             <select id="tftPlacementServer">${srvOpts}</select>
+          </div>
+        </div>`;
+      }
+      if (type === "tft-coaching") {
+        const srvOpts = valorantServers.map(s => `<option value="${escapeHtml(s)}"${s === "EU" ? " selected" : ""}>${escapeHtml(s)}</option>`).join("");
+        return `
+        <div class="valorant-configurator tft-coaching-form">
+          <div class="field-block field-block--tight">
+            <h4 class="valorant-inline-kicker">Coaching Session</h4>
+            ${qtyField("tftCoachingHours", "Hours", 1, 1, 10, true)}
+          </div>
+          <div class="field-block field-block--tight">
+            <label for="tftCoachingServer">Server</label>
+            <select id="tftCoachingServer">${srvOpts}</select>
+          </div>
+          <div class="field-block field-block--tight">
+            <label for="tftCoachingFocus">Coaching Focus</label>
+            <input id="tftCoachingFocus" type="text" placeholder="Economy, comps, positioning">
           </div>
         </div>`;
       }
@@ -2099,12 +2151,20 @@
         const desRank = val("tftDesiredRank") || "";
         const curWrap = $("tftCurrentDivWrap");
         const desWrap = $("tftDesiredDivWrap");
+        const curLpWrap = $("tftCurrentLpWrap");
         if (curWrap) curWrap.classList.toggle("tft-div-wrap--hidden", noDiv.has(curRank));
         if (desWrap) desWrap.classList.toggle("tft-div-wrap--hidden", noDiv.has(desRank));
+        if (curLpWrap) curLpWrap.classList.toggle("tft-lp-wrap--visible", noDiv.has(curRank));
         updateTotal();
       }
       $("tftCurrentRank")?.addEventListener("change", () => { syncTFTRankImages(); syncDivVisibility(); });
       $("tftDesiredRank")?.addEventListener("change", () => { syncTFTRankImages(); syncDivVisibility(); });
+      $("tftCurrentLp")?.addEventListener("input", () => {
+        const lp = $("tftCurrentLp");
+        if (!lp) return;
+        lp.value = String(Math.max(0, Math.min(999, Math.round(Number(lp.value || 0)))));
+        updateTotal();
+      });
       syncTFTRankImages();
       syncDivVisibility();
       const addToCartBtn = $("addToCart");
@@ -2134,16 +2194,15 @@
         });
       });
       if (type === "tft-placement") {
-        const matches = $("tftPlacementMatches");
-        const output = $("tftPlacementMatchesValue");
-        const syncMatches = () => {
-          if (!matches) return;
-          matches.value = String(Math.max(1, Math.min(5, Math.round(Number(matches.value || 1)))));
-          if (output) output.textContent = matches.value;
+        const lastRank = $("tftPlacementLastRank");
+        const rate = $("tftPlacementRate");
+        const syncPlacement = () => {
+          const perMatch = tftPlacementMatchRate(lastRank?.value || "None");
+          if (rate) rate.textContent = moneyUSD(perMatch) + " / match";
+          updateTotal();
         };
-        matches?.addEventListener("input", syncMatches);
-        matches?.addEventListener("change", syncMatches);
-        syncMatches();
+        lastRank?.addEventListener("change", syncPlacement);
+        syncPlacement();
       }
       if (type === "blueprints") wireBlueprints();
       if (type === "loadout") {
@@ -2722,6 +2781,7 @@
       const desRank = val("tftDesiredRank") || "Gold";
       const curDiv = noDiv.has(curRank) ? null : (val("tftCurrentDiv") || "IV");
       const desDiv = noDiv.has(desRank) ? null : (val("tftDesiredDiv") || "IV");
+      const curLp = noDiv.has(curRank) ? Math.max(0, Math.min(999, Math.round(num("tftCurrentLp") || 0))) : null;
       const server = val("tftServer") || "EU";
       const curIdx = TFT_RANK_STEPS.findIndex(function(s) { return s.rank === curRank && s.div === curDiv; });
       const desIdx = TFT_RANK_STEPS.findIndex(function(s) { return s.rank === desRank && s.div === desDiv; });
@@ -2740,7 +2800,7 @@
       const details = [
         "Game: Teamfight Tactics",
         "Service: TFT Rank Up",
-        "Current Rank: " + curLabel,
+        "Current Rank: " + curLabel + (curLp != null ? " (" + curLp + " LP)" : ""),
         "Desired Rank: " + desLabel,
         "Server: " + server,
         "Options: " + opts.summary,
@@ -2751,13 +2811,18 @@
 
     function tftSelectedOptions(base) {
       const egirl = Boolean($("tftEgirl")?.checked);
+      const express = Boolean($("tftExpress")?.checked);
+      const vod = Boolean($("tftVodReview")?.checked);
       const mode = val("tftPlayMode") || "piloted";
       let total = Number(base || 0);
       if (egirl) total += 5;
       if (mode === "selfplay") total *= 1.5;
+      if (express) total *= 1.2;
       const labels = [];
       labels.push(mode === "selfplay" ? "Selfplay (+50%)" : "Piloted");
       if (egirl) labels.push("E-girl (+$5)");
+      if (express) labels.push("Express (+20%)");
+      if (vod) labels.push("VOD Review");
       return {
         total: Math.round(total * 100) / 100,
         summary: labels.join(", ")
@@ -2765,15 +2830,38 @@
     }
 
     function calculateTFTPlacement(service) {
-      const matches = Math.max(1, Math.min(5, Math.round(num("tftPlacementMatches") || 5)));
+      const matches = 5;
+      const lastRank = val("tftPlacementLastRank") || "None";
       const server = val("tftPlacementServer") || "EU";
-      const base = matches * 25;
+      const perMatch = tftPlacementMatchRate(lastRank);
+      const base = matches * perMatch;
       const opts = tftSelectedOptions(base);
       const details = [
         "Game: Teamfight Tactics",
         "Service: TFT Placement Matches",
+        "Last Rank: " + lastRank,
         "Matches: " + matches,
+        "Rate: $" + perMatch + " per match",
         "Server: " + server,
+        "Options: " + opts.summary,
+        "Base Price: $" + base + " USD",
+        "Total: $" + opts.total + " USD"
+      ].join("\n");
+      return { total: opts.total, valid: true, custom: false, details: details };
+    }
+
+    function calculateTFTCoaching(service) {
+      const hours = Math.max(1, Math.min(10, Math.round(num("tftCoachingHours") || 1)));
+      const server = val("tftCoachingServer") || "EU";
+      const focus = val("tftCoachingFocus") || "None";
+      const base = hours * service.fromUSD;
+      const opts = tftSelectedOptions(base);
+      const details = [
+        "Game: Teamfight Tactics",
+        "Service: TFT Coaching",
+        "Hours: " + hours,
+        "Server: " + server,
+        "Focus: " + focus,
         "Options: " + opts.summary,
         "Base Price: $" + base + " USD",
         "Total: $" + opts.total + " USD"

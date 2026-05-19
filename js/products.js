@@ -27,7 +27,7 @@
         seeds: "Choose Assorted Seeds from 100 to 10,000. Bulk checkpoints show the discount clearly before the order is added to the Discord ticket.",
         depositary: "Choose safe storage capacity for wipe protection. Boosters confirm the item handoff, keep a clean inventory list, and return items after ticket confirmation.",
         trials: "Order Weekly All 3 Stars, rank-up support, or both. Rank options unlock from your current rank so the ticket stays accurate before boosters confirm timing.",
-        raid: "Choose raid count, Duo or Trio team, and optional Event Mode. Only successful raids count toward the order; failed runs are retried or compensated in the ticket.",
+        raid: "Choose raid count, Duo or Trio team, and optional Event Mode. If a raid fails, we will provide a free weapon gift.",
         pvp: "Choose PvP or PvE coaching, Duo or Trio support, and session hours up to 6. Coaching focuses on positioning, extraction decisions, fights, routes, and safer raid execution.",
         leveling: "Leveling is completed by logging into the customer's Steam or Xbox account. For account protection, boosters can use the customer's preferred VPN location; Steam or Xbox access is required or we cannot log in.",
         workshop: "Upgrade Workshop benches or Scrappy levels with clear level ranges and bundle pricing. The panel shows the total instantly before you add the order to cart.",
@@ -47,7 +47,7 @@
     const prices = {
       blueprint: .75,
       coins100k: .25,
-      weapon: .50,
+      weapon: .65,
       blueMod: .05,
       premiumMod: .10,
       seeds100: .40,
@@ -58,7 +58,7 @@
       rechargerBundle: .15,
       surgeRechargerBundle: .15,
       trialsBase: 20,
-      raid: 3.50,
+      raid: 4,
       event: 1.50,
       workshopBench: 6,
       workshopMax: 36,
@@ -125,10 +125,10 @@
       const tier40 = new Set(["Venator", "Renegade", "Torrente", "Canto", "Osprey"]);
       const tier50 = new Set(["Tempest", "Bobcat", "Vulcano", "Bettina", "Hullcracker"]);
       const tier60 = new Set(["Dolabra", "Jupiter", "Equalizer", "Aphelion"]);
-      if (tier30.has(w)) return 0.30;
-      if (tier40.has(w)) return 0.40;
-      if (tier50.has(w)) return 0.50;
-      if (tier60.has(w)) return 0.60;
+      if (tier30.has(w)) return 0.45;
+      if (tier40.has(w)) return 0.55;
+      if (tier50.has(w)) return 0.65;
+      if (tier60.has(w)) return 0.75;
       return prices.weapon;
     }
 
@@ -273,9 +273,9 @@
         popular: [],
         services: [
           { ...gameService("tft-rank-up", "rank-up", "TFT Rank Up", "TFT Rank Up", "i-rank", 7, "", "Rank Up starts at $7 per division. Live price calculator included.", "Choose your current and desired TFT rank for a live total. Iron\u2013Platinum: $7/div, Emerald: $10/div, Diamond: $12/div, Master+: $17/step.", "tft-rank-up"), thumb: "assets/tft-rank-up.webp" },
-          { ...gameService("tft-placement-matches", "tft-placement", "TFT Placement Matches", "TFT Placement Matches", "i-rank", 25, " / match", "Placement Matches are $25 per match, up to 5 matches.", "Get your TFT placement matches handled by a verified booster. Choose 1 to 5 matches and confirm through your Discord ticket.", "tft-placement"), thumb: "assets/tft-placement-matches.webp" },
-          { ...gameService("tft-coaching", "coaching", "TFT Coaching", "TFT Coaching", "i-coach", 10, "", "Piloted Duo Coaching starts at $10. Selfplay option will be added next.", "Improve your TFT decision-making, economy, positioning, comp choices, and late-game execution with a manual coaching request."), thumb: "assets/tft-coaching.webp" },
-          { ...gameService("tft-double-up", "double-up", "TFT Double Up", "TFT Double Up", "i-star", 0, "", "Double Up mode service is available by request.", "Play or request support for TFT Double Up mode. Full options and pricing will be added after Rank Up and Coaching are finalized."), thumb: "assets/tft-double-up.webp" }
+          { ...gameService("tft-placement-matches", "tft-placement", "TFT Placement Matches", "TFT Placement Matches", "i-rank", 30, " / 5 matches", "Placement Matches price is based on your last rank and always covers 5 matches.", "Get your TFT placement matches handled by a verified booster. Choose your last rank and confirm through your Discord ticket.", "tft-placement"), thumb: "assets/tft-placement-matches.webp" },
+          { ...gameService("tft-coaching", "coaching", "TFT Coaching", "TFT Coaching", "i-coach", 10, "", "TFT coaching starts at $10 with optional premium add-ons.", "Improve your TFT decision-making, economy, positioning, comp choices, and late-game execution with a manual coaching request.", "tft-coaching"), thumb: "assets/tft-coaching.webp" },
+          { ...gameService("tft-double-up", "double-up", "TFT Double Up", "TFT Double Up", "i-star", 9, "", "Double Up starts at $9.", "Play or request support for TFT Double Up mode and confirm the details through Discord."), thumb: "assets/tft-double-up.webp" }
         ]
       },
       {
@@ -335,13 +335,13 @@
         popular: ["trials", "guns", "blueprints", "coins"],
         services: [
           arcService("blueprints", "blueprints", "Buy Arc Raiders Blueprints", "All Blueprints", "i-blueprint", .75, " each", "Discounted blueprints, now $0.75 each instead of $1.50.", "30-60 Minutes", "blueprints", 1.50),
-          arcService("guns", "guns", "Buy Arc Raiders Weapons", "All Guns", "i-gun", .50, " each", "Discounted weapons and mods with automatic attachment quantity.", "30-60 Minutes", "guns", 1.00),
+          arcService("guns", "guns", "Buy Arc Raiders Weapons", "All Guns", "i-gun", .65, " each", "Discounted weapons and mods with automatic attachment quantity.", "30-60 Minutes", "guns", 1.15),
           arcService("loadout", "loadouts", "Build a Custom Loadout", "Custom Loadout", "i-loadout", 0, "", "Weapon, mods, Looting Mk. 3 Augments, Medium Shields, quick-use bundles, and special bundles.", "30-90 Minutes", "loadout"),
           arcService("coins", "coins", "Buy Raider Coins", "Raider Coins", "i-coins", .25, " / 100k", "Choose from 100k to 9 million coins with instant price updates.", "15-30 Minutes", "coins", 0.4167),
           { ...arcService("seeds", "seeds", "Buy Assorted Seeds", "Assorted Seeds", "i-coins", .35, " / 100", "Choose 100 to 5,000 Assorted Seeds with bulk discount checkpoints.", "15-30 Minutes", "seeds"), noDiscount: true },
           { ...arcService("depositary", "depositary", "Arc Raiders Depositary Service", "Depositary Service", "i-depository", 17.50, " / 50 slots", "Safe item storage service with selectable inventory slots, 20 to 280 slots.", "30-60 Minutes", "depositary"), noDiscount: true },
           arcService("trials", "trials", "Arc Raiders Trials Boost", "Trials Boost", "i-trials", 20, "", "All 3 Stars with current-rank and rank option rules.", "1-3 Hours", "trials", 40),
-          arcService("raid", "raids", "Arc Raiders Raid Boost", "All Raids", "i-raid", 3.50, " / raid", "Choose raid count, Duo/Trio, and optional Event Mode.", "15-30 Minutes", "raid", 4.67),
+          arcService("raid", "raids", "Arc Raiders Raid Boost", "All Raids", "i-raid", 4, " / raid", "Choose raid count, Duo/Trio, and optional Event Mode.", "15-30 Minutes", "raid", 4.67),
           arcService("pvp", "coaching", "Arc Raiders Coaching", "Coaching", "i-coach", 20, " / hr", "PvP or PvE coaching with Duo/Trio session options.", "By Request", "pvp", 26.67),
           arcService("leveling", "leveling", "Arc Raiders Leveling", "Leveling", "i-level", 0, "", "Current level, target level, speed, and account access requirements.", "By Request", "leveling"),
           { ...arcService("workshop", "workshop", "Arc Raiders Workshop & Scrappy", "Workshop & Scrappy", "i-workshop", 3, "+", "Upgrade workshops from level 1 to 3 or select Scrappy levels from 1 to 5.", "30-60 Minutes", "workshop"), noDiscount: true },

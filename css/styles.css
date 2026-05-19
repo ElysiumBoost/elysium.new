@@ -1,29 +1,29 @@
 ﻿    :root {
-      --bg: #070a10;
-      --surface: #0b0f1a;
-      --nav: rgba(7, 10, 16, .92);
-      --panel: rgba(16, 19, 31, .92);
-      --panel-2: rgba(20, 24, 39, .9);
-      --panel-3: rgba(24, 28, 42, .88);
-      --card: #141827;
-      --card-elevated: rgba(20, 24, 39, .92);
-      --text: #f4f7ff;
-      --muted: #a7aec0;
-      --soft: #8b93a8;
-      --rgb-purple: 139, 92, 246;
-      --rgb-ice: 125, 211, 252;
+      --bg: #050711;
+      --surface: #090d18;
+      --nav: rgba(5, 7, 17, .94);
+      --panel: rgba(12, 16, 29, .94);
+      --panel-2: rgba(15, 20, 35, .92);
+      --panel-3: rgba(20, 24, 39, .9);
+      --card: #111726;
+      --card-elevated: rgba(18, 23, 38, .94);
+      --text: #f6f0df;
+      --muted: #b9b1a4;
+      --soft: #908a82;
+      --rgb-purple: 112, 94, 150;
+      --rgb-ice: 214, 186, 112;
       --line: rgba(var(--rgb-purple), .25);
       --line-strong: rgba(var(--rgb-purple), .55);
-      --purple: #8b5cf6;
-      --purple-2: #a78bfa;
-      --purple-mid: #7c3aed;
-      --ice: rgba(167, 180, 220, .72);
-      --cyan: rgba(196, 181, 253, .55);
-      --green: #9b7fd6;
-      --gold: #fbbf24;
+      --purple: #705e96;
+      --purple-2: #9a86c8;
+      --purple-mid: #5d4a84;
+      --ice: rgba(225, 213, 187, .72);
+      --cyan: rgba(214, 186, 112, .42);
+      --green: #b7a06b;
+      --gold: #d8b968;
       --danger: #f43f5e;
-      --price: #eef1ff;
-      --price-accent: #c4b5fd;
+      --price: #fff6dc;
+      --price-accent: #d8b968;
       --shadow: 0 24px 80px rgba(0, 0, 0, .5);
       --radius: 8px;
       --font: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -7731,6 +7731,27 @@
       margin-top: 10px;
     }
 
+    .summary-total-label::before {
+      content: "Order Summary";
+      display: block;
+      margin-bottom: 2px;
+      color: var(--gold);
+      font-family: var(--display);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+
+    .summary-total .arc-price-breakdown__row {
+      border: 0;
+      background: transparent;
+      padding: 5px 0;
+    }
+
+    .summary-total .arc-price-breakdown__row--final {
+      display: none;
+    }
+
     .summary-total .old-total {
       font-size: 0.72em;
       opacity: .85;
@@ -7939,6 +7960,108 @@
       box-shadow:
         0 14px 34px rgba(0, 0, 0, .36),
         0 0 22px rgba(56, 189, 248, .12);
+    }
+
+    .event-switch.event-mode-card.ely-event-mode {
+      min-height: 44px;
+      padding: 9px 12px;
+      border-color: rgba(216, 185, 104, .28);
+      background:
+        linear-gradient(135deg, rgba(216, 185, 104, .1), rgba(112, 94, 150, .08)),
+        rgba(9, 13, 24, .92);
+      box-shadow: inset 0 1px 0 rgba(255, 246, 220, .08);
+    }
+
+    .event-switch.event-mode-card.ely-event-mode:has(input:checked) {
+      border-color: rgba(216, 185, 104, .58);
+      box-shadow:
+        0 0 0 1px rgba(216, 185, 104, .16),
+        0 0 22px rgba(216, 185, 104, .16),
+        inset 0 1px 0 rgba(255, 246, 220, .1);
+    }
+
+    .raid-gift-note {
+      color: rgba(246, 240, 223, .78);
+    }
+
+    .tft-lp-wrap {
+      display: none;
+      margin-top: 10px;
+    }
+
+    .tft-lp-wrap--visible {
+      display: block;
+    }
+
+    .tft-lp-wrap input,
+    .tft-placement-rate {
+      width: 100%;
+      border: 1px solid rgba(216, 185, 104, .18);
+      border-radius: 8px;
+      background: rgba(5, 7, 17, .55);
+    }
+
+    .tft-lp-wrap input {
+      margin-top: 6px;
+      padding: 10px 12px;
+      color: var(--text);
+    }
+
+    .tft-placement-rate {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 10px;
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .tft-placement-rate strong {
+      color: var(--gold);
+      font-family: var(--display);
+      font-size: 16px;
+      letter-spacing: .05em;
+    }
+
+    .valorant-rank-select-panel,
+    .valorant-rank-pick,
+    .valorant-panel-card,
+    .valorant-configurator,
+    .order-options-panel {
+      overflow: visible;
+    }
+
+    .order-options-panel [data-tip] {
+      position: relative;
+    }
+
+    .order-options-panel [data-tip]::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: 0;
+      bottom: calc(100% + 8px);
+      z-index: 30;
+      width: min(240px, 72vw);
+      padding: 8px 10px;
+      border: 1px solid rgba(216, 185, 104, .22);
+      border-radius: 8px;
+      background: rgba(5, 7, 17, .96);
+      color: rgba(246, 240, 223, .88);
+      font-size: 11px;
+      line-height: 1.35;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(4px);
+      transition: opacity .18s ease, transform .18s ease;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, .35);
+    }
+
+    .order-options-panel [data-tip]:hover::after,
+    .order-options-panel [data-tip]:focus-within::after {
+      opacity: 1;
+      transform: translateY(0);
     }
 
 /* TFT static centered category layout */

@@ -88,21 +88,22 @@
     const valorantCoachingHourlyEur = 14.9;
 
     const valorantExtrasPaid = [
-      { label: "Priority Start", pct: 0.20 },
-      { label: "Agent Preference", pct: 0.10 }
+      { label: "Priority Start", pct: 0.20, tip: "Start faster when boosters are available." },
+      { label: "Agent Preference", pct: 0.10, tip: "Request preferred agents for applicable services." }
     ];
     const valorantExtrasFree = [
-      { label: "Schedule Preference" }
+      { label: "Schedule Preference", tip: "Add preferred play windows to your ticket." },
+      { label: "Appear Offline", tip: "Request discreet account presence where possible." }
     ];
 
-    const valorantServers = ["EU", "NA", "LATAM", "BR", "KR", "JP", "AP", "OCE", "MEA"];
+    const valorantServers = ["TR", "EU", "NA"];
 
     const TFT_RANKS = ["Iron","Bronze","Silver","Gold","Platinum","Emerald","Diamond","Master","Grandmaster","Challenger"];
-    const TFT_DIVISIONS = ["IV","III","II","I"];
+    const TFT_DIVISIONS = ["I","II","III","IV"];
     const TFT_RANK_STEPS = (function() {
       const steps = [];
       ["Iron","Bronze","Silver","Gold","Platinum","Emerald","Diamond"].forEach(function(rank) {
-        ["IV","III","II","I"].forEach(function(div) { steps.push({ rank: rank, div: div }); });
+        ["I","II","III","IV"].forEach(function(div) { steps.push({ rank: rank, div: div }); });
       });
       ["Master","Grandmaster","Challenger"].forEach(function(rank) { steps.push({ rank: rank, div: null }); });
       return steps;

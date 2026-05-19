@@ -7,6 +7,7 @@
       }
       if (type === "tft-rank-up") return calculateTFTRankUp(service);
       if (type === "tft-placement") return calculateTFTPlacement(service);
+      if (type === "tft-coaching") return calculateTFTCoaching(service);
       if (type === "fast") {
         const qty = Math.max(1, num("fastQty"));
         const qtyLabel = currentGame()?.id === "tft" ? "Matches" : "Quantity / Hours";
@@ -249,7 +250,7 @@
         `Raid Count: ${raidQty}`,
         `Map Preference: Any Map`,
         `Event Mode: ${eventOn ? `On (+${moneyUSD(eventTotal)} USD)` : "Off"}`,
-        "Rule: only successful raids count; failed runs are retried or compensated."
+        "Note: If a raid fails, we will provide a free weapon gift."
       ].join("\n");
       return { total, valid: raidQty > 0, details };
     }
