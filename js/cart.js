@@ -474,7 +474,6 @@
         <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(gameAria(game.label))}">
           ${media}
           <span class="home-game-label">${escapeHtml(ui(game.label))}</span>
-          <span class="home-game-hint" aria-hidden="true">${ui("View services")}</span>
         </button>`;
       };
 
@@ -968,7 +967,7 @@
       $("detailIcon").innerHTML = categoryArtwork(service.category || "custom", service.cardTitle);
       $("detailTitle").textContent = ui(service.title);
       $("detailIntro").textContent = ui(service.intro);
-      $("detailDeal").innerHTML = serviceSaleBadge(service);
+      $("detailDeal").innerHTML = "";
       const hl = $("detailHighlights");
       const vtr = $("detailValorantTrust");
       const vg = currentGame()?.id === "valorant";

@@ -402,7 +402,7 @@
     }
 
     /** Single source for “ordering disabled” titles; used before order-center-upgrade loads. */
-    window.ELY_COMING_SOON_GAME_IDS = new Set(["circle", "wow", "cs2"]);
+    window.ELY_COMING_SOON_GAME_IDS = new Set(["circle", "wow", "cs2", "lol", "social"]);
 
 
 
