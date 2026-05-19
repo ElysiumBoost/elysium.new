@@ -7333,6 +7333,169 @@
         0 0 20px rgba(56, 189, 248, .22) !important;
     }
 
+    input[type="range"] {
+      accent-color: var(--ely-select-blue);
+      height: 34px;
+      filter: drop-shadow(0 0 8px rgba(56, 189, 248, .08));
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, .18);
+      background:
+        linear-gradient(90deg, rgba(56, 189, 248, .34), rgba(139, 92, 246, .5)),
+        rgba(7, 10, 18, .92);
+      box-shadow:
+        inset 0 1px 2px rgba(0, 0, 0, .55),
+        0 0 16px rgba(56, 189, 248, .08);
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      width: 21px;
+      height: 21px;
+      margin-top: -7px;
+      border: 2px solid rgba(191, 252, 255, .82);
+      background:
+        radial-gradient(circle at 38% 32%, #f8fafc, #7dd3fc 34%, #2563eb 78%);
+      box-shadow:
+        0 0 0 4px rgba(56, 189, 248, .14),
+        0 0 18px rgba(56, 189, 248, .44),
+        0 8px 18px rgba(0, 0, 0, .44);
+    }
+
+    input[type="range"]::-moz-range-track {
+      height: 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, .18);
+      background: rgba(7, 10, 18, .92);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, .55);
+    }
+
+    input[type="range"]::-moz-range-progress {
+      height: 9px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(56, 189, 248, .78), rgba(139, 92, 246, .72));
+      box-shadow: 0 0 14px rgba(56, 189, 248, .2);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 21px;
+      height: 21px;
+      border: 2px solid rgba(191, 252, 255, .82);
+      background:
+        radial-gradient(circle at 38% 32%, #f8fafc, #7dd3fc 34%, #2563eb 78%);
+      box-shadow:
+        0 0 0 4px rgba(56, 189, 248, .14),
+        0 0 18px rgba(56, 189, 248, .44),
+        0 8px 18px rgba(0, 0, 0, .44);
+    }
+
+    .dual-range-track,
+    .dual-range-fill {
+      height: 9px;
+    }
+
+    .dual-range-track {
+      border: 1px solid rgba(56, 189, 248, .16);
+      background: rgba(7, 10, 18, .92);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, .55);
+    }
+
+    .dual-range-fill {
+      background: linear-gradient(90deg, rgba(56, 189, 248, .78), rgba(139, 92, 246, .72));
+      box-shadow: 0 0 18px rgba(56, 189, 248, .24);
+    }
+
+    .dual-range input[type="range"]::-webkit-slider-thumb {
+      border-color: rgba(191, 252, 255, .82);
+      background: radial-gradient(circle at 38% 32%, #f8fafc, #7dd3fc 34%, #2563eb 78%);
+      box-shadow:
+        0 0 0 4px rgba(56, 189, 248, .14),
+        0 0 18px rgba(56, 189, 248, .44),
+        0 8px 18px rgba(0, 0, 0, .44);
+    }
+
+    .dual-range input[type="range"]::-moz-range-thumb {
+      border-color: rgba(191, 252, 255, .82);
+      background: radial-gradient(circle at 38% 32%, #f8fafc, #7dd3fc 34%, #2563eb 78%);
+      box-shadow:
+        0 0 0 4px rgba(56, 189, 248, .14),
+        0 0 18px rgba(56, 189, 248, .44),
+        0 8px 18px rgba(0, 0, 0, .44);
+    }
+
+    .btn,
+    .game-menu-btn,
+    .cat-btn,
+    .service-btn,
+    .tab-btn,
+    .raid-pill,
+    .check-row,
+    .ely-toggle-row,
+    .event-switch,
+    .qty-stepper {
+      border-radius: 10px;
+    }
+
+    .btn:hover,
+    .game-menu-btn:hover,
+    .cat-btn:hover,
+    .service-btn:hover,
+    .tab-btn:hover,
+    .raid-pill:hover,
+    .check-row:hover,
+    .ely-toggle-row:hover {
+      border-color: rgba(56, 189, 248, .42);
+      box-shadow:
+        0 0 0 1px rgba(56, 189, 248, .12),
+        0 0 18px rgba(56, 189, 248, .14);
+    }
+
+    .btn:focus-visible,
+    .game-menu-btn:focus-visible,
+    .cat-btn:focus-visible,
+    .service-btn:focus-visible,
+    .tab-btn:focus-visible,
+    .raid-pill:focus-visible,
+    .qty-step:focus-visible {
+      outline: none;
+      border-color: rgba(56, 189, 248, .64);
+      box-shadow:
+        0 0 0 2px rgba(56, 189, 248, .22),
+        0 0 22px rgba(56, 189, 248, .26);
+    }
+
+    .cat-btn.active,
+    .service-btn.active,
+    .tab-btn.active,
+    .raid-pill.active,
+    .deal-hint.active,
+    .game-menu-item.is-active,
+    .check-row:has(input:checked),
+    .ely-toggle-row:has(.ely-toggle-input:checked),
+    .event-switch:has(input:checked) {
+      border-color: rgba(56, 189, 248, .62) !important;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(56, 189, 248, .14), transparent 42%),
+        linear-gradient(165deg, rgba(14, 24, 40, .95), rgba(8, 12, 24, .92)) !important;
+      box-shadow:
+        0 0 0 1px rgba(56, 189, 248, .22),
+        0 0 24px rgba(56, 189, 248, .28),
+        inset 0 1px 0 rgba(255, 255, 255, .07) !important;
+    }
+
+    .btn-primary,
+    .btn-premium,
+    .btn-purchase,
+    #addToCart.btn-purchase {
+      border-color: rgba(56, 189, 248, .42);
+      border-radius: 10px;
+      box-shadow:
+        0 14px 34px rgba(0, 0, 0, .36),
+        0 0 22px rgba(56, 189, 248, .12);
+    }
+
 /* TFT static centered category layout */
 .category-shell.is-static-centered {
   justify-content: center;
