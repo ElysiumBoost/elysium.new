@@ -87,8 +87,13 @@
     /** Per-hour EUR for Valorant coaching (1–10 hours in the configurator). */
     const valorantCoachingHourlyEur = 14.9;
 
-    const valorantExtrasPaid = [];
-    const valorantExtrasFree = [];
+    const valorantExtrasPaid = [
+      { label: "Priority Start", pct: 0.20 },
+      { label: "Agent Preference", pct: 0.10 }
+    ];
+    const valorantExtrasFree = [
+      { label: "Schedule Preference" }
+    ];
 
     const valorantServers = ["EU", "NA", "LATAM", "BR", "KR", "JP", "AP", "OCE", "MEA"];
 

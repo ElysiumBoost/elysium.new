@@ -6,9 +6,11 @@
         return calculateValorant(type, service);
       }
       if (type === "tft-rank-up") return calculateTFTRankUp(service);
+      if (type === "tft-placement") return calculateTFTPlacement(service);
       if (type === "fast") {
         const qty = Math.max(1, num("fastQty"));
-        return { total: service.fromUSD * qty, valid: true, details: `Quantity / Hours: ${qty}\nNotes: ${val("fastNote") || "None"}` };
+        const qtyLabel = currentGame()?.id === "tft" ? "Matches" : "Quantity / Hours";
+        return { total: service.fromUSD * qty, valid: true, details: `${qtyLabel}: ${qty}\nNotes: ${val("fastNote") || "None"}` };
       }
       if (type === "blueprints") {
         const groups = Object.entries(state.blueprintSelections).map(([group, set]) => [group, Array.from(set).sort()]);

@@ -618,13 +618,13 @@
       const row = $("heroCtaRow");
       if (game) {
         hero.classList.remove("is-home");
-        hero.style.setProperty("--hero-bg", `url("${resolveSiteUrl(game.heroBg)}")`);
-        if (kicker) kicker.style.display = "";
+        hero.style.removeProperty("--hero-bg");
+        hero.style.removeProperty("--hero-position");
+        if (kicker) kicker.style.display = "none";
         if (sub) sub.style.display = "none";
         if (lead) lead.style.display = "";
-        $("heroKicker").textContent = ui(game.kicker);
-        $("heroTitle").textContent = ui(game.title);
-        $("heroCopy").textContent = ui(game.copy);
+        $("heroTitle").textContent = ui(game.label || game.title);
+        $("heroCopy").textContent = ui(game.copy || "Choose a service, configure your order, and confirm it through Discord.");
         if (row) row.style.display = "none";
       } else {
         hero.classList.add("is-home");
@@ -997,7 +997,6 @@
       $("detailSteps").innerHTML = vgSteps ? "" : detailSteps(service.form).map(step => `
         <div class="detail-step"><strong>${ui(step.title)}</strong><span>${ui(step.copy)}</span></div>
       `).join("");
-      renderOrderFeed();
       $("orderForm").innerHTML = buildForm(service.form);
       syncValorantOrderFormMount(service);
       setupValorantOrderChrome();
@@ -1101,118 +1100,6 @@
         { title: "Add To Cart", copy: "Review the total and add the configured service to your cart." },
         { title: "Copy Ticket", copy: "Paste the clean order summary into Discord for boosters confirmation." }
       ];
-    }
-
-    function recentOrderType(order) {
-      return order?.type || "item";
-    }
-
-    function pickRecentOrders() {
-      const picked = [];
-      const used = new Set();
-      let previousType = recentOrderLastBatch.length ? recentOrderType(recentOrderLastBatch[recentOrderLastBatch.length - 1]) : "";
-      for (let slot = 0; slot < 3; slot += 1) {
-        let candidates = recentOrders.filter(order => !used.has(order.label) && order.type !== previousType);
-        if (!candidates.length) candidates = recentOrders.filter(order => !used.has(order.label));
-        const choice = candidates[Math.floor(Math.random() * candidates.length)] || recentOrders[Math.floor(Math.random() * recentOrders.length)];
-        picked.push(choice);
-        used.add(choice.label);
-        previousType = choice.type;
-      }
-      recentOrderLastBatch = picked;
-      return picked;
-    }
-
-    function pickSingleRecentOrder(slotIndex) {
-      const blocked = new Set();
-      for (let i = 0; i < 3; i += 1) {
-        if (i !== slotIndex && recentOrderLastBatch[i]) blocked.add(recentOrderLastBatch[i].label);
-      }
-      const cur = recentOrderLastBatch[slotIndex];
-      let candidates = recentOrders.filter(o => !blocked.has(o.label));
-      if (cur) {
-        const alt = candidates.filter(o => o.label !== cur.label);
-        if (alt.length) candidates = alt;
-      }
-      if (!candidates.length) candidates = recentOrders.filter(o => !blocked.has(o.label));
-      if (!candidates.length) candidates = recentOrders.slice();
-      return candidates[Math.floor(Math.random() * candidates.length)];
-    }
-
-    function renderOrderFeedSlot(slotIndex) {
-      const feed = $("orderFeed");
-      if (!feed) return;
-      const game = currentGame();
-      if (!game || game.id !== "arc") return;
-      const cards = feed.querySelectorAll(".order-feed-card");
-      if (cards.length !== 3 || slotIndex < 0 || slotIndex > 2) {
-        renderOrderFeed();
-        return;
-      }
-      const newOrder = pickSingleRecentOrder(slotIndex);
-      recentOrderLastBatch[slotIndex] = newOrder;
-      const card = cards[slotIndex];
-      card.classList.add("is-changing");
-      window.setTimeout(() => {
-        card.dataset.feedService = newOrder.service;
-        card.dataset.feedCategory = newOrder.category;
-        card.setAttribute("aria-label", "Open " + newOrder.label);
-        const strong = card.querySelector("strong");
-        if (strong) strong.textContent = newOrder.label;
-        card.classList.remove("is-changing");
-      }, 360);
-    }
-
-    function bindOrderFeedClicks() {
-      const feed = $("orderFeed");
-      if (!feed || feed.dataset.feedDelegated === "1") return;
-      feed.dataset.feedDelegated = "1";
-      feed.addEventListener("click", event => {
-        const card = event.target.closest(".order-feed-card[data-feed-service]");
-        if (!card) return;
-        openRecentOrder(card.dataset.feedService, card.dataset.feedCategory);
-      });
-    }
-
-    function openRecentOrder(serviceId, categoryId) {
-      const arc = games.find(game => game.id === "arc");
-      if (!arc) return;
-      const service = arc.services.find(s => s.id === serviceId);
-      if (!service) return;
-      state.game = "arc";
-      state.category = categoryId || service.category;
-      state.serviceId = service.id;
-      syncGameHash("arc");
-      renderAll();
-      requestAnimationFrame(() => {
-        $("detailSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    }
-
-    function renderOrderFeed() {
-      const feed = $("orderFeed");
-      if (!feed) return;
-      const game = currentGame();
-      if (!game || game.id !== "arc") {
-        feed.innerHTML = "";
-        return;
-      }
-      const entries = pickRecentOrders();
-      const html = entries.map(order => `
-        <button class="order-feed-card" type="button" data-feed-service="${escapeHtml(order.service)}" data-feed-category="${escapeHtml(order.category)}" aria-label="Open ${escapeHtml(order.label)}">
-          <small><span class="live-dot" aria-hidden="true"></span>Raider Just Ordered!</small>
-          <strong>${escapeHtml(order.label)}</strong>
-        </button>
-      `).join("");
-      feed.innerHTML = html;
-      bindOrderFeedClicks();
-    }
-
-    function startOrderFeed() {
-      recentOrderTimers.forEach(id => window.clearInterval(id));
-      recentOrderTimers = ORDER_FEED_SLOT_MS.map((ms, slot) => window.setInterval(() => {
-        renderOrderFeedSlot(slot);
-      }, ms));
     }
 
     function qtyField(id, label, value = 0, min = 0, max = null, hideLabel = false) {
@@ -1339,6 +1226,60 @@
       }
       html += `</div></div>`;
       return html;
+    }
+
+    function compactRangeField(id, label, value, min, max) {
+      return `
+        <div class="level-range-card">
+          <div class="level-range-headline">
+            <label for="${id}">${escapeHtml(label)}</label>
+            <strong id="${id}Value">${value}</strong>
+          </div>
+          <input id="${id}" class="ely-level-range" type="range" min="${min}" max="${max}" step="1" value="${value}">
+        </div>`;
+    }
+
+    function valorantLevelPairHtml(startId, targetId, startLabel, targetLabel, startValue, targetValue, startMax, targetMax) {
+      return `
+        <div class="level-range-pair">
+          ${compactRangeField(startId, startLabel, startValue, 1, startMax)}
+          ${compactRangeField(targetId, targetLabel, targetValue, 2, targetMax)}
+        </div>`;
+    }
+
+    function valorantOrderOptionsHtml(type) {
+      const customizable = new Set([
+        "valorant-rank-boost",
+        "valorant-placement",
+        "valorant-ranked-wins",
+        "valorant-unrated",
+        "valorant-leveling",
+        "valorant-battlepass"
+      ]);
+      if (!customizable.has(type)) return "";
+      return `
+        <div class="order-options-panel" data-order-options-panel data-valorant-order-chrome>
+          <h4>Customize</h4>
+          ${valorantModeHtml()}
+          ${valorantExtrasHtml(true, true)}
+        </div>`;
+    }
+
+    function tftOrderOptionsHtml() {
+      return `
+        <div class="order-options-panel" data-order-options-panel>
+          <h4>Customize</h4>
+          <label class="check-row ely-toggle-row order-option-row">
+            <input id="tftEgirl" type="checkbox" class="ely-toggle-input">
+            <span class="ely-toggle-ui" aria-hidden="true"><span class="ely-toggle-track"><span class="ely-toggle-thumb"></span></span></span>
+            <span class="ely-toggle-label">E-girl (+$5)</span>
+          </label>
+          <input id="tftPlayMode" type="hidden" value="piloted">
+          <div class="order-option-buttons" role="group" aria-label="TFT play mode">
+            <button type="button" class="raid-pill active" data-tft-play-mode="piloted"><strong>Piloted</strong></button>
+            <button type="button" class="raid-pill" data-tft-play-mode="selfplay"><strong>Selfplay</strong><span>+50%</span></button>
+          </div>
+        </div>`;
     }
 
     function valorantConfiguratorCompactHeader() {
@@ -1472,26 +1413,25 @@
         leftK = ui("Rank");
         rightK = ui("Wins");
       } else if (type === "valorant-unrated") {
-        const id = val("valUnratedPkg") || "u5";
-        const pack = valorantUnratedPackages.find(p => p.id === id) || valorantUnratedPackages[0];
-        left = pack.label;
-        right = displayMoney(valorantEurToStoredTotal(pack.eur));
-        leftK = ui("Package");
+        const games = Math.max(1, Math.min(20, Math.round(num("valUnratedGames") || 5)));
+        left = `${games} ${games === 1 ? ui("game") : ui("games")}`;
+        right = displayMoney(valorantEurToStoredTotal(valorantUnratedGamesEur(games)));
+        leftK = ui("Games");
         rightK = ui("Price");
       } else if (type === "valorant-leveling") {
-        const id = val("valLevelPkg") || "l1";
-        const pack = valorantLevelPackages.find(p => p.id === id) || valorantLevelPackages[0];
-        left = pack.label;
-        right = displayMoney(valorantEurToStoredTotal(pack.eur));
-        leftK = ui("Package");
-        rightK = ui("Price");
+        const from = Math.max(1, Math.min(499, Math.round(num("valLevelFrom") || 1)));
+        const target = Math.max(from + 1, Math.min(500, Math.round(num("valLevelTo") || 20)));
+        left = `Level ${from}`;
+        right = `Level ${target}`;
+        leftK = ui("Current");
+        rightK = ui("Desired");
       } else if (type === "valorant-battlepass") {
-        const id = val("valBpPkg") || "bp-small";
-        const pack = valorantBattlePassPackages.find(p => p.id === id) || valorantBattlePassPackages[0];
-        left = pack.label;
-        right = displayMoney(valorantEurToStoredTotal(pack.eur));
-        leftK = ui("Package");
-        rightK = ui("Price");
+        const from = Math.max(1, Math.min(54, Math.round(num("valBpFrom") || 1)));
+        const target = Math.max(from + 1, Math.min(55, Math.round(num("valBpTo") || 20)));
+        left = `Level ${from}`;
+        right = `Level ${target}`;
+        leftK = ui("Current");
+        rightK = ui("Desired");
       } else if (type === "valorant-coaching") {
         const hours = Math.max(1, Math.min(10, Math.round(num("valCoachHours") || 1)));
         left = `${hours} ${hours === 1 ? ui("hour") : ui("hours")}`;
@@ -1546,6 +1486,7 @@
     function teardownValorantOrderChrome() {
       document.querySelector(".order-card")?.classList.remove("is-valorant", "is-tft-split");
       document.querySelectorAll("[data-valorant-order-chrome]").forEach(n => n.remove());
+      document.querySelectorAll("[data-order-options-panel]").forEach(n => n.remove());
       $("tftAddonsInCard")?.remove();
     }
 
@@ -1556,12 +1497,18 @@
       const summary = $("orderSummaryTotal") || document.querySelector(".order-card .summary-total");
       if (!card || !summary) return;
       teardownValorantOrderChrome();
-      if (game?.id !== "valorant" || !svc?.form?.startsWith?.("valorant-")) return;
-      card.classList.add("is-valorant");
+      if (game?.id === "valorant" && svc?.form?.startsWith?.("valorant-")) {
+        card.classList.add("is-valorant");
+        const html = valorantOrderOptionsHtml(svc.form);
+        if (html) summary.insertAdjacentHTML("afterbegin", html);
+      } else if (game?.id === "tft" && ["tft-rank-up", "tft-placement"].includes(String(svc?.form || ""))) {
+        summary.insertAdjacentHTML("afterbegin", tftOrderOptionsHtml());
+      }
     }
     function buildForm(type) {
       if (type === "fast") {
-        return `<div class="field-grid">${qtyField("fastQty", "Quantity / Hours", 1, 1)}<div><label for="fastNote">Order Notes</label><input id="fastNote" placeholder="Rank, server, role, schedule"></div></div>`;
+        const qtyLabel = currentGame()?.id === "tft" ? "Matches" : "Quantity / Hours";
+        return `<div class="field-grid">${qtyField("fastQty", qtyLabel, 1, 1)}<div><label for="fastNote">Order Notes</label><input id="fastNote" placeholder="Rank, server, role, schedule"></div></div>`;
       }
       if (type === "blueprints") {
         return `
@@ -1852,6 +1799,20 @@
           <p class="valorant-rb-hint" id="tftRankHint" hidden></p>
         </div>`;
       }
+      if (type === "tft-placement") {
+        const srvOpts = valorantServers.map(s => `<option value="${escapeHtml(s)}"${s === "EU" ? " selected" : ""}>${escapeHtml(s)}</option>`).join("");
+        return `
+        <div class="valorant-configurator tft-placement-form">
+          <div class="field-block field-block--tight">
+            <h4 class="valorant-inline-kicker">Placement Matches</h4>
+            ${compactRangeField("tftPlacementMatches", "Matches", 5, 1, 5)}
+          </div>
+          <div class="field-block field-block--tight">
+            <label for="tftPlacementServer">Server</label>
+            <select id="tftPlacementServer">${srvOpts}</select>
+          </div>
+        </div>`;
+      }
       if (type === "valorant-rank-boost") {
         const desiredRanks = [...VALORANT_RANKS.slice(1), "Radiant"];
         return `
@@ -1959,14 +1920,14 @@
         </div>`;
       }
       if (type === "valorant-unrated") {
-        const pills = valorantUnratedPackages.map(p =>
-          `<button type="button" class="raid-pill${p.id === "u5" ? " active" : ""}" data-val-unrated="${escapeHtml(p.id)}"><strong>${escapeHtml(p.label)}</strong><span>${displayMoney(valorantEurToStoredTotal(p.eur))}</span></button>`).join("");
         return `
-        <input type="hidden" id="valUnratedPkg" value="u5">
         <div class="valorant-configurator">
           ${valorantConfiguratorCompactHeader()}
           <div class="valorant-cfg-stack valorant-cfg-stack--selects">
-            <div class="field-block field-block--tight"><h4 class="valorant-inline-kicker">${ui("Package")}</h4><div class="quick-raid-grid valorant-pill-grid">${pills}</div></div>
+            <div class="field-block field-block--tight">
+              <h4 class="valorant-inline-kicker">${ui("Games")}</h4>
+              ${compactRangeField("valUnratedGames", ui("Unrated Games"), 5, 1, 20)}
+            </div>
             <div class="field-block field-block--tight">${valorantServerSelectHtml()}</div>
           </div>
         </div>`;
@@ -1976,47 +1937,24 @@
           ? String(valorantCategoryContent["account-leveling"].short || "").trim()
           : "";
         return `
-        <input type="hidden" id="valLevelPkg" value="l1">
         <div class="valorant-configurator valorant-configurator--leveling-panels">
           ${valorantConfiguratorCompactHeader()}
           ${lvlIntro ? `<p class="valorant-leveling-lead">${escapeHtml(lvlIntro)}</p>` : ""}
           <div class="valorant-panel-card valorant-panel-card--leveling">
-            <div class="field-grid valorant-leveling-grid">
-              <div class="ely-form-cell">
-                <label for="valLevelFrom">${ui("Current Level")}</label>
-                <select id="valLevelFrom">
-                  <option value="1" selected>1</option>
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="15">15</option>
-                </select>
-              </div>
-              <div class="ely-form-cell">
-                <label for="valLevelTo">${ui("Target Level")}</label>
-                <select id="valLevelTo">
-                  <option value="20" selected>20</option>
-                </select>
-              </div>
-            </div>
-            <div class="ely-form-cell valorant-leveling-speed">
-              <label for="valLevelSpeed">${ui("Speed")}</label>
-              <select id="valLevelSpeed">
-                <option value="standard">${ui("Standard")}</option>
-              </select>
-            </div>
+            ${valorantLevelPairHtml("valLevelFrom", "valLevelTo", ui("Current Level"), ui("Desired Level"), 1, 20, 499, 500)}
           </div>
           <div class="field-block field-block--tight valorant-leveling-server">${valorantServerSelectHtml()}</div>
         </div>`;
       }
       if (type === "valorant-battlepass") {
-        const pills = valorantBattlePassPackages.map(p =>
-          `<button type="button" class="raid-pill${p.id === "bp-small" ? " active" : ""}" data-val-bp="${escapeHtml(p.id)}"><strong>${escapeHtml(p.label)}</strong><span>${displayMoney(valorantEurToStoredTotal(p.eur))}</span></button>`).join("");
         return `
-        <input type="hidden" id="valBpPkg" value="bp-small">
         <div class="valorant-configurator">
           ${valorantConfiguratorCompactHeader()}
           <div class="valorant-cfg-stack valorant-cfg-stack--selects">
-            <div class="field-block field-block--tight"><h4 class="valorant-inline-kicker">${ui("Battle Pass")}</h4><div class="quick-raid-grid valorant-pill-grid">${pills}</div></div>
+            <div class="field-block field-block--tight">
+              <h4 class="valorant-inline-kicker">${ui("Battle Pass")}</h4>
+              ${valorantLevelPairHtml("valBpFrom", "valBpTo", ui("Current Battlepass Level"), ui("Desired Battlepass Level"), 1, 20, 54, 55)}
+            </div>
             <div class="field-block field-block--tight">${valorantServerSelectHtml()}</div>
           </div>
         </div>`;
@@ -2097,25 +2035,50 @@
           });
         });
       };
-      if (type === "valorant-unrated") bindPills("#detailSection [data-val-unrated]", "valUnratedPkg", b => b.dataset.valUnrated || "");
-      if (type === "valorant-leveling") {
-        const syncLevelPkg = () => {
-          const from = Number(val("valLevelFrom") || 1);
-          const map = { 1: "l1", 5: "l5", 10: "l10", 15: "l15" };
-          const hid = $("valLevelPkg");
-          if (hid) hid.value = map[from] || "l1";
-          updateTotal();
+      const syncRangeValue = id => {
+        const input = $(id);
+        const out = $(id + "Value");
+        if (!input || !out) return;
+        out.textContent = String(Math.round(Number(input.value || input.min || 0)));
+      };
+      const wireSingleRange = id => {
+        const input = $(id);
+        if (!input) return;
+        const sync = () => {
+          const min = Number(input.min || 0);
+          const max = Number(input.max || min);
+          input.value = String(Math.max(min, Math.min(max, Math.round(Number(input.value || min)))));
+          syncRangeValue(id);
         };
-        const applyPkgToFrom = () => {
-          const id = val("valLevelPkg") || "l1";
-          const rev = { l1: "1", l5: "5", l10: "10", l15: "15" };
-          const el = $("valLevelFrom");
-          if (el) el.value = rev[id] || "1";
+        input.addEventListener("input", sync);
+        input.addEventListener("change", sync);
+        sync();
+      };
+      const wireRangePair = (startId, targetId, min, max) => {
+        const start = $(startId);
+        const target = $(targetId);
+        if (!start || !target) return;
+        const sync = changed => {
+          let from = Math.max(min, Math.min(max - 1, Math.round(Number(start.value || min))));
+          let to = Math.max(min + 1, Math.min(max, Math.round(Number(target.value || min + 1))));
+          if (to <= from) {
+            if (changed === "start") to = Math.min(max, from + 1);
+            else from = Math.max(min, to - 1);
+          }
+          start.value = String(from);
+          target.value = String(to);
+          syncRangeValue(startId);
+          syncRangeValue(targetId);
         };
-        applyPkgToFrom();
-        $("valLevelFrom")?.addEventListener("change", syncLevelPkg);
-      }
-      if (type === "valorant-battlepass") bindPills("#detailSection [data-val-bp]", "valBpPkg", b => b.dataset.valBp || "");
+        start.addEventListener("input", () => sync("start"));
+        target.addEventListener("input", () => sync("target"));
+        start.addEventListener("change", () => sync("start"));
+        target.addEventListener("change", () => sync("target"));
+        sync("target");
+      };
+      if (type === "valorant-unrated") wireSingleRange("valUnratedGames");
+      if (type === "valorant-leveling") wireRangePair("valLevelFrom", "valLevelTo", 1, 500);
+      if (type === "valorant-battlepass") wireRangePair("valBpFrom", "valBpTo", 1, 55);
       if (type === "valorant-coaching") {
         $("valCoachHours")?.addEventListener("input", () => {
           const el = $("valCoachHours");
@@ -2170,6 +2133,26 @@
     function wireForm(type) {
       if (type && String(type).startsWith("valorant-")) wireValorantForm(type);
       if (type === "tft-rank-up") wireTFTRankUpForm();
+      document.querySelectorAll("#detailSection [data-tft-play-mode]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const mode = $("tftPlayMode");
+          if (mode) mode.value = btn.dataset.tftPlayMode || "piloted";
+          document.querySelectorAll("#detailSection [data-tft-play-mode]").forEach(item => item.classList.toggle("active", item === btn));
+          updateTotal();
+        });
+      });
+      if (type === "tft-placement") {
+        const matches = $("tftPlacementMatches");
+        const output = $("tftPlacementMatchesValue");
+        const syncMatches = () => {
+          if (!matches) return;
+          matches.value = String(Math.max(1, Math.min(5, Math.round(Number(matches.value || 1)))));
+          if (output) output.textContent = matches.value;
+        };
+        matches?.addEventListener("input", syncMatches);
+        matches?.addEventListener("change", syncMatches);
+        syncMatches();
+      }
       if (type === "blueprints") wireBlueprints();
       if (type === "loadout") {
         const bundleInput = $("loadoutBundle");
@@ -2758,7 +2741,8 @@
       }
       let base = 0;
       for (let i = curIdx; i < desIdx; i++) base += tftStepCost(TFT_RANK_STEPS[i].rank);
-      const total = base;
+      const opts = tftSelectedOptions(base);
+      const total = opts.total;
       const curLabel = curDiv ? curRank + " " + curDiv : curRank;
       const desLabel = desDiv ? desRank + " " + desDiv : desRank;
       const details = [
@@ -2767,9 +2751,42 @@
         "Current Rank: " + curLabel,
         "Desired Rank: " + desLabel,
         "Server: " + server,
+        "Options: " + opts.summary,
         "Total: $" + total + " USD"
       ].join("\n");
       return { total: total, valid: true, custom: false, details: details, tftRankError: "" };
+    }
+
+    function tftSelectedOptions(base) {
+      const egirl = Boolean($("tftEgirl")?.checked);
+      const mode = val("tftPlayMode") || "piloted";
+      let total = Number(base || 0);
+      if (egirl) total += 5;
+      if (mode === "selfplay") total *= 1.5;
+      const labels = [];
+      labels.push(mode === "selfplay" ? "Selfplay (+50%)" : "Piloted");
+      if (egirl) labels.push("E-girl (+$5)");
+      return {
+        total: Math.round(total * 100) / 100,
+        summary: labels.join(", ")
+      };
+    }
+
+    function calculateTFTPlacement(service) {
+      const matches = Math.max(1, Math.min(5, Math.round(num("tftPlacementMatches") || 5)));
+      const server = val("tftPlacementServer") || "EU";
+      const base = matches * 25;
+      const opts = tftSelectedOptions(base);
+      const details = [
+        "Game: Teamfight Tactics",
+        "Service: TFT Placement Matches",
+        "Matches: " + matches,
+        "Server: " + server,
+        "Options: " + opts.summary,
+        "Base Price: $" + base + " USD",
+        "Total: $" + opts.total + " USD"
+      ].join("\n");
+      return { total: opts.total, valid: true, custom: false, details: details };
     }
 
     function valorantRankBoostSegmentEur(cur, des) {
@@ -2812,6 +2829,41 @@
       if ($("valCoachAim")?.checked) labels.push("Aim Training");
       if ($("valCoachPlan")?.checked) labels.push("Rank Improvement Plan");
       return labels;
+    }
+
+    function clampWhole(value, min, max) {
+      return Math.max(min, Math.min(max, Math.round(Number(value || min))));
+    }
+
+    function valorantUnratedGamesEur(games) {
+      const count = clampWhole(games, 1, 20);
+      const anchors = valorantUnratedPackages
+        .map(pack => ({ games: parseInt(pack.label, 10), eur: pack.eur }))
+        .filter(pack => Number.isFinite(pack.games))
+        .sort((a, b) => a.games - b.games);
+      const exact = anchors.find(pack => pack.games === count);
+      if (exact) return exact.eur;
+      const lower = [...anchors].reverse().find(pack => pack.games < count) || anchors[0];
+      const upper = anchors.find(pack => pack.games > count) || anchors[anchors.length - 1];
+      if (!lower || !upper || lower.games === upper.games) return count * 2;
+      const ratio = (count - lower.games) / (upper.games - lower.games);
+      return Math.round((lower.eur + (upper.eur - lower.eur) * ratio) * 100) / 100;
+    }
+
+    function valorantAccountLevelEur(start, target) {
+      let from = clampWhole(start, 1, 499);
+      let to = clampWhole(target, 2, 500);
+      if (to <= from) to = Math.min(500, from + 1);
+      const segment = (a, b, rate) => Math.max(0, Math.min(to, b) - Math.max(from, a)) * rate;
+      const total = segment(1, 20, 1.31) + segment(20, 100, .9) + segment(100, 300, .65) + segment(300, 500, .5);
+      return Math.round(Math.max(1.5, total) * 100) / 100;
+    }
+
+    function valorantBattlePassEur(start, target) {
+      let from = clampWhole(start, 1, 54);
+      let to = clampWhole(target, 2, 55);
+      if (to <= from) to = Math.min(55, from + 1);
+      return Math.round(Math.max(3.9, (to - from) * .65) * 100) / 100;
     }
 
     function calculateValorant(type, service) {
@@ -3011,27 +3063,27 @@
         addRow("Wins", String(wins));
         addRow("Selected Options", selectedSummary);
       } else if (type === "valorant-unrated") {
-        const id = val("valUnratedPkg") || "u5";
-        const pack = valorantUnratedPackages.find(p => p.id === id) || valorantUnratedPackages[0];
-        baseEur = pack.eur;
-        selectedSummary = pack.label;
-        addRow("Package", pack.label);
-        addRow("Selected Options", pack.label);
+        const games = clampWhole(val("valUnratedGames"), 1, 20);
+        baseEur = valorantUnratedGamesEur(games);
+        selectedSummary = `${games} ${games === 1 ? "game" : "games"}`;
+        addRow("Games", String(games));
+        addRow("Selected Options", selectedSummary);
       } else if (type === "valorant-leveling") {
-        const id = val("valLevelPkg") || "l1";
-        const pack = valorantLevelPackages.find(p => p.id === id) || valorantLevelPackages[0];
-        baseEur = pack.eur;
-        selectedSummary = pack.label;
-        addRow("Package", pack.label);
-        addRow("Selected Options", pack.label);
+        const from = clampWhole(val("valLevelFrom"), 1, 499);
+        const target = Math.max(from + 1, clampWhole(val("valLevelTo"), 2, 500));
+        baseEur = valorantAccountLevelEur(from, target);
+        selectedSummary = `Level ${from} to ${Math.min(500, target)}`;
+        addRow("Current Level", String(from));
+        addRow("Desired Level", String(Math.min(500, target)));
+        addRow("Selected Options", selectedSummary);
       } else if (type === "valorant-battlepass") {
-        const id = val("valBpPkg") || "bp-small";
-        const pack = valorantBattlePassPackages.find(p => p.id === id) || valorantBattlePassPackages[0];
-        baseEur = pack.eur;
-        selectedSummary = pack.label;
-        addRow("Package", pack.label);
-        addRow("Selected Options", pack.label);
-        if (pack.id === "bp-express") bpNote = "Faster completion priority included.";
+        const from = clampWhole(val("valBpFrom"), 1, 54);
+        const target = Math.max(from + 1, clampWhole(val("valBpTo"), 2, 55));
+        baseEur = valorantBattlePassEur(from, target);
+        selectedSummary = `Battle Pass Level ${from} to ${Math.min(55, target)}`;
+        addRow("Current Battlepass Level", String(from));
+        addRow("Desired Battlepass Level", String(Math.min(55, target)));
+        addRow("Selected Options", selectedSummary);
       } else if (type === "valorant-coaching") {
         const hours = Math.max(1, Math.min(10, Math.round(num("valCoachHours") || 1)));
         baseEur = hours * valorantCoachingHourlyEur;

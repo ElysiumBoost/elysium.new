@@ -44,42 +44,6 @@
       return Object.assign(base, { noDiscount: true, valorantFromEur: fromEur }, extra || {});
     }
 
-
-    const recentOrders = [
-      { label: "20x Tempest Weapon Bundle",          service: "guns",       category: "guns",       type: "item" },
-      { label: "Anvil Blueprint",                     service: "blueprints", category: "blueprints", type: "blueprint" },
-      { label: "Bobcat Blueprint",                    service: "blueprints", category: "blueprints", type: "blueprint" },
-      { label: "Tempest Blueprint",                   service: "blueprints", category: "blueprints", type: "blueprint" },
-      { label: "Vulcano Blueprint",                   service: "blueprints", category: "blueprints", type: "blueprint" },
-      { label: "Venator Blueprint",                   service: "blueprints", category: "blueprints", type: "blueprint" },
-      { label: "Looting Mk.3 Survivor Blueprint",     service: "blueprints", category: "blueprints", type: "blueprint" },
-      { label: "20x Bobcat Weapon Bundle",            service: "guns",       category: "guns",       type: "item" },
-      { label: "10x Bobcat + 10x Vulcano Bundle",     service: "guns",       category: "guns",       type: "item" },
-      { label: "3M Discounted Raider Coins",          service: "coins",      category: "coins",      type: "currency" },
-      { label: "4x Raid Boost",                       service: "raid",       category: "raids",      type: "service" },
-      { label: "6M Discounted Raider Coins",          service: "coins",      category: "coins",      type: "currency" },
-      { label: "20x Looting Mk.3 Survivor Augment",   service: "loadout",    category: "loadouts",   type: "item" },
-      { label: "20x Medium Shield",                   service: "loadout",    category: "loadouts",   type: "item" },
-      { label: "100x Herbal Bandage",                 service: "loadout",    category: "loadouts",   type: "item" },
-      { label: "2,500 Assorted Seeds",                service: "seeds",      category: "seeds",      type: "currency" },
-      { label: "Trials Boost +3 Rank Up",             service: "trials",     category: "trials",     type: "service" },
-      { label: "Scrappy Level 1 to 5",                service: "workshop",   category: "workshop",   type: "service" },
-      { label: "Expedition Boost",                    service: "expedition", category: "expeditions",type: "service" },
-      { label: "10x Canto Weapon Bundle",             service: "guns",       category: "guns",       type: "item" },
-      { label: "10x Venator Weapon Bundle",           service: "guns",       category: "guns",       type: "item" },
-      { label: "20x Anvil Weapon Bundle",             service: "guns",       category: "guns",       type: "item" },
-      { label: "Extended Medium Mag III Blueprint",   service: "blueprints", category: "blueprints", type: "blueprint" },
-      { label: "Extended Light Mag III Blueprint",    service: "blueprints", category: "blueprints", type: "blueprint" },
-      { label: "75x Trigger Nade Bundle",             service: "loadout",    category: "loadouts",   type: "item" },
-      { label: "9M Discounted Raider Coins",          service: "coins",      category: "coins",      type: "currency" },
-      { label: "12M Discounted Raider Coins",         service: "coins",      category: "coins",      type: "currency" },
-      { label: "Queen Boss Clear",                    service: "boss",       category: "bosses",     type: "service" },
-      { label: "PvP Coaching Session",                service: "pvp",        category: "coaching",   type: "service" }
-    ];
-    let recentOrderTimers = [0, 0, 0];
-    const ORDER_FEED_SLOT_MS = [16000, 10000, 20000];
-    let recentOrderLastBatch = [];
-
     const prices = {
       blueprint: .75,
       coins100k: .25,
@@ -309,7 +273,7 @@
         popular: [],
         services: [
           { ...gameService("tft-rank-up", "rank-up", "TFT Rank Up", "TFT Rank Up", "i-rank", 7, "", "Rank Up starts at $7 per division. Live price calculator included.", "Choose your current and desired TFT rank for a live total. Iron\u2013Platinum: $7/div, Emerald: $10/div, Diamond: $12/div, Master+: $17/step.", "tft-rank-up"), thumb: "assets/tft-rank-up.webp" },
-          { ...gameService("tft-placement-matches", "tft-placement", "TFT Placement Matches", "TFT Placement Matches", "i-rank", 0, "", "Placement Matches by request. Price confirmed in Discord.", "Get your TFT placement matches handled by a verified booster. Details and price are confirmed through your Discord ticket."), thumb: "assets/tft-placement-matches.webp" },
+          { ...gameService("tft-placement-matches", "tft-placement", "TFT Placement Matches", "TFT Placement Matches", "i-rank", 25, " / match", "Placement Matches are $25 per match, up to 5 matches.", "Get your TFT placement matches handled by a verified booster. Choose 1 to 5 matches and confirm through your Discord ticket.", "tft-placement"), thumb: "assets/tft-placement-matches.webp" },
           { ...gameService("tft-coaching", "coaching", "TFT Coaching", "TFT Coaching", "i-coach", 10, "", "Piloted Duo Coaching starts at $10. Selfplay option will be added next.", "Improve your TFT decision-making, economy, positioning, comp choices, and late-game execution with a manual coaching request."), thumb: "assets/tft-coaching.webp" },
           { ...gameService("tft-double-up", "double-up", "TFT Double Up", "TFT Double Up", "i-star", 0, "", "Double Up mode service is available by request.", "Play or request support for TFT Double Up mode. Full options and pricing will be added after Rank Up and Coaching are finalized."), thumb: "assets/tft-double-up.webp" }
         ]

@@ -34,7 +34,6 @@
 
 </head>
 <body>
-  <audio id="bgMusic" src="assets/elysium-loop.mp3" loop preload="metadata" muted></audio>
   <header class="topbar">
     <div class="shell topbar-inner">
       <a class="brand" href="#" id="brandHome" aria-label="Elysium Boost – home">
@@ -69,14 +68,6 @@
           <option value="GBP">£ GBP</option>
           <option value="TRY">₺ TRY</option>
         </select>
-        <div class="audio-control" id="audioControl" title="Music">
-          <button class="audio-toggle" id="audioToggle" type="button" aria-label="Toggle music">♫</button>
-          <button type="button" class="audio-pop-trigger" id="audioPopTrigger" aria-label="Show music volume" aria-expanded="false" aria-controls="audioPop">▼</button>
-          <div class="audio-pop" id="audioPop" hidden>
-            <label class="sr-only" for="audioVolume">Music volume</label>
-            <input class="audio-volume" id="audioVolume" type="range" min="0" max="100" value="0" aria-label="Music volume">
-          </div>
-        </div>
         <button class="btn cart-button btn-icon" id="cartOpen" type="button" aria-label="Open cart" title="Open cart">
           <svg class="cart-icon-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9.2a2 2 0 01-2 1.8H8.4a2 2 0 01-2-1.6L5 4H4"/><circle cx="9" cy="20" r="1.35"/><circle cx="17" cy="20" r="1.35"/></svg>
           <span class="cart-count" id="cartCount">0</span>
@@ -217,7 +208,6 @@
             <div id="valorantConfiguratorMount" class="valorant-cfg-mount" hidden></div>
             <div class="detail-left-meta" id="detailLeftMeta">
               <div class="detail-steps" id="detailSteps"></div>
-              <div class="order-feed" id="orderFeed" aria-live="polite"></div>
               <div class="detail-highlights-wrap" id="detailHighlights" hidden></div>
               <div class="detail-val-trust" id="detailValorantTrust" hidden></div>
             </div>
@@ -354,7 +344,6 @@
 
 </body>
 </html>
-
 
 
 

@@ -1,92 +1,3 @@
-    const MUSIC_PREF_KEY = "elyBoostMusicPrefV1";
-    const bgMusic = $("bgMusic");
-    const audioToggle = $("audioToggle");
-    const audioVolume = $("audioVolume");
-    const audioControl = $("audioControl");
-    const audioPop = $("audioPop");
-    const audioPopTrigger = $("audioPopTrigger");
-
-    function readMusicPref() {
-      try {
-        const raw = localStorage.getItem(MUSIC_PREF_KEY);
-        if (!raw) return { vol: 0 };
-        const j = JSON.parse(raw);
-        return { vol: Math.max(0, Math.min(100, Number(j.vol) || 0)) };
-      } catch (e) {
-        return { vol: 0 };
-      }
-    }
-
-    function writeMusicPref() {
-      if (!audioVolume) return;
-      try {
-        localStorage.setItem(MUSIC_PREF_KEY, JSON.stringify({ vol: Number(audioVolume.value) || 0 }));
-      } catch (e) {}
-    }
-
-    function updateAudioButton() {
-      if (!audioToggle || !bgMusic) return;
-      const off = bgMusic.paused || bgMusic.muted;
-      audioToggle.innerHTML = off ? "&#9835;" : "II";
-      audioToggle.setAttribute("aria-label", off ? ui("Play music") : ui("Pause music"));
-    }
-
-    function setAudioPopOpen(open) {
-      if (!audioPop || !audioPopTrigger || !audioControl) return;
-      audioPop.hidden = !open;
-      audioPopTrigger.setAttribute("aria-expanded", open ? "true" : "false");
-      audioControl.classList.toggle("audio-control--open", open);
-      audioPopTrigger.textContent = open ? "\u25B2" : "\u25BC";
-    }
-
-    if (bgMusic && audioToggle && audioVolume && audioControl && audioPop && audioPopTrigger) {
-      (function initMusicPrefs() {
-        const p = readMusicPref();
-        audioVolume.value = String(p.vol);
-        bgMusic.volume = p.vol / 100;
-      })();
-      bgMusic.muted = true;
-      bgMusic.pause();
-
-      audioToggle.addEventListener("click", event => {
-        event.stopPropagation();
-        if (bgMusic.paused) {
-          let v = Number(audioVolume.value);
-          if (v <= 0) {
-            v = 45;
-            audioVolume.value = String(v);
-          }
-          bgMusic.volume = v / 100;
-          bgMusic.muted = false;
-          bgMusic.play().then(updateAudioButton).catch(updateAudioButton);
-        } else {
-          bgMusic.pause();
-          updateAudioButton();
-        }
-        writeMusicPref();
-      });
-      audioVolume.addEventListener("input", () => {
-        const v = Number(audioVolume.value);
-        bgMusic.volume = v / 100;
-        bgMusic.muted = v <= 0;
-        if (v <= 0) bgMusic.pause();
-        updateAudioButton();
-        writeMusicPref();
-      });
-
-      audioPopTrigger.addEventListener("click", e => {
-        e.preventDefault();
-        e.stopPropagation();
-        setAudioPopOpen(audioPop.hidden);
-      });
-
-      document.addEventListener("click", e => {
-        if (audioPop.hidden) return;
-        if (audioControl.contains(e.target)) return;
-        setAudioPopOpen(false);
-      });
-    }
-
     const currencyEl = $("currency");
     if (currencyEl) {
       currencyEl.addEventListener("change", () => {
@@ -226,7 +137,6 @@
 
     document.addEventListener("keydown", event => {
       if (event.key === "Escape") {
-        setAudioPopOpen(false);
         closeGameMenu();
         closeCart();
         closeArcIdModal();
@@ -238,7 +148,6 @@
     });
 
     applyNavRecoveryOnce();
-    updateAudioButton();
     restoreOrderState();
     sanitizeNavigationState();
     cleanStaleCart();
@@ -268,4 +177,3 @@
     }
 
     renderAll();
-    startOrderFeed();
