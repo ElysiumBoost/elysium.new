@@ -154,9 +154,9 @@
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #fde68a;
-  border: 1px solid rgba(253, 230, 138, 0.45);
-  background: rgba(88, 28, 135, 0.55);
+  color: #f3ead9;
+  border: 1px solid rgba(184, 133, 90, 0.42);
+  background: rgba(184, 133, 90, 0.32);
   pointer-events: none;
 }
 

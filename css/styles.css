@@ -8415,6 +8415,344 @@
       }
     }
 
+    /* Elysium sunset glass theme */
+    :root {
+      --bg: #0f0d12;
+      --surface: #0f0d12;
+      --nav: rgba(15, 13, 18, .72);
+      --panel: rgba(20, 18, 26, .62);
+      --panel-2: rgba(20, 18, 26, .68);
+      --panel-3: rgba(20, 18, 26, .74);
+      --card: rgba(20, 18, 26, .68);
+      --card-elevated: rgba(20, 18, 26, .72);
+      --text: #f3ead9;
+      --muted: #a89e8c;
+      --soft: #8f8576;
+      --rgb-purple: 107, 91, 138;
+      --line: rgba(212, 175, 110, .16);
+      --line-strong: rgba(212, 175, 110, .34);
+      --purple: #6b5b8a;
+      --purple-2: #8a78aa;
+      --purple-mid: #5f517c;
+      --gold: #d4af6e;
+      --price: #f3ead9;
+      --price-accent: #d4af6e;
+      --cyan: rgba(212, 175, 110, .34);
+      --glass: rgba(20, 18, 26, .62);
+      --glass-border: rgba(212, 175, 110, .18);
+      --ely-select-blue: #d4af6e;
+      --ely-select-blue-dim: rgba(212, 175, 110, .18);
+      --ely-select-glow: rgba(212, 175, 110, .24);
+    }
+
+    html,
+    body {
+      background-color: #0f0d12;
+    }
+
+    body {
+      background-image:
+        linear-gradient(180deg, rgba(15, 13, 18, .46), rgba(15, 13, 18, .68)),
+        url("../assets/backgrounds/elyssunset.webp");
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+      background-attachment: scroll;
+      color: var(--text);
+      scrollbar-color: rgba(212, 175, 110, .38) rgba(15, 13, 18, .72);
+    }
+
+    body::before {
+      background:
+        linear-gradient(90deg, rgba(15, 13, 18, .34), transparent 24%, transparent 76%, rgba(15, 13, 18, .34)),
+        linear-gradient(180deg, rgba(15, 13, 18, .14), rgba(15, 13, 18, .54));
+    }
+
+    body::after {
+      background:
+        radial-gradient(ellipse 90% 45% at 50% 0%, rgba(212, 175, 110, .08), transparent 62%),
+        linear-gradient(180deg, rgba(15, 13, 18, .08), rgba(15, 13, 18, .48));
+    }
+
+    .topbar {
+      background: rgba(15, 13, 18, .72);
+      border-bottom: 1px solid rgba(212, 175, 110, .12);
+      backdrop-filter: blur(16px) saturate(115%);
+      -webkit-backdrop-filter: blur(16px) saturate(115%);
+      box-shadow: 0 10px 32px rgba(0, 0, 0, .24);
+    }
+
+    .home-content,
+    .main,
+    .service-content,
+    .hero,
+    .hero.is-home,
+    .hero:not(.is-home),
+    .site-footer {
+      background: transparent;
+    }
+
+    .home-content::before,
+    .hero.is-home::before {
+      background:
+        linear-gradient(180deg, rgba(15, 13, 18, .38), rgba(15, 13, 18, .2) 48%, rgba(15, 13, 18, .48)),
+        radial-gradient(ellipse 70% 45% at 50% 0%, rgba(212, 175, 110, .1), transparent 60%);
+    }
+
+    .hero-future-visual,
+    .home-trust-strip,
+    .home-game-card,
+    .home-process article,
+    .home-why article,
+    .home-reviews article,
+    .home-trustpilot-card,
+    .popular-card,
+    .service-card,
+    .detail-left,
+    .detail-step,
+    .detail-specs,
+    .order-card,
+    .order-card-body,
+    .summary-total,
+    .field-block,
+    .valorant-panel-card,
+    .order-options-panel,
+    .drawer,
+    .cart-item,
+    .faq-item,
+    .site-footer-inner,
+    .ely-sticky-order__btn {
+      background: rgba(20, 18, 26, .62);
+      border-color: rgba(212, 175, 110, .18);
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, .35),
+        inset 0 1px 0 rgba(255, 255, 255, .04);
+      backdrop-filter: blur(14px) saturate(115%);
+      -webkit-backdrop-filter: blur(14px) saturate(115%);
+    }
+
+    .home-game-card,
+    .popular-card,
+    .service-card,
+    .detail-left,
+    .order-card,
+    .faq-item,
+    .site-footer-inner {
+      border-radius: 16px;
+    }
+
+    .home-trust-strip span,
+    .home-review-score,
+    .home-section-kicker,
+    .eyebrow,
+    .hero.is-home #heroCopy,
+    .price,
+    .summary-total-label::before,
+    .summary-total .live-total-text,
+    .order-summary-totals #cartTotal {
+      color: #d4af6e;
+    }
+
+    .hero.is-home h1,
+    #homeGameHead h2,
+    .home-section-head h2,
+    .faq-home h2,
+    .home-game-label,
+    .service-card h3,
+    .popular-card h3,
+    .detail-title h2,
+    .drawer-head h2,
+    .site-footer-brand strong {
+      color: #f3ead9;
+    }
+
+    .hero.is-home .hero-subtitle,
+    .home-process p,
+    .home-why p,
+    .home-reviews p,
+    .faq-item p,
+    .site-footer-brand span,
+    .usd-hint-text,
+    .order-trustpilot-cta {
+      color: #a89e8c;
+    }
+
+    .hero-future-visual {
+      background:
+        linear-gradient(145deg, rgba(20, 18, 26, .54), rgba(20, 18, 26, .72)),
+        radial-gradient(circle at 48% 42%, rgba(212, 175, 110, .18), transparent 36%);
+    }
+
+    .home-grid {
+      align-items: stretch;
+    }
+
+    .home-game-card,
+    .home-game-card.coming-soon {
+      min-height: clamp(218px, 24vh, 265px);
+      padding: 14px;
+      opacity: 1;
+    }
+
+    .home-game-card.coming-soon {
+      opacity: .55;
+      filter: grayscale(.34) saturate(.72) brightness(.84);
+    }
+
+    .home-game-card.coming-soon:hover {
+      transform: none;
+      border-color: rgba(184, 133, 90, .28);
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, .35),
+        inset 0 1px 0 rgba(255, 255, 255, .04);
+      filter: grayscale(.34) saturate(.72) brightness(.84);
+    }
+
+    .home-game-card.coming-soon:hover .home-game-media {
+      transform: none;
+      filter: brightness(.84) contrast(1.02) saturate(.82);
+    }
+
+    .home-game-card:not(.coming-soon):hover,
+    .service-card:hover,
+    .popular-card:hover {
+      border-color: rgba(212, 175, 110, .38);
+      box-shadow:
+        0 18px 46px rgba(0, 0, 0, .38),
+        0 0 26px rgba(212, 175, 110, .12),
+        inset 0 1px 0 rgba(255, 255, 255, .05);
+    }
+
+    .home-game-card::before {
+      background:
+        linear-gradient(180deg, rgba(15, 13, 18, .06) 0%, rgba(15, 13, 18, .32) 48%, rgba(15, 13, 18, .82) 100%),
+        radial-gradient(circle at 18% 78%, rgba(212, 175, 110, .12), transparent 42%);
+    }
+
+    .btn-premium,
+    .btn-primary,
+    .btn-purchase,
+    #addToCart.btn-purchase {
+      border-color: rgba(212, 175, 110, .4);
+      background: linear-gradient(135deg, #d4af6e, #b8855a);
+      color: #171015;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, .34), 0 0 22px rgba(212, 175, 110, .16);
+    }
+
+    .btn-glass,
+    .game-menu-btn,
+    .site-search,
+    .currency,
+    .cart-button {
+      background: rgba(20, 18, 26, .56);
+      border-color: rgba(212, 175, 110, .14);
+      color: #f3ead9;
+      backdrop-filter: blur(12px) saturate(112%);
+      -webkit-backdrop-filter: blur(12px) saturate(112%);
+    }
+
+    .cat-btn.active,
+    .service-btn.active,
+    .tab-btn.active,
+    .raid-pill.active,
+    .game-menu-item.is-active,
+    .check-row:has(input:checked),
+    .ely-toggle-row:has(.ely-toggle-input:checked),
+    .event-switch:has(input:checked) {
+      border-color: rgba(212, 175, 110, .52) !important;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(212, 175, 110, .12), transparent 42%),
+        linear-gradient(165deg, rgba(24, 22, 31, .82), rgba(15, 13, 18, .76)) !important;
+      box-shadow:
+        0 0 0 1px rgba(212, 175, 110, .16),
+        0 0 22px rgba(212, 175, 110, .18),
+        inset 0 1px 0 rgba(255, 255, 255, .05) !important;
+    }
+
+    .home-trustpilot-card,
+    .order-trustpilot-cta {
+      display: flex;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .home-trustpilot-card {
+      flex-direction: column;
+      margin-top: 10px;
+      padding: 13px 14px;
+      border: 1px solid rgba(212, 175, 110, .18);
+      border-radius: 16px;
+    }
+
+    .home-trustpilot-card strong {
+      color: #f3ead9;
+      font-family: var(--display);
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .home-trustpilot-card span {
+      color: #a89e8c;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .order-trustpilot-cta {
+      order: 6;
+      align-items: center;
+      justify-content: center;
+      margin-top: 8px;
+      padding: 8px 10px;
+      border: 1px solid rgba(212, 175, 110, .14);
+      border-radius: 10px;
+      background: rgba(20, 18, 26, .44);
+      font-size: 11px;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .site-footer {
+      border-top: 0;
+      background:
+        linear-gradient(180deg, transparent, rgba(15, 13, 18, .28));
+    }
+
+    .site-footer-inner {
+      padding: 14px 16px;
+    }
+
+    @media (max-width: 720px) {
+      body {
+        background-attachment: scroll;
+      }
+
+      .hero-future-visual,
+      .home-trust-strip,
+      .home-game-card,
+      .home-game-card.coming-soon,
+      .home-process article,
+      .home-why article,
+      .home-reviews article,
+      .home-trustpilot-card,
+      .service-card,
+      .detail-left,
+      .order-card,
+      .summary-total,
+      .field-block,
+      .drawer,
+      .faq-item,
+      .site-footer-inner {
+        background-color: rgba(20, 18, 26, .74);
+      }
+
+      .home-game-card,
+      .home-game-card.coming-soon {
+        min-height: 190px;
+      }
+    }
+
 /* TFT static centered category layout */
 .category-shell.is-static-centered {
   justify-content: center;

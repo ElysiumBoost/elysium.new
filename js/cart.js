@@ -624,7 +624,7 @@
           row.style.display = "";
           row.style.removeProperty("justify-content");
         }
-        $("heroTitle").textContent = ui("Premium Manual Game Boosting");
+        $("heroTitle").textContent = ui("Premium Game Boosting");
         if (sub) sub.textContent = ui("Fast, safe, Discord-confirmed services for players who want a clean and reliable order experience.");
         $("heroCopy").textContent = ui("Manual delivery · No cheats · Real support · Clear ticket confirmation");
       }
