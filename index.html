@@ -28,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=lux-cart-tft-v1">
+  <link rel="stylesheet" href="css/styles.css?v=home-landing-v1">
   <link rel="stylesheet" href="css/order-center.css?v=order-center-v2">
   <link rel="stylesheet" href="css/tft.css?v=tft-ui-v5">
 
@@ -101,26 +101,72 @@
     <section class="hero is-home" id="hero">
       <div class="shell hero-shell">
         <div class="hero-text">
-          <span class="eyebrow hero-eyebrow" id="heroKicker">Manual · Discord-confirmed</span>
-          <h1 id="heroTitle">Premium Game Boosting</h1>
-          <p class="hero-subtitle" id="heroSubtitle">Built for serious gamers who want fast, safe, and reliable progress — with clear service options and manual support.</p>
-          <p class="hero-lead" id="heroCopy">Choose your game, configure your order, and our team confirms everything with you before play.</p>
-          <div class="hero-cta-row hero-cta-row--solo" id="heroCtaRow">
-            <button type="button" class="btn btn-premium hero-cta" id="heroCta">Boost</button>
+          <span class="eyebrow hero-eyebrow" id="heroKicker">Manual &middot; Discord-confirmed</span>
+          <h1 id="heroTitle">Premium Manual Game Boosting</h1>
+          <p class="hero-subtitle" id="heroSubtitle">Fast, safe, Discord-confirmed services for players who want a clean and reliable order experience.</p>
+          <p class="hero-lead" id="heroCopy">Manual delivery &middot; No cheats &middot; Real support &middot; Clear ticket confirmation</p>
+          <div class="hero-cta-row" id="heroCtaRow">
+            <button type="button" class="btn btn-premium hero-cta" id="heroCta">Start Order</button>
+            <button type="button" class="btn btn-glass hero-cta hero-cta-secondary" id="heroHowWorks">How It Works</button>
           </div>
         </div>
+        <div class="hero-future-visual" aria-hidden="true"></div>
       </div>
     </section>
 
     <section class="home-content" id="homeContent">
       <div class="shell">
+        <div class="home-trust-strip" aria-label="Service trust highlights">
+          <span>Manual Service</span>
+          <span>Discord Confirmed</span>
+          <span>No Cheats / No Exploits</span>
+          <span>Fast Support</span>
+        </div>
         <div class="quick-head" id="homeGameHead">
           <div>
-            <h2>Select Your Service</h2>
-            <div class="home-order-flow" id="howItWorksTitle" aria-label="Order flow">Pick service <span aria-hidden="true">→</span> Configure order <span aria-hidden="true">→</span> Confirm in Discord</div>
+            <span class="home-section-kicker">Start here</span>
+            <h2>Choose Your Game</h2>
           </div>
         </div>
         <div class="home-grid" id="homeGameGrid"></div>
+        <section class="home-process" aria-labelledby="howItWorksTitle">
+          <div class="home-section-head">
+            <span class="home-section-kicker">Process</span>
+            <h2 id="howItWorksTitle">How It Works</h2>
+          </div>
+          <div class="home-process-grid">
+            <article><strong>1. Choose Your Service</strong><p>Pick the game and service that fits your goal.</p></article>
+            <article><strong>2. Configure Your Order</strong><p>Select the options needed for a clear quote.</p></article>
+            <article><strong>3. Confirm in Discord</strong><p>Copy the ticket and confirm details with support.</p></article>
+            <article><strong>4. Delivery Begins</strong><p>A verified booster starts after confirmation.</p></article>
+          </div>
+        </section>
+        <section class="home-why" id="homeAboutBlock" aria-labelledby="homeWhyTitle">
+          <div class="home-section-head">
+            <span class="home-section-kicker">Why ElysiumBoost</span>
+            <h2 id="homeWhyTitle">Built for clean orders</h2>
+          </div>
+          <div class="home-why-grid">
+            <article><strong>Clear Pricing</strong><p>Live totals stay easy to review before Discord confirmation.</p></article>
+            <article><strong>Manual Process</strong><p>Every order is handled manually with no cheats or exploits.</p></article>
+            <article><strong>Real Support</strong><p>Support confirms timing, details, and updates in your ticket.</p></article>
+            <article><strong>Built for Serious Players</strong><p>Focused services for players who value reliable progress.</p></article>
+          </div>
+        </section>
+        <section class="home-reviews" aria-labelledby="trustCompactTitle">
+          <div class="home-section-head home-section-head--inline">
+            <div>
+              <span class="home-section-kicker">Trust Proof</span>
+              <h2 id="trustCompactTitle">Player Feedback</h2>
+            </div>
+            <span class="home-review-score">4.9/5 Discord Support</span>
+          </div>
+          <div class="home-review-grid">
+            <article><strong>Fast confirmation</strong><p>Ticket was clear and support answered quickly.</p></article>
+            <article><strong>Clean delivery</strong><p>Everything was confirmed before the order started.</p></article>
+            <article><strong>Easy checkout</strong><p>The service options were simple to understand.</p></article>
+          </div>
+        </section>
         <section class="faq-home faq-home--compact" aria-labelledby="faqHomeTitle">
           <h2 id="faqHomeTitle">FAQ</h2>
           <div class="faq-list">
@@ -130,7 +176,6 @@
             <details class="faq-item"><summary>Where do I receive updates?</summary><p>Updates, timing, and delivery notes are handled in your Discord ticket.</p></details>
           </div>
         </section>
-        <div class="home-about-pricing" id="homeAboutBlock"></div>
       </div>
     </section>
 
@@ -300,9 +345,9 @@
   <script src="js/state.js?v=order-center-v2"></script>
   <script src="js/storage.js?v=social-card-live1"></script>
   <script src="js/validation.js?v=order-center-v2"></script>
-  <script src="js/cart.js?v=lux-cart-tft-v1"></script>
+  <script src="js/cart.js?v=home-landing-v1"></script>
   <script src="js/ui.js?v=lux-cart-tft-v1"></script>
-  <script src="js/main.js?v=social-card-live1"></script>
+  <script src="js/main.js?v=home-landing-v1"></script>
   <script src="js/order-center-upgrade.js?v=order-center-v2"></script>
 
 </body>

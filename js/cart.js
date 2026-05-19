@@ -478,17 +478,12 @@
       };
 
       const chunks = [];
-      ["arc", "valorant", "cs2", "lol", "tft", "social"].forEach(id => {
+      ["arc", "valorant", "tft", "cs2", "lol", "social"].forEach(id => {
         const game = g(id);
         if (game) chunks.push(renderHomeSingleCard(game));
       });
 
       $("homeGameGrid").innerHTML = chunks.join("");
-
-      const ab = $("homeAboutBlock");
-      if (ab) {
-        ab.innerHTML = "";
-      }
     }
     const serviceImages = {
       blueprints: "assets/thumb-blueprints.webp",
@@ -627,10 +622,11 @@
         if (lead) lead.style.display = "";
         if (row) {
           row.style.display = "";
-          row.style.justifyContent = "center";
+          row.style.removeProperty("justify-content");
         }
-        $("heroTitle").textContent = ui("Premium Game Boosting");
-        $("heroCopy").textContent = "";
+        $("heroTitle").textContent = ui("Premium Manual Game Boosting");
+        if (sub) sub.textContent = ui("Fast, safe, Discord-confirmed services for players who want a clean and reliable order experience.");
+        $("heroCopy").textContent = ui("Manual delivery · No cheats · Real support · Clear ticket confirmation");
       }
     }
 

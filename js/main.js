@@ -39,6 +39,9 @@
         }
       });
     }
+    $("heroHowWorks")?.addEventListener("click", () => {
+      $("howItWorksTitle")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
 
     $("addToCart")?.addEventListener("click", () => {
       const fn = window.addToCart;
