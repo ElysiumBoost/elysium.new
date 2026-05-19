@@ -4361,6 +4361,66 @@
         top: 108px;
         max-height: calc(100vh - 120px);
       }
+
+      /* Centered two-column product + checkout (Arc Raiders only) */
+      body[data-ely-game="arc"] #detailSection.detail--valorant-layout {
+        width: 100%;
+        margin-inline: auto;
+        grid-template-columns: minmax(0, max-content) minmax(300px, 460px);
+        justify-content: center;
+        gap: 20px;
+        align-items: start;
+      }
+
+      body[data-ely-game="arc"] #detailSection.detail--valorant-layout > .detail-left {
+        display: contents;
+      }
+
+      body[data-ely-game="arc"] #detailSection.detail--valorant-layout .detail-left-head {
+        grid-column: 1 / -1;
+        grid-row: 1;
+      }
+
+      body[data-ely-game="arc"] #detailSection.detail--valorant-layout > .detail-left > .intro {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+
+      body[data-ely-game="arc"] #detailSection.detail--valorant-layout > .detail-left > .detail-specs {
+        grid-row: 3;
+        grid-column: 1 / -1;
+        box-sizing: border-box;
+        display: grid;
+        grid-template-columns: subgrid;
+        justify-self: center;
+        width: auto;
+        max-width: 100%;
+      }
+
+      body[data-ely-game="arc"] #detailSection.detail--valorant-layout > .detail-left > .detail-specs > * {
+        grid-column: 1 / -1;
+      }
+
+      body[data-ely-game="arc"] #detailSection.detail--valorant-layout .valorant-cfg-mount {
+        grid-column: 1;
+        grid-row: 4;
+        align-self: start;
+        min-width: 0;
+      }
+
+      body[data-ely-game="arc"] #detailSection.detail--valorant-layout .order-card.is-arc-split {
+        grid-column: 2;
+        grid-row: 4;
+        align-self: start;
+        justify-self: stretch;
+        width: 100%;
+        max-width: 460px;
+      }
+
+      body[data-ely-game="arc"] #detailSection.detail--valorant-layout .detail-left-meta {
+        grid-column: 1 / -1;
+        grid-row: 5;
+      }
     }
 
     @media (max-width: 720px) {
