@@ -4354,6 +4354,74 @@
       text-shadow: 0 0 18px rgba(167, 139, 250, .14);
     }
 
+    /* Arc checkout — one outer card only (matches Valorant/TFT flat interior) */
+    body[data-ely-game="arc"] .order-card.is-arc-split .summary-total {
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
+    }
+
+    body[data-ely-game="arc"] .order-card.is-arc-split .order-card-body {
+      gap: 10px;
+      padding: 0 14px 14px;
+    }
+
+    body[data-ely-game="arc"] .order-card.is-arc-split .order-panel-head {
+      padding: 10px 14px 0;
+    }
+
+    body[data-ely-game="arc"] .order-card.is-arc-split .summary-total .arc-order-preview {
+      margin: 0;
+      padding: 0 0 12px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      max-height: min(36vh, 300px);
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    body[data-ely-game="arc"] .order-card.is-arc-split .summary-total .arc-order-preview__title {
+      margin: 0 0 10px;
+      padding: 0;
+    }
+
+    body[data-ely-game="arc"] .order-card.is-arc-split .summary-total .arc-order-preview__line {
+      margin: 0;
+      padding: 6px 0 0;
+      border: 0;
+      border-top: 1px solid rgba(139, 92, 246, .14);
+    }
+
+    body[data-ely-game="arc"] .order-card.is-arc-split .summary-total .arc-order-preview__line:first-of-type {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    body[data-ely-game="arc"] .order-card.is-arc-split .summary-total .arc-price-breakdown {
+      width: 100%;
+      margin: 0;
+      padding: 12px 0 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      border-top: 1px solid rgba(139, 92, 246, .22);
+    }
+
+    body[data-ely-game="arc"] .order-card.is-arc-split .summary-total .arc-price-breakdown__row--final {
+      border-top-color: rgba(139, 92, 246, .22);
+    }
+
+    body[data-ely-game="arc"] .order-card.is-arc-split .summary-total > .summary-total-label {
+      border-top: 1px solid rgba(139, 92, 246, .22);
+      padding-top: 14px;
+      margin-top: 2px;
+    }
+
     body[data-ely-game="arc"] .detail-title h2 {
       color: #fff9f4;
       text-shadow: 0 0 28px rgba(139, 92, 246, .2);
@@ -4647,7 +4715,7 @@
         grid-template-columns: minmax(0, max-content) minmax(300px, 460px);
         justify-content: center;
         gap: 20px;
-        align-items: start;
+        align-items: stretch;
       }
 
       body[data-ely-game="arc"] #detailSection.detail--valorant-layout > .detail-left {
@@ -4682,17 +4750,50 @@
       body[data-ely-game="arc"] #detailSection.detail--valorant-layout .valorant-cfg-mount {
         grid-column: 1;
         grid-row: 4;
-        align-self: start;
+        align-self: stretch;
         min-width: 0;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
       }
 
       body[data-ely-game="arc"] #detailSection.detail--valorant-layout .order-card.is-arc-split {
         grid-column: 2;
         grid-row: 4;
-        align-self: start;
+        align-self: stretch;
         justify-self: stretch;
         width: 100%;
         max-width: 460px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        box-sizing: border-box;
+      }
+
+      body[data-ely-game="arc"] #detailSection.detail--valorant-layout .order-card.is-arc-split .order-panel-head {
+        flex: 0 0 auto;
+      }
+
+      body[data-ely-game="arc"] #detailSection.detail--valorant-layout .order-card.is-arc-split .order-card-body {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 0;
+        overflow: visible;
+      }
+
+      body[data-ely-game="arc"] #detailSection.detail--valorant-layout .order-card.is-arc-split .order-form:empty {
+        display: none;
+      }
+
+      body[data-ely-game="arc"] #detailSection.detail--valorant-layout .order-card.is-arc-split .summary-total {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 0;
       }
 
       body[data-ely-game="arc"] #detailSection.detail--valorant-layout .detail-left-meta {
@@ -5044,6 +5145,12 @@
       display: grid;
       gap: 8px;
       padding-right: 3px;
+    }
+
+    @media (min-width: 1081px) {
+      body[data-ely-game="arc"] .scroll-list {
+        max-height: 169px;
+      }
     }
 
     .search-box {
