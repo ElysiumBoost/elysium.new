@@ -3354,31 +3354,56 @@
     }
 
     .valorant-mode-pills--with-duo-hint {
-      align-items: flex-end;
+      align-items: stretch;
     }
 
     .valorant-mode-duo-wrap {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      gap: 5px;
+      gap: 0;
       flex: 1 1 44%;
       min-width: 0;
     }
 
     .valorant-duo-extra-hint {
+      position: absolute;
+      top: 0;
+      right: 10px;
+      left: auto;
+      z-index: 2;
+      transform: translateY(-52%);
+      margin: 0;
+      padding: 0;
       font-family: var(--display);
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      text-align: center;
+      text-align: right;
       color: rgba(255, 209, 102, 0.88);
-      line-height: 1.15;
+      opacity: 0.8;
+      line-height: 1;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    /* Beats .summary-total span { font-size: 34px } on checkout price styling */
+    body[data-ely-game="valorant"] .order-card.is-valorant .summary-total span.valorant-duo-extra-hint {
+      font-size: 11px !important;
+      font-weight: 800 !important;
+      opacity: 0.8;
+      color: rgba(255, 209, 102, 0.88) !important;
+      line-height: 1;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-shadow: none;
     }
 
     .valorant-mode-duo-wrap .raid-pill {
       flex: 1 1 auto;
+      padding-top: 10px;
     }
 
     .order-card.is-valorant .valorant-mode-pills .raid-pill {
@@ -4356,7 +4381,228 @@
       font-size: 11px;
     }
 
+    /* Valorant checkout — one outer card only (remove nested summary-total frame) */
+    body[data-ely-game="valorant"] .order-card.is-valorant .summary-total {
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
+    }
+
+    body[data-ely-game="valorant"] .order-card.is-valorant .order-card-body {
+      gap: 10px;
+      padding: 0 14px 14px;
+    }
+
+    body[data-ely-game="valorant"] .order-card.is-valorant .order-panel-head {
+      padding: 10px 14px 0;
+    }
+
+    /* Valorant left configurator — single outer mount card, flat interior */
+    body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount {
+      padding: 14px;
+    }
+
+    body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount .valorant-configurator {
+      gap: 12px;
+    }
+
+    body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount .valorant-cfg-compact-head {
+      padding: 0 2px 12px;
+      margin-bottom: 0;
+      border-bottom-color: rgba(139, 92, 246, .22);
+    }
+
+    body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount .valorant-configurator .field-block,
+    body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount .valorant-configurator .field-block--tight {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount .valorant-configurator.valorant-rank-boost .valorant-flow-kicker {
+      margin: 10px 0 8px;
+    }
+
+    body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount .valorant-configurator.valorant-rank-boost .valorant-rank-select-panel {
+      gap: 0;
+    }
+
+    body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount .valorant-configurator.valorant-rank-boost .valorant-rank-tier-grid {
+      gap: 12px 18px;
+      padding-bottom: 4px;
+    }
+
+    body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount .valorant-configurator.valorant-rank-boost .valorant-rank-tier-grid .valorant-rank-field label {
+      display: block;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount .valorant-configurator.valorant-rank-boost .valorant-rank-select-panel > .field-block {
+      padding-top: 14px;
+      border-top: 1px solid rgba(139, 92, 246, .22);
+    }
+
+    body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount .valorant-configurator.valorant-rank-boost .valorant-rank-select-panel > .field-block label {
+      margin-bottom: 8px;
+    }
+
+    body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount .valorant-configurator.valorant-rank-boost .valorant-rb-hint {
+      padding-top: 8px;
+    }
+
+    body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount .valorant-cfg-stack--selects > .field-block + .field-block {
+      padding-top: 14px;
+      border-top: 1px solid rgba(139, 92, 246, .22);
+    }
+
     @media (min-width: 1081px) {
+      /* Centered two-column config + checkout (Valorant desktop only) */
+      body[data-ely-game="valorant"] #detailSection.detail--valorant-layout {
+        width: 100%;
+        margin-inline: auto;
+        grid-template-columns: minmax(0, 1fr) minmax(300px, 460px);
+        justify-content: center;
+        gap: 20px;
+        align-items: start;
+      }
+
+      body[data-ely-game="valorant"] #detailSection.detail--valorant-layout > .detail-left {
+        display: contents;
+      }
+
+      body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .detail-left-head {
+        grid-column: 1 / -1;
+        grid-row: 1;
+      }
+
+      body[data-ely-game="valorant"] #detailSection.detail--valorant-layout > .detail-left > .intro {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+
+      body[data-ely-game="valorant"] #detailSection.detail--valorant-layout > .detail-left > .detail-specs {
+        grid-row: 3;
+        grid-column: 1 / -1;
+        box-sizing: border-box;
+        display: grid;
+        grid-template-columns: subgrid;
+        justify-self: center;
+        width: auto;
+        max-width: 100%;
+      }
+
+      body[data-ely-game="valorant"] #detailSection.detail--valorant-layout > .detail-left > .detail-specs > * {
+        grid-column: 1 / -1;
+      }
+
+      body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount {
+        grid-column: 1;
+        grid-row: 4;
+        align-self: start;
+        min-width: 0;
+        width: 100%;
+      }
+
+      body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .order-card.is-valorant {
+        grid-column: 2;
+        grid-row: 4;
+        align-self: start;
+        justify-self: stretch;
+        width: 100%;
+        max-width: 460px;
+      }
+
+      body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .detail-left-meta {
+        grid-column: 1 / -1;
+        grid-row: 5;
+      }
+
+      /* Valorant checkout — single outer card, flat interior (desktop) */
+      body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .order-options-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .order-options-panel > h4 {
+        margin: 0 0 12px;
+        padding: 0;
+      }
+
+      body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .order-options-panel .field-block.valorant-panel-tight,
+      body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .order-options-panel .valorant-panel-tight {
+        margin: 0;
+        padding: 14px 0 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        border-top: 1px solid rgba(139, 92, 246, .22);
+      }
+
+      body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .order-options-panel .valorant-panel-tight h4 {
+        margin: 0 0 10px;
+        padding: 0;
+      }
+
+      body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .order-options-panel .valorant-mode-pills,
+      body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .order-options-panel .raid-toggle-grid {
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .valorant-duo-extra-hint {
+        margin: 0;
+        padding: 0 5px;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .valorant-mode-duo-wrap {
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        gap: 0;
+      }
+
+      body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .valorant-extras-toggle .ely-toggle-row {
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        padding: 8px 0;
+        min-height: 38px;
+      }
+
+      body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .valorant-extras-toggle .ely-toggle-row:hover {
+        border: 0;
+        background: rgba(139, 92, 246, .08);
+        box-shadow: none;
+        transform: none;
+      }
+
+      body[data-ely-game="valorant"] .order-card.is-valorant .summary-total > .summary-total-label {
+        border-top: 1px solid rgba(139, 92, 246, .22);
+        padding-top: 14px;
+        margin-top: 2px;
+      }
+
       body[data-ely-game="arc"] .order-card {
         top: 108px;
         max-height: calc(100vh - 120px);
