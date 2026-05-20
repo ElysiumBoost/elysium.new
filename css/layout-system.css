@@ -1,0 +1,374 @@
+/* ============================================================
+   ELYSIUM BOOST — LAYOUT SYSTEM
+   
+   Bu dosya sitenin 6 temel componentinin boyutlarını
+   kesinleştirir. Hiçbir oyun, hiçbir servis bu ölçüleri
+   değiştiremez. İçerik değişir, kutu değişmez.
+
+   1. TOPBAR          → 70px, sabit
+   2. CATEGORY BAR    → 124px, sabit kart boyutu
+   3. SERVICE GRID    → 4 kolon, sabit kart
+   4. DETAIL PANEL    → sol esnek, sağ 380px sabit
+   5. ORDER CARD      → 380px genişlik, sabit
+   6. CART DRAWER     → 460px genişlik, sabit
+   + Valorant category bar sola kayma fix
+   ============================================================ */
+
+/* ══════════════════════════════════════
+   1. TOPBAR — 70px, değişmez
+   ══════════════════════════════════════ */
+.topbar {
+  height: 70px;
+  min-height: 70px;
+  max-height: 70px;
+}
+
+.topbar-inner {
+  height: 70px;
+  min-height: 70px;
+}
+
+/* ══════════════════════════════════════
+   2. CATEGORY BAR — 124px, kart 148x116px
+   ══════════════════════════════════════ */
+.category-bar {
+  min-height: 124px;
+  max-height: 124px;
+}
+
+.category-shell {
+  min-height: 124px;
+  max-height: 124px;
+}
+
+.category-scroll {
+  min-height: 124px;
+  max-height: 124px;
+}
+
+/* Tüm oyunlarda kart boyutu aynı */
+.cat-btn {
+  width: 148px  !important;
+  min-width: 148px !important;
+  max-width: 148px !important;
+  min-height: 116px !important;
+  max-height: 116px !important;
+}
+
+.service-thumb {
+  height: 80px !important;
+  min-height: 80px !important;
+  max-height: 80px !important;
+}
+
+/* ── Valorant category bar FIX ──
+   Sola kayma: justify-content center zorlanıyor
+   ama scrollWidth > clientWidth olduğunda bozuluyor.
+   Çözüm: Valorant için scroll başlangıçta center,
+   overflow olunca baştan başlar.
+   ────────────────────────────────── */
+body[data-ely-game="valorant"] .category-scroll {
+  justify-content: flex-start !important;
+  overflow-x: auto !important;
+}
+
+/* Valorant'ta yeterli kart varsa ve sığıyorsa ortala */
+body[data-ely-game="valorant"] .category-shell.is-tabs-centered .category-scroll {
+  justify-content: center !important;
+  overflow-x: visible !important;
+}
+
+/* Wow category — neon game cats sabit */
+.category-bar.neon-game-cats .category-shell {
+  min-height: 124px;
+  max-height: 124px;
+}
+
+.category-bar.neon-game-cats .cat-btn.cat-btn--val {
+  width: 102px !important;
+  min-width: 102px !important;
+  max-width: 102px !important;
+  min-height: 128px !important;
+  max-height: 128px !important;
+}
+
+/* ══════════════════════════════════════
+   3. SERVICE GRID — 4 kolon, sabit kart
+   ══════════════════════════════════════ */
+.service-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 12px;
+}
+
+/* Kart minimum yüksekliği — içerik ne olursa olsun */
+.service-card {
+  min-height: 220px;
+}
+
+.popular-card {
+  min-height: 200px;
+}
+
+/* ══════════════════════════════════════
+   4. DETAIL PANEL — sol esnek, sağ 380px
+   ══════════════════════════════════════ */
+.detail {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 380px !important;
+  gap: 20px !important;
+  align-items: start !important;
+}
+
+/* Tüm detail layout varyantları aynı grid'i kullanır */
+#detailSection,
+#detailSection.detail--valorant-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 380px !important;
+  gap: 20px !important;
+  align-items: start !important;
+}
+
+/* Sol kolon — konfigürasyon alanı */
+#detailSection > .detail-left,
+#detailSection.detail--valorant-layout > .detail-left {
+  min-width: 0;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+}
+
+/* Valorant layout — display: contents kaldırılıyor */
+#detailSection.detail--valorant-layout > .detail-left {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+}
+
+/* Sağ kolon — order card */
+#detailSection > .detail-right,
+#detailSection.detail--valorant-layout > .detail-right {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  position: sticky !important;
+  top: 88px !important;
+  align-self: start !important;
+}
+
+/* detail-specs — tam genişlik, alt satırda */
+#detailSection > .detail-specs,
+#detailSection.detail--valorant-layout > .detail-specs {
+  grid-column: 1 / -1 !important;
+  grid-row: 2 !important;
+}
+
+/* Valorant cfg mount — sol kolonda kalır */
+#detailSection.detail--valorant-layout .valorant-cfg-mount {
+  grid-column: unset !important;
+  grid-row: unset !important;
+  width: 100% !important;
+}
+
+/* ══════════════════════════════════════
+   5. ORDER CARD — 380px, sabit
+   ══════════════════════════════════════ */
+
+/* Tüm order card varyantları aynı boyut */
+.order-card,
+.order-card.is-valorant,
+.order-card.is-arc-split,
+.order-card.is-tft-split {
+  width: 380px !important;
+  min-width: 380px !important;
+  max-width: 380px !important;
+  position: sticky !important;
+  top: 88px !important;
+  max-height: calc(100vh - 108px) !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  /* Oyuna özgü top/max-height overrideları kaldırıldı */
+}
+
+/* Order card body — scrollable iç alan */
+.order-card .order-card-body,
+.order-card.is-valorant .order-card-body,
+.order-card.is-arc-split .order-card-body,
+.order-card.is-tft-split .order-card-body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 !important;
+}
+
+/* Order form — scroll içinde */
+.order-card .order-form {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  max-height: none;
+  padding: 14px;
+}
+
+/* Summary total — alt kısım, sabit */
+.order-card .summary-total,
+.order-card.is-valorant .summary-total,
+.order-card.is-arc-split .summary-total,
+.order-card.is-tft-split .summary-total {
+  flex: 0 0 auto !important;
+  border-top: 1px solid rgba(212, 175, 110, .22) !important;
+  padding: 14px !important;
+  background: rgba(10, 8, 8, .85) !important;
+  /* Valorant/Arc inner card frame kaldırıldı */
+  border-radius: 0 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Panel head — sabit üst alan */
+.order-card .order-panel-head {
+  flex: 0 0 auto;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(212, 175, 110, .12);
+}
+
+/* Add to cart butonu — tam genişlik */
+.order-card #addToCart,
+.order-card .btn-purchase {
+  width: 100% !important;
+  min-height: 46px !important;
+}
+
+/* ══════════════════════════════════════
+   6. CART DRAWER — 460px, sabit
+   ══════════════════════════════════════ */
+.drawer {
+  width: 460px !important;
+  min-width: 460px !important;
+  max-width: 460px !important;
+}
+
+.drawer.drawer--wide {
+  width: 560px !important;
+  min-width: 560px !important;
+  max-width: 560px !important;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — mobilde sabit boyutlar esnetilebilir
+   ══════════════════════════════════════ */
+@media (max-width: 1080px) {
+  /* Detail — tek kolon */
+  .detail,
+  #detailSection,
+  #detailSection.detail--valorant-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  #detailSection > .detail-right,
+  #detailSection.detail--valorant-layout > .detail-right {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+  }
+
+  #detailSection.detail--valorant-layout > .detail-left {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+  }
+
+  /* Order card — tam genişlik */
+  .order-card,
+  .order-card.is-valorant,
+  .order-card.is-arc-split,
+  .order-card.is-tft-split {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    position: static !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .order-card .order-card-body,
+  .order-card.is-valorant .order-card-body,
+  .order-card.is-arc-split .order-card-body {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  /* Service grid — 2 kolon */
+  .service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  /* Category kartları biraz küçülür */
+  .cat-btn {
+    width: 132px !important;
+    min-width: 132px !important;
+    max-width: 132px !important;
+  }
+}
+
+@media (max-width: 720px) {
+  /* Service grid — 1 kolon */
+  .service-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Drawer — tam genişlik */
+  .drawer,
+  .drawer.drawer--wide {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Topbar height esnetilebilir */
+  .topbar,
+  .topbar-inner {
+    height: auto !important;
+    min-height: 60px !important;
+    max-height: none !important;
+  }
+
+  /* Category kartları daha küçük */
+  .cat-btn {
+    width: 120px !important;
+    min-width: 120px !important;
+    max-width: 120px !important;
+    min-height: 106px !important;
+  }
+}
+
+/* ══════════════════════════════════════
+   VALORANT CATEGORY BAR — KAPSAMLI FIX
+   Auto-scroll JS'i etkisiz kılmak için
+   ══════════════════════════════════════ */
+
+/* Valorant'ta yeterince kart varsa scroll gerekebilir */
+body[data-ely-game="valorant"] .category-scroll {
+  scroll-snap-type: none !important;
+  scroll-behavior: smooth !important;
+}
+
+/* Kategoriler arası gap sabit */
+body[data-ely-game="valorant"] .category-scroll .cat-btn + .cat-btn {
+  margin-left: 0;
+}
+
+/* Valorant category shell — ok butonlarını göster */
+body[data-ely-game="valorant"] .category-shell {
+  grid-template-columns: 40px minmax(0, 1fr) 40px !important;
+}
+
+/* Eğer tüm kartlar ekrana sığıyorsa (is-tabs-centered) okları gizle */
+body[data-ely-game="valorant"] .category-shell.is-tabs-centered #catPrev,
+body[data-ely-game="valorant"] .category-shell.is-tabs-centered #catNext {
+  visibility: hidden !important;
+}
