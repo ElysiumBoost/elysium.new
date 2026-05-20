@@ -255,6 +255,23 @@
       return { total, valid: raidQty > 0, details };
     }
 
+    function orderSelectionPreviewLines(result) {
+      if (!result) return [];
+      if (Array.isArray(result.valorantRows)) {
+        const skip = new Set(["Game", "Service Category", "Base Price", "Extras Price", "Discount", "Total Price"]);
+        return result.valorantRows
+          .filter(row => row && row.dt && !skip.has(row.dt) && String(row.dd || "").trim())
+          .map(row => `${row.dt}: ${row.dd}`)
+          .slice(0, 8);
+      }
+      return String(result.details || "")
+        .split("\n")
+        .map(line => line.trim())
+        .filter(Boolean)
+        .filter(line => !/^(Base Price|Extras Price|Discount|Total Price|Subtotal|Unit Rate|Rate):/i.test(line))
+        .slice(0, 8);
+    }
+
     function updateTotal() {
       const wrap = $("orderSummaryTotal");
       const svc = currentService();
@@ -272,6 +289,11 @@
         if (arcPrev) {
           arcPrev.hidden = true;
           arcPrev.innerHTML = "";
+        }
+        const selectionPrev = $("orderSelectionPreview");
+        if (selectionPrev) {
+          selectionPrev.hidden = true;
+          selectionPrev.innerHTML = "";
         }
         return;
       }
@@ -320,6 +342,18 @@
         } else {
           arcPrev.hidden = true;
           arcPrev.innerHTML = "";
+        }
+      }
+      const selectionPrev = $("orderSelectionPreview");
+      if (selectionPrev) {
+        const useArcPreview = currentGame()?.id === "arc" && document.querySelector(".order-card.is-arc-split");
+        const lines = useArcPreview ? [] : orderSelectionPreviewLines(result);
+        if (lines.length) {
+          selectionPrev.hidden = false;
+          selectionPrev.innerHTML = `<div class="order-selection-preview__title">${escapeHtml(ui("Selected Options"))}</div>${lines.map(line => `<p class="order-selection-preview__line">${escapeHtml(line)}</p>`).join("")}`;
+        } else {
+          selectionPrev.hidden = true;
+          selectionPrev.innerHTML = "";
         }
       }
       $("addToCart").disabled = !result.valid;

@@ -764,7 +764,18 @@
         }
         scroller.addEventListener("mouseenter", () => { categoryMotion.paused = true; });
         scroller.addEventListener("mouseleave", () => { categoryMotion.paused = false; });
-        scroller.addEventListener("wheel", () => pauseCategoryAuto(7000), { passive: true });
+        scroller.addEventListener("wheel", event => {
+          const maxLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+          pauseCategoryAuto(7000);
+          if (!maxLeft) return;
+          const primaryDelta = Math.abs(event.deltaX) >= Math.abs(event.deltaY) ? event.deltaX : (event.shiftKey ? event.deltaY : 0);
+          if (!primaryDelta) return;
+          event.preventDefault();
+          const cappedDelta = Math.max(-80, Math.min(80, primaryDelta));
+          scroller.scrollLeft += cappedDelta * 0.45;
+          showCategoryDragIndicator();
+          scheduleHideCategoryDragIndicator();
+        }, { passive: false });
         scroller.addEventListener("scroll", () => {
           if ($("categoryDragIndicator")?.classList.contains("is-active")) updateCategoryDragIndicator();
         }, { passive: true });
@@ -828,7 +839,7 @@
       if (!categoryMotion.raf) {
         const tick = () => {
           const maxLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
-          const canMove = maxLeft > 12 && !categoryMotion.paused && !categoryMotion.dragging && Date.now() > categoryMotion.pauseUntil && state.game;
+          const canMove = state.game !== "valorant" && maxLeft > 12 && !categoryMotion.paused && !categoryMotion.dragging && Date.now() > categoryMotion.pauseUntil && state.game;
           if (canMove) {
             if (scroller.scrollLeft >= maxLeft - 1) categoryMotion.direction = -1;
             if (scroller.scrollLeft <= 1) categoryMotion.direction = 1;

@@ -2789,6 +2789,46 @@
       padding-bottom: 0;
     }
 
+    .order-selection-preview {
+      order: 0;
+      flex-shrink: 0;
+      margin: 0 0 2px;
+      padding: 10px 12px;
+      border-radius: 11px;
+      border: 1px solid rgba(212, 175, 110, .24);
+      background: rgba(10, 8, 8, .42);
+      max-height: min(34vh, 260px);
+      overflow-x: hidden;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(212, 175, 110, .45) rgba(10, 8, 8, .7);
+    }
+
+    .order-selection-preview__title {
+      margin: 0 0 8px;
+      font-family: var(--display);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .order-selection-preview__line {
+      margin: 0;
+      padding: 6px 0 0;
+      border-top: 1px solid rgba(212, 175, 110, .14);
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    .order-selection-preview__line:first-of-type {
+      padding-top: 0;
+      border-top: 0;
+    }
+
     .valorant-order-chrome {
       display: flex;
       flex-direction: column;
