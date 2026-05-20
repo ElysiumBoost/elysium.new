@@ -768,7 +768,7 @@
           const perUnitHint = qty > 1 && !item.custom ? `<div class="cart-receipt-hint">${escapeHtml(ui("Shown as line total for this configuration."))}</div>` : "";
           const del = escapeHtml(item.deliveryType || ui("Manual delivery via Discord"));
           const eta = escapeHtml(item.etaHint || ui("Ask support"));
-          const bdBlock = item.priceBreakdown ? `<div class="cart-receipt-section cart-receipt-section--breakdown"><div class="cart-receipt-k">${ui("Price breakdown")}</div><div class="cart-item-detail-body">${escapeHtml(item.priceBreakdown)}</div></div>` : "";
+          const bdBlock = ""; // price breakdown kept in item.priceBreakdown for Discord ticket; not displayed in drawer
           const acctRows = cartReceiptAccountRows(item);
           const qtyDisabled = item.custom ? " disabled" : "";
           return `

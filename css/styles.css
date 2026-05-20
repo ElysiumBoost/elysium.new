@@ -1845,6 +1845,9 @@
       gap: 10px;
       padding: 12px 12px 11px;
       margin-bottom: 12px;
+      border-color: rgba(212, 175, 110, .22);
+      background: linear-gradient(165deg, rgba(18, 15, 20, .58), rgba(10, 8, 8, .76));
+      box-shadow: 0 10px 28px rgba(0, 0, 0, .24), inset 0 1px 0 rgba(255, 255, 255, .035);
     }
 
     .popular-card, .service-card {
@@ -3709,7 +3712,9 @@
       padding: 12px;
       border-radius: 10px;
       border: 1px solid rgba(212, 175, 110, .28);
-      background: linear-gradient(180deg, rgba(18, 14, 42, .82), rgba(8, 7, 20, .72));
+      background:
+        radial-gradient(circle at 18% 0%, rgba(212, 175, 110, .08), transparent 44%),
+        linear-gradient(180deg, rgba(18, 15, 20, .76), rgba(10, 8, 8, .72));
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
     }
 
@@ -3724,7 +3729,7 @@
     .level-range-headline label {
       margin: 0;
       font-size: 11px;
-      color: rgba(216, 209, 255, .92);
+      color: rgba(243, 234, 217, .82);
     }
 
     .level-range-headline strong {
@@ -5602,10 +5607,10 @@
     }
 
     .order-meta-card {
-      padding: 14px 16px 16px;
+      padding: 12px 14px 14px;
       border-radius: 12px;
-      border: 1px solid rgba(212, 175, 110, .35);
-      background: linear-gradient(165deg, rgba(18, 15, 20, .78), rgba(10, 8, 8, .92));
+      border: 1px solid rgba(212, 175, 110, .24);
+      background: linear-gradient(165deg, rgba(18, 15, 20, .62), rgba(10, 8, 8, .82));
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06);
     }
 
@@ -5631,10 +5636,10 @@
 
     .order-checklist-card,
     .order-discord-panel {
-      padding: 16px 18px 18px;
+      padding: 14px 16px 16px;
       border-radius: 12px;
-      border: 1px solid rgba(212, 175, 110, .28);
-      background: rgba(10, 12, 22, .55);
+      border: 1px solid rgba(212, 175, 110, .2);
+      background: rgba(14, 11, 10, .5);
     }
 
     .order-checklist-card__title,
@@ -5733,7 +5738,7 @@
 
     .cart-qty-btn:hover:not(:disabled) {
       border-color: rgba(251, 191, 36, .55);
-      background: rgba(30, 24, 60, .9);
+      background: rgba(42, 31, 18, .82);
     }
 
     .cart-qty-btn:disabled {
@@ -7908,7 +7913,7 @@
     }
 
     .dual-range input[type="range"]::-webkit-slider-thumb {
-      border-color: rgba(191, 252, 255, .82);
+      border-color: rgba(243, 234, 217, .82);
       background: radial-gradient(circle at 38% 32%, #fff7e8, #d4af6e 34%, #8b5b34 78%);
       box-shadow:
         0 0 0 4px rgba(212, 175, 110, .14),
@@ -7917,7 +7922,7 @@
     }
 
     .dual-range input[type="range"]::-moz-range-thumb {
-      border-color: rgba(191, 252, 255, .82);
+      border-color: rgba(243, 234, 217, .82);
       background: radial-gradient(circle at 38% 32%, #fff7e8, #d4af6e 34%, #8b5b34 78%);
       box-shadow:
         0 0 0 4px rgba(212, 175, 110, .14),

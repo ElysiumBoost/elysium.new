@@ -10,25 +10,25 @@
 /* Remove the side arrow columns from the shell grid */
 .category-bar.tft-cats .category-shell {
   grid-template-columns: minmax(0, 1fr);
-  min-height: 152px;
+  min-height: 124px;
 }
 
 .category-bar.tft-cats .category-scroll {
-  min-height: 152px;
+  min-height: 124px;
   justify-content: center;
-  gap: 16px;
-  padding: 14px 16px;
+  gap: 12px;
+  padding: 8px 0;
 }
 
-/* Wider, taller TFT category cards */
+/* TFT category cards — matched to Arc Raiders / Valorant proportions */
 .category-bar.tft-cats .cat-btn {
-  width: 210px;
-  min-width: 180px;
-  min-height: 148px;
+  width: 162px;
+  min-width: 152px;
+  min-height: 120px;
 }
 
 .category-bar.tft-cats .cat-btn .service-thumb {
-  height: 108px;
+  height: 90px;
 }
 
 .category-bar.tft-cats .cat-btn .service-thumb img {
@@ -36,8 +36,8 @@
 }
 
 .category-bar.tft-cats .cat-label {
-  font-size: 14px;
-  letter-spacing: .05em;
+  font-size: 12px;
+  letter-spacing: .04em;
   text-align: center;
 }
 
@@ -94,8 +94,8 @@
     overflow: visible;
   }
   .category-bar.tft-cats .cat-btn {
-    width: 180px;
-    min-width: 150px;
+    width: 150px;
+    min-width: 142px;
   }
 }
 
@@ -246,16 +246,44 @@
   flex-shrink: 0;
 }
 
-/* Rank image — square TFT assets; multiply blend removes white bg */
+/* Rank image — TFT uses square webp assets */
 .tft-rank-up-form .valorant-rank-thumb-shell {
   background: transparent;
+  min-height: 74px;
+  justify-content: center;
 }
 
 .tft-rank-up-form .valorant-rank-tier-img {
-  max-width: 100px;
-  max-height: 100px;
+  max-width: 80px;
+  max-height: 74px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
   mix-blend-mode: normal;
   filter: none;
+}
+
+/* Reserve space for division select so hide/show does not shift layout */
+.tft-rank-up-form .tft-div-wrap {
+  min-height: 64px;
+}
+
+.tft-rank-up-form .tft-div-wrap.tft-div-wrap--hidden {
+  display: block;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* TFT rank selects — match Valorant rank-pick select height and style */
+.tft-rank-up-form .valorant-rank-pick select {
+  min-height: 44px;
+  font-size: 13px;
+  border-radius: 11px;
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto;
+  text-align: center;
+  text-align-last: center;
 }
 
 /* Division select spacing inside the div-wrap */

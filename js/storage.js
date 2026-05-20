@@ -25,7 +25,7 @@ function ensureOrderPreviewId() {
   if (state.orderPreviewId) return;
   const first = state.cart[0];
   const code = gameSlugForPreview(first.game);
-  state.orderPreviewId = "EB-" + code + "-" + String(1000 + Math.floor(Math.random() * 9000)).slice(-4);
+  state.orderPreviewId = "DN-FV-" + code + "-" + String(1000 + Math.floor(Math.random() * 9000)).slice(-4);
 }
 
 function cleanStaleCart() {
@@ -149,7 +149,11 @@ function restoreOrderState() {
       const sel = $("currency");
       if (sel) sel.value = state.currency;
     }
-    if (typeof j.orderPreviewId === "string") state.orderPreviewId = j.orderPreviewId;
+    if (typeof j.orderPreviewId === "string") {
+      state.orderPreviewId = j.orderPreviewId.startsWith("DN-FV-")
+        ? j.orderPreviewId
+        : j.orderPreviewId.replace(/^EB-/, "DN-FV-");
+    }
     if (typeof j.arcId === "string") state.arcId = j.arcId;
     if (typeof j.arcIdSkipped === "boolean") state.arcIdSkipped = j.arcIdSkipped;
     if (typeof j.orderRegion === "string") state.orderRegion = j.orderRegion;
