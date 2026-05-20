@@ -2,6 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+
+  <!--
+    Base tag — GitHub Pages için path düzeltmesi.
+    Bu script olduğu gibi kalıyor, JS bağımlı.
+  -->
   <script>
     (function () {
       try {
@@ -14,90 +19,165 @@
       } catch (e) {}
     })();
   </script>
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- ── SEO & Meta ── -->
   <title>ELYSIUM BOOST | Premium Game Services</title>
   <meta name="description" content="ELYSIUM BOOST – premium manual game services, verified boosters, Discord ticket orders, and fast support.">
-  <meta name="theme-color" content="#05030d">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="ELYSIUM BOOST | Premium Game Services">
+  <meta name="theme-color" content="#0a0808">
+
+  <!-- ── Open Graph ── -->
+  <meta property="og:type"        content="website">
+  <meta property="og:title"       content="ELYSIUM BOOST | Premium Game Services">
   <meta property="og:description" content="Premium manual game services with verified boosters, clean Discord ticket flow, and fast support.">
-  <meta property="og:image" content="https://elysiumboost.com/assets/elysium-preview.webp">
-  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image"       content="https://elysiumboost.com/assets/elysium-preview.webp">
+
+  <!-- ── Twitter Card ── -->
+  <meta name="twitter:card"  content="summary_large_image">
   <meta name="twitter:image" content="https://elysiumboost.com/assets/elysium-preview.webp">
+
+  <!-- ── Favicon ── -->
   <link rel="icon" href="assets/assetselysiumlogo-transparent.webp" type="image/webp">
+
+  <!-- ── Fonts ── -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=final-gold-theme-v1">
+
+  <!-- ════════════════════════════════════
+       CSS — Yükleme sırası önemli!
+       1. vars     → Tüm CSS değişkenleri (tek kaynak)
+       2. base     → Reset, html/body, animasyonlar
+       3. layout   → Topbar, hero, home, footer
+       4. components → Butonlar, kartlar, price
+       5. forms    → Input, toggle, stepper, slider
+       6. cart     → Drawer, cart items, checkout
+       7. order-center → Cart UX geliştirmeleri
+       8. tft      → TFT'ye özel stiller
+       ════════════════════════════════════ -->
+  <link rel="stylesheet" href="css/vars.css?v=2">
+  <link rel="stylesheet" href="css/base.css?v=2">
+  <link rel="stylesheet" href="css/layout.css?v=2">
+  <link rel="stylesheet" href="css/components.css?v=2">
+  <link rel="stylesheet" href="css/forms.css?v=2">
+  <link rel="stylesheet" href="css/cart.css?v=2">
   <link rel="stylesheet" href="css/order-center.css?v=final-gold-theme-v1">
   <link rel="stylesheet" href="css/tft.css?v=final-gold-theme-v1">
 
 </head>
 <body>
+
+  <!-- ══════════════════════════════════
+       HEADER / TOPBAR
+       ══════════════════════════════════ -->
   <header class="topbar">
     <div class="shell topbar-inner">
+
+      <!-- Marka + Servis menüsü -->
       <div class="brand-zone">
-        <a class="brand" href="#" id="brandHome" aria-label="Elysium Boost – home">
+        <a class="brand" href="#" id="brandHome" aria-label="Elysium Boost – ana sayfa">
           <span class="brand-mark-wrap brand-mark-wrap--plain">
             <img
               class="brand-mark"
               src="assets/assetselysiumlogo-transparent.webp"
-              width="56"
-              height="56"
+              width="56" height="56"
               alt=""
               loading="eager"
               decoding="async">
           </span>
           <span class="brand-wordmark">Elysium Boost</span>
         </a>
-        <div class="game-menu-wrap" id="gameTabs" aria-label="Choose service">
-          <button class="btn game-menu-btn" type="button" id="gameMenuBtn" aria-expanded="false" aria-controls="gameMenuPanel" aria-haspopup="true">
+
+        <!-- Oyun seçici dropdown -->
+        <div class="game-menu-wrap" id="gameTabs" aria-label="Servis seç">
+          <button
+            class="btn game-menu-btn"
+            type="button"
+            id="gameMenuBtn"
+            aria-expanded="false"
+            aria-controls="gameMenuPanel"
+            aria-haspopup="true">
             <span class="game-menu-btn-label">Services</span>
-            <svg class="game-menu-chevron" viewBox="0 0 24 24" aria-hidden="true" width="14" height="14"><path fill="currentColor" d="M6.5 9.2 12 15l5.5-5.8L18 10l-6 6.3a1 1 0 0 1-1.45 0L6 10l.5-.8z"/></svg>
+            <svg class="game-menu-chevron" viewBox="0 0 24 24" aria-hidden="true" width="14" height="14">
+              <path fill="currentColor" d="M6.5 9.2 12 15l5.5-5.8L18 10l-6 6.3a1 1 0 0 1-1.45 0L6 10l.5-.8z"/>
+            </svg>
           </button>
           <div class="game-menu-panel" id="gameMenuPanel" role="menu" aria-labelledby="gameMenuBtn" hidden></div>
         </div>
-      </div>
-      <nav class="primary-nav" aria-label="Primary">
+      </div><!-- /brand-zone -->
+
+      <!-- Ana navigasyon -->
+      <nav class="primary-nav" aria-label="Ana menü">
         <a href="#homeAboutBlock">About Us</a>
         <a href="#howItWorksTitle">How It Works</a>
         <a href="#trustCompactTitle">Reviews</a>
         <a href="#faqHomeTitle">FAQ</a>
       </nav>
+
+      <!-- Sağ aksiyonlar -->
       <div class="actions">
-        <input class="site-search" id="siteSearch" type="search" placeholder="Search services" aria-label="Search services">
-        <button class="btn btn-icon" id="siteSearchBtn" type="button" aria-label="Search" title="Search">
-          <svg class="btn-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.65"/><path fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" d="M15.2 15.2L21 21"/></svg>
+        <input
+          class="site-search"
+          id="siteSearch"
+          type="search"
+          placeholder="Search services"
+          aria-label="Servis ara">
+
+        <button class="btn btn-icon" id="siteSearchBtn" type="button" aria-label="Ara" title="Ara">
+          <svg class="btn-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.65"/>
+            <path fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" d="M15.2 15.2L21 21"/>
+          </svg>
         </button>
-        <div class="search-results" id="siteSearchResults" role="listbox" aria-label="Search results"></div>
-        <select class="currency" id="currency" aria-label="Currency">
+
+        <!-- Arama sonuçları dropdown -->
+        <div class="search-results" id="siteSearchResults" role="listbox" aria-label="Arama sonuçları"></div>
+
+        <!-- Para birimi -->
+        <select class="currency" id="currency" aria-label="Para birimi">
           <option value="USD">$ USD</option>
           <option value="EUR">&euro; EUR</option>
           <option value="GBP">£ GBP</option>
           <option value="TRY">₺ TRY</option>
         </select>
-        <button class="btn cart-button btn-icon" id="cartOpen" type="button" aria-label="Open cart" title="Open cart">
-          <svg class="cart-icon-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9.2a2 2 0 01-2 1.8H8.4a2 2 0 01-2-1.6L5 4H4"/><circle cx="9" cy="20" r="1.35"/><circle cx="17" cy="20" r="1.35"/></svg>
+
+        <!-- Sepet -->
+        <button class="btn cart-button btn-icon" id="cartOpen" type="button" aria-label="Sepeti aç" title="Sepet">
+          <svg class="cart-icon-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 6h15l-1.5 9.2a2 2 0 01-2 1.8H8.4a2 2 0 01-2-1.6L5 4H4"/>
+            <circle cx="9" cy="20" r="1.35"/>
+            <circle cx="17" cy="20" r="1.35"/>
+          </svg>
           <span class="cart-count" id="cartCount">0</span>
         </button>
-      </div>
-    </div>
+      </div><!-- /actions -->
+
+    </div><!-- /topbar-inner -->
   </header>
 
+  <!-- ══════════════════════════════════
+       KATEGORİ BAR
+       ══════════════════════════════════ -->
   <div class="category-bar" id="categoryBar">
     <div class="shell category-shell">
-      <button class="btn cat-arrow" id="catPrev" type="button" aria-label="Previous categories">&#x2039;</button>
+      <button class="btn cat-arrow" id="catPrev" type="button" aria-label="Önceki kategoriler">&#x2039;</button>
       <div class="category-scroll-column">
         <div class="category-scroll" id="categoryScroll"></div>
         <div class="category-drag-indicator" id="categoryDragIndicator" aria-hidden="true">
           <span class="category-drag-indicator__thumb" id="categoryDragIndicatorThumb"></span>
         </div>
       </div>
-      <button class="btn cat-arrow" id="catNext" type="button" aria-label="Next categories">&#x203A;</button>
+      <button class="btn cat-arrow" id="catNext" type="button" aria-label="Sonraki kategoriler">&#x203A;</button>
     </div>
   </div>
 
+  <!-- ══════════════════════════════════
+       ANA İÇERİK
+       ══════════════════════════════════ -->
   <main>
+
+    <!-- Hero — Ana sayfa -->
     <section class="hero is-home" id="hero">
       <div class="shell hero-shell">
         <div class="hero-text">
@@ -113,14 +193,19 @@
       </div>
     </section>
 
+    <!-- Home içerik -->
     <section class="home-content" id="homeContent">
       <div class="shell">
-        <div class="home-trust-strip" aria-label="Service trust highlights">
+
+        <!-- Trust strip -->
+        <div class="home-trust-strip" aria-label="Servis güvence özellikleri">
           <span>Manual Service</span>
           <span>Discord Confirmed</span>
           <span>No Cheats / No Exploits</span>
           <span>Fast Support</span>
         </div>
+
+        <!-- Oyun seçimi -->
         <div class="quick-head" id="homeGameHead">
           <div>
             <span class="home-section-kicker">Start here</span>
@@ -128,6 +213,8 @@
           </div>
         </div>
         <div class="home-grid" id="homeGameGrid"></div>
+
+        <!-- Nasıl Çalışır -->
         <section class="home-process" aria-labelledby="howItWorksTitle">
           <div class="home-section-head">
             <span class="home-section-kicker">Process</span>
@@ -140,6 +227,8 @@
             <article><strong>4. Delivery Begins</strong><p>A verified booster starts after confirmation.</p></article>
           </div>
         </section>
+
+        <!-- Neden ElysiumBoost -->
         <section class="home-why" id="homeAboutBlock" aria-labelledby="homeWhyTitle">
           <div class="home-section-head">
             <span class="home-section-kicker">Why ElysiumBoost</span>
@@ -152,6 +241,8 @@
             <article><strong>Built for Serious Players</strong><p>Focused services for players who value reliable progress.</p></article>
           </div>
         </section>
+
+        <!-- Yorumlar -->
         <section class="home-reviews" aria-labelledby="trustCompactTitle">
           <div class="home-section-head home-section-head--inline">
             <div>
@@ -166,20 +257,37 @@
             <article><strong>Easy checkout</strong><p>The service options were simple to understand.</p></article>
           </div>
         </section>
+
+        <!-- FAQ -->
         <section class="faq-home faq-home--compact" aria-labelledby="faqHomeTitle">
           <h2 id="faqHomeTitle">FAQ</h2>
           <div class="faq-list">
-            <details class="faq-item"><summary>How do I place an order?</summary><p>Choose a service, configure the options, add it to cart, then copy your ticket into Discord.</p></details>
-            <details class="faq-item"><summary>How is the final price confirmed?</summary><p>The site shows the live estimate, and support confirms the final scope in Discord before delivery.</p></details>
-            <details class="faq-item"><summary>How fast can my order start?</summary><p>Start time depends on queue and service type. Support gives the current ETA in your ticket.</p></details>
-            <details class="faq-item"><summary>Where do I receive updates?</summary><p>Updates, timing, and delivery notes are handled in your Discord ticket.</p></details>
+            <details class="faq-item">
+              <summary>How do I place an order?</summary>
+              <p>Choose a service, configure the options, add it to cart, then copy your ticket into Discord.</p>
+            </details>
+            <details class="faq-item">
+              <summary>How is the final price confirmed?</summary>
+              <p>The site shows the live estimate, and support confirms the final scope in Discord before delivery.</p>
+            </details>
+            <details class="faq-item">
+              <summary>How fast can my order start?</summary>
+              <p>Start time depends on queue and service type. Support gives the current ETA in your ticket.</p>
+            </details>
+            <details class="faq-item">
+              <summary>Where do I receive updates?</summary>
+              <p>Updates, timing, and delivery notes are handled in your Discord ticket.</p>
+            </details>
           </div>
         </section>
-      </div>
-    </section>
 
+      </div><!-- /shell -->
+    </section><!-- /home-content -->
+
+    <!-- Servis içerik -->
     <section class="main service-content hidden" id="serviceContent">
       <div class="shell">
+
         <div class="quick-head is-hidden" id="popularHead" hidden>
           <div>
             <h2 id="popularTitle">Popular</h2>
@@ -196,7 +304,9 @@
         </div>
         <div class="service-grid" id="serviceGrid"></div>
 
-        <section class="detail" id="detailSection" aria-label="Service details">
+        <!-- Detail panel -->
+        <section class="detail" id="detailSection" aria-label="Servis detayı">
+
           <div class="detail-left">
             <div class="detail-left-head" id="detailLeftHead">
               <div class="detail-title">
@@ -217,39 +327,55 @@
               <div class="detail-highlights-wrap" id="detailHighlights" hidden></div>
               <div class="detail-val-trust" id="detailValorantTrust" hidden></div>
             </div>
-          </div>
+          </div><!-- /detail-left -->
+
           <div class="detail-right" id="detailRightCol">
             <div class="detail-feature-thumb" id="detailFeatureThumb" aria-hidden="true"></div>
+
             <aside class="order-card">
-            <div class="order-panel-head"><span class="detail-deal" id="detailDeal"></span><button class="btn clear-service btn-glass" id="clearService" type="button">Clear</button></div>
-            <div class="order-card-body" id="orderCardBody">
-              <div class="order-form" id="orderForm"></div>
-              <div class="summary-total summary-total--idle" id="orderSummaryTotal">
-                <div class="arc-order-preview" id="arcOrderSummaryPreview" hidden></div>
-                <div class="order-selection-preview" id="orderSelectionPreview" hidden></div>
-                <small class="summary-total-label">Final total</small>
-                <span id="liveTotal" class="live-total-text"></span>
-                <div class="arc-price-breakdown" id="arcPriceBreakdown" hidden></div>
-                <em id="usdHint" class="usd-hint-text"></em>
-                <button class="btn btn-purchase add-to-cart-main" id="addToCart" type="button">Add to Cart</button>
-                <a class="order-trustpilot-cta" href="https://www.trustpilot.com/review/elysiumboost.com" target="_blank" rel="noopener">Enjoyed your order? Leave us a review on Trustpilot.</a>
+              <div class="order-panel-head">
+                <span class="detail-deal" id="detailDeal"></span>
+                <button class="btn clear-service btn-glass" id="clearService" type="button">Clear</button>
               </div>
-            </div>
-          </aside>
-          </div>
+              <div class="order-card-body" id="orderCardBody">
+                <div class="order-form" id="orderForm"></div>
+                <div class="summary-total summary-total--idle" id="orderSummaryTotal">
+                  <div class="arc-order-preview" id="arcOrderSummaryPreview" hidden></div>
+                  <div class="order-selection-preview" id="orderSelectionPreview" hidden></div>
+                  <small class="summary-total-label">Final total</small>
+                  <span id="liveTotal" class="live-total-text"></span>
+                  <div class="arc-price-breakdown" id="arcPriceBreakdown" hidden></div>
+                  <em id="usdHint" class="usd-hint-text"></em>
+                  <button class="btn btn-purchase add-to-cart-main" id="addToCart" type="button">Add to Cart</button>
+                  <a class="order-trustpilot-cta"
+                     href="https://www.trustpilot.com/review/elysiumboost.com"
+                     target="_blank" rel="noopener">
+                    Enjoyed your order? Leave us a review on Trustpilot.
+                  </a>
+                </div>
+              </div>
+            </aside>
+
+          </div><!-- /detail-right -->
+
           <div class="detail-specs" id="detailSpecs" hidden></div>
-        </section>
-      </div>
-    </section>
+        </section><!-- /detailSection -->
+
+      </div><!-- /shell -->
+    </section><!-- /service-content -->
+
   </main>
 
+  <!-- ══════════════════════════════════
+       CART DRAWER
+       ══════════════════════════════════ -->
   <div class="cart-backdrop" id="cartBackdrop" aria-hidden="true">
-    <aside class="drawer" aria-label="Order center">
+    <aside class="drawer" aria-label="Sipariş merkezi">
       <div class="drawer-head">
         <h2 id="drawerTitle">Order center</h2>
         <div class="drawer-head-right">
           <button type="button" class="btn btn-glass btn-clear-cart-head" id="clearCart">Clear cart</button>
-          <button class="btn close" id="cartClose" type="button" aria-label="Close cart">×</button>
+          <button class="btn close" id="cartClose" type="button" aria-label="Kapat">×</button>
         </div>
       </div>
       <div class="drawer-body" id="cartBody"></div>
@@ -263,18 +389,29 @@
           </div>
           <p class="cart-verify-note" id="cartVerifyNote">Attach the receipt image only if support asks.</p>
           <div class="order-actions-primary">
-            <button class="btn btn-checkout-primary btn-order-copy" id="copyOrder" type="button">Copy Order & Open Discord</button>
+            <button class="btn btn-checkout-primary btn-order-copy" id="copyOrder" type="button">
+              Copy Order &amp; Open Discord
+            </button>
           </div>
           <div class="order-actions-secondary">
-            <button type="button" class="btn-text btn-receipt-link" id="downloadOrderReceipt">Download Receipt Image</button>
+            <button type="button" class="btn-text btn-receipt-link" id="downloadOrderReceipt">
+              Download Receipt Image
+            </button>
           </div>
           <div class="copy-status" id="copyStatus" aria-live="polite"></div>
-          <a id="openDiscord" class="cart-open-discord-anchor" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Open Discord</a>
+          <a id="openDiscord"
+             class="cart-open-discord-anchor"
+             href="https://discord.gg/elysiumgg"
+             target="_blank" rel="noopener"
+             tabindex="-1" aria-hidden="true">Open Discord</a>
         </div>
       </div>
     </aside>
   </div>
 
+  <!-- ══════════════════════════════════
+       EMBARK ID MODAL
+       ══════════════════════════════════ -->
   <div class="id-modal-backdrop" id="arcIdModal" aria-hidden="true">
     <div class="id-modal" role="dialog" aria-modal="true" aria-labelledby="arcIdTitle">
       <h2 id="arcIdTitle">Embark ID</h2>
@@ -282,38 +419,46 @@
       <label id="arcIdLabel" for="arcIdInput">Embark ID</label>
       <input id="arcIdInput" type="text" autocomplete="off" placeholder="Name#0000">
       <div class="id-modal-actions">
-        <button class="btn btn-premium" id="arcIdDone" type="button" aria-label="Save Embark ID">Save</button>
-        <button class="btn btn-danger" id="arcIdSkip" type="button" aria-label="Will type it on Discord">✕</button>
+        <button class="btn btn-premium" id="arcIdDone" type="button" aria-label="Kaydet">Save</button>
+        <button class="btn btn-danger" id="arcIdSkip" type="button" aria-label="Discord'da yazacağım">✕</button>
       </div>
     </div>
   </div>
 
+  <!-- ══════════════════════════════════
+       FOOTER
+       ══════════════════════════════════ -->
   <footer class="site-footer" id="siteFooter">
     <div class="shell site-footer-inner">
       <div class="site-footer-brand">
         <strong>ELYSIUM BOOST</strong>
         <span>Premium manual game services · Discord ticket flow</span>
       </div>
-      <a class="site-footer-trustpilot" href="https://www.trustpilot.com/review/elysiumboost.com" target="_blank" rel="noopener">
+      <a class="site-footer-trustpilot"
+         href="https://www.trustpilot.com/review/elysiumboost.com"
+         target="_blank" rel="noopener">
         <strong>★★★★★ 4.9/5 on Trustpilot</strong>
         <span>Trusted by players through fast Discord support and clear order confirmation.</span>
       </a>
       <div class="site-footer-actions">
         <a class="btn btn-glass" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener">Discord</a>
-        <button type="button" class="btn btn-glass" id="footerLegalBtn">Terms & safety</button>
+        <button type="button" class="btn btn-glass" id="footerLegalBtn">Terms &amp; safety</button>
       </div>
     </div>
   </footer>
 
+  <!-- ══════════════════════════════════
+       STİCKY ORDER CHİP
+       ══════════════════════════════════ -->
   <div class="ely-sticky-order" id="stickyOrderChip" hidden>
-    <button type="button" class="ely-sticky-order__btn" id="stickyOrderOpen"><span class="ely-sticky-order__text"></span></button>
+    <button type="button" class="ely-sticky-order__btn" id="stickyOrderOpen">
+      <span class="ely-sticky-order__text"></span>
+    </button>
   </div>
-  <aside class="ely-support-widget" aria-label="Discord support">
-    <strong>Support online</strong>
-    <span>Average response · 2–5 minutes</span>
-    <a class="btn btn-premium btn-mini" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener">Open Discord ticket</a>
-  </aside>
 
+  <!-- ══════════════════════════════════
+       COPY SUCCESS MODAL
+       ══════════════════════════════════ -->
   <div class="legal-modal-backdrop" id="copySuccessModal" aria-hidden="true">
     <div class="legal-modal copy-success-modal" role="dialog" aria-modal="true" aria-labelledby="copySuccessTitle">
       <h2 id="copySuccessTitle">Ticket copied successfully</h2>
@@ -325,16 +470,26 @@
       </ol>
       <p class="copy-success-receipt-note">Attach the receipt image only if support asks.</p>
       <div class="copy-success-actions">
-        <a class="btn btn-premium copy-success-discord-primary" id="copySuccessDiscord" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener">Open Discord</a>
-        <button type="button" class="btn btn-glass copy-success-receipt-secondary" id="copySuccessReceipt">Download Receipt Image</button>
-        <button type="button" class="btn btn-ghost legal-close copy-success-close-tertiary" id="copySuccessClose">Close</button>
+        <a class="btn btn-premium copy-success-discord-primary"
+           id="copySuccessDiscord"
+           href="https://discord.gg/elysiumgg"
+           target="_blank" rel="noopener">Open Discord</a>
+        <button type="button" class="btn btn-glass copy-success-receipt-secondary" id="copySuccessReceipt">
+          Download Receipt Image
+        </button>
+        <button type="button" class="btn btn-ghost legal-close copy-success-close-tertiary" id="copySuccessClose">
+          Close
+        </button>
       </div>
     </div>
   </div>
 
+  <!-- ══════════════════════════════════
+       TERMS MODAL
+       ══════════════════════════════════ -->
   <div class="legal-modal-backdrop" id="legalModal" aria-hidden="true">
     <div class="legal-modal" role="dialog" aria-modal="true" aria-labelledby="legalModalTitle">
-      <h2 id="legalModalTitle">Terms, safety & delivery</h2>
+      <h2 id="legalModalTitle">Terms, safety &amp; delivery</h2>
       <p>ELYSIUM BOOST provides manual coordination services. Pricing and scope are confirmed in Discord before play. Customers remain responsible for account security and following each platform's rules of conduct.</p>
       <p><strong>No cheats. No exploits. Manual service only.</strong> We do not sell or distribute third-party cheat software.</p>
       <p>Refunds and redelivery policies are handled case-by-case in Discord according to what was agreed in your ticket. Contact support before disputing a charge elsewhere.</p>
@@ -343,8 +498,16 @@
     </div>
   </div>
 
+  <!-- ══════════════════════════════════
+       TOAST BİLDİRİM
+       ══════════════════════════════════ -->
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <!-- ════════════════════════════════════
+       JS — Yükleme sırası önemli!
+       JS dosyalarına dokunulmadı,
+       sadece sıralamaları korundu.
+       ════════════════════════════════════ -->
   <script src="js/config.js?v=lux-cart-tft-v1"></script>
   <script src="js/products.js?v=final-gold-theme-v1"></script>
   <script src="js/state.js?v=order-center-v2"></script>
@@ -357,9 +520,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
