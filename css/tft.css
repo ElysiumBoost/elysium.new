@@ -528,3 +528,39 @@ body[data-ely-game="tft"] #detailSection.detail--valorant-layout .valorant-cfg-m
 .tft-addons-in-card .tft-addon-row {
   padding: 3px 0;
 }
+
+/* Sunset glass theme alignment */
+body[data-ely-game="tft"] .order-card .summary-total,
+body[data-ely-game="tft"] .order-card .order-card-body,
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel,
+body[data-ely-game="tft"] #detailSection.detail--valorant-layout .valorant-cfg-mount .tft-rank-up-form .field-block,
+body[data-ely-game="tft"] #detailSection.detail--valorant-layout .valorant-cfg-mount .tft-rank-up-form .field-block--tight,
+.tft-rank-up-form .field-block,
+.order-card.is-tft-split {
+  border-color: rgba(212, 175, 110, .18) !important;
+  background: rgba(20, 18, 26, .62) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .04) !important;
+  backdrop-filter: blur(14px) saturate(115%);
+  -webkit-backdrop-filter: blur(14px) saturate(115%);
+}
+
+body[data-ely-game="tft"] .order-card .order-panel-head,
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-buttons,
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-row,
+.tft-addons-in-card {
+  border-color: rgba(212, 175, 110, .18) !important;
+}
+
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-row.ely-toggle-row:has(.ely-toggle-input:checked),
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-row.check-row:has(input:checked) {
+  border-color: rgba(212, 175, 110, .48) !important;
+  background: rgba(184, 133, 90, .14) !important;
+  box-shadow: 0 0 18px rgba(212, 175, 110, .12) !important;
+}
+
+.tft-form-section-label,
+.tft-form-section-label--sub,
+body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > h4,
+body[data-ely-game="tft"] .order-card .summary-total .order-option-buttons .raid-pill span {
+  color: #d4af6e !important;
+}
