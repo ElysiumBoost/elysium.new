@@ -152,10 +152,10 @@
 
     applyNavRecoveryOnce();
     restoreOrderState();
+    restoreGameFromHash();
     sanitizeNavigationState();
     cleanStaleCart();
     persistOrderState();
-    restoreGameFromHash();
     sanitizeNavigationState();
     if (state.game) syncGameHash(state.game);
     window.addEventListener("hashchange", () => {

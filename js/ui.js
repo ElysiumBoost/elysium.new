@@ -902,9 +902,8 @@
       }
       const cartUsdHintEl = $("cartUsdHint");
       if (cartUsdHintEl) {
-        cartUsdHintEl.textContent = hasCustom
-          ? "Ticket total: " + displayInCurrency(total, cartCurrency) + " + CUSTOM"
-          : "Ticket total: " + displayInCurrency(total, cartCurrency);
+        cartUsdHintEl.textContent = "";
+        cartUsdHintEl.hidden = true;
       }
       updateCartFootAlerts();
       syncClearCartButton();
@@ -970,6 +969,15 @@
       }
     }
 
+    function activeGameIdLabel() {
+      const id = currentGame()?.id || state.game || state.cart[0]?.gameId || "";
+      if (id === "arc") return "Embark ID";
+      if (id === "valorant") return "Riot ID";
+      if (id === "lol") return "Summoner Name / Riot ID";
+      if (id === "tft") return "Riot ID / Summoner Name";
+      return "Game ID / Username";
+    }
+
     function getArcIdLine() {
       if (!cartNeedsArcId()) return "";
       const label = "Embark ID";
@@ -979,9 +987,10 @@
     }
 
     function updateArcIdModalText() {
-      $("arcIdTitle").textContent = "Embark ID";
-      $("arcIdCopy").textContent = "Add your in-game ID before copying or opening the Discord ticket.";
-      $("arcIdLabel").textContent = "Embark ID";
+      const label = activeGameIdLabel();
+      $("arcIdTitle").textContent = label;
+      $("arcIdCopy").textContent = `Add your ${label} before copying or opening the Discord ticket.`;
+      $("arcIdLabel").textContent = label;
       $("arcIdInput").placeholder = "Name#0000";
       $("arcIdDone").setAttribute("aria-label", "Done");
       $("arcIdSkip").setAttribute("aria-label", "Will type it on Discord");

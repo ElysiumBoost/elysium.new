@@ -1,4 +1,4 @@
-    const DISCORD_URL = "https://discord.com/channels/1499767937974669363/1499796035382415462";
+    const DISCORD_URL = "https://discord.gg/elysiumgg";
 
     window.elyPlaceholderSrc = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="480" height="300" viewBox="0 0 480 300"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#120f0d"/><stop offset="100%" stop-color="#0a0808"/></linearGradient></defs><rect width="480" height="300" fill="url(#g)" rx="12"/><text x="240" y="142" text-anchor="middle" fill="#d4af6e" font-family="system-ui,sans-serif" font-size="15" font-weight="700">ELYSIUM BOOST</text><text x="240" y="166" text-anchor="middle" fill="#a89e8c" font-size="11">Premium artwork</text></svg>');
     function elyImagePlaceholder(img) {
