@@ -20,7 +20,7 @@
 
 body[data-ely-game="valorant"] .category-scroll {
   justify-content: center !important;
-  overflow-x: hidden !important;
+  overflow-x: visible !important;
   scroll-behavior: auto !important;
 }
 
