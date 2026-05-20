@@ -603,16 +603,19 @@
       requestAnimationFrame(updateCatArrowVisibility);
     }
 
-    function updateCatArrowVisibility() {
-      const scroller = $("categoryScroll");
-      const prev = $("catPrev");
-      const next = $("catNext");
-      if (!scroller || !prev || !next) return;
-      const canScroll = scroller.scrollWidth > scroller.clientWidth + 4;
-      prev.style.visibility = canScroll ? "" : "hidden";
-      next.style.visibility = canScroll ? "" : "hidden";
-      const shell = $("categoryBar")?.querySelector(".category-shell");
-      if (shell) shell.classList.toggle("is-tabs-centered", !canScroll);
+   function updateCatArrowVisibility() {
+  const scroller = $("categoryScroll");
+  const prev = $("catPrev");
+  const next = $("catNext");
+  if (!scroller || !prev || !next) return;
+  if (state.game === "valorant") {
+    prev.style.visibility = "hidden";
+    next.style.visibility = "hidden";
+    const shell = $("categoryBar")?.querySelector(".category-shell");
+    if (shell) shell.classList.add("is-tabs-centered");
+    return;
+  }
+  const canScroll = scroller.scrollWidth > scroller.clientWidth + 4;
     }
 
     function renderHero() {
