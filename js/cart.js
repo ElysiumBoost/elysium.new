@@ -193,6 +193,23 @@
       state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
     }
 
+    const GAME_BG_MAP = {
+      'valorant': 'assets/backgrounds/valorant-bg.webp',
+      'arc-raiders': 'assets/backgrounds/arc-raidersmain.webp',
+    };
+
+    function panelBackgroundSlug(gameSlug) {
+      return gameSlug === "arc" ? "arc-raiders" : gameSlug;
+    }
+
+    function updatePanelBg(gameSlug) {
+      const el = document.getElementById('panel-bg-img');
+      if (!el) return;
+      const src = GAME_BG_MAP[gameSlug] || '';
+      el.src = src;
+      el.style.display = src ? 'block' : 'none';
+    }
+
     const $ = id => document.getElementById(id);
     const val = id => $(id)?.value || "";
     const num = id => Number(val(id) || 0);
@@ -276,6 +293,7 @@
 
     function renderAll() {
       updateStaticText();
+      updatePanelBg(panelBackgroundSlug(state.game));
       renderGames();
       renderHero();
       renderHome();
