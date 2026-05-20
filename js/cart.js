@@ -603,19 +603,24 @@
       requestAnimationFrame(updateCatArrowVisibility);
     }
 
-   function updateCatArrowVisibility() {
-  const scroller = $("categoryScroll");
-  const prev = $("catPrev");
-  const next = $("catNext");
-  if (!scroller || !prev || !next) return;
-  if (state.game === "valorant") {
-    prev.style.visibility = "hidden";
-    next.style.visibility = "hidden";
-    const shell = $("categoryBar")?.querySelector(".category-shell");
-    if (shell) shell.classList.add("is-tabs-centered");
-    return;
-  }
-  const canScroll = scroller.scrollWidth > scroller.clientWidth + 4;
+    function updateCatArrowVisibility() {
+      const scroller = $("categoryScroll");
+      const prev = $("catPrev");
+      const next = $("catNext");
+      if (!scroller || !prev || !next) return;
+      if (state.game === "valorant") {
+        prev.style.visibility = "hidden";
+        next.style.visibility = "hidden";
+        const shell = $("categoryBar")?.querySelector(".category-shell");
+        if (shell) shell.classList.add("is-tabs-centered");
+        return;
+      }
+      const shell = $("categoryBar")?.querySelector(".category-shell");
+      if (shell) shell.classList.remove("is-tabs-centered");
+      const canScroll = scroller.scrollWidth > scroller.clientWidth + 4;
+      prev.style.visibility = canScroll ? "" : "hidden";
+      next.style.visibility = canScroll ? "" : "hidden";
+      if (shell) shell.classList.toggle("is-tabs-centered", !canScroll);
     }
 
     function renderHero() {
@@ -765,6 +770,11 @@
     }
 
     function setupCategoryMotion() {
+      if (categoryMotion.raf) {
+        cancelAnimationFrame(categoryMotion.raf);
+        categoryMotion.raf = 0;
+      }
+      if (state.game === "valorant") return;
       const scroller = $("categoryScroll");
       // FIX: null guard — if scroller is missing, cancel any stale RAF and bail
       if (!scroller) {
