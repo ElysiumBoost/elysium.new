@@ -501,14 +501,14 @@
       expeditions: "assets/thumb-expedition.webp",
       custom: "assets/thumb-private-order.webp",
       services: "assets/thumb-private-order.webp",
-      "rank-boosting": "assets/valorant-rank-boosting.webp?v=2",
-      "placement-matches": "assets/valorant-placement-matches.webp?v=2",
+      "rank-boosting": "assets/Rank Boosting.webp",
+      "placement-matches": "assets/Placement Matches.webp",
       "tft-placement": "assets/tft-placement-matches.webp",
-      "radiant-boost": "assets/valorant-radiant-boost.webp?v=2",
-      "ranked-wins": "assets/valorant-ranked-wins.webp?v=2",
-      "unrated-games": "assets/valorant-unrated-games.webp?v=2",
-      "account-leveling": "assets/valorant-account-leveling.webp?v=2",
-      "battle-pass": "assets/valorant-battle-pass.webp?v=2",
+      "radiant-boost": "assets/Raidant Boost.webp",
+      "ranked-wins": "assets/Ranked Wins.webp",
+      "unrated-games": "assets/Unrated Matches.webp",
+      "account-leveling": "assets/account leveling.webp",
+      "battle-pass": "assets/Battle Pass.webp",
       "mythic-plus": "assets/thumb-private-order.webp",
       "raid-calendar": "assets/thumb-raids.webp",
       arena: "assets/thumb-private-order.webp",
@@ -594,6 +594,19 @@
       }));
       bindCategoryArrows();
       setupCategoryMotion();
+      requestAnimationFrame(updateCatArrowVisibility);
+    }
+
+    function updateCatArrowVisibility() {
+      const scroller = $("categoryScroll");
+      const prev = $("catPrev");
+      const next = $("catNext");
+      if (!scroller || !prev || !next) return;
+      const canScroll = scroller.scrollWidth > scroller.clientWidth + 4;
+      prev.style.visibility = canScroll ? "" : "hidden";
+      next.style.visibility = canScroll ? "" : "hidden";
+      const shell = $("categoryBar")?.querySelector(".category-shell");
+      if (shell) shell.classList.toggle("is-tabs-centered", !canScroll);
     }
 
     function renderHero() {
@@ -746,6 +759,9 @@
       const scroller = $("categoryScroll");
       if (!categoryMotion.bound) {
         categoryMotion.bound = true;
+        if (typeof ResizeObserver !== "undefined") {
+          new ResizeObserver(() => updateCatArrowVisibility()).observe(scroller);
+        }
         scroller.addEventListener("mouseenter", () => { categoryMotion.paused = true; });
         scroller.addEventListener("mouseleave", () => { categoryMotion.paused = false; });
         scroller.addEventListener("wheel", () => pauseCategoryAuto(7000), { passive: true });

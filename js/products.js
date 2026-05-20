@@ -142,14 +142,14 @@
     const ranks = ["Rookie I", "Rookie II", "Rookie III", "Tryhard I", "Tryhard II", "Tryhard III", "Wildcard I", "Wildcard II", "Wildcard III", "Daredevil I", "Daredevil II", "Daredevil III", "Hotshot"];
 
     const valorantCategories = [
-      { id: "rank-boosting", label: "Rank Boosting", icon: "rank", badge: null, badgeType: null, featured: true, thumb: "assets/valorant-rank-boosting.webp?v=2" },
-      { id: "placement-matches", label: "Placement Matches", icon: "placement", badge: null, badgeType: null, featured: false, thumb: "assets/valorant-placement-matches.webp?v=2" },
-      { id: "radiant-boost", label: "Radiant Boost", icon: "radiant", badge: "HOT", badgeType: "hot", featured: false, thumb: "assets/valorant-radiant-boost.webp?v=2" },
-      { id: "ranked-wins", label: "Ranked Wins", icon: "wins", badge: null, badgeType: null, featured: false, thumb: "assets/valorant-ranked-wins.webp?v=2" },
-      { id: "unrated-games", label: "Unrated Games", icon: "unrated", badge: null, badgeType: null, featured: false, thumb: "assets/valorant-unrated-games.webp?v=2" },
-      { id: "account-leveling", label: "Account Leveling", icon: "leveling", badge: null, badgeType: null, featured: false, thumb: "assets/valorant-account-leveling.webp?v=2" },
-      { id: "battle-pass", label: "Battle Pass", icon: "battle-pass", badge: "NEW", badgeType: "new", featured: false, thumb: "assets/valorant-battle-pass.webp?v=2" },
-      { id: "coaching", label: "Coaching", icon: "coaching", badge: null, badgeType: null, featured: false, thumb: "assets/valorant-coaching.webp?v=2" }
+      { id: "rank-boosting", label: "Rank Boosting", icon: "rank", badge: null, badgeType: null, featured: true, thumb: "assets/Rank Boosting.webp" },
+      { id: "placement-matches", label: "Placement Matches", icon: "placement", badge: null, badgeType: null, featured: false, thumb: "assets/Placement Matches.webp" },
+      { id: "radiant-boost", label: "Radiant Boost", icon: "radiant", badge: "HOT", badgeType: "hot", featured: false, thumb: "assets/Raidant Boost.webp" },
+      { id: "ranked-wins", label: "Ranked Wins", icon: "wins", badge: null, badgeType: null, featured: false, thumb: "assets/Ranked Wins.webp" },
+      { id: "unrated-games", label: "Unrated Games", icon: "unrated", badge: null, badgeType: null, featured: false, thumb: "assets/Unrated Matches.webp" },
+      { id: "account-leveling", label: "Account Leveling", icon: "leveling", badge: null, badgeType: null, featured: false, thumb: "assets/account leveling.webp" },
+      { id: "battle-pass", label: "Battle Pass", icon: "battle-pass", badge: "NEW", badgeType: "new", featured: false, thumb: "assets/Battle Pass.webp" },
+      { id: "coaching", label: "Coaching", icon: "coaching", badge: null, badgeType: null, featured: false, thumb: "assets/Coaching.webp" }
     ];
 
     const wowCategories = [
