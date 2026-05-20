@@ -1,0 +1,885 @@
+/* ============================================================
+   ELYSIUM BOOST — VALORANT & ARC LAYOUT
+   Valorant configurator, rank seçici, path rail,
+   detail--valorant-layout grid, is-valorant / is-arc-split
+   order card varyantları.
+   ============================================================ */
+
+/* ──────────────────────────────────────
+   DETAIL — VALORANT LAYOUT (iki kolon)
+   ────────────────────────────────────── */
+#detailSection.detail--valorant-layout {
+  row-gap: 16px;
+}
+
+@media (min-width: 1081px) {
+  #detailSection.detail--valorant-layout {
+    width: 100%;
+    margin-inline: auto;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 460px);
+    justify-content: center;
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  #detailSection.detail--valorant-layout > .detail-left { display: contents; }
+
+  #detailSection.detail--valorant-layout .detail-left-head {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  #detailSection.detail--valorant-layout > .detail-left > .intro {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  #detailSection.detail--valorant-layout > .detail-left > .detail-specs {
+    grid-row: 3;
+    grid-column: 1 / -1;
+  }
+
+  #detailSection.detail--valorant-layout .valorant-cfg-mount {
+    grid-column: 1;
+    grid-row: 4;
+    align-self: stretch;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  #detailSection.detail--valorant-layout .order-card.is-valorant,
+  #detailSection.detail--valorant-layout .order-card.is-arc-split {
+    grid-column: 2;
+    grid-row: 4;
+    align-self: stretch;
+    justify-self: stretch;
+    width: 100%;
+    max-width: 460px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    box-sizing: border-box;
+  }
+
+  #detailSection.detail--valorant-layout .detail-left-meta {
+    grid-column: 1 / -1;
+    grid-row: 5;
+  }
+}
+
+@media (max-width: 1080px) {
+  #detailSection.detail--valorant-layout > .detail-left { display: contents; }
+
+  #detailSection.detail--valorant-layout .detail-left-head  { grid-row: 1; grid-column: 1; }
+  #detailSection.detail--valorant-layout .valorant-cfg-mount { grid-row: 2; grid-column: 1; }
+  #detailSection.detail--valorant-layout .order-card         { grid-row: 3; grid-column: 1; }
+  #detailSection.detail--valorant-layout .detail-left-meta   { grid-row: 4; grid-column: 1; }
+
+  #detailSection.detail--valorant-layout .valorant-cfg-mount .order-form {
+    max-height: none;
+    overflow-y: visible;
+  }
+}
+
+/* ──────────────────────────────────────
+   ORDER CARD — IS-VALORANT / IS-ARC-SPLIT
+   ────────────────────────────────────── */
+.order-card.is-valorant,
+.order-card.is-arc-split,
+.order-card.is-tft-split {
+  top: 88px;
+  max-height: calc(100vh - 100px);
+  overflow: visible;
+  align-self: start;
+}
+
+.order-card.is-valorant .order-panel-head,
+.order-card.is-arc-split .order-panel-head { flex-shrink: 0; }
+
+.order-card.is-valorant .order-card-body,
+.order-card.is-arc-split .order-card-body {
+  display: flex;
+  flex-direction: column;
+  padding: 0 12px 10px;
+  gap: 0;
+  align-items: stretch;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 1080px) {
+  .order-card.is-valorant,
+  .order-card.is-arc-split,
+  .order-card.is-tft-split {
+    position: static;
+    max-height: none;
+  }
+
+  .order-card.is-valorant .order-card-body,
+  .order-card.is-arc-split .order-card-body { overflow: visible; }
+
+  .order-card.is-valorant .summary-total,
+  .order-card.is-arc-split .summary-total {
+    flex: none;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+/* Summary total — valorant/arc split iç kart kaldırılıyor */
+.order-card.is-valorant .summary-total,
+.order-card.is-arc-split .summary-total {
+  position: relative;
+  top: auto;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: 10px;
+  padding: 12px 12px 14px;
+  margin: 0;
+  border-top: none;
+  border-radius: 14px;
+  border: 1px solid rgba(212,175,110,.32);
+  background:
+    linear-gradient(168deg, rgba(18,15,20,.94), rgba(10,8,8,.98)),
+    radial-gradient(130% 90% at 100% 0%, rgba(212,175,110,.12), transparent 58%);
+  box-shadow: 0 22px 56px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+/* Configurator mount */
+.valorant-cfg-mount {
+  margin-bottom: 0;
+  border-radius: 14px;
+  border: 1px solid rgba(212,175,110,.26);
+  background:
+    linear-gradient(175deg, rgba(18,15,20,.54), rgba(10,8,8,.86)),
+    radial-gradient(90% 60% at 10% 0%, rgba(212,175,110,.12), transparent 55%);
+  box-shadow: 0 16px 38px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.05);
+  padding: 14px;
+}
+
+.valorant-cfg-mount .order-form {
+  padding: 0;
+  margin: 0;
+  max-height: none;
+  overflow-y: visible;
+  min-height: 0;
+}
+
+/* ──────────────────────────────────────
+   VALORANT CONFIGURATOR
+   ────────────────────────────────────── */
+.valorant-configurator {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.valorant-cfg-compact-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 2px 8px;
+  border-bottom: 1px solid rgba(212,175,110,.22);
+  margin-bottom: 2px;
+}
+
+.valorant-cfg-eyebrow {
+  font-family: var(--display);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(231,201,139,.65);
+}
+
+.valorant-cfg-name {
+  font-family: var(--display);
+  font-size: 15px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #f3ead9;
+  line-height: 1.15;
+}
+
+.valorant-cfg-stack { display: flex; flex-direction: column; gap: 10px; }
+.valorant-flow-kicker {
+  margin: 0 0 10px;
+  font-family: var(--display);
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(231,201,139,.82);
+}
+
+/* Configurator field block — flat iç stil */
+.valorant-configurator .field-block,
+.order-card.is-valorant .valorant-panel-tight {
+  margin: 0;
+  padding: 10px 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(212,175,110,.32);
+  background: linear-gradient(180deg, rgba(18,15,20,.42), rgba(10,8,8,.72));
+  box-shadow: 0 14px 40px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+.valorant-configurator .field-block h4,
+.order-card.is-valorant .valorant-panel-tight h4 {
+  margin: 0 0 10px;
+  font-family: var(--display);
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(231,201,139,.82);
+}
+
+.valorant-configurator label,
+.order-card.is-valorant .valorant-order-chrome label {
+  color: #f3ead9;
+  font-size: 11px;
+  letter-spacing: .06em;
+}
+
+.valorant-configurator select,
+.valorant-configurator input[type="number"],
+.valorant-configurator .qty-stepper-input,
+.order-card.is-valorant .valorant-order-chrome select {
+  border-radius: 10px;
+  border: 1px solid rgba(212,175,110,.42);
+  background: rgba(16,13,16,.94);
+  min-height: 40px;
+  color: var(--ely-text);
+  width: 100%;
+}
+
+.valorant-configurator select option,
+.order-card.is-valorant .valorant-order-chrome select option {
+  background: #100d10;
+  color: #f3ead9;
+}
+
+.valorant-configurator select:focus,
+.valorant-configurator input[type="number"]:focus,
+.order-card.is-valorant .valorant-order-chrome select:focus {
+  outline: none;
+  border-color: rgba(212,175,110,.65);
+  box-shadow: 0 0 0 3px rgba(212,175,110,.22);
+}
+
+.valorant-configurator .qty-stepper {
+  border-radius: 10px;
+  border: 1px solid rgba(212,175,110,.42);
+  min-height: 42px;
+}
+
+.valorant-configurator .qty-step {
+  background: rgba(16,13,16,.94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ──────────────────────────────────────
+   RANK SEÇİCİ
+   ────────────────────────────────────── */
+.valorant-rank-select-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.valorant-rank-tier-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+@media (max-width: 520px) {
+  .valorant-rank-tier-grid { grid-template-columns: 1fr; }
+}
+
+.valorant-rank-pick {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  min-width: 0;
+}
+
+.valorant-rank-thumb-shell {
+  flex: 0 0 auto;
+  width: auto;
+  max-width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  transition: opacity .2s;
+}
+
+.valorant-rank-thumb-shell.is-empty { opacity: .4; }
+
+.valorant-rank-tier-img {
+  width: auto; height: auto;
+  max-width: 98px; max-height: 74px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+.valorant-rank-pick select {
+  flex: 0 0 auto;
+  width: 100%;
+  min-width: 0;
+  max-width: 280px;
+  margin: 0 auto;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .04em;
+  text-align: center;
+  text-align-last: center;
+  line-height: 1.2;
+  min-height: 44px;
+  font-size: 13px;
+  border-radius: 11px;
+}
+
+/* ──────────────────────────────────────
+   PATH RAİL (rank'tan rank'a görsel)
+   ────────────────────────────────────── */
+.valorant-path-rail {
+  padding: 10px 10px 12px;
+  border-radius: 11px;
+  border: 1px solid rgba(212,175,110,.35);
+  background: linear-gradient(180deg, rgba(30,24,72,.75), rgba(12,10,28,.55));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+.valorant-path-inner {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.valorant-path-inner--single { justify-content: center; }
+.valorant-path-inner--single .valorant-path-chip { flex: 0 1 auto; max-width: min(360px, 100%); }
+
+.valorant-path-chip {
+  flex: 1 1 116px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 10px 11px;
+  border-radius: 12px;
+  border: 1px solid rgba(212,175,110,.4);
+  background: linear-gradient(165deg, rgba(26,22,58,.88), rgba(8,7,22,.82));
+  box-shadow: 0 12px 32px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+.valorant-path-rank-visual {
+  width: auto; max-width: 104px;
+  height: auto; min-height: 0;
+  margin: 2px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.valorant-path-rank-img {
+  max-width: 100%; max-height: 76px;
+  width: auto; height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 14px rgba(184,133,90,.28));
+}
+
+.valorant-path-kicker {
+  font-family: var(--display);
+  font-size: 10px; font-weight: 800;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(212,175,110,.72); line-height: 1.2;
+}
+
+.valorant-path-rank {
+  font-family: var(--display);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: #f3ead9; line-height: 1.35;
+  max-width: 20ch; text-wrap: balance; text-align: center;
+}
+
+.valorant-path-arrow {
+  flex: 0 0 auto;
+  color: rgba(231,201,139,.78);
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 4px; opacity: .88;
+}
+
+/* ──────────────────────────────────────
+   VALORANT PANEL KARTLARI
+   ────────────────────────────────────── */
+.valorant-pm-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px; align-items: stretch; margin-top: 6px;
+}
+
+@media (max-width: 720px) { .valorant-pm-grid { grid-template-columns: 1fr; } }
+
+.valorant-panel-card {
+  padding: 12px 13px;
+  border-radius: 12px;
+  border: 1px solid rgba(212,175,110,.34);
+  background: linear-gradient(165deg, rgba(18,15,20,.84), rgba(10,8,8,.92));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 10px 28px rgba(0,0,0,.22);
+}
+
+.valorant-panel-card__title {
+  margin: 0 0 10px;
+  font-family: var(--display);
+  font-size: 10px; font-weight: 800;
+  letter-spacing: .11em; text-transform: uppercase;
+  color: rgba(212,175,110,.9); line-height: 1.2;
+}
+
+.valorant-panel-card__title--sub { margin: 12px 0 8px; }
+
+/* ──────────────────────────────────────
+   MODE PILLS (Solo/Duo)
+   ────────────────────────────────────── */
+.valorant-mode-pills--with-duo-hint { align-items: stretch; }
+
+.valorant-mode-duo-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex: 1 1 44%;
+  min-width: 0;
+}
+
+.valorant-duo-extra-hint {
+  position: absolute;
+  top: 0; right: 10px; left: auto; z-index: 2;
+  transform: translateY(-52%);
+  margin: 0; padding: 0;
+  font-family: var(--display);
+  font-size: 11px; font-weight: 800;
+  letter-spacing: .05em; text-transform: uppercase;
+  text-align: right;
+  color: rgba(255,209,102,.88);
+  opacity: .8; line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.valorant-mode-duo-wrap .raid-pill { flex: 1 1 auto; padding-top: 10px; }
+.order-card.is-valorant .valorant-mode-pills .raid-pill { flex: 1 1 44%; }
+
+/* ──────────────────────────────────────
+   EXTRAS GRID
+   ────────────────────────────────────── */
+.valorant-extras-grid { display: grid; gap: 6px; }
+
+.valorant-extras-toggle .ely-toggle-row {
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.valorant-extras-toggle .ely-toggle-label,
+.valorant-coach-focus .ely-toggle-label {
+  flex: 1 1 auto;
+  font-size: 12px;
+  color: var(--text);
+}
+
+/* ──────────────────────────────────────
+   VALORANT SUMMARY DL
+   ────────────────────────────────────── */
+.valorant-summary-dl {
+  margin: 0;
+  display: grid;
+  gap: 6px 10px;
+  font-size: 12px;
+}
+
+.valorant-summary-dl div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(212,175,110,.15);
+}
+
+.valorant-summary-dl dt {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  font-size: 9px;
+}
+
+.valorant-summary-dl dd {
+  margin: 0;
+  color: var(--text);
+  text-align: right;
+  font-size: 11px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.valorant-summary-note {
+  margin: 8px 0 0;
+  font-size: 11px;
+  color: rgba(231,201,139,.78);
+  line-height: 1.35;
+}
+
+.valorant-summary-note.is-warn { color: #ffb8c3; }
+
+/* RB hint */
+.valorant-rb-hint {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #ffb8c3;
+}
+
+/* ──────────────────────────────────────
+   ORDER OPTIONS PANELİ
+   ────────────────────────────────────── */
+.order-options-panel {
+  width: 100%;
+  display: grid;
+  gap: 10px;
+  margin: 0 0 12px;
+  padding: 11px;
+  border-radius: 12px;
+  border: 1px solid rgba(212,175,110,.3);
+  background: linear-gradient(180deg, rgba(18,14,42,.82), rgba(8,7,20,.72));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+.order-options-panel h4 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 12px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,209,102,.92);
+}
+
+.order-options-panel .field-block,
+.order-options-panel .valorant-panel-tight {
+  padding: 0; margin: 0;
+  border: 0; background: transparent; box-shadow: none;
+}
+
+.order-options-panel .raid-toggle-grid,
+.order-options-panel .valorant-extras-grid,
+.order-option-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.order-options-panel .raid-pill,
+.order-option-row {
+  min-height: 38px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.045);
+}
+
+/* ──────────────────────────────────────
+   LEVEL RANGE
+   ────────────────────────────────────── */
+.level-range-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.level-range-card {
+  min-width: 0;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(212,175,110,.28);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(212,175,110,.08), transparent 44%),
+    linear-gradient(180deg, rgba(18,15,20,.76), rgba(10,8,8,.72));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+.level-range-headline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.level-range-headline label { margin: 0; font-size: 11px; color: rgba(243,234,217,.82); }
+
+.level-range-headline strong {
+  flex: 0 0 auto;
+  min-width: 38px;
+  text-align: right;
+  color: var(--gold);
+  font-family: var(--display);
+  font-size: 20px; line-height: 1;
+}
+
+.ely-level-range { display: block; width: 100%; }
+
+/* Compact range value display */
+#valLevelFromValue,
+#valLevelToValue,
+#valBpFromValue,
+#valBpToValue { font-weight: 800; color: var(--gold); }
+
+/* Valorant leveling lead */
+.valorant-leveling-lead {
+  margin: 0 0 14px;
+  font-size: 13px; line-height: 1.5;
+  color: var(--muted); max-width: 40rem;
+}
+
+/* Server field */
+.valorant-server-field select { width: 100%; }
+.valorant-leveling-server { margin-top: 12px; }
+
+/* Micro note */
+.valorant-micro-note {
+  margin: 8px 0 0;
+  font-size: 11px; line-height: 1.4;
+  color: var(--muted);
+}
+
+.valorant-inline-kicker {
+  margin: 0 0 8px;
+  font-family: var(--display);
+  font-size: 11px; letter-spacing: .1em;
+  text-transform: uppercase; color: rgba(231,201,139,.78);
+}
+
+/* ──────────────────────────────────────
+   EVENT SWITCH
+   ────────────────────────────────────── */
+.event-switch {
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 5px 8px;
+  border: 1px solid rgba(255,184,88,.36);
+  border-radius: 8px;
+  background: rgba(255,184,88,.08);
+  color: #ffe7b8;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.event-switch.event-mode-card {
+  position: relative;
+  min-height: 58px;
+  min-width: 156px;
+  overflow: hidden;
+  justify-content: flex-start;
+  padding: 9px 12px;
+  background:
+    linear-gradient(90deg, rgba(10,8,8,.85), rgba(18,15,20,.72)),
+    var(--event-bg, none) center / cover no-repeat;
+}
+
+.event-switch.event-mode-card.is-block {
+  display: flex;
+  width: 100%; min-width: 0;
+  margin: 0 0 10px;
+  padding: 12px 14px;
+  align-items: center; justify-content: flex-start; gap: 10px;
+}
+
+.event-switch.event-mode-card.is-block span {
+  font-size: 14px; letter-spacing: .04em; text-transform: uppercase; font-weight: 900;
+}
+
+.event-switch.event-mode-card::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(9,6,24,.92), rgba(9,6,24,.2));
+  z-index: 0;
+}
+
+.event-switch.event-mode-card input,
+.event-switch.event-mode-card span { position: relative; z-index: 1; }
+
+.event-switch input:not(.ely-toggle-input) {
+  width: 15px; height: 15px;
+  accent-color: var(--ely-gold);
+}
+
+.event-switch.event-mode-card input:not(.ely-toggle-input) {
+  appearance: none; -webkit-appearance: none;
+  width: 22px; height: 22px; flex: 0 0 22px;
+  display: grid; place-items: center;
+  border: 1px solid rgba(212,175,110,.45);
+  border-radius: 4px;
+  background: rgba(8,6,20,.72);
+  box-shadow: inset 0 0 10px rgba(0,0,0,.36);
+  transition: background .15s, border-color .15s;
+}
+
+.event-switch.event-mode-card input:not(.ely-toggle-input):checked {
+  border-color: rgba(52,211,153,.55);
+  background: linear-gradient(135deg, rgba(52,211,153,.35), rgba(16,120,87,.55));
+}
+
+/* Ely event mode toggle varyantı */
+.event-switch.event-mode-card.ely-event-mode {
+  gap: 14px;
+  min-height: 44px;
+  padding: 9px 12px;
+  border-color: rgba(216,185,104,.28);
+  background:
+    linear-gradient(135deg, rgba(216,185,104,.1), rgba(184,133,90,.08)),
+    rgba(18,15,20,.92);
+}
+
+.event-switch.event-mode-card.ely-event-mode .ely-toggle-input { left: 14px; }
+
+.event-switch.event-mode-card.ely-event-mode .ely-event-mode-label {
+  flex: 1 1 auto;
+  position: relative; z-index: 1;
+  font-size: 14px; letter-spacing: .04em; text-transform: uppercase; font-weight: 900;
+  color: #f3ead9; margin: 0; pointer-events: none;
+}
+
+.event-switch.event-mode-card.ely-event-mode .ely-toggle-ui { position: relative; z-index: 1; }
+.event-switch.event-mode-card.ely-event-mode::before { z-index: 0; }
+
+.event-switch.event-mode-card.ely-event-mode:has(input:checked) {
+  border-color: rgba(216,185,104,.58);
+  box-shadow: 0 0 0 1px rgba(216,185,104,.16), 0 0 22px rgba(216,185,104,.16);
+}
+
+/* ──────────────────────────────────────
+   ARC PRİCE BREAKDOWN
+   ────────────────────────────────────── */
+.arc-price-breakdown {
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(212,175,110,.28);
+  background: rgba(10,8,8,.62);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+.arc-price-breakdown__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 4px;
+  font-size: 12px; font-weight: 650;
+  color: var(--muted);
+}
+
+.arc-price-breakdown__row:first-child { margin-top: 0; }
+
+.arc-price-breakdown__row span:first-child { flex: 1; min-width: 0; }
+.arc-price-breakdown__row span:last-child { flex: 0 0 auto; text-align: right; }
+
+.arc-price-breakdown__row--final {
+  margin-top: 8px; padding-top: 8px;
+  border-top: 1px solid rgba(212,175,110,.22);
+  font-family: var(--display);
+  font-size: 13px; font-weight: 800;
+  letter-spacing: .05em; text-transform: uppercase;
+  color: var(--text);
+}
+
+.arc-price-breakdown__row--final span:last-child { color: var(--gold); font-size: 15px; }
+
+/* ──────────────────────────────────────
+   ORDER SELECTION PREVİEW (özet kutusu)
+   ────────────────────────────────────── */
+.order-selection-preview {
+  order: 0;
+  flex-shrink: 0;
+  margin: 0 0 2px;
+  padding: 10px 12px;
+  border-radius: 11px;
+  border: 1px solid rgba(212,175,110,.24);
+  background: rgba(10,8,8,.42);
+  max-height: min(34vh, 260px);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.order-selection-preview__title {
+  margin: 0 0 8px;
+  font-family: var(--display);
+  font-size: 11px; font-weight: 800;
+  letter-spacing: .09em; text-transform: uppercase;
+  color: var(--gold);
+}
+
+.order-selection-preview__line {
+  margin: 0;
+  padding: 6px 0 0;
+  border-top: 1px solid rgba(212,175,110,.14);
+  color: var(--text);
+  font-size: 12px; line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.order-selection-preview__line:first-of-type { padding-top: 0; border-top: 0; }
+
+/* Arc order preview */
+.arc-order-preview {
+  flex-shrink: 0;
+  margin: 0 0 2px;
+  padding: 10px 12px;
+  border-radius: 11px;
+  border: 1px solid rgba(212,175,110,.28);
+  background: rgba(10,8,8,.52);
+  max-height: min(36vh, 300px);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.arc-order-preview__title {
+  margin: 0 0 8px;
+  font-family: var(--display);
+  font-size: 10px; font-weight: 800;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--gold);
+}
+
+.arc-order-preview__line {
+  margin: 0;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(212,175,110,.14);
+  font-size: 11px; line-height: 1.45;
+  color: rgba(243,234,217,.85);
+  overflow-wrap: anywhere;
+}
+
+.arc-order-preview__line:last-child { border-bottom: none; padding-bottom: 0; }

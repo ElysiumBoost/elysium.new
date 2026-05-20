@@ -1,0 +1,471 @@
+/* ============================================================
+   ELYSIUM BOOST — GAME SPESİFİK STİLLER
+   body[data-ely-game="arc/valorant/tft"] scoped overrides,
+   sipariş receipt canvas, detail-val-trust, feature-thumb.
+   ============================================================ */
+
+/* ──────────────────────────────────────
+   FEATURE THUMB (detay sayfası görsel)
+   ────────────────────────────────────── */
+.detail-feature-thumb {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: linear-gradient(165deg, rgba(12,10,22,.9), rgba(7,10,16,.97));
+  box-shadow: 0 22px 56px rgba(0,0,0,.28), inset 0 1px 0 var(--glass-border);
+}
+
+.detail-feature-thumb .service-thumb {
+  aspect-ratio: var(--thumb-aspect);
+  height: auto;
+  min-height: 180px;
+  border: 0; border-radius: 0;
+  background: radial-gradient(circle at 50% 30%, rgba(212,175,110,.2), transparent 55%), #0a0808;
+}
+
+.detail-feature-thumb .service-thumb img {
+  object-fit: contain;
+  object-position: center;
+}
+
+/* ──────────────────────────────────────
+   DETAIL VAL TRUST BLOĞU
+   ────────────────────────────────────── */
+.detail-val-trust {
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(212,175,110,.22);
+  background: linear-gradient(160deg, rgba(18,15,20,.55), rgba(7,10,16,.72));
+}
+
+.detail-val-trust h4 {
+  margin: 0 0 6px;
+  font-family: var(--display);
+  font-size: 15px; letter-spacing: .05em; text-transform: uppercase;
+  color: #f3ead9;
+}
+
+.detail-val-trust p {
+  margin: 0 0 10px;
+  color: var(--muted); font-size: 13px; line-height: 1.45;
+}
+
+.detail-val-trust ul {
+  margin: 0; padding-left: 1.1em;
+  color: var(--text); font-size: 13px; line-height: 1.4;
+}
+
+/* ──────────────────────────────────────
+   ARC RAIDERS — SCOPED STİLLER
+   ────────────────────────────────────── */
+body[data-ely-game="arc"] .detail-title h2 {
+  color: #fff9f4;
+  text-shadow: 0 0 28px rgba(212,175,110,.2);
+}
+
+body[data-ely-game="arc"] .intro {
+  font-size: 13px; font-weight: 500;
+  color: rgba(243,234,217,.78); line-height: 1.5; max-width: 720px;
+}
+
+body[data-ely-game="arc"] .detail-step { min-height: 62px; padding: 9px 10px; }
+body[data-ely-game="arc"] .detail-step strong { font-size: 14px; color: #f3ead9; }
+body[data-ely-game="arc"] .detail-step span { font-size: 11px; }
+
+body[data-ely-game="arc"] #orderForm .field-block h4 {
+  color: #efd7a4; font-size: 16px; letter-spacing: .07em;
+}
+
+body[data-ely-game="arc"] #orderForm .field-block {
+  border-color: rgba(212,175,110,.28);
+  background: rgba(255,255,255,.03);
+}
+
+body[data-ely-game="arc"] .order-card .summary-total > #liveTotal {
+  color: var(--gold);
+  text-shadow: 0 0 18px rgba(231,201,139,.14);
+}
+
+/* Arc checkout — tek dış kart, düz iç */
+body[data-ely-game="arc"] .order-card.is-arc-split .summary-total {
+  border: 0; border-radius: 0; background: transparent; box-shadow: none; padding: 0;
+}
+
+body[data-ely-game="arc"] .order-card.is-arc-split .order-card-body {
+  gap: 10px; padding: 0 14px 14px;
+}
+
+body[data-ely-game="arc"] .order-card.is-arc-split .order-panel-head { padding: 10px 14px 0; }
+
+body[data-ely-game="arc"] .order-card.is-arc-split .summary-total .arc-order-preview {
+  margin: 0; padding: 0 0 12px;
+  border: 0; border-radius: 0; background: transparent; box-shadow: none;
+}
+
+body[data-ely-game="arc"] .order-card.is-arc-split .summary-total .arc-price-breakdown {
+  width: 100%; margin: 0; padding: 12px 0 0;
+  border: 0; border-radius: 0; background: transparent; box-shadow: none;
+  border-top: 1px solid rgba(212,175,110,.22);
+}
+
+body[data-ely-game="arc"] .order-card.is-arc-split .summary-total > .summary-total-label {
+  border-top: 1px solid rgba(212,175,110,.22);
+  padding-top: 14px; margin-top: 2px;
+}
+
+/* Arc — sticky order card desktop */
+@media (min-width: 1081px) {
+  body[data-ely-game="arc"] .order-card { top: 108px; max-height: calc(100vh - 120px); }
+
+  /* Arc — iki kolon layout */
+  body[data-ely-game="arc"] #detailSection.detail--valorant-layout {
+    grid-template-columns: minmax(0, max-content) minmax(300px, 460px);
+    justify-content: center; gap: 20px; align-items: stretch;
+  }
+
+  body[data-ely-game="arc"] #detailSection.detail--valorant-layout > .detail-left { display: contents; }
+  body[data-ely-game="arc"] #detailSection.detail--valorant-layout .detail-left-head { grid-column: 1 / -1; grid-row: 1; }
+  body[data-ely-game="arc"] #detailSection.detail--valorant-layout > .detail-left > .intro { grid-column: 1 / -1; grid-row: 2; }
+  body[data-ely-game="arc"] #detailSection.detail--valorant-layout > .detail-left > .detail-specs { grid-row: 3; grid-column: 1 / -1; }
+  body[data-ely-game="arc"] #detailSection.detail--valorant-layout .valorant-cfg-mount { grid-column: 1; grid-row: 4; align-self: stretch; width: 100%; height: 100%; }
+  body[data-ely-game="arc"] #detailSection.detail--valorant-layout .order-card.is-arc-split { grid-column: 2; grid-row: 4; align-self: stretch; justify-self: stretch; width: 100%; max-width: 460px; height: 100%; display: flex; flex-direction: column; min-height: 0; }
+  body[data-ely-game="arc"] #detailSection.detail--valorant-layout .detail-left-meta { grid-column: 1 / -1; grid-row: 5; }
+}
+
+/* ──────────────────────────────────────
+   VALORANT — SCOPED STİLLER
+   ────────────────────────────────────── */
+/* Checkout — tek dış kart */
+body[data-ely-game="valorant"] .order-card.is-valorant .summary-total {
+  border: 0; border-radius: 0; background: transparent; box-shadow: none; padding: 0;
+}
+
+body[data-ely-game="valorant"] .order-card.is-valorant .order-card-body { gap: 10px; padding: 0 14px 14px; }
+body[data-ely-game="valorant"] .order-card.is-valorant .order-panel-head { padding: 10px 14px 0; }
+
+/* Valorant cfg mount — flat iç */
+body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount { padding: 14px; }
+body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount .valorant-configurator { gap: 12px; }
+body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount .valorant-cfg-compact-head { padding: 0 2px 12px; margin-bottom: 0; border-bottom-color: rgba(212,175,110,.22); }
+
+body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount .valorant-configurator .field-block,
+body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount .valorant-configurator .field-block--tight {
+  margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none;
+}
+
+body[data-ely-game="valorant"] .order-card.is-valorant .summary-total > .summary-total-label {
+  border-top: 1px solid rgba(212,175,110,.22); padding-top: 14px; margin-top: 2px;
+}
+
+/* Valorant Customize panel — düz */
+body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .order-options-panel {
+  display: flex; flex-direction: column; gap: 0;
+  margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none;
+}
+
+body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .order-options-panel > h4 { margin: 0 0 12px; padding: 0; }
+
+body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .order-options-panel .field-block.valorant-panel-tight,
+body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .order-options-panel .valorant-panel-tight {
+  margin: 0; padding: 14px 0 0;
+  border: 0; border-radius: 0; background: transparent; box-shadow: none;
+  border-top: 1px solid rgba(212,175,110,.22);
+}
+
+body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .order-options-panel .valorant-extras-toggle .ely-toggle-row {
+  border: 0; border-radius: 0; background: transparent; box-shadow: none;
+  padding: 8px 0; min-height: 38px;
+}
+
+body[data-ely-game="valorant"] .order-card.is-valorant .summary-total .order-options-panel .valorant-extras-toggle .ely-toggle-row:hover {
+  border: 0; background: rgba(212,175,110,.08); box-shadow: none; transform: none;
+}
+
+/* Valorant desktop iki kolon */
+@media (min-width: 1081px) {
+  body[data-ely-game="valorant"] #detailSection.detail--valorant-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 460px);
+    justify-content: center; gap: 20px; align-items: stretch;
+  }
+
+  body[data-ely-game="valorant"] #detailSection.detail--valorant-layout > .detail-left { display: contents; }
+  body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .detail-left-head { grid-column: 1 / -1; grid-row: 1; }
+  body[data-ely-game="valorant"] #detailSection.detail--valorant-layout > .detail-left > .intro { grid-column: 1 / -1; grid-row: 2; }
+  body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount { grid-column: 1; grid-row: 4; align-self: stretch; width: 100%; height: 100%; }
+  body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .order-card.is-valorant { grid-column: 2; grid-row: 4; align-self: stretch; justify-self: stretch; width: 100%; max-width: 460px; height: 100%; display: flex; flex-direction: column; min-height: 0; }
+  body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .detail-left-meta { grid-column: 1 / -1; grid-row: 5; }
+}
+
+/* ──────────────────────────────────────
+   SİPARİŞ RECEIPT (canvas görsel)
+   ────────────────────────────────────── */
+.order-receipt-capture {
+  font-family: var(--font);
+  color: #f3ead9;
+  background: #0a0721;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+.order-receipt-inner {
+  width: 560px; max-width: 560px;
+  padding: 26px 24px 20px;
+  border: 2px solid rgba(212,175,110,.58);
+  border-radius: 14px;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 0%, rgba(212,175,110,.2), transparent 52%),
+    linear-gradient(180deg, rgba(30,24,68,.99), rgba(6,5,16,.995));
+  box-shadow: 0 0 48px rgba(212,175,110,.18), inset 0 1px 0 rgba(255,255,255,.07);
+}
+
+.order-receipt-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 14px; padding-bottom: 12px;
+  border-bottom: 1px solid rgba(212,175,110,.32);
+}
+
+.order-receipt-logo {
+  width: 48px; height: 48px;
+  border-radius: 999px; object-fit: cover;
+  border: 1px solid rgba(255,255,255,.2); flex-shrink: 0;
+}
+
+.order-receipt-title-block h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 17px; font-weight: 800;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: #fff9fc; line-height: 1.15;
+}
+
+.order-receipt-meta {
+  margin: 5px 0 0; font-size: 12px;
+  color: rgba(168,158,140,.92); font-weight: 600;
+}
+
+.order-receipt-section { margin-top: 14px; padding-top: 2px; }
+
+.order-receipt-section h2 {
+  margin: 0 0 8px;
+  font-family: var(--display);
+  font-size: 12px; font-weight: 800;
+  letter-spacing: .11em; text-transform: uppercase;
+  color: rgba(212,175,110,.88);
+}
+
+.order-receipt-item {
+  margin-bottom: 14px; padding: 12px 12px 11px;
+  border-radius: 10px;
+  border: 1px solid rgba(212,175,110,.38);
+  background: rgba(12,10,32,.55);
+}
+
+.order-receipt-item-head {
+  font-family: var(--display);
+  font-size: 15px; font-weight: 800;
+  letter-spacing: .05em; text-transform: uppercase;
+  color: #f3ead9; line-height: 1.25; margin-bottom: 6px;
+}
+
+.order-receipt-item-game {
+  font-size: 11px; font-weight: 800;
+  letter-spacing: .09em; text-transform: uppercase;
+  color: rgba(191,252,255,.75); margin-bottom: 8px;
+}
+
+.order-receipt-item-details {
+  font-size: 12px; line-height: 1.5;
+  color: rgba(243,234,217,.82);
+  white-space: pre-wrap; overflow-wrap: anywhere; margin-bottom: 8px;
+}
+
+.order-receipt-item-price {
+  font-family: var(--display);
+  font-size: 15px; font-weight: 800;
+  color: var(--gold); letter-spacing: .03em;
+}
+
+.order-receipt-totals {
+  margin-top: 8px; padding: 14px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(212,175,110,.32);
+  background: rgba(18,15,20,.55);
+}
+
+.order-receipt-totals .order-receipt-total-line {
+  display: flex; justify-content: space-between; gap: 12px;
+  font-size: 13px; font-weight: 750;
+  color: rgba(231,226,255,.95); margin-bottom: 6px;
+}
+
+.order-receipt-totals .order-receipt-grand {
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid rgba(212,175,110,.28);
+  font-family: var(--display);
+  font-size: 19px; font-weight: 800;
+  color: var(--gold); letter-spacing: .04em;
+}
+
+.order-receipt-foot {
+  margin-top: 18px; padding-top: 12px;
+  border-top: 1px solid rgba(212,175,110,.25);
+  font-size: 11px; font-weight: 750;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: rgba(168,158,140,.82); text-align: center;
+}
+
+/* ──────────────────────────────────────
+   CART CHECKLİST (sipariş kontrol)
+   ────────────────────────────────────── */
+.cart-checklist {
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(212,175,110,.32);
+  background: rgba(12,10,32,.72);
+  display: grid; gap: 4px;
+}
+
+.cart-checklist-row {
+  display: flex; align-items: flex-start; gap: 7px;
+  font-size: 11px; font-weight: 650;
+  color: var(--muted); line-height: 1.35;
+}
+
+.cart-checklist-row.is-done { color: rgba(244,247,255,.88); }
+
+.cart-checklist-row .chk {
+  flex: 0 0 auto;
+  width: 17px; height: 17px; border-radius: 5px;
+  display: grid; place-items: center;
+  font-size: 10px; font-weight: 900;
+  border: 1px solid rgba(212,175,110,.35);
+  background: rgba(255,255,255,.04);
+  color: rgba(168,158,140,.9);
+}
+
+.cart-checklist-row.is-done .chk {
+  border-color: rgba(255,209,102,.45);
+  background: rgba(212,175,110,.18);
+  color: #fde68a;
+}
+
+.cart-checklist--spacious { gap: 4px; }
+
+.cart-checklist--spacious .cart-checklist-row {
+  padding: 10px 12px; border-radius: 10px;
+  font-size: 14px; line-height: 1.35;
+  background: rgba(10,8,8,.45);
+  border: 1px solid rgba(212,175,110,.15);
+}
+
+/* ──────────────────────────────────────
+   INFO GRİD (servis bilgi kartları)
+   ────────────────────────────────────── */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.info-grid--compact { margin-top: 12px; gap: 10px; }
+
+.info-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(18,15,20,.48), rgba(10,8,8,.72));
+  box-shadow: 0 18px 54px rgba(0,0,0,.22);
+  padding: 16px;
+}
+
+.info-card h3 {
+  margin: 0 0 8px;
+  font-family: var(--display);
+  font-size: 24px; line-height: 1;
+  letter-spacing: .04em; text-transform: uppercase;
+}
+
+.info-card--compact { padding: 12px 14px; }
+.info-card--compact h3 { font-size: 15px; margin-bottom: 5px; }
+.info-card--compact p { font-size: 12px; line-height: 1.38; }
+
+.info-card p { margin: 0; color: var(--muted); line-height: 1.55; font-size: 14px; }
+
+/* ──────────────────────────────────────
+   CART READY BANNER
+   ────────────────────────────────────── */
+.cart-ready-banner {
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(212,175,110,.38);
+  background:
+    radial-gradient(circle at 8% 30%, rgba(212,175,110,.18), transparent 46%),
+    linear-gradient(180deg, rgba(18,15,20,.76), rgba(7,10,16,.96));
+  font-family: var(--display);
+  font-size: 14px; font-weight: 800;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: #f3ead9; text-align: center;
+}
+
+/* ──────────────────────────────────────
+   CART QTY PİLL
+   ────────────────────────────────────── */
+.cart-qty-pill {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(212,175,110,.35);
+  background: rgba(212,175,110,.12);
+  color: #f3ead9;
+  font-family: var(--display);
+  font-size: 14px; font-weight: 800;
+  letter-spacing: .04em; vertical-align: middle;
+}
+
+/* ──────────────────────────────────────
+   ORDER DISCORD PANELİ
+   ────────────────────────────────────── */
+.order-discord-panel {
+  padding: 14px 16px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(212,175,110,.2);
+  background: rgba(14,11,10,.5);
+}
+
+.order-discord-panel__title {
+  margin: 0 0 12px;
+  font-family: var(--display);
+  font-size: 13px; font-weight: 800;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(231,201,139,.88);
+}
+
+.order-discord-panel__list {
+  margin: 0; padding-left: 1.15rem;
+  color: var(--text); font-size: 14px; line-height: 1.5;
+}
+
+.order-discord-panel__list li { margin: 0 0 8px; }
+
+.order-safety-note {
+  margin: 0; padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(225,29,72,.28);
+  background: rgba(60,12,28,.22);
+  font-size: 13px; line-height: 1.45; font-weight: 600;
+  color: #fecdd3;
+}
+
+/* ──────────────────────────────────────
+   RESPONSIVE — GAME SPESİFİK
+   ────────────────────────────────────── */
+@media (max-width: 1080px) {
+  .info-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  .info-grid { grid-template-columns: 1fr; }
+  body[data-ely-game="arc"] .order-card { top: auto; max-height: none; }
+}
