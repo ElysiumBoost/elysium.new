@@ -1181,7 +1181,7 @@
       const ctx = canvas.getContext("2d");
       ctx.scale(scale, scale);
       ctx.textBaseline = "top";
-      ctx.fillStyle = "#070510";
+      ctx.fillStyle = "#0a0808";
       ctx.fillRect(0, 0, W, H);
       const bar = ctx.createLinearGradient(0, 0, W, 0);
       bar.addColorStop(0, "#8f6746");

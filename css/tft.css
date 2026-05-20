@@ -366,7 +366,7 @@ body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .ord
 body[data-ely-game="tft"] .order-card .summary-total .order-options-panel .order-option-buttons .raid-pill {
   background:
     radial-gradient(circle at 16% 16%, rgba(212, 175, 110, .1), transparent 38%),
-    linear-gradient(180deg, rgba(20, 24, 39, .72), rgba(12, 10, 22, .9));
+    linear-gradient(180deg, rgba(18, 15, 20, .72), rgba(12, 10, 22, .9));
 }
 
 /* Selfplay +50% label — not the live price span */

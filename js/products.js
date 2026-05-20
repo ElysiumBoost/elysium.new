@@ -47,7 +47,7 @@
     const prices = {
       blueprint: .75,
       coins100k: .25,
-      weapon: .65,
+      weapon: .90,
       blueMod: .05,
       premiumMod: .10,
       seeds100: .40,
@@ -125,10 +125,10 @@
       const tier40 = new Set(["Venator", "Renegade", "Torrente", "Canto", "Osprey"]);
       const tier50 = new Set(["Tempest", "Bobcat", "Vulcano", "Bettina", "Hullcracker"]);
       const tier60 = new Set(["Dolabra", "Jupiter", "Equalizer", "Aphelion"]);
-      if (tier30.has(w)) return 0.45;
-      if (tier40.has(w)) return 0.55;
-      if (tier50.has(w)) return 0.65;
-      if (tier60.has(w)) return 0.75;
+      if (tier30.has(w)) return 0.70;
+      if (tier40.has(w)) return 0.80;
+      if (tier50.has(w)) return 0.90;
+      if (tier60.has(w)) return 1.00;
       return prices.weapon;
     }
 
@@ -335,7 +335,7 @@
         popular: ["trials", "guns", "blueprints", "coins"],
         services: [
           arcService("blueprints", "blueprints", "Buy Arc Raiders Blueprints", "All Blueprints", "i-blueprint", .75, " each", "Discounted blueprints, now $0.75 each instead of $1.50.", "30-60 Minutes", "blueprints", 1.50),
-          arcService("guns", "guns", "Buy Arc Raiders Weapons", "All Guns", "i-gun", .65, " each", "Discounted weapons and mods with automatic attachment quantity.", "30-60 Minutes", "guns", 1.15),
+          arcService("guns", "guns", "Buy Arc Raiders Weapons", "All Guns", "i-gun", .90, " each", "Discounted weapons and mods with automatic attachment quantity.", "30-60 Minutes", "guns", 1.15),
           arcService("loadout", "loadouts", "Build a Custom Loadout", "Custom Loadout", "i-loadout", 0, "", "Weapon, mods, Looting Mk. 3 Augments, Medium Shields, quick-use bundles, and special bundles.", "30-90 Minutes", "loadout"),
           arcService("coins", "coins", "Buy Raider Coins", "Raider Coins", "i-coins", .25, " / 100k", "Choose from 100k to 9 million coins with instant price updates.", "15-30 Minutes", "coins", 0.4167),
           { ...arcService("seeds", "seeds", "Buy Assorted Seeds", "Assorted Seeds", "i-coins", .35, " / 100", "Choose 100 to 5,000 Assorted Seeds with bulk discount checkpoints.", "15-30 Minutes", "seeds"), noDiscount: true },

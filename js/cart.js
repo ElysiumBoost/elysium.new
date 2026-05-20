@@ -625,7 +625,7 @@
           row.style.removeProperty("justify-content");
         }
         $("heroTitle").textContent = ui("Premium Game Boosting");
-        if (sub) sub.textContent = ui("Fast, safe, Discord-confirmed services for players who want a clean and reliable order experience.");
+        if (sub) sub.textContent = ui("Elite boosting services with fast support, clean delivery, and a premium order experience.");
         $("heroCopy").textContent = ui("Manual delivery · No cheats · Real support · Clear ticket confirmation");
       }
     }
@@ -1164,7 +1164,10 @@
     }
 
     function weaponOptions(includeNone = true) {
-      return weapons.filter(weapon => includeNone || weapon !== "No Weapon").map(weapon => `<option value="${weapon}">${displayItemName(weapon)}</option>`).join("");
+      return weapons.filter(weapon => includeNone || weapon !== "No Weapon").map(weapon => {
+        const label = weapon === "No Weapon" ? `${displayItemName(weapon)} - ${moneyUSD(0)}` : displayItemName(weapon);
+        return `<option value="${weapon}">${label}</option>`;
+      }).join("");
     }
 
     function modTierOptionsHtml() {
@@ -1617,7 +1620,7 @@
       }
       if (type === "guns") {
         const bundleUnit = weaponBasePriceUsd("Anvil") + prices.augment + prices.shield + prices.rechargerBundle + prices.bandageBundle;
-        return `<div class="field-grid loadout-weapon-grid"><div class="ely-form-cell"><label for="gunWeapon">${ui("Weapon")}</label><select id="gunWeapon">${weaponOptions(false)}</select></div><div class="ely-form-cell ely-form-cell--arc-mods" data-arc-mod-cell="gun"><label for="gunModType">${ui("Mods")}</label><select id="gunModType">${modTierOptionsHtml()}</select></div>${qtyField("gunQty", ui("Quantity"), 1, 1)}</div><p class="loadout-mod-hint" data-arc-mod-hint="gun" role="note">${ui("Mod quantity automatically matches weapon quantity.")}</p><div class="guns-bundle-wrap" id="gunsBundleWrap"><button class="btn" id="bundle20" type="button" style="width:100%;margin-top:10px">20x Weapon + Legendary / Epic Mods (-10%)</button></div>`;
+        return `<div class="field-grid loadout-weapon-grid"><div class="ely-form-cell"><label for="gunWeapon">${ui("Weapon")}</label><select id="gunWeapon">${weaponOptions(true)}</select></div><div class="ely-form-cell ely-form-cell--arc-mods" data-arc-mod-cell="gun"><label for="gunModType">${ui("Mods")}</label><select id="gunModType">${modTierOptionsHtml()}</select></div>${qtyField("gunQty", ui("Quantity"), 1, 1)}</div><p class="loadout-mod-hint" data-arc-mod-hint="gun" role="note">${ui("Mod quantity automatically matches weapon quantity.")}</p><div class="guns-bundle-wrap" id="gunsBundleWrap"><button class="btn" id="bundle20" type="button" style="width:100%;margin-top:10px">20x Weapon + Legendary / Epic Mods (-10%)</button></div>`;
       }
       if (type === "loadout") {
         const bundleUnit = weaponBasePriceUsd("Anvil") + prices.augment + prices.shield + prices.rechargerBundle + prices.bandageBundle;
