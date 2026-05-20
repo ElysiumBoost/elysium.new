@@ -1,0 +1,79 @@
+/* ============================================================
+   ELYSIUM BOOST — CSS VARIABLES
+   Tek kaynak — tüm :root tanımları burada.
+   Eskiden styles.css'te iki ayrı :root bloğu vardı,
+   bu dosya ikisini birleştirip çakışmayı çözüyor.
+   ============================================================ */
+
+:root {
+  /* ── Marka renkleri ── */
+  --ely-bg:           #0a0808;
+  --ely-gold:         #d4af6e;
+  --ely-bronze:       #b8855a;
+  --ely-gold-soft:    rgba(212, 175, 110, 0.35);
+  --ely-border:       rgba(212, 175, 110, 0.22);
+  --ely-border-strong:rgba(212, 175, 110, 0.48);
+  --ely-text:         #f3ead9;
+  --ely-muted:        #a89e8c;
+  --ely-shadow:       rgba(0, 0, 0, 0.38);
+  --ely-rgb-gold:     212, 175, 110;
+
+  /* ── Panel / yüzey ── */
+  --ely-panel:        rgba(18, 15, 20, 0.65);
+  --ely-panel-strong: rgba(18, 15, 20, 0.82);
+
+  /* ── Checkout buton renkleri ── */
+  --ely-purchase-top:  #15803d;
+  --ely-purchase-mid:  #166534;
+  --ely-purchase-deep: #14532d;
+
+  /* ── Seçim / glow ── */
+  --ely-select-blue:     var(--ely-gold);
+  --ely-select-blue-dim: rgba(212, 175, 110, 0.18);
+  --ely-select-glow:     rgba(212, 175, 110, 0.24);
+
+  /* ── Alias'lar (JS ve diğer CSS'ler bu isimleri kullanır) ── */
+  --bg:           var(--ely-bg);
+  --surface:      var(--ely-bg);
+  --nav:          rgba(10, 8, 8, 0.72);
+  --panel:        var(--ely-panel);
+  --panel-2:      rgba(18, 15, 20, 0.72);
+  --panel-3:      var(--ely-panel-strong);
+  --card:         var(--ely-panel);
+  --card-elevated:var(--ely-panel-strong);
+  --text:         var(--ely-text);
+  --muted:        var(--ely-muted);
+  --soft:         #8f8576;
+  --gold:         var(--ely-gold);
+  --green:        #b7a06b;
+  --danger:       #f43f5e;
+  --crimson:      #e11d48;
+  --crimson-deep: #9f1239;
+
+  /* ── Çizgi / ayraç ── */
+  --line:         var(--ely-border);
+  --line-strong:  var(--ely-border-strong);
+  --rgb-ice:      214, 186, 112;
+
+  /* ── Cam efekti ── */
+  --glass:        var(--ely-panel);
+  --glass-border: var(--ely-border);
+  --ice:          rgba(225, 213, 187, 0.72);
+  --cyan:         var(--ely-gold-soft);
+
+  /* ── Fiyat renkleri ── */
+  --price:        var(--ely-text);
+  --price-accent: var(--ely-gold);
+
+  /* ── Gölge / şekil ── */
+  --shadow:       0 24px 80px var(--ely-shadow);
+  --radius:       10px;
+
+  /* ── Tipografi ── */
+  --font:    Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --display: Rajdhani, Inter, sans-serif;
+
+  /* ── Görsel ── */
+  --hero-bg:      url("../assets/backgrounds/elyssunset.webp?v=social-card-live1");
+  --thumb-aspect: 16 / 10;
+}
