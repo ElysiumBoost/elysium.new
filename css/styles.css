@@ -739,8 +739,8 @@
       top: auto;
       z-index: 45;
       background:
-        linear-gradient(180deg, rgba(12, 6, 20, .82), rgba(5, 3, 13, .58)),
-        linear-gradient(90deg, rgba(28, 8, 18, .2), transparent 28%, transparent 72%, rgba(28, 8, 18, .2));
+        linear-gradient(180deg, rgba(10, 8, 8, .88), rgba(8, 6, 6, .62)),
+        linear-gradient(90deg, rgba(10, 8, 8, .28), transparent 28%, transparent 72%, rgba(10, 8, 8, .28));
       border-bottom: 1px solid var(--line);
     }
 
@@ -845,7 +845,7 @@
       border-color: rgba(212, 175, 110, .28);
       background:
         radial-gradient(circle at 50% 16%, rgba(212, 175, 110, .1), transparent 38%),
-        linear-gradient(180deg, rgba(18, 15, 20, .78), rgba(7, 10, 16, .96));
+        linear-gradient(180deg, rgba(18, 15, 20, .78), rgba(8, 7, 8, .96));
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,.08),
         inset 0 -18px 34px rgba(0,0,0,.18),
@@ -877,7 +877,7 @@
       border-color: rgba(212, 175, 110, .55);
       background:
         radial-gradient(circle at 50% 18%, rgba(212, 175, 110, .16), transparent 40%),
-        linear-gradient(180deg, rgba(18, 15, 20, .88), rgba(7, 10, 16, .98));
+        linear-gradient(180deg, rgba(18, 15, 20, .88), rgba(8, 7, 8, .98));
       box-shadow:
         0 0 0 1px rgba(212, 175, 110, .14),
         0 18px 42px rgba(0, 0, 0, .4),
@@ -1063,7 +1063,7 @@
       place-items: center;
       margin: 0 auto;
       border: 1px solid rgba(231, 201, 139, .22);
-      background: radial-gradient(circle at 50% 32%, rgba(212, 175, 110, .55), rgba(18, 12, 44, .92));
+      background: radial-gradient(circle at 50% 32%, rgba(212, 175, 110, .52), rgba(10, 8, 8, .92));
       box-shadow: inset 0 -6px 14px rgba(0, 0, 0, .35), 0 0 16px rgba(212, 175, 110, .28);
     }
 
@@ -2639,8 +2639,8 @@
       border-radius: 14px;
       border: 1px solid rgba(212, 175, 110, .32);
       background:
-        linear-gradient(168deg, rgba(18, 15, 20, .94), rgba(7, 10, 16, .98)),
-        radial-gradient(130% 90% at 100% 0%, rgba(212, 175, 110, .1), transparent 58%);
+        linear-gradient(168deg, rgba(18, 15, 20, .94), rgba(10, 8, 8, .98)),
+        radial-gradient(130% 90% at 100% 0%, rgba(212, 175, 110, .12), transparent 58%);
       box-shadow:
         0 22px 56px rgba(0, 0, 0, .38),
         inset 0 1px 0 rgba(255, 255, 255, .06),
@@ -2744,7 +2744,7 @@
       padding: 10px 12px;
       border-radius: 11px;
       border: 1px solid rgba(212, 175, 110, .28);
-      background: rgba(8, 6, 22, .48);
+      background: rgba(10, 8, 8, .52);
       max-height: min(36vh, 300px);
       overflow-x: hidden;
       overflow-y: auto;
@@ -2777,7 +2777,7 @@
       border-bottom: 1px solid rgba(212, 175, 110, .14);
       font-size: 11px;
       line-height: 1.45;
-      color: rgba(231, 226, 255, .92);
+      color: rgba(243, 234, 217, .85);
       overflow-wrap: anywhere;
     }
 
@@ -3003,7 +3003,7 @@
       padding: 12px 13px;
       border-radius: 12px;
       border: 1px solid rgba(212, 175, 110, .34);
-      background: linear-gradient(165deg, rgba(22, 18, 48, .78), rgba(8, 7, 20, .88));
+      background: linear-gradient(165deg, rgba(18, 15, 20, .84), rgba(10, 8, 8, .92));
       box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, .05),
         0 10px 28px rgba(0, 0, 0, .22);
@@ -3305,12 +3305,12 @@
     .order-card.is-valorant .valorant-order-chrome select {
       border-radius: 10px;
       border: 1px solid rgba(212, 175, 110, .42);
-      background: rgba(22, 18, 52, .92);
+      background: rgba(18, 15, 20, .94);
       min-height: 40px;
       box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .25);
       width: 100%;
       max-width: 100%;
-      color: var(--text);
+      color: var(--ely-text);
     }
 
     .valorant-configurator .qty-stepper {
@@ -3321,7 +3321,7 @@
     }
 
     .valorant-configurator .qty-step {
-      background: rgba(22, 18, 52, .72);
+      background: rgba(18, 15, 20, .88);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -3340,8 +3340,9 @@
     .valorant-configurator input[type="number"]:focus,
     .valorant-configurator .qty-stepper-input:focus,
     .order-card.is-valorant .valorant-order-chrome select:focus {
-      border-color: rgba(231, 201, 139, .55);
-      box-shadow: 0 0 0 3px rgba(212, 175, 110, .18);
+      outline: none;
+      border-color: rgba(212, 175, 110, .65);
+      box-shadow: 0 0 0 3px rgba(212, 175, 110, .22);
     }
 
     .valorant-configurator .field-grid--rr {
@@ -3550,10 +3551,10 @@
       gap: 12px;
       overflow: auto;
       flex: 1 1 auto;
-      min-height: 180px;
+      min-height: 100px;
       max-height: min(68vh, 680px);
       scrollbar-width: thin;
-      scrollbar-color: rgba(212, 175, 110,.62) rgba(12,8,31,.34);
+      scrollbar-color: rgba(212, 175, 110,.62) rgba(10,8,10,.34);
     }
 
     #orderForm:has(#loadoutBundle) {
@@ -4331,16 +4332,17 @@
     }
 
     .coin-discount-guidance {
-      min-height: 34px;
+      min-height: 52px;
       padding: 7px 10px;
       border-radius: 10px;
       border: 1px solid rgba(212, 175, 110, .28);
       background: linear-gradient(180deg, rgba(18, 15, 20, .38), rgba(10, 8, 8, .72));
-      color: rgba(231, 226, 255, .92);
+      color: rgba(243, 234, 217, .88);
       font-size: 12px;
       font-weight: 700;
       line-height: 1.45;
       letter-spacing: .02em;
+      overflow: hidden;
     }
 
     .coin-discount-guidance.is-unlocked {
@@ -4441,7 +4443,7 @@
     body[data-ely-game="arc"] .intro {
       font-size: 13px;
       font-weight: 500;
-      color: rgba(200, 192, 236, .92);
+      color: rgba(243, 234, 217, .78);
       line-height: 1.5;
       max-width: 720px;
     }
@@ -4964,7 +4966,7 @@
       border-radius: 8px;
       background:
         radial-gradient(circle at 16% 16%, rgba(212, 175, 110, .1), transparent 38%),
-        linear-gradient(180deg, rgba(18, 15, 20, .72), rgba(12, 10, 22, .9));
+        linear-gradient(180deg, rgba(18, 15, 20, .72), rgba(10, 8, 8, .92));
       color: #f3ead9;
       display: flex;
       align-items: center;
@@ -5004,8 +5006,8 @@
     .raid-pill.active {
       border-color: rgba(231, 201, 139, .55);
       background:
-        radial-gradient(circle at 15% 12%, rgba(212, 175, 110, .18), transparent 42%),
-        linear-gradient(180deg, rgba(32, 26, 64, .82), rgba(12, 10, 28, .94));
+        radial-gradient(circle at 15% 12%, rgba(212, 175, 110, .22), transparent 42%),
+        linear-gradient(180deg, rgba(22, 18, 18, .92), rgba(10, 8, 8, .96));
       box-shadow: 0 0 0 1px rgba(212, 175, 110, .14), 0 12px 28px rgba(0, 0, 0, .28);
     }
 
@@ -5367,11 +5369,7 @@
     }
 
     .summary-total .old-total {
-      display: inline-block;
-      margin-right: 8px;
-      color: rgba(255,255,255,.46);
-      font-size: .62em;
-      text-shadow: none;
+      display: none;
     }
 
     .summary-total em {
@@ -5525,8 +5523,8 @@
       min-height: 36px;
       border-radius: 8px;
       border: 1px solid rgba(212, 175, 110, .42);
-      background: rgba(22, 18, 52, .75);
-      color: rgba(231, 226, 255, .95);
+      background: rgba(18, 15, 20, .88);
+      color: rgba(243, 234, 217, .92);
       font-family: var(--display);
       font-size: 11px;
       font-weight: 800;
@@ -5607,7 +5605,7 @@
       padding: 14px 16px 16px;
       border-radius: 12px;
       border: 1px solid rgba(212, 175, 110, .35);
-      background: linear-gradient(165deg, rgba(22, 18, 48, .72), rgba(8, 7, 22, .88));
+      background: linear-gradient(165deg, rgba(18, 15, 20, .78), rgba(10, 8, 8, .92));
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06);
     }
 
@@ -5839,7 +5837,7 @@
       font: inherit;
       font-size: 13px;
       font-weight: 600;
-      color: rgba(167, 180, 220, .88);
+      color: rgba(212, 175, 110, .72);
       text-decoration: underline;
       text-underline-offset: 3px;
       cursor: pointer;
@@ -6283,7 +6281,7 @@
 
     .copy-status {
       min-height: 20px;
-      color: rgba(212, 196, 255, .95);
+      color: rgba(212, 175, 110, .92);
       font-weight: 800;
       font-size: 13px;
     }
@@ -6293,8 +6291,8 @@
       padding: 8px 10px;
       border-radius: 8px;
       border: 1px solid rgba(212, 175, 110, .35);
-      background: rgba(12, 10, 32, .55);
-      color: rgba(200, 192, 236, .95);
+      background: rgba(14, 12, 12, .62);
+      color: rgba(243, 234, 217, .78);
       font-size: 12px;
       font-weight: 650;
       line-height: 1.45;
@@ -6370,7 +6368,7 @@
       font-weight: 800;
       letter-spacing: .11em;
       text-transform: uppercase;
-      color: rgba(191, 252, 255, .85);
+      color: rgba(212, 175, 110, .88);
     }
 
     .order-receipt-embark-box {
@@ -6426,7 +6424,7 @@
     .order-receipt-item-details {
       font-size: 12px;
       line-height: 1.5;
-      color: rgba(220, 214, 248, .95);
+      color: rgba(243, 234, 217, .82);
       white-space: pre-wrap;
       overflow-wrap: anywhere;
       margin-bottom: 8px;
@@ -7759,7 +7757,7 @@
     .summary-total .usd-hint-text {
       order: 4;
       font-size: 11px;
-      color: rgba(148, 156, 176, .75);
+      color: rgba(168, 158, 140, .72);
     }
 
     .summary-total #addToCart {
@@ -7822,8 +7820,8 @@
     }
 
     .coin-slider-mark.is-active .coin-slider-mark__tick {
-      background: linear-gradient(180deg, var(--ely-select-blue), #0ea5e9);
-      box-shadow: 0 0 12px var(--ely-select-glow);
+      background: linear-gradient(180deg, #d4af6e, #b8855a);
+      box-shadow: 0 0 10px rgba(212, 175, 110, .45);
     }
 
     .service-btn.active {
@@ -7857,7 +7855,7 @@
       width: 21px;
       height: 21px;
       margin-top: -7px;
-      border: 2px solid rgba(191, 252, 255, .82);
+      border: 2px solid rgba(243, 220, 180, .82);
       background:
         radial-gradient(circle at 38% 32%, #fff7e8, #d4af6e 34%, #8b5b34 78%);
       box-shadow:
@@ -7884,7 +7882,7 @@
     input[type="range"]::-moz-range-thumb {
       width: 21px;
       height: 21px;
-      border: 2px solid rgba(191, 252, 255, .82);
+      border: 2px solid rgba(243, 220, 180, .82);
       background:
         radial-gradient(circle at 38% 32%, #fff7e8, #d4af6e 34%, #8b5b34 78%);
       box-shadow:
@@ -8118,37 +8116,34 @@
     }
 
     .hero.is-home .hero-shell {
-      max-width: 1280px;
-      display: grid;
-      grid-template-columns: minmax(0, .96fr) minmax(280px, .64fr);
-      align-items: center;
-      gap: clamp(24px, 5vw, 70px);
-      text-align: left;
+      max-width: 860px;
+      display: block;
+      text-align: center;
     }
 
     .hero.is-home .hero-text {
-      max-width: 700px;
-      margin: 0;
+      max-width: 760px;
+      margin: 0 auto;
     }
 
     .hero.is-home h1,
     .hero.is-home p {
-      margin-left: 0;
-      margin-right: 0;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .hero.is-home h1 {
       max-width: 760px;
-      margin: 10px 0 12px;
+      margin: 10px auto 12px;
       color: var(--text);
-      font-size: clamp(40px, 5.4vw, 74px);
+      font-size: clamp(38px, 5.4vw, 72px);
       line-height: .96;
       letter-spacing: .045em;
     }
 
     .hero.is-home .hero-subtitle {
-      max-width: 620px;
-      margin: 0 0 12px;
+      max-width: 580px;
+      margin: 0 auto 12px;
       color: rgba(243, 234, 217, .88);
       font-family: var(--font);
       font-size: clamp(15px, 1.35vw, 18px);
@@ -8159,8 +8154,8 @@
     }
 
     .hero.is-home #heroCopy {
-      max-width: 680px;
-      margin: 0;
+      max-width: 620px;
+      margin: 0 auto;
       color: rgba(216, 185, 104, .92);
       font-size: clamp(12px, 1.1vw, 14px);
       font-weight: 800;
@@ -8169,10 +8164,30 @@
       text-transform: uppercase;
     }
 
+    .hero-brand-line {
+      margin: 10px auto 0;
+      max-width: 520px;
+      font-size: clamp(11px, 1vw, 13px);
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(212, 175, 110, .68);
+      line-height: 1.4;
+    }
+
+    .hero:not(.is-home) .hero-brand-line { display: none; }
+
+    /* Single-CTA row — prevent button from stretching full width on mobile */
+    .hero-cta-row--solo .btn { flex: 0 0 auto; }
+
+    /* Compact spacing for summary-total label after old-total removal */
+    .summary-total-label { margin-bottom: 2px; }
+
     .hero-cta-row {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
+      justify-content: center;
       gap: 10px;
       margin-top: 22px;
     }
@@ -8180,7 +8195,7 @@
     .hero.is-home .hero-cta {
       min-height: 42px;
       margin-top: 0;
-      padding: 0 20px;
+      padding: 0 32px;
     }
 
     .hero-cta-secondary {
@@ -8188,18 +8203,7 @@
       color: rgba(243, 234, 217, .9);
     }
 
-    .hero-future-visual {
-      min-height: clamp(220px, 28vw, 340px);
-      border: 1px solid rgba(216, 185, 104, .16);
-      border-radius: 16px;
-      background:
-        linear-gradient(145deg, rgba(243, 234, 217, .07), rgba(184, 133, 90, .08)),
-        radial-gradient(circle at 48% 42%, rgba(216, 185, 104, .2), transparent 36%),
-        rgba(10, 8, 8, .42);
-      box-shadow:
-        inset 0 1px 0 rgba(243, 234, 217, .08),
-        0 26px 70px rgba(0, 0, 0, .28);
-    }
+    .hero-future-visual { display: none; }
 
     .home-content {
       padding: 18px 0 30px;
@@ -8401,14 +8405,6 @@
     }
 
     @media (max-width: 1080px) {
-      .hero.is-home .hero-shell {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-future-visual {
-        display: none;
-      }
-
       .home-process-grid,
       .home-why-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -8577,8 +8573,8 @@
     .faq-item,
     .site-footer-inner,
     .ely-sticky-order__btn {
-      background: rgba(20, 18, 26, .62);
-      border-color: rgba(212, 175, 110, .18);
+      background: rgba(18, 15, 18, .62);
+      border-color: rgba(212, 175, 110, .2);
       box-shadow:
         0 8px 32px rgba(0, 0, 0, .35),
         inset 0 1px 0 rgba(255, 255, 255, .04);
@@ -8688,11 +8684,26 @@
     .btn-premium,
     .btn-primary,
     .btn-purchase,
-    #addToCart.btn-purchase {
+    #addToCart.btn-purchase,
+    .btn-checkout-primary {
       border-color: rgba(212, 175, 110, .4);
       background: linear-gradient(135deg, #d4af6e, #b8855a);
       color: #171015;
       box-shadow: 0 14px 34px rgba(0, 0, 0, .34), 0 0 22px rgba(212, 175, 110, .16);
+    }
+
+    .btn-premium:hover,
+    .btn-primary:hover,
+    .btn-purchase:hover,
+    #addToCart.btn-purchase:hover,
+    .btn-checkout-primary:hover {
+      filter: brightness(1.06);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, .38), 0 0 28px rgba(212, 175, 110, .22);
+    }
+
+    .btn-checkout-primary:active {
+      transform: translateY(1px);
+      filter: brightness(0.98);
     }
 
     .btn-glass,
@@ -8932,4 +8943,141 @@
 
 .category-shell.is-static-centered .category-scroll {
   justify-content: center !important;
+}
+
+/* ── Valorant / all-game tab centering when no scrolling needed ──────── */
+.category-shell.is-tabs-centered .cat-arrow {
+  display: none;
+}
+.category-shell.is-tabs-centered .category-scroll {
+  justify-content: center;
+  overflow: visible;
+}
+
+/* ── Slider focus polish: remove browser ring, add gold glow ─────────── */
+input[type="range"]:focus {
+  outline: none;
+}
+input[type="range"]:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 4px rgba(212, 175, 110, .22),
+    0 0 20px rgba(212, 175, 110, .55),
+    0 8px 18px rgba(0, 0, 0, .44);
+}
+input[type="range"]:focus-visible::-moz-range-thumb {
+  box-shadow:
+    0 0 0 4px rgba(212, 175, 110, .22),
+    0 0 20px rgba(212, 175, 110, .55),
+    0 8px 18px rgba(0, 0, 0, .44);
+}
+
+/* ── Hide large arc price breakdown / order preview panels ───────────── */
+#arcPriceBreakdown {
+  display: none !important;
+}
+#arcOrderSummaryPreview {
+  display: none !important;
+}
+
+/* ── Card symmetry: reduce excess lower space in sparse config cards ──── */
+.order-form > :last-child {
+  margin-bottom: 0;
+}
+.order-card.is-arc-split .order-card-body,
+.order-card.is-valorant .order-card-body {
+  padding-bottom: 10px;
+}
+
+/* ── Select/input gold theme — covers all game config panels ─────────── */
+/* Overrides any purple/indigo backgrounds that slipped through on selects */
+.valorant-configurator select,
+.valorant-configurator input[type="number"],
+.valorant-configurator input[type="text"],
+.valorant-configurator textarea,
+.order-card.is-valorant .valorant-order-chrome select,
+.tft-rank-up-form select,
+.tft-rank-up-form input[type="number"],
+.tft-div-wrap select,
+.order-form select,
+.order-form input[type="number"],
+.order-form input[type="text"],
+.service-config select {
+  background: rgba(16, 13, 16, .94);
+  color: #f3ead9;
+  border-color: rgba(212, 175, 110, .42);
+}
+
+.valorant-configurator select:focus,
+.valorant-configurator input[type="number"]:focus,
+.valorant-configurator input[type="text"]:focus,
+.order-card.is-valorant .valorant-order-chrome select:focus,
+.tft-rank-up-form select:focus,
+.tft-div-wrap select:focus,
+.order-form select:focus,
+.order-form input[type="number"]:focus,
+.order-form input[type="text"]:focus,
+.service-config select:focus {
+  outline: none;
+  border-color: rgba(212, 175, 110, .68);
+  box-shadow: 0 0 0 3px rgba(212, 175, 110, .22);
+}
+
+.valorant-configurator select option,
+.tft-rank-up-form select option,
+.order-form select option {
+  background: #100d10;
+  color: #f3ead9;
+}
+
+/* qty stepper warm dark */
+.valorant-configurator .qty-step {
+  background: rgba(16, 13, 16, .94);
+}
+
+/* ── Order Summary panel polish ──────────────────────────────────────── */
+/* Tighten summary-total on non-split cards so Add to Cart isn't far away */
+.summary-total {
+  gap: 5px;
+}
+/* Keep a natural top gap before the Add to Cart button */
+.summary-total #addToCart {
+  margin-top: 8px;
+}
+/* Trustpilot link below button — small, muted */
+.order-trustpilot-cta {
+  font-size: 10px;
+  color: rgba(168, 158, 140, .55);
+  text-decoration: none;
+  text-align: center;
+  margin-top: 2px;
+  line-height: 1.35;
+}
+.order-trustpilot-cta:hover {
+  color: rgba(212, 175, 110, .72);
+}
+
+/* ── Service tab premium sizing ──────────────────────────────────────── */
+/* Slight size bump so tabs feel premium but not oversized */
+.cat-btn {
+  width: 162px;
+  min-width: 152px;
+  min-height: 120px;
+}
+.service-thumb {
+  height: 90px;
+}
+/* TFT cats stay proportionally matched */
+.category-bar.tft-cats .cat-btn {
+  width: 168px;
+  min-width: 152px;
+  min-height: 120px;
+}
+.category-bar.tft-cats .cat-btn .service-thumb {
+  height: 90px;
+}
+
+/* ── Remaining cold/blue gradient end-stop overrides ─────────────────── */
+/* Cart drawer background blue end-stop */
+.drawer {
+  background: linear-gradient(180deg, rgba(18, 15, 20, .98), rgba(10, 8, 8, .99)) !important;
 }
