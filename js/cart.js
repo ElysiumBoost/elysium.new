@@ -274,8 +274,22 @@
       return `<span class="price-old">${displayMoney(old)}</span> ${displayMoney(service.fromUSD)} ${service.suffix || ""} - ${percent}% off`;
     }
 
+    function updateDocumentTitle() {
+      const titleByGame = {
+        arc: "Arc Raiders Boosting | ELYSIUM BOOST",
+        valorant: "Valorant Boosting | ELYSIUM BOOST",
+        lol: "League of Legends Boosting | ELYSIUM BOOST",
+        tft: "TFT Boosting | ELYSIUM BOOST"
+      };
+      const game = currentGame();
+      document.title = game
+        ? titleByGame[game.id] || `${game.label} Boosting | ELYSIUM BOOST`
+        : "ELYSIUM BOOST | Premium Game Services";
+    }
+
     function renderAll() {
       updateStaticText();
+      updateDocumentTitle();
       renderGames();
       renderHero();
       renderHome();
@@ -584,14 +598,6 @@
         </button>`;
         }).join("");
       }
-      document.querySelectorAll("[data-cat]").forEach(button => button.addEventListener("click", event => {
-        if (categoryMotion.didDrag || categoryMotion.skipClick) {
-          event.preventDefault();
-          categoryMotion.skipClick = false;
-          return;
-        }
-        selectCategory(button.dataset.cat);
-      }));
       bindCategoryArrows();
       setupCategoryMotion();
       requestAnimationFrame(updateCatArrowVisibility);
@@ -757,6 +763,14 @@
 
     function setupCategoryMotion() {
       const scroller = $("categoryScroll");
+      // FIX: null guard — if scroller is missing, cancel any stale RAF and bail
+      if (!scroller) {
+        if (categoryMotion.raf) {
+          cancelAnimationFrame(categoryMotion.raf);
+          categoryMotion.raf = 0;
+        }
+        return;
+      }
       if (!categoryMotion.bound) {
         categoryMotion.bound = true;
         if (typeof ResizeObserver !== "undefined") {
@@ -765,14 +779,16 @@
         scroller.addEventListener("mouseenter", () => { categoryMotion.paused = true; });
         scroller.addEventListener("mouseleave", () => { categoryMotion.paused = false; });
         scroller.addEventListener("wheel", event => {
-          const maxLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+          const liveEl = $("categoryScroll");
+          if (!liveEl) return;
+          const maxLeft = Math.max(0, liveEl.scrollWidth - liveEl.clientWidth);
           pauseCategoryAuto(7000);
           if (!maxLeft) return;
           const primaryDelta = Math.abs(event.deltaX) >= Math.abs(event.deltaY) ? event.deltaX : (event.shiftKey ? event.deltaY : 0);
           if (!primaryDelta) return;
           event.preventDefault();
           const cappedDelta = Math.max(-80, Math.min(80, primaryDelta));
-          scroller.scrollLeft += cappedDelta * 0.45;
+          liveEl.scrollLeft += cappedDelta * 0.45;
           showCategoryDragIndicator();
           scheduleHideCategoryDragIndicator();
         }, { passive: false });
@@ -780,22 +796,24 @@
           if ($("categoryDragIndicator")?.classList.contains("is-active")) updateCategoryDragIndicator();
         }, { passive: true });
         scroller.addEventListener("pointerdown", event => {
+          const liveEl = $("categoryScroll");
+          if (!liveEl) return;
           if (event.pointerType === "mouse" && event.button !== 0) return;
           categoryMotion.dragging = true;
           categoryMotion.didDrag = false;
           categoryMotion.startX = event.clientX;
           categoryMotion.startY = event.clientY;
-          categoryMotion.startLeft = scroller.scrollLeft;
+          categoryMotion.startLeft = liveEl.scrollLeft;
           categoryMotion.targetCat = event.target.closest("[data-cat]")?.dataset.cat || "";
           categoryMotion.pointerId = event.pointerId;
-          scroller.classList.add("dragging");
+          liveEl.classList.add("dragging");
           pauseCategoryAuto(8000);
-          try {
-            scroller.setPointerCapture(event.pointerId);
-          } catch (e) {}
+          try { liveEl.setPointerCapture(event.pointerId); } catch (e) {}
         });
         scroller.addEventListener("pointermove", event => {
           if (!categoryMotion.dragging) return;
+          const liveEl = $("categoryScroll");
+          if (!liveEl) return;
           const dx = event.clientX - categoryMotion.startX;
           const dy = event.clientY - categoryMotion.startY;
           if (Math.hypot(dx, dy) > categoryMotion.dragThresholdPx) {
@@ -803,24 +821,25 @@
             showCategoryDragIndicator();
           }
           if (categoryMotion.didDrag) {
-            scroller.scrollLeft = categoryMotion.startLeft - dx;
+            liveEl.scrollLeft = categoryMotion.startLeft - dx;
             updateCategoryDragIndicator();
           }
         });
         const stopDrag = event => {
+          const liveEl = $("categoryScroll");
           const wasDrag = categoryMotion.didDrag;
           const shouldSelect = !categoryMotion.didDrag && categoryMotion.targetCat;
           categoryMotion.dragging = false;
-          scroller.classList.remove("dragging");
+          if (liveEl) liveEl.classList.remove("dragging");
           if (categoryMotion.pointerId != null) {
             try {
-              if (scroller.hasPointerCapture?.(categoryMotion.pointerId)) scroller.releasePointerCapture(categoryMotion.pointerId);
+              if (liveEl?.hasPointerCapture?.(categoryMotion.pointerId)) liveEl.releasePointerCapture(categoryMotion.pointerId);
             } catch (e) {}
             categoryMotion.pointerId = null;
           }
           pauseCategoryAuto(6000);
           if (wasDrag) {
-            suppressNextCategoryStripClick(scroller);
+            if (liveEl) suppressNextCategoryStripClick(liveEl);
             updateCategoryDragIndicator();
             scheduleHideCategoryDragIndicator();
           } else if ($("categoryDragIndicator")?.classList.contains("is-active")) {
@@ -831,24 +850,50 @@
             selectCategory(categoryMotion.targetCat);
           }
           categoryMotion.targetCat = "";
-          setTimeout(() => { categoryMotion.didDrag = false; }, 0);
+          setTimeout(() => { categoryMotion.didDrag = false; categoryMotion.skipClick = false; }, 0);
         };
         scroller.addEventListener("pointerup", stopDrag);
         scroller.addEventListener("pointercancel", stopDrag);
-      }
-      if (!categoryMotion.raf) {
-        const tick = () => {
-          const maxLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
-          const canMove = state.game !== "valorant" && maxLeft > 12 && !categoryMotion.paused && !categoryMotion.dragging && Date.now() > categoryMotion.pauseUntil && state.game;
-          if (canMove) {
-            if (scroller.scrollLeft >= maxLeft - 1) categoryMotion.direction = -1;
-            if (scroller.scrollLeft <= 1) categoryMotion.direction = 1;
-            scroller.scrollLeft += categoryMotion.direction * .28;
+        // FIX: delegated click handler — attached once here, works across all re-renders
+        // replaces the per-element addEventListener loop that was in renderCategories()
+        scroller.addEventListener("click", event => {
+          const btn = event.target.closest("[data-cat]");
+          if (!btn) return;
+          // Always clear skipClick when a real click reaches the handler so the
+          // flag never gets stuck true (detached-button clicks cannot bubble here)
+          const wasSkip = categoryMotion.skipClick;
+          categoryMotion.skipClick = false;
+          if (categoryMotion.didDrag || wasSkip) {
+            event.preventDefault();
+            return;
           }
-          categoryMotion.raf = requestAnimationFrame(tick);
-        };
-        categoryMotion.raf = requestAnimationFrame(tick);
+          selectCategory(btn.dataset.cat);
+        });
       }
+      // FIX: always cancel any existing RAF before starting a new one — prevents stale loops
+      if (categoryMotion.raf) {
+        cancelAnimationFrame(categoryMotion.raf);
+        categoryMotion.raf = 0;
+      }
+      // FIX: tick re-reads #categoryScroll each frame — no stale closure reference
+      const tick = () => {
+        const liveEl = $("categoryScroll");
+        if (!liveEl) {
+          // Element gone — stop the loop cleanly
+          categoryMotion.raf = 0;
+          return;
+        }
+        const maxLeft = Math.max(0, liveEl.scrollWidth - liveEl.clientWidth);
+        const canMove = state.game !== "valorant" && maxLeft > 12 && !categoryMotion.paused &&
+          !categoryMotion.dragging && Date.now() > categoryMotion.pauseUntil && state.game;
+        if (canMove) {
+          if (liveEl.scrollLeft >= maxLeft - 1) categoryMotion.direction = -1;
+          if (liveEl.scrollLeft <= 1) categoryMotion.direction = 1;
+          liveEl.scrollLeft += categoryMotion.direction * .28;
+        }
+        categoryMotion.raf = requestAnimationFrame(tick);
+      };
+      categoryMotion.raf = requestAnimationFrame(tick);
     }
 
     function premiumCardBullets() {
