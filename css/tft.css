@@ -144,8 +144,8 @@
 }
 
 .tft-addon-chip--free {
-  background: rgba(122, 77, 255, .18);
-  color: var(--purple-2, #9b68ff);
+  background: rgba(212, 175, 110, .18);
+  color: var(--ely-gold, #d4af6e);
 }
 
 /* ============================================================
@@ -161,7 +161,7 @@
   color: var(--muted);
   margin: 14px 0 6px;
   padding-bottom: 5px;
-  border-bottom: 1px solid rgba(122, 77, 255, .18);
+  border-bottom: 1px solid rgba(212, 175, 110, .18);
 }
 
 .tft-rank-up-form > .tft-form-section-label:first-child {
@@ -238,8 +238,8 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: rgba(122, 77, 255, .25);
-  color: var(--purple-2, #9b68ff);
+  background: rgba(212, 175, 110, .25);
+  color: var(--ely-gold, #d4af6e);
   font-size: 9px;
   font-weight: 800;
   letter-spacing: .02em;
@@ -291,7 +291,7 @@ body[data-ely-game="tft"] .order-card .order-panel-head {
 }
 
 body[data-ely-game="tft"] .order-card .order-card-body::before {
-  border-bottom-color: rgba(139, 92, 246, .22);
+  border-bottom-color: rgba(212, 175, 110, .22);
   margin-bottom: 2px;
 }
 
@@ -321,13 +321,13 @@ body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .ord
   border-radius: 0;
   background: transparent;
   box-shadow: none;
-  border-top: 1px solid rgba(139, 92, 246, .22);
+  border-top: 1px solid rgba(212, 175, 110, .22);
 }
 
 body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-row.check-row,
 body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-row.ely-toggle-row {
   border: 0;
-  border-top: 1px solid rgba(139, 92, 246, .22);
+  border-top: 1px solid rgba(212, 175, 110, .22);
   border-radius: 0;
   background: transparent;
   box-shadow: none;
@@ -338,8 +338,8 @@ body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .ord
 body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-row.check-row:hover,
 body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-row.ely-toggle-row:hover {
   border: 0;
-  border-top: 1px solid rgba(139, 92, 246, .22);
-  background: rgba(139, 92, 246, .08);
+  border-top: 1px solid rgba(212, 175, 110, .22);
+  background: rgba(212, 175, 110, .08);
   box-shadow: none;
   transform: none;
 }
@@ -347,8 +347,8 @@ body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .ord
 body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-row.ely-toggle-row:has(.ely-toggle-input:checked),
 body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .order-option-row.check-row:has(input:checked) {
   border: 0 !important;
-  border-top: 1px solid rgba(139, 92, 246, .22) !important;
-  background: rgba(139, 92, 246, .08) !important;
+  border-top: 1px solid rgba(212, 175, 110, .22) !important;
+  background: rgba(212, 175, 110, .08) !important;
   box-shadow: none !important;
 }
 
@@ -360,12 +360,12 @@ body[data-ely-game="tft"] .order-card .summary-total .order-options-panel > .ord
   border-radius: 0;
   background: transparent;
   box-shadow: none;
-  border-top: 1px solid rgba(139, 92, 246, .22);
+  border-top: 1px solid rgba(212, 175, 110, .22);
 }
 
 body[data-ely-game="tft"] .order-card .summary-total .order-options-panel .order-option-buttons .raid-pill {
   background:
-    radial-gradient(circle at 16% 16%, rgba(139, 92, 246, .1), transparent 38%),
+    radial-gradient(circle at 16% 16%, rgba(212, 175, 110, .1), transparent 38%),
     linear-gradient(180deg, rgba(20, 24, 39, .72), rgba(12, 10, 22, .9));
 }
 
@@ -380,7 +380,7 @@ body[data-ely-game="tft"] .order-card .summary-total .order-option-buttons .raid
 }
 
 body[data-ely-game="tft"] .order-card .summary-total > .summary-total-label {
-  border-top: 1px solid rgba(139, 92, 246, .22);
+  border-top: 1px solid rgba(212, 175, 110, .22);
   padding-top: 14px;
   margin-top: 2px;
 }
@@ -413,7 +413,7 @@ body[data-ely-game="tft"] #detailSection.detail--valorant-layout .valorant-cfg-m
 
 body[data-ely-game="tft"] #detailSection.detail--valorant-layout .valorant-cfg-mount .tft-rank-up-form > .field-block {
   padding-top: 14px;
-  border-top: 1px solid rgba(139, 92, 246, .22);
+  border-top: 1px solid rgba(212, 175, 110, .22);
 }
 
 /* Desktop — centered two-column grid (matches Valorant layout model) */
@@ -515,7 +515,7 @@ body[data-ely-game="tft"] #detailSection.detail--valorant-layout .valorant-cfg-m
   display: flex;
   flex-direction: column;
   padding: 10px 0 6px;
-  border-top: 1px solid rgba(122, 77, 255, .15);
+  border-top: 1px solid rgba(212, 175, 110, .15);
   margin-bottom: 8px;
   gap: 0;
 }

@@ -1184,7 +1184,7 @@
       ctx.fillStyle = "#070510";
       ctx.fillRect(0, 0, W, H);
       const bar = ctx.createLinearGradient(0, 0, W, 0);
-      bar.addColorStop(0, "#5b21b6");
+      bar.addColorStop(0, "#8f6746");
       bar.addColorStop(0.5, "#fbbf24");
       bar.addColorStop(1, "#9d174d");
       ctx.fillStyle = bar;
@@ -1202,7 +1202,7 @@
         const weight = isH ? "700" : isM ? "600" : "500";
         ctx.font = `${weight} ${size}px Rajdhani, Inter, system-ui, sans-serif`;
         const lh = isH ? 22 : isM ? 17 : 20;
-        const color = isH ? "#e9d5ff" : isM ? "rgba(167, 139, 250, 0.85)" : "#e8ecff";
+        const color = isH ? "#f3ead9" : isM ? "rgba(231, 201, 139, 0.85)" : "#f3ead9";
         ctx.fillStyle = color;
         const lines = wrapReceiptLines(ctx, bl.text, inner);
         for (const ln of lines) {
