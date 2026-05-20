@@ -37,9 +37,10 @@
    yani auto-scroll zaten çalışmıyor. Sadece CSS düzeltiyoruz.
    ──────────────────────────────────────────────────────────── */
 body[data-ely-game="valorant"] .category-scroll {
-  justify-content: center !important;
-  overflow-x: auto !important;
-  scroll-behavior: auto !important; /* smooth scroll titremesi önler */
+  justify-content: safe center !important;
+  overflow-x: hidden !important;
+  scroll-behavior: auto !important;
+}
 }
 
 /* Tüm Valorant kartları görünürse okları gizle */
