@@ -1,21 +1,10 @@
 /* ============================================================
-   ELYSIUM BOOST — LAYOUT SYSTEM v2
-   
-   Daha cerrahi yaklaşım:
-   - display:contents'e DOKUNMA (Valorant grid'i bozuyor)
-   - Sadece boyutları sabitle
-   - Valorant category bar: oscillation fix
+   ELYSIUM BOOST — LAYOUT SYSTEM v3
    ============================================================ */
 
-/* ══════════════════════════════════════
-   1. TOPBAR — 70px sabit
-   ══════════════════════════════════════ */
 .topbar { min-height: 70px; }
 .topbar-inner { min-height: 70px; }
 
-/* ══════════════════════════════════════
-   2. CATEGORY BAR — kart boyutları sabit
-   ══════════════════════════════════════ */
 .cat-btn {
   width: 148px !important;
   min-width: 148px !important;
@@ -29,21 +18,12 @@
   max-height: 80px !important;
 }
 
-/* ── Valorant category bar FIX ──────────────────────────────
-   Sorun: CSS justify-content flex-start↔center arasında
-   her frame'de değişiyor → görsel titreme.
-   Çözüm: Valorant için SADECE center, overflow scroll.
-   JS zaten state.game !== "valorant" kontrolü yapıyor
-   yani auto-scroll zaten çalışmıyor. Sadece CSS düzeltiyoruz.
-   ──────────────────────────────────────────────────────────── */
 body[data-ely-game="valorant"] .category-scroll {
-  justify-content: safe center !important;
+  justify-content: center !important;
   overflow-x: hidden !important;
   scroll-behavior: auto !important;
 }
-}
 
-/* Tüm Valorant kartları görünürse okları gizle */
 body[data-ely-game="valorant"] .category-shell.is-tabs-centered .cat-arrow,
 body[data-ely-game="valorant"] .category-shell.is-tabs-centered #catPrev,
 body[data-ely-game="valorant"] .category-shell.is-tabs-centered #catNext {
@@ -51,45 +31,38 @@ body[data-ely-game="valorant"] .category-shell.is-tabs-centered #catNext {
   pointer-events: none !important;
 }
 
-/* ══════════════════════════════════════
-   3. SERVICE GRID — 4 kolon sabit
-   ══════════════════════════════════════ */
 .service-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
 }
 
-/* ══════════════════════════════════════
-   4. DETAIL PANEL — sabit iki kolon
-   Valorant'ın display:contents'ine DOKUNMUYORUZ.
-   Sadece non-valorant detail için boyut sabitliyoruz.
-   ══════════════════════════════════════ */
-
-/* Arc, TFT, LoL için standart detail grid */
 body:not([data-ely-game="valorant"]) .detail {
+  display: grid !important;
   grid-template-columns: minmax(0, 1fr) 380px !important;
   gap: 20px !important;
   align-items: start !important;
 }
 
-/* Valorant için mevcut grid'i koru, sadece sağ kolon genişliğini sabitle */
 body[data-ely-game="valorant"] #detailSection.detail--valorant-layout {
+  display: grid !important;
   grid-template-columns: minmax(0, 1fr) 380px !important;
   gap: 20px !important;
 }
 
-/* ══════════════════════════════════════
-   5. ORDER CARD — 380px sabit genişlik
-   Tüm varyantlar (.is-valorant, .is-arc-split vb.) aynı.
-   ══════════════════════════════════════ */
-.order-card {
+.order-card,
+.order-card.is-valorant,
+.order-card.is-arc-split {
   width: 380px !important;
   min-width: 380px !important;
   max-width: 380px !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  box-sizing: border-box !important;
 }
 
-/* Sticky — non-mobile */
 @media (min-width: 1081px) {
-  .order-card {
+  .order-card,
+  .order-card.is-valorant,
+  .order-card.is-arc-split {
     position: sticky !important;
     top: 88px !important;
     max-height: calc(100vh - 108px) !important;
@@ -97,19 +70,16 @@ body[data-ely-game="valorant"] #detailSection.detail--valorant-layout {
     display: flex !important;
     flex-direction: column !important;
   }
-
   .order-card .order-card-body {
     flex: 1 1 auto !important;
     min-height: 0 !important;
     overflow-y: auto !important;
   }
-
   .order-card .summary-total {
     flex: 0 0 auto !important;
   }
 }
 
-/* Add to cart — tam genişlik */
 .order-card #addToCart,
 .order-card .btn-purchase,
 .order-card .add-to-cart-main {
@@ -117,29 +87,22 @@ body[data-ely-game="valorant"] #detailSection.detail--valorant-layout {
   min-height: 46px !important;
 }
 
-/* ══════════════════════════════════════
-   6. CART DRAWER — 460px sabit
-   ══════════════════════════════════════ */
 .drawer { width: min(460px, 100%) !important; }
 .drawer.drawer--wide { width: min(560px, 100%) !important; }
 
-/* ══════════════════════════════════════
-   RESPONSIVE
-   ══════════════════════════════════════ */
 @media (max-width: 1080px) {
   body:not([data-ely-game="valorant"]) .detail {
     grid-template-columns: 1fr !important;
   }
-
   body[data-ely-game="valorant"] #detailSection.detail--valorant-layout {
     grid-template-columns: 1fr !important;
   }
-
   .service-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
-
-  .order-card {
+  .order-card,
+  .order-card.is-valorant,
+  .order-card.is-arc-split {
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
@@ -147,12 +110,10 @@ body[data-ely-game="valorant"] #detailSection.detail--valorant-layout {
     max-height: none !important;
     overflow: visible !important;
   }
-
   .order-card .order-card-body {
     overflow: visible !important;
     max-height: none !important;
   }
-
   .cat-btn {
     width: 132px !important;
     min-width: 132px !important;
@@ -161,12 +122,11 @@ body[data-ely-game="valorant"] #detailSection.detail--valorant-layout {
 }
 
 @media (max-width: 720px) {
-  .service-grid {
-    grid-template-columns: 1fr !important;
-  }
-
+  .service-grid { grid-template-columns: 1fr !important; }
   .cat-btn {
     width: 120px !important;
     min-width: 120px !important;
   }
 }
+
+/* END LAYOUT SYSTEM */
