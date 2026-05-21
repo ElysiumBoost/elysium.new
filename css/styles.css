@@ -10324,16 +10324,7 @@ a.site-footer__stat--tp .site-footer__stat-num {
 }
 
 .ely-coming-soon-card__name {
-  position: absolute;
-  bottom: 5px;
-  left: 8px;
-  font-family: var(--display);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: #f3ead9;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+  display: none !important;
 }
 
 .ely-coming-soon-card__badge {
@@ -10605,32 +10596,10 @@ body[data-ely-game="valorant"] .hero::after {
    GÖREV 4 — Order panel metal kaplama
    ════════════════════════════════════════════════════════════════════════ */
 
-.order-card,
-.ely-order-panel {
-  background: linear-gradient(160deg, #1a1510 0%, #120e0b 55%, #0d0b09 100%) !important;
-  border: 1px solid #e8a23a !important;
-  box-shadow:
-    0 0 0 1px rgba(232, 162, 58, 0.08) inset,
-    0 2px 16px rgba(0, 0, 0, 0.55),
-    0 0 40px rgba(232, 162, 58, 0.04) !important;
-}
-
 .order-panel-head,
 .ely-order-panel-title-row {
   background: linear-gradient(90deg, rgba(232, 162, 58, 0.10) 0%, rgba(232, 162, 58, 0.04) 100%) !important;
   border-bottom: 1px solid rgba(232, 162, 58, 0.22) !important;
-}
-
-.order-card .summary-total,
-.ely-order-panel .summary-total {
-  border-top: 1px solid rgba(232, 162, 58, 0.22) !important;
-  background: rgba(232, 162, 58, 0.05) !important;
-}
-
-.valorant-cfg-mount {
-  background: linear-gradient(160deg, #1a1510 0%, #120e0b 55%, #0d0b09 100%) !important;
-  border: 1px solid rgba(232, 162, 58, 0.32) !important;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.45) !important;
 }
 
 /* ════════════════════════════════════════════════════════════════════════
@@ -10828,42 +10797,7 @@ label,
   }
 }
 
-/* ════════════════════════════════════════════════════════════════════════
-   GÖREV 6 — Order panel final — solid metal, no background image
-   ════════════════════════════════════════════════════════════════════════ */
-
-.order-card {
-  background-image: url('../assets/orderpanelbg.webp') !important;
-  background-size: cover !important;
-  background-position: center center !important;
-  background-repeat: no-repeat !important;
-  background-color: #0d0b09 !important;
-  border: 1px solid #e8a23a !important;
-  border-radius: 16px !important;
-  box-shadow:
-    0 0 0 1px rgba(232, 162, 58, 0.12),
-    inset 0 1px 0 rgba(232, 162, 58, 0.18),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.6),
-    0 32px 80px rgba(0, 0, 0, 0.72) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-
-.valorant-cfg-mount {
-  background-image: url('../assets/orderpanelbg.webp') !important;
-  background-size: cover !important;
-  background-position: center center !important;
-  background-repeat: no-repeat !important;
-  background-color: #0d0b09 !important;
-}
-
-.summary-total {
-  background-image: url('../assets/orderpanelbg.webp') !important;
-  background-size: cover !important;
-  background-position: center center !important;
-  background-repeat: no-repeat !important;
-  background-color: #0d0b09 !important;
-}
+/* wrong-path block removed — correct path block below */
 
 /* ════════════════════════════════════════════════════════════════════════
    GÖREV 7 — Top Boosters section styles
@@ -11172,4 +11106,237 @@ h1, h2, .hero-title, #heroTitle {
   text-transform: uppercase !important;
   color: var(--ely-gold, #d4af6e) !important;
   white-space: nowrap !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   DÜZELTME 3 — Mor renkler → altın
+   ════════════════════════════════════════════════════════════════════════ */
+
+.category-bar.neon-game-cats .cat-btn.cat-btn--val {
+  border-color: rgba(212, 175, 110, 0.38) !important;
+  background:
+    radial-gradient(circle at 50% 22%, rgba(212, 175, 110, 0.12), transparent 42%),
+    linear-gradient(180deg, rgba(18, 15, 20, 0.82), rgba(6, 4, 16, 0.94)) !important;
+}
+
+.category-bar.neon-game-cats .cat-val-svg-wrap,
+.category-bar.neon-game-cats .cat-val-svg-wrap svg {
+  color: #e8a23a !important;
+}
+
+.ely-booster-rank--val {
+  background: rgba(232, 162, 58, 0.1) !important;
+  border: 1px solid rgba(232, 162, 58, 0.28) !important;
+  color: #e8a23a !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   DÜZELTME 4 — Blur tamamen kaldır (order panel)
+   ════════════════════════════════════════════════════════════════════════ */
+
+.order-card,
+.order-card-body,
+.valorant-cfg-mount,
+.summary-total,
+.order-card.is-valorant .summary-total,
+.order-card.is-arc-split .summary-total,
+.order-options-panel,
+.arc-order-preview,
+.order-selection-preview {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   DÜZELTME 5 — Order panel simetri
+   ════════════════════════════════════════════════════════════════════════ */
+
+.detail {
+  align-items: stretch !important;
+}
+
+.detail-left,
+.detail-right {
+  align-self: stretch !important;
+}
+
+.order-card {
+  align-self: stretch !important;
+  height: 100% !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   DÜZELTME 7 — Kategori thumbnail boyut
+   ════════════════════════════════════════════════════════════════════════ */
+
+.service-thumb {
+  height: 72px !important;
+  min-height: 72px !important;
+  max-height: 72px !important;
+}
+
+.cat-btn {
+  min-height: 108px !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   DÜZELTME 6 — Booster kart yeni CSS (header satır layout)
+   ════════════════════════════════════════════════════════════════════════ */
+
+.ely-booster-card__header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  margin-bottom: 12px !important;
+}
+
+.ely-booster-logo {
+  width: 40px !important;
+  height: 40px !important;
+  object-fit: contain !important;
+  flex-shrink: 0 !important;
+  filter: drop-shadow(0 2px 8px rgba(232, 162, 58, .3)) !important;
+}
+
+.ely-booster-card__name {
+  font-family: var(--display) !important;
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+  text-align: left !important;
+  display: block !important;
+  margin-bottom: 0 !important;
+}
+
+.ely-booster-card__verified {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+  color: var(--ely-gold, #d4af6e) !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.ely-booster-card {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  padding: 16px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(232, 162, 58, 0.22) !important;
+  background: linear-gradient(168deg, #1a1510, #0d0b09) !important;
+  transition: border-color .2s, box-shadow .2s !important;
+}
+
+.ely-booster-card--top {
+  border-color: rgba(232, 162, 58, 0.52) !important;
+  box-shadow:
+    0 0 0 1px rgba(232, 162, 58, .18),
+    0 16px 48px rgba(0, 0, 0, .5),
+    0 0 32px rgba(232, 162, 58, .12) !important;
+}
+
+.ely-booster-card__ranks {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+}
+
+.ely-booster-rank {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 5px 10px !important;
+  border-radius: 6px !important;
+  letter-spacing: .03em !important;
+  text-transform: none !important;
+}
+
+.ely-booster-rank--arc {
+  background: rgba(232, 162, 58, 0.1) !important;
+  border: 1px solid rgba(232, 162, 58, 0.28) !important;
+  color: #e8a23a !important;
+}
+
+.ely-booster-card__services {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 5px !important;
+  margin-top: 2px !important;
+}
+
+.ely-booster-card__services span {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: .05em !important;
+  text-transform: uppercase !important;
+  color: var(--ely-muted, #8a8898) !important;
+  background: rgba(255, 255, 255, .04) !important;
+  border: 1px solid rgba(212, 175, 110, .15) !important;
+  border-radius: 5px !important;
+  padding: 3px 8px !important;
+}
+
+.ely-booster-card__footer {
+  margin-top: auto !important;
+  padding-top: 10px !important;
+  border-top: 1px solid rgba(232, 162, 58, .15) !important;
+}
+
+.ely-booster-orders {
+  font-family: var(--display) !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: .04em !important;
+  color: var(--ely-gold, #d4af6e) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   DÜZELTME 8 — Confirm strip
+   ════════════════════════════════════════════════════════════════════════ */
+
+.ely-confirm-strip {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(232, 162, 58, 0.35);
+  background: linear-gradient(168deg, rgba(26, 21, 16, 0.95), rgba(13, 11, 9, 0.98));
+}
+
+.ely-confirm-strip__msg {
+  margin: 0 0 12px;
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--ely-text, #e8e6e1);
+  text-align: center;
+}
+
+.ely-confirm-strip__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   EXTRA — Section kicker altın, process-grid gap
+   ════════════════════════════════════════════════════════════════════════ */
+
+.home-section-kicker {
+  color: var(--ely-gold, #d4af6e) !important;
+}
+
+.home-process-grid {
+  gap: 16px !important;
+}
+
+.home-process-grid article {
+  padding: 18px 16px !important;
 }

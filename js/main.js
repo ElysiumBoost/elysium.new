@@ -44,8 +44,24 @@
     });
 
     $("addToCart")?.addEventListener("click", () => {
+      const strip = $("elyConfirmStrip");
+      if (strip) {
+        strip.hidden = false;
+        strip.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      } else {
+        const fn = window.addToCart;
+        if (typeof fn === "function") fn();
+      }
+    });
+    $("elyConfirmYes")?.addEventListener("click", () => {
       const fn = window.addToCart;
       if (typeof fn === "function") fn();
+      const strip = $("elyConfirmStrip");
+      if (strip) strip.hidden = true;
+    });
+    $("elyConfirmNo")?.addEventListener("click", () => {
+      const strip = $("elyConfirmStrip");
+      if (strip) strip.hidden = true;
     });
     $("clearService")?.addEventListener("click", clearServiceForm);
     $("cartOpen")?.addEventListener("click", openCart);
