@@ -2461,6 +2461,10 @@
       max-width: 860px;
     }
 
+    .detail-steps:not(:empty) {
+      display: grid;
+    }
+
     #serviceContent,
     #detailSection {
       scroll-margin-top: 84px;
@@ -9088,6 +9092,11 @@
 .category-shell.is-tabs-centered .category-scroll {
   justify-content: center;
   overflow: visible;
+}
+
+body[data-ely-game="valorant"] .category-shell .category-scroll-column {
+  display: flex;
+  justify-content: center;
 }
 
 /* ── Slider focus polish: remove browser ring, add gold glow ─────────── */
