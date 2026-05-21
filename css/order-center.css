@@ -207,3 +207,66 @@
   border-color: rgba(212, 175, 110, 0.52) !important;
   box-shadow: 0 0 0 3px rgba(212, 175, 110, 0.16) !important;
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   PHASE 2 — GÖREV C: Order panel polish (order-center.css)
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* C-1: Panel başlık satırı */
+.ely-order-panel-title-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ely-order-panel-title {
+  font-family: var(--display, 'Rajdhani', sans-serif);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(212, 175, 110, 0.72);
+  line-height: 1;
+}
+
+/* C-4: Panel yükseklik sabitleme */
+@media (min-width: 1081px) {
+  .order-card {
+    min-height: 480px !important;
+    transition: none !important;
+  }
+
+  .order-card .order-card-body {
+    min-height: 0 !important;
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 175, 110, .3) transparent;
+  }
+
+  .summary-total {
+    flex-shrink: 0 !important;
+  }
+}
+
+/* C-5: Güven satırı */
+.ely-cart-trust-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  padding: 6px 0 2px;
+}
+
+.ely-cart-trust-row span {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: rgba(168, 158, 140, 0.72);
+  white-space: nowrap;
+}

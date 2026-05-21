@@ -9945,3 +9945,77 @@ textarea:focus {
   font-weight: 800;
   flex-shrink: 0;
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   PHASE 2 — GÖREV C: Order panel polish
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* C-2: Fiyat gösterimi */
+.live-total-text {
+  font-family: var(--display, 'Rajdhani', sans-serif) !important;
+  font-size: clamp(28px, 4vw, 38px) !important;
+  font-weight: 800 !important;
+  letter-spacing: .04em !important;
+  color: var(--ely-gold, #d4af6e) !important;
+  line-height: 1.1 !important;
+  text-shadow: 0 0 32px rgba(212, 175, 110, 0.28) !important;
+}
+
+.summary-total-label {
+  font-family: var(--display, 'Rajdhani', sans-serif) !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+  color: var(--ely-muted, #a89e8c) !important;
+  margin-bottom: 2px !important;
+}
+
+.usd-hint-text {
+  font-size: 11px !important;
+  color: var(--ely-muted, #a89e8c) !important;
+  margin-top: 2px !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+}
+
+/* C-3: Add to Cart güçlendirme */
+.add-to-cart-main {
+  width: 100% !important;
+  min-height: 52px !important;
+  margin-top: 8px !important;
+  font-size: 15px !important;
+  border-radius: 12px !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.add-to-cart-main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+/* C-6: Drawer başlığı */
+.drawer-head {
+  border-bottom: 1px solid rgba(212, 175, 110, 0.22) !important;
+  background: linear-gradient(180deg,
+    rgba(18, 15, 20, 0.98),
+    rgba(14, 12, 16, 0.96)) !important;
+}
+
+.drawer-head h2 {
+  font-family: var(--display, 'Rajdhani', sans-serif) !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase !important;
+  color: var(--ely-text, #f3ead9) !important;
+}
