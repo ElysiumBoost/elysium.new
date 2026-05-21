@@ -347,4 +347,13 @@ body[data-ely-game="valorant"] #detailSection .detail-left {
   border-right: none !important;
 }
 
+body[data-ely-game="valorant"] .category-shell {
+  grid-template-columns: 0 minmax(0, 1fr) 0 !important;
+}
+body[data-ely-game="valorant"] #catPrev,
+body[data-ely-game="valorant"] #catNext {
+  display: none !important;
+  width: 0 !important;
+  padding: 0 !important;
+}
 /* END LAYOUT SYSTEM */
