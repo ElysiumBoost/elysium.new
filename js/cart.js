@@ -481,13 +481,22 @@
 
       const gameAria = label => `${ui("View")} ${ui(label)} ${ui("services")}`;
       const homeCardSrc = game => (game.homeCardImage || game.heroBg);
+      const isComingSoonGame = game => Boolean(
+        game?.comingSoon ||
+        (window.ELY_COMING_SOON_GAME_IDS instanceof Set && window.ELY_COMING_SOON_GAME_IDS.has(game.id))
+      );
 
       const renderHomeSingleCard = game => {
+        const comingSoon = isComingSoonGame(game);
+        const cardClass = `home-game-card${comingSoon ? " coming-soon" : ""}`;
+        const disabled = comingSoon ? ` disabled aria-disabled="true"` : "";
+        const badge = comingSoon ? `<span class="home-coming-soon-badge">${escapeHtml(ui("Coming Soon"))}</span>` : "";
         const media = `<img class="home-game-media" src="${escapeHtml(homeCardSrc(game))}" alt="${escapeHtml(ui(game.label))}" loading="eager" data-home-card-fb="${escapeHtml(game.heroBg)}" onerror="elyHomeCardFallback(this)">`;
         return `
-        <button class="home-game-card" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(gameAria(game.label))}">
+        <button class="${cardClass}" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(gameAria(game.label))}"${disabled}>
           ${media}
           <span class="home-game-label">${escapeHtml(ui(game.label))}</span>
+          ${badge}
         </button>`;
       };
 
@@ -1005,7 +1014,7 @@
         const thumbName = cg ? ui(cg.label) : ui("Services");
         $("detailIcon").innerHTML = categoryArtwork(thumbCat, thumbName);
         const comingSoonGame =
-          cg && window.ELY_COMING_SOON_GAME_IDS instanceof Set && window.ELY_COMING_SOON_GAME_IDS.has(cg.id);
+          cg && (cg.comingSoon || (window.ELY_COMING_SOON_GAME_IDS instanceof Set && window.ELY_COMING_SOON_GAME_IDS.has(cg.id)));
         $("detailTitle").textContent = ui(comingSoonGame ? "Coming soon" : "No services available yet.");
         $("detailIntro").textContent = cg ? ui(cg.copy || "") : "";
         $("detailDeal").innerHTML = "";
