@@ -330,4 +330,19 @@ body[data-ely-game="valorant"] #detailSection .valorant-cfg-mount {
   }
 }
 
+/* Order Panel backgrounds — scoped only to #detailSection */
+body[data-ely-game="arc"] #detailSection {
+  background-image: url("../assets/backgrounds/arc-raidersmain.webp") !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-blend-mode: overlay !important;
+}
+
+body[data-ely-game="valorant"] #detailSection {
+  background-image: url("../assets/backgrounds/valorant-bg.webp") !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-blend-mode: overlay !important;
+}
+
 /* END LAYOUT SYSTEM */
