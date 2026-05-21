@@ -331,6 +331,8 @@ Keep the report tight. The user is reviewing a lot of work in a short window; do
 - [ ] My new translated strings are saved as real UTF‑8, not Latin‑1 mojibake.
 - [ ] I prepared a short post‑edit report listing files touched, line ranges, reasons, and risks.
 
+---
+
 # AGENTS.md — ELYSIUM BOOST · Claude Code Talimat Dosyası
 
 Bu dosyayı okuyan her AI agent veya Claude Code oturumu
@@ -650,5 +652,26 @@ refactor: footer yeniden yapılandırıldı
 
 ---
 
-*Son güncelleme: Phase 1 başlangıcı*
+*Son güncelleme: Phase 1 tamamlandı*
 *Bu dosyayı her büyük değişiklikten sonra güncelle.*
+
+---
+
+## 10. Açık Görevler
+
+### PHASE 1 — Hero & sosyal kanıt (Tamamlandı)
+
+- [x] GÖREV 1 — Hero animated trust counters (`#elyTrustCounters`, IntersectionObserver + RAF cubic ease)
+- [x] GÖREV 2 — Gerçek review kartları (Marcus K., Raf T., Sophie L.) `.ely-review-card`
+- [x] GÖREV 3 — Trustpilot/Discord rating pill link (`.ely-trustpilot-link`, `home-review-score` yerine)
+- [x] GÖREV 4 — Footer yenileme (stats + trust badges + brand, `id="footerLegalBtn"` korundu)
+- [x] GÖREV 5 — Hero social proof band (`.ely-hero-social-proof`, `heroCtaRow` sonrası)
+- [x] GÖREV 6 — Hash sub-routing `#game/category` (`replaceState`, `parseGameHash` → `{gameId,categorySlug}`)
+
+### PHASE 2 — Sıradaki görevler
+
+- [ ] SEO: history.pushState ile /arc-raiders gerçek URL
+- [ ] Trustpilot gerçek embed widget (JS snippet)
+- [ ] homeCardImage görsel kalitesi kontrolü
+- [ ] Booster profil kartları
+- [ ] Mobil bottom navigation
