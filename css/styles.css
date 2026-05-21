@@ -11374,3 +11374,20 @@ h1, h2, .hero-title, #heroTitle {
 .ely-coming-soon-card {
   height: 96px !important;
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   DÜZELTME 2 — Reviews Discord link wrapper
+   ════════════════════════════════════════════════════════════════════════ */
+
+.ely-reviews-discord-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.ely-reviews-discord-link:hover .ely-review-card {
+  border-color: rgba(212, 175, 110, 0.45);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, .4),
+              0 0 24px rgba(212, 175, 110, .08);
+}
