@@ -347,7 +347,7 @@
     .topbar-inner {
       min-height: 70px;
       display: grid;
-      grid-template-columns: minmax(0, auto) minmax(260px, 1fr) minmax(280px, auto);
+      grid-template-columns: auto 1fr auto;
       align-items: center;
       column-gap: 18px;
       row-gap: 10px;
@@ -922,10 +922,11 @@
     .service-thumb img {
       width: 100%;
       height: 100%;
-      object-fit: contain;
-      object-position: center center;
+      object-fit: cover !important;
+      object-position: center center !important;
       display: block;
-      transition: transform .22s ease;
+      transform: scale(0.92) !important;
+      transition: transform .22s ease !important;
     }
 
     .service-thumb.is-cat-thumb-fallback {
@@ -955,7 +956,7 @@
     .popular-card:hover .service-thumb img,
     .service-card:hover .service-thumb img,
     .detail-left:hover .service-thumb img {
-      transform: scale(1.035);
+      transform: scale(0.96) !important;
     }
 
     .cat-label {
@@ -10730,4 +10731,306 @@ label,
   font-weight: 700 !important;
   letter-spacing: 0.08em !important;
   text-transform: uppercase !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 2 — Topbar Services fix
+   ════════════════════════════════════════════════════════════════════════ */
+
+.brand-zone {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-shrink: 0 !important;
+  min-width: 0 !important;
+}
+
+.game-menu-wrap {
+  flex-shrink: 0 !important;
+}
+
+.primary-nav {
+  justify-content: center !important;
+  gap: clamp(10px, 1.8vw, 22px) !important;
+  overflow: hidden !important;
+}
+
+.primary-nav a {
+  font-size: 12px !important;
+  white-space: nowrap !important;
+}
+
+.actions {
+  flex-shrink: 0 !important;
+  gap: 6px !important;
+}
+
+.site-search {
+  width: min(200px, 18vw) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 3 — Hide home game labels
+   ════════════════════════════════════════════════════════════════════════ */
+
+.home-game-label {
+  display: none !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 4 — Section başlıkları ortala
+   ════════════════════════════════════════════════════════════════════════ */
+
+.home-section-head {
+  text-align: center !important;
+}
+
+.home-section-head h2 {
+  text-align: center !important;
+}
+
+.home-section-kicker {
+  display: block !important;
+  text-align: center !important;
+}
+
+.quick-head {
+  text-align: center !important;
+}
+
+.quick-head h2 {
+  text-align: center !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 5 — Coming soon strip 6-column grid
+   ════════════════════════════════════════════════════════════════════════ */
+
+.ely-coming-soon-strip__games {
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.ely-coming-soon-card {
+  width: 100% !important;
+}
+
+@media (max-width: 900px) {
+  .ely-coming-soon-strip__games {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .ely-coming-soon-strip__games {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 6 — Order panel final — solid metal, no background image
+   ════════════════════════════════════════════════════════════════════════ */
+
+.order-card {
+  background: linear-gradient(
+    168deg,
+    #1a1510 0%,
+    #120e0b 45%,
+    #0d0b09 100%
+  ) !important;
+  border: 1px solid #e8a23a !important;
+  border-radius: 16px !important;
+  box-shadow:
+    0 0 0 1px rgba(232, 162, 58, 0.12),
+    inset 0 1px 0 rgba(232, 162, 58, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.6),
+    0 32px 80px rgba(0, 0, 0, 0.72) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 7 — Top Boosters section styles
+   ════════════════════════════════════════════════════════════════════════ */
+
+.ely-top-boosters {
+  margin-bottom: 48px;
+}
+
+.ely-booster-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  margin-bottom: 16px !important;
+}
+
+@media (max-width: 900px) {
+  .ely-booster-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .ely-booster-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.ely-booster-card {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  padding: 18px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(232, 162, 58, 0.22) !important;
+  background: linear-gradient(168deg, #1a1510, #0d0b09) !important;
+  transition: border-color .2s ease, box-shadow .2s ease !important;
+}
+
+.ely-booster-card:hover {
+  border-color: rgba(232, 162, 58, 0.45) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, .4), 0 0 24px rgba(232, 162, 58, .08) !important;
+}
+
+.ely-booster-card--top {
+  border-color: rgba(232, 162, 58, 0.52) !important;
+  box-shadow:
+    0 0 0 1px rgba(232, 162, 58, .18),
+    0 16px 48px rgba(0, 0, 0, .5),
+    0 0 32px rgba(232, 162, 58, .12) !important;
+}
+
+.ely-booster-card__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ely-booster-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 8px rgba(232, 162, 58, .3));
+}
+
+.ely-booster-card__title {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ely-booster-card__name {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ely-text, #f3ead9);
+  line-height: 1;
+}
+
+.ely-booster-card__verified {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ely-gold, #d4af6e);
+}
+
+.ely-booster-top-badge {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #0d0b09;
+  background: linear-gradient(135deg, #e8a23a, #d4af6e);
+  border-radius: 999px;
+  padding: 4px 10px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.ely-booster-card__ranks {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.ely-booster-rank {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 5px 10px !important;
+  border-radius: 6px !important;
+  letter-spacing: .03em !important;
+  line-height: 1.3 !important;
+  text-transform: none !important;
+}
+
+.ely-booster-rank--arc {
+  background: rgba(232, 162, 58, 0.10) !important;
+  border: 1px solid rgba(232, 162, 58, 0.28) !important;
+  color: #e8a23a !important;
+}
+
+.ely-booster-rank--val {
+  background: rgba(83, 74, 183, 0.12) !important;
+  border: 1px solid rgba(83, 74, 183, 0.28) !important;
+  color: #9b8fff !important;
+}
+
+.ely-booster-card__services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.ely-booster-card__services span {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--ely-muted, #a89e8c);
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid rgba(212, 175, 110, .15);
+  border-radius: 5px;
+  padding: 3px 8px;
+}
+
+.ely-booster-card__footer {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid rgba(232, 162, 58, .15);
+}
+
+.ely-booster-orders {
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  color: var(--ely-gold, #d4af6e);
+}
+
+.ely-booster-more {
+  text-align: center;
+  padding: 12px 0;
+}
+
+.ely-booster-more__link {
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(114, 137, 218, 0.85);
+  text-decoration: none;
+  transition: color .18s;
+}
+
+.ely-booster-more__link:hover {
+  color: #8ea0f7;
 }

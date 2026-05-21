@@ -585,7 +585,6 @@
         return `
         <button class="${cardClass}" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(gameAria(game.label))}"${disabled}>
           ${media}
-          <span class="home-game-label">${escapeHtml(ui(game.label))}</span>
           ${priceBadge}
           ${badge}
         </button>`;
@@ -597,7 +596,7 @@
         if (game) chunks.push(renderHomeSingleCard(game));
       });
 
-      const csIds = ["tft", "lol", "cs2", "wow", "circle"];
+      const csIds = ["tft", "lol", "cs2", "wow", "circle", "social"];
       const csCards = csIds.map(id => {
         const game = g(id);
         if (!game) return "";
