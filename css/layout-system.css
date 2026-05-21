@@ -1,64 +1,69 @@
 /* ============================================================
    ELYSIUM BOOST — LAYOUT SYSTEM v3
    ============================================================ */
-
+ 
 .topbar { min-height: 70px; }
 .topbar-inner { min-height: 70px; }
-
+ 
 .cat-btn {
   width: 148px !important;
   min-width: 148px !important;
   max-width: 148px !important;
   min-height: 116px !important;
 }
-
+ 
 .service-thumb {
   height: 80px !important;
   min-height: 80px !important;
   max-height: 80px !important;
 }
-
+ 
 .category-scroll-column {
   width: 100% !important;
   align-self: stretch !important;
 }
-
+ 
 .category-scroll {
   align-items: center !important;
   width: 100% !important;
 }
-
+ 
 body[data-ely-game="valorant"] .category-scroll {
   display: flex !important;
   justify-content: center !important;
   overflow-x: visible !important;
   scroll-behavior: auto !important;
 }
-
-body[data-ely-game="valorant"] .category-shell.is-tabs-centered .cat-arrow,
-body[data-ely-game="valorant"] .category-shell.is-tabs-centered #catPrev,
-body[data-ely-game="valorant"] .category-shell.is-tabs-centered #catNext {
-  visibility: hidden !important;
-  pointer-events: none !important;
+ 
+body[data-ely-game="valorant"] .category-shell {
+  grid-template-columns: 0 minmax(0, 1fr) 0 !important;
 }
-
+ 
+body[data-ely-game="valorant"] #catPrev,
+body[data-ely-game="valorant"] #catNext {
+  display: none !important;
+  width: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+ 
 .service-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
 }
-
+ 
 body:not([data-ely-game="valorant"]) .detail {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) 380px !important;
   gap: 20px !important;
   align-items: start !important;
 }
-
+ 
 body[data-ely-game="valorant"] #detailSection.detail--valorant-layout {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) 380px !important;
   gap: 20px !important;
 }
-
+ 
 @media (min-width: 1081px) {
   .order-card,
   .order-card.is-valorant,
@@ -85,17 +90,17 @@ body[data-ely-game="valorant"] #detailSection.detail--valorant-layout {
     flex: 0 0 auto !important;
   }
 }
-
+ 
 .order-card #addToCart,
 .order-card .btn-purchase,
 .order-card .add-to-cart-main {
   width: 100% !important;
   min-height: 46px !important;
 }
-
+ 
 .drawer { width: min(460px, 100%) !important; }
 .drawer.drawer--wide { width: min(560px, 100%) !important; }
-
+ 
 @media (max-width: 1080px) {
   body:not([data-ely-game="valorant"]) .detail {
     grid-template-columns: 1fr !important;
@@ -126,7 +131,7 @@ body[data-ely-game="valorant"] #detailSection.detail--valorant-layout {
     max-width: 132px !important;
   }
 }
-
+ 
 @media (max-width: 720px) {
   .service-grid { grid-template-columns: 1fr !important; }
   .cat-btn {
@@ -134,11 +139,9 @@ body[data-ely-game="valorant"] #detailSection.detail--valorant-layout {
     min-width: 120px !important;
   }
 }
-
-/* ══════════════════════════════════════
-   ORDER PANEL — UNIFIED CONTAINER
-   ══════════════════════════════════════ */
-
+ 
+/* ORDER PANEL */
+ 
 #detailSection {
   border: none !important;
   border-radius: 16px !important;
@@ -147,46 +150,32 @@ body[data-ely-game="valorant"] #detailSection.detail--valorant-layout {
   margin-top: 8px !important;
   isolation: isolate !important;
 }
-
-/* ── Arc Raiders background ── */
+ 
 body[data-ely-game="arc"] #detailSection {
   background-image: url("../assets/backgrounds/arc-raidersmain.webp") !important;
   background-size: cover !important;
   background-position: center center !important;
 }
-
-/* ── Valorant background ── */
+ 
 body[data-ely-game="valorant"] #detailSection {
   background-image: url("../assets/backgrounds/valorant-bg.webp") !important;
   background-size: cover !important;
   background-position: center center !important;
 }
-
-/* ── Valorant category bar centering ── */
-body[data-ely-game="valorant"] .category-shell {
-  grid-template-columns: 0 minmax(0, 1fr) 0 !important;
-}
-
-body[data-ely-game="valorant"] #catPrev,
-body[data-ely-game="valorant"] #catNext {
-  display: none !important;
-  width: 0 !important;
-  overflow: hidden !important;
-  padding: 0 !important;
-}
-
-/* ── Left column ── */
+ 
 body[data-ely-game="arc"] #detailSection .detail-left,
 body[data-ely-game="valorant"] #detailSection .detail-left {
   padding: 24px 28px !important;
-  border-right: 1px solid rgba(212, 175, 110, 0.22) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   background: rgba(0, 0, 0, 0.35) !important;
   box-shadow: none !important;
 }
-
-/* ── Right column ── */
+ 
+body[data-ely-game="valorant"] #detailSection .detail-left {
+  border-right: none !important;
+}
+ 
 body[data-ely-game="arc"] #detailSection .detail-right,
 body[data-ely-game="valorant"] #detailSection .detail-right {
   padding: 20px !important;
@@ -197,13 +186,12 @@ body[data-ely-game="valorant"] #detailSection .detail-right {
   width: 100% !important;
   min-width: 0 !important;
 }
-
+ 
 body[data-ely-game="valorant"] #detailSection .detail-right {
   background: rgba(0, 0, 0, 0.72) !important;
   border-left: 1px solid rgba(212, 175, 110, 0.2) !important;
 }
-
-/* ── Order card inside panel ── */
+ 
 body[data-ely-game="arc"] #detailSection .order-card,
 body[data-ely-game="valorant"] #detailSection .order-card {
   border: none !important;
@@ -217,8 +205,7 @@ body[data-ely-game="valorant"] #detailSection .order-card {
   max-height: none !important;
   overflow: visible !important;
 }
-
-/* ── Remove blur from all inner elements ── */
+ 
 body[data-ely-game="arc"] #detailSection .field-block,
 body[data-ely-game="arc"] #detailSection .order-form,
 body[data-ely-game="arc"] #detailSection .valorant-cfg-mount,
@@ -237,34 +224,30 @@ body[data-ely-game="valorant"] #detailSection .order-options-panel {
   background: rgba(0, 0, 0, 0.28) !important;
   box-shadow: none !important;
 }
-
-/* ── Title area: center, hide rating ── */
+ 
 body[data-ely-game="arc"] #detailSection #detailLeftHead,
 body[data-ely-game="valorant"] #detailSection #detailLeftHead {
   text-align: center !important;
   justify-content: center !important;
-  padding: 16px 28px 16px 28px !important;
+  padding: 16px 28px !important;
 }
-
+ 
 body[data-ely-game="arc"] #detailSection .rating,
 body[data-ely-game="valorant"] #detailSection .rating {
   display: none !important;
 }
-
-/* ── Hide valorant sub-label ── */
+ 
 body[data-ely-game="valorant"] #detailSection .valorant-cfg-eyebrow,
 body[data-ely-game="valorant"] #detailSection .valorant-cfg-compact-head {
   display: none !important;
 }
-
-/* ── Text readability on glass ── */
+ 
 body[data-ely-game="arc"] #detailSection h1,
 body[data-ely-game="arc"] #detailSection h2,
 body[data-ely-game="arc"] #detailSection h3,
 body[data-ely-game="arc"] #detailSection h4,
 body[data-ely-game="arc"] #detailSection label,
 body[data-ely-game="arc"] #detailSection strong,
-body[data-ely-game="arc"] #detailSection .cat-label,
 body[data-ely-game="valorant"] #detailSection h1,
 body[data-ely-game="valorant"] #detailSection h2,
 body[data-ely-game="valorant"] #detailSection h3,
@@ -274,19 +257,7 @@ body[data-ely-game="valorant"] #detailSection strong {
   color: #ffffff !important;
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9) !important;
 }
-
-body[data-ely-game="arc"] #detailSection p,
-body[data-ely-game="arc"] #detailSection small,
-body[data-ely-game="arc"] #detailSection em,
-body[data-ely-game="arc"] #detailSection span,
-body[data-ely-game="valorant"] #detailSection p,
-body[data-ely-game="valorant"] #detailSection small,
-body[data-ely-game="valorant"] #detailSection em,
-body[data-ely-game="valorant"] #detailSection span {
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
-}
-
-/* ── Active/selected button state on glass ── */
+ 
 body[data-ely-game="arc"] #detailSection .raid-pill.active,
 body[data-ely-game="valorant"] #detailSection .raid-pill.active,
 body[data-ely-game="arc"] #detailSection .tab-btn.active,
@@ -296,8 +267,7 @@ body[data-ely-game="valorant"] #detailSection .tab-btn.active {
   color: #ffffff !important;
   box-shadow: 0 0 16px rgba(212, 175, 110, 0.3) !important;
 }
-
-/* ── Order summary title gold ── */
+ 
 body[data-ely-game="arc"] #detailSection .order-summary-panel-title,
 body[data-ely-game="valorant"] #detailSection .order-summary-panel-title,
 body[data-ely-game="arc"] #detailSection .order-selection-preview__title,
@@ -305,8 +275,7 @@ body[data-ely-game="valorant"] #detailSection .order-selection-preview__title {
   color: var(--gold) !important;
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9) !important;
 }
-
-/* ── Input/select readability ── */
+ 
 body[data-ely-game="arc"] #detailSection input,
 body[data-ely-game="arc"] #detailSection select,
 body[data-ely-game="arc"] #detailSection textarea,
@@ -317,8 +286,7 @@ body[data-ely-game="valorant"] #detailSection textarea {
   border-color: rgba(212, 175, 110, 0.45) !important;
   color: #ffffff !important;
 }
-
-/* ── Mobile responsive ── */
+ 
 @media (max-width: 1080px) {
   body[data-ely-game="arc"] #detailSection .detail-left,
   body[data-ely-game="valorant"] #detailSection .detail-left {
@@ -331,39 +299,5 @@ body[data-ely-game="valorant"] #detailSection textarea {
     padding: 16px !important;
   }
 }
-
-/* Remove inner box borders inside order panel */
-body[data-ely-game="valorant"] #detailSection .order-card,
-body[data-ely-game="arc"] #detailSection .order-card {
-  border: none !important;
-  border-radius: 0 !important;
-}
-
-body[data-ely-game="valorant"] #detailSection .order-card {
-  background: transparent !important;
-}
-
-body[data-ely-game="valorant"] #detailSection .detail-left {
-  border-right: none !important;
-}
-
-body[data-ely-game="valorant"] .category-shell {
-  grid-template-columns: 0 minmax(0, 1fr) 0 !important;
-}
-body[data-ely-game="valorant"] #catPrev,
-body[data-ely-game="valorant"] #catNext {
-  display: none !important;
-  width: 0 !important;
-  padding: 0 !important;
-}
+ 
 /* END LAYOUT SYSTEM */
-
-body[data-ely-game="valorant"] .category-shell {
-  grid-template-columns: 0 minmax(0, 1fr) 0 !important;
-}
-body[data-ely-game="valorant"] #catPrev,
-body[data-ely-game="valorant"] #catNext {
-  display: none !important;
-  width: 0 !important;
-  padding: 0 !important;
-}
