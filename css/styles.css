@@ -45,9 +45,9 @@
       --ely-select-blue: var(--ely-gold);
       --ely-select-blue-dim: rgba(212, 175, 110, .18);
       --ely-select-glow: rgba(212, 175, 110, .24);
-      --ely-purchase-top: #15803d;
-      --ely-purchase-mid: #166534;
-      --ely-purchase-deep: #14532d;
+      --ely-purchase-top: #b8855a;
+      --ely-purchase-mid: #a07040;
+      --ely-purchase-deep: #8a5a30;
     }
 
     * { box-sizing: border-box; }
