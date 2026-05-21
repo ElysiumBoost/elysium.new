@@ -1,5 +1,4 @@
     :root {
-      --tp-green: #00b67a;
       --ely-bg: #0a0808;
       --ely-panel: rgba(18, 15, 20, 0.65);
       --ely-panel-strong: rgba(18, 15, 20, 0.82);
@@ -9363,7 +9362,7 @@ input[type="range"]:focus-visible::-moz-range-thumb {
 .ely-review-badge {
   font-size: 0.68rem;
   font-weight: 600;
-  color: rgba(100, 210, 140, 0.9);
+  color: var(--ely-gold, #d4af6e);
   letter-spacing: 0.04em;
 }
 
@@ -9628,50 +9627,30 @@ input[type="range"]:focus-visible::-moz-range-thumb {
   margin-left: 4px;
 }
 
-/* Trustpilot yeşil yıldızlar */
+/* Discord rating yıldızlar — altın */
 .ely-review-stars {
-  color: var(--tp-green, #00b67a) !important;
+  color: var(--ely-gold, #d4af6e) !important;
 }
 
-/* Verified badge — Trustpilot linki */
+/* Verified badge — Discord gold */
 .ely-review-badge {
-  color: var(--tp-green, #00b67a) !important;
+  color: var(--ely-gold, #d4af6e) !important;
   text-decoration: none;
-  transition: opacity 0.15s;
 }
 
-.ely-review-badge:hover {
-  opacity: 0.8;
-  text-decoration: underline;
-}
-
-/* Trustpilot header pill — yeşil override */
-.ely-trustpilot-link--tp {
-  background: rgba(0, 182, 122, 0.12) !important;
-  border-color: rgba(0, 182, 122, 0.38) !important;
-  color: var(--tp-green, #00b67a) !important;
-}
-
-.ely-trustpilot-link--tp:hover {
-  background: rgba(0, 182, 122, 0.22) !important;
-  border-color: rgba(0, 182, 122, 0.65) !important;
-  color: #2dd49a !important;
-}
-
-/* ── Trust counter Trustpilot link ───────────────────────────────────── */
-.ely-trust-counter__link {
-  display: flex;
-  flex-direction: column;
+/* Discord rating pill (review section header) */
+.ely-discord-rating-pill {
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
-  text-decoration: none;
-  color: inherit;
-  transition: opacity 0.15s;
-}
-
-.ely-trust-counter__link:hover {
-  opacity: 0.8;
-  text-decoration: none;
+  gap: 6px;
+  padding: 6px 14px 6px 10px;
+  background: rgba(212, 175, 110, 0.10);
+  border: 1px solid rgba(212, 175, 110, 0.32);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ely-gold, #d4af6e);
+  white-space: nowrap;
 }
 
 /* ════════════════════════════════════════════════════════════════════════
@@ -10487,4 +10466,268 @@ body[data-ely-game="valorant"] .hero::after {
   font-size: 12px;
   line-height: 1.6;
   color: var(--ely-muted, #a89e8c);
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 3 — Booster profil kartları
+   ════════════════════════════════════════════════════════════════════════ */
+
+.ely-boosters-section {
+  margin-top: 60px;
+}
+
+.ely-booster-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+  .ely-booster-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.ely-booster-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background: rgba(18, 15, 12, 0.75);
+  border: 1px solid rgba(212, 175, 110, 0.18);
+  border-radius: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.ely-booster-card:hover {
+  border-color: rgba(212, 175, 110, 0.38);
+  box-shadow: 0 4px 24px rgba(212, 175, 110, 0.08);
+}
+
+.ely-booster-card--featured {
+  border-color: rgba(212, 175, 110, 0.38);
+  background: linear-gradient(160deg, rgba(20, 16, 10, 0.95) 0%, rgba(26, 20, 10, 0.9) 100%);
+  box-shadow: 0 0 0 1px rgba(212, 175, 110, 0.12) inset, 0 4px 32px rgba(212, 175, 110, 0.07);
+}
+
+.ely-booster-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(212, 175, 110, 0.15);
+  border: 2px solid rgba(212, 175, 110, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display, 'Cinzel', serif);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ely-gold, #d4af6e);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.ely-booster-avatar--gold {
+  background: rgba(212, 175, 110, 0.22);
+  border-color: rgba(212, 175, 110, 0.6);
+  color: #e8c87a;
+}
+
+.ely-booster-avatar--purple {
+  background: rgba(140, 100, 210, 0.18);
+  border-color: rgba(140, 100, 210, 0.4);
+  color: #b89de0;
+}
+
+.ely-booster-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ely-booster-name {
+  font-family: var(--display, 'Cinzel', serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ely-text, #f3ead9);
+  letter-spacing: 0.04em;
+}
+
+.ely-booster-ranks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ely-booster-rank {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.ely-booster-rank--arc {
+  background: rgba(232, 162, 58, 0.14);
+  border: 1px solid rgba(232, 162, 58, 0.36);
+  color: #e8a23a;
+}
+
+.ely-booster-rank--val {
+  background: rgba(255, 70, 84, 0.12);
+  border: 1px solid rgba(255, 70, 84, 0.32);
+  color: #ff7080;
+}
+
+.ely-booster-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.ely-booster-chip {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 3px 9px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  color: var(--ely-muted, #a89e8c);
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 4 — Order panel metal kaplama
+   ════════════════════════════════════════════════════════════════════════ */
+
+.order-card,
+.ely-order-panel {
+  background: linear-gradient(160deg, #1a1510 0%, #120e0b 55%, #0d0b09 100%) !important;
+  border: 1px solid #e8a23a !important;
+  box-shadow:
+    0 0 0 1px rgba(232, 162, 58, 0.08) inset,
+    0 2px 16px rgba(0, 0, 0, 0.55),
+    0 0 40px rgba(232, 162, 58, 0.04) !important;
+}
+
+.order-panel-head,
+.ely-order-panel-title-row {
+  background: linear-gradient(90deg, rgba(232, 162, 58, 0.10) 0%, rgba(232, 162, 58, 0.04) 100%) !important;
+  border-bottom: 1px solid rgba(232, 162, 58, 0.22) !important;
+}
+
+.order-card .summary-total,
+.ely-order-panel .summary-total {
+  border-top: 1px solid rgba(232, 162, 58, 0.22) !important;
+  background: rgba(232, 162, 58, 0.05) !important;
+}
+
+.valorant-cfg-mount {
+  background: linear-gradient(160deg, #1a1510 0%, #120e0b 55%, #0d0b09 100%) !important;
+  border: 1px solid rgba(232, 162, 58, 0.32) !important;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 5 — Layout scaling düzeltmesi
+   ════════════════════════════════════════════════════════════════════════ */
+
+.shell {
+  max-width: 1100px !important;
+}
+
+@media (min-width: 1081px) {
+  .category-shell .category-scroll > *,
+  .category-bar > * {
+    min-width: 100px !important;
+  }
+}
+
+.hero h1,
+.hero-title {
+  font-size: clamp(32px, 5vw, 52px) !important;
+}
+
+.hero-subtitle {
+  font-size: clamp(14px, 1.8vw, 20px) !important;
+}
+
+.topbar,
+.topbar-inner {
+  min-height: 62px !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 6 — Buton / Input / Slider standardizasyonu
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Tier 1 — Primary (48px) */
+.btn-premium,
+.btn-purchase,
+.add-to-cart-main,
+#addToCart {
+  min-height: 48px !important;
+}
+
+/* Tier 2 — Secondary (40px) */
+.btn,
+.btn-secondary,
+.btn-outline {
+  min-height: 40px !important;
+}
+
+/* Tier 3 — Compact (34px) */
+.btn-sm,
+.btn-compact {
+  min-height: 34px !important;
+}
+
+/* Input / Select / Textarea */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+select,
+textarea {
+  min-height: 40px !important;
+}
+
+/* Qty stepper */
+.qty-stepper,
+.qty-wrap {
+  min-height: 40px !important;
+}
+
+/* Gold slider thumb */
+input[type="range"] {
+  accent-color: var(--ely-gold, #d4af6e);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  width: 22px !important;
+  height: 22px !important;
+  background: var(--ely-gold, #d4af6e) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 22px !important;
+  height: 22px !important;
+  background: var(--ely-gold, #d4af6e) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+}
+
+/* Form labels */
+label,
+.form-label,
+.field-label {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
 }
