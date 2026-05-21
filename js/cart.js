@@ -1703,12 +1703,15 @@
           card.classList.toggle("is-tft-split", isTftForm && !isValorantForm && !isArcConfigurator);
         }
       }
-      if (isValorantForm) {
+      if (isValorantForm || isArcConfigurator) {
         mount.hidden = false;
         mount.appendChild(form);
+        form.style.display = "";
+        if (body) body.style.paddingTop = "0";
       } else {
         mount.hidden = true;
         body.insertBefore(form, sum);
+        if (body) body.style.paddingTop = "";
       }
     }
 
@@ -1729,7 +1732,13 @@
       if (game?.id === "valorant" && svc?.form?.startsWith?.("valorant-")) {
         card.classList.add("is-valorant");
         const html = valorantOrderOptionsHtml(svc.form);
-        if (html) summary.insertAdjacentHTML("afterbegin", html);
+        if (html) {
+          const mount = $("valorantConfiguratorMount");
+          if (mount) {
+            const existing = mount.querySelector("[data-order-options-panel]");
+            if (!existing) mount.insertAdjacentHTML("beforeend", html);
+          }
+        }
       } else if (game?.id === "tft" && ["tft-rank-up", "tft-placement", "tft-coaching"].includes(String(svc?.form || ""))) {
         summary.insertAdjacentHTML("afterbegin", tftOrderOptionsHtml(String(svc?.form || "")));
       }
