@@ -276,15 +276,27 @@
 
     function updateDocumentTitle() {
       const titleByGame = {
-        arc: "Arc Raiders Boosting | ELYSIUM BOOST",
-        valorant: "Valorant Boosting | ELYSIUM BOOST",
+        arc: "Arc Raiders Boosting & Items | ELYSIUM BOOST",
+        valorant: "Valorant Boosting Services | ELYSIUM BOOST",
         lol: "League of Legends Boosting | ELYSIUM BOOST",
         tft: "TFT Boosting | ELYSIUM BOOST"
+      };
+      const descriptionByGame = {
+        arc: "Premium Arc Raiders boosting, item delivery, weapons, blueprints, raids, and Discord-confirmed orders.",
+        valorant: "Premium Valorant boosting services for ranks, placements, wins, battle pass, coaching, and Discord-confirmed orders.",
+        lol: "Premium League of Legends boosting services with clear Discord ticket confirmation and support.",
+        tft: "Premium Teamfight Tactics boosting services with clean order configuration and Discord support."
       };
       const game = currentGame();
       document.title = game
         ? titleByGame[game.id] || `${game.label} Boosting | ELYSIUM BOOST`
         : "ELYSIUM BOOST | Premium Game Services";
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) {
+        metaDescription.setAttribute("content", game
+          ? descriptionByGame[game.id] || `Premium ${game.label} boosting services with clear Discord ticket confirmation and support.`
+          : "ELYSIUM BOOST - premium manual game services, verified boosters, Discord ticket orders, and fast support.");
+      }
     }
 
     function renderAll() {
@@ -574,6 +586,7 @@
       renderPopular();
       renderServices();
       renderDetail();
+      updateDocumentTitle();
       requestAnimationFrame(() => {
         const target = $("detailLeftHead") || $("serviceHead");
         if (target && game?.categories?.length) target.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1027,6 +1040,7 @@
         renderPopular();
         renderServices();
         renderDetail();
+        updateDocumentTitle();
         ($("detailLeftHead") || $("detailSection")).scrollIntoView({ behavior: "smooth", block: "start" });
       }));
     }
