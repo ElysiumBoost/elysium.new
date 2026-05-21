@@ -9700,17 +9700,7 @@ input[type="range"]:focus-visible::-moz-range-thumb {
   transform: none !important;
 }
 
-/* A-2 — Order panel: altın border + derin shadow */
-.order-card {
-  border: 1px solid rgba(212, 175, 110, 0.42) !important;
-  box-shadow:
-    0 0 0 1px rgba(212, 175, 110, 0.12),
-    0 28px 64px rgba(0, 0, 0, 0.52),
-    inset 0 1px 0 rgba(212, 175, 110, 0.14) !important;
-  border-radius: 16px !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
+/* A-2 — Order panel: altın border + derin shadow (merged into canonical block) */
 
 /* A-3 — Köşe yumuşatma */
 .cat-btn {
@@ -10148,18 +10138,8 @@ a.site-footer__stat--tp .site-footer__stat-num {
 }
 
 /* ════════════════════════════════════════════════════════════════════════
-   GÖREV 1 — Order panel solid dark (tüm blur/şeffaflık kaldırıldı)
+   GÖREV 1 — Order panel solid dark (merged into canonical block)
    ════════════════════════════════════════════════════════════════════════ */
-.order-card {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border: 1px solid rgba(212, 175, 110, 0.45) !important;
-  box-shadow:
-    0 0 0 1px rgba(212, 175, 110, 0.10),
-    0 32px 80px rgba(0, 0, 0, 0.65),
-    inset 0 1px 0 rgba(212, 175, 110, 0.12) !important;
-  border-radius: 16px !important;
-}
 
 .summary-total,
 .order-card.is-valorant .summary-total,
@@ -10982,7 +10962,7 @@ h1, h2, .hero-title, #heroTitle {
 }
 
 .home-section-kicker {
-  color: #9b8fff !important;
+  color: #c9a84c !important;
 }
 
 /* ════════════════════════════════════════════════════════════════════════
@@ -11016,6 +10996,8 @@ h1, h2, .hero-title, #heroTitle {
     0 0 0 1px rgba(232, 162, 58, 0.12),
     inset 0 1px 0 rgba(232, 162, 58, 0.18),
     0 32px 80px rgba(0, 0, 0, 0.72) !important;
+  align-self: stretch !important;
+  height: 100% !important;
 }
 
 .valorant-cfg-mount {
@@ -11147,11 +11129,6 @@ h1, h2, .hero-title, #heroTitle {
 .detail-left,
 .detail-right {
   align-self: stretch !important;
-}
-
-.order-card {
-  align-self: stretch !important;
-  height: 100% !important;
 }
 
 /* ════════════════════════════════════════════════════════════════════════
