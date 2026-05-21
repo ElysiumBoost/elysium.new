@@ -19,6 +19,7 @@
 }
  
 .category-scroll-column {
+  grid-column: 2 !important; /* stay in middle track even when arrows are display:none */
   width: 100% !important;
   align-self: stretch !important;
 }

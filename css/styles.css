@@ -788,6 +788,7 @@
     }
 
     .category-scroll-column {
+      grid-column: 2; /* stay in middle track even when arrows are display:none */
       min-width: 0;
       display: flex;
       flex-direction: column;
