@@ -1,4 +1,5 @@
     :root {
+      --tp-green: #00b67a;
       --ely-bg: #0a0808;
       --ely-panel: rgba(18, 15, 20, 0.65);
       --ely-panel-strong: rgba(18, 15, 20, 0.82);
@@ -9573,4 +9574,86 @@ input[type="range"]:focus-visible::-moz-range-thumb {
     gap: 6px 8px;
     font-size: 0.72rem;
   }
+}
+
+/* ── Review kartları güncelleme — gerçek Trustpilot yorumları ─────────── */
+.ely-review-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+@media (max-width: 900px) {
+  .ely-review-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .ely-review-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.ely-review-card:hover {
+  border-color: rgba(212, 175, 110, 0.5) !important;
+  box-shadow: 0 0 20px rgba(212, 175, 110, 0.12) !important;
+}
+
+/* Avatar renk varyantları */
+.ely-review-avatar--purple {
+  background: linear-gradient(135deg, #534AB7, #3C3489) !important;
+  border-color: rgba(83, 74, 183, 0.6) !important;
+  color: #d0ccff !important;
+}
+
+.ely-review-avatar--green {
+  background: linear-gradient(135deg, #0F6E56, #085041) !important;
+  border-color: rgba(15, 110, 86, 0.6) !important;
+  color: #7eefd4 !important;
+}
+
+/* Kart title satırı */
+.ely-review-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.88);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Lokasyon etiketi */
+.ely-review-location {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.35);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+/* Trustpilot yeşil yıldızlar */
+.ely-review-stars {
+  color: var(--tp-green, #00b67a) !important;
+}
+
+/* Verified badge — Trustpilot linki */
+.ely-review-badge {
+  color: var(--tp-green, #00b67a) !important;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.ely-review-badge:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* Trustpilot header pill — yeşil override */
+.ely-trustpilot-link--tp {
+  background: rgba(0, 182, 122, 0.12) !important;
+  border-color: rgba(0, 182, 122, 0.38) !important;
+  color: var(--tp-green, #00b67a) !important;
+}
+
+.ely-trustpilot-link--tp:hover {
+  background: rgba(0, 182, 122, 0.22) !important;
+  border-color: rgba(0, 182, 122, 0.65) !important;
+  color: #2dd49a !important;
 }
