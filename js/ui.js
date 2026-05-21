@@ -763,17 +763,12 @@
           <div class="cart-empty-card">
             <div class="cart-empty-icon" aria-hidden="true">✦</div>
             <p class="cart-empty-title">${escapeHtml(ui("Your order is empty"))}</p>
-            <p class="cart-empty-sub">${escapeHtml(ui("Choose a service to build your Discord ticket."))}</p>
-            <button type="button" class="btn btn-premium" id="browsePopularServices">${escapeHtml(ui("Browse games"))}</button>
+            <p class="cart-empty-sub">${escapeHtml(ui("Your cart is empty. Start with a service and build your order in seconds."))}</p>
+            <button type="button" class="btn btn-premium" id="browsePopularServices">${escapeHtml(ui(state.game ? "Continue your service" : "Browse games"))}</button>
             <button type="button" class="btn btn-glass cart-empty-secondary" id="continueShoppingEmpty">${escapeHtml(ui("Continue browsing"))}</button>
           </div>`;
           const bp = cartBodyEl.querySelector("#browsePopularServices");
-          if (bp) {
-            bp.addEventListener("click", () => {
-              closeCart();
-              requestAnimationFrame(() => $("homeGameHead")?.scrollIntoView({ behavior: "smooth", block: "start" }));
-            });
-          }
+          if (bp) bp.addEventListener("click", continueShopping);
           const c0 = cartBodyEl.querySelector("#continueShoppingEmpty");
           if (c0) c0.addEventListener("click", continueShopping);
         }
@@ -1310,8 +1305,19 @@
       const text = ticketText();
       const statusEl = $("copyStatus");
       const ok = () => {
-        if (statusEl) statusEl.textContent = ui("Ticket copied successfully. Open Discord and paste it into your order ticket.");
-        showToast(ui("Ticket copied."), 2600, false);
+        const copyBtn = $("copyOrder");
+        const originalCopyText = copyBtn ? copyBtn.textContent : "";
+        const successMessage = openDiscordAfter ? "Copied ✓ Opening Discord..." : "Order copied ✓";
+        if (statusEl) statusEl.textContent = ui(successMessage);
+        if (copyBtn) {
+          copyBtn.textContent = ui(successMessage);
+          copyBtn.disabled = true;
+          setTimeout(() => {
+            copyBtn.disabled = false;
+            copyBtn.textContent = originalCopyText || ui("Copy Order & Open Discord");
+          }, 2000);
+        }
+        showToast(ui(successMessage), 2600, false);
         if (openDiscordAfter && typeof DISCORD_URL === "string") window.open(DISCORD_URL, "_blank", "noopener");
         openCopySuccessModal();
       };
