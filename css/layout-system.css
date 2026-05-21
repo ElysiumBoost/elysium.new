@@ -18,7 +18,8 @@
   max-height: 80px !important;
 }
 
-body[data-ely-game="valorant"] .category-scroll { display: flex !important;
+body[data-ely-game="valorant"] .category-scroll {
+  display: flex !important;
   justify-content: center !important;
   overflow-x: visible !important;
   scroll-behavior: auto !important;
