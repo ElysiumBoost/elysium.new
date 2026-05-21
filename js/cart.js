@@ -1082,6 +1082,8 @@
         const thumbCat = "services";
         const thumbName = cg ? ui(cg.label) : ui("Services");
         $("detailIcon").innerHTML = categoryArtwork(thumbCat, thumbName);
+        const heroClean = document.getElementById("svcHeroCard");
+        if (heroClean) heroClean.innerHTML = "";
         const comingSoonGame =
           cg && (cg.comingSoon || (window.ELY_COMING_SOON_GAME_IDS instanceof Set && window.ELY_COMING_SOON_GAME_IDS.has(cg.id)));
         $("detailTitle").textContent = ui(comingSoonGame ? "Coming soon" : "No services available yet.");
@@ -1122,6 +1124,52 @@
       $("detailIcon").innerHTML = categoryArtwork(service.category || "custom", service.cardTitle);
       $("detailTitle").textContent = ui(service.title);
       $("detailIntro").textContent = ui(service.intro);
+      // Hero card injection — safe, uses existing data
+      const heroMount = $("detailLeftMeta");
+      if (heroMount) {
+        const game = currentGame();
+        const thumbSrc = resolveSiteUrl(
+          (game?.id === "valorant"
+            ? (valorantCategories.find(c => c.id === service.category)?.thumb || "")
+            : "") ||
+          serviceImages[service.category] ||
+          serviceImages.custom
+        );
+        const bullets = (() => {
+          if (game?.id === "valorant") {
+            const cat = typeof valorantCategoryContent !== "undefined" ? valorantCategoryContent[service.category] : null;
+            if (cat?.highlights?.length) return cat.highlights.slice(0, 3);
+          }
+          const intro = ui(service.intro || "").trim();
+          return intro ? [intro.slice(0, 100)] : ["Manual delivery", "Verified boosters", "Discord confirmed"];
+        })();
+        const heroId = "svcHeroCard";
+        let heroEl = document.getElementById(heroId);
+        if (!heroEl) {
+          heroEl = document.createElement("div");
+          heroEl.id = heroId;
+          heroMount.parentElement.insertBefore(heroEl, heroMount);
+        }
+        heroEl.innerHTML = `
+          <div class="svc-hero-card">
+            <div class="svc-hero-card__media">
+              <img src="${escapeHtml(thumbSrc)}" alt="${escapeHtml(service.cardTitle)}" loading="eager" onerror="elyImagePlaceholder(this)">
+            </div>
+            <div class="svc-hero-card__body">
+              <h3 class="svc-hero-card__name">${escapeHtml(ui(service.cardTitle))}</h3>
+              <p class="svc-hero-card__desc">${escapeHtml(ui(service.intro || "").slice(0, 130))}</p>
+              <ul class="svc-hero-card__list">
+                ${bullets.map(b => `<li>${escapeHtml(ui(b))}</li>`).join("")}
+              </ul>
+            </div>
+          </div>
+          <div class="svc-trust-row">
+            <span class="svc-trust-badge">Manual Delivery</span>
+            <span class="svc-trust-badge">Discord Confirmed</span>
+            <span class="svc-trust-badge">No Cheats</span>
+          </div>
+        `;
+      }
       $("detailDeal").innerHTML = "";
       const hl = $("detailHighlights");
       const vtr = $("detailValorantTrust");
