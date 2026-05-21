@@ -9520,3 +9520,57 @@ input[type="range"]:focus-visible::-moz-range-thumb {
     justify-content: center;
   }
 }
+
+/* ── GÖREV 5: Hero social proof band ────────────────────────────────── */
+.ely-hero-social-proof {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin-top: 16px;
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.ely-hero-tp {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--gold, #d4af6e);
+  font-weight: 600;
+  font-size: 0.76rem;
+  text-decoration: none;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.ely-hero-tp:hover {
+  opacity: 1;
+  text-decoration: none;
+}
+
+.ely-hero-tp span:first-child {
+  letter-spacing: 0.06em;
+  font-size: 0.7rem;
+}
+
+.ely-hero-dot {
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+
+.ely-hero-proof-text {
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .ely-hero-social-proof {
+    gap: 6px 8px;
+    font-size: 0.72rem;
+  }
+}
