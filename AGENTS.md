@@ -920,3 +920,20 @@ const parsed = parseGameHash();
 - [ ] Booster profil kartları
 - [ ] FAQ accordian bölümü
 - [ ] Google Analytics / Search Console doğrulama meta tag
+
+---
+
+## 15. DEĞİŞKEN DEĞİŞTİRME KURALI (KRİTİK)
+
+CSS değişkenlerini (`:root` içindeki `--değişkenler`) değiştirirken ASLA dosya sonuna ekleme. ASLA `!important` ile override etme. DAIMA `str_replace` ile `:root` içindeki satırı direkt değiştir.
+
+JavaScript sabitlerini değiştirirken de aynı kural: ASLA dosya sonuna yeni `const`/`let` ekleme. ASLA mevcut değerin üstüne yaz. DAIMA `str_replace` ile ilgili satırı bul ve değiştir.
+
+HTML içeriğini değiştirirken: ASLA yeni section ekleyip eskisini bırakma. DAIMA önce eskiyi sil, sonra yenisini yaz.
+
+Her değişiklikten sonra doğrulama yap:
+- CSS değişkeni için → `grep -n "değişken-adı" css/styles.css`
+- JS sabiti için → `grep -n "sabit-adı" js/[dosya].js`
+- HTML elementi için → `grep -n "class-adı" index.html`
+
+Doğrulama başarısız olursa tekrar yap. Push etmeden önce doğrulama zorunludur.
