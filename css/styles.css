@@ -9207,3 +9207,66 @@ input[type="range"]:focus-visible::-moz-range-thumb {
 .drawer {
   background: linear-gradient(180deg, rgba(18, 15, 20, .98), rgba(10, 8, 8, .99)) !important;
 }
+
+/* ── GÖREV 1: Hero animated trust counters ─────────────────────────── */
+.ely-trust-counters {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0;
+  margin: 18px auto 22px;
+  max-width: 480px;
+  border: 1px solid rgba(212, 175, 110, 0.25);
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.ely-trust-counter {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 10px;
+  gap: 4px;
+}
+
+.ely-trust-counter--mid {
+  border-left: 1px solid rgba(212, 175, 110, 0.2);
+  border-right: 1px solid rgba(212, 175, 110, 0.2);
+}
+
+.ely-trust-counter__number {
+  font-family: var(--display, 'Cinzel', serif);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--gold, #d4af6e);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 18px rgba(212, 175, 110, 0.45);
+}
+
+.ely-trust-counter__label {
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .ely-trust-counters {
+    max-width: 100%;
+    margin: 14px 0 18px;
+  }
+  .ely-trust-counter__number {
+    font-size: 1.2rem;
+  }
+  .ely-trust-counter__label {
+    font-size: 0.62rem;
+  }
+}

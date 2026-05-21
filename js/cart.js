@@ -3370,3 +3370,35 @@
 
 
 
+
+(function initTrustCounters() {
+  const counters = document.querySelectorAll(".ely-trust-counter__number");
+  if (!counters.length) return;
+  const animate = (el) => {
+    const target = parseFloat(el.dataset.target);
+    const suffix = el.dataset.suffix || "";
+    const duration = 1800;
+    const start = performance.now();
+    const isDecimal = target % 1 !== 0;
+    const step = (now) => {
+      const elapsed = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - elapsed, 3);
+      const value = isDecimal
+        ? (target * eased).toFixed(1)
+        : Math.floor(target * eased);
+      el.textContent = value + suffix;
+      if (elapsed < 1) requestAnimationFrame(step);
+      else el.textContent = (isDecimal ? target.toFixed(1) : target) + suffix;
+    };
+    requestAnimationFrame(step);
+  };
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animate(entry.target);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  counters.forEach(el => obs.observe(el));
+})();
