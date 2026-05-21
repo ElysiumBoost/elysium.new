@@ -185,12 +185,22 @@
     }
 
     function restoreGameFromHash() {
-      const id = parseGameHash();
-      if (!id || !games.some(g => g.id === id)) return;
-      const game = games.find(g => g.id === id);
-      state.game = id;
-      state.category = game.categories[0]?.id || "services";
-      state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
+      const parsed = parseGameHash();
+      if (!parsed) return;
+      const { gameId, categorySlug } = parsed;
+      if (!games.some(g => g.id === gameId)) return;
+      const game = games.find(g => g.id === gameId);
+      state.game = gameId;
+      if (categorySlug) {
+        const matched = game.categories.find(c =>
+          c.id === categorySlug ||
+          c.id.replace(/[^a-z0-9]/gi, "-").toLowerCase() === categorySlug
+        );
+        state.category = matched ? matched.id : (game.categories[0]?.id || "services");
+      } else {
+        state.category = game.categories[0]?.id || "services";
+      }
+      state.serviceId = game.services.find(s => s.category === state.category)?.id ?? null;
     }
 
     const $ = id => document.getElementById(id);
@@ -325,8 +335,8 @@
     }
 
     function applyHashRouteToState() {
-      const id = parseGameHash();
-      if (!id) {
+      const parsed = parseGameHash();
+      if (!parsed) {
         if (state.game != null || state.category != null || state.serviceId != null) {
           state.game = null;
           state.category = null;
@@ -335,10 +345,19 @@
         }
         return;
       }
-      if (!games.some(g => g.id === id)) return;
-      const game = games.find(g => g.id === id);
-      state.game = id;
-      state.category = game.categories[0]?.id || "services";
+      const { gameId, categorySlug } = parsed;
+      if (!games.some(g => g.id === gameId)) return;
+      const game = games.find(g => g.id === gameId);
+      state.game = gameId;
+      if (categorySlug) {
+        const matched = game.categories.find(c =>
+          c.id === categorySlug ||
+          c.id.replace(/[^a-z0-9]/gi, "-").toLowerCase() === categorySlug
+        );
+        state.category = matched ? matched.id : (game.categories[0]?.id || "services");
+      } else {
+        state.category = game.categories[0]?.id || "services";
+      }
       state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
       sanitizeNavigationState();
       renderAll();
@@ -593,6 +612,11 @@
       const game = currentGame();
       state.category = categoryId;
       state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
+      const gameSlug = GAME_HASH_SLUGS[state.game];
+      if (gameSlug) {
+        const newHash = "#" + gameSlug + "/" + categoryId;
+        if (location.hash !== newHash) history.replaceState(null, "", newHash);
+      }
       renderCategories();
       renderPopular();
       renderServices();

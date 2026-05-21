@@ -384,9 +384,14 @@
     })();
 
     function parseGameHash() {
-      const key = (location.hash || "").replace(/^#\/?/, "").trim().toLowerCase();
-      if (!key) return null;
-      return HASH_TO_GAME_ID[key] || null;
+      const raw = (location.hash || "").replace(/^#\/?/, "").trim();
+      if (!raw) return null;
+      const parts = raw.split("/");
+      const slug = parts[0].toLowerCase();
+      const categorySlug = parts[1] ? parts[1].toLowerCase() : null;
+      const gameId = HASH_TO_GAME_ID[slug] || null;
+      if (!gameId) return null;
+      return { gameId, categorySlug };
     }
 
     function syncGameHash(gameId) {
@@ -397,9 +402,11 @@
       }
       const slug = GAME_HASH_SLUGS[gameId];
       if (!slug) return;
-      const frag = "#" + slug;
-      const nextUrl = base + frag;
-      if (location.hash !== frag) history.replaceState(null, "", nextUrl);
+      const raw = (location.hash || "").replace(/^#/, "");
+      const parts = raw.split("/");
+      const existingCat = (parts[0] === slug && parts[1]) ? "/" + parts[1] : "";
+      const frag = "#" + slug + existingCat;
+      if (location.hash !== frag) history.replaceState(null, "", base + frag);
     }
 
     /** Single source for “ordering disabled” titles; used before order-center-upgrade loads. */
