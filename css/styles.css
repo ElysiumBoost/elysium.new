@@ -10169,3 +10169,322 @@ a.site-footer__stat--tp .site-footer__stat-num {
     min-width: 420px !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 1 — Order panel solid dark (tüm blur/şeffaflık kaldırıldı)
+   ════════════════════════════════════════════════════════════════════════ */
+.order-card {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(10, 8, 8, 0.97) !important;
+  border: 1px solid rgba(212, 175, 110, 0.45) !important;
+  box-shadow:
+    0 0 0 1px rgba(212, 175, 110, 0.10),
+    0 32px 80px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(212, 175, 110, 0.12) !important;
+  border-radius: 16px !important;
+}
+
+.summary-total,
+.order-card.is-valorant .summary-total,
+.order-card.is-arc-split .summary-total {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(10, 8, 8, 0.95) !important;
+}
+
+.valorant-cfg-mount {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(12, 10, 14, 0.97) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 2 — Active game grid (arc + valorant büyük kart)
+   ════════════════════════════════════════════════════════════════════════ */
+.home-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  margin-bottom: 48px !important;
+}
+
+.home-game-card {
+  position: relative !important;
+  height: 220px !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(212, 175, 110, 0.28) !important;
+  cursor: pointer !important;
+  transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease !important;
+}
+
+.home-game-card:not(.coming-soon):hover {
+  transform: scale(1.02) !important;
+  border-color: rgba(212, 175, 110, 0.58) !important;
+  box-shadow:
+    0 0 0 1px rgba(212, 175, 110, 0.2),
+    0 24px 56px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(212, 175, 110, 0.12) !important;
+}
+
+.home-game-card .home-game-media {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  transition: transform .28s ease !important;
+}
+
+.home-game-card:not(.coming-soon):hover .home-game-media {
+  transform: scale(1.04) !important;
+}
+
+.home-game-card .home-game-label {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  padding: 32px 20px 16px !important;
+  background: linear-gradient(180deg, transparent, rgba(10, 8, 8, 0.92)) !important;
+  font-family: var(--display) !important;
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+  color: #f3ead9 !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8) !important;
+}
+
+.home-game-price {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  padding: 4px 10px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(212, 175, 110, 0.45) !important;
+  background: rgba(10, 8, 8, 0.82) !important;
+  font-family: var(--display) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: .06em !important;
+  color: var(--ely-gold, #d4af6e) !important;
+}
+
+/* Coming-soon strip spans full grid width */
+.home-grid > .ely-coming-soon-strip {
+  grid-column: 1 / -1;
+}
+
+/* Coming soon strip */
+.ely-coming-soon-strip {
+  margin: 0;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(212, 175, 110, 0.15);
+  background: rgba(18, 15, 20, 0.5);
+}
+
+.ely-coming-soon-strip__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.ely-coming-soon-strip__label {
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ely-muted, #a89e8c);
+}
+
+.ely-coming-soon-strip__discord {
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: rgba(114, 137, 218, 0.85);
+  text-decoration: none;
+  transition: color .18s;
+}
+
+.ely-coming-soon-strip__discord:hover {
+  color: #8ea0f7;
+}
+
+.ely-coming-soon-strip__games {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ely-coming-soon-card {
+  position: relative;
+  width: 120px;
+  height: 72px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(212, 175, 110, 0.15);
+  opacity: 0.45;
+  flex-shrink: 0;
+  cursor: not-allowed;
+}
+
+.ely-coming-soon-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(30%);
+}
+
+.ely-coming-soon-card__name {
+  position: absolute;
+  bottom: 5px;
+  left: 8px;
+  font-family: var(--display);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #f3ead9;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+}
+
+.ely-coming-soon-card__badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-family: var(--display);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #f3ead9;
+  background: rgba(184, 133, 90, 0.55);
+  border: 1px solid rgba(212, 175, 110, 0.3);
+}
+
+@media (max-width: 720px) {
+  .home-grid { grid-template-columns: 1fr !important; }
+  .home-game-card { height: 180px !important; }
+  .ely-coming-soon-card { width: 96px; height: 58px; }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 3 — Section geçiş divider (gold hairline)
+   ════════════════════════════════════════════════════════════════════════ */
+.home-process,
+.home-why,
+.home-reviews,
+.faq-home {
+  position: relative;
+  padding-top: 48px;
+}
+
+.home-process::before,
+.home-why::before,
+.home-reviews::before,
+.faq-home::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(212, 175, 110, 0.25) 30%,
+    rgba(212, 175, 110, 0.25) 70%,
+    transparent);
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 5 — Valorant amber overlay
+   ════════════════════════════════════════════════════════════════════════ */
+body[data-ely-game="valorant"] .hero {
+  background-blend-mode: overlay;
+}
+
+body[data-ely-game="valorant"] .hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgba(212, 175, 110, 0.08),
+    transparent 60%,
+    rgba(184, 133, 90, 0.06));
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 6 — Refund & Guarantee bölümü
+   ════════════════════════════════════════════════════════════════════════ */
+.ely-guarantee-strip {
+  margin: 0 0 48px;
+  padding: 32px 0;
+  border-top: 1px solid rgba(212, 175, 110, 0.15);
+  border-bottom: 1px solid rgba(212, 175, 110, 0.15);
+}
+
+.ely-guarantee-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .ely-guarantee-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 520px) {
+  .ely-guarantee-grid { grid-template-columns: 1fr; }
+}
+
+.ely-guarantee-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(212, 175, 110, 0.18);
+  background: rgba(18, 15, 20, 0.6);
+  transition: border-color .2s ease;
+}
+
+.ely-guarantee-card:hover {
+  border-color: rgba(212, 175, 110, 0.38);
+}
+
+.ely-guarantee-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  line-height: 1.2;
+}
+
+.ely-guarantee-card strong {
+  display: block;
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--ely-gold, #d4af6e);
+  margin-bottom: 5px;
+}
+
+.ely-guarantee-card p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ely-muted, #a89e8c);
+}

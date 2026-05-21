@@ -592,12 +592,23 @@
       };
 
       const chunks = [];
-      ["arc", "valorant", "tft", "cs2", "lol", "social"].forEach(id => {
+      ["arc", "valorant"].forEach(id => {
         const game = g(id);
         if (game) chunks.push(renderHomeSingleCard(game));
       });
 
-      $("homeGameGrid").innerHTML = chunks.join("");
+      const csIds = ["tft", "lol", "cs2", "wow", "circle"];
+      const csCards = csIds.map(id => {
+        const game = g(id);
+        if (!game) return "";
+        const src = escapeHtml(game.homeCardImage || game.heroBg || "");
+        const lbl = escapeHtml(ui(game.label));
+        return `<div class="ely-coming-soon-card" aria-label="${lbl} — coming soon"><img src="${src}" alt="${lbl}" loading="lazy"><span class="ely-coming-soon-card__name">${lbl}</span><span class="ely-coming-soon-card__badge">Soon</span></div>`;
+      }).join("");
+
+      const csStrip = `<div class="ely-coming-soon-strip"><div class="ely-coming-soon-strip__head"><span class="ely-coming-soon-strip__label">More games coming</span><a href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer" class="ely-coming-soon-strip__discord">Join Discord for early access →</a></div><div class="ely-coming-soon-strip__games">${csCards}</div></div>`;
+
+      $("homeGameGrid").innerHTML = chunks.join("") + csStrip;
     }
     const serviceImages = {
       blueprints: "assets/thumb-blueprints.webp",
