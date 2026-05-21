@@ -412,8 +412,17 @@
     }
 
     function selectGame(id) {
-      if (!games.some(g => g.id === id)) {
+      const game = games.find(g => g.id === id);
+      if (!game) {
         showToast("That game is not available.");
+        return;
+      }
+      const comingSoonGame = Boolean(
+        game.comingSoon ||
+        (window.ELY_COMING_SOON_GAME_IDS instanceof Set && window.ELY_COMING_SOON_GAME_IDS.has(id))
+      );
+      if (comingSoonGame) {
+        showToast(ui("Coming soon — ordering is not available for this title yet."));
         return;
       }
       const slug = GAME_HASH_SLUGS[id];
@@ -424,7 +433,6 @@
       closeGameMenu();
       const frag = "#" + slug;
       if (location.hash === frag) {
-        const game = games.find(g => g.id === id);
         state.game = id;
         state.category = game.categories[0]?.id || "services";
         state.serviceId = game.services.find(service => service.category === state.category)?.id ?? null;
