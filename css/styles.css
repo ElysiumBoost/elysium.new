@@ -11023,11 +11023,9 @@ h1, h2, .hero-title, #heroTitle {
 }
 
 .valorant-cfg-mount {
-  background-image: url('../assets/backgrounds/orderpanelbg.webp') !important;
-  background-size: cover !important;
-  background-position: center center !important;
-  background-color: #0d0b09 !important;
-  border: 1px solid rgba(232, 162, 58, 0.35) !important;
+  background: linear-gradient(160deg, #1a1510 0%, #120e0b 55%, #0d0b09 100%) !important;
+  border: 1px solid rgba(232, 162, 58, 0.32) !important;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.45) !important;
 }
 
 .summary-total,
