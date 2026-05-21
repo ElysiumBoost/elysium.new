@@ -330,3 +330,325 @@ Keep the report tight. The user is reviewing a lot of work in a short window; do
 - [ ] My new images are `.webp`, `cover`‑safe, under ~150 KB for thumbnails, and registered in `serviceImages` if they're category art.
 - [ ] My new translated strings are saved as real UTF‑8, not Latin‑1 mojibake.
 - [ ] I prepared a short post‑edit report listing files touched, line ranges, reasons, and risks.
+
+# AGENTS.md — ELYSIUM BOOST · Claude Code Talimat Dosyası
+
+Bu dosyayı okuyan her AI agent veya Claude Code oturumu
+aşağıdaki kuralları eksiksiz uygular. Sormadan bilir.
+
+---
+
+## 1. PROJE KİMLİĞİ
+
+**Site:** https://elysiumboost.com
+**Repo:** GitHub Pages — vanilla HTML/CSS/JS SPA
+**Branch:** main → otomatik deploy
+**Teknoloji:** Sıfır framework. Webpack yok, build yok, npm sadece araç için.
+**Deploy:** git push main → GitHub Pages canlıya alır
+
+---
+
+## 2. DOSYA YAPISI
+
+```
+/
+├── index.html              ← TEK HTML DOSYASI. Tüm sayfa burada.
+├── css/
+│   ├── styles.css          ← ANA CSS. Değişkenler + tüm komponentler.
+│   ├── order-center.css    ← Sepet drawer UX iyileştirmeleri
+│   └── layout-system.css   ← Grid breakpoint overrides
+├── js/
+│   └── cart.js             ← TÜM UYGULAMA MANTIĞI. SPA engine burada.
+├── assets/
+│   ├── backgrounds/        ← Hero ve game card görselleri (.webp)
+│   ├── thumb-*.webp        ← Servis kategori thumbnails
+│   ├── rank-*.png          ← Valorant rank görselleri
+│   └── assetselysiumlogo-transparent.webp ← Ana logo
+├── tools/                  ← Yardımcı scriptler (siteye dokunmaz)
+├── AGENTS.md               ← Bu dosya
+└── CNAME                   ← elysiumboost.com
+```
+
+---
+
+## 3. TASARIM SİSTEMİ — DEĞİŞTİRME, KULLAN
+
+### Renk Değişkenleri (styles.css :root)
+```css
+--ely-bg: #0a0808              /* Zemin — koyu kırmızı-siyah */
+--ely-gold: #d4af6e            /* Ana aksanı — altın */
+--ely-bronze: #b8855a          /* İkincil aksanı — bronz */
+--ely-gold-soft: rgba(212,175,110,0.35)
+--ely-border: rgba(212,175,110,0.22)
+--ely-border-strong: rgba(212,175,110,0.48)
+--ely-text: #f3ead9            /* Ana metin — krem */
+--ely-muted: #a89e8c           /* Soluk metin */
+--ely-panel: rgba(18,15,20,0.65)   /* Glass panel */
+--ely-panel-strong: rgba(18,15,20,0.82)
+--ely-shadow: rgba(0,0,0,0.38)
+--danger: #f43f5e
+--crimson: #e11d48
+```
+
+### Tipografi
+```css
+--font: Inter, system-ui, sans-serif      /* Body metin */
+--display: Rajdhani, Inter, sans-serif    /* Başlıklar, butonlar, nav */
+```
+
+**Kural:** Başlıklar, butonlar, nav linkleri, badge'ler → `font-family: var(--display)`
+Body paragraflar, açıklamalar → `font-family: var(--font)`
+Rajdhani her zaman UPPERCASE + letter-spacing ile kullanılır.
+
+### Buton Hiyerarşisi
+```css
+.btn-premium   /* Altın gradient → ana CTA */
+.btn-glass     /* Glassmorphism → ikincil */
+.btn-green     /* Bronz-crimson gradient → satın al */
+.btn           /* Base buton */
+```
+
+### Yeni Komponent Yazarken
+- `var(--ely-*)` değişkenlerini kullan, hardcode renk yazma
+- Arka plan: `var(--ely-panel)` + `backdrop-filter: blur(10px)`
+- Border: `1px solid var(--ely-border)`
+- Border radius: `var(--radius)` (= 8px) veya 10px, 12px
+- Hover: `border-color: var(--ely-border-strong)` + subtle gold glow
+- Yeni CSS değişkeni EKLEME — mevcutları kullan
+
+---
+
+## 4. UYGULAMA MİMARİSİ — ANLAMADAN DOKUNMA
+
+### SPA Routing (cart.js)
+```
+URL hash → parseGameHash() → applyHashRouteToState()
+         → renderAll() → tüm UI güncellenir
+```
+
+**Hash formatı:** `#game-slug/category-id`
+- `#arc-raiders` → Arc Raiders, ilk kategori
+- `#arc-raiders/coins` → Arc Raiders + Coins kategorisi
+- `#valorant/rank-boosting` → Valorant + Rank Boosting
+
+**GAME_HASH_SLUGS:** game ID → hash slug mapping
+**selectGame(id):** oyun değiştirir, hash yazar
+**selectCategory(id):** kategori değiştirir, hash'e /category ekler (replaceState)
+
+### State Objesi
+```javascript
+state = {
+  game: "arc",          // aktif oyun ID
+  category: "coins",    // aktif kategori ID
+  serviceId: "...",     // aktif servis ID
+  cart: [],             // sepet ürünleri
+  currency: "USD",      // aktif para birimi
+  // + daha fazlası
+}
+```
+
+### Render Akışı
+```
+renderAll()
+  ├── renderGames()      → Services dropdown menüsü
+  ├── renderHero()       → Hero section içeriği
+  ├── renderHome()       → Ana sayfa game kartları
+  ├── renderCategories() → Kategori şeridi
+  ├── renderServices()   → Servis grid kartları
+  ├── renderDetail()     → Sağ panel (form + fiyat)
+  └── renderCart()       → Sepet drawer
+```
+
+### Oyunlar
+| ID | Hash Slug | Durum |
+|---|---|---|
+| arc | arc-raiders | Aktif — birincil oyun |
+| valorant | valorant | Aktif |
+| lol | league-of-legends | Aktif |
+| tft | tft | Aktif |
+| wow | world-of-warcraft | Aktif |
+| cs2 | cs2 | Aktif |
+| social | social | Aktif |
+
+---
+
+## 5. DOKUNMA KURALLARI
+
+### ❌ ASLA DOKUNMA
+```
+cart.js içindeki fiyat hesaplama fonksiyonları
+  → calculateTotal(), updateTotal(), displayMoney()
+
+cart.js içindeki form builder
+  → buildForm(), wireForm()
+
+Valorant rank sistemi
+  → valorantEurToStoredTotal(), syncValorantPathRail()
+
+Blueprint seçici
+  → renderBlueprintTabs(), bpContent
+
+Tüm prices objesi
+  → prices.raid, prices.coins100k vb.
+
+games array ve services array
+  → oyun/servis verileri
+
+Discord ticket sistemi
+  → buildTicketText(), copyOrder
+
+cart.js'in genel yapısı — fonksiyon sırası, scope, IIFE wrapper
+```
+
+### ✅ GÜVENLİ DOKUNMA ALANLARI
+```
+index.html → yeni section, yeni HTML blok ekleme
+styles.css → yeni class ekleme (mevcut class değiştirme dikkatli)
+order-center.css → sepet UX iyileştirmeleri
+Görsel asset ekleme/değiştirme
+Metin içerikleri (review metinleri, FAQ, about vb.)
+cart.js sonuna yeni bağımsız fonksiyon ekleme (IIFE içinde değil)
+```
+
+---
+
+## 6. CSS YAZIM KURALLARI
+
+```css
+/* YENİ KOMPONENT ŞABLONU */
+.ely-[komponent-adi] {
+  /* Temel layout */
+  display: flex;
+  
+  /* Spacing — px iç, rem dış */
+  padding: 14px 16px;
+  margin-bottom: 1.5rem;
+  
+  /* Görünüm — daima değişken kullan */
+  background: var(--ely-panel);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--ely-border);
+  border-radius: 12px;
+  
+  /* Tipografi */
+  font-family: var(--display);
+  color: var(--ely-text);
+  
+  /* Transition */
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.ely-[komponent-adi]:hover {
+  border-color: var(--ely-border-strong);
+  box-shadow: 0 0 20px rgba(212, 175, 110, .1);
+}
+```
+
+**Prefix kuralı:** Tüm yeni class'lar `ely-` ile başlar.
+Mevcut class'lara (`.btn`, `.cat-btn`, `.service-card` vb.) dokunmadan önce sor.
+
+---
+
+## 7. GERÇEK VERİLER
+
+```
+Tamamlanan sipariş sayısı: 2,000+
+Discord üye sayısı: 100+
+Discord rating: 4.9/5
+Trustpilot URL: https://www.trustpilot.com/review/elysiumboost.com
+Discord URL: https://discord.gg/elysiumgg
+```
+
+Review kartlarında gerçek veriler kullanılır.
+Asla "Lorem ipsum" veya tamamen uydurma içerik ekleme.
+
+---
+
+## 8. TAMAMLANAN İŞLER (dokunma)
+
+- [x] Temel SPA mimarisi ve routing
+- [x] Çoklu oyun sistemi (arc, valorant, lol, tft, wow, cs2)
+- [x] Hash sub-routing: `#game/category`
+- [x] Valorant rank path hesaplayıcı (EUR bazlı)
+- [x] Arc Raiders: blueprint, coin, seed, raid, loadout, boss sistemleri
+- [x] Çoklu döviz (USD, EUR, GBP, TRY)
+- [x] Kategori drag-scroll + auto-scroll
+- [x] 2-kolon sticky order card layout
+- [x] Discord ticket + receipt sistemi
+- [x] Responsive breakpoints (1080px, 720px, 520px)
+
+---
+
+## 9. AÇIK GÖREVLER (Phase 1)
+
+### 9.1 Sosyal Kanıt Sayaçları
+- [ ] Hero section'a animated counter ekle (2000+, 100+, 4.9★)
+- [ ] IntersectionObserver ile tetikle
+- [ ] CSS: `.ely-trust-counters` glass panel
+
+### 9.2 Review Kartları
+- [ ] 3 anonim article → gerçekçi kart
+- [ ] Avatar (initials) + isim + oyun + tarih + yıldız + Verified badge
+- [ ] CSS: `.ely-review-card`, `.ely-review-avatar`
+
+### 9.3 Trustpilot Bağlantısı
+- [ ] `home-review-score` span → yeşil pill link
+- [ ] Trustpilot logosu + dış link ikonu
+
+### 9.4 Footer Yenileme
+- [ ] Brand + istatistikler + trust badge'ler + Discord butonu
+- [ ] `© 2025 Elysium Boost` alt satır
+
+### 9.5 Hero Sosyal Kanıt Bandı
+- [ ] CTA altına küçük sosyal kanıt satırı
+- [ ] Trustpilot link + order sayısı + Discord üyesi
+
+---
+
+## 10. TEST PROTOKOLÜ
+
+Her değişiklikten sonra şunları kontrol et:
+
+```
+[ ] Ana sayfa yükleniyor (konsol hatası yok)
+[ ] Services dropdown açılıyor
+[ ] Oyun seçimi çalışıyor (arc, valorant, lol)
+[ ] Kategori geçişi URL'i güncelliyor (#arc-raiders/coins)
+[ ] Bu URL yeniden yüklendiğinde aynı kategori açılıyor
+[ ] Fiyat hesaplayıcı çalışıyor
+[ ] Sepete ekle çalışıyor
+[ ] Ticket kopyalama çalışıyor
+[ ] Döviz değişimi çalışıyor
+[ ] Mobil görünüm bozulmadı (720px altı)
+```
+
+---
+
+## 11. HATA DURUMUNDA
+
+Bir şey beklenmedik davranıyorsa:
+1. Önce `cart.js`'e bak — büyük ihtimal orada
+2. `renderAll()` çağrıldı mı kontrol et
+3. State güncel mi kontrol et
+4. Console'da `state` yaz, anlık durumu gör
+5. Hash'i elle değiştir, routing çalışıyor mu test et
+
+Eğer fiyatlar yanlış görünüyorsa: `prices` objesine veya
+`calculateTotal()` fonksiyonuna dokunmadan önce kullanıcıya sor.
+
+---
+
+## 12. COMMIT MESAJI FORMATI
+
+```
+feat: sosyal kanıt sayaçları eklendi
+fix: valorant kategori hash routing düzeltildi
+style: review kartları gerçekçi hale getirildi
+refactor: footer yeniden yapılandırıldı
+```
+
+---
+
+*Son güncelleme: Phase 1 başlangıcı*
+*Bu dosyayı her büyük değişiklikten sonra güncelle.*
