@@ -226,3 +226,54 @@
       fetchPresence();
       setInterval(fetchPresence, INTERVAL_MS);
     })();
+
+    (function initMobileNav() {
+      const navHome     = document.getElementById("mobileNavHome");
+      const navServices = document.getElementById("mobileNavServices");
+      const navCart     = document.getElementById("mobileNavCart");
+      const navBadge    = document.getElementById("mobileNavCartBadge");
+      const gameMenuBtn = document.getElementById("gameMenuBtn");
+      const cartOpenBtn = document.getElementById("cartOpen");
+      const brandHome   = document.getElementById("brandHome");
+
+      if (!navHome || !navServices || !navCart) return;
+
+      function syncActiveState() {
+        const hash = location.hash;
+        navHome.classList.toggle("is-active", !hash || hash === "#");
+        navServices.classList.toggle("is-active", Boolean(hash && hash !== "#"));
+      }
+
+      function syncCartBadge() {
+        const count = document.getElementById("cartCount");
+        if (!count || !navBadge) return;
+        const n = parseInt(count.textContent || "0", 10);
+        navBadge.textContent = n > 9 ? "9+" : String(n);
+        navBadge.dataset.count = String(n);
+      }
+
+      navHome.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (brandHome) brandHome.click();
+        syncActiveState();
+      });
+
+      navServices.addEventListener("click", () => {
+        if (gameMenuBtn) gameMenuBtn.click();
+      });
+
+      navCart.addEventListener("click", () => {
+        if (cartOpenBtn) cartOpenBtn.click();
+      });
+
+      window.addEventListener("hashchange", syncActiveState);
+
+      const cartCountEl = document.getElementById("cartCount");
+      if (cartCountEl) {
+        new MutationObserver(syncCartBadge)
+          .observe(cartCountEl, { childList: true, characterData: true, subtree: true });
+      }
+
+      syncActiveState();
+      syncCartBadge();
+    })();
