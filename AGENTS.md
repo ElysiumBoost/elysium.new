@@ -354,22 +354,42 @@ aşağıdaki kuralları eksiksiz uygular. Sormadan bilir.
 
 ```
 /
-├── index.html              ← TEK HTML DOSYASI. Tüm sayfa burada.
+├── index.html                  ← Ana HTML — markup + script yükleme
 ├── css/
-│   ├── styles.css          ← ANA CSS. Değişkenler + tüm komponentler.
-│   ├── order-center.css    ← Sepet drawer UX iyileştirmeleri
-│   └── layout-system.css   ← Grid breakpoint overrides
+│   ├── styles.css              ← ANA CSS. :root değişkenleri + tüm komponentler (~10 000 satır)
+│   ├── order-center.css        ← Sipariş paneli ve drawer UX
+│   └── layout-system.css       ← Grid/breakpoint override'ları (son yüklenir, !important)
 ├── js/
-│   └── cart.js             ← TÜM UYGULAMA MANTIĞI. SPA engine burada.
+│   ├── config.js               ← valorantCategoryContent, valorantTrustBlock, oyun config
+│   ├── products.js             ← GAME_HASH_SLUGS, HASH_TO_GAME_ID, parseGameHash(),
+│   │                              syncGameHash(), arcHighlights{}, games[] kataloğu
+│   ├── state.js                ← state{} objesi (game, category, serviceId, cart, …)
+│   ├── storage.js              ← localStorage persist/restore, hash ile çakışma koruması
+│   ├── validation.js           ← Form doğrulama yardımcıları
+│   ├── cart.js                 ← SPA çekirdeği: render fonksiyonları, fiyat motoru,
+│   │                              Discord ticket, sepet mantığı (~3 400 satır)
+│   ├── ui.js                   ← UI yardımcıları: animasyon, drawer, arama, toast
+│   ├── main.js                 ← Uygulama başlangıcı: event listener'lar, hash routing,
+│   │                              initDiscordCounter(), initMobileNav()
+│   └── order-center-upgrade.js ← Sepet drawer ek UX (compact mod, receipt, vb.)
 ├── assets/
-│   ├── backgrounds/        ← Hero ve game card görselleri (.webp)
-│   ├── thumb-*.webp        ← Servis kategori thumbnails
-│   ├── rank-*.png          ← Valorant rank görselleri
+│   ├── backgrounds/            ← Hero ve game card görselleri (.webp, ≤500 KB)
+│   ├── thumb-*.webp            ← Servis kategori thumbnails (≤150 KB)
+│   ├── rank-*.png              ← Valorant rank görselleri
 │   └── assetselysiumlogo-transparent.webp ← Ana logo
-├── tools/                  ← Yardımcı scriptler (siteye dokunmaz)
-├── AGENTS.md               ← Bu dosya
-└── CNAME                   ← elysiumboost.com
+├── sitemap.xml                 ← 7 URL, lastmod + changefreq, Google Search Console'a gönderildi
+├── robots.txt                  ← User-agent: * Allow: /, sitemap referansı
+├── AGENTS.md                   ← Bu dosya
+├── CNAME                       ← elysiumboost.com
+└── tools/                      ← Yardımcı scriptler (siteye dokunmaz)
 ```
+
+**Script yükleme sırası** (index.html `</body>` öncesi):
+```
+config.js → products.js → state.js → storage.js → validation.js
+→ cart.js → ui.js → main.js → order-center-upgrade.js
+```
+Bu sıra önemlidir — her dosya önceki dosyanın global'larına bağımlıdır.
 
 ---
 
@@ -569,9 +589,10 @@ Asla "Lorem ipsum" veya tamamen uydurma içerik ekleme.
 
 ## 8. TAMAMLANAN İŞLER (dokunma)
 
+### Temel altyapı
 - [x] Temel SPA mimarisi ve routing
 - [x] Çoklu oyun sistemi (arc, valorant, lol, tft, wow, cs2)
-- [x] Hash sub-routing: `#game/category`
+- [x] Hash sub-routing: `#game/category` — `parseGameHash()` → `{gameId,categorySlug}`
 - [x] Valorant rank path hesaplayıcı (EUR bazlı)
 - [x] Arc Raiders: blueprint, coin, seed, raid, loadout, boss sistemleri
 - [x] Çoklu döviz (USD, EUR, GBP, TRY)
@@ -580,31 +601,55 @@ Asla "Lorem ipsum" veya tamamen uydurma içerik ekleme.
 - [x] Discord ticket + receipt sistemi
 - [x] Responsive breakpoints (1080px, 720px, 520px)
 
+### Phase 1 — Hero & sosyal kanıt
+- [x] Hero animated trust counters — `#elyTrustCounters`, `initTrustCounters()` IIFE
+- [x] Gerçek Trustpilot review kartları (6 kart) — `.ely-review-card`
+- [x] Trustpilot pill link — `.ely-trustpilot-link--tp`, yeşil `--tp-green: #00b67a`
+- [x] Footer yenileme — `.site-footer__*`, `id="footerLegalBtn"` korundu
+- [x] Hero sosyal kanıt bandı — `.ely-hero-social-proof`, `heroCtaRow` sonrası
+
+### Phase 2 — Visual polish & SEO
+- [x] Add to Cart altın/bronz gradient — `.btn-purchase`, `.btn-green`, `.add-to-cart-main`
+- [x] Order panel gold border frame — `.order-card` override
+- [x] Köşe yumuşatma — cat-btn 16px, kartlar 14px, tab-btn pill, input 10px
+- [x] Input gold focus glow — `input:focus`, `select:focus`, `textarea:focus`
+- [x] İçerik kartlarında backdrop-filter kaldırıldı (topbar/drawer'da kaldı)
+- [x] Detail panel: teslimat badge, highlights grid, trust strip, Valorant trust card
+- [x] Order panel başlık satırı — `.ely-order-panel-title-row`
+- [x] Add to Cart trust row — `.ely-cart-trust-row`
+- [x] Drawer başlık gold border — `.drawer-head`
+- [x] Mobile bottom navigation — `#elyMobileNav`, `initMobileNav()` IIFE
+- [x] sitemap.xml + robots.txt oluşturuldu
+- [x] Discord live presence counter — `initDiscordCounter()` IIFE
+- [x] Dinamik meta description + OG title/image/canonical — `updateDocumentTitle()` genişletildi
+- [x] JSON-LD Organization structured data — `<head>` içinde
+- [x] Service thumb lazy loading — `loading="lazy" decoding="async"`
+
 ---
 
-## 9. AÇIK GÖREVLER (Phase 1)
+## 9. AÇIK GÖREVLER (Phase 1) — TAMAMLANDI
 
 ### 9.1 Sosyal Kanıt Sayaçları
-- [ ] Hero section'a animated counter ekle (2000+, 100+, 4.9★)
-- [ ] IntersectionObserver ile tetikle
-- [ ] CSS: `.ely-trust-counters` glass panel
+- [x] Hero section'a animated counter ekle (2000+, 100+, 4.9★)
+- [x] IntersectionObserver ile tetikle
+- [x] CSS: `.ely-trust-counters` glass panel
 
 ### 9.2 Review Kartları
-- [ ] 3 anonim article → gerçekçi kart
-- [ ] Avatar (initials) + isim + oyun + tarih + yıldız + Verified badge
-- [ ] CSS: `.ely-review-card`, `.ely-review-avatar`
+- [x] 3 anonim article → gerçekçi kart (6 gerçek Trustpilot review'u)
+- [x] Avatar (initials) + isim + oyun + tarih + yıldız + Verified badge
+- [x] CSS: `.ely-review-card`, `.ely-review-avatar`
 
 ### 9.3 Trustpilot Bağlantısı
-- [ ] `home-review-score` span → yeşil pill link
-- [ ] Trustpilot logosu + dış link ikonu
+- [x] `home-review-score` span → yeşil pill link
+- [x] Trustpilot logosu + dış link ikonu
 
 ### 9.4 Footer Yenileme
-- [ ] Brand + istatistikler + trust badge'ler + Discord butonu
-- [ ] `© 2025 Elysium Boost` alt satır
+- [x] Brand + istatistikler + trust badge'ler + Discord butonu
+- [x] `© 2025 Elysium Boost` alt satır
 
 ### 9.5 Hero Sosyal Kanıt Bandı
-- [ ] CTA altına küçük sosyal kanıt satırı
-- [ ] Trustpilot link + order sayısı + Discord üyesi
+- [x] CTA altına küçük sosyal kanıt satırı
+- [x] Trustpilot link + order sayısı + Discord üyesi
 
 ---
 
@@ -657,21 +702,221 @@ refactor: footer yeniden yapılandırıldı
 
 ---
 
+## 13. YENİ CSS CLASS'LARI
+
+Phase 1 ve Phase 2 ile eklenen tüm `ely-*` class'ları. Bunlara dokunmadan önce bu belgeyi güncelle.
+
+### Trust Counters (Phase 1)
+| Class | Dosya | Açıklama |
+|---|---|---|
+| `.ely-trust-counters` | styles.css | 3'lü counter glass panel — `#elyTrustCounters` wrapper |
+| `.ely-trust-counter` | styles.css | Tek counter item (sayı + etiket) |
+| `.ely-trust-counter__number` | styles.css | Büyük animasyonlu sayı (`data-target`, `data-suffix` attr) |
+| `.ely-trust-counter__label` | styles.css | Küçük açıklama etiketi |
+
+### Review Kartları (Phase 1)
+| Class | Dosya | Açıklama |
+|---|---|---|
+| `.ely-review-card` | styles.css | `<article>` — tek Trustpilot review kartı |
+| `.ely-review-header` | styles.css | Avatar + isim + verified badge satırı |
+| `.ely-review-avatar` | styles.css | Renk arka planlı harf avatar dairesi |
+| `.ely-review-meta` | styles.css | İsim + verified satırı |
+| `.ely-review-verified` | styles.css | ✓ Verified Buyer badge |
+| `.ely-review-stars` | styles.css | ★★★★★ yıldız satırı |
+| `.ely-review-text` | styles.css | Review body metni |
+| `.ely-review-footer` | styles.css | Tarih + platform satırı |
+
+### Trustpilot Link (Phase 1)
+| Class | Dosya | Açıklama |
+|---|---|---|
+| `.ely-trustpilot-link--tp` | styles.css | Yeşil pill link — `--tp-green: #00b67a` rengi |
+
+### Hero Sosyal Kanıt (Phase 1)
+| Class | Dosya | Açıklama |
+|---|---|---|
+| `.ely-hero-social-proof` | styles.css | CTA altındaki sosyal kanıt bandı |
+| `.ely-hero-sp-item` | styles.css | Tek kanıt öğesi (ikon + metin) |
+
+### Footer (Phase 1)
+| Class | Dosya | Açıklama |
+|---|---|---|
+| `.site-footer` | styles.css | Footer wrapper |
+| `.site-footer__inner` | styles.css | İç container (max-width: 1200px) |
+| `.site-footer__top` | styles.css | Logo + nav + stats grid satırı |
+| `.site-footer__brand` | styles.css | Logo + slogan sütunu |
+| `.site-footer__stats` | styles.css | 3'lü istatistik grubu |
+| `.site-footer__stat` | styles.css | Tek istatistik (sayı + etiket) |
+| `.site-footer__bottom` | styles.css | Copyright + link satırı |
+
+### Detail Panel (Phase 2B)
+| Class | Dosya | Açıklama |
+|---|---|---|
+| `.ely-detail-delivery` | styles.css | Teslimat badge wrapper (`#detailDeliveryBadge`) |
+| `.ely-detail-delivery__icon` | styles.css | Saat/ok ikonu |
+| `.ely-detail-delivery__text` | styles.css | Teslimat süresi metni |
+| `.ely-detail-highlights` | styles.css | 2×2 highlight grid wrapper |
+| `.ely-detail-highlight` | styles.css | Tek highlight item (ikon + başlık + metin) |
+| `.ely-detail-highlight__icon` | styles.css | Emoji/SVG ikon |
+| `.ely-detail-highlight__title` | styles.css | Highlight başlık |
+| `.ely-detail-trust` | styles.css | 4-pill trust strip (`buildDetailSpecs()` output) |
+| `.ely-detail-trust__pill` | styles.css | Tek trust pill (ikon + metin) |
+| `.ely-val-trust` | styles.css | Valorant-specific trust card (config.js `valorantTrustBlock`) |
+
+### Order Panel (Phase 2C)
+| Class | Dosya | Açıklama |
+|---|---|---|
+| `.ely-order-panel-title-row` | order-center.css | Başlık satırı + sağ bilgi chips |
+| `.ely-order-panel-title` | order-center.css | "Your Order" başlık span |
+| `.ely-cart-trust-row` | order-center.css | Add to Cart altı güven satırı |
+
+### Mobile Nav (Phase 2D)
+| Class | Dosya | Açıklama |
+|---|---|---|
+| `.ely-mobile-nav` | styles.css | 4-item bottom nav wrapper (`#elyMobileNav`) |
+| `.ely-mobile-nav__item` | styles.css | Tek nav item (buton/link) |
+| `.ely-mobile-nav__item.is-active` | styles.css | Aktif nav item altın rengi |
+| `.ely-mobile-nav__icon` | styles.css | SVG ikon wrapper |
+| `.ely-mobile-nav__label` | styles.css | Nav item etiketi |
+| `.ely-mobile-nav__badge` | styles.css | Sepet item sayısı badge (`#mobileNavCartBadge`) |
+
+---
+
+## 14. YENİ JS FONKSİYONLARI
+
+Phase 1 ve Phase 2 ile eklenen veya genişletilen fonksiyonlar.
+
+### products.js değişiklikleri
+
+**`parseGameHash()`** — Güncellendi
+```javascript
+// Eskisi: string|null döndürüyordu
+// Yenisi: {gameId, categorySlug}|null döndürür
+parseGameHash() → { gameId: "arc", categorySlug: "coins" } | null
+```
+`#arc-raiders/coins` → `{ gameId: "arc", categorySlug: "coins" }`. `storage.js` ve `cart.js`'deki tüm çağrılar güncellendi.
+
+**`syncGameHash(gameId)`** — Güncellendi
+```javascript
+// Mevcut /category segmentini korur — oyun değişmiyorsa override etmez
+syncGameHash("arc") // #arc-raiders/coins → #arc-raiders/coins (kategori korunur)
+```
+
+**`arcHighlights`** — Yeni const (products.js, `arcIntro()` sonrası)
+```javascript
+const arcHighlights = {
+  blueprints: ["Fast delivery", "All blueprints", "Safe method", "Live support"],
+  coins: [...],
+  // 14 kategori entry'si
+};
+```
+`renderDetail()` içinde `arcHighlights[service.category]` ile çekilir.
+
+### cart.js değişiklikleri
+
+**`updateDocumentTitle(game)`** — Genişletildi
+- `metaDescriptions{}` objesi — her oyun için özel meta description
+- `ogImages{}` objesi — her oyun için OG image URL
+- Per-game OG title, description, image meta tag güncelleme
+- `#canonicalUrl` link element güncelleme
+
+**`buildDetailSpecs(service)`** — Güncellendi
+- Eski: 3 satırlık basit spec listesi
+- Yeni: `.ely-detail-trust` 4-pill format (shield, clock, lock, star ikonları)
+- `renderDetail()` içinde çağrılır: `ds.innerHTML = buildDetailSpecs(service); ds.hidden = false;`
+
+**`renderDetail(service)`** — Genişletildi
+- `#detailDeliveryBadge` elementi doldurma
+- `arcHighlights` grid HTML oluşturma
+- `buildDetailSpecs()` çağrısı eklendi
+- Valorant trust card entegrasyonu (`config.js valorantTrustBlock`)
+
+**`selectCategory(id)`** — Güncellendi
+```javascript
+// Category değiştiğinde URL'i günceller — browser geçmişine eklemez
+history.replaceState(null, "", "#" + gameSlug + "/" + id);
+```
+
+**`restoreGameFromHash()`** — Güncellendi
+```javascript
+const parsed = parseGameHash(); // artık {gameId, categorySlug} döner
+if (parsed) { state.game = parsed.gameId; /* category match */ }
+```
+
+**`applyHashRouteToState()`** — Güncellendi
+```javascript
+const parsed = parseGameHash();
+// categorySlug → category ID eşleştirmesi slug.toLowerCase() ile
+```
+
+**`categoryArtwork(categoryId, label)`** — Güncellendi
+```javascript
+// loading="eager" → loading="lazy" decoding="async"
+```
+
+### main.js — Yeni IIFE'ler
+
+**`initDiscordCounter()`** IIFE (main.js, `renderAll()` sonrası)
+```javascript
+// Discord Guild: 1499767937974669363
+// Widget URL: https://discord.com/api/guilds/1499767937974669363/widget.json
+// presence_count değerini her 30 saniyede çeker
+// "Discord Members" etiketli .ely-trust-counter__number elementini günceller
+// Fallback: "100+"
+```
+
+**`initMobileNav()`** IIFE (main.js, `initDiscordCounter()` sonrası)
+```javascript
+// #mobileNavHome → #brandHome click tetikler
+// #mobileNavServices → #gameMenuBtn click tetikler
+// #mobileNavCart → #cartOpen click tetikler
+// MutationObserver: #cartCount → #mobileNavCartBadge senkronizasyonu
+// hashchange → navHome/navServices is-active sınıfı senkronizasyonu
+```
+
+---
+
 ## 10. Açık Görevler
 
 ### PHASE 1 — Hero & sosyal kanıt (Tamamlandı)
 
 - [x] GÖREV 1 — Hero animated trust counters (`#elyTrustCounters`, IntersectionObserver + RAF cubic ease)
-- [x] GÖREV 2 — Gerçek review kartları (Marcus K., Raf T., Sophie L.) `.ely-review-card`
-- [x] GÖREV 3 — Trustpilot/Discord rating pill link (`.ely-trustpilot-link`, `home-review-score` yerine)
+- [x] GÖREV 2 — Gerçek review kartları (Tianto, DGK, Harvey H., BOSS, C.A., Tianto #2) `.ely-review-card`
+- [x] GÖREV 3 — Trustpilot/Discord rating pill link (`.ely-trustpilot-link--tp`, `home-review-score` yerine)
 - [x] GÖREV 4 — Footer yenileme (stats + trust badges + brand, `id="footerLegalBtn"` korundu)
 - [x] GÖREV 5 — Hero social proof band (`.ely-hero-social-proof`, `heroCtaRow` sonrası)
 - [x] GÖREV 6 — Hash sub-routing `#game/category` (`replaceState`, `parseGameHash` → `{gameId,categorySlug}`)
 
-### PHASE 2 — Sıradaki görevler
+### PHASE 2 — Visual polish & SEO (Tamamlandı)
 
-- [ ] SEO: history.pushState ile /arc-raiders gerçek URL
+- [x] GÖREV A-1 — Add to Cart altın/bronz gradient (`.btn-purchase`, `.btn-green`, `.add-to-cart-main`)
+- [x] GÖREV A-2 — Order panel gold border frame (`.order-card` override)
+- [x] GÖREV A-3 — Köşe yumuşatma (cat-btn 16px, kartlar 14px, tab-btn pill, input 10px)
+- [x] GÖREV A-4 — Input gold focus glow (`input:focus`, `select:focus`, `textarea:focus`)
+- [x] GÖREV A-5 — İçerik kartlarında backdrop-filter kaldırıldı
+- [x] GÖREV B-1 — Detail panel teslimat badge (`#detailDeliveryBadge`)
+- [x] GÖREV B-2 — Highlights grid (`.ely-detail-highlights`, `arcHighlights{}` products.js)
+- [x] GÖREV B-3 — Trust strip 4-pill format (`.ely-detail-trust` in `buildDetailSpecs()`)
+- [x] GÖREV B-4 — Valorant trust card (config.js `valorantTrustBlock`)
+- [x] GÖREV C-1 — Order panel başlık satırı (`.ely-order-panel-title-row`)
+- [x] GÖREV C-2 — Fiyat görüntüleme güncellemesi (`.live-total-text`, `.summary-total-label`)
+- [x] GÖREV C-3 — CTA boyutu ve ağırlığı (`.add-to-cart-main`)
+- [x] GÖREV C-4 — Panel yüksekliği (order-center.css min-height 480px)
+- [x] GÖREV C-5 — Trust row (`.ely-cart-trust-row`)
+- [x] GÖREV C-6 — Drawer başlık gold border (`.drawer-head`)
+- [x] GÖREV D-1 — Mobile bottom nav HTML (`#elyMobileNav`, 4 item)
+- [x] GÖREV D-2 — Mobile bottom nav CSS (grid layout, safe-area-inset)
+- [x] GÖREV D-3 — Mobile bottom nav JS (`initMobileNav()`, cart badge MutationObserver)
+- [x] GÖREV E-1 — Dinamik meta description (`updateDocumentTitle()` genişletildi)
+- [x] GÖREV E-2 — Canonical URL (`<link rel="canonical" id="canonicalUrl">`)
+- [x] GÖREV E-3 — OG title/image/Twitter image (per-game OG images)
+- [x] GÖREV E-4 — sitemap.xml + robots.txt oluşturuldu
+- [x] GÖREV E-5 — Service thumb lazy loading (`loading="lazy" decoding="async"`)
+- [x] GÖREV E-6 — JSON-LD Organization structured data (`<head>` içinde)
+
+### PHASE 3 — Sıradaki açık görevler
+
 - [ ] Trustpilot gerçek embed widget (JS snippet)
 - [ ] homeCardImage görsel kalitesi kontrolü
 - [ ] Booster profil kartları
-- [ ] Mobil bottom navigation
+- [ ] FAQ accordian bölümü
+- [ ] Google Analytics / Search Console doğrulama meta tag
