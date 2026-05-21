@@ -10135,3 +10135,37 @@ textarea:focus {
 .ely-mobile-nav__badge[data-count="0"] {
   display: none;
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   DÜZELTME 1: Footer "on Trustpilot" link styling
+   ════════════════════════════════════════════════════════════════════════ */
+a.site-footer__stat--tp {
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity .2s ease;
+}
+a.site-footer__stat--tp:hover {
+  opacity: .8;
+}
+a.site-footer__stat--tp .site-footer__stat-num {
+  color: var(--tp-green, #00b67a);
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   DÜZELTME 2: Footer/içerik arası boşluk azalt
+   ════════════════════════════════════════════════════════════════════════ */
+.main {
+  padding-bottom: 24px !important;
+}
+.site-footer {
+  margin-top: 40px !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   DÜZELTME 3: Valorant configurator sol genişlik desktop'ta
+   ════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 1081px) {
+  body[data-ely-game="valorant"] #detailSection.detail--valorant-layout .valorant-cfg-mount {
+    min-width: 420px !important;
+  }
+}
