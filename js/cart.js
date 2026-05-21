@@ -996,6 +996,15 @@
         const intro = ui(service.intro || "").trim();
         pkg = intro.length > 12 ? intro.slice(0, 200) + (intro.length > 200 ? "…" : "") : ui("Full delivery as configured in the order panel — tailored options you select below.");
       }
+      const trustBadges = [
+        ui("Manual delivery"),
+        ui("No cheats / no exploits"),
+        ui("Extract-guaranteed"),
+        ui("24/7 Discord support"),
+      ];
+      const trustStrip = `<div class="detail-trust-strip" aria-label="${ui("Service guarantees")}">${
+        trustBadges.map(b => `<span>${escapeHtml(b)}</span>`).join("")
+      }</div>`;
       return `
         <h4 class="detail-specs__k">${ui("Package includes")}</h4>
         <p>${escapeHtml(pkg)}</p>
@@ -1003,6 +1012,9 @@
         <p>${escapeHtml(ui("Manual coordination through Discord after you paste your ticket — booster assigned by support."))}</p>
         <h4 class="detail-specs__k">${ui("Safety & guarantee")}</h4>
         <p>${escapeHtml(ui("Verified boosters, transparent ticket text, and completion terms confirmed in Discord before play."))}</p>
+        <h4 class="detail-specs__k">${ui("Support")}</h4>
+        <p>${escapeHtml(ui("Open a Discord ticket after checkout — a support agent will confirm your order and assign a booster within minutes."))}</p>
+        ${trustStrip}
       `;
     }
 

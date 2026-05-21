@@ -1,8 +1,14 @@
 /* ============================================================
-   ELYSIUM BOOST — CSS VARIABLES
-   Tek kaynak — tüm :root tanımları burada.
-   Eskiden styles.css'te iki ayrı :root bloğu vardı,
-   bu dosya ikisini birleştirip çakışmayı çözüyor.
+   ELYSIUM BOOST — CSS VARIABLES (REFERENCE FILE — NOT LOADED)
+   ============================================================
+   WARNING: This file is NOT linked in index.html and is NOT
+   active in production. Do not add a <link> tag for this file
+   without first doing a full variable audit against styles.css.
+
+   Known mismatch to resolve before activating:
+     --radius here was 10px; corrected to 8px to match styles.css.
+
+   Active :root is defined inside css/styles.css (line 1).
    ============================================================ */
 
 :root {
@@ -67,7 +73,7 @@
 
   /* ── Gölge / şekil ── */
   --shadow:       0 24px 80px var(--ely-shadow);
-  --radius:       10px;
+  --radius:       8px;
 
   /* ── Tipografi ── */
   --font:    Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
