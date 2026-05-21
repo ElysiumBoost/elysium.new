@@ -286,26 +286,67 @@
 
     function updateDocumentTitle() {
       const titleByGame = {
-        arc: "Arc Raiders Boosting & Items | ELYSIUM BOOST",
-        valorant: "Valorant Boosting Services | ELYSIUM BOOST",
+        arc: "Arc Raiders Boosting & Marketplace | ELYSIUM BOOST",
+        valorant: "Valorant Rank Boosting Services | ELYSIUM BOOST",
         lol: "League of Legends Boosting | ELYSIUM BOOST",
-        tft: "TFT Boosting | ELYSIUM BOOST"
+        tft: "TFT Boosting Services | ELYSIUM BOOST",
+        wow: "World of Warcraft Boosting | ELYSIUM BOOST",
+        cs2: "Counter-Strike 2 Boosting | ELYSIUM BOOST",
+        social: "ELYSIUM BOOST | Premium Game Services"
       };
-      const descriptionByGame = {
-        arc: "Premium Arc Raiders boosting, item delivery, weapons, blueprints, raids, and Discord-confirmed orders.",
-        valorant: "Premium Valorant boosting services for ranks, placements, wins, battle pass, coaching, and Discord-confirmed orders.",
-        lol: "Premium League of Legends boosting services with clear Discord ticket confirmation and support.",
-        tft: "Premium Teamfight Tactics boosting services with clean order configuration and Discord support."
+      const metaDescriptions = {
+        arc: "Buy Arc Raiders blueprints, weapons, coins, raids and more. Manual delivery, verified boosters, Discord-confirmed orders. Fast and safe.",
+        valorant: "Valorant rank boosting, placement matches, ranked wins and coaching. Manual service, no cheats, live pricing. Discord-confirmed delivery.",
+        lol: "League of Legends boosting services. Net wins, duo queue and coaching with verified boosters and Discord ticket confirmation.",
+        tft: "Teamfight Tactics boosting. Rank up, placement matches and coaching — manual service with clean Discord order flow.",
+        wow: "World of Warcraft boosting services. Mythic+, raids, arena and gear boost. Manual delivery confirmed through Discord.",
+        cs2: "Counter-Strike 2 boosting. Premier and FACEIT rank services — manual, no cheats, Discord ticket flow.",
+        social: "Social and companion gaming services. Custom requests handled manually through Discord.",
+        default: "ELYSIUM BOOST — premium manual game boosting services. Verified boosters, no cheats, Discord-confirmed orders and fast support."
+      };
+      const ogImages = {
+        arc: "https://elysiumboost.com/assets/backgrounds/arc-raiders-home-card.webp",
+        valorant: "https://elysiumboost.com/assets/backgrounds/val33.webp",
+        lol: "https://elysiumboost.com/assets/backgrounds/lol33.webp",
+        tft: "https://elysiumboost.com/assets/backgrounds/tft-home-card.webp",
+        wow: "https://elysiumboost.com/assets/backgrounds/wow22.webp",
+        cs2: "https://elysiumboost.com/assets/backgrounds/cs2-bg.webp",
+        default: "https://elysiumboost.com/assets/elysium-preview.webp"
       };
       const game = currentGame();
+      const gameId = game?.id || "default";
+
+      // Title
       document.title = game
-        ? titleByGame[game.id] || `${game.label} Boosting | ELYSIUM BOOST`
+        ? titleByGame[gameId] || `${game.label} Boosting | ELYSIUM BOOST`
         : "ELYSIUM BOOST | Premium Game Services";
-      const metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute("content", game
-          ? descriptionByGame[game.id] || `Premium ${game.label} boosting services with clear Discord ticket confirmation and support.`
-          : "ELYSIUM BOOST - premium manual game services, verified boosters, Discord ticket orders, and fast support.");
+
+      // Meta description
+      const desc = metaDescriptions[gameId] || metaDescriptions.default;
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute("content", desc);
+
+      // OG title
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute("content", titleByGame[gameId] || "ELYSIUM BOOST | Premium Game Services");
+
+      // OG + Twitter description
+      const ogDesc = document.querySelector('meta[property="og:description"]');
+      if (ogDesc) ogDesc.setAttribute("content", desc);
+
+      // OG + Twitter image (E-3)
+      const imgUrl = ogImages[gameId] || ogImages.default;
+      const ogImage = document.querySelector('meta[property="og:image"]');
+      const twImage = document.querySelector('meta[name="twitter:image"]');
+      if (ogImage) ogImage.setAttribute("content", imgUrl);
+      if (twImage) twImage.setAttribute("content", imgUrl);
+
+      // Canonical URL (E-2)
+      const canonical = document.getElementById("canonicalUrl");
+      if (canonical) {
+        const slug = game ? (GAME_HASH_SLUGS[game.id] || "") : "";
+        canonical.setAttribute("href",
+          slug ? "https://elysiumboost.com/#" + slug : "https://elysiumboost.com/");
       }
     }
 
@@ -605,7 +646,7 @@
       const src = override || valThumb || serviceImages[id] || serviceImages.custom;
       const isVal = game && game.id === "valorant";
       const errFn = isVal ? ` onerror="elyValorantThumbFallback(this)"` : ` onerror="elyImagePlaceholder(this)"`;
-      return `<div class="service-thumb"><img src="${escapeHtml(src)}" alt="${escapeHtml(label)}" loading="eager"${errFn}></div>`;
+      return `<div class="service-thumb"><img src="${escapeHtml(src)}" alt="${escapeHtml(label)}" loading="lazy" decoding="async"${errFn}></div>`;
     }
     function selectCategory(categoryId) {
       pauseCategoryAuto(3500);
