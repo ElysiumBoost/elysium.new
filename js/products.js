@@ -54,6 +54,8 @@
       boss:       ["Queen, Matriarch, Harvester","Puzzle completion available","Quantity selectable","Booster-confirmed scope"],
       private:    ["Custom request review","Any non-standard order","Manual booster assignment","Discord coordination"]
     };
+
+    function valorantGameService(id, categoryId, cardTitle, icon, form, fromEur, extra) {
       const c = valorantCategoryContent[categoryId];
       const base = gameService(id, categoryId, c.title, cardTitle, icon, valorantEurToStoredTotal(fromEur), "", c.short, c.intro, form);
       return Object.assign(base, { noDiscount: true, valorantFromEur: fromEur }, extra || {});
