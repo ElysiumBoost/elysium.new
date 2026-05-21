@@ -7402,6 +7402,27 @@
       #siteSearchBtn { width: auto; flex: 0 0 auto; }
       .currency { max-width: 100px; flex: 0 0 auto; height: 42px; min-height: 42px; }
       .cart-button { flex: 0 0 auto; margin-left: auto; }
+      .actions:not(.search-open) .site-search {
+        width: 0;
+        min-width: 0;
+        flex: 0 0 0;
+        padding-inline: 0;
+        border-width: 0;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .actions.search-open {
+        flex-wrap: nowrap;
+      }
+      .actions.search-open .site-search {
+        width: min(42vw, 170px);
+        flex: 1 1 130px;
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .actions .search-results {
+        right: 0;
+      }
       .hero { min-height: 320px; padding-top: 38px; }
       .hero.is-home { min-height: 440px; padding: 52px 0 48px; }
       .popular-grid, .service-grid, .field-grid, .home-grid, .info-grid { grid-template-columns: 1fr; }
@@ -7751,6 +7772,16 @@
       opacity: .48;
       filter: grayscale(0.2);
       box-shadow: none;
+    }
+
+    .add-to-cart-helper {
+      order: 6;
+      margin: 2px 0 0;
+      color: rgba(168, 158, 140, .86);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.35;
+      text-align: center;
     }
 
     .order-summary-totals small#cartTotalLabel {

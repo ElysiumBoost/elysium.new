@@ -274,12 +274,27 @@
 
     function updateTotal() {
       const wrap = $("orderSummaryTotal");
+      const syncAddToCartHelper = show => {
+        const button = $("addToCart");
+        if (!button) return;
+        let helper = $("addToCartHelper");
+        if (!helper) {
+          helper = document.createElement("p");
+          helper.id = "addToCartHelper";
+          helper.className = "add-to-cart-helper";
+          helper.textContent = ui("Configure your service above to continue.");
+          button.insertAdjacentElement("afterend", helper);
+        }
+        helper.textContent = ui("Configure your service above to continue.");
+        helper.hidden = !show;
+      };
       const svc = currentService();
       if (!svc) {
         if (wrap) wrap.classList.add("summary-total--idle");
         $("liveTotal").textContent = ui("Select a service to build your order.");
         $("usdHint").textContent = "";
         $("addToCart").disabled = true;
+        syncAddToCartHelper(true);
         const br = $("arcPriceBreakdown");
         if (br) {
           br.hidden = true;
@@ -357,6 +372,7 @@
         }
       }
       $("addToCart").disabled = !result.valid;
+      syncAddToCartHelper(!result.valid);
       $("addToCart").textContent = ui(result.contactOnly || (vForm && result.custom) ? "Contact Us" : "Add to Cart");
       const dl = $("valorantSummaryDl");
       const noteEl = $("valorantSummaryNote");
