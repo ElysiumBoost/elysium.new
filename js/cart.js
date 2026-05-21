@@ -582,23 +582,27 @@
 
     function renderCategories() {
       const game = currentGame();
+      const scroller = $("categoryScroll");
       $("categoryBar").classList.toggle("hidden", game.categories.length === 0);
       $("categoryBar").classList.toggle("circle-mode", game.id === "circle");
       $("categoryBar").classList.toggle("neon-game-cats", game.id === "wow");
       $("categoryBar").classList.toggle("tft-cats", game.id === "tft");
+      if (scroller) scroller.setAttribute("role", "tablist");
       if (game.id === "wow") {
         const catSvg = wowCategorySvg;
         $("categoryScroll").innerHTML = game.categories.map(cat => {
           const svg = catSvg(cat.icon);
           const rib = cat.badge ? `<span class="cat-ribbon ${cat.badgeTone || cat.badgeType || "hot"} cat-ribbon--val">${escapeHtml(cat.badge)}</span>` : "";
           const featured = cat.featured ? " cat-btn--featured" : "";
-          return `<button class="cat-btn cat-btn--val${featured} ${cat.id === state.category ? "active" : ""}" type="button" data-cat="${cat.id}">
+          const active = cat.id === state.category;
+          return `<button class="cat-btn cat-btn--val${featured} ${active ? "active" : ""}" type="button" role="tab" aria-selected="${active ? "true" : "false"}" tabindex="${active ? "0" : "-1"}" data-cat="${cat.id}">
             <span class="cat-val-ring">${rib}<span class="cat-val-svg-wrap">${svg}</span></span>
             <span class="cat-label">${ui(cat.label)}</span>
           </button>`;
         }).join("");
       } else {
         $("categoryScroll").innerHTML = game.categories.map(cat => {
+          const active = cat.id === state.category;
           const thumbOpt = cat.thumb || cat.image || cat.bg;
           const micro =
             game.id === "arc"
@@ -607,7 +611,7 @@
                 ? `<span class="cat-micro">${escapeHtml(ui(cat.microBadge))}</span>`
                 : "";
           return `
-        <button class="cat-btn ${cat.id === state.category ? "active" : ""}" type="button" data-cat="${cat.id}" ${cat.bg ? `style="--cat-bg:url('${escapeHtml(resolveSiteUrl(cat.bg))}')"` : ""}>
+        <button class="cat-btn ${active ? "active" : ""}" type="button" role="tab" aria-selected="${active ? "true" : "false"}" tabindex="${active ? "0" : "-1"}" data-cat="${cat.id}" ${cat.bg ? `style="--cat-bg:url('${escapeHtml(resolveSiteUrl(cat.bg))}')"` : ""}>
           ${cat.badge ? `<span class="cat-ribbon ${cat.badgeTone || cat.badgeType || "hot"}">${escapeHtml(cat.badge)}</span>` : ""}
           ${categoryArtwork(cat.id, ui(cat.label), thumbOpt)}
           <span class="cat-label">${ui(cat.label)}</span>
