@@ -10833,12 +10833,11 @@ label,
    ════════════════════════════════════════════════════════════════════════ */
 
 .order-card {
-  background: linear-gradient(
-    168deg,
-    #1a1510 0%,
-    #120e0b 45%,
-    #0d0b09 100%
-  ) !important;
+  background-image: url('../assets/orderpanelbg.webp') !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-color: #0d0b09 !important;
   border: 1px solid #e8a23a !important;
   border-radius: 16px !important;
   box-shadow:
@@ -10848,6 +10847,22 @@ label,
     0 32px 80px rgba(0, 0, 0, 0.72) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+}
+
+.valorant-cfg-mount {
+  background-image: url('../assets/orderpanelbg.webp') !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-color: #0d0b09 !important;
+}
+
+.summary-total {
+  background-image: url('../assets/orderpanelbg.webp') !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-color: #0d0b09 !important;
 }
 
 /* ════════════════════════════════════════════════════════════════════════
