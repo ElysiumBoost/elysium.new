@@ -1007,28 +1007,9 @@
     }
 
     function buildDetailSpecs(service) {
-      let pkg = "";
-      const vg = currentGame()?.id === "valorant";
-      const vf = service.form && String(service.form).startsWith("valorant-");
-      if (vg && vf) {
-        const cat = typeof valorantCategoryContent !== "undefined" ? valorantCategoryContent[service.category] : null;
-        if (cat && cat.highlights && cat.highlights.length) {
-          pkg = cat.highlights.slice(0, 4).map(h => ui(h)).join(" · ");
-        }
-      }
-      if (!pkg) {
-        const intro = ui(service.intro || "").trim();
-        pkg = intro.length > 12 ? intro.slice(0, 200) + (intro.length > 200 ? "…" : "") : ui("Full delivery as configured in the order panel — tailored options you select below.");
-      }
-      const trustBadges = [
-        ui("Manual delivery"),
-        ui("No cheats / no exploits"),
-        ui("Extract-guaranteed"),
-        ui("24/7 Discord support"),
-      ];
-      const trustStrip = `<div class="detail-trust-strip" aria-label="${ui("Service guarantees")}">${
-        trustBadges.map(b => `<span>${escapeHtml(b)}</span>`).join("")
-      }</div>`;
+      const intro = ui(service.intro || "").trim();
+      const pkg = intro.length > 12 ? intro.slice(0, 200) + (intro.length > 200 ? "…" : "") : ui("Full delivery as configured in the order panel — tailored options you select below.");
+      const trustStrip = `<div class="ely-detail-trust" aria-label="${ui("Service guarantees")}"><span>✓ Manual only</span><span>✓ No cheats</span><span>✓ Discord confirmed</span><span>✓ Verified boosters</span></div>`;
       return `
         <h4 class="detail-specs__k">${ui("Package includes")}</h4>
         <p>${escapeHtml(pkg)}</p>
@@ -1145,12 +1126,61 @@
       }
       $("detailIcon").innerHTML = categoryArtwork(service.category || "custom", service.cardTitle);
       $("detailTitle").textContent = ui(service.title);
+
+      // B-1: Teslimat süresi badge
+      const deliveryBadgeEl = $("detailDeliveryBadge");
+      if (deliveryBadgeEl) {
+        if (service.start && service.start.trim()) {
+          deliveryBadgeEl.innerHTML = `<span class="ely-delivery-badge__icon" aria-hidden="true">⚡</span><span class="ely-delivery-badge__text">${escapeHtml(service.start)}</span>`;
+          deliveryBadgeEl.hidden = false;
+        } else {
+          deliveryBadgeEl.innerHTML = "";
+          deliveryBadgeEl.hidden = true;
+        }
+      }
+
       $("detailIntro").textContent = "";
       $("detailDeal").innerHTML = "";
       const hl = $("detailHighlights");
       const vtr = $("detailValorantTrust");
-      if (hl) { hl.hidden = true; hl.innerHTML = ""; }
-      if (vtr) { vtr.hidden = true; vtr.innerHTML = ""; }
+
+      // B-2: Highlights grid
+      if (hl) {
+        const isArc = currentGame()?.id === "arc";
+        const isVal = currentGame()?.id === "valorant";
+        let highlights = [];
+        if (isArc && typeof arcHighlights !== "undefined" && arcHighlights[service.category]) {
+          highlights = arcHighlights[service.category];
+        } else if (isVal) {
+          const cat = typeof valorantCategoryContent !== "undefined" ? valorantCategoryContent[service.category] : null;
+          if (cat && cat.highlights && cat.highlights.length) highlights = cat.highlights;
+        }
+        if (highlights.length) {
+          hl.innerHTML = `<div class="ely-highlights-grid">${highlights.slice(0, 4).map(h => `<div class="ely-highlight-item"><span class="ely-highlight-check" aria-hidden="true">✓</span><span>${escapeHtml(ui(h))}</span></div>`).join("")}</div>`;
+          hl.hidden = false;
+        } else {
+          hl.innerHTML = "";
+          hl.hidden = true;
+        }
+      }
+
+      // B-3 & B-4: specs + trust strip + valorant trust card
+      if (ds) {
+        ds.innerHTML = buildDetailSpecs(service);
+        ds.hidden = false;
+      }
+      if (vtr) {
+        const isVal = currentGame()?.id === "valorant";
+        const vf = service.form && String(service.form).startsWith("valorant-");
+        if (isVal && vf && typeof valorantTrustBlock !== "undefined") {
+          vtr.innerHTML = `<div class="ely-val-trust-card"><h4 class="ely-val-trust-card__title">${escapeHtml(valorantTrustBlock.title)}</h4><p class="ely-val-trust-card__intro">${escapeHtml(valorantTrustBlock.intro)}</p><div class="ely-val-trust-card__points">${valorantTrustBlock.points.map(p => `<div class="ely-val-trust-point"><span aria-hidden="true">✓</span><span>${escapeHtml(p)}</span></div>`).join("")}</div></div>`;
+          vtr.hidden = false;
+        } else {
+          vtr.innerHTML = "";
+          vtr.hidden = true;
+        }
+      }
+
       $("detailSteps").innerHTML = "";
       $("orderForm").innerHTML = buildForm(service.form);
       syncValorantOrderFormMount(service);

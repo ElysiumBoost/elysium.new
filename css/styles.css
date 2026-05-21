@@ -9808,3 +9808,140 @@ textarea:focus {
     rgba(18, 15, 20, 0.88),
     rgba(10, 8, 8, 0.96)) !important;
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   PHASE 2 — GÖREV B: Detail panel enhancements
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* B-1: Teslimat süresi badge */
+.ely-delivery-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 6px 0 10px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 175, 110, 0.38);
+  background: rgba(212, 175, 110, 0.1);
+  font-family: var(--display, 'Rajdhani', sans-serif);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ely-gold, #d4af6e);
+}
+
+.ely-delivery-badge__icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* B-2: Highlights grid */
+.ely-highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 12px 0 16px;
+}
+
+@media (max-width: 720px) {
+  .ely-highlights-grid { grid-template-columns: 1fr; }
+}
+
+.ely-highlight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(212, 175, 110, 0.2);
+  background: rgba(212, 175, 110, 0.05);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ely-text, #f3ead9);
+  line-height: 1.4;
+}
+
+.ely-highlight-check {
+  flex-shrink: 0;
+  color: var(--ely-gold, #d4af6e);
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+
+/* B-3: Detail trust şeridi */
+.ely-detail-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(212, 175, 110, 0.18);
+}
+
+.ely-detail-trust span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ely-muted, #a89e8c);
+  border: 1px solid rgba(212, 175, 110, 0.2);
+  border-radius: 999px;
+  padding: 3px 10px;
+  background: rgba(212, 175, 110, 0.05);
+}
+
+/* B-4: Valorant trust card */
+.ely-val-trust-card {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(212, 175, 110, 0.28);
+  background: linear-gradient(165deg,
+    rgba(18, 15, 20, 0.82),
+    rgba(10, 8, 8, 0.94));
+}
+
+.ely-val-trust-card__title {
+  margin: 0 0 8px;
+  font-family: var(--display, 'Rajdhani', sans-serif);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ely-gold, #d4af6e);
+}
+
+.ely-val-trust-card__intro {
+  margin: 0 0 12px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ely-muted, #a89e8c);
+}
+
+.ely-val-trust-card__points {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+@media (max-width: 720px) {
+  .ely-val-trust-card__points { grid-template-columns: 1fr; }
+}
+
+.ely-val-trust-point {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ely-text, #f3ead9);
+  line-height: 1.4;
+}
+
+.ely-val-trust-point span:first-child {
+  color: var(--ely-gold, #d4af6e);
+  font-weight: 800;
+  flex-shrink: 0;
+}

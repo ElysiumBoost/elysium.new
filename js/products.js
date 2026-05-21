@@ -38,7 +38,22 @@
       return copy[id] || "Customize this service and copy the order into Discord.";
     }
 
-    function valorantGameService(id, categoryId, cardTitle, icon, form, fromEur, extra = null) {
+    const arcHighlights = {
+      blueprints: ["Manual delivery via Discord","All blueprint groups available","Search by name to find items fast","Verified booster handoff"],
+      guns:       ["Tiered weapon pricing","Blue & Legendary mod options","20x bundle discount available","In-raid delivery confirmed"],
+      loadout:    ["Full loadout customization","10x & 20x special bundles","Weapons, shields, quick-use items","Clean Discord ticket breakdown"],
+      coins:      ["100k to 12M range","Live price updates","Bulk discount tiers","Fast Discord confirmation"],
+      seeds:      ["100 to 2,000 seeds","Bulk deal checkpoints","Clean ticket summary","Manual delivery"],
+      depositary: ["20 to 280 inventory slots","Secure wipe protection","Item list in Discord ticket","Booster-confirmed handoff"],
+      trials:     ["Weekly All 3 Star Trials","Rank-up service available","Manual delivery","1-3 hour completion"],
+      raid:       ["Duo or Trio team options","Event Mode available","Failed raid = free weapon gift","15-30 min per raid"],
+      pvp:        ["PvP & PvE coaching","Duo or Trio sessions","Up to 6 hours per ticket","Discord schedule confirmation"],
+      leveling:   ["Steam or Xbox access required","VPN location available","Current to target level","Manual piloted service"],
+      workshop:   ["Workbench level 1 to 3","Scrappy level 1 to 5","Bundle pricing available","30-60 min completion"],
+      expedition: ["Specific stage selection","Each stage listed in ticket","Manual completion","30-60 min ETA"],
+      boss:       ["Queen, Matriarch, Harvester","Puzzle completion available","Quantity selectable","Booster-confirmed scope"],
+      private:    ["Custom request review","Any non-standard order","Manual booster assignment","Discord coordination"]
+    };
       const c = valorantCategoryContent[categoryId];
       const base = gameService(id, categoryId, c.title, cardTitle, icon, valorantEurToStoredTotal(fromEur), "", c.short, c.intro, form);
       return Object.assign(base, { noDiscount: true, valorantFromEur: fromEur }, extra || {});
