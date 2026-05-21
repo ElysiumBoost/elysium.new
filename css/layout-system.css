@@ -135,6 +135,34 @@ body[data-ely-game="valorant"] #detailSection.detail--valorant-layout {
   }
 }
 
+/* ══════════════════════════════════════
+   ORDER PANEL — UNIFIED CONTAINER
+   ══════════════════════════════════════ */
+
+#detailSection {
+  border: 1px solid rgba(212, 175, 110, 0.5) !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  gap: 0 !important;
+  margin-top: 8px !important;
+  isolation: isolate !important;
+}
+
+/* ── Arc Raiders background ── */
+body[data-ely-game="arc"] #detailSection {
+  background-image: url("../assets/backgrounds/arc-raidersmain.webp") !important;
+  background-size: cover !important;
+  background-position: center center !important;
+}
+
+/* ── Valorant background ── */
+body[data-ely-game="valorant"] #detailSection {
+  background-image: url("../assets/backgrounds/valorant-bg.webp") !important;
+  background-size: cover !important;
+  background-position: center center !important;
+}
+
+/* ── Valorant category bar centering ── */
 body[data-ely-game="valorant"] .category-shell {
   grid-template-columns: 0 minmax(0, 1fr) 0 !important;
 }
@@ -147,41 +175,32 @@ body[data-ely-game="valorant"] #catNext {
   padding: 0 !important;
 }
 
-/* ── Unified service page container ── */
-#detailSection {
-  border: 1px solid rgba(212, 175, 110, 0.22) !important;
-  border-radius: 16px !important;
-  background: linear-gradient(165deg, rgba(18, 15, 20, 0.72), rgba(10, 8, 8, 0.92)) !important;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.05) !important;
-  gap: 0 !important;
-  margin-top: 8px !important;
+/* ── Left column ── */
+body[data-ely-game="arc"] #detailSection .detail-left,
+body[data-ely-game="valorant"] #detailSection .detail-left {
+  padding: 24px 28px !important;
+  border-right: 1px solid rgba(212, 175, 110, 0.22) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(0, 0, 0, 0.35) !important;
+  box-shadow: none !important;
 }
 
-#detailSection {
-  border-radius: 16px !important;
-  isolation: isolate !important;
-}
-
-/* Left column padding + divider */
-body:not([data-ely-game="valorant"]) #detailSection .detail-left {
-  padding: 28px !important;
-  border-right: 1px solid rgba(212, 175, 110, 0.18) !important;
-}
-
-/* Right column background */
-body:not([data-ely-game="valorant"]) #detailSection .detail-right {
+/* ── Right column ── */
+body[data-ely-game="arc"] #detailSection .detail-right,
+body[data-ely-game="valorant"] #detailSection .detail-right {
   padding: 20px !important;
-  background: rgba(8, 6, 6, 0.38) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(0, 0, 0, 0.55) !important;
+  box-shadow: none !important;
+  width: 100% !important;
+  min-width: 0 !important;
 }
 
-/* Valorant left mount padding */
-body[data-ely-game="valorant"] #detailSection .valorant-cfg-mount {
-  padding: 20px !important;
-  border-right: none !important;
-}
-
-/* Order card inside shell: remove its own border/bg, shell handles it */
-#detailSection .order-card {
+/* ── Order card inside panel ── */
+body[data-ely-game="arc"] #detailSection .order-card,
+body[data-ely-game="valorant"] #detailSection .order-card {
   border: none !important;
   background: transparent !important;
   box-shadow: none !important;
@@ -189,192 +208,125 @@ body[data-ely-game="valorant"] #detailSection .valorant-cfg-mount {
   width: 100% !important;
   min-width: 0 !important;
   max-width: 100% !important;
+  position: static !important;
+  max-height: none !important;
+  overflow: visible !important;
 }
 
-/* Summary panel title */
-.order-summary-panel-title {
-  font-family: var(--display);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--gold);
-  padding: 0 14px 12px;
-  margin: 0;
-  border-bottom: 1px solid rgba(212, 175, 110, 0.18);
-  display: block;
-}
-
-/* Hero card */
-.svc-hero-card {
-  display: grid;
-  grid-template-columns: 180px 1fr;
-  gap: 0;
-  border: 1px solid rgba(212, 175, 110, 0.18);
-  border-radius: 12px;
-  overflow: hidden;
-  margin-bottom: 20px;
-  background: rgba(10, 8, 8, 0.45);
-}
-
-.svc-hero-card__media {
-  min-height: 150px;
-  overflow: hidden;
-  background: rgba(10,8,8,0.8);
-}
-
-.svc-hero-card__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.svc-hero-card__body {
-  padding: 18px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  justify-content: center;
-}
-
-.svc-hero-card__name {
-  margin: 0;
-  font-family: var(--display);
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-
-.svc-hero-card__desc {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--muted);
-}
-
-.svc-hero-card__list {
-  margin: 4px 0 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.svc-hero-card__list li {
-  font-size: 12px;
-  color: rgba(243, 234, 217, 0.82);
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.svc-hero-card__list li::before {
-  content: "✓";
-  color: var(--gold);
-  font-weight: 900;
-  font-size: 11px;
-  flex-shrink: 0;
-}
-
-/* Trust badges */
-.svc-trust-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  margin-bottom: 20px;
-}
-
-.svc-trust-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 11px;
-  border: 1px solid rgba(212, 175, 110, 0.2);
-  border-radius: 999px;
-  background: rgba(18, 15, 20, 0.55);
-  font-family: var(--display);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: rgba(243, 234, 217, 0.78);
-}
-
-@media (max-width: 1080px) {
-  body:not([data-ely-game="valorant"]) #detailSection .detail-left {
-    padding: 20px !important;
-    border-right: none !important;
-    border-bottom: 1px solid rgba(212, 175, 110, 0.18) !important;
-  }
-  body:not([data-ely-game="valorant"]) #detailSection .detail-right {
-    padding: 16px !important;
-  }
-  .svc-hero-card {
-    grid-template-columns: 130px 1fr;
-  }
-}
-
-@media (max-width: 720px) {
-  body:not([data-ely-game="valorant"]) #detailSection .detail-left {
-    padding: 16px !important;
-  }
-  .svc-hero-card {
-    grid-template-columns: 1fr;
-  }
-  .svc-hero-card__media {
-    min-height: 110px;
-  }
-}
-
-/* Order Panel backgrounds — scoped only to #detailSection */
-body[data-ely-game="arc"] #detailSection {
-  background-image: url("../assets/backgrounds/arc-raidersmain.webp") !important;
-  background-size: cover !important;
-  background-position: center center !important;
-  background-blend-mode: overlay !important;
-}
-
-body[data-ely-game="valorant"] #detailSection {
-  background-image: url("../assets/backgrounds/valorant-bg.webp") !important;
-  background-size: cover !important;
-  background-position: center center !important;
-  background-blend-mode: overlay !important;
-}
-
-/* Remove blur and dark overlays inside order panel for arc and valorant */
-body[data-ely-game="arc"] #detailSection .detail-left,
-body[data-ely-game="arc"] #detailSection .detail-right,
-body[data-ely-game="arc"] #detailSection .order-card,
-body[data-ely-game="arc"] #detailSection .order-card-body,
-body[data-ely-game="arc"] #detailSection .summary-total,
-body[data-ely-game="arc"] #detailSection .valorant-cfg-mount,
-body[data-ely-game="valorant"] #detailSection .detail-left,
-body[data-ely-game="valorant"] #detailSection .detail-right,
-body[data-ely-game="valorant"] #detailSection .order-card,
-body[data-ely-game="valorant"] #detailSection .order-card-body,
-body[data-ely-game="valorant"] #detailSection .summary-total,
-body[data-ely-game="valorant"] #detailSection .valorant-cfg-mount {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-/* Also remove blur from form elements inside order panel */
+/* ── Remove blur from all inner elements ── */
 body[data-ely-game="arc"] #detailSection .field-block,
 body[data-ely-game="arc"] #detailSection .order-form,
+body[data-ely-game="arc"] #detailSection .valorant-cfg-mount,
+body[data-ely-game="arc"] #detailSection .summary-total,
+body[data-ely-game="arc"] #detailSection .order-card-body,
 body[data-ely-game="valorant"] #detailSection .field-block,
 body[data-ely-game="valorant"] #detailSection .order-form,
+body[data-ely-game="valorant"] #detailSection .valorant-cfg-mount,
+body[data-ely-game="valorant"] #detailSection .summary-total,
+body[data-ely-game="valorant"] #detailSection .order-card-body,
 body[data-ely-game="valorant"] #detailSection .valorant-configurator .field-block,
-body[data-ely-game="valorant"] #detailSection .valorant-panel-card {
+body[data-ely-game="valorant"] #detailSection .valorant-panel-card,
+body[data-ely-game="valorant"] #detailSection .order-options-panel {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  background: rgba(0, 0, 0, 0.25) !important;
+  background: rgba(0, 0, 0, 0.28) !important;
   box-shadow: none !important;
+}
+
+/* ── Title area: center, hide rating ── */
+body[data-ely-game="arc"] #detailSection #detailLeftHead,
+body[data-ely-game="valorant"] #detailSection #detailLeftHead {
+  text-align: center !important;
+  justify-content: center !important;
+  padding: 0 0 16px 0 !important;
+  border-bottom: 1px solid rgba(212, 175, 110, 0.2) !important;
+  margin-bottom: 20px !important;
+}
+
+body[data-ely-game="arc"] #detailSection .rating,
+body[data-ely-game="valorant"] #detailSection .rating {
+  display: none !important;
+}
+
+/* ── Hide valorant sub-label ── */
+body[data-ely-game="valorant"] #detailSection .valorant-cfg-eyebrow,
+body[data-ely-game="valorant"] #detailSection .valorant-cfg-compact-head {
+  display: none !important;
+}
+
+/* ── Text readability on glass ── */
+body[data-ely-game="arc"] #detailSection h1,
+body[data-ely-game="arc"] #detailSection h2,
+body[data-ely-game="arc"] #detailSection h3,
+body[data-ely-game="arc"] #detailSection h4,
+body[data-ely-game="arc"] #detailSection label,
+body[data-ely-game="arc"] #detailSection strong,
+body[data-ely-game="arc"] #detailSection .cat-label,
+body[data-ely-game="valorant"] #detailSection h1,
+body[data-ely-game="valorant"] #detailSection h2,
+body[data-ely-game="valorant"] #detailSection h3,
+body[data-ely-game="valorant"] #detailSection h4,
+body[data-ely-game="valorant"] #detailSection label,
+body[data-ely-game="valorant"] #detailSection strong {
+  color: #ffffff !important;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9) !important;
+}
+
+body[data-ely-game="arc"] #detailSection p,
+body[data-ely-game="arc"] #detailSection small,
+body[data-ely-game="arc"] #detailSection em,
+body[data-ely-game="arc"] #detailSection span,
+body[data-ely-game="valorant"] #detailSection p,
+body[data-ely-game="valorant"] #detailSection small,
+body[data-ely-game="valorant"] #detailSection em,
+body[data-ely-game="valorant"] #detailSection span {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* ── Active/selected button state on glass ── */
+body[data-ely-game="arc"] #detailSection .raid-pill.active,
+body[data-ely-game="valorant"] #detailSection .raid-pill.active,
+body[data-ely-game="arc"] #detailSection .tab-btn.active,
+body[data-ely-game="valorant"] #detailSection .tab-btn.active {
+  background: rgba(212, 175, 110, 0.35) !important;
+  border-color: rgba(212, 175, 110, 0.85) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(212, 175, 110, 0.3) !important;
+}
+
+/* ── Order summary title gold ── */
+body[data-ely-game="arc"] #detailSection .order-summary-panel-title,
+body[data-ely-game="valorant"] #detailSection .order-summary-panel-title,
+body[data-ely-game="arc"] #detailSection .order-selection-preview__title,
+body[data-ely-game="valorant"] #detailSection .order-selection-preview__title {
+  color: var(--gold) !important;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* ── Input/select readability ── */
+body[data-ely-game="arc"] #detailSection input,
+body[data-ely-game="arc"] #detailSection select,
+body[data-ely-game="arc"] #detailSection textarea,
+body[data-ely-game="valorant"] #detailSection input,
+body[data-ely-game="valorant"] #detailSection select,
+body[data-ely-game="valorant"] #detailSection textarea {
+  background: rgba(0, 0, 0, 0.55) !important;
+  border-color: rgba(212, 175, 110, 0.45) !important;
+  color: #ffffff !important;
+}
+
+/* ── Mobile responsive ── */
+@media (max-width: 1080px) {
+  body[data-ely-game="arc"] #detailSection .detail-left,
+  body[data-ely-game="valorant"] #detailSection .detail-left {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(212, 175, 110, 0.22) !important;
+    padding: 18px !important;
+  }
+  body[data-ely-game="arc"] #detailSection .detail-right,
+  body[data-ely-game="valorant"] #detailSection .detail-right {
+    padding: 16px !important;
+  }
 }
 
 /* END LAYOUT SYSTEM */
