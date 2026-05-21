@@ -505,17 +505,28 @@
         game?.comingSoon ||
         (window.ELY_COMING_SOON_GAME_IDS instanceof Set && window.ELY_COMING_SOON_GAME_IDS.has(game.id))
       );
+      const homeStartingPrice = game => {
+        const values = (game?.services || [])
+          .filter(service => !service.valorantCustomPrice)
+          .map(service => Number(service.fromUSD || 0))
+          .filter(value => Number.isFinite(value) && value > 0);
+        if (!values.length) return "";
+        return moneyUSD(Math.min(...values));
+      };
 
       const renderHomeSingleCard = game => {
         const comingSoon = isComingSoonGame(game);
         const cardClass = `home-game-card${comingSoon ? " coming-soon" : ""}`;
         const disabled = comingSoon ? ` disabled aria-disabled="true"` : "";
         const badge = comingSoon ? `<span class="home-coming-soon-badge">${escapeHtml(ui("Coming Soon"))}</span>` : "";
+        const fromPrice = comingSoon ? "" : homeStartingPrice(game);
+        const priceBadge = fromPrice ? `<span class="home-game-price">From ${escapeHtml(fromPrice)}</span>` : "";
         const media = `<img class="home-game-media" src="${escapeHtml(homeCardSrc(game))}" alt="${escapeHtml(ui(game.label))}" loading="eager" data-home-card-fb="${escapeHtml(game.heroBg)}" onerror="elyHomeCardFallback(this)">`;
         return `
         <button class="${cardClass}" type="button" data-home-game="${game.id}" aria-label="${escapeHtml(gameAria(game.label))}"${disabled}>
           ${media}
           <span class="home-game-label">${escapeHtml(ui(game.label))}</span>
+          ${priceBadge}
           ${badge}
         </button>`;
       };
