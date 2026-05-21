@@ -1573,7 +1573,7 @@
           card.classList.toggle("is-tft-split", isTftForm && !isValorantForm && !isArcConfigurator);
         }
       }
-      if (split) {
+      if (isValorantForm) {
         mount.hidden = false;
         mount.appendChild(form);
       } else {
