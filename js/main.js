@@ -192,3 +192,37 @@
     }
 
     renderAll();
+
+    // Discord live presence counter
+    (function initDiscordCounter() {
+      const GUILD_ID = "1499767937974669363";
+      const WIDGET_URL = "https://discord.com/api/guilds/" + GUILD_ID + "/widget.json";
+      const FALLBACK = "100+";
+      const INTERVAL_MS = 30000;
+
+      function updateCounter(value) {
+        document.querySelectorAll(".ely-trust-counter__number").forEach(el => {
+          if (el.dataset.suffix === "+") {
+            const label = el.closest(".ely-trust-counter")?.querySelector(".ely-trust-counter__label");
+            if (label && label.textContent.trim() === "Discord Members") {
+              el.textContent = value;
+            }
+          }
+        });
+      }
+
+      function fetchPresence() {
+        fetch(WIDGET_URL)
+          .then(r => r.ok ? r.json() : Promise.reject())
+          .then(data => {
+            const count = data && typeof data.presence_count === "number"
+              ? data.presence_count + "+"
+              : FALLBACK;
+            updateCounter(count);
+          })
+          .catch(() => updateCounter(FALLBACK));
+      }
+
+      fetchPresence();
+      setInterval(fetchPresence, INTERVAL_MS);
+    })();
