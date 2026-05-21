@@ -257,6 +257,7 @@
       {
         id: "tft",
         label: "Teamfight Tactics",
+        comingSoon: true,
         tabIcon: "i-star",
         homeCardImage: "assets/backgrounds/tft-home-card.webp",
         heroBg: "assets/backgrounds/tft-home-card.webp",

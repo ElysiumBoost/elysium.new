@@ -704,6 +704,7 @@
 
     const categoryMotion = {
       bound: false,
+      clickBound: false,
       paused: false,
       pauseUntil: 0,
       dragging: false,
@@ -774,7 +775,6 @@
         cancelAnimationFrame(categoryMotion.raf);
         categoryMotion.raf = 0;
       }
-      if (state.game === "valorant") return;
       const scroller = $("categoryScroll");
       // FIX: null guard — if scroller is missing, cancel any stale RAF and bail
       if (!scroller) {
@@ -784,6 +784,25 @@
         }
         return;
       }
+      if (!categoryMotion.clickBound) {
+        categoryMotion.clickBound = true;
+        // FIX: delegated click handler — attached once here, works across all re-renders
+        // replaces the per-element addEventListener loop that was in renderCategories()
+        scroller.addEventListener("click", event => {
+          const btn = event.target.closest("[data-cat]");
+          if (!btn) return;
+          // Always clear skipClick when a real click reaches the handler so the
+          // flag never gets stuck true (detached-button clicks cannot bubble here)
+          const wasSkip = categoryMotion.skipClick;
+          categoryMotion.skipClick = false;
+          if (categoryMotion.didDrag || wasSkip) {
+            event.preventDefault();
+            return;
+          }
+          selectCategory(btn.dataset.cat);
+        });
+      }
+      if (state.game === "valorant") return;
       if (!categoryMotion.bound) {
         categoryMotion.bound = true;
         if (typeof ResizeObserver !== "undefined") {
@@ -867,21 +886,6 @@
         };
         scroller.addEventListener("pointerup", stopDrag);
         scroller.addEventListener("pointercancel", stopDrag);
-        // FIX: delegated click handler — attached once here, works across all re-renders
-        // replaces the per-element addEventListener loop that was in renderCategories()
-        scroller.addEventListener("click", event => {
-          const btn = event.target.closest("[data-cat]");
-          if (!btn) return;
-          // Always clear skipClick when a real click reaches the handler so the
-          // flag never gets stuck true (detached-button clicks cannot bubble here)
-          const wasSkip = categoryMotion.skipClick;
-          categoryMotion.skipClick = false;
-          if (categoryMotion.didDrag || wasSkip) {
-            event.preventDefault();
-            return;
-          }
-          selectCategory(btn.dataset.cat);
-        });
       }
       // FIX: always cancel any existing RAF before starting a new one — prevents stale loops
       if (categoryMotion.raf) {

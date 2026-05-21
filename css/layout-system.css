@@ -18,6 +18,16 @@
   max-height: 80px !important;
 }
 
+.category-scroll-column {
+  width: 100% !important;
+  align-self: stretch !important;
+}
+
+.category-scroll {
+  align-items: center !important;
+  width: 100% !important;
+}
+
 body[data-ely-game="valorant"] .category-scroll {
   display: flex !important;
   justify-content: center !important;
