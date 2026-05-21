@@ -1082,8 +1082,6 @@
         const thumbCat = "services";
         const thumbName = cg ? ui(cg.label) : ui("Services");
         $("detailIcon").innerHTML = categoryArtwork(thumbCat, thumbName);
-        const heroClean = document.getElementById("svcHeroCard");
-        if (heroClean) heroClean.innerHTML = "";
         const comingSoonGame =
           cg && (cg.comingSoon || (window.ELY_COMING_SOON_GAME_IDS instanceof Set && window.ELY_COMING_SOON_GAME_IDS.has(cg.id)));
         $("detailTitle").textContent = ui(comingSoonGame ? "Coming soon" : "No services available yet.");
@@ -1118,88 +1116,18 @@
         dft.setAttribute("aria-hidden", "false");
       }
       if (ds) {
-        ds.innerHTML = buildDetailSpecs(service);
-        ds.hidden = false;
+        ds.innerHTML = "";
+        ds.hidden = true;
       }
       $("detailIcon").innerHTML = categoryArtwork(service.category || "custom", service.cardTitle);
       $("detailTitle").textContent = ui(service.title);
-      $("detailIntro").textContent = ui(service.intro);
-      // Hero card injection — safe, uses existing data
-      const heroMount = $("detailLeftMeta");
-      if (heroMount) {
-        const game = currentGame();
-        const thumbSrc = resolveSiteUrl(
-          (game?.id === "valorant"
-            ? (valorantCategories.find(c => c.id === service.category)?.thumb || "")
-            : "") ||
-          serviceImages[service.category] ||
-          serviceImages.custom
-        );
-        const bullets = (() => {
-          if (game?.id === "valorant") {
-            const cat = typeof valorantCategoryContent !== "undefined" ? valorantCategoryContent[service.category] : null;
-            if (cat?.highlights?.length) return cat.highlights.slice(0, 3);
-          }
-          const intro = ui(service.intro || "").trim();
-          return intro ? [intro.slice(0, 100)] : ["Manual delivery", "Verified boosters", "Discord confirmed"];
-        })();
-        const heroId = "svcHeroCard";
-        let heroEl = document.getElementById(heroId);
-        if (!heroEl) {
-          heroEl = document.createElement("div");
-          heroEl.id = heroId;
-          heroMount.parentElement.insertBefore(heroEl, heroMount);
-        }
-        heroEl.innerHTML = `
-          <div class="svc-hero-card">
-            <div class="svc-hero-card__media">
-              <img src="${escapeHtml(thumbSrc)}" alt="${escapeHtml(service.cardTitle)}" loading="eager" onerror="elyImagePlaceholder(this)">
-            </div>
-            <div class="svc-hero-card__body">
-              <h3 class="svc-hero-card__name">${escapeHtml(ui(service.cardTitle))}</h3>
-              <p class="svc-hero-card__desc">${escapeHtml(ui(service.intro || "").slice(0, 130))}</p>
-              <ul class="svc-hero-card__list">
-                ${bullets.map(b => `<li>${escapeHtml(ui(b))}</li>`).join("")}
-              </ul>
-            </div>
-          </div>
-          <div class="svc-trust-row">
-            <span class="svc-trust-badge">Manual Delivery</span>
-            <span class="svc-trust-badge">Discord Confirmed</span>
-            <span class="svc-trust-badge">No Cheats</span>
-          </div>
-        `;
-      }
+      $("detailIntro").textContent = "";
       $("detailDeal").innerHTML = "";
       const hl = $("detailHighlights");
       const vtr = $("detailValorantTrust");
-      const vg = currentGame()?.id === "valorant";
-      const vForm = service.form && String(service.form).startsWith("valorant-");
-      if (hl && vtr) {
-        if (vg && vForm) {
-          const cat = valorantCategoryContent[service.category];
-          if (cat && cat.highlights && cat.highlights.length) {
-            hl.hidden = false;
-            hl.innerHTML = `<h4>${escapeHtml(ui("Highlights"))}</h4><ul>${cat.highlights.map(h => `<li>${escapeHtml(ui(h))}</li>`).join("")}</ul>`;
-            vtr.hidden = false;
-            vtr.innerHTML = `<h4>${escapeHtml(ui(valorantTrustBlock.title))}</h4><p>${escapeHtml(ui(valorantTrustBlock.intro))}</p><ul>${valorantTrustBlock.points.map(p => `<li>${escapeHtml(ui(p))}</li>`).join("")}</ul>`;
-          } else {
-            hl.hidden = true;
-            hl.innerHTML = "";
-            vtr.hidden = true;
-            vtr.innerHTML = "";
-          }
-        } else {
-          hl.hidden = true;
-          hl.innerHTML = "";
-          vtr.hidden = true;
-          vtr.innerHTML = "";
-        }
-      }
-      const vgSteps = vg;
-      $("detailSteps").innerHTML = vgSteps ? "" : detailSteps(service.form).map(step => `
-        <div class="detail-step"><strong>${ui(step.title)}</strong><span>${ui(step.copy)}</span></div>
-      `).join("");
+      if (hl) { hl.hidden = true; hl.innerHTML = ""; }
+      if (vtr) { vtr.hidden = true; vtr.innerHTML = ""; }
+      $("detailSteps").innerHTML = "";
       $("orderForm").innerHTML = buildForm(service.form);
       syncValorantOrderFormMount(service);
       setupValorantOrderChrome();
@@ -1844,7 +1772,7 @@
       }
       if (type === "guns") {
         const bundleUnit = weaponBasePriceUsd("Anvil") + prices.augment + prices.shield + prices.rechargerBundle + prices.bandageBundle;
-        return `<div class="field-grid loadout-weapon-grid"><div class="ely-form-cell"><label for="gunWeapon">${ui("Weapon")}</label><select id="gunWeapon">${weaponOptions(true)}</select></div><div class="ely-form-cell ely-form-cell--arc-mods" data-arc-mod-cell="gun"><label for="gunModType">${ui("Mods")}</label><select id="gunModType">${modTierOptionsHtml()}</select></div>${qtyField("gunQty", ui("Quantity"), 1, 1)}</div><p class="loadout-mod-hint" data-arc-mod-hint="gun" role="note">${ui("Mod quantity automatically matches weapon quantity.")}</p><div class="guns-bundle-wrap" id="gunsBundleWrap"><button class="btn" id="bundle20" type="button" style="width:100%;margin-top:10px">20x Weapon + Legendary / Epic Mods (-10%)</button></div>`;
+        return `<div class="field-grid loadout-weapon-grid"><div class="ely-form-cell"><label for="gunWeapon">${ui("Weapon")}</label><select id="gunWeapon">${weaponOptions(false)}</select></div><div class="ely-form-cell ely-form-cell--arc-mods" data-arc-mod-cell="gun"><label for="gunModType">${ui("Mods")}</label><select id="gunModType">${modTierOptionsHtml()}</select></div>${qtyField("gunQty", ui("Quantity"), 1, 1)}</div><p class="loadout-mod-hint" data-arc-mod-hint="gun" role="note">${ui("Mod quantity automatically matches weapon quantity.")}</p><div class="guns-bundle-wrap" id="gunsBundleWrap"><button class="btn" id="bundle20" type="button" style="width:100%;margin-top:10px">20x Weapon + Legendary / Epic Mods (-10%)</button></div>`;
       }
       if (type === "loadout") {
         const bundleUnit = weaponBasePriceUsd("Anvil") + prices.augment + prices.shield + prices.rechargerBundle + prices.bandageBundle;
@@ -2280,7 +2208,7 @@
     }
 
     function weaponBlock(title, prefix) {
-      return `<div class="field-block"><h4>${escapeHtml(title)}</h4><div class="field-grid loadout-weapon-grid"><div class="ely-form-cell"><label for="${prefix}Weapon">${ui("Weapon")}</label><select id="${prefix}Weapon">${weaponOptions(true)}</select></div><div class="ely-form-cell ely-form-cell--arc-mods" data-arc-mod-cell="${prefix}"><label for="${prefix}ModType">${ui("Mods")}</label><select id="${prefix}ModType">${modTierOptionsHtml()}</select></div>${qtyField(prefix + "WeaponQty", ui("Quantity"))}</div><p class="loadout-mod-hint" data-arc-mod-hint="${prefix}" role="note">${ui("Mod quantity automatically matches weapon quantity.")}</p></div>`;
+      return `<div class="field-block"><h4>${escapeHtml(title)}</h4><div class="field-grid loadout-weapon-grid"><div class="ely-form-cell"><label for="${prefix}Weapon">${ui("Weapon")}</label><select id="${prefix}Weapon">${weaponOptions(false)}</select></div><div class="ely-form-cell ely-form-cell--arc-mods" data-arc-mod-cell="${prefix}"><label for="${prefix}ModType">${ui("Mods")}</label><select id="${prefix}ModType">${modTierOptionsHtml()}</select></div>${qtyField(prefix + "WeaponQty", ui("Quantity"))}</div><p class="loadout-mod-hint" data-arc-mod-hint="${prefix}" role="note">${ui("Mod quantity automatically matches weapon quantity.")}</p></div>`;
     }
 
     function wireValorantForm(type) {

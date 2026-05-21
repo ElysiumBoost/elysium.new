@@ -361,8 +361,7 @@
       }
       const selectionPrev = $("orderSelectionPreview");
       if (selectionPrev) {
-        const useArcPreview = currentGame()?.id === "arc" && document.querySelector(".order-card.is-arc-split");
-        const lines = useArcPreview ? [] : orderSelectionPreviewLines(result);
+        const lines = orderSelectionPreviewLines(result);
         if (lines.length) {
           selectionPrev.hidden = false;
           selectionPrev.innerHTML = `<div class="order-selection-preview__title">${escapeHtml(ui("Selected Options"))}</div>${lines.map(line => `<p class="order-selection-preview__line">${escapeHtml(line)}</p>`).join("")}`;
