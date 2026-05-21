@@ -10926,11 +10926,6 @@ label,
   color: #e8a23a !important;
 }
 
-.ely-booster-rank--val {
-  background: rgba(83, 74, 183, 0.12) !important;
-  border: 1px solid rgba(83, 74, 183, 0.28) !important;
-  color: #9b8fff !important;
-}
 
 .ely-booster-card__services {
   display: flex;
@@ -11016,7 +11011,7 @@ h1, h2, .hero-title, #heroTitle {
    ════════════════════════════════════════════════════════════════════════ */
 
 .order-card {
-  background-image: url('assets/backgrounds/orderpanelbg.webp') !important;
+  background-image: url('../assets/backgrounds/orderpanelbg.webp') !important;
   background-size: cover !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
@@ -11030,7 +11025,7 @@ h1, h2, .hero-title, #heroTitle {
 }
 
 .valorant-cfg-mount {
-  background-image: url('assets/backgrounds/orderpanelbg.webp') !important;
+  background-image: url('../assets/backgrounds/orderpanelbg.webp') !important;
   background-size: cover !important;
   background-position: center center !important;
   background-color: #0d0b09 !important;
@@ -11040,7 +11035,7 @@ h1, h2, .hero-title, #heroTitle {
 .summary-total,
 .order-card.is-valorant .summary-total,
 .order-card.is-arc-split .summary-total {
-  background-image: url('assets/backgrounds/orderpanelbg.webp') !important;
+  background-image: url('../assets/backgrounds/orderpanelbg.webp') !important;
   background-size: cover !important;
   background-position: center center !important;
   background-color: #0d0b09 !important;
@@ -11208,7 +11203,7 @@ h1, h2, .hero-title, #heroTitle {
   color: #ffffff !important;
   flex: 1 !important;
   min-width: 0 !important;
-  text-align: left !important;
+  text-align: center !important;
   display: block !important;
   margin-bottom: 0 !important;
 }
@@ -11339,4 +11334,43 @@ h1, h2, .hero-title, #heroTitle {
 
 .home-process-grid article {
   padding: 18px 16px !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   DÜZELTME 5 — cat-btn ve service-thumb boyutları
+   ════════════════════════════════════════════════════════════════════════ */
+
+.cat-btn {
+  width: 148px !important;
+  min-width: 148px !important;
+  max-width: 148px !important;
+  min-height: 116px !important;
+}
+
+.service-thumb {
+  height: 88px !important;
+  min-height: 88px !important;
+  max-height: 88px !important;
+}
+
+@media (max-width: 1080px) {
+  .cat-btn {
+    width: 132px !important;
+    min-width: 132px !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .cat-btn {
+    width: 118px !important;
+    min-width: 118px !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   DÜZELTME 6 — Coming soon kart yüksekliği
+   ════════════════════════════════════════════════════════════════════════ */
+
+.ely-coming-soon-card {
+  height: 96px !important;
 }
