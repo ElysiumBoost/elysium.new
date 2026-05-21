@@ -904,18 +904,6 @@
       pointer-events: none;
     }
 
-    .cat-btn.active {
-      border-color: rgba(212, 175, 110, .55);
-      background:
-        radial-gradient(circle at 50% 18%, rgba(212, 175, 110, .16), transparent 40%),
-        linear-gradient(180deg, rgba(18, 15, 20, .88), rgba(8, 7, 8, .98));
-      box-shadow:
-        0 0 0 1px rgba(212, 175, 110, .14),
-        0 18px 42px rgba(0, 0, 0, .4),
-        0 0 24px rgba(212, 175, 110, .1),
-        inset 0 1px 0 rgba(255,255,255,.12);
-    }
-
     .service-thumb {
       position: relative;
       z-index: 1;
@@ -7918,15 +7906,6 @@
     .summary-total .old-total {
       font-size: 0.72em;
       opacity: .85;
-    }
-
-    .cat-btn.active {
-      border-color: var(--ely-select-blue) !important;
-      background: linear-gradient(165deg, rgba(18, 15, 20, .94), rgba(10, 8, 8, .9)) !important;
-      box-shadow:
-        0 0 0 1px var(--ely-select-blue-dim),
-        0 0 22px var(--ely-select-glow),
-        inset 0 1px 0 rgba(255, 255, 255, .06) !important;
     }
 
     .raid-pill.active,
