@@ -9673,3 +9673,138 @@ input[type="range"]:focus-visible::-moz-range-thumb {
   opacity: 0.8;
   text-decoration: none;
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   PHASE 2 — GÖREV A: Visual polish overrides
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* A-1 — Add to Cart butonu: yeşilden altın/bronz gradient */
+.btn-purchase,
+#addToCart.btn-purchase,
+.btn-green,
+.add-to-cart-main {
+  border: 1px solid rgba(212, 175, 110, 0.65) !important;
+  background: linear-gradient(135deg, #b8855a 0%, #d4af6e 45%, #c9974f 100%) !important;
+  color: #0a0808 !important;
+  font-family: var(--display, 'Rajdhani', sans-serif) !important;
+  font-weight: 800 !important;
+  letter-spacing: .07em !important;
+  text-transform: uppercase !important;
+  box-shadow:
+    0 14px 36px rgba(212, 175, 110, 0.22),
+    0 6px 18px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease !important;
+}
+
+.btn-purchase:hover,
+#addToCart.btn-purchase:hover,
+.btn-green:hover,
+.add-to-cart-main:hover {
+  transform: translateY(-2px) !important;
+  box-shadow:
+    0 20px 48px rgba(212, 175, 110, 0.3),
+    0 8px 24px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+  filter: brightness(1.06) !important;
+}
+
+.btn-purchase:disabled,
+#addToCart.btn-purchase:disabled,
+.btn-green:disabled,
+.add-to-cart-main:disabled {
+  background: linear-gradient(135deg, #6b5a3e 0%, #8a7044 45%, #7a5e30 100%) !important;
+  color: rgba(10, 8, 8, 0.45) !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+/* A-2 — Order panel: altın border + derin shadow */
+.order-card {
+  border: 1px solid rgba(212, 175, 110, 0.42) !important;
+  box-shadow:
+    0 0 0 1px rgba(212, 175, 110, 0.12),
+    0 28px 64px rgba(0, 0, 0, 0.52),
+    inset 0 1px 0 rgba(212, 175, 110, 0.14) !important;
+  border-radius: 16px !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: linear-gradient(168deg,
+    rgba(18, 15, 20, 0.97),
+    rgba(10, 8, 8, 0.99)) !important;
+}
+
+/* A-3 — Köşe yumuşatma */
+.cat-btn {
+  border-radius: 16px !important;
+}
+
+.service-card {
+  border-radius: 14px !important;
+}
+
+.popular-card {
+  border-radius: 14px !important;
+}
+
+.tab-btn {
+  border-radius: 999px !important;
+}
+
+.raid-pill {
+  border-radius: 12px !important;
+}
+
+.how-card {
+  border-radius: 14px !important;
+}
+
+.faq-item {
+  border-radius: 12px !important;
+}
+
+.home-why-grid article {
+  border-radius: 12px !important;
+}
+
+.home-process-grid article {
+  border-radius: 12px !important;
+}
+
+.detail-step {
+  border-radius: 10px !important;
+}
+
+.qty-stepper {
+  border-radius: 12px !important;
+}
+
+input,
+select,
+textarea {
+  border-radius: 10px !important;
+}
+
+/* A-4 — Input/select/textarea: altın focus glow */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none !important;
+  border-color: rgba(212, 175, 110, 0.65) !important;
+  box-shadow: 0 0 0 3px rgba(212, 175, 110, 0.14) !important;
+}
+
+/* A-5 — Blur temizliği: içerik kartlarından backdrop-filter kaldır */
+.how-card,
+.home-why-grid article,
+.home-process-grid article,
+.detail-step,
+.service-card,
+.popular-card {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: linear-gradient(165deg,
+    rgba(18, 15, 20, 0.88),
+    rgba(10, 8, 8, 0.96)) !important;
+}
