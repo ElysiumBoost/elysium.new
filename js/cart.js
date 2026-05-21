@@ -819,7 +819,15 @@
           selectCategory(btn.dataset.cat);
         });
       }
-      if (state.game === "valorant") return;
+      if (state.game === "valorant") {
+        categoryMotion.dragging = false;
+        categoryMotion.didDrag = false;
+        categoryMotion.skipClick = false;
+        categoryMotion.targetCat = "";
+        categoryMotion.pointerId = null;
+        scroller.classList.remove("dragging");
+        return;
+      }
       if (!categoryMotion.bound) {
         categoryMotion.bound = true;
         if (typeof ResizeObserver !== "undefined") {
@@ -828,6 +836,7 @@
         scroller.addEventListener("mouseenter", () => { categoryMotion.paused = true; });
         scroller.addEventListener("mouseleave", () => { categoryMotion.paused = false; });
         scroller.addEventListener("wheel", event => {
+          if (state.game === "valorant") return;
           const liveEl = $("categoryScroll");
           if (!liveEl) return;
           const maxLeft = Math.max(0, liveEl.scrollWidth - liveEl.clientWidth);
@@ -842,9 +851,11 @@
           scheduleHideCategoryDragIndicator();
         }, { passive: false });
         scroller.addEventListener("scroll", () => {
+          if (state.game === "valorant") return;
           if ($("categoryDragIndicator")?.classList.contains("is-active")) updateCategoryDragIndicator();
         }, { passive: true });
         scroller.addEventListener("pointerdown", event => {
+          if (state.game === "valorant") return;
           const liveEl = $("categoryScroll");
           if (!liveEl) return;
           if (event.pointerType === "mouse" && event.button !== 0) return;
@@ -860,6 +871,7 @@
           try { liveEl.setPointerCapture(event.pointerId); } catch (e) {}
         });
         scroller.addEventListener("pointermove", event => {
+          if (state.game === "valorant") return;
           if (!categoryMotion.dragging) return;
           const liveEl = $("categoryScroll");
           if (!liveEl) return;
@@ -875,6 +887,14 @@
           }
         });
         const stopDrag = event => {
+          if (state.game === "valorant") {
+            categoryMotion.dragging = false;
+            categoryMotion.didDrag = false;
+            categoryMotion.skipClick = false;
+            categoryMotion.targetCat = "";
+            $("categoryScroll")?.classList.remove("dragging");
+            return;
+          }
           const liveEl = $("categoryScroll");
           const wasDrag = categoryMotion.didDrag;
           const shouldSelect = !categoryMotion.didDrag && categoryMotion.targetCat;
@@ -1584,7 +1604,7 @@
       const isTftForm = Boolean(service && game?.id === "tft");
       const split = Boolean(service);
       const card = document.querySelector(".order-card");
-      section.classList.toggle("detail--valorant-layout", split);
+      section.classList.toggle("detail--valorant-layout", isValorantForm);
       if (card) {
         if (!split) {
           card.classList.remove("is-valorant", "is-arc-split", "is-tft-split");
