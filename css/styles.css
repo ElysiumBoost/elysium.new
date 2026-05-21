@@ -9400,3 +9400,123 @@ input[type="range"]:focus-visible::-moz-range-thumb {
   color: #6fe6a0;
   text-decoration: none;
 }
+
+/* ── GÖREV 4: Footer yenileme ────────────────────────────────────────── */
+.site-footer__inner {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: 24px 32px;
+  padding: 32px 0 24px;
+}
+
+.site-footer__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.site-footer__wordmark {
+  font-family: var(--display, 'Cinzel', serif);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gold, #d4af6e);
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 16px rgba(212,175,110,0.35);
+}
+
+.site-footer__tagline {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.02em;
+}
+
+.site-footer__stats {
+  display: flex;
+  gap: 20px;
+}
+
+.site-footer__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.site-footer__stat-num {
+  font-family: var(--display, 'Cinzel', serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--gold, #d4af6e);
+  line-height: 1;
+}
+
+.site-footer__stat-lbl {
+  font-size: 0.64rem;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.site-footer__trust {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.site-footer__trust-badge {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.site-footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.site-footer__discord,
+.site-footer__terms-btn {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.site-footer__bottom {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 14px 0;
+  text-align: center;
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.25);
+}
+
+@media (max-width: 900px) {
+  .site-footer__inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 24px;
+  }
+  .site-footer__brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .site-footer__inner {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    text-align: center;
+  }
+  .site-footer__stats {
+    justify-content: center;
+  }
+  .site-footer__trust {
+    align-items: center;
+  }
+  .site-footer__links {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
