@@ -140,7 +140,7 @@ body[data-ely-game="valorant"] #detailSection.detail--valorant-layout {
    ══════════════════════════════════════ */
 
 #detailSection {
-  border: 1px solid rgba(212, 175, 110, 0.5) !important;
+  border: none !important;
   border-radius: 16px !important;
   overflow: hidden !important;
   gap: 0 !important;
@@ -198,6 +198,11 @@ body[data-ely-game="valorant"] #detailSection .detail-right {
   min-width: 0 !important;
 }
 
+body[data-ely-game="valorant"] #detailSection .detail-right {
+  background: rgba(0, 0, 0, 0.72) !important;
+  border-left: 1px solid rgba(212, 175, 110, 0.2) !important;
+}
+
 /* ── Order card inside panel ── */
 body[data-ely-game="arc"] #detailSection .order-card,
 body[data-ely-game="valorant"] #detailSection .order-card {
@@ -238,9 +243,7 @@ body[data-ely-game="arc"] #detailSection #detailLeftHead,
 body[data-ely-game="valorant"] #detailSection #detailLeftHead {
   text-align: center !important;
   justify-content: center !important;
-  padding: 0 0 16px 0 !important;
-  border-bottom: 1px solid rgba(212, 175, 110, 0.2) !important;
-  margin-bottom: 20px !important;
+  padding: 16px 28px 16px 28px !important;
 }
 
 body[data-ely-game="arc"] #detailSection .rating,
@@ -327,6 +330,21 @@ body[data-ely-game="valorant"] #detailSection textarea {
   body[data-ely-game="valorant"] #detailSection .detail-right {
     padding: 16px !important;
   }
+}
+
+/* Remove inner box borders inside order panel */
+body[data-ely-game="valorant"] #detailSection .order-card,
+body[data-ely-game="arc"] #detailSection .order-card {
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+body[data-ely-game="valorant"] #detailSection .order-card {
+  background: transparent !important;
+}
+
+body[data-ely-game="valorant"] #detailSection .detail-left {
+  border-right: none !important;
 }
 
 /* END LAYOUT SYSTEM */
