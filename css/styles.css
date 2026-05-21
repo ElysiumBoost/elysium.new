@@ -9710,9 +9710,6 @@ input[type="range"]:focus-visible::-moz-range-thumb {
   border-radius: 16px !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  background: linear-gradient(168deg,
-    rgba(18, 15, 20, 0.97),
-    rgba(10, 8, 8, 0.99)) !important;
 }
 
 /* A-3 — Köşe yumuşatma */
@@ -10156,7 +10153,6 @@ a.site-footer__stat--tp .site-footer__stat-num {
 .order-card {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  background: rgba(10, 8, 8, 0.97) !important;
   border: 1px solid rgba(212, 175, 110, 0.45) !important;
   box-shadow:
     0 0 0 1px rgba(212, 175, 110, 0.10),
@@ -10170,13 +10166,11 @@ a.site-footer__stat--tp .site-footer__stat-num {
 .order-card.is-arc-split .summary-total {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  background: rgba(10, 8, 8, 0.95) !important;
 }
 
 .valorant-cfg-mount {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  background: rgba(12, 10, 14, 0.97) !important;
 }
 
 /* ════════════════════════════════════════════════════════════════════════
