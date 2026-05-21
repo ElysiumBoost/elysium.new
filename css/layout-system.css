@@ -59,21 +59,16 @@ body[data-ely-game="valorant"] #detailSection.detail--valorant-layout {
   gap: 20px !important;
 }
 
-.order-card,
-.order-card.is-valorant,
-.order-card.is-arc-split {
-  width: 380px !important;
-  min-width: 380px !important;
-  max-width: 380px !important;
-  flex-shrink: 0 !important;
-  flex-grow: 0 !important;
-  box-sizing: border-box !important;
-}
-
 @media (min-width: 1081px) {
   .order-card,
   .order-card.is-valorant,
   .order-card.is-arc-split {
+    width: 380px !important;
+    min-width: 380px !important;
+    max-width: 380px !important;
+    flex-shrink: 0 !important;
+    flex-grow: 0 !important;
+    box-sizing: border-box !important;
     position: sticky !important;
     top: 88px !important;
     max-height: calc(100vh - 108px) !important;

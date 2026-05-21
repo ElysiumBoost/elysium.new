@@ -8963,6 +8963,10 @@
       .home-game-card.coming-soon {
         min-height: 190px;
       }
+
+      .toast {
+        bottom: 72px;
+      }
     }
 
 /* TFT static centered category layout */
