@@ -11284,6 +11284,7 @@ h1, h2, .hero-title, #heroTitle {
    ════════════════════════════════════════════════════════════════════════ */
 
 .ely-confirm-strip {
+  display: none !important;
   margin-top: 16px;
   padding: 16px;
   border-radius: 12px;
