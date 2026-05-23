@@ -21,7 +21,7 @@
     function arcIntro(id) {
       const copy = {
         blueprints: "Pick the exact blueprint groups you need and use search to find items quickly. Selected items are delivered through a clean Discord ticket so boosters can confirm availability and handoff details.",
-        guns: "Choose the weapon, quantity, and optional Blue or Legendary / Epic mods. Weapon and mod quantities are calculated separately, with bundle discounts applied only when the 20x bundle rules match.",
+        guns: "Choose the weapon, quantity, and optional Legendary / Epic mods. Weapon and mod quantities are calculated separately, with bundle discounts applied only when the 20x bundle rules match.",
         loadout: "Build a full Arc Raiders loadout around your selected weapon. You can order individual gear or use 10x/20x special bundles for weapons, Looting Mk. 3 (Survivor) Augments, Medium Shields, rechargers, and Herbal Bandages.",
         coins: "Move the slider to choose Raider Coins from 100k to 10 million. Customers can view local currency, while every copied boosters ticket keeps the exact USD total.",
         seeds: "Choose Assorted Seeds from 100 to 10,000. Bulk checkpoints show the discount clearly before the order is added to the Discord ticket.",
@@ -40,7 +40,7 @@
 
     const arcHighlights = {
       blueprints: ["Manual delivery via Discord","All blueprint groups available","Search by name to find items fast","Verified booster handoff"],
-      guns:       ["Tiered weapon pricing","Blue & Legendary mod options","20x bundle discount available","In-raid delivery confirmed"],
+      guns:       ["Tiered weapon pricing","Legendary / Epic mod options","20x bundle discount available","In-raid delivery confirmed"],
       loadout:    ["Full loadout customization","10x & 20x special bundles","Weapons, shields, quick-use items","Clean Discord ticket breakdown"],
       coins:      ["100k to 12M range","Live price updates","Bulk discount tiers","Fast Discord confirmation"],
       seeds:      ["100 to 2,000 seeds","Bulk deal checkpoints","Clean ticket summary","Manual delivery"],
@@ -64,8 +64,7 @@
     const prices = {
       blueprint: .75,
       coins100k: .25,
-      weapon: .90,
-      blueMod: .05,
+      weapon: .50,
       premiumMod: .10,
       seeds100: .40,
       augment: .35,
@@ -142,10 +141,10 @@
       const tier40 = new Set(["Venator", "Renegade", "Torrente", "Canto", "Osprey"]);
       const tier50 = new Set(["Tempest", "Bobcat", "Vulcano", "Bettina", "Hullcracker"]);
       const tier60 = new Set(["Dolabra", "Jupiter", "Equalizer", "Aphelion"]);
-      if (tier30.has(w)) return 0.70;
-      if (tier40.has(w)) return 0.80;
-      if (tier50.has(w)) return 0.90;
-      if (tier60.has(w)) return 1.00;
+      if (tier30.has(w)) return 0.30;
+      if (tier40.has(w)) return 0.40;
+      if (tier50.has(w)) return 0.50;
+      if (tier60.has(w)) return 0.60;
       return prices.weapon;
     }
 
@@ -353,7 +352,7 @@
         popular: ["trials", "guns", "blueprints", "coins"],
         services: [
           arcService("blueprints", "blueprints", "Buy Arc Raiders Blueprints", "All Blueprints", "i-blueprint", .75, " each", "Discounted blueprints, now $0.75 each instead of $1.50.", "30-60 Minutes", "blueprints", 1.50),
-          arcService("guns", "guns", "Buy Arc Raiders Weapons", "All Guns", "i-gun", .90, " each", "Discounted weapons and mods with automatic attachment quantity.", "30-60 Minutes", "guns", 1.15),
+          arcService("guns", "guns", "Buy Arc Raiders Weapons", "All Guns", "i-gun", .50, " each", "Discounted weapons and mods with automatic attachment quantity.", "30-60 Minutes", "guns", 1.15),
           arcService("loadout", "loadouts", "Build a Custom Loadout", "Custom Loadout", "i-loadout", 0, "", "Weapon, mods, Looting Mk. 3 Augments, Medium Shields, quick-use bundles, and special bundles.", "30-90 Minutes", "loadout"),
           arcService("coins", "coins", "Buy Raider Coins", "Raider Coins", "i-coins", .25, " / 100k", "Choose from 100k to 9 million coins with instant price updates.", "15-30 Minutes", "coins", 0.4167),
           { ...arcService("seeds", "seeds", "Buy Assorted Seeds", "Assorted Seeds", "i-coins", .35, " / 100", "Choose 100 to 5,000 Assorted Seeds with bulk discount checkpoints.", "15-30 Minutes", "seeds"), noDiscount: true },

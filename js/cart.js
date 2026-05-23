@@ -1419,7 +1419,7 @@
     }
 
     function modTierOptionsHtml() {
-      return `<option value="none">${ui("No Mods")}</option><option value="blue">${ui("Blue Mods - +$0.05 each")}</option><option value="premium">${ui("Legendary / Epic Mods - +$0.10 each")}</option>`;
+      return `<option value="none">${ui("No Mods")}</option><option value="premium">${ui("Legendary / Epic Mods - +$0.10 each")}</option>`;
     }
 
     function elyToggleRow(inputAttrs, labelInnerHtml, checked = false) {
@@ -2846,13 +2846,11 @@
     }
 
     function modPrice(type) {
-      if (type === "blue") return prices.blueMod;
       if (type === "premium") return prices.premiumMod;
       return 0;
     }
 
     function modLabel(type) {
-      if (type === "blue") return "Blue Mods";
       if (type === "premium") return "Legendary / Epic Mods";
       return "No Mods";
     }
@@ -2935,14 +2933,6 @@
         const cost = qty * prices.premiumMod;
         result.total += cost;
         result.lines.push(`${qty}x Legendary / Epic Mods â‰ˆ ${moneyUSD(cost)}`);
-      });
-
-      tryMatch(/(\d+)\s*x?\s*blue\s*mods?\b/g, m => {
-        const qty = parseInt(m[1], 10);
-        if (!qty) return;
-        const cost = qty * prices.blueMod;
-        result.total += cost;
-        result.lines.push(`${qty}x Blue Mods â‰ˆ ${moneyUSD(cost)}`);
       });
 
       tryMatch(/(\d+)\s*x?\s*(?:raids?|raid\s*runs?)\b/g, m => {
