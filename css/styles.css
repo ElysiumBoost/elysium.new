@@ -11005,12 +11005,9 @@ h1, h2, .hero-title, #heroTitle {
   background: rgba(18, 15, 18, 0.85) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  border: 1px solid #e8a23a !important;
+  border: 1px solid rgba(212, 175, 110, 0.22) !important;
   border-radius: 16px !important;
-  box-shadow:
-    0 0 0 1px rgba(232, 162, 58, 0.12),
-    inset 0 1px 0 rgba(232, 162, 58, 0.18),
-    0 32px 80px rgba(0, 0, 0, 0.72) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35) !important;
   align-self: stretch !important;
   height: 100% !important;
 }
@@ -11025,7 +11022,7 @@ h1, h2, .hero-title, #heroTitle {
 .order-card.is-valorant .summary-total,
 .order-card.is-arc-split .summary-total {
   background-color: transparent !important;
-  border: 1px solid rgba(232, 162, 58, 0.28) !important;
+  border: none !important;
 }
 
 /* ════════════════════════════════════════════════════════════════════════
