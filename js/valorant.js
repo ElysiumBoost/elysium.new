@@ -23,6 +23,14 @@
     { id: "undercover", label: "Undercover Winrate", desc: "Booster caps winrate ~65%.", pctMod: 0.10, badge: "+10%" },
     { id: "express", label: "Express Priority", desc: "Jump the queue, starts within the hour.", pctMod: 0.20, badge: "+20%" }
   ];
+  var PLACEMENT_TIERS = TIERS.concat([
+    { id: "radiant", name: "Radiant", color: "#fff5b3", glyph: "R", icon: "../../assets/valorant/icons/rank-radiant.png" }
+  ]);
+  var COACHING_FOCI = [
+    { id: "vod", name: "VOD Review", desc: "Coach reviews your demos and pulls timestamped notes on positioning, util, and decision points." },
+    { id: "live", name: "Live Coaching", desc: "Voice + screen-share session. Coach watches you queue and corrects in real time between rounds." },
+    { id: "copilot", name: "Co-Pilot Coaching", desc: "Coach duos with you, live-callouts on every round, plus a debrief at the end of each match." }
+  ];
   var REVIEWS = [
     { initials: "L.K", user: "lurik#0042", quote: "Booster played like I would on my best day. Smooth climb, no flags. Discord channel was active at 3am my time.", from: "Gold III", to: "Immortal I", days: 4 },
     { initials: "M.R", user: "mythosrev", quote: "Everything confirmed in the ticket before they touched my account. No upsells. Just the climb I paid for.", from: "Diamond II", to: "Ascendant II", days: 3 },
@@ -50,8 +58,66 @@
     target: { tier: "diamond", div: 1 },
     rrPerWin: "41-60", currentRR: "50",
     server: "Europe", platform: "PC",
-    mode: "solo", addons: ["offline"]
+    mode: "solo", addons: ["offline"],
+    pl: { tier: "gold", div: 1, server: "North America", platform: "PC", games: 5, mode: "solo", addons: { stream: false, offline: false, agents: false, express: true } },
+    rw: { tier: "gold", div: 1, rrPerWin: 22, wins: 5, server: "North America", platform: "PC", mode: "solo", addons: { stream: false, offline: false, agents: false, undercover: false, express: true } },
+    lv: { current: 1, desired: 20, server: "North America", platform: "PC", addons: { priority: false, agents: false, schedule: false, offline: false } },
+    bp: { current: 1, desired: 55, server: "North America", platform: "PC", addons: { priority: false, agents: false, schedule: false, offline: false } },
+    co: { hours: 1, focus: "vod", server: "North America", platform: "PC" }
   };
+
+  var PLACEMENT_BASE = [3.99, 4.49, 4.99, 5.49, 5.99, 6.99, 8.49, 10.49, 13.49];
+
+  function calcPlacementsPrice(s) {
+    var idx = PLACEMENT_TIERS.findIndex(function (t) { return t.id === s.tier; });
+    var price = (PLACEMENT_BASE[idx] || 5.99) * s.games;
+    price *= [0.96, 1.0, 1.06][s.div] || 1;
+    if (s.mode === "duo") price *= 1.30;
+    if (s.platform !== "PC") price *= 1.08;
+    if (["Korea", "Middle East", "Latin America"].indexOf(s.server) >= 0) price *= 1.06;
+    var mult = 1;
+    if (s.addons.stream) mult += 0.20;
+    if (s.addons.express) mult += 0.20;
+    return Math.round(price * 100) / 100;
+  }
+  function placementsETA(games, addons) {
+    var base = Math.max(0, Math.ceil(games / 5));
+    var lo = addons.express ? Math.max(0, base - 1) : base;
+    return [lo, lo + 1];
+  }
+  function calcWinsPrice(s) {
+    var idx = PLACEMENT_TIERS.findIndex(function (t) { return t.id === s.tier; });
+    var perWin = (3.49 + idx * 1.15) * Math.max(0.7, 1 - (s.rrPerWin - 22) * 0.012);
+    var price = perWin * s.wins;
+    if (s.mode === "duo") price *= 1.30;
+    if (s.platform !== "PC") price *= 1.08;
+    if (["Korea", "Middle East", "Latin America"].indexOf(s.server) >= 0) price *= 1.06;
+    var mult = 1;
+    if (s.addons.stream) mult += 0.20;
+    if (s.addons.undercover) mult += 0.10;
+    if (s.addons.express) mult += 0.20;
+    return Math.round(price * mult * 100) / 100;
+  }
+  function winsETA(wins, addons) {
+    var base = Math.max(1, Math.ceil(wins / 4));
+    var lo = addons.express ? Math.max(1, base - 1) : base;
+    return [lo, lo + 1];
+  }
+  function calcLevelPrice(s, perLevel) {
+    var levels = Math.max(0, s.desired - s.current);
+    var price = perLevel * levels;
+    if (s.platform !== "PC") price *= 1.08;
+    if (["Korea", "Middle East", "Latin America"].indexOf(s.server) >= 0) price *= 1.06;
+    var mult = 1;
+    if (s.addons.priority) mult += 0.20;
+    if (s.addons.agents) mult += 0.10;
+    return Math.round(price * mult * 100) / 100;
+  }
+  function levelETA(levels, addons, perDay) {
+    var base = Math.max(1, Math.ceil(levels / perDay));
+    var lo = addons.priority ? Math.max(1, base - 1) : base;
+    return [lo, lo + 1];
+  }
 
   function $(id) { return document.getElementById(id); }
   function esc(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
@@ -146,6 +212,54 @@
   function arrowSvg() {
     return '<svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M0 5H14M14 5L10 1M14 5L10 9" stroke="currentColor" stroke-width="1.5"/></svg>';
   }
+  function shieldSvg() {
+    return '<svg width="16" height="16" viewBox="0 0 22 22" fill="none"><path d="M11 2L3 5v6c0 5 3.5 7.8 8 9 4.5-1.2 8-4 8-9V5l-8-3z" stroke="currentColor" stroke-width="1.4"/></svg>';
+  }
+  function selectHtml(options, value, name) {
+    return '<div class="val-select-wrap"><select class="val-select" data-select-' + name + ' aria-label="' + esc(name) + '">' +
+      options.map(function (o) { return '<option value="' + esc(o) + '"' + (o === value ? " selected" : "") + '>' + esc(o) + "</option>"; }).join("") +
+    "</select></div>";
+  }
+  function dropdownsHtml(server, platform, serverName, platformName) {
+    return '<div class="val-dropdowns"><div class="val-field"><span class="val-field-label">Server</span>' +
+      selectHtml(SERVERS, server, serverName || "server") + '</div><div class="val-field"><span class="val-field-label">Platform</span>' +
+      selectHtml(PLATFORMS, platform, platformName || "platform") + "</div></div>";
+  }
+  function sliderHtml(value, min, max, name, pct) {
+    return '<div class="val-slider" style="--val:' + pct + '%"><div class="val-slider-track" aria-hidden="true"><div class="val-slider-fill" style="width:' + pct + '%"></div></div>' +
+      '<input type="range" min="' + min + '" max="' + max + '" step="1" value="' + value + '" data-slider-' + name + ' aria-label="' + esc(name) + '"></div>';
+  }
+  function stepperHtml(value, min, max, name) {
+    return '<div class="val-stepper" role="group" aria-label="' + esc(name) + '">' +
+      '<button type="button" data-step-' + name + '="-1"' + (value <= min ? " disabled" : "") + ' aria-label="Decrease">−</button>' +
+      '<input type="number" min="' + min + '" max="' + max + '" value="' + value + '" data-stepper-' + name + ' aria-label="' + esc(name) + '">' +
+      '<button type="button" data-step-' + name + '="1"' + (value >= max ? " disabled" : "") + ' aria-label="Increase">+</button></div>';
+  }
+  function toggleRowHtml(key, label, badge, badgeCls, on, tip) {
+    return '<div class="val-toggle-row ' + (on ? "active" : "") + '" data-toggle="' + esc(key) + '">' +
+      '<span class="nm">' + esc(label) + (tip ? ' <span class="val-tip-wrap" tabindex="0">i<span class="pop">' + esc(tip) + "</span></span>" : "") + "</span>" +
+      '<span class="badge ' + (badgeCls || "") + '">' + esc(badge) + "</span>" +
+      '<button type="button" class="val-switch ' + (on ? "on" : "") + '" data-switch="' + esc(key) + '" aria-pressed="' + on + '" aria-label="' + esc(label) + '"><span class="knob"></span></button></div>';
+  }
+  function summaryHeadLg() {
+    return '<div class="val-summary-head-lg"><div class="row"><span class="micro">Checkout</span>' +
+      '<span class="val-online" aria-live="polite"><span class="live" aria-hidden="true"></span>21 online now</span></div>' +
+      '<h3 class="ttl">Secure order summary</h3></div>';
+  }
+  function summaryFootHtml(etaLo, etaHi, price, ctaLabel) {
+    return '<div class="val-summary-foot">' +
+      '<div class="val-eta"><span class="k">Estimated</span><span class="v">~ ' + etaLo + "–" + etaHi + ' days</span></div>' +
+      '<div class="val-total"><span class="k">Total</span><span class="v">' + formatPrice(price) + "</span></div>" +
+      '<button type="button" class="eb-btn eb-btn-primary val-cta val-cta-shield">' + shieldSvg() + " " + esc(ctaLabel) + ' <span class="arrow">' + arrowSvg() + "</span></button>" +
+      '<div class="val-trust"><span>Fast Checkout</span><span class="sep"></span><span>Verified Pros</span><span class="sep"></span><span>Money-Back</span></div></div>';
+  }
+  function tabFaqsHtml(faqs) {
+    return faqs.map(function (f, i) {
+      return '<div class="eb-faq-row"><button class="eb-faq-btn" type="button"><span class="eb-faq-n">Q.' + String(i + 1).padStart(2, "0") +
+        '</span><span class="eb-faq-q">' + esc(f.q) + '</span><span class="eb-faq-plus">+</span></button>' +
+        '<div class="eb-faq-panel"><div class="eb-faq-a"><span></span><p>' + esc(f.a) + "</p><span></span></div></div></div>";
+    }).join("");
+  }
 
   function renderRankConfig() {
     var mount = $("valConfigMount");
@@ -226,14 +340,280 @@
     if (rrInput) rrInput.addEventListener("input", function () { state.currentRR = rrInput.value; });
   }
 
-  function renderComingSoon(label) {
+  function renderPlacements() {
+    var s = state.pl;
+    var tier = PLACEMENT_TIERS.find(function (t) { return t.id === s.tier; });
+    var hasDivs = s.tier !== "radiant";
+    var price = calcPlacementsPrice(s);
+    var eta = placementsETA(s.games, s.addons);
+    var sliderPct = ((s.games - 1) / 4) * 100;
+    var iconSrc = s.tier === "radiant" ? "../../assets/valorant/icons/rank-radiant.png" : "../../assets/valorant/icons/rank-" + s.tier + "-" + (s.div + 1) + ".png";
+    var FAQS_PL = [
+      { q: "What happens if a draw is played?", a: "Draws don't count against your placement series. The booster re-queues until the contracted number of completed games is hit." },
+      { q: "Placements Guarantee", a: "If a booster trends below our 75% winrate floor during your placement matches, we swap them out the same day at no cost." }
+    ];
+    $("valConfigMount").innerHTML =
+      '<div class="val-config"><div class="val-builder">' +
+        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 01 — Starting Point</span><h3 class="val-step-title">Season End Rank</h3><span class="val-step-sub">Select the end season rank</span></div>' +
+          '<div class="val-ranks val-ranks-9">' + rankTilesHtml(PLACEMENT_TIERS, s.tier, "pl-tier") + '</div>' +
+          '<div class="val-row"><span class="val-row-label">Division</span>' + (hasDivs ? segHtml(DIVISIONS, s.div, "pl-div") : '<span class="val-step-sub">Radiant has no divisions</span>') + '</div>' +
+          dropdownsHtml(s.server, s.platform, "pl-server", "pl-platform") +
+        '</div>' +
+        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 02 — Matches</span><h3 class="val-step-title">Number of Games</h3><span class="val-step-sub">Select the number of games</span></div>' +
+          '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.games + '</span><span class="val-games-unit">Placement matches<span class="v">' + s.games + (s.games === 1 ? " game" : " consecutive games") + '</span></span></div>' +
+          sliderHtml(s.games, 1, 5, "pl-games", sliderPct) +
+          '<div class="val-slider-ticks" aria-hidden="true" style="grid-template-columns:repeat(5,1fr)">' + [1,2,3,4,5].map(function(n) { return '<span class="' + (n === s.games ? "active" : "") + '">' + n + "</span>"; }).join("") + '</div></div>' +
+        '</div>' +
+        tabFaqsHtml(FAQS_PL) +
+      '</div>' +
+      '<div class="val-summary-wrap"><aside class="val-summary has-items" aria-label="Order summary"><span class="arc-hot-trace" aria-hidden="true"></span>' +
+        summaryHeadLg() +
+        '<div class="val-summary-scroll">' +
+          '<div class="val-current-sel"><div class="val-rank-icon" style="--tier-color:' + tier.color + '"><img src="' + iconSrc + '" alt=""></div><div><span class="lbl">Your order</span><span class="v">' + s.games + ' Placement matches<br><span class="tier">' + esc(tier.name) + (hasDivs ? " " + DIVISIONS[s.div] : "") + '</span></span></div></div>' +
+          '<div class="val-summary-block-label">Boosting Mode</div>' + summaryModeHtml(s.mode) +
+          '<div class="val-summary-block-label">Add-ons</div><div class="val-summary-addons-scroll">' +
+            toggleRowHtml("stream", "Stream games", "+20%", "", s.addons.stream, "Your assigned booster will record/live stream all the games.") +
+            '<div class="val-subhead">Privacy settings</div>' +
+            toggleRowHtml("offline", "Appear Offline", "Free", "free", s.addons.offline, "Your account status stays invisible to friends.") +
+            toggleRowHtml("agents", "Specific agents", "Free", "free", s.addons.agents, "Lock in the agents the booster is allowed to play.") +
+            toggleRowHtml("express", "Express priority", "+20%", "", s.addons.express, "Skip the queue — your booster starts within the hour.") +
+          '</div>' +
+        '</div>' +
+        summaryFootHtml(eta[0], eta[1], price, "Rank Up") +
+      '</aside></div></div>';
+    bindTabEvents("pl");
+  }
+
+  function renderWins() {
+    var s = state.rw;
+    var tier = PLACEMENT_TIERS.find(function (t) { return t.id === s.tier; });
+    var hasDivs = s.tier !== "radiant";
+    var price = calcWinsPrice(s);
+    var eta = winsETA(s.wins, s.addons);
+    var sliderPct = ((s.wins - 1) / 9) * 100;
+    var iconSrc = s.tier === "radiant" ? "../../assets/valorant/icons/rank-radiant.png" : "../../assets/valorant/icons/rank-" + s.tier + "-" + (s.div + 1) + ".png";
+    var FAQS_RW = [
+      { q: "Why is my RR Gain relevant?", a: "RR per win determines how many matches the booster needs. Higher gains mean fewer games — pricing scales with that effort." },
+      { q: "What happens if a game is lost?", a: "Ranked Wins is a wins-delivered contract: a loss doesn't count against the number you ordered. You only pay for wins." }
+    ];
+    $("valConfigMount").innerHTML =
+      '<div class="val-config"><div class="val-builder">' +
+        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 01 — Starting Point</span><h3 class="val-step-title">Current Rank</h3><span class="val-step-sub">Select your current rank and division</span></div>' +
+          '<div class="val-ranks">' + rankTilesHtml(PLACEMENT_TIERS, s.tier, "rw-tier") + '</div>' +
+          (hasDivs ? '<div class="val-row"><span class="val-row-label">Division</span>' + segHtml(DIVISIONS, s.div, "rw-div") + '</div>' : '') +
+          '<div class="val-row"><span class="val-row-label">RR per Win</span>' + stepperHtml(s.rrPerWin, 10, 40, "rw-rr") + '</div>' +
+        '</div>' +
+        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 02 — Goal</span><h3 class="val-step-title">Number of Wins</h3><span class="val-step-sub">Select the number of wins</span></div>' +
+          '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.wins + '</span><span class="val-games-unit">Wins to deliver<span class="v">~ ' + Math.ceil(s.wins / Math.max(1, s.rrPerWin / 30)) + ' games projected</span></span></div>' +
+          sliderHtml(s.wins, 1, 10, "rw-wins", sliderPct) +
+          '<div class="val-slider-ticks" aria-hidden="true">' + [1,2,3,4,5,6,7,8,9,10].map(function(n) { return '<span class="' + (n === s.wins ? "active" : "") + '">' + n + "</span>"; }).join("") + '</div></div>' +
+          dropdownsHtml(s.server, s.platform, "rw-server", "rw-platform") +
+        '</div>' +
+        tabFaqsHtml(FAQS_RW) +
+      '</div>' +
+      '<div class="val-summary-wrap"><aside class="val-summary has-items" aria-label="Order summary"><span class="arc-hot-trace" aria-hidden="true"></span>' +
+        summaryHeadLg() +
+        '<div class="val-summary-scroll">' +
+          '<div class="val-current-sel"><div class="val-rank-icon" style="--tier-color:' + tier.color + '"><img src="' + iconSrc + '" alt=""></div><div><span class="lbl">Your order</span><span class="v">' + s.wins + (s.wins === 1 ? " win" : " wins") + ' in<br><span class="tier">' + esc(tier.name) + (hasDivs ? " " + DIVISIONS[s.div] : "") + '</span></span></div></div>' +
+          '<div class="val-summary-block-label">Boosting Mode</div>' + summaryModeHtml(s.mode) +
+          '<div class="val-summary-block-label">Add-ons</div><div class="val-summary-addons-scroll">' +
+            toggleRowHtml("stream", "Stream games", "+20%", "", s.addons.stream, "Your assigned booster will record/live stream all the games.") +
+            '<div class="val-subhead">Privacy settings</div>' +
+            toggleRowHtml("offline", "Appear Offline", "Free", "free", s.addons.offline, "Account stays invisible to friends.") +
+            toggleRowHtml("agents", "Specific agents", "Free", "free", s.addons.agents, "Lock in the agents the booster plays.") +
+            toggleRowHtml("undercover", "Undercover Winrate", "Recommended", "recommended", s.addons.undercover, "Booster caps winrate ~65% — looks natural.") +
+            toggleRowHtml("express", "Express priority", "Recommended", "recommended", s.addons.express, "Skip the queue — starts within the hour.") +
+          '</div>' +
+        '</div>' +
+        summaryFootHtml(eta[0], eta[1], price, "Rank Up") +
+      '</aside></div></div>';
+    bindTabEvents("rw");
+  }
+
+  function renderLeveling() {
+    var s = state.lv;
+    var levels = Math.max(0, s.desired - s.current);
+    var price = calcLevelPrice(s, 0.50);
+    var eta = levelETA(levels, s.addons, 25);
+    var curPct = ((s.current - 1) / 499) * 100;
+    var desPct = ((s.desired - 1) / 499) * 100;
+    var FAQS_LV = [
+      { q: "Why level a Valorant account?", a: "Some skins unlock by account level, and ranked requires Level 20. Manual leveling gets your account ranked-ready without botting." },
+      { q: "How fast does leveling progress?", a: "Roughly 25 levels per day. Priority Start cuts kickoff wait so the booster begins within the hour." }
+    ];
+    $("valConfigMount").innerHTML =
+      '<div class="val-config val-config--natural"><div class="val-builder">' +
+        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 01 — Current</span><h3 class="val-step-title">Current Level</h3><span class="val-step-sub">Reach ranked-ready levels faster</span></div>' +
+          '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.current + '</span><span class="val-games-unit">Starting level<span class="v">$0.50 per level · 1–500 range</span></span></div>' +
+          sliderHtml(s.current, 1, 500, "lv-current", curPct) + '</div>' +
+        '</div>' +
+        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 02 — Desired</span><h3 class="val-step-title">Desired Level</h3><span class="val-step-sub">Must be higher than current</span></div>' +
+          '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.desired + '</span><span class="val-games-unit">Target level<span class="v">' + levels + (levels === 1 ? " level" : " levels") + ' to gain</span></span></div>' +
+          sliderHtml(s.desired, 1, 500, "lv-desired", desPct) + '</div>' +
+          dropdownsHtml(s.server, s.platform, "lv-server", "lv-platform") +
+        '</div>' +
+        tabFaqsHtml(FAQS_LV) +
+      '</div>' +
+      '<div class="val-summary-wrap"><aside class="val-summary has-items" aria-label="Order summary"><span class="arc-hot-trace" aria-hidden="true"></span>' +
+        summaryHeadLg() +
+        '<div class="val-summary-scroll">' +
+          '<div class="val-current-sel"><div class="val-rank-icon" style="--tier-color:#e5c26b"><span class="glyph" style="font-size:18px">' + s.current + '→' + s.desired + '</span></div><div><span class="lbl">Your order</span><span class="v">Level ' + s.current + ' → ' + s.desired + ' · ' + levels + ' levels<br><span class="tier">' + esc(s.server) + ' · ' + esc(s.platform) + '</span></span></div></div>' +
+          '<div class="val-summary-block-label">Add-ons</div><div class="val-summary-addons-scroll">' +
+            toggleRowHtml("priority", "Priority Start", "+20%", "", s.addons.priority, "Skip the queue — starts within the hour.") +
+            toggleRowHtml("agents", "Agent Preference", "+10%", "", s.addons.agents, "Lock in the agents the booster plays while leveling.") +
+            '<div class="val-subhead">Privacy settings</div>' +
+            toggleRowHtml("schedule", "Schedule Preference", "Free", "free", s.addons.schedule, "Pick the hours the booster can play.") +
+            toggleRowHtml("offline", "Appear Offline", "Free", "free", s.addons.offline, "Account stays invisible to friends.") +
+          '</div>' +
+        '</div>' +
+        summaryFootHtml(eta[0], eta[1], price, "Rank Up") +
+      '</aside></div></div>';
+    bindTabEvents("lv");
+  }
+
+  function renderBattlePass() {
+    var s = state.bp;
+    var levels = Math.max(0, s.desired - s.current);
+    var price = calcLevelPrice(s, 0.50);
+    var eta = levelETA(levels, s.addons, 8);
+    var curPct = ((s.current - 1) / 54) * 100;
+    var desPct = ((s.desired - 1) / 54) * 100;
+    var FAQS_BP = [
+      { q: "Will I get all the act-specific skins?", a: "Yes — every level reward, gun buddy, spray, and Tier 50 skin lands in your inventory exactly as if you'd played it yourself." },
+      { q: "How fast does Battle Pass leveling progress?", a: "Roughly 8 BP tiers per day at a sustainable pace. Priority Start cuts kickoff wait." }
+    ];
+    $("valConfigMount").innerHTML =
+      '<div class="val-config"><div class="val-builder">' +
+        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 01 — Battle Pass</span><h3 class="val-step-title">Battle Pass Levels</h3><span class="val-step-sub">Complete your Battle Pass faster</span></div>' +
+          '<div class="val-bp-sliders">' +
+            '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.current + '</span><span class="val-games-unit">Current level<span class="v">$0.50 per level</span></span></div>' +
+            sliderHtml(s.current, 1, 55, "bp-current", curPct) + '</div>' +
+            '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.desired + '</span><span class="val-games-unit">Desired level<span class="v">' + levels + (levels === 1 ? " tier" : " tiers") + ' to gain</span></span></div>' +
+            sliderHtml(s.desired, 1, 55, "bp-desired", desPct) + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 02 — Region</span><h3 class="val-step-title">Server &amp; Platform</h3></div>' +
+          dropdownsHtml(s.server, s.platform, "bp-server", "bp-platform") +
+        '</div>' +
+      '</div>' +
+      '<div class="val-summary-wrap"><aside class="val-summary has-items" aria-label="Order summary"><span class="arc-hot-trace" aria-hidden="true"></span>' +
+        summaryHeadLg() +
+        '<div class="val-summary-scroll">' +
+          '<div class="val-current-sel"><div class="val-rank-icon" style="--tier-color:#e5c26b"><span class="glyph" style="font-size:18px">' + s.current + '→' + s.desired + '</span></div><div><span class="lbl">Your order</span><span class="v">BP Tier ' + s.current + ' → ' + s.desired + ' · ' + levels + ' tiers<br><span class="tier">' + esc(s.server) + ' · ' + esc(s.platform) + '</span></span></div></div>' +
+          '<div class="val-summary-block-label">Active extras</div><div class="val-summary-addons-scroll">' +
+            toggleRowHtml("priority", "Priority Start", "+20%", "", s.addons.priority, "Skip the queue — starts within the hour.") +
+            toggleRowHtml("agents", "Agent Preference", "+10%", "", s.addons.agents, "Lock in agents during pass progression.") +
+            '<div class="val-subhead">Privacy settings</div>' +
+            toggleRowHtml("schedule", "Schedule Preference", "Free", "free", s.addons.schedule, "Pick the hours the booster can play.") +
+            toggleRowHtml("offline", "Appear Offline", "Free", "free", s.addons.offline, "Account stays invisible to friends.") +
+          '</div>' +
+        '</div>' +
+        summaryFootHtml(eta[0], eta[1], price, "Rank Up") +
+      '</aside></div></div>' +
+      tabFaqsHtml(FAQS_BP);
+    bindTabEvents("bp");
+  }
+
+  function renderCoaching() {
+    var s = state.co;
+    var price = Math.round(16.99 * s.hours * 100) / 100;
+    var focusObj = COACHING_FOCI.find(function (f) { return f.id === s.focus; });
+    var FAQS_CO = [
+      { q: "How are coaches verified?", a: "Every coach has held Radiant or pro-level for two acts running and submits screenshots each season." },
+      { q: "What do I need to prepare?", a: "For VOD Review: send 1–2 demos. For Live and Co-Pilot: just have Discord ready. The coach drops a prep checklist in your ticket." }
+    ];
+    $("valConfigMount").innerHTML =
+      '<div class="val-config val-config--natural"><div class="val-builder">' +
+        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 01 — Session</span><h3 class="val-step-title">Coaching</h3><span class="val-step-sub">Personalized sessions for aim, positioning, agents, and game sense</span></div>' +
+          '<div class="val-row"><span class="val-row-label">Hours</span>' + stepperHtml(s.hours, 1, 4, "co-hours") + '</div>' +
+          '<div class="val-summary-block-label" style="margin-top:22px">Focus</div>' +
+          '<div class="val-summary-mode" style="grid-template-columns:1fr">' +
+            COACHING_FOCI.map(function (f) {
+              return '<button type="button" class="' + (s.focus === f.id ? "active" : "") + '" data-co-focus="' + f.id + '" aria-pressed="' + (s.focus === f.id) + '">' +
+                '<span class="pill">$16.99 / hr</span><span class="val-summary-mode-name">' + esc(f.name) + '</span><span class="val-summary-mode-desc">' + esc(f.desc) + '</span></button>';
+            }).join("") +
+          '</div>' +
+          dropdownsHtml(s.server, s.platform, "co-server", "co-platform") +
+        '</div>' +
+        tabFaqsHtml(FAQS_CO) +
+      '</div>' +
+      '<div class="val-summary-wrap"><aside class="val-summary has-items" aria-label="Order summary"><span class="arc-hot-trace" aria-hidden="true"></span>' +
+        summaryHeadLg() +
+        '<div class="val-summary-scroll">' +
+          '<div class="val-current-sel"><div class="val-rank-icon" style="--tier-color:#e5c26b"><span class="glyph" style="font-size:24px">' + s.hours + 'h</span></div><div><span class="lbl">Your session</span><span class="v">' + s.hours + (s.hours === 1 ? " hour" : " hours") + ' of ' + esc(focusObj.name) + '<br><span class="tier">' + esc(s.server) + ' · ' + esc(s.platform) + '</span></span></div></div>' +
+          '<div class="val-summary-block-label">Session</div>' +
+          '<div class="val-toggle-row active" style="pointer-events:none"><span class="nm">' + esc(focusObj.name) + '</span><span class="badge free">' + s.hours + ' hr</span></div>' +
+          '<div class="val-toggle-row active" style="pointer-events:none"><span class="nm">Platform</span><span class="badge">' + esc(s.platform) + '</span></div>' +
+        '</div>' +
+        '<div class="val-summary-foot">' +
+          '<div class="val-eta"><span class="k">Rate</span><span class="v">$16.99 / hr</span></div>' +
+          '<div class="val-total"><span class="k">Total</span><span class="v">' + formatPrice(price) + '</span></div>' +
+          '<button type="button" class="eb-btn eb-btn-primary val-cta val-cta-shield">' + shieldSvg() + ' Book Session <span class="arrow">' + arrowSvg() + '</span></button>' +
+          '<div class="val-trust"><span>Fast Checkout</span><span class="sep"></span><span>Verified Pros</span><span class="sep"></span><span>Money-Back</span></div></div>' +
+      '</aside></div></div>';
+    bindTabEvents("co");
+  }
+
+  function bindTabEvents(tab) {
     var mount = $("valConfigMount");
-    mount.innerHTML =
-      '<div class="val-coming">' +
-        '<span class="val-coming-eyebrow">' + esc(label) + "</span>" +
-        '<h2 class="val-coming-title">Coming Soon</h2>' +
-        '<p class="val-coming-sub">This service is being configured. Join our Discord for early access and updates.</p>' +
-      "</div>";
+    mount.onclick = function (e) {
+      var btn, val;
+      btn = e.target.closest(".eb-faq-btn");
+      if (btn) { var row = btn.closest(".eb-faq-row"); if (row) { row.classList.toggle("eb-open"); } return; }
+      if (tab === "rank") return;
+      var s = state[tab];
+      var render = { pl: renderPlacements, rw: renderWins, lv: renderLeveling, bp: renderBattlePass, co: renderCoaching }[tab];
+      btn = e.target.closest("[data-" + tab + "-tier]");
+      if (btn) { s.tier = btn.getAttribute("data-" + tab + "-tier"); render(); return; }
+      btn = e.target.closest("[data-seg-" + tab + "-div]");
+      if (btn) { s.div = parseInt(btn.getAttribute("data-seg-" + tab + "-div")); render(); return; }
+      btn = e.target.closest("[data-mode]");
+      if (btn) { s.mode = btn.dataset.mode; render(); return; }
+      btn = e.target.closest("[data-switch]");
+      if (btn) { var key = btn.dataset["switch"]; s.addons[key] = !s.addons[key]; render(); return; }
+      btn = e.target.closest("[data-toggle]");
+      if (btn && !e.target.closest("[data-switch]")) { var tkey = btn.dataset.toggle; s.addons[tkey] = !s.addons[tkey]; render(); return; }
+      btn = e.target.closest("[data-co-focus]");
+      if (btn) { s.focus = btn.dataset.coFocus; render(); return; }
+      btn = e.target.closest("[data-step-rw-rr]");
+      if (btn) { s.rrPerWin = Math.min(40, Math.max(10, s.rrPerWin + parseInt(btn.getAttribute("data-step-rw-rr")))); render(); return; }
+      btn = e.target.closest("[data-step-co-hours]");
+      if (btn) { s.hours = Math.min(4, Math.max(1, s.hours + parseInt(btn.getAttribute("data-step-co-hours")))); render(); return; }
+    };
+    mount.onchange = function (e) {
+      var el = e.target;
+      var render = { pl: renderPlacements, rw: renderWins, lv: renderLeveling, bp: renderBattlePass, co: renderCoaching }[tab];
+      if (el.matches("[data-slider-pl-games]")) { state.pl.games = parseInt(el.value); render(); }
+      else if (el.matches("[data-slider-rw-wins]")) { state.rw.wins = parseInt(el.value); render(); }
+      else if (el.matches("[data-slider-lv-current]")) { state.lv.current = parseInt(el.value); if (state.lv.desired <= state.lv.current) state.lv.desired = Math.min(500, state.lv.current + 1); render(); }
+      else if (el.matches("[data-slider-lv-desired]")) { state.lv.desired = Math.max(state.lv.current + 1, parseInt(el.value)); render(); }
+      else if (el.matches("[data-slider-bp-current]")) { state.bp.current = parseInt(el.value); if (state.bp.desired <= state.bp.current) state.bp.desired = Math.min(55, state.bp.current + 1); render(); }
+      else if (el.matches("[data-slider-bp-desired]")) { state.bp.desired = Math.max(state.bp.current + 1, parseInt(el.value)); render(); }
+      else if (el.matches("[data-select-pl-server]")) { state.pl.server = el.value; render(); }
+      else if (el.matches("[data-select-pl-platform]")) { state.pl.platform = el.value; render(); }
+      else if (el.matches("[data-select-rw-server]")) { state.rw.server = el.value; render(); }
+      else if (el.matches("[data-select-rw-platform]")) { state.rw.platform = el.value; render(); }
+      else if (el.matches("[data-select-lv-server]")) { state.lv.server = el.value; render(); }
+      else if (el.matches("[data-select-lv-platform]")) { state.lv.platform = el.value; render(); }
+      else if (el.matches("[data-select-bp-server]")) { state.bp.server = el.value; render(); }
+      else if (el.matches("[data-select-bp-platform]")) { state.bp.platform = el.value; render(); }
+      else if (el.matches("[data-select-co-server]")) { state.co.server = el.value; render(); }
+      else if (el.matches("[data-select-co-platform]")) { state.co.platform = el.value; render(); }
+      else if (el.matches("[data-stepper-rw-rr]")) { state.rw.rrPerWin = Math.min(40, Math.max(10, parseInt(el.value) || 22)); render(); }
+      else if (el.matches("[data-stepper-co-hours]")) { state.co.hours = Math.min(4, Math.max(1, parseInt(el.value) || 1)); render(); }
+    };
+    mount.oninput = function (e) {
+      var el = e.target;
+      if (el.matches("input[type=range]")) {
+        var slider = el.closest(".val-slider");
+        if (!slider) return;
+        var min = parseInt(el.min), max = parseInt(el.max), val = parseInt(el.value);
+        var pct = ((val - min) / (max - min)) * 100;
+        slider.style.setProperty("--val", pct + "%");
+        var fill = slider.querySelector(".val-slider-fill");
+        if (fill) fill.style.width = pct + "%";
+      }
+    };
   }
 
   function switchTab(tabId) {
@@ -245,11 +625,11 @@
     });
     switch (tabId) {
       case "rank": renderRankConfig(); break;
-      case "placements": renderComingSoon("Placements"); break;
-      case "wins": renderComingSoon("Ranked Wins"); break;
-      case "leveling": renderComingSoon("Account Leveling"); break;
-      case "battlepass": renderComingSoon("Battle Pass"); break;
-      case "coaching": renderComingSoon("Coaching"); break;
+      case "placements": renderPlacements(); break;
+      case "wins": renderWins(); break;
+      case "leveling": renderLeveling(); break;
+      case "battlepass": renderBattlePass(); break;
+      case "coaching": renderCoaching(); break;
     }
     var section = $("valConfigSection");
     if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
