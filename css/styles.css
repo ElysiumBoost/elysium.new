@@ -13040,8 +13040,14 @@ select.eb-currency:hover { border-color: var(--gold); color: var(--gold-bright);
 select.eb-currency:focus { outline: none; border-color: var(--gold); }
 select.eb-currency option { background: var(--bg-2, #100b07); color: var(--text, #efe6cf); }
 
-/* Landing nav — travelling line on cart + CTA (::before rotation approach) */
-.eb-nav .arc-hot-trace { overflow: hidden; opacity: 1; }
+/* Landing nav + hero — travelling line (::before rotation, disable @property background) */
+.eb-nav .arc-hot-trace,
+.eb-hero .arc-hot-trace {
+  overflow: hidden;
+  opacity: 1;
+  background: none;
+  animation: none;
+}
 .eb-nav .arc-hot-trace::before,
 .eb-hero .arc-hot-trace::before {
   content: "";
@@ -13062,7 +13068,7 @@ select.eb-currency option { background: var(--bg-2, #100b07); color: var(--text,
 
 /* Landing logo — bare image, no circle frame (override components.css for landing only) */
 .eb-nav .eb-logo-mark {
-  width: 48px; height: 48px;
+  width: 56px; height: 56px;
   border: none; border-radius: 0;
   background: none;
   box-shadow: none;
@@ -13070,8 +13076,8 @@ select.eb-currency option { background: var(--bg-2, #100b07); color: var(--text,
   overflow: visible;
 }
 .eb-nav .eb-logo-mark img {
-  width: 48px; height: 48px;
-  min-width: 48px; min-height: 48px;
+  width: 56px; height: 56px;
+  min-width: 56px; min-height: 56px;
   object-fit: contain;
   transform: none;
   filter: none;
