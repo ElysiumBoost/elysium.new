@@ -47,7 +47,7 @@
   <!-- ── Fonts ── -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Rajdhani:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- ════════════════════════════════════
        CSS — Yükleme sırası önemli!
@@ -93,7 +93,7 @@
   </script>
 
 </head>
-<body>
+<body class="tw-hero-centered tw-title-outlined">
   <div class="ely-grain" aria-hidden="true"></div>
   <a href="#serviceContent" class="skip-link">Skip to content</a>
 
@@ -207,360 +207,432 @@
   <main>
 
     <!-- Hero — Ana sayfa -->
-    <section class="hero is-home" id="hero">
-      <div class="shell hero-shell">
-        <div class="hero-text">
-          <span class="eyebrow hero-eyebrow" id="heroKicker">Manual &middot; Discord-confirmed</span>
-          <h1 id="heroTitle">Premium Game Boosting</h1>
-          <p class="hero-subtitle" id="heroSubtitle">Elite boosting services with fast support, clean delivery, and a premium order experience.</p>
-          <p class="hero-lead" id="heroCopy">Manual delivery &middot; No cheats &middot; Real support &middot; Clear ticket confirmation</p>
-          <p class="hero-brand-line" id="heroBrandLine">Built by veterans. Tailored to your climb.</p>
-          <div class="ely-trust-counters" id="elyTrustCounters" aria-label="Elysium Boost statistics">
-            <div class="ely-trust-counter">
-              <span class="ely-trust-counter__number" data-target="2000" data-suffix="+">0</span>
-              <span class="ely-trust-counter__label">Orders Completed</span>
-            </div>
-            <div class="ely-trust-counter ely-trust-counter--mid">
-              <span class="ely-trust-counter__number" data-target="100" data-suffix="+">0</span>
-              <span class="ely-trust-counter__label">Discord Members</span>
-            </div>
-            <div class="ely-trust-counter">
-              <span class="ely-trust-counter__number" data-target="4.9" data-suffix="/5">0</span>
-              <span class="ely-trust-counter__label">Discord Rating</span>
-            </div>
+    <section class="hero is-home eb-hero" id="hero">
+      <div class="eb-hero-fallback" aria-hidden="true"></div>
+      <video
+        class="eb-hero-video"
+        src="assets/elysium-hero.mp4"
+        autoplay
+        loop
+        muted
+        playsinline
+        preload="auto"
+        aria-hidden="true"></video>
+      <div class="eb-hero-tint" aria-hidden="true"></div>
+      <div class="eb-hero-haze" aria-hidden="true"></div>
+      <div class="eb-hero-vignette" aria-hidden="true"></div>
+      <div class="eb-hero-fade" aria-hidden="true"></div>
+      <div class="eb-container eb-hero-inner">
+        <!-- Hidden JS-controlled placeholders (renderHero writes to these) -->
+        <span id="heroKicker" style="display:none">The Realm of Champions</span>
+        <h1 id="heroTitle" style="display:none">Premium Game Boosting</h1>
+        <p id="heroSubtitle" style="display:none">BUILT BY VETERANS. TAILORED TO YOUR CLIMB.</p>
+        <p class="hero-lead" id="heroCopy" style="display:none">Manual delivery · No cheats · Real support</p>
+        <p class="hero-brand-line" id="heroBrandLine" style="display:none">Built by veterans.</p>
+        <div class="ely-trust-counters" id="elyTrustCounters" style="display:none" aria-label="Elysium Boost statistics">
+          <div class="ely-trust-counter">
+            <span class="ely-trust-counter__number" data-target="2000" data-suffix="+">0</span>
+            <span class="ely-trust-counter__label">Orders Completed</span>
           </div>
-          <div class="hero-cta-row hero-cta-row--solo" id="heroCtaRow">
-            <button type="button" class="btn btn-premium hero-cta" id="heroCta">Start</button>
+          <div class="ely-trust-counter ely-trust-counter--mid">
+            <span class="ely-trust-counter__number" data-target="100" data-suffix="+">0</span>
+            <span class="ely-trust-counter__label">Discord Members</span>
           </div>
-          <div class="ely-hero-social-proof" aria-label="Social proof">
-            <span class="ely-hero-tp">
-              <span aria-hidden="true">★★★★★</span>
-              <span>4.9/5 Discord Rating</span>
-            </span>
-            <span class="ely-hero-dot" aria-hidden="true"></span>
-            <span class="ely-hero-proof-text">2,000+ orders delivered</span>
-            <span class="ely-hero-dot" aria-hidden="true"></span>
-            <span class="ely-hero-proof-text">100+ Discord members</span>
+          <div class="ely-trust-counter">
+            <span class="ely-trust-counter__number" data-target="4.9" data-suffix="/5">0</span>
+            <span class="ely-trust-counter__label">Discord Rating</span>
           </div>
         </div>
+        <div id="heroCtaRow" style="display:none">
+          <button type="button" class="btn btn-premium hero-cta" id="heroCta">Start</button>
+        </div>
+        <div class="ely-hero-social-proof" id="heroSocialProof" style="display:none" aria-label="Social proof">
+          <span class="ely-hero-tp"><span aria-hidden="true">★★★★★</span><span>4.9/5 Discord Rating</span></span>
+        </div>
+
+        <!-- Visible design hero content -->
+        <div class="eb-hero-copy">
+          <div class="eb-reveal"><span class="eb-label">The Realm of Champions</span></div>
+          <div class="eb-reveal" style="transition-delay:80ms">
+            <h1 class="eb-h1">
+              Premium Game<br>
+              <span class="gold">Boosting.</span>
+            </h1>
+          </div>
+          <div class="eb-reveal" style="transition-delay:160ms">
+            <p class="eb-body" style="font-size:18px;max-width:52ch;margin-bottom:40px">
+              BUILT BY VETERANS. TAILORED TO YOUR CLIMB.
+            </p>
+          </div>
+          <div class="eb-reveal" style="transition-delay:240ms">
+            <div class="eb-hero-ctas">
+              <button type="button" class="eb-btn eb-btn-primary hero-cta" onclick="document.getElementById('heroCta').click()">
+                <span class="arc-hot-trace" aria-hidden="true"></span>
+                Start Your Climb <span class="arrow"><svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M0 5H14M14 5L10 1M14 5L10 9" stroke="currentColor" stroke-width="1.5"/></svg></span>
+              </button>
+              <a href="#howItWorksTitle" class="eb-btn">How it works <span class="arrow"><svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M0 5H14M14 5L10 1M14 5L10 9" stroke="currentColor" stroke-width="1.5"/></svg></span></a>
+            </div>
+          </div>
+        </div>
+        <div class="eb-reveal" style="transition-delay:380ms">
+          <div class="eb-hero-stats">
+            <div class="eb-stat"><span class="eb-stat-n">10,000+</span><span class="eb-stat-l">Orders Completed</span></div>
+            <div class="eb-stat"><span class="eb-stat-n">500+</span><span class="eb-stat-l">Discord Members</span></div>
+            <div class="eb-stat"><span class="eb-stat-n">4.9★</span><span class="eb-stat-l">Discord Rating</span></div>
+            <div class="eb-stat"><span class="eb-stat-n">24/7</span><span class="eb-stat-l">Fast Support</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="eb-scroll-hint">
+        <span>SCROLL</span><span class="bar"></span>
       </div>
     </section>
 
     <!-- Home içerik -->
     <section class="home-content" id="homeContent">
-      <div class="shell">
+      <div class="eb-page-bg">
 
-        <!-- Trust strip -->
-        <div class="home-trust-strip" aria-label="Servis güvence özellikleri">
-          <span>Manual Service</span>
-          <span>Discord Confirmed</span>
-          <span>No Cheats / No Exploits</span>
-          <span>Fast Support</span>
-        </div>
+        <!-- Games Section -->
+        <section class="eb-section" id="ebGamesSection" style="padding-top:140px">
+          <div class="eb-container">
+            <div class="eb-secheader eb-left eb-games-head">
+              <div>
+                <div class="eb-reveal"><span class="eb-label">START HERE</span></div>
+                <div class="eb-reveal" style="transition-delay:80ms"><h2 class="eb-h2" id="homeGameHead" style="text-align:left">Choose Your Game</h2></div>
+              </div>
+              <div class="eb-reveal" style="transition-delay:120ms">
+                <p class="eb-body" style="margin-top:4px;max-width:36ch"></p>
+              </div>
+            </div>
 
-        <!-- Oyun seçimi -->
-        <div class="quick-head" id="homeGameHead">
-          <div>
-            <span class="home-section-kicker">Start here</span>
-            <h2>Choose Your Game</h2>
-          </div>
-        </div>
-        <div class="home-grid" id="homeGameGrid"></div>
+            <!-- Featured game cards -->
+            <div class="eb-games-featured">
+              <div class="eb-reveal">
+                <a href="pages/games/arc-raiders.html" class="eb-fcard" style="--accent:#ff8a3d;--art-tint:radial-gradient(80% 70% at 50% 110%, #ff8a3d 0%, #c45a1a 22%, #5a2806 55%, #0a0a10 100%)">
+                  <div class="eb-fcard-art">
+                    <div class="eb-fcard-bigword" aria-hidden="true">ARC RAIDERS</div>
+                    <div class="eb-fcard-glyph" aria-hidden="true">I</div>
+                  </div>
+                  <div class="eb-fcard-overlay" aria-hidden="true"></div>
+                  <span class="eb-fcard-tag">EXTRACTION · LAUNCH SEASON</span>
+                  <div class="eb-fcard-meta">
+                    <h3 class="eb-fcard-name">Arc Raiders</h3>
+                    <div class="eb-fcard-services">
+                      <span>Rank Boost</span><span class="sep">·</span>
+                      <span>Extractions</span><span class="sep">·</span>
+                      <span>Quest Lines</span><span class="sep">·</span>
+                      <span>Coaching</span>
+                    </div>
+                    <span class="eb-fcard-enter">
+                      Configure climb <svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M0 5H14M14 5L10 1M14 5L10 9" stroke="currentColor" stroke-width="1.5"/></svg>
+                    </span>
+                  </div>
+                </a>
+              </div>
+              <div class="eb-reveal" style="transition-delay:80ms">
+                <a href="#valorant" class="eb-fcard" style="--accent:#ff5d6a;--art-tint:radial-gradient(80% 70% at 50% 110%, #ff4655 0%, #a31621 22%, #3d0a14 55%, #0a0a10 100%)">
+                  <div class="eb-fcard-art">
+                    <div class="eb-fcard-bigword" aria-hidden="true">VALORANT</div>
+                    <div class="eb-fcard-glyph" aria-hidden="true">II</div>
+                  </div>
+                  <div class="eb-fcard-overlay" aria-hidden="true"></div>
+                  <span class="eb-fcard-tag">TAC FPS · EP 9 ACT III</span>
+                  <div class="eb-fcard-meta">
+                    <h3 class="eb-fcard-name">Valorant</h3>
+                    <div class="eb-fcard-services">
+                      <span>Rank Boost</span><span class="sep">·</span>
+                      <span>Placement Wins</span><span class="sep">·</span>
+                      <span>Premier</span><span class="sep">·</span>
+                      <span>Coaching</span>
+                    </div>
+                    <span class="eb-fcard-enter">
+                      Configure climb <svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M0 5H14M14 5L10 1M14 5L10 9" stroke="currentColor" stroke-width="1.5"/></svg>
+                    </span>
+                  </div>
+                </a>
+              </div>
+            </div>
 
-        <!-- Nasıl Çalışır -->
-        <section class="home-process" aria-labelledby="howItWorksTitle">
-          <div class="home-section-head">
-            <span class="home-section-kicker">Process</span>
-            <h2 id="howItWorksTitle">How It Works</h2>
-          </div>
-          <div class="home-process-grid">
-            <article><strong>1. Choose Your Service</strong><p>Pick the game and service that fits your goal.</p></article>
-            <article><strong>2. Configure Your Order</strong><p>Select the options needed for a clear quote.</p></article>
-            <article><strong>3. Confirm in Discord</strong><p>Copy the ticket and confirm details with support.</p></article>
-            <article><strong>4. Delivery Begins</strong><p>A verified booster starts after confirmation.</p></article>
+            <!-- Small card rail -->
+            <div class="eb-games-rail-wrap">
+              <div class="eb-rail-head">
+                <div class="eb-reveal">
+                  <span class="eb-rail-eyebrow">
+                    <span class="diamond"></span>
+                    THE REST OF THE CATALOGUE
+                  </span>
+                </div>
+                <div class="eb-reveal" style="transition-delay:80ms">
+                  <a href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer" class="eb-rail-discord">
+                    <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M13.5 1.2A12.5 12.5 0 0010.6.3a8.5 8.5 0 00-.4.8 11.8 11.8 0 00-3.6 0 8.4 8.4 0 00-.4-.8A12.5 12.5 0 003.3 1.2C1 4.5.4 7.7.7 10.9a12.6 12.6 0 003.8 1.9c.3-.4.6-.9.8-1.4a8.2 8.2 0 01-1.3-.6l.3-.2a9 9 0 008.2 0l.3.2a8.2 8.2 0 01-1.3.6c.2.5.5 1 .8 1.4a12.6 12.6 0 003.8-1.9c.4-3.8-.6-7-2.6-9.7zM5.7 8.9c-.8 0-1.5-.8-1.5-1.7s.7-1.7 1.5-1.7c.9 0 1.5.8 1.5 1.7s-.6 1.7-1.5 1.7zm5 0c-.8 0-1.5-.8-1.5-1.7s.7-1.7 1.5-1.7c.9 0 1.5.8 1.5 1.7s-.6 1.7-1.5 1.7z"/></svg>
+                    Join Discord for early access
+                    <svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M0 5H14M14 5L10 1M14 5L10 9" stroke="currentColor" stroke-width="1.5"/></svg>
+                  </a>
+                </div>
+              </div>
+              <div class="eb-rail-stage">
+                <button class="eb-rail-nav prev" type="button" aria-label="Scroll left">&#8249;</button>
+                <button class="eb-rail-nav next" type="button" aria-label="Scroll right">&#8250;</button>
+                <div class="eb-games-rail" id="ebGamesRail">
+                  <a href="#tft" class="eb-scard eb-reveal" style="--accent:#9b6cff;--art-tint:linear-gradient(180deg, #221540 0%, #0a0a14 100%)">
+                    <div class="eb-scard-art"><span class="eb-scard-bigword" aria-hidden="true">TFT</span></div>
+                    <div class="eb-scard-meta"><span class="eb-scard-tag">AUTO BATTLER</span><span class="eb-scard-name">TFT</span></div>
+                  </a>
+                  <a href="#league-of-legends" class="eb-scard eb-reveal" style="--accent:#4ec6e8;--art-tint:linear-gradient(180deg, #0a2230 0%, #06121c 100%);transition-delay:40ms">
+                    <div class="eb-scard-art"><span class="eb-scard-bigword" aria-hidden="true">LEAGUE</span></div>
+                    <div class="eb-scard-meta"><span class="eb-scard-tag">MOBA · 5V5</span><span class="eb-scard-name">League of Legends</span></div>
+                  </a>
+                  <a href="#cs2" class="eb-scard eb-reveal" style="--accent:#e08a2c;--art-tint:linear-gradient(180deg, #2a1d0a 0%, #100c08 100%);transition-delay:80ms">
+                    <div class="eb-scard-art"><span class="eb-scard-bigword" aria-hidden="true">CS2</span></div>
+                    <div class="eb-scard-meta"><span class="eb-scard-tag">TAC FPS</span><span class="eb-scard-name">CS2</span></div>
+                  </a>
+                  <div class="eb-scard eb-soon eb-reveal" style="--accent:#8a7ad6;--art-tint:linear-gradient(180deg, #1a1430 0%, #0a0a14 100%);transition-delay:120ms">
+                    <div class="eb-scard-art"><span class="eb-scard-bigword" aria-hidden="true">WoW</span></div>
+                    <span class="eb-scard-badge soon">SOON</span>
+                    <div class="eb-scard-meta"><span class="eb-scard-tag">MMORPG</span><span class="eb-scard-name">Warcraft</span></div>
+                  </div>
+                  <div class="eb-scard eb-soon eb-reveal" style="--accent:#e5c26b;--art-tint:linear-gradient(180deg, #2a200a 0%, #14100a 100%);transition-delay:160ms">
+                    <div class="eb-scard-art"><span class="eb-scard-bigword" aria-hidden="true">BOOST+</span></div>
+                    <span class="eb-scard-badge soon">SOON</span>
+                    <div class="eb-scard-meta"><span class="eb-scard-tag">SUBSCRIPTION</span><span class="eb-scard-name">Boost+</span></div>
+                  </div>
+                  <div class="eb-scard eb-soon eb-reveal" style="--accent:#4e7fe8;--art-tint:linear-gradient(180deg, #0a1c30 0%, #06101a 100%);transition-delay:200ms">
+                    <div class="eb-scard-art"><span class="eb-scard-bigword" aria-hidden="true">SOCIAL</span></div>
+                    <span class="eb-scard-badge soon">SOON</span>
+                    <div class="eb-scard-meta"><span class="eb-scard-tag">COMMUNITY</span><span class="eb-scard-name">Social</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Keep dynamic grid hidden but present for JS -->
+            <div class="home-grid" id="homeGameGrid" style="display:none"></div>
           </div>
         </section>
 
-        <!-- Top Boosters -->
-        <section class="ely-top-boosters" aria-labelledby="topBoostersTitle">
-          <div class="home-section-head">
-            <span class="home-section-kicker">Our Team</span>
-            <h2 id="topBoostersTitle">Top Boosters</h2>
-          </div>
-
-          <div class="ely-booster-grid">
-
-            <article class="ely-booster-card">
-              <div class="ely-booster-card__header">
-                <img src="assets/assetselysiumlogo-transparent.webp" alt="Elysium Boost" class="ely-booster-logo" width="40" height="40" loading="lazy">
-                <strong class="ely-booster-card__name">ARCHI</strong>
-                <span class="ely-booster-card__verified">&#10003; Verified</span>
+        <!-- How It Works -->
+        <section class="eb-section" id="ebHowSection" aria-labelledby="howItWorksTitle">
+          <div class="eb-container">
+            <div class="eb-secheader">
+              <div class="eb-reveal"><span class="eb-label">THE PATH</span></div>
+              <div class="eb-reveal" style="transition-delay:80ms"><h2 class="eb-h2" id="howItWorksTitle">Three steps, one clean delivery.</h2></div>
+            </div>
+            <div class="eb-steps">
+              <div class="eb-reveal">
+                <div class="eb-step">
+                  <div class="eb-step-n">01</div>
+                  <div class="tick"></div>
+                  <h3 class="eb-step-title">Choose your service</h3>
+                  <p class="eb-step-body">Rank boost, in-game items, coaching — pick your game and configure exactly what you need.</p>
+                  <span class="eb-step-arrow" aria-hidden="true"></span>
+                </div>
               </div>
-              <div class="ely-booster-card__ranks">
-                <span class="ely-booster-rank ely-booster-rank--arc">Arc Raiders &middot; Top 1000 Cantina Legend</span>
-                <span class="ely-booster-rank ely-booster-rank--arc">Arc Raiders &middot; PvP &amp; PvE Expert</span>
+              <div class="eb-reveal" style="transition-delay:100ms">
+                <div class="eb-step">
+                  <div class="eb-step-n">02</div>
+                  <div class="tick"></div>
+                  <h3 class="eb-step-title">Confirm in Discord</h3>
+                  <p class="eb-step-body">Copy your order ticket and drop it in Discord. Our team confirms scope, timing, and your booster.</p>
+                  <span class="eb-step-arrow" aria-hidden="true"></span>
+                </div>
               </div>
-              <div class="ely-booster-card__services">
-                <span>Raid Coaching</span>
-                <span>Trials Boost</span>
-                <span>All Guns</span>
-                <span>Boss &amp; Puzzle</span>
-                <span>Custom Loadout</span>
-                <span>All Blueprints</span>
+              <div class="eb-reveal" style="transition-delay:200ms">
+                <div class="eb-step">
+                  <div class="eb-step-n">03</div>
+                  <div class="tick"></div>
+                  <h3 class="eb-step-title">Delivery begins</h3>
+                  <p class="eb-step-body">Your verified booster starts. Clean, manual, no cheats — tracked until done.</p>
+                </div>
               </div>
-              <div class="ely-booster-card__footer">
-                <span class="ely-booster-orders">+213 orders completed</span>
-              </div>
-            </article>
-
-            <article class="ely-booster-card ely-booster-card--top">
-              <div class="ely-booster-card__header">
-                <img src="assets/assetselysiumlogo-transparent.webp" alt="Elysium Boost" class="ely-booster-logo" width="40" height="40" loading="lazy">
-                <strong class="ely-booster-card__name">DRATON</strong>
-                <span class="ely-booster-card__verified">&#10003; Verified</span>
-              </div>
-              <div class="ely-booster-card__ranks">
-                <span class="ely-booster-rank ely-booster-rank--arc">Arc Raiders &middot; Top 200 Cantina Legend</span>
-                <span class="ely-booster-rank ely-booster-rank--arc">Valorant &middot; Immortal 3 &mdash; 340 RR</span>
-              </div>
-              <div class="ely-booster-card__services">
-                <span>Raid Coaching</span>
-                <span>Trials Boost</span>
-                <span>Gun Provide</span>
-                <span>Rank Boost</span>
-                <span>Custom Loadout</span>
-                <span>All Guns</span>
-              </div>
-              <div class="ely-booster-card__footer">
-                <span class="ely-booster-orders">+648 orders completed</span>
-              </div>
-            </article>
-
-            <article class="ely-booster-card">
-              <div class="ely-booster-card__header">
-                <img src="assets/assetselysiumlogo-transparent.webp" alt="Elysium Boost" class="ely-booster-logo" width="40" height="40" loading="lazy">
-                <strong class="ely-booster-card__name">FIVEX</strong>
-                <span class="ely-booster-card__verified">&#10003; Verified</span>
-              </div>
-              <div class="ely-booster-card__ranks">
-                <span class="ely-booster-rank ely-booster-rank--arc">Arc Raiders &middot; Top 1000 Cantina Legend</span>
-                <span class="ely-booster-rank ely-booster-rank--arc">Valorant &middot; Radiant &mdash; 814 RR</span>
-              </div>
-              <div class="ely-booster-card__services">
-                <span>Raid Coaching</span>
-                <span>Trials Boost</span>
-                <span>All Materials</span>
-                <span>Rank Boost</span>
-                <span>Coaching</span>
-                <span>Custom Loadout</span>
-              </div>
-              <div class="ely-booster-card__footer">
-                <span class="ely-booster-orders">+456 orders completed</span>
-              </div>
-            </article>
-
-          </div>
-
-          <div class="ely-booster-more">
-            <a href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer" class="ely-booster-more__link">More verified boosters available in Discord &rarr;</a>
+            </div>
           </div>
         </section>
 
-        <!-- Neden ElysiumBoost -->
-        <section class="home-why" id="homeAboutBlock" aria-labelledby="homeWhyTitle">
-          <div class="home-section-head">
-            <span class="home-section-kicker">Why ElysiumBoost</span>
-            <h2 id="homeWhyTitle">Built for clean orders</h2>
-          </div>
-          <div class="home-why-grid">
-            <article><strong>Clear Pricing</strong><p>Live totals stay easy to review before Discord confirmation.</p></article>
-            <article><strong>Manual Process</strong><p>Every order is handled manually with no cheats or exploits.</p></article>
-            <article><strong>Real Support</strong><p>Support confirms timing, details, and updates in your ticket.</p></article>
-            <article><strong>Built for Serious Players</strong><p>Focused services for players who value reliable progress.</p></article>
+        <!-- Why Us -->
+        <section class="eb-section" id="homeAboutBlock" aria-labelledby="homeWhyTitle" style="background:var(--eb-bg-2);border-top:1px solid var(--eb-line-soft);border-bottom:1px solid var(--eb-line-soft)">
+          <div class="eb-container">
+            <div class="eb-why-grid">
+              <div class="eb-secheader eb-left">
+                <div class="eb-reveal"><span class="eb-label">WHY ELYSIUMBOOST</span></div>
+                <div class="eb-reveal" style="transition-delay:80ms"><h2 class="eb-h2" id="homeWhyTitle" style="text-align:left">Built for clean orders.</h2></div>
+                <div class="eb-reveal" style="transition-delay:160ms">
+                  <p class="eb-body" style="margin-top:12px">
+                    Four standards every order ships against. Clear pricing up front, manual hands on the account, a real person in your Discord ticket, and zero footprint after the climb closes.
+                  </p>
+                </div>
+              </div>
+              <div class="eb-features">
+                <div class="eb-reveal">
+                  <div class="eb-feature">
+                    <div class="eb-feature-head"><h3 class="eb-feature-title">Clear Pricing</h3><span class="eb-feature-n">01</span></div>
+                    <p class="eb-feature-body">Live totals stay easy to review before Discord confirmation.</p>
+                  </div>
+                </div>
+                <div class="eb-reveal" style="transition-delay:80ms">
+                  <div class="eb-feature">
+                    <div class="eb-feature-head"><h3 class="eb-feature-title">Manual Process</h3><span class="eb-feature-n">02</span></div>
+                    <p class="eb-feature-body">Every order is handled manually with no cheats or exploits.</p>
+                  </div>
+                </div>
+                <div class="eb-reveal" style="transition-delay:160ms">
+                  <div class="eb-feature">
+                    <div class="eb-feature-head"><h3 class="eb-feature-title">Real Support</h3><span class="eb-feature-n">03</span></div>
+                    <p class="eb-feature-body">Support confirms timing, details, and updates in your ticket.</p>
+                  </div>
+                </div>
+                <div class="eb-reveal" style="transition-delay:240ms">
+                  <div class="eb-feature">
+                    <div class="eb-feature-head"><h3 class="eb-feature-title">Private by Default</h3><span class="eb-feature-n">04</span></div>
+                    <p class="eb-feature-body">No streams, no public logs. Your account stays yours.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
-        <!-- Yorumlar -->
-        <section class="home-reviews" aria-labelledby="trustCompactTitle">
-          <div class="home-section-head home-section-head--inline">
-            <div>
-              <span class="home-section-kicker">Trust Proof</span>
-              <h2 id="trustCompactTitle">Player Feedback</h2>
+        <!-- Reviews -->
+        <section class="eb-section" aria-labelledby="trustCompactTitle">
+          <div class="eb-container">
+            <div class="eb-secheader">
+              <div class="eb-reveal"><span class="eb-label">TRUST PROOF</span></div>
+              <div class="eb-reveal" style="transition-delay:80ms"><h2 class="eb-h2" id="trustCompactTitle">Player Feedback.</h2></div>
             </div>
-            <span class="ely-discord-rating-pill">
-              ★★★★★ 4.9/5 Discord Rating
-            </span>
-          </div>
-          <a href="https://discord.com/channels/1499767937974669363/1499794268561211653"
-             target="_blank"
-             rel="noopener noreferrer"
-             class="ely-reviews-discord-link"
-             aria-label="Discord'da tüm yorumları gör">
-          <div class="home-review-grid ely-review-grid">
-
-            <article class="ely-review-card">
-              <div class="ely-review-top">
-                <div class="ely-review-avatar" aria-hidden="true">BL</div>
-                <div class="ely-review-meta">
-                  <span class="ely-review-name">Blacklisted <span class="ely-review-location">🇺🇸 US</span></span>
-                  <span class="ely-review-date">May 18, 2026</span>
-                </div>
+            <div class="eb-reviews">
+              <div class="eb-reveal">
+                <article class="eb-review">
+                  <div class="eb-stars">★★★★★</div>
+                  <p class="eb-review-quote">"Every order I've placed was handled quickly and professionally. No issues, no delays, just results. Best boosting service I've used."</p>
+                  <footer class="eb-review-foot">
+                    <span class="eb-avatar">BL</span>
+                    <div><span class="eb-review-user">Blacklisted</span><span class="eb-review-meta"><span class="game">ARC RAIDERS</span> · VERIFIED BUYER</span></div>
+                  </footer>
+                </article>
               </div>
-              <p class="ely-review-title">"Smooth and fast every single time"</p>
-              <div class="ely-review-stars" aria-label="5 out of 5 stars">★★★★★</div>
-              <p class="ely-review-text">"Every order I've placed was handled quickly and professionally. No issues, no delays, just results. Best boosting service I've used."</p>
-              <div class="ely-review-foot">
-                <span class="ely-review-badge">✓ Verified Discord Customer</span>
+              <div class="eb-reveal" style="transition-delay:60ms">
+                <article class="eb-review">
+                  <div class="eb-stars">★★★★★</div>
+                  <p class="eb-review-quote">"Fast reply, they go the extra mile. Nice, polite, respectful, super trust worthy. Prices are great — they even gave me extra items!"</p>
+                  <footer class="eb-review-foot">
+                    <span class="eb-avatar">BO</span>
+                    <div><span class="eb-review-user">BOSS</span><span class="eb-review-meta"><span class="game">ARC RAIDERS</span> · VERIFIED BUYER</span></div>
+                  </footer>
+                </article>
               </div>
-            </article>
-
-            <article class="ely-review-card">
-              <div class="ely-review-top">
-                <div class="ely-review-avatar ely-review-avatar--purple" aria-hidden="true">BO</div>
-                <div class="ely-review-meta">
-                  <span class="ely-review-name">BOSS <span class="ely-review-location">🇺🇸 US</span></span>
-                  <span class="ely-review-date">May 19, 2026</span>
-                </div>
+              <div class="eb-reveal" style="transition-delay:120ms">
+                <article class="eb-review">
+                  <div class="eb-stars">★★★★★</div>
+                  <p class="eb-review-quote">"They provide the best service everytime and makes sure I get quality product each time. Best store you can think of — literally everything."</p>
+                  <footer class="eb-review-foot">
+                    <span class="eb-avatar">KT</span>
+                    <div><span class="eb-review-user">kingtianto</span><span class="eb-review-meta"><span class="game">ARC RAIDERS</span> · VERIFIED BUYER</span></div>
+                  </footer>
+                </article>
               </div>
-              <p class="ely-review-title">"These people are amazing"</p>
-              <div class="ely-review-stars" aria-label="5 out of 5 stars">★★★★★</div>
-              <p class="ely-review-text">"Fast reply, they go the extra mile. Nice, polite, respectful, super trust worthy. Prices are great — they even gave me extra items!"</p>
-              <div class="ely-review-foot">
-                <span class="ely-review-badge">✓ Verified Discord Customer</span>
+              <div class="eb-reveal" style="transition-delay:180ms">
+                <article class="eb-review">
+                  <div class="eb-stars">★★★★★</div>
+                  <p class="eb-review-quote">"Super reliable. Ordered twice now and both times were flawless. Communication was clear and delivery was on time. Highly recommend."</p>
+                  <footer class="eb-review-foot">
+                    <span class="eb-avatar">XU</span>
+                    <div><span class="eb-review-user">xunyf</span><span class="eb-review-meta"><span class="game">VALORANT</span> · VERIFIED BUYER</span></div>
+                  </footer>
+                </article>
               </div>
-            </article>
-
-            <article class="ely-review-card">
-              <div class="ely-review-top">
-                <div class="ely-review-avatar ely-review-avatar--green" aria-hidden="true">KT</div>
-                <div class="ely-review-meta">
-                  <span class="ely-review-name">kingtianto <span class="ely-review-location">🇺🇸 US</span></span>
-                  <span class="ely-review-date">May 20, 2026</span>
-                </div>
+              <div class="eb-reveal" style="transition-delay:240ms">
+                <article class="eb-review">
+                  <div class="eb-stars">★★★★★</div>
+                  <p class="eb-review-quote">"Very kind and very quick. Even gave extra blueprints and sometimes guns when I've ordered. Would recommend to anyone looking for the best."</p>
+                  <footer class="eb-review-foot">
+                    <span class="eb-avatar">HV</span>
+                    <div><span class="eb-review-user">Harv</span><span class="eb-review-meta"><span class="game">ARC RAIDERS</span> · VERIFIED BUYER</span></div>
+                  </footer>
+                </article>
               </div>
-              <p class="ely-review-title">"my experience was the best i've been..."</p>
-              <div class="ely-review-stars" aria-label="5 out of 5 stars">★★★★★</div>
-              <p class="ely-review-text">"They provide the best service everytime and makes sure I get quality product each time. Best store you can think of — literally everything you can ask for. 1000/1000."</p>
-              <div class="ely-review-foot">
-                <span class="ely-review-badge">✓ Verified Discord Customer</span>
-              </div>
-            </article>
-
-            <article class="ely-review-card">
-              <div class="ely-review-top">
-                <div class="ely-review-avatar" aria-hidden="true">XU</div>
-                <div class="ely-review-meta">
-                  <span class="ely-review-name">xunyf <span class="ely-review-location">🇬🇧 GB</span></span>
-                  <span class="ely-review-date">May 17, 2026</span>
-                </div>
-              </div>
-              <p class="ely-review-title">"Reliable and professional team"</p>
-              <div class="ely-review-stars" aria-label="5 out of 5 stars">★★★★★</div>
-              <p class="ely-review-text">"Super reliable. Ordered twice now and both times were flawless. Communication was clear and delivery was on time. Highly recommend."</p>
-              <div class="ely-review-foot">
-                <span class="ely-review-badge">✓ Verified Discord Customer</span>
-              </div>
-            </article>
-
-            <article class="ely-review-card">
-              <div class="ely-review-top">
-                <div class="ely-review-avatar ely-review-avatar--purple" aria-hidden="true">HV</div>
-                <div class="ely-review-meta">
-                  <span class="ely-review-name">Harv <span class="ely-review-location">🇬🇧 GB</span></span>
-                  <span class="ely-review-date">May 20, 2026</span>
-                </div>
-              </div>
-              <p class="ely-review-title">"Very kind and very quick"</p>
-              <div class="ely-review-stars" aria-label="5 out of 5 stars">★★★★★</div>
-              <p class="ely-review-text">"Very kind and very quick. Even gave extra blueprints and sometimes guns when I've ordered. Would recommend to anyone looking for the best."</p>
-              <div class="ely-review-foot">
-                <span class="ely-review-badge">✓ Verified Discord Customer</span>
-              </div>
-            </article>
-
-            <article class="ely-review-card">
-              <div class="ely-review-top">
-                <div class="ely-review-avatar ely-review-avatar--green" aria-hidden="true">JC</div>
-                <div class="ely-review-meta">
-                  <span class="ely-review-name">JuicyXCocoNtz <span class="ely-review-location">🇨🇦 CA</span></span>
-                  <span class="ely-review-date">May 21, 2026</span>
-                </div>
-              </div>
-              <p class="ely-review-title">"Always get more than I ordered"</p>
-              <div class="ely-review-stars" aria-label="5 out of 5 stars">★★★★★</div>
-              <p class="ely-review-text">"Always get what I ordered — plus even more 😊. The team is honest and always delivers. Would recommend to anyone, no hesitation."</p>
-              <div class="ely-review-foot">
-                <span class="ely-review-badge">✓ Verified Discord Customer</span>
-              </div>
-            </article>
-
-          </div>
-          </a>
-        </section>
-
-        <!-- Garanti & güvence -->
-        <section class="ely-guarantee-strip" aria-label="Garanti ve güvence">
-          <div class="ely-guarantee-grid">
-
-            <div class="ely-guarantee-card">
-              <span class="ely-guarantee-icon" aria-hidden="true">🛡</span>
-              <div>
-                <strong>Manual &amp; Safe</strong>
-                <p>No cheats, no scripts, no bots. Every order is handled manually by a verified booster.</p>
+              <div class="eb-reveal" style="transition-delay:300ms">
+                <article class="eb-review">
+                  <div class="eb-stars">★★★★★</div>
+                  <p class="eb-review-quote">"Always get what I ordered — plus even more. The team is honest and always delivers. Would recommend to anyone, no hesitation."</p>
+                  <footer class="eb-review-foot">
+                    <span class="eb-avatar">JC</span>
+                    <div><span class="eb-review-user">JuicyXCocoNtz</span><span class="eb-review-meta"><span class="game">CS2</span> · VERIFIED BUYER</span></div>
+                  </footer>
+                </article>
               </div>
             </div>
-
-            <div class="ely-guarantee-card">
-              <span class="ely-guarantee-icon" aria-hidden="true">⚡</span>
-              <div>
-                <strong>Confirmed Before Start</strong>
-                <p>Nothing starts until you confirm the full scope and price in Discord. No surprises.</p>
+            <div class="eb-reveal" style="transition-delay:400ms">
+              <div class="eb-reviews-foot">
+                <span class="big">4.9 / 5</span>
+                <span class="sep"></span>
+                <span>10,000+ Orders</span>
+                <span class="sep"></span>
+                <span>Discord Rating</span>
               </div>
             </div>
-
-            <div class="ely-guarantee-card">
-              <span class="ely-guarantee-icon" aria-hidden="true">↩</span>
-              <div>
-                <strong>Refund Policy</strong>
-                <p>If we cannot complete your order, you get a full refund. Contact support in Discord before disputing any charge.</p>
-              </div>
-            </div>
-
-            <div class="ely-guarantee-card">
-              <span class="ely-guarantee-icon" aria-hidden="true">💬</span>
-              <div>
-                <strong>Real Support</strong>
-                <p>A real person handles your ticket. No bots, no automated replies. Fast response in Discord.</p>
-              </div>
-            </div>
-
           </div>
         </section>
 
         <!-- FAQ -->
-        <section class="faq-home faq-home--compact" aria-labelledby="faqHomeTitle">
-          <h2 id="faqHomeTitle">FAQ</h2>
-          <div class="faq-list">
-            <details class="faq-item">
-              <summary>How do I place an order?</summary>
-              <p>Choose a service, configure the options, add it to cart, then copy your ticket into Discord.</p>
-            </details>
-            <details class="faq-item">
-              <summary>How is the final price confirmed?</summary>
-              <p>The site shows the live estimate, and support confirms the final scope in Discord before delivery.</p>
-            </details>
-            <details class="faq-item">
-              <summary>How fast can my order start?</summary>
-              <p>Start time depends on queue and service type. Support gives the current ETA in your ticket.</p>
-            </details>
-            <details class="faq-item">
-              <summary>Where do I receive updates?</summary>
-              <p>Updates, timing, and delivery notes are handled in your Discord ticket.</p>
-            </details>
+        <section class="eb-section" aria-labelledby="faqHomeTitle">
+          <div class="eb-container">
+            <div class="eb-secheader">
+              <div class="eb-reveal"><span class="eb-label">FAQ</span></div>
+              <div class="eb-reveal" style="transition-delay:80ms"><h2 class="eb-h2" id="faqHomeTitle">Frequently Asked Questions.</h2></div>
+            </div>
+            <div>
+              <div class="eb-reveal">
+                <div class="eb-faq-row eb-open">
+                  <button class="eb-faq-btn" type="button">
+                    <span class="eb-faq-n">Q.01</span>
+                    <span class="eb-faq-q">How do I place an order?</span>
+                    <span class="eb-faq-plus">+</span>
+                  </button>
+                  <div class="eb-faq-panel">
+                    <div class="eb-faq-a"><span></span><p>Choose a service, configure the options, add it to cart, then copy your ticket into Discord.</p><span></span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="eb-reveal" style="transition-delay:50ms">
+                <div class="eb-faq-row">
+                  <button class="eb-faq-btn" type="button">
+                    <span class="eb-faq-n">Q.02</span>
+                    <span class="eb-faq-q">Is my account safe?</span>
+                    <span class="eb-faq-plus">+</span>
+                  </button>
+                  <div class="eb-faq-panel">
+                    <div class="eb-faq-a"><span></span><p>Manual only, no cheats, no bots. 10,000+ orders completed without a single ban.</p><span></span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="eb-reveal" style="transition-delay:100ms">
+                <div class="eb-faq-row">
+                  <button class="eb-faq-btn" type="button">
+                    <span class="eb-faq-n">Q.03</span>
+                    <span class="eb-faq-q">When does delivery start?</span>
+                    <span class="eb-faq-plus">+</span>
+                  </button>
+                  <div class="eb-faq-panel">
+                    <div class="eb-faq-a"><span></span><p>After Discord confirmation with our team. We give you a clear ETA before anything begins.</p><span></span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="eb-reveal" style="transition-delay:150ms">
+                <div class="eb-faq-row">
+                  <button class="eb-faq-btn" type="button">
+                    <span class="eb-faq-n">Q.04</span>
+                    <span class="eb-faq-q">What games do you cover?</span>
+                    <span class="eb-faq-plus">+</span>
+                  </button>
+                  <div class="eb-faq-panel">
+                    <div class="eb-faq-a"><span></span><p>Valorant, Arc Raiders, CS2, TFT, League of Legends — and growing.</p><span></span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
-      </div><!-- /shell -->
+      </div><!-- /eb-page-bg -->
     </section><!-- /home-content -->
 
     <!-- Servis içerik -->
@@ -722,52 +794,495 @@
   </div>
 
   <!-- ══════════════════════════════════
-       FOOTER
+       ARC RAIDERS — HUB MAP VIEW
        ══════════════════════════════════ -->
-  <footer class="site-footer" id="siteFooter">
-    <div class="shell site-footer__inner">
+  <section id="arcHubView" style="display:none">
 
-      <!-- Brand -->
-      <div class="site-footer__brand">
-        <span class="site-footer__wordmark">ELYSIUM BOOST</span>
-        <span class="site-footer__tagline">Premium manual game services · Discord ticket flow</span>
-      </div>
+    <!-- Back to Map button (visible in service view) -->
+    <button type="button" class="arc-back-btn" id="arcBackBtn">
+      <svg width="12" height="8" viewBox="0 0 16 10" fill="none"><path d="M16 5H2M2 5L6 1M2 5L6 9" stroke="currentColor" stroke-width="1.5"/></svg>
+      Back to map
+    </button>
 
-      <!-- Stats -->
-      <div class="site-footer__stats">
-        <div class="site-footer__stat">
-          <span class="site-footer__stat-num">2,000+</span>
-          <span class="site-footer__stat-lbl">Orders</span>
-        </div>
-        <div class="site-footer__stat">
-          <span class="site-footer__stat-num">100+</span>
-          <span class="site-footer__stat-lbl">Discord Members</span>
-        </div>
-        <div class="site-footer__stat">
-          <span class="site-footer__stat-num">4.9★</span>
-          <span class="site-footer__stat-lbl">Discord Rating</span>
+    <!-- Art panel (visible in service view, hidden in hub/other games) -->
+    <aside class="arc-art-panel" id="arcArtPanel" aria-label="Service artwork">
+      <div class="arc-art-frame">
+        <img class="arc-art-image" id="arcArtImage" src="" alt="">
+        <div class="arc-art-stripe" aria-hidden="true"></div>
+        <div class="arc-art-meta">
+          <span class="arc-art-eyebrow">Service · Arc Raiders</span>
+          <h2 class="arc-art-name" id="arcArtName"></h2>
+          <p class="arc-art-desc" id="arcArtDesc"></p>
+          <div class="arc-art-tags" id="arcArtTags"></div>
         </div>
       </div>
+    </aside>
 
-      <!-- Trust badges -->
-      <div class="site-footer__trust">
-        <span class="site-footer__trust-badge">🔒 Manual Only</span>
-        <span class="site-footer__trust-badge">✓ No Cheats</span>
-        <span class="site-footer__trust-badge">⚡ Fast Support</span>
-        <span class="site-footer__trust-badge">🛡 No Exploits</span>
+    <!-- Hub map wrapper -->
+    <div class="arc-hub arc-hub--fullscreen" role="region" aria-label="Service map" id="arcHubMap">
+      <img class="arc-hub-img" src="assets/arc-hub-speranza.png" alt="Speranza hub overview" loading="eager">
+      <div class="arc-hub-veil" aria-hidden="true"></div>
+      <div class="arc-hub-scan" aria-hidden="true"></div>
+
+      <!-- LIVE badge (top-right) -->
+      <span class="arc-hub-hud" aria-hidden="true">
+        <span class="live"></span>
+        Live · Speranza
+      </span>
+
+      <!-- Station selector trigger (top-left) -->
+      <button type="button" class="arc-hub-hud-r" id="arcSidebarBtn" aria-label="Open station selector">
+        <span class="arc-hot-trace" aria-hidden="true"></span>
+        <span class="nudge" aria-hidden="true">
+          <svg width="12" height="10" viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+            <line x1="1" y1="2" x2="11" y2="2"/>
+            <line x1="1" y1="5" x2="8" y2="5"/>
+            <line x1="1" y1="8" x2="5" y2="8"/>
+          </svg>
+        </span>
+        Select a station
+        <span class="caret"></span>
+      </button>
+
+      <!-- Overlay text (bottom-left) -->
+      <p class="arc-hub-overlay">
+        Pick a station on the map. Loadouts, materials, raids, leveling — every service in Speranza, in one place. Verified runners, instant delivery, prices in Raider Coins.
+      </p>
+
+      <!-- Hotspots — 15 stations positioned at % coordinates -->
+      <button type="button" class="arc-hot" style="left:22%;top:36%" data-service-id="loadout" data-category="loadouts" aria-label="Custom Loadout">
+        <span class="dot" aria-hidden="true"></span><span class="line" aria-hidden="true"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Custom Loadout</span>
+      </button>
+      <button type="button" class="arc-hot" style="left:32%;top:28%" data-service-id="guns" data-category="guns" aria-label="All Weapons">
+        <span class="dot" aria-hidden="true"></span><span class="line" aria-hidden="true"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>All Weapons</span>
+      </button>
+      <button type="button" class="arc-hot" style="left:13%;top:52%" data-service-id="blueprints" data-category="blueprints" aria-label="Blueprints">
+        <span class="dot" aria-hidden="true"></span><span class="line" aria-hidden="true"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Blueprints</span>
+      </button>
+      <button type="button" class="arc-hot" style="left:24%;top:43%" data-service-id="leveling" data-category="leveling" aria-label="Leveling">
+        <span class="dot" aria-hidden="true"></span><span class="line" aria-hidden="true"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Leveling</span>
+      </button>
+      <button type="button" class="arc-hot" style="left:34%;top:55%" data-service-id="workshop" data-category="workshop" aria-label="Workshop &amp; Scrappy">
+        <span class="dot" aria-hidden="true"></span><span class="line" aria-hidden="true"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Workshop &amp; Scrappy</span>
+      </button>
+      <button type="button" class="arc-hot" style="left:50%;top:59%" data-service-id="materials" data-category="materials" aria-label="All Materials">
+        <span class="dot" aria-hidden="true"></span><span class="line" aria-hidden="true"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>All Materials</span>
+      </button>
+      <button type="button" class="arc-hot" style="left:48%;top:46%" data-service-id="depositary" data-category="depositary" aria-label="Depositary">
+        <span class="dot" aria-hidden="true"></span><span class="line" aria-hidden="true"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Depositary</span>
+      </button>
+      <button type="button" class="arc-hot" style="left:47%;top:38%" data-service-id="boss" data-category="bosses" aria-label="Boss &amp; Puzzle">
+        <span class="dot" aria-hidden="true"></span><span class="line" aria-hidden="true"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Boss &amp; Puzzle</span>
+      </button>
+      <button type="button" class="arc-hot" style="left:51%;top:28%" data-service-id="coins" data-category="coins" aria-label="Raider Coins">
+        <span class="dot" aria-hidden="true"></span><span class="line" aria-hidden="true"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Raider Coins</span>
+      </button>
+      <button type="button" class="arc-hot left" style="left:64%;top:32%" data-service-id="trials" data-category="trials" aria-label="Trials Boost">
+        <span class="dot" aria-hidden="true"></span><span class="line" aria-hidden="true"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Trials Boost</span>
+      </button>
+      <button type="button" class="arc-hot left" style="left:76%;top:22%" data-service-id="raid" data-category="raids" aria-label="Raid Bundles">
+        <span class="dot" aria-hidden="true"></span><span class="line" aria-hidden="true"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Raid Bundles</span>
+      </button>
+      <button type="button" class="arc-hot left" style="left:78%;top:42%" data-service-id="expedition" data-category="expeditions" aria-label="Expedition Boost">
+        <span class="dot" aria-hidden="true"></span><span class="line" aria-hidden="true"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Expedition Boost</span>
+      </button>
+      <button type="button" class="arc-hot left" style="left:88%;top:35%" data-service-id="pvp" data-category="coaching" aria-label="Hourly Coaching">
+        <span class="dot" aria-hidden="true"></span><span class="line" aria-hidden="true"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Hourly Coaching</span>
+      </button>
+      <button type="button" class="arc-hot left" style="left:86%;top:47%" data-service-id="private" data-category="custom" aria-label="Custom Orders">
+        <span class="dot" aria-hidden="true"></span><span class="line" aria-hidden="true"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Custom Orders</span>
+      </button>
+      <button type="button" class="arc-hot left" style="left:78%;top:52%" data-service-id="seeds" data-category="seeds" aria-label="Assorted Seeds">
+        <span class="dot" aria-hidden="true"></span><span class="line" aria-hidden="true"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Assorted Seeds</span>
+      </button>
+
+      <!-- Scroll hint -->
+      <div class="arc-scroll-hint" aria-hidden="true" id="arcScrollHint">
+        <span class="arrow">↓</span>
+        <span class="lbl">Scroll</span>
       </div>
-
-      <!-- Links -->
-      <div class="site-footer__links">
-        <a class="site-footer__discord btn btn-glass" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener">Discord</a>
-        <button type="button" class="btn btn-glass site-footer__terms-btn" id="footerLegalBtn">Terms &amp; safety</button>
-      </div>
-
     </div>
 
-    <!-- Bottom bar -->
-    <div class="site-footer__bottom">
-      <span>© 2025 ElysiumBoost · All rights reserved</span>
+    <!-- Mobile fallback list -->
+    <div class="arc-hub-mobile" role="list" aria-label="Services" id="arcHubMobile">
+      <button type="button" data-service-id="loadout" data-category="loadouts">Custom Loadout</button>
+      <button type="button" data-service-id="guns" data-category="guns">All Weapons</button>
+      <button type="button" data-service-id="blueprints" data-category="blueprints">Blueprints</button>
+      <button type="button" data-service-id="leveling" data-category="leveling">Leveling</button>
+      <button type="button" data-service-id="workshop" data-category="workshop">Workshop &amp; Scrappy</button>
+      <button type="button" data-service-id="materials" data-category="materials">All Materials</button>
+      <button type="button" data-service-id="depositary" data-category="depositary">Depositary</button>
+      <button type="button" data-service-id="boss" data-category="bosses">Boss &amp; Puzzle</button>
+      <button type="button" data-service-id="coins" data-category="coins">Raider Coins</button>
+      <button type="button" data-service-id="trials" data-category="trials">Trials Boost</button>
+      <button type="button" data-service-id="raid" data-category="raids">Raid Bundles</button>
+      <button type="button" data-service-id="expedition" data-category="expeditions">Expedition Boost</button>
+      <button type="button" data-service-id="pvp" data-category="coaching">Hourly Coaching</button>
+      <button type="button" data-service-id="private" data-category="custom">Custom Orders</button>
+      <button type="button" data-service-id="seeds" data-category="seeds">Assorted Seeds</button>
+    </div>
+
+    <!-- Station selector sidebar -->
+    <div class="arc-sidebar-overlay" id="arcSidebarOverlay"></div>
+    <aside class="arc-sidebar" id="arcSidebar" aria-hidden="true" aria-label="Station selector">
+      <div class="arc-sidebar-head">
+        <span class="arc-sidebar-title">Select a Station</span>
+        <button type="button" class="arc-sidebar-close" id="arcSidebarClose" aria-label="Close station selector">×</button>
+      </div>
+      <div class="arc-sidebar-list">
+        <button type="button" class="arc-sidebar-item" data-service-id="loadout" data-category="loadouts">
+          <span class="arc-sidebar-icon" aria-hidden="true"></span>
+          <span class="arc-sidebar-name">Custom Loadout</span>
+          <span class="arc-sidebar-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="arc-sidebar-item" data-service-id="guns" data-category="guns">
+          <span class="arc-sidebar-icon" aria-hidden="true"></span>
+          <span class="arc-sidebar-name">All Weapons</span>
+          <span class="arc-sidebar-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="arc-sidebar-item" data-service-id="blueprints" data-category="blueprints">
+          <span class="arc-sidebar-icon" aria-hidden="true"></span>
+          <span class="arc-sidebar-name">Blueprints</span>
+          <span class="arc-sidebar-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="arc-sidebar-item" data-service-id="leveling" data-category="leveling">
+          <span class="arc-sidebar-icon" aria-hidden="true"></span>
+          <span class="arc-sidebar-name">Leveling</span>
+          <span class="arc-sidebar-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="arc-sidebar-item" data-service-id="workshop" data-category="workshop">
+          <span class="arc-sidebar-icon" aria-hidden="true"></span>
+          <span class="arc-sidebar-name">Workshop &amp; Scrappy</span>
+          <span class="arc-sidebar-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="arc-sidebar-item" data-service-id="materials" data-category="materials">
+          <span class="arc-sidebar-icon" aria-hidden="true"></span>
+          <span class="arc-sidebar-name">All Materials</span>
+          <span class="arc-sidebar-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="arc-sidebar-item" data-service-id="depositary" data-category="depositary">
+          <span class="arc-sidebar-icon" aria-hidden="true"></span>
+          <span class="arc-sidebar-name">Depositary</span>
+          <span class="arc-sidebar-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="arc-sidebar-item" data-service-id="boss" data-category="bosses">
+          <span class="arc-sidebar-icon" aria-hidden="true"></span>
+          <span class="arc-sidebar-name">Boss &amp; Puzzle</span>
+          <span class="arc-sidebar-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="arc-sidebar-item" data-service-id="coins" data-category="coins">
+          <span class="arc-sidebar-icon" aria-hidden="true"></span>
+          <span class="arc-sidebar-name">Raider Coins</span>
+          <span class="arc-sidebar-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="arc-sidebar-item" data-service-id="trials" data-category="trials">
+          <span class="arc-sidebar-icon" aria-hidden="true"></span>
+          <span class="arc-sidebar-name">Trials Boost</span>
+          <span class="arc-sidebar-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="arc-sidebar-item" data-service-id="raid" data-category="raids">
+          <span class="arc-sidebar-icon" aria-hidden="true"></span>
+          <span class="arc-sidebar-name">Raid Bundles</span>
+          <span class="arc-sidebar-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="arc-sidebar-item" data-service-id="expedition" data-category="expeditions">
+          <span class="arc-sidebar-icon" aria-hidden="true"></span>
+          <span class="arc-sidebar-name">Expedition Boost</span>
+          <span class="arc-sidebar-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="arc-sidebar-item" data-service-id="pvp" data-category="coaching">
+          <span class="arc-sidebar-icon" aria-hidden="true"></span>
+          <span class="arc-sidebar-name">Hourly Coaching</span>
+          <span class="arc-sidebar-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="arc-sidebar-item" data-service-id="private" data-category="custom">
+          <span class="arc-sidebar-icon" aria-hidden="true"></span>
+          <span class="arc-sidebar-name">Custom Orders</span>
+          <span class="arc-sidebar-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="arc-sidebar-item" data-service-id="seeds" data-category="seeds">
+          <span class="arc-sidebar-icon" aria-hidden="true"></span>
+          <span class="arc-sidebar-name">Assorted Seeds</span>
+          <span class="arc-sidebar-arrow" aria-hidden="true">→</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Below-map content -->
+    <div class="arc-hub-sections eb-page-bg">
+
+      <!-- Section 2: Arc Info Strip -->
+      <section class="arc-info">
+        <div class="eb-container">
+          <span class="arc-info-eyebrow">Extraction · Launch Season</span>
+          <h2 class="arc-info-title">Arc <span class="accent">Raiders.</span></h2>
+          <div class="arc-info-stats" role="list">
+            <span class="item" role="listitem">
+              <span class="num">2,400+</span>
+              <span class="lbl">Arc Raiders Orders</span>
+            </span>
+            <span class="sep" aria-hidden="true"></span>
+            <span class="item" role="listitem">
+              <span class="num">100%</span>
+              <span class="lbl">Manual · Stash Delivery</span>
+            </span>
+            <span class="sep" aria-hidden="true"></span>
+            <span class="item" role="listitem">
+              <span class="num">~ 12 min</span>
+              <span class="lbl">Average Fulfilment</span>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Elysium Shield -->
+      <section class="eb-section" style="background:#100b07;border-top:1px solid rgba(239,230,207,0.08);border-bottom:1px solid rgba(239,230,207,0.08)">
+        <div class="eb-container">
+          <div class="eb-secheader" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;margin-bottom:64px">
+            <span class="eb-label">ELYSIUM SHIELD</span>
+            <h2 class="eb-h2" style="font-family:var(--display);font-weight:600;font-size:clamp(34px,3.8vw,48px);line-height:1;letter-spacing:0.005em;text-transform:uppercase;color:#efe6cf;margin:18px 0 0">Four standards. Every order.</h2>
+          </div>
+          <div class="arc-shield-grid">
+            <div class="arc-shield-card">
+              <div class="arc-shield-mark">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="9" width="14" height="10" stroke="currentColor" stroke-width="1.4"/><path d="M7 9V6a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.4"/></svg>
+              </div>
+              <h3 class="arc-shield-title">Encrypted Login</h3>
+              <p class="arc-shield-body">OAuth handoff where supported. We never store your credentials — session access only, revoked on delivery.</p>
+            </div>
+            <div class="arc-shield-card">
+              <div class="arc-shield-mark">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L3 5v6c0 5 3.5 7.8 8 9 4.5-1.2 8-4 8-9V5l-8-3z" stroke="currentColor" stroke-width="1.4"/></svg>
+              </div>
+              <h3 class="arc-shield-title">Zero-Ban Record</h3>
+              <p class="arc-shield-body">2,400+ Arc Raiders orders shipped with zero account bans on file. Manual play only — no scripts, no exploits.</p>
+            </div>
+            <div class="arc-shield-card">
+              <div class="arc-shield-mark">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M19 11a8 8 0 11-2.34-5.66M19 4v4h-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="arc-shield-title">Money-Back Guarantee</h3>
+              <p class="arc-shield-body">Full refund if we can't complete your order. No fine print, no partial credits — your money back in full.</p>
+            </div>
+            <div class="arc-shield-card">
+              <div class="arc-shield-mark">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.4"/><path d="M8 9a3 3 0 116 0c0 2-3 2-3 4M11 16.5h.01" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="arc-shield-title">24/7 Discord Support</h3>
+              <p class="arc-shield-body">Live human support in Discord around the clock. Order issues, questions, changes — we respond in minutes.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Features -->
+      <section class="eb-section">
+        <div class="eb-container">
+          <div class="eb-secheader" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;margin-bottom:64px">
+            <span class="eb-label">OUR FEATURES PICK</span>
+            <h2 class="eb-h2" style="font-family:var(--display);font-weight:600;font-size:clamp(34px,3.8vw,48px);line-height:1;letter-spacing:0.005em;text-transform:uppercase;color:#efe6cf;margin:18px 0 0">Built for clean Arc Raiders orders.</h2>
+          </div>
+          <div class="arc-features">
+            <div class="arc-feature">
+              <div class="arc-feature-head">
+                <h3 class="arc-feature-title">Stash Delivery</h3>
+                <span class="arc-feature-n">01</span>
+              </div>
+              <p class="arc-feature-body">Every item lands directly in your Stash — no drop trades, no risky lobby handoffs. You log in and it's already there.</p>
+            </div>
+            <div class="arc-feature">
+              <div class="arc-feature-head">
+                <h3 class="arc-feature-title">Manual Only</h3>
+                <span class="arc-feature-n">02</span>
+              </div>
+              <p class="arc-feature-body">Real players on residential IPs. No scripts, no automation, no injection. Every order is completed by hand on a verified machine.</p>
+            </div>
+            <div class="arc-feature">
+              <div class="arc-feature-head">
+                <h3 class="arc-feature-title">Instant Delivery</h3>
+                <span class="arc-feature-n">03</span>
+              </div>
+              <p class="arc-feature-body">Average fulfilment time under 12 minutes. Most loadout and currency orders are completed before you finish reading Discord.</p>
+            </div>
+            <div class="arc-feature">
+              <div class="arc-feature-head">
+                <h3 class="arc-feature-title">Verified Runners</h3>
+                <span class="arc-feature-n">04</span>
+              </div>
+              <p class="arc-feature-body">Every runner is screened, tested, and monitored. Access is revoked the moment an order is complete — no lingering sessions.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Reviews -->
+      <section class="eb-section" style="background:#100b07;border-top:1px solid rgba(239,230,207,0.08);border-bottom:1px solid rgba(239,230,207,0.08)">
+        <div class="eb-container">
+          <div class="arc-reviews-head">
+            <span>Verified reviews</span>
+            <span class="big">4.92 / 5</span>
+            <span>based on Arc Raiders orders</span>
+          </div>
+          <div class="arc-reviews-rail">
+            <article class="arc-review">
+              <div class="arc-review-head">
+                <span class="arc-avatar">L.K</span>
+                <span class="arc-review-user">
+                  lurik#0042
+                  <span class="arc-flag" aria-label="GB" style="--c1:#012169;--c2:#fff;--c3:#c8102e"></span>
+                </span>
+                <span class="arc-verified">✓ Verified</span>
+              </div>
+              <div class="arc-review-stars">★ ★ ★ ★ ★</div>
+              <p class="arc-review-quote">"Loadout arrived in my stash before I could even alt-tab back to the game. Insane speed."</p>
+              <div class="arc-review-meta"><span class="game">ARC RAIDERS</span> · Custom Loadout · 2d</div>
+            </article>
+            <article class="arc-review">
+              <div class="arc-review-head">
+                <span class="arc-avatar">M.R</span>
+                <span class="arc-review-user">
+                  mraz#1991
+                  <span class="arc-flag" aria-label="DE" style="--c1:#000;--c2:#d00;--c3:#fc0"></span>
+                </span>
+                <span class="arc-verified">✓ Verified</span>
+              </div>
+              <div class="arc-review-stars">★ ★ ★ ★ ★</div>
+              <p class="arc-review-quote">"Bought 6M coins — got a 15% discount and delivery in under 10 minutes. Best rate I've found anywhere."</p>
+              <div class="arc-review-meta"><span class="game">ARC RAIDERS</span> · Raider Coins · 5d</div>
+            </article>
+            <article class="arc-review">
+              <div class="arc-review-head">
+                <span class="arc-avatar">S.T</span>
+                <span class="arc-review-user">
+                  styx#7744
+                  <span class="arc-flag" aria-label="US" style="--c1:#b22234;--c2:#fff;--c3:#3c3b6e"></span>
+                </span>
+                <span class="arc-verified">✓ Verified</span>
+              </div>
+              <div class="arc-review-stars">★ ★ ★ ★ ★</div>
+              <p class="arc-review-quote">"Ordered the raid bundle with event mode. Team was cracked — 12 raids cleared in one sitting."</p>
+              <div class="arc-review-meta"><span class="game">ARC RAIDERS</span> · Raid Bundles · 3d</div>
+            </article>
+            <article class="arc-review">
+              <div class="arc-review-head">
+                <span class="arc-avatar">J.P</span>
+                <span class="arc-review-user">
+                  jpilot#5502
+                  <span class="arc-flag" aria-label="FR" style="--c1:#002395;--c2:#fff;--c3:#ed2939"></span>
+                </span>
+                <span class="arc-verified">✓ Verified</span>
+              </div>
+              <div class="arc-review-stars">★ ★ ★ ★ ★</div>
+              <p class="arc-review-quote">"Got all blueprints unlocked in one go. Support walked me through every step on Discord."</p>
+              <div class="arc-review-meta"><span class="game">ARC RAIDERS</span> · Blueprints · 1d</div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: FAQ -->
+      <section class="eb-section" style="padding-top:80px">
+        <div class="eb-container">
+          <div class="eb-secheader" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;margin-bottom:64px">
+            <span class="eb-label">FAQ</span>
+            <h2 class="eb-h2" style="font-family:var(--display);font-weight:600;font-size:clamp(34px,3.8vw,48px);line-height:1;letter-spacing:0.005em;text-transform:uppercase;color:#efe6cf;margin:18px 0 0">Arc Raiders boosting, answered.</h2>
+          </div>
+          <div id="arcFaqList">
+            <div class="eb-faq-row">
+              <button class="eb-faq-btn" type="button" aria-expanded="false">
+                <span class="eb-faq-n">Q.01</span>
+                <span class="eb-faq-q">Is this safe for my account?</span>
+                <span class="eb-faq-plus">+</span>
+              </button>
+              <div class="eb-faq-panel"><div class="eb-faq-a"><span></span><p>Every runner is manual-only, on residential IPs, screened against our Arc Raiders safety checklist. We have shipped 2,400+ Arc Raiders orders with zero account bans on file. Encrypted login handoff via OAuth where supported — we never store credentials.</p><span></span></div></div>
+            </div>
+            <div class="eb-faq-row">
+              <button class="eb-faq-btn" type="button" aria-expanded="false">
+                <span class="eb-faq-n">Q.02</span>
+                <span class="eb-faq-q">How does delivery work?</span>
+                <span class="eb-faq-plus">+</span>
+              </button>
+              <div class="eb-faq-panel"><div class="eb-faq-a"><span></span><p>Items, coins, and materials land directly in your Stash via a verified in-game trade. No risky lobby handoffs. You open your Stash and everything is there. Average delivery time is under 12 minutes for most services.</p><span></span></div></div>
+            </div>
+            <div class="eb-faq-row">
+              <button class="eb-faq-btn" type="button" aria-expanded="false">
+                <span class="eb-faq-n">Q.03</span>
+                <span class="eb-faq-q">What payment methods do you accept?</span>
+                <span class="eb-faq-plus">+</span>
+              </button>
+              <div class="eb-faq-panel"><div class="eb-faq-a"><span></span><p>We accept all major payment methods via Discord ticket — PayPal, crypto, bank transfer, and card payments through our secure checkout. Pricing is shown in USD or Raider Coins depending on the service.</p><span></span></div></div>
+            </div>
+            <div class="eb-faq-row">
+              <button class="eb-faq-btn" type="button" aria-expanded="false">
+                <span class="eb-faq-n">Q.04</span>
+                <span class="eb-faq-q">Can I get a refund?</span>
+                <span class="eb-faq-plus">+</span>
+              </button>
+              <div class="eb-faq-panel"><div class="eb-faq-a"><span></span><p>Full money-back guarantee if we can't complete your order. No partial credits, no store credit — your payment returned in full. Contact support in Discord to initiate a refund at any time before delivery.</p><span></span></div></div>
+            </div>
+            <div class="eb-faq-row">
+              <button class="eb-faq-btn" type="button" aria-expanded="false">
+                <span class="eb-faq-n">Q.05</span>
+                <span class="eb-faq-q">Do I need to share my password?</span>
+                <span class="eb-faq-plus">+</span>
+              </button>
+              <div class="eb-faq-panel"><div class="eb-faq-a"><span></span><p>For most services — no. Stash delivery, coins, and materials are handled without account access. For services that require login (leveling, coaching), we use encrypted OAuth handoff and revoke access the moment the order is complete.</p><span></span></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /arc-hub-sections -->
+  </section><!-- /arcHubView -->
+
+  <!-- ══════════════════════════════════
+       FOOTER
+       ══════════════════════════════════ -->
+  <footer class="eb-footer" id="siteFooter">
+    <div class="eb-container">
+      <div class="eb-footer-grid">
+        <div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <span class="eb-logo-mark">
+              <img src="assets/elysium-logo-mark.png" alt="Elysium" width="48" height="48" loading="lazy">
+            </span>
+            <div class="eb-wordmark">
+              <div class="name">ELYSIUM BOOST</div>
+              <div class="tag">MANUAL · NO CHEATS · FAST SUPPORT</div>
+            </div>
+          </div>
+          <div class="eb-footer-tag">The Realm of Champions · Built by veterans.</div>
+        </div>
+        <div class="eb-footer-links">
+          <a href="#ebGamesSection">Games</a>
+          <a href="https://discord.gg/elysiumgg" target="_blank" rel="noopener">Discord</a>
+          <button type="button" id="footerLegalBtn">Terms</button>
+        </div>
+        <div class="eb-footer-social">
+          <a href="https://discord.gg/elysiumgg" target="_blank" rel="noopener" aria-label="Discord">
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M13.5 1.2A12.5 12.5 0 0010.6.3a8.5 8.5 0 00-.4.8 11.8 11.8 0 00-3.6 0 8.4 8.4 0 00-.4-.8A12.5 12.5 0 003.3 1.2C1 4.5.4 7.7.7 10.9a12.6 12.6 0 003.8 1.9c.3-.4.6-.9.8-1.4a8.2 8.2 0 01-1.3-.6l.3-.2a9 9 0 008.2 0l.3.2a8.2 8.2 0 01-1.3.6c.2.5.5 1 .8 1.4a12.6 12.6 0 003.8-1.9c.4-3.8-.6-7-2.6-9.7zM5.7 8.9c-.8 0-1.5-.8-1.5-1.7s.7-1.7 1.5-1.7c.9 0 1.5.8 1.5 1.7s-.6 1.7-1.5 1.7zm5 0c-.8 0-1.5-.8-1.5-1.7s.7-1.7 1.5-1.7c.9 0 1.5.8 1.5 1.7s-.6 1.7-1.5 1.7z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="eb-footer-base">
+        <span>© 2025 Elysium Boost · All rights reserved</span>
+        <span>10,000+ Orders · 500+ Discord Members · 4.9★</span>
+      </div>
     </div>
   </footer>
 

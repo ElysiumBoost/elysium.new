@@ -188,6 +188,10 @@
       const parsed = parseGameHash();
       if (!parsed) return;
       const { gameId, categorySlug } = parsed;
+      if (MIGRATED_GAME_PAGES[gameId]) {
+        window.location.href = MIGRATED_GAME_PAGES[gameId];
+        return;
+      }
       if (!games.some(g => g.id === gameId)) return;
       const game = games.find(g => g.id === gameId);
       state.game = gameId;
@@ -387,6 +391,10 @@
         return;
       }
       const { gameId, categorySlug } = parsed;
+      if (MIGRATED_GAME_PAGES[gameId]) {
+        window.location.href = MIGRATED_GAME_PAGES[gameId];
+        return;
+      }
       if (!games.some(g => g.id === gameId)) return;
       const game = games.find(g => g.id === gameId);
       state.game = gameId;
@@ -483,6 +491,8 @@
       });
     }
 
+    const MIGRATED_GAME_PAGES = { arc: "pages/games/arc-raiders.html" };
+
     function selectGame(id) {
       const game = games.find(g => g.id === id);
       if (!game) {
@@ -495,6 +505,11 @@
       );
       if (comingSoonGame) {
         showToast(ui("Coming soon — ordering is not available for this title yet."));
+        return;
+      }
+      if (MIGRATED_GAME_PAGES[id]) {
+        closeGameMenu();
+        window.location.href = MIGRATED_GAME_PAGES[id];
         return;
       }
       const slug = GAME_HASH_SLUGS[id];

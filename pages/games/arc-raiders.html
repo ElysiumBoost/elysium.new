@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arc Raiders — Elysium Boost</title>
+  <meta name="description" content="Premium Arc Raiders boosting: weapons, materials, leveling, raids, blueprints and more. Manual delivery, 24/7 support.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/arc-raiders.css">
+</head>
+<body>
+  <div class="eb-grain" aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════
+       NAVIGATION
+       ══════════════════════════════════ -->
+  <header class="eb-nav" id="arcNav">
+    <a href="../../index.html" class="eb-logo" aria-label="Elysium Boost home">
+      <span class="eb-logo-mark">
+        <img src="../../assets/elysium-logo-mark.png" alt="Elysium Boost" loading="eager">
+      </span>
+      <span class="eb-wordmark">
+        <span class="name">Elysium Boost</span>
+        <span class="tag">The guild of champions</span>
+      </span>
+    </a>
+    <nav class="eb-links" aria-label="Main navigation">
+      <a href="../../index.html">Home</a>
+      <a href="#" aria-current="page">Arc Raiders</a>
+      <a href="../../index.html#how-it-works">How It Works</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="eb-nav-right">
+      <span class="eb-currency">$ USD</span>
+      <button class="eb-cart" id="arcCartToggle" type="button" aria-label="Cart">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 3H4L5 11H13L14 5H5" stroke="currentColor" stroke-width="1.4"/><circle cx="6" cy="13.5" r="0.8" fill="currentColor"/><circle cx="12" cy="13.5" r="0.8" fill="currentColor"/></svg>
+        <span class="eb-cart-dot" id="arcCartDot" hidden>0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════
+       HUB MAP — fullscreen Speranza map
+       ══════════════════════════════════ -->
+  <div class="arc-page fullscreen" id="arcPage">
+
+    <div class="arc-hub arc-hub--fullscreen" role="region" aria-label="Service map" id="arcHubMap">
+      <img class="arc-hub-img" src="../../assets/arc-hub-speranza.png" alt="Speranza hub overview" loading="eager">
+      <div class="arc-hub-veil" aria-hidden="true"></div>
+      <div class="arc-hub-scan" aria-hidden="true"></div>
+
+      <!-- LIVE badge -->
+      <span class="arc-hub-hud" aria-hidden="true">
+        <span class="live"></span>
+        Live · Speranza
+      </span>
+
+      <!-- Station selector trigger -->
+      <button type="button" class="arc-hub-hud-r" id="arcSidebarBtn">
+        <span class="arc-hot-trace" aria-hidden="true"></span>
+        <span class="nudge">‹</span>
+        Stations
+        <span class="caret" aria-hidden="true"></span>
+      </button>
+
+      <!-- Hotspots — right-side services -->
+      <button class="arc-hot" data-service="custom-loadout">
+        <span class="dot"></span><span class="line"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Custom Loadout</span>
+      </button>
+      <button class="arc-hot" data-service="all-weapons">
+        <span class="dot"></span><span class="line"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>All Weapons</span>
+      </button>
+      <button class="arc-hot" data-service="blueprints">
+        <span class="dot"></span><span class="line"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Blueprints</span>
+      </button>
+      <button class="arc-hot" data-service="leveling">
+        <span class="dot"></span><span class="line"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Leveling</span>
+      </button>
+      <button class="arc-hot" data-service="workshop">
+        <span class="dot"></span><span class="line"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Workshop &amp; Scrappy</span>
+      </button>
+      <button class="arc-hot" data-service="materials">
+        <span class="dot"></span><span class="line"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>All Materials</span>
+      </button>
+      <button class="arc-hot" data-service="depositary">
+        <span class="dot"></span><span class="line"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Depositary</span>
+      </button>
+      <button class="arc-hot" data-service="boss-puzzle">
+        <span class="dot"></span><span class="line"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Boss &amp; Puzzle</span>
+      </button>
+      <button class="arc-hot" data-service="raider-coins">
+        <span class="dot"></span><span class="line"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Raider Coins</span>
+      </button>
+
+      <!-- Hotspots — left-side services (pill to the left of the dot) -->
+      <button class="arc-hot left" data-service="trials-boost">
+        <span class="dot"></span><span class="line"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Trials Boost</span>
+      </button>
+      <button class="arc-hot left" data-service="raids">
+        <span class="dot"></span><span class="line"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Raid Bundles</span>
+      </button>
+      <button class="arc-hot left" data-service="expedition-boost">
+        <span class="dot"></span><span class="line"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Expedition Boost</span>
+      </button>
+      <button class="arc-hot left" data-service="raid-coaching">
+        <span class="dot"></span><span class="line"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Hourly Coaching</span>
+      </button>
+      <button class="arc-hot left" data-service="custom-orders">
+        <span class="dot"></span><span class="line"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Custom Orders</span>
+      </button>
+      <button class="arc-hot left" data-service="assorted-seeds">
+        <span class="dot"></span><span class="line"></span>
+        <span class="pill"><span class="arc-hot-trace" aria-hidden="true"></span>Assorted Seeds</span>
+      </button>
+
+      <!-- Overlay text -->
+      <p class="arc-hub-overlay">
+        Loot, currencies, blueprints, and raid services — configure in-site, then lock details with our team in Discord.
+      </p>
+
+      <!-- Scroll hint -->
+      <div class="arc-scroll-hint" id="arcScrollHint">
+        <span class="arrow">&#8964;</span>
+        <span class="lbl">Scroll</span>
+      </div>
+    </div>
+
+    <!-- Mobile fallback grid -->
+    <div class="arc-hub-mobile" id="arcHubMobile">
+      <button data-service="custom-loadout">Custom Loadout</button>
+      <button data-service="all-weapons">All Weapons</button>
+      <button data-service="blueprints">Blueprints</button>
+      <button data-service="leveling">Leveling</button>
+      <button data-service="workshop">Workshop &amp; Scrappy</button>
+      <button data-service="materials">All Materials</button>
+      <button data-service="depositary">Depositary</button>
+      <button data-service="boss-puzzle">Boss &amp; Puzzle</button>
+      <button data-service="raider-coins">Raider Coins</button>
+      <button data-service="trials-boost">Trials Boost</button>
+      <button data-service="raids">Raid Bundles</button>
+      <button data-service="expedition-boost">Expedition Boost</button>
+      <button data-service="raid-coaching">Hourly Coaching</button>
+      <button data-service="custom-orders">Custom Orders</button>
+      <button data-service="assorted-seeds">Assorted Seeds</button>
+    </div>
+
+    <!-- ══════════════════════════════════
+         STATION SELECTOR SIDEBAR
+         ══════════════════════════════════ -->
+    <div class="arc-sidebar-overlay" id="arcSidebarOverlay"></div>
+    <aside class="arc-sidebar" id="arcSidebar" aria-label="Station selector" aria-hidden="true">
+      <div class="arc-sidebar-head">
+        <span class="arc-sidebar-title">Stations</span>
+        <button class="arc-sidebar-close" id="arcSidebarClose" type="button" aria-label="Close sidebar">&times;</button>
+      </div>
+      <div class="arc-sidebar-list">
+        <button class="arc-sidebar-item" data-service="custom-loadout">
+          <span class="arc-sidebar-icon"><img src="../../assets/custom-loadout.webp" alt="" loading="lazy"></span>
+          <span class="arc-sidebar-name">Custom Loadout</span>
+          <span class="arc-sidebar-arrow">&#8250;</span>
+        </button>
+        <button class="arc-sidebar-item" data-service="all-weapons">
+          <span class="arc-sidebar-icon"><img src="../../assets/all-weapons.webp" alt="" loading="lazy"></span>
+          <span class="arc-sidebar-name">All Weapons</span>
+          <span class="arc-sidebar-arrow">&#8250;</span>
+        </button>
+        <button class="arc-sidebar-item" data-service="blueprints">
+          <span class="arc-sidebar-icon"><img src="../../assets/blueprints.webp" alt="" loading="lazy"></span>
+          <span class="arc-sidebar-name">Blueprints</span>
+          <span class="arc-sidebar-arrow">&#8250;</span>
+        </button>
+        <button class="arc-sidebar-item" data-service="leveling">
+          <span class="arc-sidebar-icon"><img src="../../assets/leveling.webp" alt="" loading="lazy"></span>
+          <span class="arc-sidebar-name">Leveling</span>
+          <span class="arc-sidebar-arrow">&#8250;</span>
+        </button>
+        <button class="arc-sidebar-item" data-service="workshop">
+          <span class="arc-sidebar-icon"><img src="../../assets/workshop.webp" alt="" loading="lazy"></span>
+          <span class="arc-sidebar-name">Workshop &amp; Scrappy</span>
+          <span class="arc-sidebar-arrow">&#8250;</span>
+        </button>
+        <button class="arc-sidebar-item" data-service="materials">
+          <span class="arc-sidebar-icon"><img src="../../assets/icon-materials.png" alt="" loading="lazy"></span>
+          <span class="arc-sidebar-name">All Materials</span>
+          <span class="arc-sidebar-arrow">&#8250;</span>
+        </button>
+        <button class="arc-sidebar-item" data-service="depositary">
+          <span class="arc-sidebar-icon"><img src="../../assets/depositary.webp" alt="" loading="lazy"></span>
+          <span class="arc-sidebar-name">Depositary</span>
+          <span class="arc-sidebar-arrow">&#8250;</span>
+        </button>
+        <button class="arc-sidebar-item" data-service="boss-puzzle">
+          <span class="arc-sidebar-icon"><img src="../../assets/boss-puzzle.webp" alt="" loading="lazy"></span>
+          <span class="arc-sidebar-name">Boss &amp; Puzzle</span>
+          <span class="arc-sidebar-arrow">&#8250;</span>
+        </button>
+        <button class="arc-sidebar-item" data-service="raider-coins">
+          <span class="arc-sidebar-icon"><img src="../../assets/raider-coins.webp" alt="" loading="lazy"></span>
+          <span class="arc-sidebar-name">Raider Coins</span>
+          <span class="arc-sidebar-arrow">&#8250;</span>
+        </button>
+        <button class="arc-sidebar-item" data-service="trials-boost">
+          <span class="arc-sidebar-icon"><img src="../../assets/trials-boost.webp" alt="" loading="lazy"></span>
+          <span class="arc-sidebar-name">Trials Boost</span>
+          <span class="arc-sidebar-arrow">&#8250;</span>
+        </button>
+        <button class="arc-sidebar-item" data-service="raids">
+          <span class="arc-sidebar-icon"><img src="../../assets/raids.webp" alt="" loading="lazy"></span>
+          <span class="arc-sidebar-name">Raid Bundles</span>
+          <span class="arc-sidebar-arrow">&#8250;</span>
+        </button>
+        <button class="arc-sidebar-item" data-service="expedition-boost">
+          <span class="arc-sidebar-icon"><img src="../../assets/expedition-boost.webp" alt="" loading="lazy"></span>
+          <span class="arc-sidebar-name">Expedition Boost</span>
+          <span class="arc-sidebar-arrow">&#8250;</span>
+        </button>
+        <button class="arc-sidebar-item" data-service="raid-coaching">
+          <span class="arc-sidebar-icon"><img src="../../assets/raid-coaching.webp" alt="" loading="lazy"></span>
+          <span class="arc-sidebar-name">Hourly Coaching</span>
+          <span class="arc-sidebar-arrow">&#8250;</span>
+        </button>
+        <button class="arc-sidebar-item" data-service="custom-orders">
+          <span class="arc-sidebar-icon"><img src="../../assets/custom-orders.webp" alt="" loading="lazy"></span>
+          <span class="arc-sidebar-name">Custom Orders</span>
+          <span class="arc-sidebar-arrow">&#8250;</span>
+        </button>
+        <button class="arc-sidebar-item" data-service="assorted-seeds">
+          <span class="arc-sidebar-icon"><img src="../../assets/assorted-seeds.webp" alt="" loading="lazy"></span>
+          <span class="arc-sidebar-name">Assorted Seeds</span>
+          <span class="arc-sidebar-arrow">&#8250;</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ══════════════════════════════════
+         BELOW-MAP CONTENT
+         ══════════════════════════════════ -->
+    <div class="eb-page-bg" id="arcBelowMap">
+
+      <!-- Section 2 — Arc Info strip -->
+      <section class="arc-info eb-reveal">
+        <div class="eb-container">
+          <span class="arc-info-eyebrow">Arc Raiders Boosting</span>
+          <h2 class="arc-info-title">Speranza <span class="accent">Services</span></h2>
+          <div class="arc-info-stats">
+            <span class="item"><span class="num">2,400+</span><span class="lbl">Orders completed</span></span>
+            <span class="sep" aria-hidden="true"></span>
+            <span class="item"><span class="num">100%</span><span class="lbl">Manual delivery</span></span>
+            <span class="sep" aria-hidden="true"></span>
+            <span class="item"><span class="num">12 min</span><span class="lbl">Avg. delivery</span></span>
+            <span class="sep" aria-hidden="true"></span>
+            <span class="item"><span class="num">0</span><span class="lbl">Account bans</span></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3 — Shield -->
+      <section class="eb-section eb-reveal" id="shield">
+        <div class="eb-container">
+          <div class="eb-secheader">
+            <span class="eb-label">Elysium Shield</span>
+            <h2 class="eb-h2">Four standards. Every order.</h2>
+          </div>
+          <div class="val-shield-grid">
+            <div class="val-shield-card">
+              <div class="val-shield-mark">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="9" width="14" height="10" stroke="currentColor" stroke-width="1.4"/><path d="M7 9V6a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.4"/></svg>
+              </div>
+              <h3 class="val-shield-title">Account Stays Private</h3>
+              <p class="val-shield-body">VPN-protected runner sessions, residential IPs in your region, zero shared logins. Your account is yours.</p>
+            </div>
+            <div class="val-shield-card">
+              <div class="val-shield-mark">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M19 11a8 8 0 11-2.34-5.66M19 4v4h-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="val-shield-title">Money-Back Guarantee</h3>
+              <p class="val-shield-body">Backed by our full refund promise. Miss our ETA by more than 48 hours and your order is refunded in full.</p>
+            </div>
+            <div class="val-shield-card">
+              <div class="val-shield-mark">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.4"/><path d="M8 9a3 3 0 116 0c0 2-3 2-3 4M11 16.5h.01" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="val-shield-title">24/7 Live Support</h3>
+              <p class="val-shield-body">Live chat in your Discord ticket around the clock. Average first response under five minutes, day or night.</p>
+            </div>
+            <div class="val-shield-card">
+              <div class="val-shield-mark">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L3 5v6c0 5 3.5 7.8 8 9 4.5-1.2 8-4 8-9V5l-8-3z" stroke="currentColor" stroke-width="1.4"/></svg>
+              </div>
+              <h3 class="val-shield-title">Encrypted Payments</h3>
+              <p class="val-shield-body">PCI-DSS gateways, end-to-end encryption, optional crypto rails. We never store card data, period.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4 — Features -->
+      <section class="eb-section eb-reveal">
+        <div class="eb-container">
+          <div class="eb-secheader">
+            <span class="eb-label">Our Features Pick</span>
+            <h2 class="eb-h2">Built for clean Arc Raiders orders.</h2>
+          </div>
+          <div class="eb-features">
+            <div class="eb-feature">
+              <div class="eb-feature-head">
+                <h3 class="eb-feature-title">Dedicated 24/7 Support</h3>
+                <span class="eb-feature-n">01</span>
+              </div>
+              <p class="eb-feature-body">One Discord ticket from order to delivery. Concierge, runner, and you in the same thread.</p>
+            </div>
+            <div class="eb-feature">
+              <div class="eb-feature-head">
+                <h3 class="eb-feature-title">Manual Delivery Only</h3>
+                <span class="eb-feature-n">02</span>
+              </div>
+              <p class="eb-feature-body">No bots, no auto-trade scripts. Every weapon, material, and bundle is hand-delivered to your Stash.</p>
+            </div>
+            <div class="eb-feature">
+              <div class="eb-feature-head">
+                <h3 class="eb-feature-title">Automated VPN Protection</h3>
+                <span class="eb-feature-n">03</span>
+              </div>
+              <p class="eb-feature-body">Residential-tier VPN routes every runner session through your region. The game sees a clean login.</p>
+            </div>
+            <div class="eb-feature">
+              <div class="eb-feature-head">
+                <h3 class="eb-feature-title">Instant Stash Delivery</h3>
+                <span class="eb-feature-n">04</span>
+              </div>
+              <p class="eb-feature-body">Confirmation to Stash in under 30 minutes for most orders. Status pings the moment goods are in your inventory.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5 — Reviews -->
+      <section class="eb-section eb-reveal" id="reviews">
+        <div class="eb-container">
+          <div class="val-reviews-head">
+            <span>Rated Excellent</span>
+            <span class="big">4.92 / 5</span>
+            <span>Based on 620+ reviews</span>
+          </div>
+          <div class="val-reviews-rail" id="arcReviewsRail">
+            <!-- Reviews rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6 — FAQ -->
+      <section class="eb-section eb-reveal" id="faq">
+        <div class="eb-container">
+          <div class="eb-secheader">
+            <span class="eb-label">Frequently Asked</span>
+            <h2 class="eb-h2">Questions &amp; answers</h2>
+          </div>
+          <div id="arcFaqList">
+            <!-- FAQ rows rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /eb-page-bg -->
+
+    <!-- ══════════════════════════════════
+         SERVICE VIEW — 3-column layout
+         (hidden until a service is selected)
+         ══════════════════════════════════ -->
+    <div class="arc-stage" id="arcServiceView" hidden>
+      <div class="eb-container-wide">
+        <button class="arc-back" id="arcBackBtn" type="button">
+          <svg width="12" height="8" viewBox="0 0 16 10" fill="none"><path d="M16 5H2M2 5L6 1M2 5L6 9" stroke="currentColor" stroke-width="1.5"/></svg>
+          Back to map
+        </button>
+
+        <div class="arc-service" id="arcServiceGrid">
+          <!-- LEFT — art panel -->
+          <aside class="arc-art" id="arcArt">
+            <div class="arc-art-frame">
+              <img class="arc-art-image" id="arcArtImage" src="" alt="" loading="lazy">
+              <div class="arc-art-stripe" aria-hidden="true"></div>
+              <div class="arc-art-meta">
+                <span class="arc-art-eyebrow">Service · Arc Raiders</span>
+                <h2 class="arc-art-name" id="arcArtName"></h2>
+                <p class="arc-art-desc" id="arcArtDesc"></p>
+                <div class="arc-art-tags" id="arcArtTags"></div>
+              </div>
+            </div>
+          </aside>
+
+          <!-- MIDDLE — configurator (rendered by JS) -->
+          <div class="arc-config" id="arcConfigPanel"></div>
+
+          <!-- RIGHT — cart -->
+          <aside class="arc-cart" id="arcCart">
+            <span class="arc-hot-trace" aria-hidden="true"></span>
+            <div class="arc-cart-head">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 3H4L5 11H13L14 5H5" stroke="currentColor" stroke-width="1.4"/><circle cx="6" cy="13.5" r="0.8" fill="currentColor"/><circle cx="12" cy="13.5" r="0.8" fill="currentColor"/></svg>
+              <span class="ttl">Order Summary</span>
+              <span class="count" id="arcCartCount">0 items</span>
+            </div>
+            <div class="arc-cart-body" id="arcCartBody">
+              <div class="arc-cart-empty" id="arcCartEmpty">Configure your order above</div>
+            </div>
+            <div class="arc-cart-foot" id="arcCartFoot">
+              <div class="arc-cart-row"><span>Subtotal</span><span class="v" id="arcCartSub"><span class="coin"></span> 0</span></div>
+              <div class="arc-cart-row"><span>Service fee (5%)</span><span class="v" id="arcCartFee"><span class="coin"></span> 0</span></div>
+              <div class="arc-cart-total">
+                <span class="k">Total</span>
+                <span class="v" id="arcCartTotal"><span class="coin"></span> 0</span>
+              </div>
+              <div class="arc-cart-note">Copy your cart summary and paste it into a Discord ticket to finalize your order.</div>
+              <button class="eb-btn-primary arc-cart-cta" id="arcCopyCta" type="button">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" stroke="currentColor" stroke-width="1.4"/><path d="M11 5V2H2v9h3" stroke="currentColor" stroke-width="1.4"/></svg>
+                Copy to Discord
+              </button>
+              <button class="arc-cart-cancel" id="arcBackBtn2" type="button">
+                Back to map
+                <span class="esc">ESC</span>
+              </button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /arc-page -->
+
+  <!-- ══════════════════════════════════
+       FOOTER
+       ══════════════════════════════════ -->
+  <footer class="eb-footer" id="arcFooter">
+    <div class="eb-container">
+      <div class="eb-footer-grid">
+        <div>
+          <a href="../../index.html" class="eb-logo">
+            <span class="eb-logo-mark">
+              <img src="../../assets/elysium-logo-mark.png" alt="Elysium Boost" loading="lazy">
+            </span>
+            <span class="eb-wordmark">
+              <span class="name">Elysium Boost</span>
+            </span>
+          </a>
+          <p class="eb-footer-tag">The Guild of Champions · Built by Gamers</p>
+        </div>
+        <div class="eb-footer-links">
+          <a href="../../index.html">Games</a>
+          <a href="#reviews">Reviews</a>
+          <a href="#">Discord</a>
+          <a href="#">Terms</a>
+        </div>
+        <div class="eb-footer-social">
+          <a href="#" aria-label="Discord"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M13.5 1.2A12.5 12.5 0 0010.6.3a8.5 8.5 0 00-.4.8 11.8 11.8 0 00-3.6 0 8.4 8.4 0 00-.4-.8A12.5 12.5 0 003.3 1.2C1 4.5.4 7.7.7 10.9a12.6 12.6 0 003.8 1.9c.3-.4.6-.9.8-1.4a8.2 8.2 0 01-1.3-.6l.3-.2a9 9 0 008.2 0l.3.2a8.2 8.2 0 01-1.3.6c.2.5.5 1 .8 1.4a12.6 12.6 0 003.8-1.9c.4-3.8-.6-7-2.6-9.7zM5.7 8.9c-.8 0-1.5-.8-1.5-1.7s.7-1.7 1.5-1.7c.9 0 1.5.8 1.5 1.7s-.6 1.7-1.5 1.7zm5 0c-.8 0-1.5-.8-1.5-1.7s.7-1.7 1.5-1.7c.9 0 1.5.8 1.5 1.7s-.6 1.7-1.5 1.7z"/></svg></a>
+          <a href="#" aria-label="X / Twitter"><svg width="14" height="13" viewBox="0 0 14 13" fill="currentColor"><path d="M11 0H13.1L8.4 5.4 14 13H9.5L6 8.4 2 13H0L5 7.3 0 0h4.6l3.2 4.2L11 0zm-.8 11.7h1.2L4 1.3H2.7l7.5 10.4z"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M15.7 1.9a2 2 0 00-1.4-1.4C13 .2 8 .2 8 .2s-5 0-6.3.3A2 2 0 00.3 1.9C0 3.1 0 5.7 0 5.7s0 2.6.3 3.8c.2.7.7 1.2 1.4 1.4 1.3.3 6.3.3 6.3.3s5 0 6.3-.3a2 2 0 001.4-1.4c.3-1.2.3-3.8.3-3.8s0-2.6-.3-3.8zM6.4 8.1V3.3l4.2 2.4-4.2 2.4z"/></svg></a>
+        </div>
+      </div>
+      <div class="eb-footer-base">
+        <span>&copy; 2025 Elysium Boost</span>
+        <span>2,400+ Arc Raiders Orders · 0 Bans</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../js/arc-raiders.js" defer></script>
+</body>
+</html>
