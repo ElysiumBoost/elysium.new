@@ -491,7 +491,7 @@
       });
     }
 
-    const MIGRATED_GAME_PAGES = { arc: "pages/games/arc-raiders.html" };
+    const MIGRATED_GAME_PAGES = { arc: "pages/games/arc-raiders.html", valorant: "pages/games/valorant.html" };
 
     function selectGame(id) {
       const game = games.find(g => g.id === id);
