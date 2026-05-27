@@ -358,6 +358,15 @@
   }
 })();
 
+/* ── Landing nav scroll state ── */
+(function initNavScroll() {
+  var nav = document.getElementById('ebNav');
+  if (!nav) return;
+  function check() { nav.classList.toggle('eb-scrolled', window.scrollY > 40); }
+  check();
+  window.addEventListener('scroll', check, { passive: true });
+})();
+
 /* ══════════════════════════════════════════════════════════════
    ARC RAIDERS — Hub Map Controller
    ══════════════════════════════════════════════════════════════ */

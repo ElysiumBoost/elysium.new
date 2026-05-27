@@ -60,6 +60,8 @@
        7. order-center → Cart UX geliştirmeleri
        8. tft      → TFT'ye özel stiller
        ════════════════════════════════════ -->
+<link rel="stylesheet" href="css/global.css">
+<link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/styles.css?v=v5-fix3">
 <link rel="stylesheet" href="css/order-center.css?v=v5-fix3">
 <link rel="stylesheet" href="css/layout-system.css?v=v5-fix3">
@@ -98,108 +100,49 @@
   <a href="#serviceContent" class="skip-link">Skip to content</a>
 
   <!-- ══════════════════════════════════
-       HEADER / TOPBAR
+       NAVIGATION
        ══════════════════════════════════ -->
-  <header class="topbar">
-    <div class="shell topbar-inner">
-
-      <!-- Marka + Servis menüsü -->
-      <div class="brand-zone">
-        <a class="brand" href="#" id="brandHome" aria-label="Elysium Boost – ana sayfa">
-          <span class="brand-mark-wrap brand-mark-wrap--plain">
-            <img
-              class="brand-mark"
-              src="assets/assetselysiumlogo-transparent.webp"
-              width="56" height="56"
-              alt=""
-              loading="eager"
-              decoding="async">
-          </span>
-          <span class="brand-wordmark">Elysium Boost</span>
-        </a>
-
-        <!-- Oyun seçici dropdown -->
-        <div class="game-menu-wrap" id="gameTabs" aria-label="Servis seç">
-          <button
-            class="btn game-menu-btn"
-            type="button"
-            id="gameMenuBtn"
-            aria-expanded="false"
-            aria-controls="gameMenuPanel"
-            aria-haspopup="true">
-            <span class="game-menu-btn-label">Services</span>
-            <svg class="game-menu-chevron" viewBox="0 0 24 24" aria-hidden="true" width="14" height="14">
-              <path fill="currentColor" d="M6.5 9.2 12 15l5.5-5.8L18 10l-6 6.3a1 1 0 0 1-1.45 0L6 10l.5-.8z"/>
-            </svg>
-          </button>
-          <div class="game-menu-panel" id="gameMenuPanel" role="menu" aria-labelledby="gameMenuBtn" hidden></div>
-        </div>
-      </div><!-- /brand-zone -->
-
-      <!-- Ana navigasyon -->
-      <nav class="primary-nav" aria-label="Ana menü">
-        <a href="#homeAboutBlock">About Us</a>
-        <a href="#howItWorksTitle">How It Works</a>
-        <a href="#trustCompactTitle">Reviews</a>
-        <a href="#faqHomeTitle">FAQ</a>
-      </nav>
-
-      <!-- Sağ aksiyonlar -->
-      <div class="actions">
-        <input
-          class="site-search"
-          id="siteSearch"
-          type="search"
-          placeholder="Search services"
-          aria-label="Servis ara">
-
-        <button class="btn btn-icon" id="siteSearchBtn" type="button" aria-label="Ara" title="Ara">
-          <svg class="btn-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.65"/>
-            <path fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" d="M15.2 15.2L21 21"/>
-          </svg>
-        </button>
-
-        <!-- Arama sonuçları dropdown -->
-        <div class="search-results" id="siteSearchResults" role="listbox" aria-label="Arama sonuçları"></div>
-
-        <!-- Para birimi -->
-        <select class="currency" id="currency" aria-label="Para birimi">
-          <option value="USD">$ USD</option>
-          <option value="EUR">&euro; EUR</option>
-          <option value="GBP">£ GBP</option>
-          <option value="TRY">₺ TRY</option>
-        </select>
-
-        <!-- Sepet -->
-        <button class="btn cart-button btn-icon" id="cartOpen" type="button" aria-label="Sepeti aç" title="Sepet">
-          <svg class="cart-icon-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 6h15l-1.5 9.2a2 2 0 01-2 1.8H8.4a2 2 0 01-2-1.6L5 4H4"/>
-            <circle cx="9" cy="20" r="1.35"/>
-            <circle cx="17" cy="20" r="1.35"/>
-          </svg>
-          <span class="cart-count" id="cartCount">0</span>
-        </button>
-      </div><!-- /actions -->
-
-    </div><!-- /topbar-inner -->
+  <header class="eb-nav" id="ebNav">
+    <a href="#" class="eb-logo" id="brandHome" aria-label="Elysium Boost home">
+      <span class="eb-logo-mark">
+        <img src="assets/elysium-logo-mark.png" alt="Elysium Boost" loading="eager">
+      </span>
+      <span class="eb-wordmark">
+        <span class="name">Elysium Boost</span>
+        <span class="tag">The Realm of Champions</span>
+      </span>
+    </a>
+    <nav class="eb-links" aria-label="Main navigation">
+      <a href="#ebGamesSection">Games</a>
+      <a href="#howItWorksTitle">How It Works</a>
+      <a href="#trustCompactTitle">Reviews</a>
+      <a href="#homeAboutBlock">Why Us</a>
+      <a href="#faqHomeTitle">FAQ</a>
+    </nav>
+    <div class="eb-nav-right">
+      <select class="eb-currency" id="currency" aria-label="Currency">
+        <option value="USD">$ USD</option>
+        <option value="EUR">&euro; EUR</option>
+        <option value="GBP">&pound; GBP</option>
+        <option value="TRY">&#8378; TRY</option>
+      </select>
+      <button class="eb-cart" id="cartOpen" type="button" aria-label="Cart">
+        <span class="arc-hot-trace" aria-hidden="true"></span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 3H4L5 11H13L14 5H5" stroke="currentColor" stroke-width="1.4"/><circle cx="6" cy="13.5" r="0.8" fill="currentColor"/><circle cx="12" cy="13.5" r="0.8" fill="currentColor"/></svg>
+        <span class="eb-cart-dot" id="cartCount">0</span>
+      </button>
+    </div>
   </header>
 
-  <!-- ══════════════════════════════════
-       KATEGORİ BAR
-       ══════════════════════════════════ -->
-  <div class="category-bar" id="categoryBar">
-    <div class="shell category-shell">
-      <button class="btn cat-arrow" id="catPrev" type="button" aria-label="Önceki kategoriler">&#x2039;</button>
-      <div class="category-scroll-column">
-        <div class="category-scroll" id="categoryScroll"></div>
-        <div class="category-drag-indicator" id="categoryDragIndicator" aria-hidden="true">
-          <span class="category-drag-indicator__thumb" id="categoryDragIndicatorThumb"></span>
-        </div>
-      </div>
-      <button class="btn cat-arrow" id="catNext" type="button" aria-label="Sonraki kategoriler">&#x203A;</button>
-    </div>
+  <!-- Hidden elements for JS compatibility (game menu, search, category bar) -->
+  <div id="gameTabs" hidden>
+    <button id="gameMenuBtn" hidden aria-expanded="false" aria-controls="gameMenuPanel"></button>
+    <div id="gameMenuPanel" role="menu" hidden></div>
   </div>
+  <div id="categoryBar" hidden></div>
+  <input id="siteSearch" type="hidden">
+  <button id="siteSearchBtn" type="button" hidden></button>
+  <div id="siteSearchResults" hidden></div>
 
   <!-- ══════════════════════════════════
        ANA İÇERİK
