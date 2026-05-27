@@ -113,6 +113,18 @@
       </span>
     </a>
     <nav class="eb-links" aria-label="Main navigation">
+      <span class="eb-search-wrap" id="ebSearchWrap">
+        <button type="button" class="eb-search-toggle" id="ebSearchToggle" aria-label="Search games" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+        </button>
+        <div class="eb-search-dropdown" id="ebSearchDropdown" role="dialog" aria-label="Search games">
+          <div class="eb-search-input-wrap">
+            <input type="text" class="eb-search-input" id="ebSearchInput" placeholder="Search games...">
+            <span class="arc-hot-trace" aria-hidden="true"></span>
+          </div>
+          <div class="eb-search-list" id="ebSearchList"></div>
+        </div>
+      </span>
       <a href="#ebGamesSection">Games</a>
       <a href="#howItWorksTitle">How It Works</a>
       <a href="#trustCompactTitle">Reviews</a>

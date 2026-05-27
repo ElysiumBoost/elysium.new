@@ -367,6 +367,62 @@
   window.addEventListener('scroll', check, { passive: true });
 })();
 
+/* ── Landing nav search dropdown ── */
+(function initNavSearch() {
+  var wrap = document.getElementById('ebSearchWrap');
+  var toggle = document.getElementById('ebSearchToggle');
+  var dropdown = document.getElementById('ebSearchDropdown');
+  var input = document.getElementById('ebSearchInput');
+  var list = document.getElementById('ebSearchList');
+  if (!wrap || !toggle || !dropdown || !input || !list) return;
+
+  var GAMES = [
+    { name: 'Arc Raiders', href: 'pages/games/arc-raiders.html' },
+    { name: 'Valorant', href: 'pages/games/valorant.html' },
+    { name: 'TFT', href: '#tft' },
+    { name: 'League of Legends', href: '#league-of-legends' },
+    { name: 'CS2', href: '#cs2' }
+  ];
+  var arrowSvg = '<svg width="12" height="8" viewBox="0 0 16 10" fill="none"><path d="M0 5H14M14 5L10 1M14 5L10 9" stroke="currentColor" stroke-width="1.5"/></svg>';
+
+  function render(q) {
+    var filtered = q ? GAMES.filter(function (g) { return g.name.toLowerCase().indexOf(q) >= 0; }) : GAMES;
+    if (filtered.length === 0) {
+      list.innerHTML = '<div class="eb-search-empty">No games match "' + q + '"</div>';
+      return;
+    }
+    list.innerHTML = filtered.map(function (g) {
+      return '<a href="' + g.href + '" class="eb-search-result"><span>' + g.name + '</span><span class="arrow">' + arrowSvg + '</span></a>';
+    }).join('');
+  }
+
+  function open() {
+    dropdown.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+    render('');
+    setTimeout(function () { input.focus(); }, 30);
+  }
+  function close() {
+    dropdown.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    input.value = '';
+  }
+
+  toggle.addEventListener('click', function () {
+    dropdown.classList.contains('open') ? close() : open();
+  });
+  input.addEventListener('input', function () {
+    render(input.value.trim().toLowerCase());
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && dropdown.classList.contains('open')) close();
+  });
+  document.addEventListener('mousedown', function (e) {
+    if (!wrap.contains(e.target)) close();
+  });
+  list.addEventListener('click', function () { close(); });
+})();
+
 /* ══════════════════════════════════════════════════════════════
    ARC RAIDERS — Hub Map Controller
    ══════════════════════════════════════════════════════════════ */
