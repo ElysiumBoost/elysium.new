@@ -708,3 +708,39 @@ select.eb-currency option { background: var(--bg-2, #100b07); color: var(--text,
    KNOWN FIX: Icon transparency
    ────────────────────────────────────────────────────────────── */
 .arc-sidebar-icon img { mix-blend-mode: screen; }
+
+/* ──────────────────────────────────────────────────────────────
+   PAGE SECTION BACKGROUND — shared base only
+   Wraps below-hero content on every page (landing, Arc, Valorant).
+   Provides the fixed section-2 starfield image with 78% dark tint.
+   Landing-specific extras (-80px overlap + ::before/::after hero
+   seam fades) live in css/styles.css since they only apply when
+   stacking under .eb-hero-fade. Matches the Claude Design subpage
+   reference exactly.
+   ────────────────────────────────────────────────────────────── */
+.eb-page-bg {
+  position: relative;
+  background-color: #0a0805;
+  background-image:
+    linear-gradient(rgba(5,4,2,0.78), rgba(5,4,2,0.78)),
+    url("../assets/section-2-background.webp");
+  background-size: cover, cover;
+  background-position: center top, center top;
+  background-attachment: fixed, fixed;
+  background-repeat: no-repeat, no-repeat;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   SECTION MODIFIER — solid dark split
+   Used for alternating-band sections (Shield, Reviews) inside
+   .eb-page-bg. Solid var(--bg-2) covers the starfield locally,
+   bordered top + bottom with a 1px gold-tinted hairline for the
+   tactical split look. Replaces the design's inline
+   style={{ background: 'var(--bg-2)', borderTop/borderBottom }}
+   pattern with a clean modifier (CLAUDE.md: no inline styles).
+   ────────────────────────────────────────────────────────────── */
+.eb-section--solid {
+  background: var(--bg-2);
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}

@@ -1,0 +1,649 @@
+/* ══════════════════════════════════════════════════════════════
+   cart.css — Shared cart V2 dropdown styles
+
+   Extracted from css/styles.css so subpages (Arc Raiders, Valorant)
+   can render the V2 cart dropdown without loading the entire
+   landing stylesheet (which leaks landing-only body backgrounds,
+   theme overrides, etc.).
+
+   Load order:
+   - index.html: components.css → cart.css → styles.css
+   - pages/games/arc-raiders.html: components.css → cart.css → arc-raiders.css
+   - pages/games/valorant.html: components.css → cart.css → valorant.css
+
+   Contents:
+   - cart-backdrop + drawer shell (geometry, mobile)
+   - .eb-cart-* V2 design block (panel, head, foot, summary, total,
+     promo, actions, trust, receipt, empty card)
+   - Supporting button bases (.btn-text, .btn-receipt-link,
+     .cart-foot-alerts)
+   - cartTotalPulse keyframe animation
+   ══════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────
+   CART BACKDROP — transparent click-catcher anchored
+   under the nav cart button (top-right).
+   ───────────────────────────────────────────────────── */
+.cart-backdrop {
+  position: fixed;
+  inset: 0;
+  display: none;
+  justify-items: end;
+  align-items: start;
+  z-index: 90;
+  padding: 76px 24px 24px;
+  background: transparent;
+  pointer-events: auto;
+}
+.cart-backdrop.active { display: grid; }
+
+/* ─────────────────────────────────────────────────────
+   DRAWER SHELL — geometry only. Visual treatment lives
+   in .drawer.eb-cart-panel below.
+   ───────────────────────────────────────────────────── */
+.drawer {
+  width: min(420px, 100%);
+  height: auto;
+  max-height: min(78svh, 640px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  background: linear-gradient(165deg, rgba(18, 15, 20, .97), rgba(10, 8, 8, .98));
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, .5),
+    0 0 0 1px rgba(231, 201, 139, .08);
+}
+
+.drawer.drawer--wide {
+  width: min(480px, 100%);
+  max-width: calc(100vw - 24px);
+}
+
+.drawer.drawer--wide .drawer-head h2 {
+  font-size: 22px;
+  letter-spacing: .06em;
+}
+
+.drawer-head, .drawer-foot {
+  padding: 16px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.drawer-head {
+  flex-wrap: wrap;
+}
+
+.drawer-head-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.drawer-foot {
+  border-top: 1px solid var(--line);
+  border-bottom: 0;
+  align-items: stretch;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 8px;
+  background: linear-gradient(180deg, rgba(10, 8, 8, .72), rgba(18, 15, 20, .995));
+  box-shadow: 0 -16px 40px rgba(0, 0, 0, .42);
+}
+
+.drawer-head h2 {
+  margin: 0;
+  font-family: var(--f-display);
+  font-size: 26px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.drawer-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 14px;
+}
+
+/* Empty cart: body shrinks to the empty card's natural height — no giant blank zone */
+.drawer:has(.cart-empty-card) .drawer-body {
+  flex: 0 0 auto;
+}
+
+/* Drawer body scrollbar */
+.drawer-body::-webkit-scrollbar {
+  width: 6px;
+}
+.drawer-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.drawer-body::-webkit-scrollbar-thumb {
+  background: rgba(201, 168, 76, .35);
+  border-radius: 3px;
+}
+
+/* ─────────────────────────────────────────────────────
+   CART FOOT ALERTS
+   ───────────────────────────────────────────────────── */
+.cart-foot-alerts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.cart-foot-alerts:empty {
+  display: none;
+}
+
+/* ─────────────────────────────────────────────────────
+   SUPPORTING BUTTON BASES — cart uses .btn-text and
+   .btn-receipt-link for the receipt link.
+   ───────────────────────────────────────────────────── */
+.btn-text {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(212, 175, 110, .72);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.btn-text:hover {
+  color: #fff;
+}
+
+.btn-receipt-link {
+  font-size: 12px;
+  color: rgba(212, 175, 110, .88);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   EB CART V2 — native to val-summary + arc-sidebar language
+   Sharp 2-3px radii, mono uppercase labels, gold accents,
+   warm-tinted dark panel, gold-glow halo shadow.
+   ═══════════════════════════════════════════════════════ */
+
+/* Panel container — overrides .drawer base appearance.
+   Keeps geometry (size, max-height) from .drawer above. */
+.drawer.eb-cart-panel {
+  background:
+    linear-gradient(180deg, rgba(31, 26, 18, 0.94), rgba(18, 12, 8, 0.97)) !important;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  box-shadow:
+    0 32px 80px -28px rgba(0, 0, 0, 0.7),
+    0 0 60px -20px var(--gold-glow);
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Header — eyebrow + title in val-summary-head pattern */
+.drawer-head.eb-cart-head {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--line-soft);
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.eb-cart-head-title {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.eb-cart-eyebrow {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.eb-cart-head h2#drawerTitle {
+  margin: 0;
+  font-family: var(--f-display) !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: var(--text) !important;
+}
+/* Override the legacy .drawer.drawer--wide bump that pushes h2 to 22px */
+.drawer.drawer--wide .eb-cart-head h2#drawerTitle { font-size: 17px !important; }
+
+.eb-cart-head-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Close button — arc-sidebar-close language */
+.eb-cart-head .btn.close.eb-cart-close {
+  width: 28px; height: 28px;
+  min-width: 28px; min-height: 28px;
+  padding: 0;
+  display: grid; place-items: center;
+  background: transparent;
+  border: 1px solid var(--line-soft);
+  border-radius: 2px;
+  color: var(--text-dim);
+  font-family: var(--f-display); font-weight: 600;
+  font-size: 16px; line-height: 1;
+  cursor: pointer;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+.eb-cart-head .btn.close.eb-cart-close:hover {
+  color: var(--gold-bright);
+  border-color: var(--gold);
+}
+
+/* Clear cart button — val-summary-mode (inactive) language */
+.eb-cart-head .btn-clear-cart-head {
+  padding: 6px 10px;
+  min-height: 28px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--line-soft);
+  border-radius: 2px;
+  color: var(--text-soft);
+  font-family: var(--f-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+.eb-cart-head .btn-clear-cart-head:hover:not(:disabled) {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+}
+.eb-cart-head .btn-clear-cart-head:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Foot panel — sectioned with val-summary-foot tint */
+.drawer-foot:has(.eb-cart-foot) {
+  padding: 0;
+  background: rgba(8, 5, 3, 0.42);
+  border-top: 1px solid var(--line-soft);
+  gap: 0;
+  box-shadow: none;
+}
+.eb-cart-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 20px 18px;
+}
+
+/* Block label with diamond marker — val-summary-block-label */
+.eb-cart-block-label {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eb-cart-block-label::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* Summary rows — mono key + display value */
+.eb-cart-summary { margin: 0; }
+.eb-cart-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--line-soft);
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 4px 12px;
+}
+.eb-cart-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.eb-cart-row:last-child { border-bottom: 0; }
+.eb-cart-k {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.eb-cart-v {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.eb-cart-v--muted { color: var(--text-faint); font-weight: 500; }
+
+/* Final payment — val-total scale */
+.eb-cart-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0 4px;
+  border-top: 1px solid var(--line-soft);
+  flex-wrap: wrap;
+}
+.eb-cart-total-k {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.eb-cart-total-v {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--gold-bright);
+  font-variant-numeric: tabular-nums;
+}
+.eb-cart-total-hint {
+  flex-basis: 100%;
+  font-style: normal;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+/* Promo — val-route panel + mini val-cta apply */
+.eb-cart-promo {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  padding: 4px;
+  border: 1px solid var(--line-soft);
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.32);
+  transition: border-color 0.25s ease;
+}
+.eb-cart-promo:focus-within { border-color: var(--gold); }
+.eb-cart-promo-input {
+  flex: 1;
+  min-width: 0;
+  height: 34px;
+  padding: 0 10px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--f-body);
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  outline: none;
+}
+.eb-cart-promo-input::placeholder {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.eb-cart-promo-apply {
+  flex-shrink: 0;
+  min-width: 72px;
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--gold);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--gold-bright);
+  font-family: var(--f-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.eb-cart-promo-apply:hover {
+  background: var(--gold);
+  color: #1a1208;
+}
+
+.eb-cart-note {
+  margin: 0;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  text-align: center;
+}
+
+/* Actions — primary uses eb-btn-primary class; this scopes the foot */
+.eb-cart-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Primary CHECKOUT — full-width pill in site primary language.
+   Composes with .eb-btn-primary from global.css. */
+.eb-cart-checkout {
+  width: 100%;
+  justify-content: center;
+  min-height: 48px;
+  padding: 14px 18px;
+  font-family: var(--f-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+.eb-cart-checkout:disabled {
+  opacity: 0.42;
+  filter: grayscale(0.6);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Secondary MEMBER CHECKOUT — val-summary-mode (inactive) language */
+.eb-cart-member {
+  width: 100%;
+  min-height: 42px;
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--line-soft);
+  border-left: 3px solid transparent;
+  border-radius: 2px;
+  color: var(--text-soft);
+  font-family: var(--f-display);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+}
+.eb-cart-member:hover {
+  border-color: var(--gold);
+  border-left-color: var(--gold);
+  color: var(--gold-bright);
+  background: rgba(201, 168, 76, 0.06);
+}
+
+/* Trust strip — val-trust verbatim */
+.eb-cart-trust {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line-soft);
+  font-family: var(--f-mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.eb-cart-trust .sep {
+  width: 1px;
+  height: 9px;
+  background: var(--line-soft);
+}
+
+.eb-cart-receipt {
+  display: flex;
+  justify-content: center;
+  margin-top: -4px;
+}
+.eb-cart-receipt .btn-receipt-link {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+.eb-cart-receipt .btn-receipt-link:hover { color: var(--gold-bright); }
+
+/* Empty-cart hide: only the item-dependent rows.
+   Header, CHECKOUT, MEMBER CHECKOUT, trust strip and note stay visible. */
+.eb-cart-foot.is-empty .eb-cart-summary,
+.eb-cart-foot.is-empty .eb-cart-total,
+.eb-cart-foot.is-empty .eb-cart-promo {
+  display: none;
+}
+
+/* sr-only for promo label */
+.eb-cart-foot .sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Empty cart tile inside the body ─────────────────────
+   Sharp val-summary-addon language; no rounded SaaS card. */
+.cart-empty-card.eb-cart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--line-soft);
+  border-left: 3px solid var(--gold);
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.32);
+  box-shadow: none;
+  text-align: left;
+}
+.eb-cart-empty-label {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+.eb-cart-empty-label::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.eb-cart-empty-sub {
+  font-family: var(--f-body);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-soft);
+  margin: 0;
+}
+.eb-cart-empty-browse {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 9px 16px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--line-soft);
+  border-left: 3px solid transparent;
+  border-radius: 2px;
+  color: var(--text-soft);
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+}
+.eb-cart-empty-browse:hover {
+  border-color: var(--gold);
+  border-left-color: var(--gold);
+  color: var(--gold-bright);
+  background: rgba(201, 168, 76, 0.06);
+}
+
+/* ─────────────────────────────────────────────────────
+   CART TOTAL PULSE — fires via JS class toggle when the
+   final total changes (cart-total-pulse class).
+   ───────────────────────────────────────────────────── */
+@keyframes cartTotalPulse {
+  0%   { text-shadow: none; filter: none; }
+  35%  { text-shadow: 0 0 20px rgba(231, 201, 139, .35); filter: brightness(1.06); }
+  100% { text-shadow: none; filter: none; }
+}
+
+#cartTotal.cart-total-pulse {
+  animation: cartTotalPulse 0.85s ease;
+}
+
+/* ─────────────────────────────────────────────────────
+   MOBILE — cart fills viewport on narrow screens
+   ───────────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  .cart-backdrop { padding: 64px 10px 10px; }
+  .drawer { max-height: calc(100svh - 74px); width: 100%; }
+  .drawer.drawer--wide { width: 100%; max-width: none; }
+}
