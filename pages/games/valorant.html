@@ -26,10 +26,22 @@
       </span>
       <span class="eb-wordmark">
         <span class="name">Elysium Boost</span>
-        <span class="tag">The guild of champions</span>
+        <span class="tag">The Realm of Champions</span>
       </span>
     </a>
     <nav class="eb-links" aria-label="Main navigation">
+      <span class="eb-search-wrap" id="valSearchWrap">
+        <button type="button" class="eb-search-toggle" id="valSearchToggle" aria-label="Search games" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+        </button>
+        <div class="eb-search-dropdown" id="valSearchDropdown" role="dialog" aria-label="Search games">
+          <div class="eb-search-input-wrap">
+            <input type="text" class="eb-search-input" id="valSearchInput" placeholder="Search games...">
+            <span class="arc-hot-trace" aria-hidden="true"></span>
+          </div>
+          <div class="eb-search-list" id="valSearchList"></div>
+        </div>
+      </span>
       <a href="../../index.html">Home</a>
       <a href="#" aria-current="page">Valorant</a>
       <a href="../../index.html#howItWorksTitle">How It Works</a>
@@ -37,8 +49,14 @@
       <a href="#faq">FAQ</a>
     </nav>
     <div class="eb-nav-right">
-      <span class="eb-currency">$ USD</span>
+      <select class="eb-currency" id="valCurrency" aria-label="Currency">
+        <option value="USD">$ USD</option>
+        <option value="EUR">&euro; EUR</option>
+        <option value="GBP">&pound; GBP</option>
+        <option value="TRY">&#8378; TRY</option>
+      </select>
       <button class="eb-cart" id="valCartToggle" type="button" aria-label="Cart">
+        <span class="arc-hot-trace" aria-hidden="true"></span>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 3H4L5 11H13L14 5H5" stroke="currentColor" stroke-width="1.4"/><circle cx="6" cy="13.5" r="0.8" fill="currentColor"/><circle cx="12" cy="13.5" r="0.8" fill="currentColor"/></svg>
         <span class="eb-cart-dot" id="valCartDot" hidden>0</span>
       </button>
@@ -267,5 +285,60 @@
   </footer>
 
   <script src="../../js/valorant.js" defer></script>
+
+  <!-- Shared nav search dropdown — class-based init, mirrors js/main.js -->
+  <script>
+  (function initNavSearch() {
+    var wraps = document.querySelectorAll('.eb-search-wrap');
+    if (!wraps.length) return;
+    var GAMES = [
+      { name: 'Arc Raiders', href: '../../pages/games/arc-raiders.html' },
+      { name: 'Valorant', href: '../../pages/games/valorant.html' },
+      { name: 'TFT', href: '../../index.html#tft' },
+      { name: 'League of Legends', href: '../../index.html#league-of-legends' },
+      { name: 'CS2', href: '../../index.html#cs2' }
+    ];
+    var arrowSvg = '<svg width="12" height="8" viewBox="0 0 16 10" fill="none"><path d="M0 5H14M14 5L10 1M14 5L10 9" stroke="currentColor" stroke-width="1.5"/></svg>';
+    wraps.forEach(function (wrap) {
+      var toggle = wrap.querySelector('.eb-search-toggle');
+      var dropdown = wrap.querySelector('.eb-search-dropdown');
+      var input = wrap.querySelector('.eb-search-input');
+      var list = wrap.querySelector('.eb-search-list');
+      if (!toggle || !dropdown || !input || !list) return;
+      function render(q) {
+        var filtered = q ? GAMES.filter(function (g) { return g.name.toLowerCase().indexOf(q) >= 0; }) : GAMES;
+        if (filtered.length === 0) {
+          list.innerHTML = '<div class="eb-search-empty">No games match "' + q + '"</div>';
+          return;
+        }
+        list.innerHTML = filtered.map(function (g) {
+          return '<a href="' + g.href + '" class="eb-search-result"><span>' + g.name + '</span><span class="arrow">' + arrowSvg + '</span></a>';
+        }).join('');
+      }
+      function open() {
+        dropdown.classList.add('open');
+        toggle.setAttribute('aria-expanded', 'true');
+        render('');
+        setTimeout(function () { input.focus(); }, 30);
+      }
+      function close() {
+        dropdown.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        input.value = '';
+      }
+      toggle.addEventListener('click', function () {
+        dropdown.classList.contains('open') ? close() : open();
+      });
+      input.addEventListener('input', function () { render(input.value.trim().toLowerCase()); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && dropdown.classList.contains('open')) close();
+      });
+      document.addEventListener('mousedown', function (e) {
+        if (!wrap.contains(e.target)) close();
+      });
+      list.addEventListener('click', function () { close(); });
+    });
+  })();
+  </script>
 </body>
 </html>

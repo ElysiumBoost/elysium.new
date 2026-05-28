@@ -12958,106 +12958,13 @@ body[data-ely-game="arc"]:not(.arc-hub-active) .arc-back-btn {
 .arc-state.leave { opacity: 0; transform: translateY(8px); pointer-events: none; }
 
 /* Landing nav search dropdown */
-.eb-search-wrap { position: relative; display: inline-flex; align-items: center; }
-.eb-search-toggle {
-  background: transparent; border: none; padding: 6px 4px;
-  color: var(--text-soft); cursor: pointer;
-  display: inline-flex; align-items: center;
-  transition: color 0.3s ease;
-}
-.eb-search-toggle:hover,
-.eb-search-toggle[aria-expanded="true"] { color: var(--gold-bright); }
-.eb-search-toggle svg { width: 14px; height: 14px; display: block; }
-.eb-search-dropdown {
-  position: absolute;
-  top: calc(100% + 22px); left: 50%;
-  width: min(360px, calc(100vw - 96px));
-  min-width: 260px;
-  background: rgba(10, 8, 5, 0.82);
-  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-  border: 1px solid var(--line-soft);
-  border-radius: 3px;
-  box-shadow: 0 18px 36px -10px rgba(0, 0, 0, 0.7);
-  padding: 14px;
-  opacity: 0;
-  transform: translate(-50%, -8px);
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
-  z-index: 210;
-}
-.eb-search-dropdown.open {
-  opacity: 1;
-  transform: translate(-50%, 0);
-  pointer-events: auto;
-}
-.eb-search-input-wrap { position: relative; border-radius: 2px; }
-.eb-search-input-wrap > .arc-hot-trace {
-  inset: -3px; padding: 2px; border-radius: 3px;
-  opacity: 0; transition: opacity 0.25s ease;
-}
-.eb-search-dropdown.open .eb-search-input-wrap > .arc-hot-trace { opacity: 1; }
-.eb-search-input {
-  width: 100%; height: 44px; padding: 0 14px;
-  background: rgba(0, 0, 0, 0.32);
-  border: 1px solid transparent; border-radius: 2px;
-  color: var(--text); font-family: var(--f-body); font-size: 13px;
-  outline: none;
-  transition: color 0.25s ease, background 0.25s ease;
-}
-.eb-search-input::placeholder { color: var(--text-faint); }
-.eb-search-input:focus { outline: none; border-color: transparent; box-shadow: none; color: var(--gold-bright); }
-.eb-search-list {
-  margin-top: 10px; display: flex; flex-direction: column;
-  max-height: 320px; overflow-y: auto;
-  scrollbar-width: thin; scrollbar-color: var(--gold-deep) transparent;
-}
-.eb-search-list::-webkit-scrollbar { width: 4px; }
-.eb-search-list::-webkit-scrollbar-thumb { background: var(--gold-deep); border-radius: 2px; }
-.eb-search-result {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 11px 12px;
-  font-family: var(--f-display); font-weight: 600;
-  font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--text-soft); border-radius: 3px;
-  transition: background 0.2s ease, color 0.2s ease;
-  text-decoration: none;
-}
-.eb-search-result:hover { background: var(--gold-soft); color: var(--gold-bright); }
-.eb-search-result .arrow {
-  color: var(--gold); display: inline-flex; align-items: center;
-  transition: transform 0.25s ease;
-}
-.eb-search-result:hover .arrow { transform: translateX(3px); }
-.eb-search-empty {
-  padding: 14px 12px;
-  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.24em;
-  color: var(--text-dim); text-transform: uppercase;
-}
-
-/* Landing nav currency select — compact */
-select.eb-currency {
-  appearance: none; -webkit-appearance: none;
-  background: transparent;
-  border: 1px solid var(--line-soft);
-  cursor: pointer;
-  padding: 6px 10px;
-  font-size: 10px;
-  width: auto;
-  max-width: 90px;
-}
-select.eb-currency:hover { border-color: var(--gold); color: var(--gold-bright); }
-select.eb-currency:focus { outline: none; border-color: var(--gold); }
-select.eb-currency option { background: var(--bg-2, #100b07); color: var(--text, #efe6cf); }
-
-/* Landing nav + hero — travelling line (::before rotation, disable @property background) */
-.eb-nav .arc-hot-trace,
+/* Hero travelling line — shares the same comet animation defined in components.css */
 .eb-hero .arc-hot-trace {
   overflow: hidden;
   opacity: 1;
   background: none;
   animation: none;
 }
-.eb-nav .arc-hot-trace::before,
 .eb-hero .arc-hot-trace::before {
   content: "";
   position: absolute;
@@ -13071,23 +12978,4 @@ select.eb-currency option { background: var(--bg-2, #100b07); color: var(--text,
     rgba(229,194,107,1) 360deg);
   animation: arc-trace-spin-landing 4.5s linear infinite;
 }
-@keyframes arc-trace-spin-landing { to { transform: translate(-50%, -50%) rotate(360deg); } }
-.eb-cart > .arc-hot-trace { inset: -3px; padding: 2px; border-radius: 5px; }
 .eb-btn-primary > .arc-hot-trace { inset: -3px; padding: 2px; border-radius: 6px; }
-
-/* Landing logo — bare image, no circle frame (override components.css for landing only) */
-.eb-nav .eb-logo-mark {
-  width: 56px; height: 56px;
-  border: none; border-radius: 0;
-  background: none;
-  box-shadow: none;
-  display: inline-flex; align-items: center; justify-content: center;
-  overflow: visible;
-}
-.eb-nav .eb-logo-mark img {
-  width: 56px; height: 56px;
-  min-width: 56px; min-height: 56px;
-  object-fit: contain;
-  transform: none;
-  filter: none;
-}
