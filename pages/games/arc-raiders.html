@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/styles.css">
   <link rel="stylesheet" href="../../css/arc-raiders.css">
 </head>
 <body>
@@ -63,10 +64,10 @@
         </button>
         <button type="button" class="eb-signin-sub" id="arcLoginBtn" aria-label="Login (coming soon)">Login</button>
       </span>
-      <button class="eb-cart" id="arcCartToggle" type="button" aria-label="Cart">
+      <button class="eb-cart" id="cartOpen" type="button" aria-label="Cart">
         <span class="arc-hot-trace" aria-hidden="true"></span>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 3H4L5 11H13L14 5H5" stroke="currentColor" stroke-width="1.4"/><circle cx="6" cy="13.5" r="0.8" fill="currentColor"/><circle cx="12" cy="13.5" r="0.8" fill="currentColor"/></svg>
-        <span class="eb-cart-dot" id="arcCartDot" hidden>0</span>
+        <span class="eb-cart-dot" id="cartCount">0</span>
       </button>
     </div>
   </header>
@@ -584,5 +585,91 @@
     if (login) login.addEventListener('click', function () { show('Login coming soon.'); });
   })();
   </script>
+
+  <!-- ══════════════════════════════════
+       CART V2 DROPDOWN — shared drawer markup
+       (wired by js/cart-dropdown.js below)
+       ══════════════════════════════════ -->
+  <div class="cart-backdrop" id="cartBackdrop" aria-hidden="true">
+    <aside class="drawer eb-cart-panel" aria-label="Order summary">
+      <div class="drawer-head eb-cart-head">
+        <div class="eb-cart-head-title">
+          <span class="eb-cart-eyebrow">Order</span>
+          <h2 id="drawerTitle">Order Summary</h2>
+        </div>
+        <div class="drawer-head-right eb-cart-head-right">
+          <button type="button" class="btn btn-glass btn-clear-cart-head" id="clearCart">Clear cart</button>
+          <button class="btn close eb-cart-close" id="cartClose" type="button" aria-label="Close">×</button>
+        </div>
+      </div>
+      <div class="drawer-body" id="cartBody"></div>
+      <div class="drawer-foot" id="cartDrawerFoot">
+        <div class="eb-cart-foot" id="orderCheckoutStrip">
+          <div class="cart-foot-alerts" id="cartFootAlerts" aria-live="polite"></div>
+
+          <section class="eb-cart-summary">
+            <div class="eb-cart-block-label">Summary</div>
+            <div class="eb-cart-rows" id="cartSummaryRows">
+              <div class="eb-cart-row">
+                <span class="eb-cart-k">Total items</span>
+                <span class="eb-cart-v" id="cartItemsCount">0</span>
+              </div>
+              <div class="eb-cart-row">
+                <span class="eb-cart-k">Subtotal</span>
+                <span class="eb-cart-v" id="cartSubtotalAmt">$0.00</span>
+              </div>
+              <div class="eb-cart-row">
+                <span class="eb-cart-k">Taxes</span>
+                <span class="eb-cart-v eb-cart-v--muted" id="cartTaxAmt">—</span>
+              </div>
+              <div class="eb-cart-row">
+                <span class="eb-cart-k">Discount</span>
+                <span class="eb-cart-v eb-cart-v--muted" id="cartDiscountAmt">—</span>
+              </div>
+            </div>
+          </section>
+
+          <div class="eb-cart-total" id="cartSummaryTotals">
+            <span class="eb-cart-total-k" id="cartTotalLabel">Final payment</span>
+            <span class="eb-cart-total-v" id="cartTotal">$0.00</span>
+            <em class="eb-cart-total-hint" id="cartUsdHint" hidden></em>
+          </div>
+
+          <div class="eb-cart-promo">
+            <label for="cartPromoInput" class="sr-only">Promo code</label>
+            <input class="eb-cart-promo-input" id="cartPromoInput" type="text" autocomplete="off"
+                   placeholder="Enter promo code" maxlength="32">
+            <button class="eb-cart-promo-apply" id="cartPromoApply" type="button">Apply</button>
+          </div>
+
+          <p class="cart-verify-note eb-cart-note" id="cartVerifyNote">Attach receipt only if support asks.</p>
+
+          <div class="eb-cart-actions">
+            <button class="eb-btn-primary eb-cart-checkout btn-order-copy" id="copyOrder" type="button">
+              Checkout
+            </button>
+            <button class="eb-cart-member" id="memberCheckout" type="button">
+              Member Checkout
+            </button>
+          </div>
+
+          <div class="eb-cart-trust" aria-label="Service guarantees">
+            <span>Manual</span><span class="sep"></span>
+            <span>No cheats</span><span class="sep"></span>
+            <span>Discord confirmed</span>
+          </div>
+
+          <div class="eb-cart-receipt">
+            <button type="button" class="btn-text btn-receipt-link" id="downloadOrderReceipt">
+              Download Receipt Image
+            </button>
+          </div>
+
+          <div class="copy-status" id="copyStatus" aria-live="polite"></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+  <script src="../../js/cart-dropdown.js" defer></script>
 </body>
 </html>
