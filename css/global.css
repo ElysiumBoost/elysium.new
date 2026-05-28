@@ -3,6 +3,9 @@
    Tokens, resets, layout primitives, typography, buttons.
    ══════════════════════════════════════════════════════════════ */
 
+/* ── Shared font import (Space Grotesk — display family) ── */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
 /* ── @property for travelling line animation ── */
 @property --arc-trace-angle {
   syntax: "<angle>";
@@ -36,8 +39,8 @@
   --arc-rust:      #d4571b;
   --arc-rust-glow: rgba(212, 87, 27, 0.32);
 
-  --f-display: "Rajdhani", "Plus Jakarta Sans", system-ui, sans-serif;
-  --f-body:    "Plus Jakarta Sans", system-ui, sans-serif;
+  --f-display: "Space Grotesk", "Rajdhani", "Plus Jakarta Sans", system-ui, sans-serif;
+  --f-body:    "Space Grotesk", "Plus Jakarta Sans", system-ui, sans-serif;
   --f-mono:    "JetBrains Mono", ui-monospace, monospace;
 
   color-scheme: dark;
@@ -90,7 +93,7 @@ video { display: block; max-width: 100%; height: auto; }
 .eb-section { padding: 110px 0; position: relative; }
 @media (max-width: 720px) { .eb-section { padding: 72px 0; } }
 
-/* ── Typography ── */
+/* ── Typography (shared across landing, Arc Raiders, Valorant) ── */
 .eb-label {
   font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.32em;
   text-transform: uppercase; color: var(--gold);
@@ -102,13 +105,31 @@ video { display: block; max-width: 100%; height: auto; }
   background: var(--gold); transform: rotate(45deg);
 }
 
+.eb-h1 {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: clamp(56px, 8vw, 120px);
+  line-height: 1.0;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin: 24px 0 40px;
+}
+.eb-h1 .gold { color: var(--gold-bright); }
+
 .eb-h2 {
   font-family: var(--f-display); font-weight: 600;
-  font-size: clamp(34px, 3.8vw, 48px);
+  font-size: clamp(36px, 4vw, 52px);
   line-height: 1; letter-spacing: 0.005em;
   text-transform: uppercase;
   color: var(--text);
   margin: 18px 0 0;
+}
+
+.eb-body {
+  font-family: var(--f-body);
+  font-size: 16px; line-height: 1.7;
+  color: var(--text-soft);
+  max-width: 56ch;
 }
 
 .eb-secheader {
@@ -116,6 +137,8 @@ video { display: block; max-width: 100%; height: auto; }
   text-align: center; gap: 16px;
   margin-bottom: 64px;
 }
+.eb-secheader .eb-body { margin-top: 16px; }
+.eb-secheader.eb-left { align-items: flex-start; text-align: left; margin-bottom: 0; }
 
 /* ── Buttons ── */
 .eb-btn {

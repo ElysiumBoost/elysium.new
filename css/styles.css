@@ -11410,55 +11410,8 @@ h1, h2, .hero-title, #heroTitle {
 @media (max-width: 900px) { .eb-container { padding: 0 28px; } }
 .eb-section { padding: 120px 0; position: relative; }
 
-/* typography primitives */
-.eb-label {
-  font-family: var(--eb-f-mono);
-  font-size: 11px;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--eb-gold);
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-}
-.eb-label::before {
-  content: "";
-  display: inline-block;
-  width: 6px; height: 6px;
-  background: var(--eb-gold);
-  transform: rotate(45deg);
-}
-
-.eb-h1 {
-  font-family: var(--eb-f-display);
-  font-weight: 700;
-  font-size: clamp(56px, 7.6vw, 112px);
-  line-height: 1.0;
-  letter-spacing: -0.005em;
-  text-transform: uppercase;
-  color: var(--eb-text);
-  margin: 24px 0 40px;
-}
-.eb-h1 .gold { color: var(--eb-gold-bright); }
-
-.eb-h2 {
-  font-family: var(--eb-f-display);
-  font-weight: 600;
-  font-size: clamp(38px, 4.2vw, 56px);
-  line-height: 1;
-  letter-spacing: 0.005em;
-  text-transform: uppercase;
-  color: var(--eb-text);
-  margin: 18px 0 0;
-}
-
-.eb-body {
-  font-family: var(--eb-f-body);
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--eb-text-soft);
-  max-width: 56ch;
-}
+/* Typography primitives — shared base rules now live in css/global.css.
+   The landing keeps only landing-specific tweaks below (outlined hero etc.). */
 
 /* buttons */
 .eb-btn {
@@ -11613,9 +11566,20 @@ h1, h2, .hero-title, #heroTitle {
   100% { transform: translate( 1%,  1%) scale(1.04); }
 }
 
-.eb-hero-inner { position: relative; z-index: 2; }
+.eb-hero-inner { position: relative; z-index: 2; width: 100%; }
 .eb-hero-copy { max-width: 920px; }
-.eb-hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; }
+/* Stretch the reveal wrappers so the hero title can use the full copy width
+   (without this they shrink-wrap to content and the h1 wraps awkwardly). */
+.eb-hero-copy > .eb-reveal { width: 100%; }
+.eb-hero-copy .eb-h1 { width: 100%; max-width: 100%; }
+.eb-hero-ctas { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 24px; }
+.eb-hero-ctas .eb-btn,
+.eb-hero-ctas .eb-btn-primary {
+  padding: 22px 40px !important;
+  font-size: 15px !important;
+  letter-spacing: 0.22em;
+  min-height: 64px;
+}
 .eb-hero-stats {
   margin-top: 88px;
   margin-inline: calc(max(0px, min(50vw - 50% - 48px, 170px)) * -1);
@@ -11662,27 +11626,39 @@ h1, h2, .hero-title, #heroTitle {
 /* hero centered + outlined title */
 body.tw-hero-centered .eb-hero-inner { text-align: center; }
 body.tw-hero-centered .eb-hero-copy {
-  max-width: 980px; margin: 0 auto;
+  max-width: 1080px; margin: 0 auto;
   display: flex; flex-direction: column; align-items: center;
+}
+body.tw-hero-centered .eb-hero-copy .eb-body {
+  font-size: 22px !important;
+  max-width: 60ch;
 }
 body.tw-hero-centered .eb-hero-copy .eb-body { margin-left: auto; margin-right: auto; }
 body.tw-hero-centered .eb-hero-ctas { justify-content: center; }
 body.tw-hero-centered .eb-hero-stats { text-align: left; }
 
+/* Landing hero outlined display — premium gold stroke, transparent center.
+   Strengthened stroke + larger responsive clamp than the shared .eb-h1 base
+   so the hero feels properly heroic without overflowing. !important is
+   required to override earlier landing-only !important rules at L10634
+   (`.hero h1 { font-size: ... !important }`) and L10998
+   (`h1 { color: white !important }`). */
 body.tw-title-outlined .eb-hero .eb-h1 {
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--eb-gold-bright);
-  text-stroke: 1.5px var(--eb-gold-bright);
+  font-size: clamp(64px, 8.5vw, 132px) !important;
+  color: transparent !important;
+  -webkit-text-stroke: 2px var(--gold-bright);
+  text-stroke: 2px var(--gold-bright);
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  /* Defeat `.hero.is-home h1 { max-width: 760px }` at L8271 so the hero
+     title can use the full hero-copy width instead of wrapping every word. */
+  max-width: 100% !important;
+  width: 100%;
 }
 body.tw-title-outlined .eb-hero .eb-h1 .gold {
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--eb-gold-bright);
+  color: transparent !important;
+  -webkit-text-stroke: 2px var(--gold-bright);
 }
-
-/* ── SECTION HEADERS ── */
-.eb-secheader { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; margin-bottom: 80px; }
-.eb-secheader .eb-body { margin-top: 16px; }
-.eb-secheader.eb-left { align-items: flex-start; text-align: left; margin-bottom: 0; }
 
 /* ── GAMES ── */
 .eb-games-head {
