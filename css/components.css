@@ -84,11 +84,15 @@
   color: var(--text-soft);
 }
 
+/* Cart button — canonical Claude Design spec verbatim from
+   design-extract/signin-button/Elysium Boost.html (lines 354-362). */
 .eb-cart {
-  position: relative; width: 38px; height: 38px;
+  position: relative;
+  width: 38px; height: 38px;
   display: grid; place-items: center;
   border: 1px solid var(--line-soft); border-radius: 3px;
-  color: var(--text-soft); transition: all 0.3s ease;
+  color: var(--text-soft);
+  transition: all 0.3s ease;
 }
 .eb-cart:hover { color: var(--gold-bright); border-color: var(--gold); }
 
@@ -167,7 +171,14 @@ select.eb-currency option { background: var(--bg-2, #100b07); color: var(--text,
   animation: arc-trace-spin-landing 4.5s linear infinite;
 }
 @keyframes arc-trace-spin-landing { to { transform: translate(-50%, -50%) rotate(360deg); } }
-.eb-cart > .arc-hot-trace { inset: -3px; padding: 2px; border-radius: 5px; }
+/* Cart trace — canonical Claude Design spec (Elysium Boost.html L366-370).
+   Trace sits JUST OUTSIDE the 1px cart border (inset:-3px) so the comet
+   tail shows against the dark page bg instead of fighting the box border. */
+.eb-cart > .arc-hot-trace {
+  inset: -3px;
+  padding: 2px;
+  border-radius: 5px;
+}
 
 /* Search — toggle button + dropdown */
 .eb-search-wrap { position: relative; display: inline-flex; align-items: center; }
@@ -247,10 +258,154 @@ select.eb-currency option { background: var(--bg-2, #100b07); color: var(--text,
   color: var(--text-dim); text-transform: uppercase;
 }
 
+/* ──────────────────────────────────────────────────────────────
+   SIGN-IN BUTTON — translated from Claude Design (Elysium Boost.html).
+   Premium glass capsule with three drifting brand-tinted color blobs
+   (gold, amber, deep ember) behind a blurred backdrop. The blobs drift
+   gently and intensify on hover; no click/press state. LOGIN sits
+   outside-right as a separate text-link.
+   ────────────────────────────────────────────────────────────── */
+.eb-signin-wrap {
+  display: inline-flex; align-items: center;
+  gap: 14px;
+}
+
+@keyframes eb-signin-drift-a {
+  0%, 100% { transform: translate(-22%, -28%) scale(1); }
+  50%      { transform: translate(-14%, -18%) scale(1.18); }
+}
+@keyframes eb-signin-drift-b {
+  0%, 100% { transform: translate(78%, 36%) scale(1.05); }
+  50%      { transform: translate(64%, 22%) scale(0.92); }
+}
+@keyframes eb-signin-drift-c {
+  0%, 100% { transform: translate(34%, 84%) scale(0.95); }
+  50%      { transform: translate(46%, 62%) scale(1.12); }
+}
+
+.eb-signin {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 44px;
+  min-width: 112px;
+  padding: 6px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(239, 230, 207, 0.16);
+  background: linear-gradient(180deg,
+    rgba(239, 230, 207, 0.10) 0%,
+    rgba(239, 230, 207, 0.04) 55%,
+    rgba(239, 230, 207, 0.08) 100%);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  color: var(--text);
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow:
+    0 1px 0 rgba(255, 232, 178, 0.10) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.25) inset,
+    0 6px 18px -10px rgba(0, 0, 0, 0.6);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
+}
+.eb-signin-blob {
+  position: absolute;
+  top: 0; left: 0;
+  width: 70%; aspect-ratio: 1;
+  border-radius: 50%;
+  filter: blur(22px);
+  opacity: 0.85;
+  z-index: -1;
+  will-change: transform, opacity, filter;
+  transition: opacity 0.5s ease, filter 0.5s ease;
+}
+.eb-signin-blob.a {
+  background: radial-gradient(circle, var(--gold-bright) 0%, rgba(229,194,107,0) 70%);
+  animation: eb-signin-drift-a 7s ease-in-out infinite;
+}
+.eb-signin-blob.b {
+  background: radial-gradient(circle, var(--amber) 0%, rgba(217,119,87,0) 70%);
+  animation: eb-signin-drift-b 8s ease-in-out infinite;
+}
+.eb-signin-blob.c {
+  background: radial-gradient(circle, #8d3a4c 0%, rgba(141,58,76,0) 70%);
+  animation: eb-signin-drift-c 9s ease-in-out infinite;
+}
+.eb-signin-label {
+  font-family: var(--f-display); font-weight: 600;
+  font-size: 13px; letter-spacing: 0.02em;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+}
+.eb-signin:hover {
+  border-color: rgba(239, 230, 207, 0.32);
+  box-shadow:
+    0 1px 0 rgba(255, 232, 178, 0.18) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.25) inset,
+    0 10px 28px -10px rgba(201, 168, 76, 0.45),
+    0 0 0 1px rgba(201, 168, 76, 0.18);
+}
+.eb-signin:hover .eb-signin-blob { opacity: 1; filter: blur(16px); }
+.eb-signin:hover .eb-signin-blob.a { animation-duration: 3.5s; }
+.eb-signin:hover .eb-signin-blob.b { animation-duration: 4s; }
+.eb-signin:hover .eb-signin-blob.c { animation-duration: 4.5s; }
+.eb-signin:focus-visible {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow:
+    0 0 0 2px rgba(201, 168, 76, 0.35),
+    0 10px 28px -10px rgba(201, 168, 76, 0.45);
+}
+
+/* "LOGIN" text-link button — sits to the right of the capsule */
+.eb-signin-sub {
+  background: transparent; border: none; padding: 0;
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.32em;
+  text-transform: uppercase; color: var(--gold);
+  white-space: nowrap; cursor: pointer; line-height: 1;
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+.eb-signin-sub:hover {
+  color: var(--gold-bright);
+  text-shadow: 0 0 12px var(--gold-glow);
+}
+.eb-signin-sub:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   TOAST — bottom-center floating message, used for "Login coming soon"
+   ────────────────────────────────────────────────────────────── */
+.eb-toast {
+  position: fixed;
+  left: 50%; bottom: 32px;
+  transform: translate(-50%, 10px);
+  z-index: 999;
+  padding: 12px 22px;
+  background: rgba(20, 14, 8, 0.72);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  font-family: var(--f-display); font-weight: 600;
+  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold-bright);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.eb-toast.is-show { opacity: 1; transform: translate(-50%, 0); }
+
 @media (max-width: 1100px) {
   .eb-links, .eb-currency, .eb-search-wrap { display: none; }
   .eb-nav { padding: 14px 24px; }
   .eb-nav.eb-scrolled { padding: 10px 24px; }
+}
+@media (max-width: 900px) {
+  .eb-signin { min-width: 96px; height: 40px; padding: 6px 14px; }
+  .eb-signin-label { font-size: 12px; }
+}
+@media (max-width: 720px) {
+  .eb-signin-sub { display: none; }
 }
 
 /* ──────────────────────────────────────────────────────────────

@@ -138,6 +138,15 @@
         <option value="GBP">&pound; GBP</option>
         <option value="TRY">&#8378; TRY</option>
       </select>
+      <span class="eb-signin-wrap">
+        <button type="button" class="eb-signin" id="ebSigninBtn" aria-label="Sign in (coming soon)">
+          <span class="eb-signin-blob a" aria-hidden="true"></span>
+          <span class="eb-signin-blob b" aria-hidden="true"></span>
+          <span class="eb-signin-blob c" aria-hidden="true"></span>
+          <span class="eb-signin-label">Sign in</span>
+        </button>
+        <button type="button" class="eb-signin-sub" id="ebLoginBtn" aria-label="Login (coming soon)">Login</button>
+      </span>
       <button class="eb-cart" id="cartOpen" type="button" aria-label="Cart">
         <span class="arc-hot-trace" aria-hidden="true"></span>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 3H4L5 11H13L14 5H5" stroke="currentColor" stroke-width="1.4"/><circle cx="6" cy="13.5" r="0.8" fill="currentColor"/><circle cx="12" cy="13.5" r="0.8" fill="currentColor"/></svg>
@@ -1366,5 +1375,24 @@
 
   </nav>
 
+  <!-- Sign in / Login toasts (coming soon) -->
+  <div class="eb-toast" id="ebToast" role="status" aria-live="polite"></div>
+  <script>
+  (function () {
+    var signin = document.getElementById('ebSigninBtn');
+    var login = document.getElementById('ebLoginBtn');
+    var toast = document.getElementById('ebToast');
+    if (!toast) return;
+    var t;
+    function show(msg) {
+      toast.textContent = msg;
+      toast.classList.add('is-show');
+      clearTimeout(t);
+      t = setTimeout(function () { toast.classList.remove('is-show'); }, 2200);
+    }
+    if (signin) signin.addEventListener('click', function () { show('Sign in coming soon.'); });
+    if (login) login.addEventListener('click', function () { show('Login coming soon.'); });
+  })();
+  </script>
 </body>
 </html>
