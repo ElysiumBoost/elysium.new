@@ -752,6 +752,17 @@
       if (clearCartEl) clearCartEl.disabled = !state.cart.length;
       const hasArcItems = state.cart.some(item => item.game === "Arc Raiders");
       if (!state.cart.length) {
+        // Preserve #orderCheckoutStrip across items->empty transition.
+        // The items branch may have relocated the strip into #cartCheckoutDock
+        // (a child of cartBody). Without first moving it back to #cartDrawerFoot,
+        // the upcoming cartBodyEl.innerHTML wipe destroys the dock and orphans
+        // the strip, breaking checkout / member checkout / promo on subsequent renders.
+        {
+          const foot = $("cartDrawerFoot");
+          const strip = $("orderCheckoutStrip");
+          if (foot && strip && strip.parentElement !== foot) foot.appendChild(strip);
+        }
+
         state.arcId = "";
         state.arcIdSkipped = false;
         state.clearCartConfirmUntil = 0;
