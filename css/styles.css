@@ -8341,7 +8341,7 @@
     .hero-future-visual { display: none; }
 
     .home-content {
-      padding: 18px 0 30px;
+      padding: 18px 0 0;
     }
 
     .home-trust-strip {
@@ -12159,6 +12159,15 @@ body.tw-title-outlined .eb-hero .eb-h1 .gold {
   top: 0; left: 0; right: 0;
   height: 240px;
   background: linear-gradient(180deg, rgba(5,4,2,1) 0%, rgba(5,4,2,0.6) 30%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+}
+.eb-page-bg::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 240px;
+  background: linear-gradient(0deg, rgba(5,4,2,1) 0%, rgba(5,4,2,0.6) 30%, transparent 60%);
   pointer-events: none;
   z-index: 1;
 }
