@@ -759,17 +759,13 @@
         const cartBodyEl = $("cartBody");
         if (cartBodyEl) {
           cartBodyEl.innerHTML = `
-          <div class="cart-empty-card">
-            <div class="cart-empty-icon" aria-hidden="true">✦</div>
-            <p class="cart-empty-title">${escapeHtml(ui("Your order is empty"))}</p>
-            <p class="cart-empty-sub">${escapeHtml(ui("Your cart is empty. Start with a service and build your order in seconds."))}</p>
-            <button type="button" class="btn btn-premium" id="browsePopularServices">${escapeHtml(ui(state.game ? "Continue your service" : "Browse games"))}</button>
-            <button type="button" class="btn btn-glass cart-empty-secondary" id="continueShoppingEmpty">${escapeHtml(ui("Continue browsing"))}</button>
+          <div class="cart-empty-card eb-cart-empty">
+            <p class="eb-cart-empty-label">${escapeHtml(ui("Cart empty"))}</p>
+            <p class="eb-cart-empty-sub">${escapeHtml(ui("Pick a service to start your order."))}</p>
+            <button type="button" class="eb-cart-empty-browse" id="browsePopularServices">${escapeHtml(ui(state.game ? "Continue your service" : "Browse games"))}</button>
           </div>`;
           const bp = cartBodyEl.querySelector("#browsePopularServices");
           if (bp) bp.addEventListener("click", continueShopping);
-          const c0 = cartBodyEl.querySelector("#continueShoppingEmpty");
-          if (c0) c0.addEventListener("click", continueShopping);
         }
       } else {
         if (!hasArcItems) {
@@ -915,6 +911,26 @@
         cartUsdHintEl.textContent = "";
         cartUsdHintEl.hidden = true;
       }
+
+      // Populate new summary panel rows
+      const stripEl = $("orderCheckoutStrip");
+      if (stripEl) stripEl.classList.toggle("is-empty", state.cart.length === 0);
+      const copyBtnEl = $("copyOrder");
+      if (copyBtnEl) copyBtnEl.disabled = state.cart.length === 0;
+      const itemsCountEl = $("cartItemsCount");
+      if (itemsCountEl) itemsCountEl.textContent = String(lineCount);
+      const subtotalEl = $("cartSubtotalAmt");
+      if (subtotalEl) {
+        subtotalEl.textContent = hasCustom
+          ? displayInCurrency(total, cartCurrency) + " + CUSTOM"
+          : displayInCurrency(total, cartCurrency);
+      }
+      // Taxes & discount stay as "—" until backend/promo engine exists.
+      const taxEl = $("cartTaxAmt");
+      if (taxEl && !taxEl.dataset.locked) taxEl.textContent = "—";
+      const discountEl = $("cartDiscountAmt");
+      if (discountEl && !discountEl.dataset.locked) discountEl.textContent = "—";
+
       updateCartFootAlerts();
       syncClearCartButton();
       applyDrawerCompactClass();

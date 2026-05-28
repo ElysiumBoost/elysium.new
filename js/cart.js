@@ -430,7 +430,13 @@
       $("clearService").textContent = ui("Clear");
       $("addToCart").textContent = ui("Add to Cart");
       const copyBtn = $("copyOrder");
-      if (copyBtn) copyBtn.textContent = ui("Copy Order & Open Discord");
+      if (copyBtn) copyBtn.textContent = ui("Checkout");
+      const memberBtn = $("memberCheckout");
+      if (memberBtn) memberBtn.textContent = ui("Member Checkout");
+      const promoIn = $("cartPromoInput");
+      if (promoIn) promoIn.placeholder = ui("Enter promo code");
+      const promoBtn = $("cartPromoApply");
+      if (promoBtn) promoBtn.textContent = ui("Apply");
       const dlR = $("downloadOrderReceipt");
       if (dlR) dlR.textContent = ui("Download Receipt Image");
       const vNote = $("cartVerifyNote");
@@ -439,9 +445,9 @@
       const discA = document.querySelector('a[href*="1499796035382415462"]');
       if (discA) discA.textContent = ui("Open Discord");
       const drawerH = document.querySelector(".drawer-head h2");
-      if (drawerH) drawerH.textContent = ui("Order center");
+      if (drawerH) drawerH.textContent = ui("Order Summary");
       const ctl = $("cartTotalLabel");
-      if (ctl) ctl.textContent = ui("Final total");
+      if (ctl) ctl.textContent = ui("Final payment");
     }
 
     function closeGameMenu() {

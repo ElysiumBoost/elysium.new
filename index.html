@@ -702,34 +702,80 @@
        CART DRAWER
        ══════════════════════════════════ -->
   <div class="cart-backdrop" id="cartBackdrop" aria-hidden="true">
-    <aside class="drawer" aria-label="Sipariş merkezi">
-      <div class="drawer-head">
-        <h2 id="drawerTitle">Order center</h2>
-        <div class="drawer-head-right">
+    <aside class="drawer eb-cart-panel" aria-label="Order summary">
+      <div class="drawer-head eb-cart-head">
+        <div class="eb-cart-head-title">
+          <span class="eb-cart-eyebrow">Order</span>
+          <h2 id="drawerTitle">Order Summary</h2>
+        </div>
+        <div class="drawer-head-right eb-cart-head-right">
           <button type="button" class="btn btn-glass btn-clear-cart-head" id="clearCart">Clear cart</button>
-          <button class="btn close" id="cartClose" type="button" aria-label="Kapat">×</button>
+          <button class="btn close eb-cart-close" id="cartClose" type="button" aria-label="Close">×</button>
         </div>
       </div>
       <div class="drawer-body" id="cartBody"></div>
       <div class="drawer-foot" id="cartDrawerFoot">
-        <div class="order-checkout-strip" id="orderCheckoutStrip">
+        <div class="eb-cart-foot" id="orderCheckoutStrip">
           <div class="cart-foot-alerts" id="cartFootAlerts" aria-live="polite"></div>
-          <div class="order-summary-totals" id="cartSummaryTotals">
-            <small id="cartTotalLabel">Final total</small>
-            <span id="cartTotal">$0.00</span>
-            <em id="cartUsdHint" hidden></em>
+
+          <section class="eb-cart-summary">
+            <div class="eb-cart-block-label">Summary</div>
+            <div class="eb-cart-rows" id="cartSummaryRows">
+              <div class="eb-cart-row">
+                <span class="eb-cart-k">Total items</span>
+                <span class="eb-cart-v" id="cartItemsCount">0</span>
+              </div>
+              <div class="eb-cart-row">
+                <span class="eb-cart-k">Subtotal</span>
+                <span class="eb-cart-v" id="cartSubtotalAmt">$0.00</span>
+              </div>
+              <div class="eb-cart-row">
+                <span class="eb-cart-k">Taxes</span>
+                <span class="eb-cart-v eb-cart-v--muted" id="cartTaxAmt">—</span>
+              </div>
+              <div class="eb-cart-row">
+                <span class="eb-cart-k">Discount</span>
+                <span class="eb-cart-v eb-cart-v--muted" id="cartDiscountAmt">—</span>
+              </div>
+            </div>
+          </section>
+
+          <div class="eb-cart-total" id="cartSummaryTotals">
+            <span class="eb-cart-total-k" id="cartTotalLabel">Final payment</span>
+            <span class="eb-cart-total-v" id="cartTotal">$0.00</span>
+            <em class="eb-cart-total-hint" id="cartUsdHint" hidden></em>
           </div>
-          <p class="cart-verify-note" id="cartVerifyNote">Attach the receipt image only if support asks.</p>
-          <div class="order-actions-primary">
-            <button class="btn btn-checkout-primary btn-order-copy" id="copyOrder" type="button">
-              Copy Order &amp; Open Discord
+
+          <div class="eb-cart-promo">
+            <label for="cartPromoInput" class="sr-only">Promo code</label>
+            <input class="eb-cart-promo-input" id="cartPromoInput" type="text" autocomplete="off"
+                   placeholder="Enter promo code" maxlength="32">
+            <button class="eb-cart-promo-apply" id="cartPromoApply" type="button">Apply</button>
+          </div>
+
+          <p class="cart-verify-note eb-cart-note" id="cartVerifyNote">Attach receipt only if support asks.</p>
+
+          <div class="eb-cart-actions">
+            <button class="eb-btn-primary eb-cart-checkout btn-order-copy" id="copyOrder" type="button">
+              Checkout
+            </button>
+            <button class="eb-cart-member" id="memberCheckout" type="button">
+              Member Checkout
             </button>
           </div>
-          <div class="order-actions-secondary">
+
+          <div class="eb-cart-trust" aria-label="Service guarantees">
+            <span>Manual</span><span class="sep"></span>
+            <span>No cheats</span><span class="sep"></span>
+            <span>Discord confirmed</span>
+          </div>
+
+          <div class="eb-cart-receipt">
             <button type="button" class="btn-text btn-receipt-link" id="downloadOrderReceipt">
               Download Receipt Image
             </button>
           </div>
+
           <div class="copy-status" id="copyStatus" aria-live="polite"></div>
           <a id="openDiscord"
              class="cart-open-discord-anchor"

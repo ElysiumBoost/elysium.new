@@ -57,6 +57,26 @@
       if (typeof persistOrderState === "function") persistOrderState();
     });
     $("copyOrder")?.addEventListener("click", () => copyOrder(true));
+    $("memberCheckout")?.addEventListener("click", () => {
+      if (typeof showToast === "function") showToast("Member checkout coming soon.");
+    });
+    $("cartPromoApply")?.addEventListener("click", () => {
+      const input = $("cartPromoInput");
+      const code = input ? input.value.trim() : "";
+      if (!code) {
+        if (typeof showToast === "function") showToast("Enter a promo code first.");
+        return;
+      }
+      if (typeof showToast === "function") {
+        showToast("Promo codes are validated in Discord during ticket review.");
+      }
+    });
+    $("cartPromoInput")?.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        $("cartPromoApply")?.click();
+      }
+    });
     $("downloadOrderReceipt")?.addEventListener("click", e => {
       e.preventDefault();
       if (typeof downloadOrderReceipt === "function") downloadOrderReceipt();
