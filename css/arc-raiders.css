@@ -183,7 +183,7 @@ body.arc-locked { overflow: hidden; }
 .arc-hub--fullscreen {
   margin: 78px 0 0;
   aspect-ratio: auto;
-  width: 100vw;
+  width: 100%;
   height: calc(100vh - 78px);
   border: none;
   border-radius: 0;
@@ -235,30 +235,22 @@ body.arc-locked { overflow: hidden; }
 }
 .arc-hub-hud .live { width: 6px; height: 6px; border-radius: 50%; background: var(--arc-rust); box-shadow: 0 0 10px var(--arc-rust-glow); animation: arc-pulse 1.8s ease-in-out infinite; }
 .arc-hub-hud-r {
-  position: absolute; top: 20px; left: 24px;
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 11px 20px;
+  position: absolute; top: 18px; left: 20px;
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 8px 14px;
   background: rgba(8,5,3,0.7);
   border: 1px solid var(--line); border-radius: 2px;
-  font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.28em;
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.24em;
   text-transform: uppercase; color: var(--text-soft);
   z-index: 4;
   backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: color 0.25s ease, border-color 0.25s ease;
 }
+.arc-hub-hud-r:hover { color: var(--gold-bright); border-color: var(--gold); }
+.arc-hub-hud-r .ico { color: var(--gold-bright); flex-shrink: 0; }
 /* Always-on travelling line trace for the station-selector trigger */
 .arc-hub-hud-r .arc-hot-trace { opacity: 1; }
-.arc-hub-hud-r .nudge {
-  display: inline-block;
-  color: var(--gold-bright);
-  animation: arc-nudge 1.6s ease-in-out infinite;
-}
-.arc-hub-hud-r .caret {
-  display: inline-block;
-  width: 7px; height: 12px;
-  margin-left: 2px;
-  background: var(--gold-bright);
-  animation: arc-blink 1.1s steps(2, start) infinite;
-}
 @keyframes arc-nudge {
   0%, 100% { transform: translateX(0); opacity: 0.65; }
   50%      { transform: translateX(-3px); opacity: 1; }
@@ -274,7 +266,7 @@ body.arc-locked { overflow: hidden; }
    ────────────────────────────────────────────────────────────── */
 .arc-hot {
   position: absolute;
-  transform: translate(-50%, -50%);
+  transform: translate(0, -50%);
   display: inline-flex; align-items: center;
   gap: 0;
   z-index: 5;
@@ -283,7 +275,7 @@ body.arc-locked { overflow: hidden; }
   animation: arc-hot-in 0.6s ease-out both;
 }
 .arc-hot * { cursor: pointer; }
-@keyframes arc-hot-in { from { opacity: 0; transform: translate(-50%, -50%) translateY(4px); } to { opacity: 1; transform: translate(-50%, -50%); } }
+@keyframes arc-hot-in { from { opacity: 0; transform: translate(0, -50%) translateY(4px); } to { opacity: 1; transform: translate(0, -50%); } }
 
 .arc-hot .dot {
   position: relative;
@@ -377,25 +369,25 @@ body.arc-locked { overflow: hidden; }
 .arc-hot:hover .line { background: var(--gold-bright); }
 .arc-hot:focus-visible .pill { outline: 2px solid var(--gold); outline-offset: 2px; }
 
-/* hotspot left-side variant: pill on the LEFT of the dot */
-.arc-hot.left { flex-direction: row-reverse; }
-
-/* Hotspot positions — keyed on data-service */
-.arc-hot[data-service="custom-loadout"]   { left: 22%; top: 36%; }
-.arc-hot[data-service="all-weapons"]      { left: 32%; top: 28%; }
-.arc-hot[data-service="blueprints"]       { left: 13%; top: 52%; }
-.arc-hot[data-service="leveling"]         { left: 24%; top: 43%; }
-.arc-hot[data-service="workshop"]         { left: 34%; top: 55%; }
-.arc-hot[data-service="materials"]        { left: 50%; top: 59%; }
-.arc-hot[data-service="depositary"]       { left: 48%; top: 46%; }
-.arc-hot[data-service="boss-puzzle"]      { left: 47%; top: 38%; }
-.arc-hot[data-service="raider-coins"]     { left: 51%; top: 28%; }
-.arc-hot[data-service="trials-boost"]     { left: 64%; top: 32%; }
-.arc-hot[data-service="raids"]            { left: 76%; top: 22%; }
-.arc-hot[data-service="expedition-boost"] { left: 78%; top: 42%; }
-.arc-hot[data-service="raid-coaching"]    { left: 88%; top: 35%; }
-.arc-hot[data-service="custom-orders"]    { left: 86%; top: 47%; }
-.arc-hot[data-service="assorted-seeds"]   { left: 78%; top: 52%; }
+/* Hotspot positions — keyed on data-service
+   Coordinates are the dot's position (button.left = dot.left because
+   `.arc-hot` uses `transform: translate(0, -50%)`). Tuned to the
+   Speranza reference: dot → line → pill, all pills extend rightward. */
+.arc-hot[data-service="custom-loadout"]   { left: 17%; top: 18%; }
+.arc-hot[data-service="all-weapons"]      { left: 29%; top: 32%; }
+.arc-hot[data-service="raids"]            { left: 73%; top: 14%; }
+.arc-hot[data-service="trials-boost"]     { left: 64%; top: 23%; }
+.arc-hot[data-service="raider-coins"]     { left: 44%; top: 26%; }
+.arc-hot[data-service="raid-coaching"]    { left: 81%; top: 33%; }
+.arc-hot[data-service="depositary"]       { left: 50%; top: 39%; }
+.arc-hot[data-service="leveling"]         { left: 13%; top: 54%; }
+.arc-hot[data-service="boss-puzzle"]      { left: 44%; top: 59%; }
+.arc-hot[data-service="expedition-boost"] { left: 75%; top: 58%; }
+.arc-hot[data-service="custom-orders"]    { left: 82%; top: 66%; }
+.arc-hot[data-service="blueprints"]       { left: 19%; top: 76%; }
+.arc-hot[data-service="workshop"]         { left: 47%; top: 76%; }
+.arc-hot[data-service="assorted-seeds"]   { left: 67%; top: 76%; }
+.arc-hot[data-service="materials"]        { left: 53%; top: 89%; }
 
 /* ──────────────────────────────────────────────────────────────
    STATION SELECTOR SIDEBAR
