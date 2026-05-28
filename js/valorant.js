@@ -310,7 +310,7 @@
 
   function bindConfigEvents() {
     var mount = $("valConfigMount");
-    mount.addEventListener("click", function (e) {
+    mount.onclick = function (e) {
       var btn = e.target.closest("[data-current-tier]");
       if (btn) { state.current.tier = btn.dataset.currentTier; renderRankConfig(); return; }
       btn = e.target.closest("[data-target-tier]");
@@ -335,7 +335,7 @@
         renderRankConfig();
         return;
       }
-    });
+    };
     var rrInput = $("valCurrentRR");
     if (rrInput) rrInput.addEventListener("input", function () { state.currentRR = rrInput.value; });
   }
