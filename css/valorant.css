@@ -178,7 +178,7 @@
   position: relative; padding: 0;
   background: rgba(10,8,5,0.4); border: 1px solid var(--line-soft);
   border-radius: 3px; overflow: hidden;
-  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; text-align: center;
+  transition: border-color 0.2s ease-out, background 0.2s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out; text-align: center;
   display: flex; flex-direction: column; align-items: stretch; cursor: pointer;
 }
 @media (hover: hover) and (pointer: fine) {
@@ -674,7 +674,7 @@
 .val-shield-card {
   position: relative; padding: 32px 28px;
   background: var(--bg-2); border: 1px solid var(--line-soft);
-  transition: border-color 0.4s ease, background 0.4s ease;
+  transition: border-color 0.3s ease, background 0.3s ease;
 }
 .val-shield-card:hover { border-color: var(--gold); background: var(--bg-3); }
 .val-shield-mark {
@@ -713,7 +713,7 @@
   background: linear-gradient(180deg, rgba(31,26,18,0.6), rgba(18,12,8,0.6));
   border: 1px solid var(--line-soft);
   display: flex; flex-direction: column; gap: 16px;
-  transition: transform 0.4s ease, border-color 0.4s ease;
+  transition: transform 0.2s ease-out, border-color 0.2s ease, box-shadow 0.2s ease-out;
 }
 @media (hover: hover) and (pointer: fine) {
   .val-review:hover { transform: translateY(-3px); border-color: var(--gold); }
