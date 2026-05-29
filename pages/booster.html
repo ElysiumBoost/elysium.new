@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Booster Panel — Elysium Boost</title>
   <meta name="description" content="Elysium Boost booster panel — pick orders, chat with customers, track deliveries, and grow your rank.">
+  <meta property="og:title" content="Elysium Boost">
+  <meta property="og:description" content="Premium gaming boost service.">
+  <meta property="og:image" content="https://elysiumboost.com/assets/elysium-og.webp">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="../assets/elysium-logo-mark.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -180,7 +184,7 @@
               <div class="bp-field"><label class="bp-label" for="bpFDiscord">Discord Tag</label>
                 <input class="bp-input" type="text" id="bpFDiscord" placeholder="username or user#0000"></div>
               <div class="bp-field"><label class="bp-label" for="bpFCountry">Country</label>
-                <input class="bp-input" type="text" id="bpFCountry" placeholder="e.g. Türkiye" autocomplete="country-name"></div>
+                <input class="bp-input" type="text" id="bpFCountry" placeholder="e.g. Turkey" autocomplete="country-name"></div>
               <div class="bp-field"><label class="bp-label" for="bpFGames">Games You Boost</label>
                 <input class="bp-input" type="text" id="bpFGames" placeholder="e.g. Valorant, Arc Raiders"></div>
               <div class="bp-field"><label class="bp-label" for="bpFPayoutEmail">Payout Email</label>
@@ -276,6 +280,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="../js/config.js" defer></script>
   <script src="../js/auth.js" defer></script>
   <script src="../js/booster.js" defer></script>
   <script src="../js/chat-widget.js" defer></script>

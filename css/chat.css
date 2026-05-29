@@ -3,12 +3,7 @@
    All classes prefixed .ec-. Tokens from global.css. No new vars.
    ══════════════════════════════════════════════════════════════ */
 
-/* ── Keyframes ─────────────────────────────────────────────── */
-@keyframes ec-shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-@keyframes ec-fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes ec-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
-@keyframes ec-spin-kf { to { transform: rotate(360deg); } }
-@keyframes ec-typing { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }
+/* ── Keyframes moved to animations.css ─────────────────────── */
 .ec-spin { display: inline-block; animation: ec-spin-kf 0.7s linear infinite; }
 
 /* ── Base ──────────────────────────────────────────────────── */

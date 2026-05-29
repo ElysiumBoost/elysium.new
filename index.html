@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
 
   <!--
-    Base tag — GitHub Pages için path düzeltmesi.
-    Bu script olduğu gibi kalıyor, JS bağımlı.
+    Base tag — path fix for GitHub Pages.
+    This script stays as-is, JS-dependent.
   -->
   <script>
     (function () {
@@ -50,15 +50,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Rajdhani:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- ════════════════════════════════════
-       CSS — Yükleme sırası önemli!
-       1. vars     → Tüm CSS değişkenleri (tek kaynak)
-       2. base     → Reset, html/body, animasyonlar
+       CSS — load order matters!
+       1. vars     → All CSS variables (single source)
+       2. base     → Reset, html/body, animations
        3. layout   → Topbar, hero, home, footer
-       4. components → Butonlar, kartlar, price
+       4. components → Buttons, cards, price
        5. forms    → Input, toggle, stepper, slider
        6. cart     → Drawer, cart items, checkout
-       7. order-center → Cart UX geliştirmeleri
-       8. tft      → TFT'ye özel stiller
+       7. order-center → Cart UX improvements
+       8. tft      → TFT-specific styles
        ════════════════════════════════════ -->
 <link rel="stylesheet" href="css/global.css">
 <link rel="stylesheet" href="css/animations.css">
@@ -203,7 +203,7 @@
        ══════════════════════════════════ -->
   <main>
 
-    <!-- Hero — Ana sayfa -->
+    <!-- Hero — Home page -->
     <section class="hero is-home eb-hero" id="hero">
       <div class="eb-hero-fallback" aria-hidden="true"></div>
       <video
@@ -284,7 +284,7 @@
       </div>
     </section>
 
-    <!-- Home içerik -->
+    <!-- Home content -->
     <section class="home-content" id="homeContent">
       <div class="eb-page-bg">
 
@@ -631,7 +631,7 @@
       </div><!-- /eb-page-bg -->
     </section><!-- /home-content -->
 
-    <!-- Servis içerik -->
+    <!-- Service content -->
     <section class="main service-content hidden" id="serviceContent">
       <div class="shell">
 
@@ -698,7 +698,7 @@
                   <div class="arc-price-breakdown" id="arcPriceBreakdown" hidden></div>
                   <em id="usdHint" class="usd-hint-text"></em>
                   <button class="btn btn-purchase add-to-cart-main" id="addToCart" type="button">Add to Cart</button>
-                  <div class="ely-cart-trust-row" aria-label="Sipariş güvence bilgisi">
+                  <div class="ely-cart-trust-row" aria-label="Order security info">
                     <span>✓ Manual</span>
                     <span>✓ No cheats</span>
                     <span>✓ Discord confirmed</span>
@@ -830,7 +830,7 @@
       <input id="arcIdInput" type="text" autocomplete="off" placeholder="Name#0000">
       <div class="id-modal-actions">
         <button class="btn btn-premium" id="arcIdDone" type="button" aria-label="Kaydet">Save</button>
-        <button class="btn btn-danger" id="arcIdSkip" type="button" aria-label="Discord'da yazacağım">✕</button>
+        <button class="btn btn-danger" id="arcIdSkip" type="button" aria-label="Chat on Discord">✕</button>
       </div>
     </div>
   </div>
@@ -1380,14 +1380,14 @@
   </div>
 
   <!-- ══════════════════════════════════
-       TOAST BİLDİRİM
+       TOAST NOTIFICATION
        ══════════════════════════════════ -->
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <!-- ════════════════════════════════════
-       JS — Yükleme sırası önemli!
-       JS dosyalarına dokunulmadı,
-       sadece sıralamaları korundu.
+       JS — load order matters!
+       JS files untouched,
+       only order preserved.
        ════════════════════════════════════ -->
   <script src="js/config.js?v=v5-fix1" defer></script>
   <script src="js/products.js?v=v5-fix1" defer></script>
@@ -1400,12 +1400,12 @@
   <script src="js/main.js?v=v5-fix1" defer></script>
   <script src="js/order-center-upgrade.js?v=v5-fix1" defer></script>
 
-  <nav class="ely-mobile-nav" id="elyMobileNav" aria-label="Mobil navigasyon">
+  <nav class="ely-mobile-nav" id="elyMobileNav" aria-label="Mobile navigation">
 
     <a href="#"
        class="ely-mobile-nav__item ely-mobile-nav__item--home"
        id="mobileNavHome"
-       aria-label="Ana sayfa">
+       aria-label="Home">
       <svg class="ely-mobile-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M3 12L12 3l9 9"/>
         <path d="M9 21V12h6v9"/>
@@ -1466,93 +1466,6 @@
       Yapıştır: </body> öncesine, her sayfada
       ═══════════════════════════════════════════════════════════
     -->
-
-    <style>
-    :root{--gold:#c9a84c;--gold-b:#e5c26b;--gold-d:#8a6f32;--text:#efe6cf;--text-d:#8a7d5e;--f-display:'Rajdhani',sans-serif;--f-body:'Plus Jakarta Sans',sans-serif;}
-
-    .eb-modal-overlay{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:1rem;animation:ebFadeIn 0.2s ease;}
-    .eb-modal-overlay.eb-hidden{display:none;}
-    @keyframes ebFadeIn{from{opacity:0}to{opacity:1}}
-    @keyframes ebSlideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-
-    /* Background image inside overlay */
-    .eb-modal-overlay::before{content:'';position:absolute;inset:0;background:url('assets/backgrounds/elyssunset.webp') center/cover no-repeat;opacity:0.12;pointer-events:none;}
-
-    .eb-modal{position:relative;width:100%;max-width:420px;background:linear-gradient(160deg,#1c1609 0%,#120e07 50%,#0a0805 100%);border:1px solid rgba(201,168,76,0.25);border-radius:3px;overflow:hidden;animation:ebSlideUp 0.28s ease;font-family:var(--f-body);}
-    .eb-top-line{height:2px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold-b),var(--gold),transparent);}
-    .eb-corner{position:absolute;width:14px;height:14px;}
-    .eb-corner-tl{top:0;left:0;border-top:1px solid var(--gold);border-left:1px solid var(--gold);}
-    .eb-corner-tr{top:0;right:0;border-top:1px solid var(--gold);border-right:1px solid var(--gold);}
-    .eb-corner-bl{bottom:0;left:0;border-bottom:1px solid var(--gold);border-left:1px solid var(--gold);}
-    .eb-corner-br{bottom:0;right:0;border-bottom:1px solid var(--gold);border-right:1px solid var(--gold);}
-
-    .eb-close{position:absolute;top:14px;right:14px;width:28px;height:28px;background:rgba(239,230,207,0.05);border:1px solid rgba(201,168,76,0.15);border-radius:50%;color:var(--text-d);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:20;transition:all 0.2s;}
-    .eb-close:hover{border-color:var(--gold-d);color:var(--gold);}
-
-    .eb-body{padding:2.25rem 2rem 1.75rem;position:relative;z-index:5;}
-
-    /* Logo */
-    .eb-logo-wrap{display:flex;justify-content:center;margin-bottom:1.1rem;}
-    .eb-logo-img{width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 0 12px rgba(201,168,76,0.3));}
-
-    .eb-title{font-family:var(--f-display);font-size:26px;font-weight:700;color:var(--text);letter-spacing:0.04em;text-align:center;margin:0 0 6px;}
-    .eb-sub{font-size:13px;color:var(--text-d);text-align:center;line-height:1.6;margin:0 0 1.75rem;}
-
-    /* OAuth Buttons */
-    .eb-auth-btn{width:100%;box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 16px;border-radius:2px;font-family:var(--f-body);font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;margin-bottom:10px;border:1px solid rgba(239,230,207,0.1);background:rgba(239,230,207,0.04);color:var(--text);}
-    .eb-auth-btn:hover{background:rgba(239,230,207,0.08);border-color:rgba(239,230,207,0.18);}
-    .eb-auth-btn.google{border-color:rgba(234,67,53,0.3);background:rgba(234,67,53,0.07);}
-    .eb-auth-btn.google:hover{background:rgba(234,67,53,0.12);border-color:rgba(234,67,53,0.45);}
-    .eb-auth-btn.apple{border-color:rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);display:none;}
-    .eb-auth-btn.apple:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.22);}
-    .eb-auth-btn.discord{border-color:rgba(88,101,242,0.3);background:rgba(88,101,242,0.07);color:#9fa5f7;}
-    .eb-auth-btn.discord:hover{background:rgba(88,101,242,0.13);border-color:rgba(88,101,242,0.5);}
-    .eb-auth-btn.email{border-color:rgba(201,168,76,0.2);background:rgba(201,168,76,0.04);color:var(--text-d);}
-    .eb-auth-btn.email:hover{background:rgba(201,168,76,0.08);border-color:rgba(201,168,76,0.35);color:var(--text);}
-    .eb-btn-icon{width:20px;height:20px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-    .eb-btn-label{flex:1;text-align:center;margin-right:20px;}
-
-    /* Divider */
-    .eb-divider{display:flex;align-items:center;gap:10px;margin:4px 0 10px;}
-    .eb-div-line{flex:1;height:1px;background:rgba(201,168,76,0.1);}
-    .eb-div-txt{font-size:11px;color:var(--text-d);letter-spacing:0.08em;text-transform:uppercase;}
-
-    /* Email view */
-    .eb-email-view{display:none;}
-    .eb-back{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-display);font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-d);cursor:pointer;background:none;border:none;padding:0;margin-bottom:1.25rem;transition:color 0.2s;}
-    .eb-back:hover{color:var(--gold);}
-    .eb-tabs{display:flex;border-bottom:1px solid rgba(201,168,76,0.12);margin-bottom:1.5rem;}
-    .eb-tab{flex:1;text-align:center;padding:9px 0;font-family:var(--f-display);font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-d);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color 0.2s,border-color 0.2s;}
-    .eb-tab.active{color:var(--gold-b);border-bottom-color:var(--gold);}
-    .eb-panel{display:none;}.eb-panel.active{display:block;}
-    .eb-field{margin-bottom:1.1rem;}
-    .eb-field label{display:block;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-d);margin-bottom:5px;font-family:var(--f-display);font-weight:600;}
-    .eb-field input{width:100%;box-sizing:border-box;background:rgba(255,255,255,0.03);border:1px solid rgba(201,168,76,0.15);border-radius:2px;padding:10px 14px;color:var(--text);font-size:14px;font-family:var(--f-body);outline:none;transition:border-color 0.2s,background 0.2s;}
-    .eb-field input:focus{border-color:rgba(201,168,76,0.45);background:rgba(201,168,76,0.03);}
-    .eb-field input::placeholder{color:rgba(239,230,207,0.2);font-size:13px;}
-    .eb-pass-wrap{position:relative;}.eb-pass-wrap input{padding-right:44px;}
-    .eb-pass-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;padding:0;color:var(--text-d);cursor:pointer;display:flex;align-items:center;transition:color 0.2s;}
-    .eb-pass-eye:hover{color:var(--gold);}
-    .eb-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-    .eb-forgot{text-align:right;margin-top:-8px;margin-bottom:4px;}
-    .eb-forgot button{font-size:11px;color:var(--gold-d);letter-spacing:0.06em;text-transform:uppercase;background:none;border:none;cursor:pointer;transition:color 0.2s;padding:0;}
-    .eb-forgot button:hover{color:var(--gold);}
-    .eb-cta{width:100%;margin-top:1.25rem;background:linear-gradient(90deg,#8a6f32,var(--gold),var(--gold-b),var(--gold),#8a6f32);background-size:200% 100%;border:none;border-radius:2px;padding:12px 0;font-family:var(--f-display);font-size:14px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#0a0805;cursor:pointer;transition:background-position 0.5s,opacity 0.2s;}
-    .eb-cta:hover{background-position:100% 0;}.eb-cta:disabled{opacity:0.6;cursor:not-allowed;}
-    .eb-msg{font-size:12px;padding:8px 12px;border-radius:2px;margin-top:10px;display:none;}
-    .eb-msg.eb-error{display:block;color:#f4a261;border:1px solid rgba(244,162,97,0.25);background:rgba(244,162,97,0.05);}
-    .eb-msg.eb-success{display:block;color:var(--gold-b);border:1px solid rgba(201,168,76,0.25);background:rgba(201,168,76,0.05);}
-    .eb-shields{display:flex;gap:14px;margin-top:1.25rem;}
-    .eb-shield{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-d);}
-    .eb-shield-dot{width:4px;height:4px;border-radius:50%;background:var(--gold-d);flex-shrink:0;}
-
-    /* Footer */
-    .eb-footer{position:relative;z-index:5;border-top:1px solid rgba(201,168,76,0.08);padding:.875rem 2rem;}
-    .eb-footer-txt{font-size:11px;color:var(--text-d);letter-spacing:0.05em;text-align:center;margin:0;}
-    .eb-footer-txt a{color:var(--gold-d);text-decoration:none;}.eb-footer-txt a:hover{color:var(--gold);}
-
-    @media(max-width:480px){.eb-body{padding:2rem 1.25rem 1.5rem;}.eb-footer{padding:.875rem 1.25rem;}.eb-row2{grid-template-columns:1fr;}}
-    </style>
 
     <div class="eb-modal-overlay eb-hidden" id="ebModal" onclick="ebCloseOnOverlay(event)">
       <div class="eb-modal" role="dialog" aria-modal="true" aria-labelledby="ebTitle">

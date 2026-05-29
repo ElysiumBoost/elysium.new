@@ -3,8 +3,9 @@
 
   /* ── Constants ─────────────────────────────────────────────── */
 
-  var SB_URL = 'https://ylaxzlejhzgakhtfmsbt.supabase.co';
-  var SB_KEY = 'sb_publishable_hjqgJX_RSpeypqtjJDk4xQ_pPGSnWAT';
+  /* SB_URL and SB_KEY sourced from js/config.js (SUPABASE_URL / SUPABASE_ANON_KEY) */
+  var SB_URL = (typeof SUPABASE_URL !== 'undefined') ? SUPABASE_URL : 'https://ylaxzlejhzgakhtfmsbt.supabase.co';
+  var SB_KEY = (typeof SUPABASE_ANON_KEY !== 'undefined') ? SUPABASE_ANON_KEY : 'sb_publishable_hjqgJX_RSpeypqtjJDk4xQ_pPGSnWAT';
 
   var RANKS = [
     { name: 'Veteran',  min: 0,    max: 100,  discount: 0,  icon: 'ti-shield',  perks: ['Basic support'] },
@@ -58,7 +59,7 @@
         var timer = setTimeout(function () {
           window.location.replace('../index.html?login=true');
           resolve(null);
-        }, 3000);
+        }, 8000);
 
         _sb.auth.onAuthStateChange(function (event, session) {
           if (session && session.user) {
@@ -122,6 +123,14 @@
 
   /* ── Load data ──────────────────────────────────────────────── */
 
+  function renderError(msg) {
+    var containers = ['bpStatsGrid','bpActiveList','bpOrdersBody'];
+    containers.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.innerHTML = '<div class="db-orders-empty"><i class="ti ti-alert-circle"></i><p class="db-empty-title">Error</p><p>' + msg + '</p></div>';
+    });
+  }
+
   function loadData() {
     Promise.all([
       _sb.from('profiles')
@@ -157,6 +166,8 @@
       renderDiscord();
       renderNavUnread();
       subscribeChatFeed();
+    }).catch(function(err) {
+      renderError('Failed to load dashboard data. Please refresh.');
     });
   }
 
@@ -763,6 +774,7 @@
           if (saveBtn) { saveBtn.disabled = false; saveBtn.innerHTML = saveLabel; }
           if (res.error) { toast('error', res.error.message); return; }
           Object.assign(_profile, { username: username, discord_id: discord, country: country });
+
           /* Sync to nav across pages */
           try {
             if (username) localStorage.setItem('elysium_username', username);
@@ -771,7 +783,7 @@
           var nameEl = document.getElementById('dbProfileName');
           if (nameEl) nameEl.textContent = username || (_user.email && _user.email.split('@')[0]) || 'Champion';
           toast('success', 'Profile updated, ' + (username || 'Champion') + ' ✓');
-        });
+        }).catch(function(err) { console.error('Profile save failed:', err); });
       });
     }
 
@@ -938,7 +950,7 @@
     _sb.from('messages').select('*').eq('order_id', o.id).order('created_at', { ascending: true }).then(function (res) {
       renderChatThread(res.data || []);
       markChatRead(o);
-    });
+    }).catch(function() { renderChatThread([]); });
   }
 
   function renderChatThread(msgs) {
@@ -1012,6 +1024,10 @@
       })
       .subscribe();
   }
+
+  window.addEventListener('beforeunload', function() {
+    if (_feedChannel && typeof _sb !== 'undefined') _sb.removeChannel(_feedChannel);
+  });
 
   function markChatRead(o) {
     _sb.from('messages').update({ read_at: new Date().toISOString() })

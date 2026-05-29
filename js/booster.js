@@ -3,8 +3,9 @@
 
   /* ── Constants ─────────────────────────────────────────────── */
 
-  var SB_URL = 'https://ylaxzlejhzgakhtfmsbt.supabase.co';
-  var SB_KEY = 'sb_publishable_hjqgJX_RSpeypqtjJDk4xQ_pPGSnWAT';
+  /* SB_URL and SB_KEY sourced from js/config.js (SUPABASE_URL / SUPABASE_ANON_KEY) */
+  var SB_URL = (typeof SUPABASE_URL !== 'undefined') ? SUPABASE_URL : 'https://ylaxzlejhzgakhtfmsbt.supabase.co';
+  var SB_KEY = (typeof SUPABASE_ANON_KEY !== 'undefined') ? SUPABASE_ANON_KEY : 'sb_publishable_hjqgJX_RSpeypqtjJDk4xQ_pPGSnWAT';
 
   var PROOF_BUCKET = 'booster-proofs';
   var AVATAR_BASE  = '../assets/avatars/elysium_unique_avatar_';
@@ -985,7 +986,7 @@
 
   function subscribeOrders() {
     _ordersChannel = _sb.channel('orders-feed')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'orders' }, function (payload) {
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'orders', filter: 'booster_id=eq.' + _user.id }, function (payload) {
         var o = payload.new;
         if (o.status === 'pending' && !o.booster_id) {
           if (_profile.is_available !== false && document.hidden) notify('New order available', (o.game || 'Boost') + ' · ' + (o.service_name || ''));
@@ -998,6 +999,11 @@
       })
       .subscribe();
   }
+
+  window.addEventListener('beforeunload', function() {
+    if (_ordersChannel) _sb.removeChannel(_ordersChannel);
+    if (_msgChannel) _sb.removeChannel(_msgChannel);
+  });
 
   /* ── Rules modal ───────────────────────────────────────────── */
 

@@ -1199,7 +1199,7 @@
       $("detailIcon").innerHTML = categoryArtwork(service.category || "custom", service.cardTitle);
       $("detailTitle").textContent = ui(service.title);
 
-      // B-1: Teslimat süresi badge
+      // B-1: Delivery time badge
       const deliveryBadgeEl = $("detailDeliveryBadge");
       if (deliveryBadgeEl) {
         if (service.start && service.start.trim()) {

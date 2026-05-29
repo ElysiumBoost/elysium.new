@@ -19,7 +19,7 @@
     return 'assets/';
   }
 
-  if (location.pathname.endsWith('chat.html')) return;
+  if (window.location.href.includes('/chat.html')) return;
 
   let _widgetUser    = null;
   let _widgetChannel = null;

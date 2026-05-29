@@ -29,13 +29,17 @@ let _typingTimer = null;
 document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('eb:authChange', ({ detail }) => {
     _user = detail.user;
+    if (typeof _sb === 'undefined') { console.error('Supabase not loaded'); return; }
     if (_user) _init();
     else _redirectLogin();
   });
 
   // Auth may have already fired before DOMContentLoaded
   const sess = window.ElysiumAuth?.isLoggedIn?.();
-  if (sess) { _user = window.ElysiumAuth.getUser(); _init(); }
+  if (sess) {
+    if (typeof _sb === 'undefined') { console.error('Supabase not loaded'); return; }
+    _user = window.ElysiumAuth.getUser(); _init();
+  }
 });
 
 async function _init() {

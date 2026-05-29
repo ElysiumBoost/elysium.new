@@ -57,6 +57,34 @@
 /* Arc Raiders — hotspot entrance */
 @keyframes arc-hot-in { from { opacity: 0; transform: translate(0, -50%) translateY(4px); } to { opacity: 1; transform: translate(0, -50%); } }
 
+/* Auth modal fade/slide */
+@keyframes ebFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ebSlideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Booster panel keyframes */
+@keyframes bp-shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes bp-fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes bp-pulse { 0%,100% { box-shadow: 0 0 0 0 var(--gold-glow); } 50% { box-shadow: 0 0 0 7px transparent; } }
+@keyframes bp-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+@keyframes bp-spin-kf { to { transform: rotate(360deg); } }
+
+/* Dashboard keyframes */
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes rankPulse { 0%, 100% { box-shadow: 0 0 0 0 var(--gold-glow); } 50% { box-shadow: 0 0 0 8px transparent; } }
+@keyframes rankGlowPulse { 0%, 100% { text-shadow: 0 0 8px var(--gold-glow); } 50% { text-shadow: 0 0 20px var(--gold-glow), 0 0 40px rgba(201,168,76,0.2); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideInRight { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes progressFill { from { width: 0%; } }
+@keyframes discordDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+@keyframes db-spin { to { transform: rotate(360deg); } }
+
+/* Chat keyframes */
+@keyframes ec-shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes ec-fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes ec-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+@keyframes ec-spin-kf { to { transform: rotate(360deg); } }
+@keyframes ec-typing { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }
+
 /* Arc Raiders — pulsing ring */
 @keyframes arc-ring {
   0%   { transform: scale(0.6); opacity: 0; }

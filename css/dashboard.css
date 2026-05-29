@@ -2,45 +2,7 @@
    dashboard.css — Elysium Boost customer dashboard
    ══════════════════════════════════════════════════════════════ */
 
-/* ── Keyframes ─────────────────────────────────────────────── */
-
-@keyframes shimmer {
-  0%   { background-position: -200% 0; }
-  100% { background-position:  200% 0; }
-}
-
-@keyframes rankPulse {
-  0%, 100% { box-shadow: 0 0 0 0 var(--gold-glow); }
-  50%       { box-shadow: 0 0 0 8px transparent; }
-}
-
-@keyframes rankGlowPulse {
-  0%, 100% { text-shadow: 0 0 8px var(--gold-glow); }
-  50%       { text-shadow: 0 0 20px var(--gold-glow), 0 0 40px rgba(201,168,76,0.2); }
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(24px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes progressFill {
-  from { width: 0%; }
-}
-
-@keyframes discordDot {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.3; }
-}
-
-@keyframes db-spin {
-  to { transform: rotate(360deg); }
-}
+/* ── Keyframes moved to animations.css ─────────────────────── */
 .db-spin { display: inline-block; animation: db-spin 0.7s linear infinite; }
 
 /* ── Base ───────────────────────────────────────────────────── */

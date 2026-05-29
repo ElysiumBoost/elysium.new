@@ -188,7 +188,6 @@
     sanitizeNavigationState();
     cleanStaleCart();
     persistOrderState();
-    sanitizeNavigationState();
     if (state.game) syncGameHash(state.game);
     window.addEventListener("hashchange", () => {
       closeGameMenu();
@@ -573,12 +572,14 @@
 
   // --- Sidebar ---
   function openSidebar() {
+    if (!sidebar || !sidebarOverlay) return;
     sidebar.classList.add('on');
     sidebarOverlay.classList.add('on');
     sidebar.setAttribute('aria-hidden', 'false');
   }
 
   function closeSidebar() {
+    if (!sidebar || !sidebarOverlay) return;
     sidebar.classList.remove('on');
     sidebarOverlay.classList.remove('on');
     sidebar.setAttribute('aria-hidden', 'true');
@@ -608,7 +609,7 @@
   }
 
   bindServiceButtons(hubMap);
-  bindServiceButtons(document.getElementById('arcHubMobile'));
+  const arcHub = document.getElementById('arcHubMobile'); if (arcHub) bindServiceButtons(arcHub);
   bindServiceButtons(sidebar);
 
   // --- Back to map ---

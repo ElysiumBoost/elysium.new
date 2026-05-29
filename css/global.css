@@ -3,8 +3,7 @@
    Tokens, resets, layout primitives, typography, buttons.
    ══════════════════════════════════════════════════════════════ */
 
-/* ── Shared font import (Space Grotesk — display family) ── */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+/* Space Grotesk import removed — Rajdhani and Plus Jakarta Sans are the primary fonts */
 
 /* ── @property for travelling line animation ── */
 @property --arc-trace-angle {
@@ -69,6 +68,9 @@ html, body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--gold-deep); border-radius: 3px; }
 html { scrollbar-width: thin; scrollbar-color: var(--gold-deep) transparent; }
+
+/* ── Utility ── */
+.eb-hidden { display: none !important; }
 
 /* ── Element resets ── */
 a { color: inherit; text-decoration: none; }

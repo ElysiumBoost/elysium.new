@@ -6,7 +6,7 @@
 
 const SUPABASE_URL      = 'https://ylaxzlejhzgakhtfmsbt.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_hjqgJX_RSpeypqtjJDk4xQ_pPGSnWAT';
-const REDIRECT_ORIGIN   = 'https://elysiumboost.github.io/elysium.new';
+const REDIRECT_ORIGIN   = 'https://elysiumboost.com';
 
 const { createClient } = supabase;
 const _sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
@@ -202,6 +202,10 @@ function ebOpen() {
   document.getElementById('ebModal').classList.remove('eb-hidden');
   document.body.style.overflow = 'hidden';
   const v = _heroVideo(); if (v) v.pause();
+}
+function safeEbOpen() {
+  if (document.getElementById('ebModal')) ebOpen();
+  else window.location.href = '../index.html#login';
 }
 function ebClose() {
   document.getElementById('ebModal').classList.add('eb-hidden');

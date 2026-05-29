@@ -315,3 +315,8 @@ exception when duplicate_object then null; end $$;
 -- ── orders: tip + customer confirmation ──────────────────────────
 alter table public.orders add column if not exists tip_amount numeric(10,2) not null default 0;
 alter table public.orders add column if not exists customer_confirmed_at timestamptz;
+
+-- Allow customers to place their own orders
+CREATE POLICY "Customers can insert own orders"
+  ON public.orders FOR INSERT TO authenticated
+  WITH CHECK (user_id = auth.uid());
