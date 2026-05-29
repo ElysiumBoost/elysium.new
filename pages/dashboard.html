@@ -88,14 +88,18 @@
         <div class="db-section-hd">
           <h1 class="db-section-title">Overview</h1>
         </div>
+
+        <!-- Stats row -->
+        <div class="db-stats-grid" id="dbStatsGrid">
+          <div class="db-stat-card"><div class="db-skel db-skel-stat"></div></div>
+          <div class="db-stat-card"><div class="db-skel db-skel-stat"></div></div>
+          <div class="db-stat-card"><div class="db-skel db-skel-stat"></div></div>
+          <div class="db-stat-card"><div class="db-skel db-skel-stat"></div></div>
+        </div>
+
+        <!-- Cards row -->
         <div class="db-overview-2col">
           <div class="db-ov-col db-ov-left">
-            <div class="db-stats-grid" id="dbStatsGrid">
-              <div class="db-stat-card"><div class="db-skel db-skel-stat"></div></div>
-              <div class="db-stat-card"><div class="db-skel db-skel-stat"></div></div>
-              <div class="db-stat-card"><div class="db-skel db-skel-stat"></div></div>
-              <div class="db-stat-card"><div class="db-skel db-skel-stat"></div></div>
-            </div>
             <div class="db-card db-last-order-card" id="dbLastOrderCard">
               <div class="db-skel db-skel-block"></div>
             </div>
@@ -109,6 +113,67 @@
             </div>
           </div>
         </div>
+
+        <!-- Continue Shopping -->
+        <div class="db-sub-hd">Continue Shopping</div>
+        <div class="db-grid-2">
+          <a class="db-game-card" href="games/arc-raiders.html">
+            <i class="ti ti-crosshair db-game-card-icon" aria-hidden="true"></i>
+            <span class="db-game-card-text">
+              <span class="db-game-card-name">Arc Raiders</span>
+              <span class="db-game-card-sub">Boosting · Coaching · Materials</span>
+            </span>
+            <i class="ti ti-arrow-right db-game-card-arrow" aria-hidden="true"></i>
+          </a>
+          <a class="db-game-card" href="games/valorant.html">
+            <i class="ti ti-sword db-game-card-icon" aria-hidden="true"></i>
+            <span class="db-game-card-text">
+              <span class="db-game-card-name">Valorant</span>
+              <span class="db-game-card-sub">Rank Boost · Coaching · Placements</span>
+            </span>
+            <i class="ti ti-arrow-right db-game-card-arrow" aria-hidden="true"></i>
+          </a>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="db-sub-hd">Quick Actions</div>
+        <div class="db-quick-actions">
+          <a class="db-quick-btn" href="#orders" data-section="orders">
+            <i class="ti ti-shopping-bag" aria-hidden="true"></i>
+            <span>My Orders</span>
+          </a>
+          <a class="db-quick-btn" href="#rank" data-section="rank">
+            <i class="ti ti-crown" aria-hidden="true"></i>
+            <span>Elysium Rank</span>
+          </a>
+          <a class="db-quick-btn" href="#account" data-section="account">
+            <i class="ti ti-user" aria-hidden="true"></i>
+            <span>My Account</span>
+          </a>
+          <a class="db-quick-btn" href="#tickets" data-section="tickets">
+            <i class="ti ti-ticket" aria-hidden="true"></i>
+            <span>My Tickets</span>
+          </a>
+        </div>
+
+        <!-- Discord + Support -->
+        <div class="db-grid-2 db-bottom-strip">
+          <a class="db-discord-cta" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer">
+            <i class="ti ti-brand-discord db-discord-cta-icon" aria-hidden="true"></i>
+            <span class="db-discord-cta-text">
+              <span class="db-discord-cta-title">Join Our Discord</span>
+              <span class="db-discord-cta-sub">Support, updates, community</span>
+            </span>
+            <i class="ti ti-arrow-right db-discord-cta-arrow" aria-hidden="true"></i>
+          </a>
+          <div class="db-support-banner">
+            <span class="db-support-text"><strong>Need help?</strong> Our team responds within 24 hours.</span>
+            <a class="eb-btn-primary db-support-btn" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer">
+              <i class="ti ti-headset" aria-hidden="true"></i> Get Support
+            </a>
+          </div>
+        </div>
+
       </section>
 
       <!-- My Orders -->
@@ -122,8 +187,44 @@
             <button class="db-tab"           data-filter="pending"   type="button" role="tab">Pending</button>
           </div>
         </div>
-        <div class="db-orders-body" id="dbOrdersBody">
-          <div class="db-skel db-skel-table"></div>
+        <div class="db-orders-stats" id="dbOrdersStats">
+          <div class="db-skel db-skel-order-stat"></div>
+          <div class="db-skel db-skel-order-stat"></div>
+          <div class="db-skel db-skel-order-stat"></div>
+          <div class="db-skel db-skel-order-stat"></div>
+        </div>
+        <div class="db-orders-layout">
+          <div class="db-orders-main">
+            <div class="db-orders-body" id="dbOrdersBody">
+              <div class="db-skel db-skel-table"></div>
+            </div>
+          </div>
+          <div class="db-orders-aside">
+            <div class="db-card">
+              <h3 class="db-status-guide-title">Order Status Guide</h3>
+              <div class="db-status-guide-list">
+                <div class="db-status-guide-row">
+                  <span class="db-status-guide-badge-wrap"><span class="db-status-badge db-status-pending">Pending</span></span>
+                  <span class="db-status-guide-desc">Order received, awaiting booster assignment</span>
+                </div>
+                <div class="db-status-guide-row">
+                  <span class="db-status-guide-badge-wrap"><span class="db-status-badge db-status-active">Active</span></span>
+                  <span class="db-status-guide-desc">Booster is currently working on your order</span>
+                </div>
+                <div class="db-status-guide-row">
+                  <span class="db-status-guide-badge-wrap"><span class="db-status-badge db-status-completed">Completed</span></span>
+                  <span class="db-status-guide-desc">Order delivered successfully</span>
+                </div>
+              </div>
+            </div>
+            <div class="db-card db-orders-need-help">
+              <div class="db-card-title-sm"><i class="ti ti-headset"></i> Need Help?</div>
+              <p class="db-orders-help-text">Issues with an order? Open a ticket in Discord and our team will assist you.</p>
+              <a class="db-ticket-btn" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer">
+                <i class="ti ti-brand-discord"></i> Open Ticket
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 

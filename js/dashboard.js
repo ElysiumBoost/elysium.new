@@ -142,6 +142,7 @@
       renderSidebar();
       renderOverview();
       renderOrders();
+      renderOrdersStats();
       renderTickets();
       renderRank();
       renderAccount();
@@ -340,6 +341,29 @@
       '<td><span class="db-status-badge db-status-' + sc + '">' + esc(o.status || 'Pending') + '</span></td>' +
       '<td><a href="' + discordUrl + '" target="_blank" rel="noopener noreferrer" class="db-ticket-btn" aria-label="Open Discord ticket"><i class="ti ti-brand-discord"></i></a></td>' +
       '</tr>';
+  }
+
+  /* ── Order stats (My Orders tab) ───────────────────────────── */
+
+  function renderOrdersStats() {
+    var el = document.getElementById('dbOrdersStats');
+    if (!el) return;
+    var total     = _orders.length;
+    var active    = _orders.filter(function (o) { return (o.status || '').toLowerCase().indexOf('progress') !== -1; }).length;
+    var completed = _orders.filter(function (o) { return (o.status || '').toLowerCase().indexOf('complet') !== -1; }).length;
+    var cancelled = _orders.filter(function (o) { return (o.status || '').toLowerCase().indexOf('cancel') !== -1; }).length;
+    el.innerHTML =
+      oStat(total,     'Total') +
+      oStat(active,    'Active') +
+      oStat(completed, 'Completed') +
+      oStat(cancelled, 'Cancelled');
+  }
+
+  function oStat(val, label) {
+    return '<div class="db-order-stat">' +
+      '<div class="db-order-stat-val">' + val + '</div>' +
+      '<div class="db-order-stat-lbl">' + label + '</div>' +
+      '</div>';
   }
 
   /* ── Tickets ────────────────────────────────────────────────── */
