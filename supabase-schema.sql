@@ -273,3 +273,45 @@ do $$ begin
     on storage.objects for select to authenticated
     using (bucket_id = 'booster-proofs');
 exception when duplicate_object then null; end $$;
+
+-- ════════════════════════════════════════════════════════════════════
+-- CHAT SYSTEM EXTENSION
+-- Rich site-internal chat: flags, edits, reactions, pins, dedup, types,
+-- admin moderation, tips, customer confirmation. Additive + idempotent.
+-- ════════════════════════════════════════════════════════════════════
+
+-- ── messages: rich chat columns ──────────────────────────────────
+alter table public.messages add column if not exists flagged      boolean not null default false;
+alter table public.messages add column if not exists flag_reason  text;
+alter table public.messages add column if not exists edited_at    timestamptz;
+alter table public.messages add column if not exists deleted_at   timestamptz;
+alter table public.messages add column if not exists reactions    jsonb not null default '{}'::jsonb;
+alter table public.messages add column if not exists pinned       boolean not null default false;
+alter table public.messages add column if not exists client_id    text;
+alter table public.messages add column if not exists message_type text not null default 'user';
+
+-- Allow admin- and system-authored messages.
+alter table public.messages drop constraint if exists messages_sender_role_check;
+alter table public.messages add constraint messages_sender_role_check
+  check (sender_role in ('booster','customer','admin','system'));
+
+-- Offline-queue dedup: one row per client_id within an order.
+create unique index if not exists messages_order_client_idx
+  on public.messages(order_id, client_id) where client_id is not null;
+
+-- Admins read/moderate every conversation (flagged-message review).
+do $$ begin
+  create policy "Admins read all messages"
+    on public.messages for select to authenticated
+    using (exists (select 1 from public.profiles p where p.id = auth.uid() and p.role = 'admin'));
+exception when duplicate_object then null; end $$;
+do $$ begin
+  create policy "Admins send messages"
+    on public.messages for insert to authenticated
+    with check (sender_id = auth.uid()
+      and exists (select 1 from public.profiles p where p.id = auth.uid() and p.role = 'admin'));
+exception when duplicate_object then null; end $$;
+
+-- ── orders: tip + customer confirmation ──────────────────────────
+alter table public.orders add column if not exists tip_amount numeric(10,2) not null default 0;
+alter table public.orders add column if not exists customer_confirmed_at timestamptz;
