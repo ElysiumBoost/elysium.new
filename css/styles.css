@@ -11318,13 +11318,16 @@ h1, h2, .hero-title, #heroTitle {
 .eb-btn:hover .arrow { transform: translateX(4px); color: var(--eb-gold-bright); }
 
 .eb-btn-primary {
-  background: linear-gradient(180deg, #d4b056 0%, #a4821f 100%);
+  background: linear-gradient(90deg, #8a7224 0%, #c9a84c 35%, #e5c26b 55%, #c9a84c 75%, #8a7224 100%);
+  background-size: 200% 100%;
   color: #1a1208;
   border: none;
   box-shadow: 0 1px 0 rgba(255,220,150,0.45) inset, 0 12px 28px -12px var(--eb-gold-glow);
+  transition: background-position 0.5s ease, box-shadow 0.35s ease, transform 100ms ease-out;
 }
 .eb-btn-primary .arrow { color: #1a1208; }
 .eb-btn-primary:hover { color: #1a1208;
+  background-position: 100% 0;
   box-shadow: 0 1px 0 rgba(255,220,150,0.45) inset, 0 16px 36px -10px var(--eb-gold-glow), 0 0 0 1px rgba(229,194,107,0.4); }
 .eb-btn-primary:hover .arrow { color: #1a1208; }
 
@@ -11464,7 +11467,7 @@ h1, h2, .hero-title, #heroTitle {
 .eb-hero-stats {
   margin-top: 88px;
   margin-inline: calc(max(0px, min(50vw - 50% - 48px, 170px)) * -1);
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 0;
   border-top: 1px solid var(--eb-line);
   border-bottom: 1px solid var(--eb-line);
@@ -11516,7 +11519,7 @@ body.tw-hero-centered .eb-hero-copy .eb-body {
 }
 body.tw-hero-centered .eb-hero-copy .eb-body { margin-left: auto; margin-right: auto; }
 body.tw-hero-centered .eb-hero-ctas { justify-content: center; }
-body.tw-hero-centered .eb-hero-stats { text-align: left; }
+body.tw-hero-centered .eb-hero-stats { text-align: center; justify-content: center; }
 
 /* Landing hero outlined display — premium gold stroke, transparent center.
    Strengthened stroke + larger responsive clamp than the shared .eb-h1 base

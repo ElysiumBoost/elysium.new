@@ -165,12 +165,15 @@ video { display: block; max-width: 100%; height: auto; }
 .eb-btn:hover .arrow { transform: translateX(4px); color: var(--gold-bright); }
 
 .eb-btn-primary {
-  background: linear-gradient(180deg, #d4b056 0%, #a4821f 100%);
+  background: linear-gradient(90deg, var(--gold-deep) 0%, var(--gold) 35%, var(--gold-bright) 55%, var(--gold) 75%, var(--gold-deep) 100%);
+  background-size: 200% 100%;
   color: #1a1208; border: none;
   box-shadow: 0 1px 0 rgba(255, 220, 150, 0.45) inset, 0 12px 28px -12px var(--gold-glow);
+  transition: background-position 0.5s ease, box-shadow 0.35s ease, transform 100ms ease-out;
 }
 .eb-btn-primary:hover {
   color: #1a1208;
+  background-position: 100% 0;
   box-shadow: 0 1px 0 rgba(255, 220, 150, 0.45) inset, 0 16px 36px -10px var(--gold-glow), 0 0 0 1px rgba(229, 194, 107, 0.4);
 }
 .eb-btn:active, .eb-btn-primary:active {

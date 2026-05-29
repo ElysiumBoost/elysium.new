@@ -307,7 +307,7 @@
 .db-main {
   margin-left: 260px;
   flex: 1;
-  padding: 44px 52px 80px;
+  padding: 44px 52px 40px;
   position: relative;
   z-index: 1;
   min-height: 100vh;
@@ -315,7 +315,7 @@
 
 /* ── Sections ───────────────────────────────────────────────── */
 
-.db-section { max-width: 900px; }
+.db-section { max-width: 1200px; width: 100%; }
 
 @media (prefers-reduced-motion: no-preference) {
   .db-section-enter {
@@ -763,7 +763,7 @@
   backdrop-filter: blur(8px);
   border-radius: 14px;
   overflow: hidden;
-  min-height: 120px;
+  min-height: auto;
 }
 
 .db-table-wrap { overflow-x: auto; }
@@ -863,7 +863,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 40px;
+  padding: 32px 40px;
   gap: 14px;
   text-align: center;
 }
@@ -1161,8 +1161,8 @@
 
 .db-av-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 9px;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 12px;
 }
 
 .db-av-cell {
