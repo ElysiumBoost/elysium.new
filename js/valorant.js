@@ -40,7 +40,7 @@
     { initials: "D.H", user: "dunehollow", quote: "Asked for Undercover Winrate and the booster respected it. No 12-game streaks. Looked natural.", from: "Gold I", to: "Diamond III", days: 6 }
   ];
   var FAQS = [
-    { q: "How does Valorant boosting work?", a: "Configure your current and target rank, pick add-ons, then confirm the order in Discord. A verified Immortal+ booster signs into your account (or queues with you in Duo mode) and plays manually until your target is hit." },
+    { q: "How does Valorant boosting work?", a: "Configure your current and target rank, pick add-ons, then complete checkout via our secure on-site checkout. A verified Immortal+ booster signs into your account (or queues with you in Duo mode) and plays manually until your target is hit." },
     { q: "Is boosting safe with Vanguard?", a: "Every booster is manual-only, on residential IPs, and follows our Vanguard-safe checklist: no shared sessions, no overlap with your active hours unless requested, no third-party tooling. 10,000+ Riot orders, zero bans." },
     { q: "Can I play with the booster?", a: "Yes. Pro Duo mode queues a verified Immortal+ booster on your team. You play your own account the entire time." },
     { q: "How long does a boost take?", a: "Most divisions complete in 12–36 hours. Diamond and above run 2–5 days. Express Priority cuts your wait to start by 80%." },
@@ -48,7 +48,7 @@
     { q: "Will my friends notice?", a: "Turn on Appear Offline (free add-on) and your status stays dark for the duration. Boosters won't accept or send invites." },
     { q: "What if the booster loses a match?", a: "We work in division targets, not match counts. You only pay for the result. If a booster trends below our 75% winrate floor, we swap them out the same day." },
     { q: "Can I watch the boost live?", a: "Add Stream Games and you get a private link plus saved VODs of every match." },
-    { q: "Refunds and pausing?", a: "Pause any time from your Discord ticket. Refunds are pro-rated against progress. Full refund if no work has started. Money-back guarantee if we miss our ETA by 48+ hours." },
+    { q: "Refunds and pausing?", a: "Pause any time from your dashboard. Refunds are pro-rated against progress. Full refund if no work has started. Money-back guarantee if we miss our ETA by 48+ hours." },
     { q: "Are your boosters really Immortal/Radiant?", a: "Every Valorant booster is verified Immortal 3 or above. Most hold Radiant on their main. We screenshot-verify each season." }
   ];
 

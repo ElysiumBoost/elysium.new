@@ -237,16 +237,16 @@
   ];
 
   var ARC_FAQS = [
-    { q: 'How does Arc Raiders boosting work?', a: 'Pick a station on the map, configure your order in the middle column, copy the cart summary into our Discord ticket. A verified runner picks up the order, executes it manually in-game (or queues alongside you for coaching/raid services), and delivers items directly to your Stash. You get live updates inside the ticket the whole way.' },
+    { q: 'How does Arc Raiders boosting work?', a: 'Pick a station on the map, configure your order in the middle column, and add it to cart. Complete checkout via our secure on-site checkout. A verified runner picks up the order, executes it manually in-game (or queues alongside you for coaching/raid services), and delivers items directly to your Stash. You get live updates in your dashboard the whole way.' },
     { q: 'How is delivery handled — will it affect my account?', a: 'Delivery happens through the in-game trade and Stash systems, on residential IPs from your region, manually — the same way two friends would hand off loot. No exploits, no shared sessions. The runner signs out the moment your goods are in your Stash.' },
     { q: 'Can I choose which runner completes my order?', a: 'If you’ve worked with one of our runners before and want them again, drop their handle in your ticket and we’ll route the order to them. Otherwise, our concierge desk pairs your order with the runner whose load and timezone match yours.' },
     { q: 'How long does delivery take?', a: 'Most material and weapon orders are in your Stash within 10–30 minutes. Bundles and custom loadouts land within 1–2 hours. Boss clears, raids, and expedition runs depend on instance availability — usually same-day, never beyond 48 hours unless we tell you up front.' },
     { q: 'Are prices in real money or Raider Coins?', a: 'The configurator displays prices in Raider Coins for clarity. Checkout converts to your selected fiat or crypto at our current daily rate, shown before you confirm. No hidden conversion fees.' },
     { q: 'What happens if a run fails?', a: 'Runs are outcome contracts. A failed extract, a wiped raid, a missed objective — the runner retries until the order is fulfilled, at no extra cost. If a service genuinely can’t be completed (game outage, content gate), we refund pro-rated against any work already delivered.' },
     { q: 'Can I watch the run live?', a: 'Yes — add the Stream Games option in Discord and you get a private link plus saved VODs of every session. Great for boss/raid services where you want to learn the routes.' },
-    { q: 'Refunds and cancellations?', a: 'Cancel any time from your Discord ticket — no penalty. Refunds are pro-rated against goods already delivered, full refund if no work has started. We honour a money-back guarantee if our ETA slips by more than 48 hours without a heads-up.' },
+    { q: 'Refunds and cancellations?', a: 'Cancel any time from your dashboard — no penalty. Refunds are pro-rated against goods already delivered, full refund if no work has started. We honour a money-back guarantee if our ETA slips by more than 48 hours without a heads-up.' },
     { q: 'Is the service safe from bans?', a: 'Every runner is manual-only, on residential IPs, screened against our Arc Raiders safety checklist. We have shipped 2,400+ Arc Raiders orders with zero account bans on file. Encrypted login handoff via OAuth where supported — we never store credentials.' },
-    { q: 'Do you support all servers?', a: 'Yes — every published Arc Raiders region. Runner availability per region is shown in your Discord ticket; concierge will tell you up front if we need to schedule the order for a peak window in your timezone.' }
+    { q: 'Do you support all servers?', a: 'Yes — every published Arc Raiders region. Runner availability per region is confirmed in your dashboard; concierge will tell you up front if we need to schedule the order for a peak window in your timezone.' }
   ];
 
   /* ────────────────────────────────────────────────────────────
@@ -2202,7 +2202,7 @@
         '<p class="arc-co-section">Describe Your Request</p>' +
         '<p class="arc-co-body-text">Tell us what you need — anything not covered by the standard stations. Our concierge desk will price it and confirm in Discord.</p>' +
         '<textarea class="arc-textarea" id="coText" placeholder="Describe your custom order here..."></textarea>' +
-        '<div class="arc-co-hint"><span class="bolt">⚡</span> Pricing confirmed in your Discord ticket</div>' +
+        '<div class="arc-co-hint"><span class="bolt">⚡</span> Pricing confirmed after checkout</div>' +
         '<div class="arc-co-trust"><span>Manual Delivery</span><span>VPN Protected</span><span>24/7 Support</span></div>' +
       '</div>';
 
@@ -2211,7 +2211,7 @@
     function syncCart() {
       var text = $('coText').value.trim();
       if (text) {
-        cart.replaceAll([{ id: 'custom', name: 'Custom Order', qty: 1, price: 0, color: '#e08a2c', sub: 'See Discord ticket' }]);
+        cart.replaceAll([{ id: 'custom', name: 'Custom Order', qty: 1, price: 0, color: '#e08a2c', sub: 'Confirm at checkout' }]);
       } else {
         cart.replaceAll([]);
       }

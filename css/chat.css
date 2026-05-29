@@ -330,6 +330,22 @@
   border: 2px solid #0d0a06;
 }
 
+/* ── FAB tooltip ── */
+.ecw-fab-tooltip {
+  position: absolute; bottom: calc(100% + 10px); right: 0;
+  background: #1a1208; border: 1px solid var(--line, rgba(201,168,76,0.18));
+  border-radius: 8px; padding: 7px 12px;
+  font-family: var(--f-body, sans-serif); font-size: 0.76rem;
+  color: var(--text-soft, rgba(239,230,207,0.72)); white-space: nowrap;
+  pointer-events: none; opacity: 0; transform: translateY(4px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 8001;
+}
+.ecw-fab:hover .ecw-fab-tooltip,
+.ecw-fab:focus-visible .ecw-fab-tooltip {
+  opacity: 1; transform: translateY(0);
+}
+
 /* ── Panel ── */
 .ecw-panel {
   position: fixed; bottom: 88px; right: 20px; z-index: 8002;
@@ -414,9 +430,10 @@
 
 /* ── Support pane ── */
 #ecwSupportPane { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
-.ecw-chips { flex-shrink: 0; display: flex; gap: 6px; padding: 10px 12px; overflow-x: auto; scrollbar-width: none; }
+.ecw-chips { flex-shrink: 0; display: flex; flex-wrap: nowrap; gap: 8px; padding: 10px 12px; overflow-x: auto; scrollbar-width: none; position: relative; }
 .ecw-chips::-webkit-scrollbar { display: none; }
-.ecw-chip { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px;
+.ecw-chips::after { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 32px; background: linear-gradient(to left, #0a0805, transparent); pointer-events: none; }
+.ecw-chip { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px;
   background: rgba(255,255,255,0.02); border: 1px solid var(--line-soft, rgba(239,230,207,0.08)); border-radius: 999px;
   padding: 6px 12px; cursor: pointer; font-family: var(--f-body, sans-serif); font-size: 0.74rem;
   color: var(--text-soft, rgba(239,230,207,0.72)); white-space: nowrap; transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease; }

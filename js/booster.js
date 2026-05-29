@@ -13,11 +13,11 @@
 
   /* Booster rank ladder — share % grows with lifetime completed orders. */
   var BRANKS = [
-    { name: 'Recruit',   min: 0,    pct: 55, icon: 'ti-shield',       blurb: 'Welcome aboard. Build your record.' },
-    { name: 'Vanguard',  min: 100,  pct: 58, icon: 'ti-shield-bolt',  blurb: 'Proven hands. Higher share.' },
-    { name: 'Elite',     min: 300,  pct: 61, icon: 'ti-star',         blurb: 'Trusted specialist. Priority queue.' },
-    { name: 'Legendary', min: 600,  pct: 63, icon: 'ti-flame',        blurb: 'Top performer. Premium orders.' },
-    { name: 'Elysian',   min: 1000, pct: 65, icon: 'ti-crown',        blurb: 'The pinnacle. Maximum share.' },
+    { name: 'Recruit',   min: 0,   pct: 55, icon: 'ti-shield',       blurb: 'Welcome aboard. Build your record.' },
+    { name: 'Vanguard',  min: 50,  pct: 58, icon: 'ti-shield-bolt',  blurb: 'Proven hands. Higher share.' },
+    { name: 'Elite',     min: 150, pct: 61, icon: 'ti-star',         blurb: 'Trusted specialist. Priority queue.' },
+    { name: 'Legendary', min: 300, pct: 63, icon: 'ti-flame',        blurb: 'Top performer. Premium orders.' },
+    { name: 'Elysian',   min: 500, pct: 65, icon: 'ti-crown',        blurb: 'The pinnacle. Maximum share.' },
   ];
 
   /* ── State ─────────────────────────────────────────────────── */
@@ -1196,11 +1196,14 @@
 
   function updateGreeting() {
     var h = new Date().getHours();
-    setText('bpGreeting', h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening');
+    var timePrefix = h >= 5 && h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+    var name = (_profile && _profile.username) ? ', ' + _profile.username : ', Booster';
+    setText('bpGreeting', timePrefix + name);
   }
 
   function initials(n) { return (n || 'B').split(/\s+/).map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase() || 'B'; }
   function shortId(id) { return (id || '').replace(/-/g, '').slice(0, 6).toUpperCase(); }
+  function formatBoosterId(uuid) { var n = parseInt((uuid || '').replace(/-/g, '').slice(0, 8), 16) % 100000000; return 'E' + String(n).padStart(8, '0'); }
   function safeName(n) { return (n || 'file').replace(/[^a-zA-Z0-9._-]/g, '_').slice(-40); }
   function fmtDate(s) { if (!s) return '—'; try { return new Date(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); } catch (_) { return '—'; } }
   function fmtTime(s) { if (!s) return ''; try { return new Date(s).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }); } catch (_) { return ''; } }

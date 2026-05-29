@@ -1413,6 +1413,7 @@
 
     .home-game-card {
       min-height: clamp(155px, 20vh, 205px);
+      min-width: 0;
       border: 1px solid var(--line);
       border-radius: 12px;
       background: #08051a;
@@ -6049,6 +6050,7 @@
       text-transform: uppercase;
       overflow-wrap: anywhere;
       letter-spacing: .04em;
+      color: #efe6cf;
     }
 
     .cart-item-game {
@@ -6058,8 +6060,21 @@
       font-weight: 800;
       letter-spacing: .1em;
       text-transform: uppercase;
-      color: rgba(168, 158, 140, .9);
+      color: rgba(239, 230, 207, 0.75);
     }
+
+    .cart-item-detail-option,
+    .cart-item-sub,
+    .cart-item .option-label {
+      color: rgba(239, 230, 207, 0.75);
+    }
+
+    .cart-item-price {
+      color: #e5c26b;
+      font-weight: 600;
+    }
+
+    .cart-item * { opacity: unset; }
 
     .cart-item--receipt .cart-receipt-head {
       display: flex;

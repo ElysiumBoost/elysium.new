@@ -53,7 +53,7 @@
       cta: 'Mark urgent', sys: 'Order marked as urgent. Admin notified.' },
     { type: 'schedule', icon: '📅', label: 'Schedule Order', needsOrder: true, datetime: true,
       cta: 'Send schedule request', sys: 'Schedule request sent for {datetime}.' },
-    { type: 'preferred_booster', icon: '⭐', label: 'Add to Preferred Booster', needsOrder: true, needsBooster: true,
+    { type: 'preferred_booster', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="#e5c26b" aria-hidden="true" style="vertical-align:-2px"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>', label: 'Add to Preferred Booster', needsOrder: true, needsBooster: true,
       note: 'Work with this booster again on future orders.',
       cta: 'Add to preferred', sys: 'Booster added to your preferred list.' },
     { type: 'report', icon: '⚠️', label: 'Report Issue',
