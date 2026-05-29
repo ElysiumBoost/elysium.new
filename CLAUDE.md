@@ -573,3 +573,12 @@ Finish a clean, stable, premium frontend migration:
 5. Assets organized.
 6. No obvious production blockers.
 7. Then proceed to backend/auth/admin/pricing later.
+
+## Agent Behavior Rules
+- NEVER rewrite entire files. Always use surgical str_replace edits.
+- NEVER read files unless directly needed for the current task.
+- Make the minimal change that fixes the problem.
+- One commit per logical change.
+- No lengthy explanations before starting — just do it.
+- Do not re-read files you already read this session.
+- Do not summarize what you are about to do — just do it.
