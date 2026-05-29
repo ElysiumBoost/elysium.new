@@ -168,6 +168,10 @@ video { display: block; max-width: 100%; height: auto; }
   color: #1a1208;
   box-shadow: 0 1px 0 rgba(255, 220, 150, 0.45) inset, 0 16px 36px -10px var(--gold-glow), 0 0 0 1px rgba(229, 194, 107, 0.4);
 }
+.eb-btn:active, .eb-btn-primary:active {
+  transform: scale(0.97);
+  transition: transform 100ms ease-out;
+}
 
 /* ── Scroll reveal ── */
 .eb-reveal {
@@ -175,3 +179,10 @@ video { display: block; max-width: 100%; height: auto; }
   transition: opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .eb-reveal.eb-in { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

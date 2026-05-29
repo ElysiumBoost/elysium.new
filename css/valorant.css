@@ -872,3 +872,12 @@
 button:focus-visible, a:focus-visible, input:focus-visible {
   outline: 2px solid var(--gold); outline-offset: 2px;
 }
+
+.val-tab:active { transform: scale(0.97); transition: transform 100ms ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
