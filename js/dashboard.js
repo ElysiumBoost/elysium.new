@@ -1,372 +1,716 @@
 (function () {
   'use strict';
 
-  var AVATAR_PREFIX = '../assets/avatars/elysium_unique_avatar_';
-  var AVATAR_COUNT  = 16;
+  /* ── Constants ─────────────────────────────────────────────── */
 
-  var RANK_TIERS = [
-    { name: 'Veteran',   min: 0,    max: 100  },
-    { name: 'Champion',  min: 100,  max: 250  },
-    { name: 'Legend',    min: 250,  max: 500  },
-    { name: 'Immortal',  min: 500,  max: 1000 },
-    { name: 'Elysian',   min: 1000, max: null },
+  var SB_URL = 'https://ylaxzlejhzgakhtfmsbt.supabase.co';
+  var SB_KEY = 'sb_publishable_hjqgJX_RSpeypqtjJDk4xQ_pPGSnWAT';
+
+  var RANKS = [
+    { name: 'Veteran',  min: 0,    max: 100,  discount: 0,  icon: 'ti-shield',  perks: ['Basic support'] },
+    { name: 'Champion', min: 100,  max: 250,  discount: 5,  icon: 'ti-star',    perks: ['5% discount', 'Priority support'] },
+    { name: 'Legend',   min: 250,  max: 500,  discount: 10, icon: 'ti-flame',   perks: ['10% discount', 'Fast delivery', 'Priority support'] },
+    { name: 'Immortal', min: 500,  max: 1000, discount: 15, icon: 'ti-bolt',    perks: ['15% discount', 'Custom booster selection', 'All above'] },
+    { name: 'Elysian',  min: 1000, max: null, discount: 20, icon: 'ti-crown',   perks: ['20% discount', 'VIP Discord channel', 'Exclusive badge', 'All above'] },
   ];
 
-  var PLACEHOLDER_ORDERS = [
-    { game: 'Valorant', service: 'Rank Boosting — Gold III → Platinum I', date: '2025-05-18', price: 48.50, status: 'Completed' },
-    { game: 'Valorant', service: 'Ranked Wins × 10 — Platinum II',        date: '2025-05-24', price: 72.00, status: 'In Progress' },
-    { game: 'Arc Raiders', service: 'Leveling Boost — Station 4',         date: '2025-05-27', price: 35.00, status: 'Pending' },
-  ];
+  var AVATAR_BASE  = '../assets/avatars/elysium_unique_avatar_';
+  var AVATAR_COUNT = 16;
 
-  var _user    = null;
-  var _profile = null;
-  var _selectedAvatarNum = null;
+  /* ── State ─────────────────────────────────────────────────── */
 
-  /* ── Auth guard ── */
+  var _sb, _user, _profile = {}, _orders = [];
+  var _selectedAvNum = null;
+  var _currentFilter = 'all';
 
-  var _authReady = false;
-  window.addEventListener('eb:authChange', function (e) {
-    if (_authReady) return;
-    _authReady = true;
-    _user = e.detail.user;
-    if (!_user) {
-      window.location.replace('../index.html');
-      return;
-    }
-    _init();
+  /* ── Bootstrap ─────────────────────────────────────────────── */
+
+  document.addEventListener('DOMContentLoaded', function () {
+    _sb = supabase.createClient(SB_URL, SB_KEY, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false },
+    });
+
+    authGuard().then(function (user) {
+      if (!user) return;
+      _user = user;
+      updateGreeting();
+      setupNav();
+      setupForms();
+      buildAvatarGrids();
+      var hash = window.location.hash.slice(1) || 'overview';
+      showSection(hash, false);
+      loadData();
+    });
   });
 
-  /* Fallback: if auth event never fires within 3 s, redirect */
-  setTimeout(function () {
-    if (!_authReady) {
-      window.location.replace('../index.html');
-    }
-  }, 3000);
+  /* ── Auth guard ─────────────────────────────────────────────── */
 
-  /* ── Bootstrap ── */
+  function authGuard() {
+    return _sb.auth.getSession().then(function (res) {
+      if (res.data && res.data.session && res.data.session.user) {
+        return res.data.session.user;
+      }
+      return new Promise(function (resolve) {
+        var timer = setTimeout(function () {
+          window.location.replace('../index.html?login=true');
+          resolve(null);
+        }, 3000);
 
-  function _init() {
-    _setupNav();
-    _loadProfile();
-    _buildAvGrid();
-    _setupAccountForm();
-    document.getElementById('dbLogout').addEventListener('click', function () {
-      ebSignOut();
-    });
-  }
-
-  /* ── Section switching ── */
-
-  function _setupNav() {
-    document.querySelectorAll('[data-section]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        _showSection(btn.dataset.section);
+        _sb.auth.onAuthStateChange(function (event, session) {
+          if (session && session.user) {
+            clearTimeout(timer);
+            resolve(session.user);
+          }
+        });
       });
     });
   }
 
-  function _showSection(key) {
-    document.querySelectorAll('.db-section').forEach(function (el) {
-      el.classList.add('db-hidden');
+  /* ── Navigation ─────────────────────────────────────────────── */
+
+  function setupNav() {
+    document.querySelectorAll('[data-section]').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.preventDefault();
+        var section = el.dataset.section;
+        history.pushState(null, '', '#' + section);
+        showSection(section, true);
+      });
     });
-    document.querySelectorAll('[data-section]').forEach(function (btn) {
-      btn.classList.toggle('is-active', btn.dataset.section === key);
+
+    window.addEventListener('popstate', function () {
+      showSection(window.location.hash.slice(1) || 'overview', true);
     });
-    var target = document.getElementById('dbSection' + key.charAt(0).toUpperCase() + key.slice(1));
-    if (target) target.classList.remove('db-hidden');
+
+    var logoutBtn = document.getElementById('dbNavLogout');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', function () {
+        _sb.auth.signOut().then(function () {
+          window.location.replace('../index.html');
+        });
+      });
+    }
   }
 
-  /* ── Profile loading ── */
+  function showSection(key, animate) {
+    var valid = ['overview', 'orders', 'tickets', 'rank', 'account', 'security'];
+    if (valid.indexOf(key) === -1) key = 'overview';
 
-  async function _loadProfile() {
-    try {
-      var result = await _sb.from('profiles').select('username, avatar_url, discord_id, total_spent').eq('id', _user.id).maybeSingle();
-      _profile = result.data || {};
-    } catch (_) {
-      _profile = {};
-    }
+    document.querySelectorAll('.db-section').forEach(function (s) {
+      s.classList.add('db-hidden');
+      s.classList.remove('db-section-enter');
+    });
 
-    var username = _profile.username || _user.user_metadata?.username || _user.user_metadata?.full_name || _user.email?.split('@')[0] || 'Champion';
-    var totalSpent = parseFloat(_profile.total_spent) || 0;
-    var rank = _computeRank(totalSpent);
+    document.querySelectorAll('[data-section]').forEach(function (el) {
+      el.classList.toggle('is-active', el.dataset.section === key);
+    });
 
-    /* Sidebar */
-    document.getElementById('dbSidebarUsername').textContent = username;
-    document.getElementById('dbSidebarRank').textContent = rank.name;
-    _applySidebarAvatar(_profile.avatar_url || null, username);
-
-    /* Account form */
-    document.getElementById('dbFieldUsername').value = username;
-    document.getElementById('dbFieldEmail').value    = _user.email || '';
-    document.getElementById('dbFieldDiscord').value  = _profile.discord_id || '';
-
-    /* Account avatar preview */
-    _applyAccountAvatarPreview(_profile.avatar_url || null, username);
-
-    /* Mark selected cell */
-    if (_profile.avatar_url) {
-      var match = _profile.avatar_url.match(/elysium_unique_avatar_(\d+)\.png$/);
-      if (match) {
-        _selectedAvatarNum = match[1];
-        _markSelectedCell(_selectedAvatarNum);
+    var id = 'dbSection' + key.charAt(0).toUpperCase() + key.slice(1);
+    var target = document.getElementById(id);
+    if (target) {
+      target.classList.remove('db-hidden');
+      if (animate) {
+        void target.offsetWidth; /* force reflow */
+        target.classList.add('db-section-enter');
       }
     }
-
-    /* Rank section */
-    _renderRankSection(rank, totalSpent);
-
-    /* Orders */
-    _loadOrders(totalSpent);
   }
 
-  /* ── Avatar helpers ── */
+  /* ── Load data ──────────────────────────────────────────────── */
 
-  function _applySidebarAvatar(url, username) {
-    var el = document.getElementById('dbSidebarAvatar');
-    if (!el) return;
-    if (url) {
-      var resolved = _resolveAvatarUrl(url);
-      el.innerHTML = '<img src="' + resolved + '" alt="Your avatar">';
-    } else {
-      var initials = _makeInitials(username);
-      el.textContent = initials;
-    }
-  }
+  function loadData() {
+    Promise.all([
+      _sb.from('profiles')
+        .select('username, email, discord_id, country, avatar_url, total_spent, referral_code')
+        .eq('id', _user.id)
+        .maybeSingle(),
+      _sb.from('orders')
+        .select('*')
+        .eq('user_id', _user.id)
+        .order('created_at', { ascending: false }),
+    ]).then(function (results) {
+      _profile = (results[0].data) || {};
+      _orders  = (results[1].data) || [];
 
-  function _applyAccountAvatarPreview(url, username) {
-    var el = document.getElementById('dbAccountAvatarPreview');
-    if (!el) return;
-    if (url) {
-      var resolved = _resolveAvatarUrl(url);
-      el.innerHTML = '<img src="' + resolved + '" alt="Your avatar">';
-    } else {
-      el.textContent = _makeInitials(username);
-    }
-  }
+      if (!_profile.referral_code) {
+        _profile.referral_code = 'ELY-' + _user.id.slice(0, 8).toUpperCase();
+      }
 
-  function _resolveAvatarUrl(url) {
-    /* Stored as relative-to-root path — prepend ../ for pages/ subdirectory */
-    if (url && url.startsWith('assets/')) return '../' + url;
-    return url;
-  }
+      var rank = computeRank(parseFloat(_profile.total_spent) || 0);
+      try { localStorage.setItem('elysium_rank_discount', JSON.stringify({ rank: rank.name, discount: rank.discount })); } catch (_) {}
 
-  function _makeInitials(name) {
-    return (name || 'EB').split(/\s+/).map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase() || 'EB';
-  }
-
-  /* ── Avatar grid ── */
-
-  function _buildAvGrid() {
-    var grid = document.getElementById('dbAvGrid');
-    if (!grid) return;
-    for (var i = 1; i <= AVATAR_COUNT; i++) {
-      var num   = i < 10 ? '0' + i : '' + i;
-      var btn   = document.createElement('button');
-      btn.type  = 'button';
-      btn.className = 'db-av-cell';
-      btn.dataset.avNum = num;
-      var img   = document.createElement('img');
-      img.src   = AVATAR_PREFIX + num + '.png';
-      img.alt   = 'Avatar ' + num;
-      img.loading = 'lazy';
-      btn.appendChild(img);
-      btn.addEventListener('click', function () { _selectAvatar(this.dataset.avNum); });
-      grid.appendChild(btn);
-    }
-  }
-
-  function _markSelectedCell(num) {
-    document.querySelectorAll('.db-av-cell').forEach(function (btn) {
-      btn.classList.toggle('is-selected', btn.dataset.avNum === num);
+      renderSidebar();
+      renderOverview();
+      renderOrders();
+      renderTickets();
+      renderRank();
+      renderAccount();
     });
   }
 
-  async function _selectAvatar(num) {
-    _selectedAvatarNum = num;
-    _markSelectedCell(num);
+  /* ── Rank ───────────────────────────────────────────────────── */
 
-    var url         = 'assets/avatars/elysium_unique_avatar_' + num + '.png';
-    var resolvedUrl = '../' + url;
-
-    /* Update sidebar and preview immediately */
-    var sidebar = document.getElementById('dbSidebarAvatar');
-    if (sidebar) sidebar.innerHTML = '<img src="' + resolvedUrl + '" alt="Your avatar">';
-
-    var preview = document.getElementById('dbAccountAvatarPreview');
-    if (preview) preview.innerHTML = '<img src="' + resolvedUrl + '" alt="Your avatar">';
-
-    /* Persist to Supabase */
-    try {
-      await _sb.from('profiles').upsert({ id: _user.id, avatar_url: url }, { onConflict: 'id' });
-    } catch (_) {}
-  }
-
-  /* ── Rank computation ── */
-
-  function _computeRank(totalSpent) {
-    var current = RANK_TIERS[0];
-    for (var i = RANK_TIERS.length - 1; i >= 0; i--) {
-      if (totalSpent >= RANK_TIERS[i].min) { current = RANK_TIERS[i]; break; }
+  function computeRank(spent) {
+    var current = RANKS[0];
+    for (var i = RANKS.length - 1; i >= 0; i--) {
+      if (spent >= RANKS[i].min) { current = RANKS[i]; break; }
     }
     return current;
   }
 
-  function _renderRankSection(rank, totalSpent) {
-    document.getElementById('dbRankCurrentName').textContent = rank.name;
+  /* ── Sidebar ────────────────────────────────────────────────── */
 
-    var fill = document.getElementById('dbRankProgressFill');
-    var text = document.getElementById('dbRankProgressText');
+  function renderSidebar() {
+    var name  = _profile.username || (_user.user_metadata && (_user.user_metadata.username || _user.user_metadata.full_name)) || (_user.email && _user.email.split('@')[0]) || 'Champion';
+    var spent = parseFloat(_profile.total_spent) || 0;
+    var rank  = computeRank(spent);
 
-    if (rank.max === null) {
-      fill.style.width = '100%';
-      if (text) text.textContent = 'Maximum rank achieved';
-    } else {
-      var pct = Math.min(100, Math.round(((totalSpent - rank.min) / (rank.max - rank.min)) * 100));
-      fill.style.width = pct + '%';
-      var needed = rank.max - totalSpent;
-      if (text) text.textContent = '$' + needed.toFixed(2) + ' to next rank';
-    }
+    var nameEl  = document.getElementById('dbProfileName');
+    var emailEl = document.getElementById('dbProfileEmail');
+    var rankBEl = document.getElementById('dbRankBadgeName');
 
-    var tiersEl = document.getElementById('dbRankTiers');
-    if (!tiersEl) return;
-    tiersEl.innerHTML = '';
+    if (nameEl)  nameEl.textContent  = name;
+    if (emailEl) emailEl.textContent = _user.email || '';
+    if (rankBEl) rankBEl.textContent = rank.name;
 
-    RANK_TIERS.forEach(function (tier) {
-      var card = document.createElement('div');
-      card.className = 'db-rank-tier';
-      var isCurrent  = tier.name === rank.name;
-      var isUnlocked = totalSpent >= tier.min;
-      if (isCurrent)  card.classList.add('is-current');
-      if (isUnlocked) card.classList.add('is-unlocked');
-
-      var threshold = tier.max !== null ? '$' + tier.min + '+' : '$' + tier.min + '+';
-
-      card.innerHTML =
-        '<span class="db-rank-tier-name">' + tier.name + '</span>' +
-        '<span class="db-rank-tier-threshold">' + threshold + '</span>' +
-        '<div class="db-rank-tier-indicator"></div>';
-      tiersEl.appendChild(card);
-    });
-  }
-
-  /* ── Orders ── */
-
-  async function _loadOrders(totalSpent) {
-    var orders = [];
-    try {
-      var result = await _sb.from('orders').select('*').eq('user_id', _user.id).order('created_at', { ascending: false });
-      if (result.data && result.data.length > 0) {
-        orders = result.data;
+    var circle = document.getElementById('dbAvatarCircle');
+    if (circle) {
+      if (_profile.avatar_url) {
+        var resolved = _profile.avatar_url.startsWith('assets/') ? '../' + _profile.avatar_url : _profile.avatar_url;
+        circle.innerHTML = '<img src="' + resolved + '" alt="' + esc(name) + '">';
+        circle.classList.add('has-img');
       } else {
-        orders = PLACEHOLDER_ORDERS;
+        circle.textContent = makeInitials(name);
+        circle.classList.remove('has-img');
       }
-    } catch (_) {
-      orders = PLACEHOLDER_ORDERS;
     }
 
-    _renderStats(orders, totalSpent);
-    _renderOrders(orders);
+    var active = _orders.filter(function (o) { return (o.status || '').toLowerCase().indexOf('progress') !== -1; }).length;
+    var badge  = document.getElementById('dbNavOrdersBadge');
+    if (badge && active > 0) { badge.textContent = active; badge.hidden = false; }
   }
 
-  function _renderStats(orders, totalSpent) {
-    var inProgress = orders.filter(function (o) { return (o.status || '').toLowerCase().includes('progress'); }).length;
-    var spent = totalSpent > 0 ? '$' + totalSpent.toFixed(2) : _sumOrders(orders);
-
-    document.getElementById('dbStatTotal').textContent     = orders.length;
-    document.getElementById('dbStatSpent').textContent     = spent;
-    document.getElementById('dbStatInProgress').textContent = inProgress;
+  function updateGreeting() {
+    var h = new Date().getHours();
+    var el = document.getElementById('dbGreeting');
+    if (el) el.textContent = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
   }
 
-  function _sumOrders(orders) {
-    var total = orders.reduce(function (acc, o) { return acc + (parseFloat(o.price) || 0); }, 0);
-    return '$' + total.toFixed(2);
+  function makeInitials(name) {
+    return (name || 'EB').split(/\s+/).map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase() || 'EB';
   }
 
-  function _renderOrders(orders) {
-    var list = document.getElementById('dbOrdersList');
-    if (!list) return;
-    list.innerHTML = '';
+  /* ── Overview ───────────────────────────────────────────────── */
 
-    if (!orders.length) {
-      list.innerHTML =
+  function renderOverview() {
+    var spent  = parseFloat(_profile.total_spent) || 0;
+    var rank   = computeRank(spent);
+    var active = _orders.filter(function (o) { return (o.status || '').toLowerCase().indexOf('progress') !== -1; }).length;
+
+    /* Stat cards */
+    var grid = document.getElementById('dbStatsGrid');
+    if (grid) {
+      grid.innerHTML =
+        statCard('ti-shopping-bag',    'Total Orders',  _orders.length, false) +
+        statCard('ti-currency-dollar', 'Total Spent',   '$' + spent.toFixed(2), false) +
+        statCard('ti-loader-2',        'Active Orders', active, active > 0) +
+        statCard('ti-crown',           'Current Rank',  rank.name, false);
+
+      grid.querySelectorAll('[data-count]').forEach(function (el) {
+        countUp(el, parseFloat(el.dataset.count));
+      });
+    }
+
+    /* Last order */
+    var lastCard = document.getElementById('dbLastOrderCard');
+    if (lastCard) {
+      var activeOrders = _orders.filter(function (o) { return (o.status || '').toLowerCase().indexOf('progress') !== -1; });
+      var latest = activeOrders[0] || _orders[0];
+      if (latest) {
+        var sc = statusClass(latest.status);
+        lastCard.innerHTML =
+          '<div class="db-card-header"><span class="db-card-title-sm"><i class="ti ti-activity"></i> Latest Order</span>' +
+          '<span class="db-status-badge db-status-' + sc + '">' + esc(latest.status || 'Pending') + '</span></div>' +
+          '<div class="db-last-order-game">' + esc(latest.game || 'Boost') + '</div>' +
+          '<div class="db-last-order-service">' + esc(latest.service_name || latest.service || '—') + '</div>' +
+          '<div class="db-last-order-meta"><span><i class="ti ti-calendar"></i> ' + fmtDate(latest.created_at || latest.date) + '</span>' +
+          '<span class="db-last-order-price">$' + parseFloat(latest.price || 0).toFixed(2) + '</span></div>';
+      } else {
+        lastCard.innerHTML =
+          '<div class="db-card-header"><span class="db-card-title-sm"><i class="ti ti-activity"></i> Latest Order</span></div>' +
+          '<div class="db-empty-mini">No orders yet</div>';
+      }
+    }
+
+    /* Rank progress */
+    var rankCard = document.getElementById('dbRankProgressCard');
+    if (rankCard) {
+      var ridx = rankIdx(rank);
+      var next = RANKS[ridx + 1];
+      var pct  = 100;
+      var msg  = 'Maximum rank achieved!';
+      if (next) {
+        pct = Math.min(100, Math.round(((spent - rank.min) / (next.min - rank.min)) * 100));
+        msg = 'Spend $' + (next.min - spent).toFixed(2) + ' more to reach ' + next.name;
+      }
+      rankCard.innerHTML =
+        '<div class="db-card-header"><span class="db-card-title-sm"><i class="ti ti-crown"></i> Elysium Rank</span></div>' +
+        '<div class="db-rank-name-display">' + esc(rank.name) + '</div>' +
+        '<div class="db-rank-discount-display">Your discount: <strong>' + rank.discount + '% off</strong></div>' +
+        '<div class="db-progress-wrap">' +
+          '<div class="db-progress-track"><div class="db-progress-fill" style="width:0%" data-pct="' + pct + '"></div></div>' +
+          '<span class="db-progress-pct">' + pct + '%</span>' +
+        '</div>' +
+        '<div class="db-progress-label">' + esc(msg) + '</div>';
+
+      setTimeout(function () {
+        var fill = rankCard.querySelector('.db-progress-fill');
+        if (fill) fill.style.width = fill.dataset.pct + '%';
+      }, 80);
+    }
+
+    /* Referral */
+    var refCard = document.getElementById('dbReferralCard');
+    if (refCard) {
+      var code = _profile.referral_code || '—';
+      refCard.innerHTML =
+        '<div class="db-card-header"><span class="db-card-title-sm"><i class="ti ti-users"></i> Referral Program</span></div>' +
+        '<div class="db-referral-desc">Invite friends, earn <strong>3% per order</strong> they place.</div>' +
+        '<div class="db-referral-code-wrap">' +
+          '<code class="db-referral-code" id="dbRefCode">' + esc(code) + '</code>' +
+          '<button class="db-copy-btn" type="button" onclick="dbCopyRef()" title="Copy code" aria-label="Copy referral code"><i class="ti ti-copy"></i></button>' +
+        '</div>';
+    }
+  }
+
+  function statCard(icon, label, value, highlight) {
+    var isNum     = typeof value === 'number';
+    var countAttr = isNum ? ' data-count="' + value + '"' : '';
+    var display   = isNum ? '0' : esc(String(value));
+    return '<div class="db-stat-card' + (highlight ? ' db-stat-highlight' : '') + '">' +
+      '<i class="ti ' + icon + ' db-stat-icon"></i>' +
+      '<div class="db-stat-value"' + countAttr + '>' + display + '</div>' +
+      '<div class="db-stat-label">' + label + '</div>' +
+      '</div>';
+  }
+
+  /* ── Orders ─────────────────────────────────────────────────── */
+
+  function renderOrders(filter) {
+    if (filter !== undefined) _currentFilter = filter;
+    var body = document.getElementById('dbOrdersBody');
+    if (!body) return;
+
+    var filtered = _orders;
+    if (_currentFilter === 'active')    filtered = _orders.filter(function (o) { return (o.status || '').toLowerCase().indexOf('progress') !== -1; });
+    if (_currentFilter === 'completed') filtered = _orders.filter(function (o) { return (o.status || '').toLowerCase().indexOf('complet') !== -1; });
+    if (_currentFilter === 'pending')   filtered = _orders.filter(function (o) { return (o.status || '').toLowerCase() === 'pending'; });
+
+    if (!filtered.length) {
+      body.innerHTML =
         '<div class="db-orders-empty">' +
-          '<p class="db-orders-empty-title">No orders yet</p>' +
-          '<p class="db-orders-empty-sub">Your completed and active orders will appear here.</p>' +
+        '<img src="../assets/elysium-logo-mark.png" alt="" width="48" loading="lazy">' +
+        '<p class="db-empty-title">No orders yet, Champion</p>' +
+        '<a href="../index.html" class="eb-btn-primary">Start Your Climb</a>' +
         '</div>';
       return;
     }
 
-    var header = document.createElement('div');
-    header.className = 'db-order-row db-orders-header';
-    header.innerHTML = '<span>Game</span><span>Service</span><span>Date</span><span>Price</span><span>Status</span>';
-    list.appendChild(header);
-
-    orders.forEach(function (o) {
-      var row = document.createElement('div');
-      row.className = 'db-order-row';
-
-      var status    = o.status || 'Pending';
-      var statusCls = status.toLowerCase().includes('complete') ? 'db-status-completed' :
-                      status.toLowerCase().includes('progress')  ? 'db-status-progress' : 'db-status-pending';
-
-      var dateStr = '';
-      if (o.date || o.created_at) {
-        try { dateStr = new Date(o.date || o.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); } catch (_) {}
-      }
-
-      row.innerHTML =
-        '<span><span class="db-order-tag">' + _esc(o.game || 'Boost') + '</span></span>' +
-        '<span class="db-order-name">' + _esc(o.service || o.service_name || '—') + '</span>' +
-        '<span class="db-order-date">' + _esc(dateStr) + '</span>' +
-        '<span class="db-order-price">$' + parseFloat(o.price || 0).toFixed(2) + '</span>' +
-        '<span><span class="db-order-status ' + statusCls + '">' + _esc(status) + '</span></span>';
-
-      list.appendChild(row);
-    });
+    body.innerHTML =
+      '<div class="db-table-wrap"><table class="db-table">' +
+      '<thead><tr><th>Game</th><th>Service</th><th class="db-date-cell">Date</th><th>Price</th><th>Status</th><th>Ticket</th></tr></thead>' +
+      '<tbody>' + filtered.map(orderRow).join('') + '</tbody>' +
+      '</table></div>';
   }
 
-  /* ── Account form ── */
-
-  function _setupAccountForm() {
-    var form = document.getElementById('dbAccountForm');
-    if (!form) return;
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      _saveAccount();
-    });
+  function orderRow(o) {
+    var sc = statusClass(o.status);
+    var discordUrl = 'https://discord.gg/elysiumgg';
+    return '<tr class="db-order-row">' +
+      '<td><span class="db-game-badge">' + esc(o.game || 'Boost') + '</span></td>' +
+      '<td class="db-service-cell">' + esc(o.service_name || o.service || '—') + '</td>' +
+      '<td class="db-date-cell">' + fmtDate(o.created_at || o.date) + '</td>' +
+      '<td class="db-price-cell">$' + parseFloat(o.price || 0).toFixed(2) + '</td>' +
+      '<td><span class="db-status-badge db-status-' + sc + '">' + esc(o.status || 'Pending') + '</span></td>' +
+      '<td><a href="' + discordUrl + '" target="_blank" rel="noopener noreferrer" class="db-ticket-btn" aria-label="Open Discord ticket"><i class="ti ti-brand-discord"></i></a></td>' +
+      '</tr>';
   }
 
-  async function _saveAccount() {
-    var msg      = document.getElementById('dbFormMsg');
-    var username = document.getElementById('dbFieldUsername').value.trim();
-    var discord  = document.getElementById('dbFieldDiscord').value.trim();
+  /* ── Tickets ────────────────────────────────────────────────── */
 
-    if (msg) { msg.textContent = 'Saving…'; msg.className = 'db-form-msg'; }
+  function renderTickets() {
+    var body = document.getElementById('dbTicketsBody');
+    if (!body) return;
+    var ticketed = _orders.filter(function (o) { return !!o.discord_ticket_id; });
 
-    var avatarUrl = _selectedAvatarNum
-      ? 'assets/avatars/elysium_unique_avatar_' + _selectedAvatarNum + '.png'
-      : (_profile && _profile.avatar_url) || null;
-
-    var payload = { id: _user.id, username: username, discord_id: discord };
-    if (avatarUrl) payload.avatar_url = avatarUrl;
-
-    try {
-      var result = await _sb.from('profiles').upsert(payload, { onConflict: 'id' });
-      if (result.error) throw result.error;
-      if (_profile) { _profile.username = username; _profile.discord_id = discord; }
-      document.getElementById('dbSidebarUsername').textContent = username;
-      if (msg) { msg.textContent = 'Saved!'; msg.className = 'db-form-msg is-success'; }
-    } catch (err) {
-      if (msg) { msg.textContent = 'Failed to save.'; msg.className = 'db-form-msg is-error'; }
+    if (!ticketed.length) {
+      body.innerHTML =
+        '<div class="db-orders-empty">' +
+        '<i class="ti ti-brand-discord db-empty-icon"></i>' +
+        '<p class="db-empty-title">No active tickets</p>' +
+        '<a href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer" class="eb-btn-primary"><i class="ti ti-brand-discord"></i> Open Discord</a>' +
+        '</div>';
+      return;
     }
 
-    setTimeout(function () { if (msg) { msg.textContent = ''; msg.className = 'db-form-msg'; } }, 3000);
+    body.innerHTML =
+      '<div class="db-table-wrap"><table class="db-table">' +
+      '<thead><tr><th>Ticket ID</th><th>Service</th><th class="db-date-cell">Date</th><th></th></tr></thead>' +
+      '<tbody>' + ticketed.map(function (o) {
+        return '<tr class="db-order-row">' +
+          '<td><code class="db-ticket-id">#' + esc(String(o.discord_ticket_id)) + '</code></td>' +
+          '<td>' + esc(o.service_name || o.service || '—') + '</td>' +
+          '<td class="db-date-cell">' + fmtDate(o.created_at || o.date) + '</td>' +
+          '<td><a href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer" class="db-ticket-btn"><i class="ti ti-external-link"></i> Open</a></td>' +
+          '</tr>';
+      }).join('') +
+      '</tbody></table></div>';
   }
 
-  /* ── Utility ── */
+  /* ── Rank section ───────────────────────────────────────────── */
 
-  function _esc(str) {
-    return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  function renderRank() {
+    var spent = parseFloat(_profile.total_spent) || 0;
+    var rank  = computeRank(spent);
+    var ridx  = rankIdx(rank);
+    var next  = RANKS[ridx + 1];
+
+    var hero = document.getElementById('dbRankHero');
+    if (hero) {
+      var pct = 100;
+      var msg = "You've reached the highest rank!";
+      if (next) {
+        pct = Math.min(100, Math.round(((spent - rank.min) / (next.min - rank.min)) * 100));
+        msg = 'Spend $' + (next.min - spent).toFixed(2) + ' more to unlock ' + next.name;
+      }
+      hero.innerHTML =
+        '<div class="db-rank-hero-inner">' +
+          '<div class="db-rank-hero-icon-wrap"><i class="ti ' + rank.icon + ' db-rank-hero-icon"></i></div>' +
+          '<div class="db-rank-hero-info">' +
+            '<div class="db-rank-hero-label">Current Rank</div>' +
+            '<div class="db-rank-hero-name">' + esc(rank.name) + '</div>' +
+            '<div class="db-rank-hero-discount">' + rank.discount + '% discount on all orders</div>' +
+            '<div class="db-rank-hero-progress">' +
+              '<div class="db-progress-track db-progress-track-lg">' +
+                '<div class="db-progress-fill db-progress-fill-lg" style="width:0%" data-pct="' + pct + '"></div>' +
+              '</div>' +
+              '<div class="db-rank-progress-meta">' +
+                '<span class="db-progress-label">' + esc(msg) + '</span>' +
+                '<span class="db-progress-pct">' + pct + '%</span>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+
+      setTimeout(function () {
+        var fill = hero.querySelector('.db-progress-fill-lg');
+        if (fill) fill.style.width = fill.dataset.pct + '%';
+      }, 100);
+    }
+
+    var tiersEl = document.getElementById('dbRankTiersGrid');
+    if (tiersEl) {
+      tiersEl.innerHTML = RANKS.map(function (r) {
+        var isCurrent  = r.name === rank.name;
+        var isUnlocked = spent >= r.min;
+        var cls = isCurrent ? 'is-current' : isUnlocked ? 'is-unlocked' : 'is-locked';
+        return '<div class="db-rank-tier db-rank-tier-' + cls + '">' +
+          '<i class="ti ' + r.icon + ' db-tier-icon"></i>' +
+          '<div class="db-tier-name">' + r.name + '</div>' +
+          '<div class="db-tier-threshold">$' + r.min + '+</div>' +
+          '<div class="db-tier-discount">' + r.discount + '% off</div>' +
+          '<ul class="db-tier-perks">' + r.perks.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ul>' +
+          (isCurrent ? '<div class="db-tier-current-label">Current</div>' : '') +
+          '</div>';
+      }).join('');
+    }
   }
+
+  /* ── Account ────────────────────────────────────────────────── */
+
+  function renderAccount() {
+    var name = _profile.username || (_user.user_metadata && (_user.user_metadata.username || _user.user_metadata.full_name)) || (_user.email && _user.email.split('@')[0]) || '';
+
+    var fU = document.getElementById('dbFUsername');
+    var fE = document.getElementById('dbFEmail');
+    var fD = document.getElementById('dbFDiscord');
+    var fC = document.getElementById('dbFCountry');
+
+    if (fU) fU.value = name;
+    if (fE) fE.value = _user.email || '';
+    if (fD) fD.value = _profile.discord_id || '';
+    if (fC) fC.value = _profile.country || '';
+
+    applyAvPreview(_profile.avatar_url, name);
+
+    if (_profile.avatar_url) {
+      var m = _profile.avatar_url.match(/elysium_unique_avatar_(\d+)\.png$/);
+      if (m) { _selectedAvNum = m[1]; markAvSelected(_selectedAvNum); }
+    }
+  }
+
+  function applyAvPreview(url, name) {
+    var preview = document.getElementById('dbAvPreview');
+    if (!preview) return;
+    if (url) {
+      var r = url.startsWith('assets/') ? '../' + url : url;
+      preview.innerHTML = '<img src="' + r + '" alt="Avatar preview">';
+      preview.classList.add('has-img');
+    } else {
+      preview.textContent = makeInitials(name || 'Champion');
+      preview.classList.remove('has-img');
+    }
+  }
+
+  function markAvSelected(num) {
+    document.querySelectorAll('.db-av-cell').forEach(function (btn) {
+      var sel = btn.dataset.avNum === num;
+      btn.classList.toggle('is-selected', sel);
+      btn.setAttribute('aria-pressed', String(sel));
+    });
+  }
+
+  /* ── Avatar grids ───────────────────────────────────────────── */
+
+  function buildAvatarGrids() {
+    ['dbAvGrid', 'dbModalAvGrid'].forEach(function (id) {
+      var grid = document.getElementById(id);
+      if (!grid) return;
+      grid.innerHTML = '';
+      for (var i = 1; i <= AVATAR_COUNT; i++) {
+        var num = i < 10 ? '0' + i : '' + i;
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'db-av-cell';
+        btn.dataset.avNum = num;
+        btn.setAttribute('aria-pressed', 'false');
+        btn.setAttribute('aria-label', 'Avatar ' + num);
+        var img = document.createElement('img');
+        img.src = AVATAR_BASE + num + '.png';
+        img.alt = 'Avatar ' + num;
+        img.loading = 'lazy';
+        btn.appendChild(img);
+        btn.addEventListener('click', function () { selectAvatar(this.dataset.avNum); });
+        grid.appendChild(btn);
+      }
+    });
+
+    var wrap = document.getElementById('dbAvatarWrap');
+    if (wrap) wrap.addEventListener('click', openAvModal);
+
+    document.getElementById('dbAvatarModalClose')
+      && document.getElementById('dbAvatarModalClose').addEventListener('click', closeAvModal);
+
+    var overlay = document.getElementById('dbAvatarModal');
+    if (overlay) overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeAvModal();
+    });
+  }
+
+  function openAvModal() {
+    var m = document.getElementById('dbAvatarModal');
+    if (m) m.classList.remove('db-hidden');
+    document.body.style.overflow = 'hidden';
+    if (_selectedAvNum) markAvSelected(_selectedAvNum);
+  }
+
+  function closeAvModal() {
+    var m = document.getElementById('dbAvatarModal');
+    if (m) m.classList.add('db-hidden');
+    document.body.style.overflow = '';
+  }
+
+  function selectAvatar(num) {
+    _selectedAvNum = num;
+    markAvSelected(num);
+
+    var url      = 'assets/avatars/elysium_unique_avatar_' + num + '.png';
+    var resolved = '../' + url;
+
+    var name = (_profile && _profile.username) || (_user.email && _user.email.split('@')[0]) || '';
+
+    var circle = document.getElementById('dbAvatarCircle');
+    if (circle) { circle.innerHTML = '<img src="' + resolved + '" alt="' + esc(name) + '">'; circle.classList.add('has-img'); }
+
+    applyAvPreview(url, name);
+
+    _sb.from('profiles').upsert({ id: _user.id, avatar_url: url }, { onConflict: 'id' })
+      .then(function (res) {
+        if (res.error) { toast('error', 'Failed to save avatar.'); return; }
+        _profile.avatar_url = url;
+        toast('success', 'Avatar updated!');
+      });
+
+    closeAvModal();
+  }
+
+  /* ── Forms ──────────────────────────────────────────────────── */
+
+  function setupForms() {
+    /* Account form */
+    var accForm = document.getElementById('dbAccountForm');
+    if (accForm) {
+      accForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var username = document.getElementById('dbFUsername').value.trim();
+        var discord  = document.getElementById('dbFDiscord').value.trim();
+        var country  = document.getElementById('dbFCountry').value.trim();
+        var avUrl    = _selectedAvNum ? 'assets/avatars/elysium_unique_avatar_' + _selectedAvNum + '.png' : (_profile.avatar_url || null);
+
+        var payload = { id: _user.id, username: username, discord_id: discord, country: country };
+        if (avUrl) payload.avatar_url = avUrl;
+
+        _sb.from('profiles').upsert(payload, { onConflict: 'id' }).then(function (res) {
+          if (res.error) { toast('error', res.error.message); return; }
+          Object.assign(_profile, { username: username, discord_id: discord, country: country });
+          var nameEl = document.getElementById('dbProfileName');
+          if (nameEl) nameEl.textContent = username || (_user.email && _user.email.split('@')[0]) || 'Champion';
+          toast('success', 'Profile updated, ' + (username || 'Champion') + ' ✓');
+        });
+      });
+    }
+
+    /* Password form */
+    var pwForm = document.getElementById('dbPasswordForm');
+    if (pwForm) {
+      pwForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var np = document.getElementById('dbFNewPw').value;
+        var cp = document.getElementById('dbFConfirmPw').value;
+        if (np.length < 8)  { toast('error', 'Password must be at least 8 characters.'); return; }
+        if (np !== cp)       { toast('error', 'Passwords do not match.'); return; }
+
+        _sb.auth.updateUser({ password: np }).then(function (res) {
+          if (res.error) { toast('error', res.error.message); return; }
+          document.getElementById('dbFNewPw').value  = '';
+          document.getElementById('dbFConfirmPw').value = '';
+          toast('success', 'Password updated successfully.');
+        });
+      });
+    }
+
+    /* Order filter tabs */
+    var tabsEl = document.getElementById('dbOrderTabs');
+    if (tabsEl) {
+      tabsEl.addEventListener('click', function (e) {
+        var tab = e.target.closest('[data-filter]');
+        if (!tab) return;
+        tabsEl.querySelectorAll('.db-tab').forEach(function (t) { t.classList.remove('is-active'); });
+        tab.classList.add('is-active');
+        renderOrders(tab.dataset.filter);
+      });
+    }
+
+    /* Delete account */
+    var delBtn = document.getElementById('dbDeleteAccountBtn');
+    if (delBtn) {
+      delBtn.addEventListener('click', function () {
+        var m = document.getElementById('dbDeleteModal');
+        if (m) m.classList.remove('db-hidden');
+        document.body.style.overflow = 'hidden';
+      });
+    }
+
+    ['dbDeleteCancelBtn', 'dbDeleteModalClose'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('click', function () {
+        var m = document.getElementById('dbDeleteModal');
+        if (m) m.classList.add('db-hidden');
+        document.body.style.overflow = '';
+      });
+    });
+
+    var delInput = document.getElementById('dbDeleteConfirmInput');
+    if (delInput) {
+      delInput.addEventListener('input', function () {
+        var confirmBtn = document.getElementById('dbDeleteConfirmBtn');
+        if (confirmBtn) confirmBtn.disabled = delInput.value !== 'DELETE';
+      });
+    }
+
+    var delConfirm = document.getElementById('dbDeleteConfirmBtn');
+    if (delConfirm) {
+      delConfirm.addEventListener('click', function () {
+        toast('info', 'Please contact support to delete your account.');
+        var m = document.getElementById('dbDeleteModal');
+        if (m) m.classList.add('db-hidden');
+        document.body.style.overflow = '';
+      });
+    }
+
+    /* ESC closes modals */
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        closeAvModal();
+        var dm = document.getElementById('dbDeleteModal');
+        if (dm) dm.classList.add('db-hidden');
+        document.body.style.overflow = '';
+      }
+    });
+  }
+
+  /* ── Toast ──────────────────────────────────────────────────── */
+
+  function toast(type, message) {
+    var container = document.getElementById('dbToasts');
+    if (!container) return;
+    var icons = { success: 'ti-check', error: 'ti-x', info: 'ti-info-circle' };
+    var t = document.createElement('div');
+    t.className = 'db-toast db-toast-' + type;
+    t.innerHTML = '<i class="ti ' + (icons[type] || 'ti-info-circle') + '"></i><span>' + esc(message) + '</span>';
+    container.appendChild(t);
+    requestAnimationFrame(function () { requestAnimationFrame(function () { t.classList.add('is-visible'); }); });
+    setTimeout(function () {
+      t.classList.remove('is-visible');
+      t.addEventListener('transitionend', function () { t.remove(); }, { once: true });
+    }, 3500);
+  }
+
+  /* ── Count-up ───────────────────────────────────────────────── */
+
+  function countUp(el, target) {
+    if (isNaN(target)) return;
+    var start    = performance.now();
+    var duration = 800;
+    function step(now) {
+      var p   = Math.min((now - start) / duration, 1);
+      var eas = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eas);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ── Utilities ──────────────────────────────────────────────── */
+
+  function rankIdx(rank) {
+    for (var i = 0; i < RANKS.length; i++) { if (RANKS[i].name === rank.name) return i; }
+    return 0;
+  }
+
+  function statusClass(status) {
+    var s = (status || '').toLowerCase();
+    if (s.indexOf('complet') !== -1) return 'completed';
+    if (s.indexOf('progress') !== -1) return 'active';
+    return 'pending';
+  }
+
+  function fmtDate(str) {
+    if (!str) return '—';
+    try { return new Date(str).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); } catch (_) { return '—'; }
+  }
+
+  function esc(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /* Expose referral copy globally (called from inline onclick) */
+  window.dbCopyRef = function () {
+    var code = document.getElementById('dbRefCode');
+    if (code && navigator.clipboard) {
+      navigator.clipboard.writeText(code.textContent || '').then(function () { toast('success', 'Referral code copied!'); });
+    }
+  };
 
 })();
