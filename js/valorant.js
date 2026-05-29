@@ -237,7 +237,9 @@
   }
   function toggleRowHtml(key, label, badge, badgeCls, on, tip) {
     return '<div class="val-toggle-row ' + (on ? "active" : "") + '" data-toggle="' + esc(key) + '">' +
-      '<span class="nm">' + esc(label) + (tip ? ' <span class="val-tip-wrap" tabindex="0">i<span class="pop">' + esc(tip) + "</span></span>" : "") + "</span>" +
+      '<div class="val-toggle-info"><span class="nm">' + esc(label) + '</span>' +
+      (tip ? '<span class="val-toggle-desc">' + esc(tip) + '</span>' : '') +
+      '</div>' +
       '<span class="badge ' + (badgeCls || "") + '">' + esc(badge) + "</span>" +
       '<button type="button" class="val-switch ' + (on ? "on" : "") + '" data-switch="' + esc(key) + '" aria-pressed="' + on + '" aria-label="' + esc(label) + '"><span class="knob"></span></button></div>';
   }
@@ -443,13 +445,15 @@
     ];
     $("valConfigMount").innerHTML =
       '<div class="val-config val-config--natural"><div class="val-builder">' +
-        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 01 — Current</span><h3 class="val-step-title">Current Level</h3><span class="val-step-sub">Reach ranked-ready levels faster</span></div>' +
-          '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.current + '</span><span class="val-games-unit">Starting level<span class="v">$0.50 per level · 1–500 range</span></span></div>' +
-          sliderHtml(s.current, 1, 500, "lv-current", curPct) + '</div>' +
+        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 01 — Level Range</span><h3 class="val-step-title">Account Leveling</h3><span class="val-step-sub">$0.50 per level · 1–500 range</span></div>' +
+          '<div class="val-bp-sliders">' +
+            '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.current + '</span><span class="val-games-unit">From level</span></div>' +
+            sliderHtml(s.current, 1, 500, "lv-current", curPct) + '</div>' +
+            '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.desired + '</span><span class="val-games-unit">To level<span class="v">' + levels + (levels === 1 ? " level" : " levels") + ' to gain</span></span></div>' +
+            sliderHtml(s.desired, 1, 500, "lv-desired", desPct) + '</div>' +
+          '</div>' +
         '</div>' +
-        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 02 — Desired</span><h3 class="val-step-title">Desired Level</h3><span class="val-step-sub">Must be higher than current</span></div>' +
-          '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.desired + '</span><span class="val-games-unit">Target level<span class="v">' + levels + (levels === 1 ? " level" : " levels") + ' to gain</span></span></div>' +
-          sliderHtml(s.desired, 1, 500, "lv-desired", desPct) + '</div>' +
+        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 02 — Region</span><h3 class="val-step-title">Server &amp; Platform</h3></div>' +
           dropdownsHtml(s.server, s.platform, "lv-server", "lv-platform") +
         '</div>' +
         tabFaqsHtml(FAQS_LV) +
@@ -457,7 +461,7 @@
       '<div class="val-summary-wrap"><aside class="val-summary has-items" aria-label="Order summary"><span class="arc-hot-trace" aria-hidden="true"></span>' +
         summaryHeadLg() +
         '<div class="val-summary-scroll">' +
-          '<div class="val-current-sel"><div class="val-rank-icon" style="--tier-color:#e5c26b"><span class="glyph" style="font-size:18px">' + s.current + '→' + s.desired + '</span></div><div><span class="lbl">Your order</span><span class="v">Level ' + s.current + ' → ' + s.desired + ' · ' + levels + ' levels<br><span class="tier">' + esc(s.server) + ' · ' + esc(s.platform) + '</span></span></div></div>' +
+          '<div class="val-current-sel"><div><span class="lbl">Your order</span><span class="v">Level ' + s.current + ' → ' + s.desired + ' · ' + levels + ' levels<br><span class="tier">' + esc(s.server) + ' · ' + esc(s.platform) + '</span></span></div></div>' +
           '<div class="val-summary-block-label">Add-ons</div><div class="val-summary-addons-scroll">' +
             toggleRowHtml("priority", "Priority Start", "+20%", "", s.addons.priority, "Skip the queue — starts within the hour.") +
             toggleRowHtml("agents", "Agent Preference", "+10%", "", s.addons.agents, "Lock in the agents the booster plays while leveling.") +
@@ -499,7 +503,7 @@
       '<div class="val-summary-wrap"><aside class="val-summary has-items" aria-label="Order summary"><span class="arc-hot-trace" aria-hidden="true"></span>' +
         summaryHeadLg() +
         '<div class="val-summary-scroll">' +
-          '<div class="val-current-sel"><div class="val-rank-icon" style="--tier-color:#e5c26b"><span class="glyph" style="font-size:18px">' + s.current + '→' + s.desired + '</span></div><div><span class="lbl">Your order</span><span class="v">BP Tier ' + s.current + ' → ' + s.desired + ' · ' + levels + ' tiers<br><span class="tier">' + esc(s.server) + ' · ' + esc(s.platform) + '</span></span></div></div>' +
+          '<div class="val-current-sel"><div><span class="lbl">Your order</span><span class="v">BP Tier ' + s.current + ' → ' + s.desired + ' · ' + levels + ' tiers<br><span class="tier">' + esc(s.server) + ' · ' + esc(s.platform) + '</span></span></div></div>' +
           '<div class="val-summary-block-label">Active extras</div><div class="val-summary-addons-scroll">' +
             toggleRowHtml("priority", "Priority Start", "+20%", "", s.addons.priority, "Skip the queue — starts within the hour.") +
             toggleRowHtml("agents", "Agent Preference", "+10%", "", s.addons.agents, "Lock in agents during pass progression.") +
@@ -540,7 +544,7 @@
       '<div class="val-summary-wrap"><aside class="val-summary has-items" aria-label="Order summary"><span class="arc-hot-trace" aria-hidden="true"></span>' +
         summaryHeadLg() +
         '<div class="val-summary-scroll">' +
-          '<div class="val-current-sel"><div class="val-rank-icon" style="--tier-color:#e5c26b"><span class="glyph" style="font-size:24px">' + s.hours + 'h</span></div><div><span class="lbl">Your session</span><span class="v">' + s.hours + (s.hours === 1 ? " hour" : " hours") + ' of ' + esc(focusObj.name) + '<br><span class="tier">' + esc(s.server) + ' · ' + esc(s.platform) + '</span></span></div></div>' +
+          '<div class="val-current-sel"><div><span class="lbl">Your session</span><span class="v">' + s.hours + (s.hours === 1 ? " hour" : " hours") + ' of ' + esc(focusObj.name) + '<br><span class="tier">' + esc(s.server) + ' · ' + esc(s.platform) + '</span></span></div></div>' +
           '<div class="val-summary-block-label">Session</div>' +
           '<div class="val-toggle-row active" style="pointer-events:none"><span class="nm">' + esc(focusObj.name) + '</span><span class="badge free">' + s.hours + ' hr</span></div>' +
           '<div class="val-toggle-row active" style="pointer-events:none"><span class="nm">Platform</span><span class="badge">' + esc(s.platform) + '</span></div>' +
