@@ -93,7 +93,7 @@
   }
 
   function showSection(key, animate) {
-    var valid = ['overview', 'orders', 'tickets', 'rank', 'account', 'security'];
+    var valid = ['overview', 'orders', 'tickets', 'rank', 'account', 'security', 'discord'];
     if (valid.indexOf(key) === -1) key = 'overview';
 
     document.querySelectorAll('.db-section').forEach(function (s) {
@@ -144,8 +144,11 @@
       renderOrders();
       renderOrdersStats();
       renderTickets();
+      renderTicketsStats();
       renderRank();
       renderAccount();
+      renderSecurity();
+      renderDiscord();
     });
   }
 
@@ -368,6 +371,23 @@
 
   /* ── Tickets ────────────────────────────────────────────────── */
 
+  function ticketState(o) {
+    var s = (o.status || '').toLowerCase();
+    if (s.indexOf('complet') !== -1) return { label: 'Solved',        cls: 'completed' };
+    if (s.indexOf('progress') !== -1) return { label: 'Open',          cls: 'active' };
+    return { label: 'Waiting Reply', cls: 'pending' };
+  }
+
+  function renderTicketsStats() {
+    var el = document.getElementById('dbTicketsStats');
+    if (!el) return;
+    var ticketed = _orders.filter(function (o) { return !!o.discord_ticket_id; });
+    var open    = ticketed.filter(function (o) { return ticketState(o).cls === 'active'; }).length;
+    var waiting = ticketed.filter(function (o) { return ticketState(o).cls === 'pending'; }).length;
+    var solved  = ticketed.filter(function (o) { return ticketState(o).cls === 'completed'; }).length;
+    el.innerHTML = oStat(open, 'Open') + oStat(waiting, 'Waiting Reply') + oStat(solved, 'Solved');
+  }
+
   function renderTickets() {
     var body = document.getElementById('dbTicketsBody');
     if (!body) return;
@@ -376,25 +396,37 @@
     if (!ticketed.length) {
       body.innerHTML =
         '<div class="db-orders-empty">' +
-        '<i class="ti ti-brand-discord db-empty-icon"></i>' +
-        '<p class="db-empty-title">No active tickets</p>' +
-        '<a href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer" class="eb-btn-primary"><i class="ti ti-brand-discord"></i> Open Discord</a>' +
+        '<i class="ti ti-ticket db-empty-icon"></i>' +
+        '<p class="db-empty-title">No tickets yet</p>' +
+        '<a href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer" class="eb-btn-primary"><i class="ti ti-brand-discord"></i> Open a Ticket on Discord</a>' +
+        '<div class="db-help-topics">' +
+          helpTopic('ti-package', 'Where is my order?') +
+          helpTopic('ti-arrows-exchange', 'Request a refund or change') +
+          helpTopic('ti-user-star', 'Switch my assigned booster') +
+        '</div>' +
         '</div>';
       return;
     }
 
     body.innerHTML =
       '<div class="db-table-wrap"><table class="db-table">' +
-      '<thead><tr><th>Ticket ID</th><th>Service</th><th class="db-date-cell">Date</th><th></th></tr></thead>' +
+      '<thead><tr><th>Subject</th><th>Status</th><th class="db-date-cell">Last Update</th><th>Action</th></tr></thead>' +
       '<tbody>' + ticketed.map(function (o) {
+        var st = ticketState(o);
         return '<tr class="db-order-row">' +
-          '<td><code class="db-ticket-id">#' + esc(String(o.discord_ticket_id)) + '</code></td>' +
-          '<td>' + esc(o.service_name || o.service || '—') + '</td>' +
+          '<td class="db-service-cell">' + esc(o.service_name || o.service || 'Support ticket') + '</td>' +
+          '<td><span class="db-status-badge db-status-' + st.cls + '">' + st.label + '</span></td>' +
           '<td class="db-date-cell">' + fmtDate(o.created_at || o.date) + '</td>' +
           '<td><a href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer" class="db-ticket-btn"><i class="ti ti-external-link"></i> Open</a></td>' +
           '</tr>';
       }).join('') +
       '</tbody></table></div>';
+  }
+
+  function helpTopic(icon, label) {
+    return '<a class="db-help-topic" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer">' +
+      '<i class="ti ' + icon + '"></i><span>' + esc(label) + '</span>' +
+      '<i class="ti ti-arrow-right db-help-topic-arrow"></i></a>';
   }
 
   /* ── Rank section ───────────────────────────────────────────── */
@@ -404,6 +436,16 @@
     var rank  = computeRank(spent);
     var ridx  = rankIdx(rank);
     var next  = RANKS[ridx + 1];
+
+    var facts = document.getElementById('dbRankFacts');
+    if (facts) {
+      var remaining = next ? Math.max(0, next.min - spent) : 0;
+      facts.innerHTML =
+        oStat('$' + spent.toFixed(2),               'Total Spent') +
+        oStat(rank.discount + '%',                  'Your Discount') +
+        oStat(next ? next.name : 'Max',             'Next Rank') +
+        oStat(next ? '$' + remaining.toFixed(2) : 'Achieved', 'To Next Rank');
+    }
 
     var hero = document.getElementById('dbRankHero');
     if (hero) {
@@ -477,6 +519,86 @@
       var m = _profile.avatar_url.match(/elysium_unique_avatar_(\d+)\.png$/);
       if (m) { _selectedAvNum = m[1]; markAvSelected(_selectedAvNum); }
     }
+
+    /* Profile summary + aside */
+    var rank = computeRank(parseFloat(_profile.total_spent) || 0);
+    setText('dbAccName', name || 'Champion');
+    setText('dbAccEmail', _user.email || '');
+    setText('dbAccRankBadge', rank.name);
+    setText('dbAccRefCode', _profile.referral_code || '—');
+    setText('dbAccMember', fmtDate(_user.created_at));
+
+    var statusEl = document.getElementById('dbAccStatusList');
+    if (statusEl) {
+      var emailOk   = !!_user.email_confirmed_at;
+      var discordOk = !!_profile.discord_id;
+      statusEl.innerHTML =
+        infoRow('Account', 'Active', true) +
+        infoRow('Email', emailOk ? 'Verified' : 'Unverified', emailOk) +
+        infoRow('Discord', discordOk ? 'Linked' : 'Not linked', discordOk);
+    }
+  }
+
+  function infoRow(label, val, ok) {
+    return '<div class="db-info-row"><span class="db-info-row-label">' + esc(label) + '</span>' +
+      '<span class="db-info-row-val ' + (ok ? 'is-ok' : 'is-warn') + '">' +
+      '<i class="ti ' + (ok ? 'ti-circle-check' : 'ti-circle-x') + '"></i>' + esc(val) + '</span></div>';
+  }
+
+  /* ── Security ───────────────────────────────────────────────── */
+
+  function renderSecurity() {
+    var sessions = document.getElementById('dbSessionsList');
+    if (sessions) {
+      var last = _user.last_sign_in_at ? fmtDateTime(_user.last_sign_in_at) : 'Active now';
+      sessions.innerHTML =
+        '<div class="db-session-row">' +
+        '<i class="ti ti-device-desktop db-session-device-icon"></i>' +
+        '<div class="db-session-info">' +
+        '<span class="db-session-device">This device</span>' +
+        '<span class="db-session-time">Last sign-in: ' + esc(last) + '</span>' +
+        '</div>' +
+        '<span class="db-session-current-badge">Current</span>' +
+        '</div>';
+    }
+
+    var checklist = document.getElementById('dbChecklist');
+    if (checklist) {
+      var emailOk   = !!_user.email_confirmed_at;
+      var discordOk = !!_profile.discord_id;
+      checklist.innerHTML =
+        checkRow('Email address verified', emailOk) +
+        checkRow('Password protected', true) +
+        checkRow('Discord account linked', discordOk) +
+        checkRow('Two-factor authentication', false);
+    }
+  }
+
+  function checkRow(label, done) {
+    return '<div class="db-check-row ' + (done ? 'db-check-done' : 'db-check-todo') + '">' +
+      '<span class="db-check-icon"><i class="ti ' + (done ? 'ti-check' : 'ti-minus') + '"></i></span>' +
+      '<span class="db-check-text">' + esc(label) + '</span></div>';
+  }
+
+  /* ── Discord ────────────────────────────────────────────────── */
+
+  function renderDiscord() {
+    var el = document.getElementById('dbDiscordConnect');
+    if (!el) return;
+    var linked = !!_profile.discord_id;
+    el.innerHTML =
+      '<div class="db-discord-conn-head">' +
+        '<div class="db-discord-conn-mark"><i class="ti ti-brand-discord"></i></div>' +
+        '<div class="db-discord-conn-info">' +
+          '<div class="db-discord-conn-label">Connection Status</div>' +
+          '<div class="db-discord-conn-status ' + (linked ? 'is-linked' : 'is-unlinked') + '">' +
+            '<span class="db-discord-conn-dot"></span>' + (linked ? 'Linked' : 'Not linked') +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      (linked
+        ? '<div class="db-discord-conn-tag">Linked account: <strong>' + esc(_profile.discord_id) + '</strong></div>'
+        : '<div class="db-discord-conn-tag">Add your Discord tag in <strong>My Account</strong> so we can reach you about orders.</div>');
   }
 
   function applyAvPreview(url, name) {
@@ -637,6 +759,13 @@
       });
     }
 
+    /* Two-factor auth (UI ready; backend MFA enrolled with our team) */
+    function twofaInfo() { toast('info', 'Two-factor setup is handled by our team on Discord. Open a ticket to enable it.'); }
+    var twofaBtn = document.getElementById('db2faBtn');
+    if (twofaBtn) twofaBtn.addEventListener('click', twofaInfo);
+    var twofaToggle = document.getElementById('db2faToggle');
+    if (twofaToggle) twofaToggle.addEventListener('click', twofaInfo);
+
     /* Order filter tabs */
     var tabsEl = document.getElementById('dbOrderTabs');
     if (tabsEl) {
@@ -751,17 +880,29 @@
     try { return new Date(str).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); } catch (_) { return '—'; }
   }
 
+  function fmtDateTime(str) {
+    if (!str) return '—';
+    try { return new Date(str).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); } catch (_) { return '—'; }
+  }
+
+  function setText(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
+
   function esc(str) {
     return String(str || '')
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
   /* Expose referral copy globally (called from inline onclick) */
-  window.dbCopyRef = function () {
-    var code = document.getElementById('dbRefCode');
+  function copyCode(id) {
+    var code = document.getElementById(id);
     if (code && navigator.clipboard) {
       navigator.clipboard.writeText(code.textContent || '').then(function () { toast('success', 'Referral code copied!'); });
     }
-  };
+  }
+  window.dbCopyRef    = function () { copyCode('dbRefCode'); };
+  window.dbCopyAccRef = function () { copyCode('dbAccRefCode'); };
 
 })();
