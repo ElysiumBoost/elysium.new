@@ -98,9 +98,20 @@
     var lo = addons.express ? Math.max(0, base - 1) : base;
     return [lo, lo + 1];
   }
+  var RANKED_WINS_PRICES = {
+    'iron-1': 2.48, 'iron-2': 2.48, 'iron-3': 2.48,
+    'bronze-1': 2.48, 'bronze-2': 2.48, 'bronze-3': 2.48,
+    'silver-1': 2.97, 'silver-2': 3.06, 'silver-3': 3.15,
+    'gold-1': 3.60, 'gold-2': 4.05, 'gold-3': 4.95,
+    'platinum-1': 5.40, 'platinum-2': 6.30, 'platinum-3': 7.20,
+    'diamond-1': 8.55, 'diamond-2': 10.80, 'diamond-3': 12.60,
+    'ascendant-1': 18.00, 'ascendant-2': 23.40, 'ascendant-3': 28.80,
+    'immortal-1': 36.00, 'immortal-2': 52.92, 'immortal-3': 57.33,
+    'radiant-1': 57.33
+  };
   function calcWinsPrice(s) {
-    var idx = PLACEMENT_TIERS.findIndex(function (t) { return t.id === s.tier; });
-    var perWin = (3.49 + idx * 1.15) * Math.max(0.7, 1 - (s.rrPerWin - 22) * 0.012);
+    var key = s.tier + '-' + (s.div + 1);
+    var perWin = RANKED_WINS_PRICES[key] || 2.48;
     var price = perWin * s.wins;
     if (s.mode === "duo") price *= 1.30;
     if (s.platform !== "PC") price *= 1.08;
@@ -472,7 +483,7 @@
   function renderLeveling() {
     var s = state.lv;
     var levels = Math.max(0, s.desired - s.current);
-    var price = calcLevelPrice(s, 0.50);
+    var price = calcLevelPrice(s, 12.74);
     var eta = levelETA(levels, s.addons, 25);
     var curPct = ((s.current - 1) / 499) * 100;
     var desPct = ((s.desired - 1) / 499) * 100;
@@ -482,7 +493,7 @@
     ];
     $("valConfigMount").innerHTML =
       '<div class="val-config val-config--natural"><div class="val-builder">' +
-        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 01 — Level Range</span><h3 class="val-step-title">Account Leveling</h3><span class="val-step-sub">$0.50 per level · 1–500 range</span></div>' +
+        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 01 — Level Range</span><h3 class="val-step-title">Account Leveling</h3><span class="val-step-sub">$12.74 per level · 1–500 range</span></div>' +
           '<div class="val-bp-sliders">' +
             '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.current + '</span><span class="val-games-unit">From level</span></div>' +
             sliderHtml(s.current, 1, 500, "lv-current", curPct) + '</div>' +
@@ -515,7 +526,7 @@
   function renderBattlePass() {
     var s = state.bp;
     var levels = Math.max(0, s.desired - s.current);
-    var price = calcLevelPrice(s, 0.50);
+    var price = calcLevelPrice(s, 7.22);
     var eta = levelETA(levels, s.addons, 8);
     var curPct = ((s.current - 1) / 54) * 100;
     var desPct = ((s.desired - 1) / 54) * 100;
@@ -527,7 +538,7 @@
       '<div class="val-config"><div class="val-builder">' +
         '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 01 — Battle Pass</span><h3 class="val-step-title">Battle Pass Levels</h3><span class="val-step-sub">Complete your Battle Pass faster</span></div>' +
           '<div class="val-bp-sliders">' +
-            '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.current + '</span><span class="val-games-unit">Current level<span class="v">$0.50 per level</span></span></div>' +
+            '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.current + '</span><span class="val-games-unit">Current level<span class="v">$7.22 per level</span></span></div>' +
             sliderHtml(s.current, 1, 55, "bp-current", curPct) + '</div>' +
             '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.desired + '</span><span class="val-games-unit">Desired level<span class="v">' + levels + (levels === 1 ? " tier" : " tiers") + ' to gain</span></span></div>' +
             sliderHtml(s.desired, 1, 55, "bp-desired", desPct) + '</div>' +
