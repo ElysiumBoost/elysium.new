@@ -96,12 +96,83 @@ function _updateNavUI(user) {
     signInBtns.forEach(el => el.style.display = 'none');
     userMenus.forEach(el  => el.style.display = '');
     userNames.forEach(el  => el.textContent = name);
-    avatarEls.forEach(el  => el.textContent = initials);
+    avatarEls.forEach(el  => {
+      if (!el.getAttribute('data-has-img')) el.textContent = initials;
+    });
     signOutBtns.forEach(el=> el.style.display = '');
+    _loadAvatarFromProfile(user.id);
   } else {
     signInBtns.forEach(el => el.style.display = '');
     userMenus.forEach(el  => el.style.display = 'none');
     signOutBtns.forEach(el=> el.style.display = 'none');
+    _applyAvatarUrl(null);
+    window._ebCurrentAvatarUrl = '';
+  }
+}
+
+function _applyAvatarUrl(url) {
+  document.querySelectorAll('[data-eb-avatar]').forEach(function(el) {
+    if (url) {
+      el.innerHTML = '<img src="' + url + '" alt="Your avatar">';
+      el.setAttribute('data-has-img', 'true');
+    } else {
+      el.innerHTML = '';
+      el.removeAttribute('data-has-img');
+    }
+  });
+}
+
+async function _loadAvatarFromProfile(userId) {
+  try {
+    const { data } = await _sb.from('profiles').select('avatar_url').eq('id', userId).maybeSingle();
+    if (data && data.avatar_url) {
+      _applyAvatarUrl(data.avatar_url);
+      window._ebCurrentAvatarUrl = data.avatar_url;
+    }
+  } catch (_) {}
+}
+
+function ebOpenAvatar() {
+  const modal = document.getElementById('ebAvatarModal');
+  if (!modal) return;
+  modal.classList.remove('eb-hidden');
+  document.body.style.overflow = 'hidden';
+  const current = window._ebCurrentAvatarUrl || '';
+  modal.querySelectorAll('[data-av-num]').forEach(function(btn) {
+    const filename = 'elysium_unique_avatar_' + btn.dataset.avNum + '.png';
+    btn.classList.toggle('is-selected', current.endsWith(filename));
+  });
+}
+
+function ebCloseAvatar() {
+  const modal = document.getElementById('ebAvatarModal');
+  if (!modal) return;
+  modal.classList.add('eb-hidden');
+  document.body.style.overflow = '';
+}
+
+function ebCloseAvatarOnOverlay(e) {
+  if (e.target === document.getElementById('ebAvatarModal')) ebCloseAvatar();
+}
+
+async function ebSelectAvatar(num) {
+  const url = 'assets/avatars/elysium_unique_avatar_' + num + '.png';
+  const statusEl = document.getElementById('ebAvatarStatus');
+  _applyAvatarUrl(url);
+  window._ebCurrentAvatarUrl = url;
+  const modal = document.getElementById('ebAvatarModal');
+  if (modal) {
+    modal.querySelectorAll('[data-av-num]').forEach(function(btn) {
+      btn.classList.toggle('is-selected', btn.dataset.avNum === num);
+    });
+  }
+  if (statusEl) statusEl.textContent = 'Saving…';
+  const user = ebGetUser();
+  if (!user) { if (statusEl) statusEl.textContent = ''; return; }
+  const { error } = await _sb.from('profiles').upsert({ id: user.id, avatar_url: url }, { onConflict: 'id' });
+  if (statusEl) {
+    statusEl.textContent = error ? 'Failed to save.' : 'Saved!';
+    setTimeout(function() { if (statusEl) statusEl.textContent = ''; }, 2000);
   }
 }
 
@@ -126,7 +197,7 @@ function _showAuthSuccess(msg, elId = 'ebAuthMsg') { const el = document.getElem
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-eb-login]').forEach(el => el.addEventListener('click', e => { e.preventDefault(); ebOpen(); }));
   document.querySelectorAll('[data-eb-signout]').forEach(el => el.addEventListener('click', e => { e.preventDefault(); ebSignOut(); }));
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') { ebClose(); _closeUserMenu(); } });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { ebClose(); ebCloseAvatar(); _closeUserMenu(); } });
 
   // User dropdown toggle
   const menu    = document.getElementById('ebUserMenu');
@@ -148,6 +219,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (menu.classList.contains('is-open') && !menu.contains(e.target)) _closeUserMenu();
     });
   }
+
+  // Avatar circle click — opens picker, stops dropdown from toggling
+  document.querySelectorAll('[data-eb-open-avatar]').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      _closeUserMenu();
+      ebOpenAvatar();
+    });
+  });
 });
 
 window.ElysiumAuth = { getUser: ebGetUser, getSession: ebGetSession, isLoggedIn: ebIsLoggedIn, signOut: ebSignOut, signInGoogle: ebAuthGoogle, signInApple: ebAuthApple, signInDiscord: ebAuthDiscord, signIn: ebAuthEmailSignIn, signUp: ebAuthEmailSignUp, forgotPassword: ebForgotPassword, open: ebOpen, close: ebClose };
