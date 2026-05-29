@@ -354,7 +354,7 @@
   var elCartFoot = $('arcCartFoot');
   var elCopyCta = $('arcCopyCta');
   var elBackBtn = $('arcBackBtn');
-  var elBackBtn2 = $('arcBackBtn2');
+  var elArtBack = $('arcArtBack');
   var elReviewsRail = $('arcReviewsRail');
   var elFaqList = $('arcFaqList');
   var elFooter = $('siteFooter');
@@ -847,7 +847,10 @@
 
     function render() {
       var tab = BP_TABS[activeTab];
-      var allSelected = tab.items.every(function (_, i) { return selected[tab.id + '-' + i]; });
+      var allSelected = tab.items.every(function (_, i) {
+      var k = tab.id + '-' + i;
+      return selected[k] && selected[k].qty > 0;
+    });
 
       var html =
         '<div class="arc-card">' +
@@ -870,10 +873,10 @@
           '<div class="arc-bp-grid' + (tab.id === 'backpack' ? ' arc-bp-grid-2col' : '') + '">' +
             tab.items.map(function (item, i) {
               var key = tab.id + '-' + i;
-              var isOn = !!selected[key];
+              var isOn = !!(selected[key] && selected[key].qty > 0);
               var tier = tierChoices[key] || defaultTier(item);
               var p = priceFor(item, tab.id, tier);
-              var cellHtml = '<button type="button" class="arc-bp-cell' + (isOn ? ' on' : '') + '" data-idx="' + i + '">';
+              var cellHtml = '<div class="arc-bp-cell' + (isOn ? ' on' : '') + '" data-idx="' + i + '">';
               cellHtml += '<span class="arc-bp-cell-name">' + escHtml(item.name) + '</span>';
               if (item.tiers) {
                 cellHtml += '<span class="arc-bp-tier-row">';
@@ -883,7 +886,8 @@
                 cellHtml += '</span>';
               }
               cellHtml += '<span class="arc-bp-cell-price">' + fmtDollar(p) + '</span>';
-              cellHtml += '</button>';
+              cellHtml += '<div id="bp-step-' + key + '"></div>';
+              cellHtml += '</div>';
               return cellHtml;
             }).join('') +
           '</div>' +
@@ -891,27 +895,30 @@
 
       configPanel.innerHTML = html;
 
+      // Attach qty steppers
+      tab.items.forEach(function (item, i) {
+        var key = tab.id + '-' + i;
+        var slotEl = document.getElementById('bp-step-' + key);
+        if (!slotEl) return;
+        var currentQty = (selected[key] && selected[key].qty) || 0;
+        var stepper = createStepper(currentQty, 0, 99, function (v) {
+          if (!selected[key]) {
+            var tier = tierChoices[key] || defaultTier(item);
+            selected[key] = { tier: tier, qty: v };
+          } else {
+            selected[key].qty = v;
+          }
+          var cellEl = slotEl.closest('.arc-bp-cell');
+          if (cellEl) cellEl.classList.toggle('on', v > 0);
+          syncCart();
+        });
+        slotEl.appendChild(stepper);
+      });
+
       // Tab clicks
       qsa('.arc-bp-tab', configPanel).forEach(function (btn) {
         btn.addEventListener('click', function () {
           activeTab = parseInt(btn.getAttribute('data-tabidx'), 10);
-          render();
-        });
-      });
-
-      // Cell clicks
-      qsa('.arc-bp-cell', configPanel).forEach(function (cell) {
-        cell.addEventListener('click', function (e) {
-          if (e.target.closest('.arc-bp-tier')) return;
-          var idx = parseInt(cell.getAttribute('data-idx'), 10);
-          var key = tab.id + '-' + idx;
-          if (selected[key]) {
-            delete selected[key];
-          } else {
-            var item = tab.items[idx];
-            var tier = tierChoices[key] || defaultTier(item);
-            selected[key] = { tier: tier };
-          }
           render();
         });
       });
@@ -938,8 +945,10 @@
           } else {
             tab.items.forEach(function (item, i) {
               var key = tab.id + '-' + i;
-              var tier = tierChoices[key] || defaultTier(item);
-              selected[key] = { tier: tier };
+              if (!selected[key] || selected[key].qty < 1) {
+                var tier = tierChoices[key] || defaultTier(item);
+                selected[key] = { tier: tier, qty: 1 };
+              }
             });
           }
           render();
@@ -954,12 +963,13 @@
       BP_TABS.forEach(function (tab) {
         tab.items.forEach(function (item, i) {
           var key = tab.id + '-' + i;
-          if (!selected[key]) return;
+          if (!selected[key] || selected[key].qty < 1) return;
           var tier = selected[key].tier;
+          var qty = selected[key].qty;
           var p = priceFor(item, tab.id, tier);
           var sub = tab.sub;
           if (tier) sub += ' · Tier ' + tier;
-          items.push({ id: 'bp-' + key, name: item.name, qty: 1, price: p, color: tab.color, sub: sub });
+          items.push({ id: 'bp-' + key, name: item.name, qty: qty, price: p * qty, color: tab.color, sub: sub });
         });
       });
       cart.replaceAll(items);
@@ -2446,7 +2456,7 @@
      BACK BUTTONS
      ──────────────────────────────────────────────────────────── */
   if (elBackBtn) elBackBtn.addEventListener('click', closeService);
-  if (elBackBtn2) elBackBtn2.addEventListener('click', closeService);
+  if (elArtBack) elArtBack.addEventListener('click', closeService);
 
   /* ────────────────────────────────────────────────────────────
      ESC KEY
@@ -2512,8 +2522,8 @@
           elCopyCta.textContent = '';
           // Restore the icon + text via innerHTML for the SVG
           elCopyCta.innerHTML =
-            '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-            'Confirm Order';
+            '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 3H4L5 11H13L14 5H5" stroke="currentColor" stroke-width="1.4"/><circle cx="6" cy="13.5" r="0.8" fill="currentColor"/><circle cx="12" cy="13.5" r="0.8" fill="currentColor"/></svg>' +
+            'Add to Cart';
         }, 2000);
       });
     });

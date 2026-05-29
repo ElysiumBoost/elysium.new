@@ -564,6 +564,15 @@ body.arc-locked { overflow: hidden; }
 }
 .arc-back:hover { color: var(--gold-bright); border-color: var(--gold); background: rgba(201,168,76,0.06); }
 
+.arc-art-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-bottom: 12px;
+  font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.22em;
+  color: var(--text-dim); text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+.arc-art-back:hover { color: var(--gold-bright); }
+
 /* ──────────────────────────────────────────────────────────────
    LEFT -- Art Panel
    ────────────────────────────────────────────────────────────── */
@@ -923,6 +932,8 @@ body.arc-locked { overflow: hidden; }
 }
 
 .arc-bp-cell.on .arc-bp-cell-price { color: var(--gold-bright); }
+
+.arc-bp-cell .arc-stepper { width: 100%; }
 
 /* tier pills inside a blueprint cell */
 .arc-bp-tier-row { display: inline-flex; gap: 4px; }
