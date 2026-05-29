@@ -4,163 +4,283 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard — Elysium Boost</title>
-  <meta name="description" content="Manage your Elysium Boost orders, rank, and account settings.">
+  <meta name="description" content="Your Elysium Boost dashboard — orders, rank, and account.">
+  <link rel="icon" href="../assets/elysium-logo-mark.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/dashboard.css">
 </head>
-<body class="db-page">
+<body class="db-body">
 
-  <div class="db-layout">
+  <div class="db-bg" aria-hidden="true"></div>
+  <div class="db-toasts" id="dbToasts" aria-live="polite" aria-atomic="false"></div>
 
-    <!-- ── Sidebar ── -->
-    <aside class="db-sidebar">
-      <div class="db-sidebar-brand">
-        <a href="../index.html" class="db-brand-link" aria-label="Elysium Boost home">
-          <img src="../assets/elysium-logo-mark.png" alt="Elysium Boost" class="db-brand-logo" loading="lazy">
-        </a>
-      </div>
+  <div class="db-shell">
 
-      <div class="db-profile-wrap">
-        <div class="db-profile-avatar" id="dbSidebarAvatar">EB</div>
-        <div class="db-profile-name" id="dbSidebarUsername">Champion</div>
-        <div class="db-profile-rank-badge" id="dbSidebarRank">Veteran</div>
+    <!-- ══ Sidebar ══ -->
+    <aside class="db-sidebar" id="dbSidebar">
+
+      <a href="../index.html" class="db-sidebar-logo" aria-label="Elysium Boost home">
+        <img src="../assets/elysium-logo-mark.png" alt="Elysium Boost" width="32" height="32" loading="eager">
+        <span>Elysium</span>
+      </a>
+
+      <div class="db-sidebar-profile">
+        <button class="db-avatar-wrap" id="dbAvatarWrap" type="button" aria-label="Change avatar">
+          <div class="db-avatar-circle" id="dbAvatarCircle">EB</div>
+          <div class="db-avatar-overlay" aria-hidden="true">
+            <i class="ti ti-camera"></i>
+            <span>Change</span>
+          </div>
+        </button>
+        <div class="db-profile-text">
+          <div class="db-greeting" id="dbGreeting">Good evening</div>
+          <div class="db-profile-name" id="dbProfileName">Champion</div>
+          <div class="db-profile-email" id="dbProfileEmail">—</div>
+        </div>
+        <div class="db-rank-badge" id="dbRankBadge" aria-label="Your rank">
+          <i class="ti ti-crown"></i>
+          <span id="dbRankBadgeName">Veteran</span>
+        </div>
       </div>
 
       <nav class="db-nav" aria-label="Dashboard navigation">
-        <button class="db-nav-item is-active" type="button" data-section="orders">
-          <svg class="db-nav-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M7 7h6M7 10h6M7 13h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-          My Orders
-        </button>
-        <button class="db-nav-item" type="button" data-section="rank">
-          <svg class="db-nav-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M10 2l2.09 4.26L17 7.27l-3.5 3.41.83 4.83L10 13.27l-4.33 2.24.83-4.83L3 7.27l4.91-.01L10 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-          </svg>
-          Elysium Rank
-        </button>
-        <button class="db-nav-item" type="button" data-section="account">
-          <svg class="db-nav-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M3 17c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-          My Account
-        </button>
-        <a class="db-nav-item db-nav-external" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer">
-          <svg class="db-nav-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M16.93 4.01A16.27 16.27 0 0013 3a.06.06 0 00-.06.03c-.16.28-.34.65-.46.94a15.05 15.05 0 00-4.96 0 9.54 9.54 0 00-.47-.94A.06.06 0 007 3a16.22 16.22 0 00-3.93 1.01.06.06 0 00-.02.02C1.19 7.38.7 10.65.95 13.89a.07.07 0 00.03.05 16.35 16.35 0 004.93 2.49.06.06 0 00.07-.02c.38-.52.72-1.07 1.01-1.65a.06.06 0 00-.03-.08 10.77 10.77 0 01-1.54-.73.06.06 0 010-.1c.1-.08.21-.16.31-.24a.06.06 0 01.06-.01c3.23 1.47 6.73 1.47 9.92 0a.06.06 0 01.06.01c.1.08.2.16.31.24a.06.06 0 010 .1c-.49.29-1 .53-1.54.73a.06.06 0 00-.03.08c.3.58.64 1.13 1.01 1.65a.06.06 0 00.07.02 16.3 16.3 0 004.94-2.49.06.06 0 00.03-.05c.3-3.68-.5-6.92-2.06-9.86a.05.05 0 00-.03-.02z" stroke="currentColor" stroke-width="0" fill="currentColor"/>
-          </svg>
-          Discord
+        <a class="db-nav-item is-active" href="#overview" data-section="overview">
+          <i class="ti ti-layout-dashboard"></i><span>Overview</span>
+        </a>
+        <a class="db-nav-item" href="#orders" data-section="orders">
+          <i class="ti ti-shopping-bag"></i><span>My Orders</span>
+          <span class="db-nav-badge" id="dbNavOrdersBadge" hidden>0</span>
+        </a>
+        <a class="db-nav-item" href="#tickets" data-section="tickets">
+          <i class="ti ti-ticket"></i><span>My Tickets</span>
+        </a>
+        <a class="db-nav-item" href="#rank" data-section="rank">
+          <i class="ti ti-crown"></i><span>Elysium Rank</span>
+        </a>
+        <a class="db-nav-item" href="#account" data-section="account">
+          <i class="ti ti-user"></i><span>My Account</span>
+        </a>
+        <a class="db-nav-item" href="#security" data-section="security">
+          <i class="ti ti-lock"></i><span>Security</span>
         </a>
         <div class="db-nav-sep" role="separator"></div>
-        <button class="db-nav-item db-nav-logout" type="button" id="dbLogout">
-          <svg class="db-nav-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M13 15l4-5-4-5M17 10H7M11 3H5a1 1 0 00-1 1v12a1 1 0 001 1h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Logout
+        <a class="db-nav-item db-nav-discord" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer">
+          <i class="ti ti-brand-discord"></i><span>Discord</span>
+          <span class="db-discord-dot" aria-hidden="true"></span>
+        </a>
+        <button class="db-nav-item db-nav-logout" type="button" id="dbNavLogout">
+          <i class="ti ti-logout"></i><span>Logout</span>
         </button>
       </nav>
+
     </aside>
 
-    <!-- ── Main Content ── -->
+    <!-- ══ Main ══ -->
     <main class="db-main" id="dbMain">
 
-      <!-- My Orders -->
-      <section class="db-section" id="dbSectionOrders" aria-label="My Orders">
-        <header class="db-section-header">
-          <h1 class="db-section-title">My Orders</h1>
-        </header>
-
-        <div class="db-stats-row">
-          <div class="db-stat-card">
-            <span class="db-stat-value" id="dbStatTotal">—</span>
-            <span class="db-stat-label">Total Orders</span>
+      <!-- Overview -->
+      <section class="db-section" id="dbSectionOverview">
+        <div class="db-section-hd">
+          <h1 class="db-section-title">Overview</h1>
+        </div>
+        <div class="db-stats-grid" id="dbStatsGrid">
+          <div class="db-stat-card"><div class="db-skel db-skel-stat"></div></div>
+          <div class="db-stat-card"><div class="db-skel db-skel-stat"></div></div>
+          <div class="db-stat-card"><div class="db-skel db-skel-stat"></div></div>
+          <div class="db-stat-card"><div class="db-skel db-skel-stat"></div></div>
+        </div>
+        <div class="db-overview-grid">
+          <div class="db-card db-last-order-card" id="dbLastOrderCard">
+            <div class="db-skel db-skel-block"></div>
           </div>
-          <div class="db-stat-card">
-            <span class="db-stat-value" id="dbStatSpent">—</span>
-            <span class="db-stat-label">Total Spent</span>
+          <div class="db-card db-rank-progress-card" id="dbRankProgressCard">
+            <div class="db-skel db-skel-block"></div>
           </div>
-          <div class="db-stat-card">
-            <span class="db-stat-value" id="dbStatInProgress">—</span>
-            <span class="db-stat-label">In Progress</span>
+          <div class="db-card db-referral-card" id="dbReferralCard">
+            <div class="db-skel db-skel-block"></div>
           </div>
         </div>
+      </section>
 
-        <div class="db-orders-wrap">
-          <div class="db-orders-list" id="dbOrdersList">
-            <div class="db-orders-loading" id="dbOrdersLoading">Loading orders…</div>
+      <!-- My Orders -->
+      <section class="db-section db-hidden" id="dbSectionOrders">
+        <div class="db-section-hd">
+          <h1 class="db-section-title">My Orders</h1>
+          <div class="db-filter-tabs" id="dbOrderTabs" role="tablist" aria-label="Filter orders">
+            <button class="db-tab is-active" data-filter="all"       type="button" role="tab">All</button>
+            <button class="db-tab"           data-filter="active"    type="button" role="tab">Active</button>
+            <button class="db-tab"           data-filter="completed" type="button" role="tab">Completed</button>
+            <button class="db-tab"           data-filter="pending"   type="button" role="tab">Pending</button>
           </div>
+        </div>
+        <div class="db-orders-body" id="dbOrdersBody">
+          <div class="db-skel db-skel-table"></div>
+        </div>
+      </section>
+
+      <!-- My Tickets -->
+      <section class="db-section db-hidden" id="dbSectionTickets">
+        <div class="db-section-hd">
+          <h1 class="db-section-title">My Tickets</h1>
+          <a class="eb-btn-primary db-header-btn" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer">
+            <i class="ti ti-plus"></i> Open New Ticket
+          </a>
+        </div>
+        <div class="db-tickets-body" id="dbTicketsBody">
+          <div class="db-skel db-skel-table"></div>
         </div>
       </section>
 
       <!-- Elysium Rank -->
-      <section class="db-section db-hidden" id="dbSectionRank" aria-label="Elysium Rank">
-        <header class="db-section-header">
+      <section class="db-section db-hidden" id="dbSectionRank">
+        <div class="db-section-hd">
           <h1 class="db-section-title">Elysium Rank</h1>
-          <p class="db-section-sub">Your rank is determined by your total spending with Elysium Boost.</p>
-        </header>
-
-        <div class="db-rank-current-wrap" id="dbRankCurrentWrap">
-          <div class="db-rank-current-card">
-            <span class="db-rank-current-label">Current Rank</span>
-            <span class="db-rank-current-name" id="dbRankCurrentName">Veteran</span>
-            <div class="db-rank-progress-wrap">
-              <div class="db-rank-progress-bar">
-                <div class="db-rank-progress-fill" id="dbRankProgressFill"></div>
-              </div>
-              <span class="db-rank-progress-text" id="dbRankProgressText"></span>
-            </div>
-          </div>
         </div>
-
-        <div class="db-rank-tiers" id="dbRankTiers"></div>
+        <div class="db-rank-hero" id="dbRankHero">
+          <div class="db-skel db-skel-rank-hero"></div>
+        </div>
+        <div class="db-rank-tiers-grid" id="dbRankTiersGrid">
+          <div class="db-skel db-skel-tier"></div>
+          <div class="db-skel db-skel-tier"></div>
+          <div class="db-skel db-skel-tier"></div>
+          <div class="db-skel db-skel-tier"></div>
+          <div class="db-skel db-skel-tier"></div>
+        </div>
       </section>
 
       <!-- My Account -->
-      <section class="db-section db-hidden" id="dbSectionAccount" aria-label="My Account">
-        <header class="db-section-header">
+      <section class="db-section db-hidden" id="dbSectionAccount">
+        <div class="db-section-hd">
           <h1 class="db-section-title">My Account</h1>
-        </header>
-
+        </div>
         <div class="db-account-layout">
+          <div class="db-account-av-col">
+            <h2 class="db-col-title">Choose Avatar</h2>
+            <div class="db-av-preview-wrap">
+              <div class="db-av-preview" id="dbAvPreview">EB</div>
+            </div>
+            <div class="db-av-grid" id="dbAvGrid" role="radiogroup" aria-label="Select avatar"></div>
+          </div>
+          <div class="db-account-form-col">
+            <h2 class="db-col-title">Profile Info</h2>
+            <form class="db-form" id="dbAccountForm" novalidate>
+              <div class="db-field">
+                <label class="db-label" for="dbFUsername">Username</label>
+                <input class="db-input" type="text" id="dbFUsername" name="username" autocomplete="username" placeholder="Your username">
+              </div>
+              <div class="db-field">
+                <label class="db-label" for="dbFEmail">Email</label>
+                <input class="db-input db-input-ro" type="email" id="dbFEmail" name="email" readonly aria-readonly="true" placeholder="your@email.com">
+              </div>
+              <div class="db-field">
+                <label class="db-label" for="dbFDiscord">Discord ID</label>
+                <input class="db-input" type="text" id="dbFDiscord" name="discord_id" autocomplete="off" placeholder="username or user#0000">
+              </div>
+              <div class="db-field">
+                <label class="db-label" for="dbFCountry">Country</label>
+                <input class="db-input" type="text" id="dbFCountry" name="country" autocomplete="country-name" placeholder="e.g. United States">
+              </div>
+              <button type="submit" class="eb-btn-primary db-save-btn">
+                <i class="ti ti-device-floppy"></i> Save Changes
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
 
-          <div class="db-account-avatar-col">
-            <h2 class="db-subsection-title">Choose Avatar</h2>
-            <div class="db-account-avatar-preview" id="dbAccountAvatarPreview"></div>
-            <div class="db-av-grid" id="dbAvGrid"></div>
+      <!-- Security -->
+      <section class="db-section db-hidden" id="dbSectionSecurity">
+        <div class="db-section-hd">
+          <h1 class="db-section-title">Security</h1>
+        </div>
+        <div class="db-security-layout">
+
+          <div class="db-card db-security-card">
+            <h2 class="db-card-title"><i class="ti ti-key"></i> Change Password</h2>
+            <form class="db-form" id="dbPasswordForm" novalidate>
+              <div class="db-field">
+                <label class="db-label" for="dbFNewPw">New Password</label>
+                <input class="db-input" type="password" id="dbFNewPw" name="new_password" autocomplete="new-password" placeholder="Minimum 8 characters">
+              </div>
+              <div class="db-field">
+                <label class="db-label" for="dbFConfirmPw">Confirm Password</label>
+                <input class="db-input" type="password" id="dbFConfirmPw" name="confirm_password" autocomplete="new-password" placeholder="Repeat new password">
+              </div>
+              <button type="submit" class="eb-btn-primary db-save-btn">
+                <i class="ti ti-lock-check"></i> Update Password
+              </button>
+            </form>
           </div>
 
-          <div class="db-account-form-col">
-            <h2 class="db-subsection-title">Profile Info</h2>
-            <form class="db-account-form" id="dbAccountForm" novalidate>
-              <div class="db-field">
-                <label class="db-label" for="dbFieldUsername">Username</label>
-                <input class="db-input" type="text" id="dbFieldUsername" name="username" placeholder="Your username" autocomplete="nickname">
+          <div class="db-card db-security-card">
+            <h2 class="db-card-title"><i class="ti ti-devices"></i> Active Sessions</h2>
+            <div class="db-sessions-list" id="dbSessionsList">
+              <div class="db-session-row">
+                <i class="ti ti-device-desktop db-session-device-icon"></i>
+                <div class="db-session-info">
+                  <span class="db-session-device">This device</span>
+                  <span class="db-session-time">Current session</span>
+                </div>
+                <span class="db-session-current-badge">Current</span>
               </div>
-              <div class="db-field">
-                <label class="db-label" for="dbFieldEmail">Email</label>
-                <input class="db-input db-input-readonly" type="email" id="dbFieldEmail" name="email" placeholder="your@email.com" readonly aria-readonly="true">
-              </div>
-              <div class="db-field">
-                <label class="db-label" for="dbFieldDiscord">Discord ID</label>
-                <input class="db-input" type="text" id="dbFieldDiscord" name="discord_id" placeholder="username or user#0000" autocomplete="off">
-              </div>
-              <div class="db-form-foot">
-                <span class="db-form-msg" id="dbFormMsg" aria-live="polite"></span>
-                <button type="submit" class="eb-btn-primary db-save-btn">Save Changes</button>
-              </div>
-            </form>
+            </div>
+          </div>
+
+          <div class="db-card db-danger-card">
+            <h2 class="db-card-title db-danger-title"><i class="ti ti-alert-triangle"></i> Danger Zone</h2>
+            <p class="db-danger-desc">Permanently delete your account and all associated data. This action cannot be undone.</p>
+            <button class="db-danger-btn" type="button" id="dbDeleteAccountBtn">
+              <i class="ti ti-trash"></i> Delete Account
+            </button>
           </div>
 
         </div>
       </section>
 
     </main>
+  </div>
+
+  <!-- Mobile bottom nav -->
+  <nav class="db-mobile-nav" id="dbMobileNav" aria-label="Mobile navigation">
+    <a class="db-mob-item is-active" href="#overview"  data-section="overview"  aria-label="Overview"><i class="ti ti-layout-dashboard"></i><span>Overview</span></a>
+    <a class="db-mob-item"           href="#orders"    data-section="orders"    aria-label="Orders"><i class="ti ti-shopping-bag"></i><span>Orders</span></a>
+    <a class="db-mob-item"           href="#rank"      data-section="rank"      aria-label="Rank"><i class="ti ti-crown"></i><span>Rank</span></a>
+    <a class="db-mob-item"           href="#account"   data-section="account"   aria-label="Account"><i class="ti ti-user"></i><span>Account</span></a>
+    <a class="db-mob-item"           href="#security"  data-section="security"  aria-label="Security"><i class="ti ti-lock"></i><span>Security</span></a>
+  </nav>
+
+  <!-- Avatar picker modal -->
+  <div class="db-modal-overlay db-hidden" id="dbAvatarModal" role="dialog" aria-modal="true" aria-label="Choose avatar">
+    <div class="db-modal">
+      <div class="db-modal-hd">
+        <span class="db-modal-title">Choose Your Avatar</span>
+        <button class="db-modal-close" id="dbAvatarModalClose" type="button" aria-label="Close"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="db-modal-av-grid" id="dbModalAvGrid" role="radiogroup" aria-label="Select avatar"></div>
+    </div>
+  </div>
+
+  <!-- Delete confirm modal -->
+  <div class="db-modal-overlay db-hidden" id="dbDeleteModal" role="dialog" aria-modal="true" aria-label="Confirm account deletion">
+    <div class="db-modal db-modal-sm">
+      <div class="db-modal-hd">
+        <span class="db-modal-title">Delete Account</span>
+        <button class="db-modal-close" id="dbDeleteModalClose" type="button" aria-label="Close"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="db-modal-body">
+        <p>This will permanently delete your account, all orders, and all data. Type <strong>DELETE</strong> to confirm.</p>
+        <input class="db-input db-delete-confirm-input" type="text" id="dbDeleteConfirmInput" placeholder="Type DELETE to confirm" autocomplete="off">
+      </div>
+      <div class="db-modal-ft">
+        <button class="db-ghost-btn" type="button" id="dbDeleteCancelBtn">Cancel</button>
+        <button class="db-danger-btn" type="button" id="dbDeleteConfirmBtn" disabled>Delete Account</button>
+      </div>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
