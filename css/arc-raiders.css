@@ -285,7 +285,7 @@ body.arc-locked { overflow: hidden; }
   background: #ffffff;
   box-shadow: 0 0 0 2.5px rgba(8,6,4,0.6), 0 0 0 5px rgba(255,255,255,1), 0 0 17.5px rgba(255,255,255,0.35);
   flex-shrink: 0;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
 }
 .arc-hot .dot::before {
   content: "";
@@ -302,7 +302,7 @@ body.arc-locked { overflow: hidden; }
 .arc-hot .line {
   width: 35px; height: 2px;
   background: rgba(255,255,255,0.7);
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
 }
 .arc-hot .pill {
   padding: 12.5px 20px;
@@ -440,7 +440,7 @@ body.arc-locked { overflow: hidden; }
   font-family: var(--f-display); font-weight: 600;
   font-size: 14px; line-height: 1;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: color 0.25s ease, border-color 0.25s ease;
 }
 .arc-sidebar-close:hover {
   color: var(--gold-bright);
@@ -466,7 +466,7 @@ body.arc-locked { overflow: hidden; }
   text-align: left;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: background 0.25s ease, border-left-color 0.25s ease;
 }
 .arc-sidebar-item:hover,
 .arc-sidebar-item.on {
@@ -542,7 +542,7 @@ body.arc-locked { overflow: hidden; }
     font-family: var(--f-display); font-weight: 600;
     font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
     color: var(--text-soft); text-align: left;
-    transition: all 0.25s ease;
+    transition: border-color 0.25s ease, color 0.25s ease;
   }
   .arc-hub-mobile button:hover { border-color: var(--gold); color: var(--gold-bright); }
   /* on mobile, release the body lock and pad past the fixed nav */
@@ -579,7 +579,7 @@ body.arc-locked { overflow: hidden; }
   border-radius: 3px;
   font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.24em;
   color: var(--text-soft); text-transform: uppercase;
-  transition: all 0.25s ease;
+  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
 }
 .arc-back:hover { color: var(--gold-bright); border-color: var(--gold); background: rgba(201,168,76,0.06); }
 
@@ -704,7 +704,7 @@ body.arc-locked { overflow: hidden; }
   border-radius: 3px;
   text-align: left;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
 .arc-bundle:hover { border-color: var(--gold); }
 .arc-bundle.active {
@@ -788,7 +788,7 @@ body.arc-locked { overflow: hidden; }
   cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   white-space: nowrap;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 .arc-modtoggle button:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
 .arc-modtoggle button.on {
@@ -819,7 +819,7 @@ body.arc-locked { overflow: hidden; }
   cursor: help;
   padding: 0;
   position: relative;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 .arc-help:hover { color: var(--gold-bright); border-color: var(--gold); }
 .arc-help::after {
@@ -873,7 +873,7 @@ body.arc-locked { overflow: hidden; }
   font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
   border-radius: 2px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 .arc-bp-tab:hover:not(.disabled) { color: var(--text); border-color: rgba(255,255,255,0.25); }
 .arc-bp-tab.active {
@@ -923,7 +923,7 @@ body.arc-locked { overflow: hidden; }
   font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
   cursor: pointer;
   display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   text-align: left;
 }
 .arc-bp-cell:hover { color: var(--text); border-color: rgba(255,255,255,0.25); transform: translateY(-1px); }
@@ -954,7 +954,7 @@ body.arc-locked { overflow: hidden; }
   color: var(--text-dim);
   border-radius: 2px;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
 }
 .arc-bp-tier:hover { color: var(--text); border-color: rgba(255,255,255,0.32); }
 .arc-bp-tier.on {
@@ -1008,7 +1008,7 @@ body.arc-locked { overflow: hidden; }
   color: var(--text);
   text-align: left;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 .arc-bundle-toggle:hover { border-color: rgba(255,255,255,0.25); }
 .arc-bundle-toggle.on {
@@ -1175,10 +1175,12 @@ body.arc-locked { overflow: hidden; }
   border-radius: 3px;
   text-align: left;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   display: flex; flex-direction: column; gap: 8px;
 }
-.arc-rc-preset:hover { border-color: rgba(255,255,255,0.25); transform: translateY(-1px); }
+@media (hover: hover) and (pointer: fine) {
+  .arc-rc-preset:hover { border-color: rgba(255,255,255,0.25); transform: translateY(-1px); }
+}
 .arc-rc-preset.on {
   background: var(--gold-soft);
   border-color: var(--gold);
@@ -1246,7 +1248,7 @@ body.arc-locked { overflow: hidden; }
   cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   white-space: nowrap;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 .arc-pilltoggle button:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
 .arc-pilltoggle button.on {
@@ -1277,7 +1279,7 @@ body.arc-locked { overflow: hidden; }
   font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
   border-radius: 2px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 .arc-bp-selectall:hover {
   background: var(--gold-soft);
@@ -1311,7 +1313,7 @@ body.arc-locked { overflow: hidden; }
   font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--text);
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: border-color 0.25s ease, color 0.25s ease;
 }
 .arc-select:hover { border-color: var(--gold); color: var(--gold-bright); }
 .arc-select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold-soft); }
@@ -1336,7 +1338,7 @@ body.arc-locked { overflow: hidden; }
   font-family: var(--f-body);
   font-size: 13px; line-height: 1.55;
   resize: vertical;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
 }
 .arc-textarea::placeholder { color: var(--text-faint); }
 .arc-textarea:hover { border-color: rgba(255,255,255,0.25); }
@@ -1364,11 +1366,13 @@ body.arc-locked { overflow: hidden; }
   text-align: left;
   font-family: inherit;
   color: inherit;
-  transition: all 0.25s ease;
+  transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
-.arc-focus-card:hover {
-  border-color: rgba(255,255,255,0.22);
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .arc-focus-card:hover {
+    border-color: rgba(255,255,255,0.22);
+    transform: translateY(-1px);
+  }
 }
 .arc-focus-card.on {
   border-color: var(--gold);
@@ -1394,7 +1398,7 @@ body.arc-locked { overflow: hidden; }
   width: 8px; height: 8px;
   background: var(--text-faint);
   transform: rotate(45deg);
-  transition: all 0.25s ease;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
 }
 .arc-focus-card.on .arc-focus-card-mark {
   background: var(--gold-bright);
@@ -1437,11 +1441,13 @@ body.arc-locked { overflow: hidden; }
   text-align: left;
   font-family: inherit; color: inherit;
   display: flex; flex-direction: column; gap: 8px;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
-.arc-raid-cell:hover {
-  border-color: rgba(255,255,255,0.25);
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .arc-raid-cell:hover {
+    border-color: rgba(255,255,255,0.25);
+    transform: translateY(-1px);
+  }
 }
 .arc-raid-cell.on {
   background: var(--gold-soft);
@@ -1655,7 +1661,7 @@ body.arc-locked { overflow: hidden; }
   color: var(--text);
   font-family: var(--f-body);
   font-size: 13px;
-  transition: all 0.25s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
 }
 .arc-mat-search-input::placeholder { color: var(--text-faint); }
 .arc-mat-search-input:hover { border-color: rgba(255,255,255,0.25); }
@@ -1685,7 +1691,7 @@ body.arc-locked { overflow: hidden; }
   font-family: var(--f-display); font-weight: 600;
   font-size: 16px; line-height: 1;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 .arc-mat-search-clear:hover { color: var(--gold-bright); border-color: var(--gold); }
 
@@ -1946,7 +1952,7 @@ body.arc-locked { overflow: hidden; }
   background: rgba(0,0,0,0.22);
   border: 1px solid var(--line-soft); border-radius: 3px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
   text-align: left;
   font-family: inherit;
@@ -1964,7 +1970,7 @@ body.arc-locked { overflow: hidden; }
   background: rgba(0,0,0,0.45);
   border: 1px solid var(--text-faint);
   position: relative;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 .arc-ws-switch::after {
   content: ""; position: absolute; top: 50%; left: 2px;
@@ -2139,7 +2145,7 @@ body.arc-locked { overflow: hidden; }
   background: transparent; border: 1px solid var(--line-soft); border-radius: 50%;
   color: var(--text-dim);
   font-family: var(--f-mono); font-size: 11px; line-height: 1;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 .arc-line-x:hover { color: var(--arc-rust); border-color: var(--arc-rust); }
 
@@ -2190,7 +2196,7 @@ body.arc-locked { overflow: hidden; }
   font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase;
   color: var(--text-dim);
   display: flex; align-items: center; justify-content: center; gap: 10px;
-  transition: all 0.25s ease;
+  transition: color 0.25s ease, border-color 0.25s ease;
 }
 .arc-cart-cancel:hover { color: var(--text); border-color: var(--text-dim); }
 .arc-cart-cancel .esc {

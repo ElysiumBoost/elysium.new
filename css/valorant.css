@@ -102,7 +102,7 @@
   font-family: var(--f-display); font-weight: 600;
   font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
   border-radius: 3px; white-space: nowrap;
-  transition: all 0.3s ease; position: relative;
+  transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease; position: relative;
 }
 .val-tab:hover { border-color: var(--gold); color: var(--gold-bright); }
 .val-tab.active {
@@ -178,10 +178,12 @@
   position: relative; padding: 0;
   background: rgba(10,8,5,0.4); border: 1px solid var(--line-soft);
   border-radius: 3px; overflow: hidden;
-  transition: all 0.3s ease; text-align: center;
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; text-align: center;
   display: flex; flex-direction: column; align-items: stretch; cursor: pointer;
 }
-.val-rank:hover { border-color: var(--gold); transform: translateY(-2px); }
+@media (hover: hover) and (pointer: fine) {
+  .val-rank:hover { border-color: var(--gold); transform: translateY(-2px); }
+}
 .val-rank.active {
   border-color: var(--gold); background: rgba(201,168,76,0.06);
   box-shadow: 0 0 0 1px var(--gold), 0 12px 28px -16px var(--gold-glow);
@@ -234,7 +236,7 @@
   padding: 8px 14px; background: transparent; border: none;
   font-family: var(--f-display); font-weight: 600;
   font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--text-soft); border-radius: 2px; transition: all 0.2s ease;
+  color: var(--text-soft); border-radius: 2px; transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 .val-seg button:hover { color: var(--gold-bright); }
 .val-seg button.active {
@@ -270,7 +272,7 @@
   color: var(--text-soft);
   font-family: var(--f-display); font-weight: 600;
   font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
-  transition: all 0.25s ease;
+  transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
 }
 .val-chip:hover { border-color: var(--gold); color: var(--text); }
 .val-chip.active { background: rgba(201,168,76,0.10); border-color: var(--gold); color: var(--gold-bright); }
@@ -280,7 +282,7 @@
 .val-mode button {
   position: relative; padding: 18px 20px;
   background: rgba(0,0,0,0.28); border: 1px solid var(--line-soft);
-  border-radius: 3px; text-align: left; transition: all 0.3s ease;
+  border-radius: 3px; text-align: left; transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
 .val-mode button:hover { border-color: var(--gold); }
 .val-mode button.active {
@@ -309,14 +311,14 @@
 .val-addon {
   position: relative; padding: 16px 16px 16px 50px;
   background: rgba(0,0,0,0.28); border: 1px solid var(--line-soft);
-  border-radius: 3px; text-align: left; transition: all 0.3s ease; cursor: pointer;
+  border-radius: 3px; text-align: left; transition: border-color 0.3s ease, background 0.3s ease; cursor: pointer;
 }
 .val-addon:hover { border-color: var(--gold); }
 .val-addon.active { border-color: var(--gold); background: rgba(201,168,76,0.06); }
 .val-addon .checkbox {
   position: absolute; top: 18px; left: 16px;
   width: 18px; height: 18px; border: 1px solid var(--line);
-  border-radius: 2px; display: grid; place-items: center; transition: all 0.2s ease;
+  border-radius: 2px; display: grid; place-items: center; transition: background 0.2s ease, border-color 0.2s ease;
 }
 .val-addon.active .checkbox { background: var(--gold); border-color: var(--gold); }
 .val-addon.active .checkbox::after {
@@ -428,7 +430,7 @@
   position: relative; padding: 14px 12px 14px 16px;
   background: rgba(0,0,0,0.28); border: 1px solid var(--line-soft);
   border-left: 3px solid transparent; border-radius: 2px;
-  text-align: left; transition: all 0.25s ease;
+  text-align: left; transition: border-color 0.25s ease, background 0.25s ease;
 }
 .val-summary-mode button:hover { border-color: var(--gold); }
 .val-summary-mode button.active {
@@ -459,7 +461,7 @@
   padding: 11px 12px 11px 14px;
   background: rgba(0,0,0,0.22); border: 1px solid var(--line-soft);
   border-left: 3px solid transparent; border-radius: 2px;
-  text-align: left; cursor: pointer; transition: all 0.2s ease;
+  text-align: left; cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease;
 }
 .val-summary-addon:hover { border-color: var(--gold); }
 .val-summary-addon.active {
@@ -647,7 +649,7 @@
   background: rgba(0,0,0,0.32); border: 1px solid var(--line-soft); border-radius: 3px;
   font-family: var(--f-display); font-weight: 600;
   font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--text); cursor: pointer; transition: all 0.25s ease;
+  color: var(--text); cursor: pointer; transition: border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
 }
 .val-select:hover { border-color: var(--gold); color: var(--gold-bright); }
 .val-select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold-soft); }
@@ -672,7 +674,7 @@
 .val-shield-card {
   position: relative; padding: 32px 28px;
   background: var(--bg-2); border: 1px solid var(--line-soft);
-  transition: all 0.4s ease;
+  transition: border-color 0.4s ease, background 0.4s ease;
 }
 .val-shield-card:hover { border-color: var(--gold); background: var(--bg-3); }
 .val-shield-mark {
@@ -713,7 +715,9 @@
   display: flex; flex-direction: column; gap: 16px;
   transition: transform 0.4s ease, border-color 0.4s ease;
 }
-.val-review:hover { transform: translateY(-3px); border-color: var(--gold); }
+@media (hover: hover) and (pointer: fine) {
+  .val-review:hover { transform: translateY(-3px); border-color: var(--gold); }
+}
 .val-review-head { display: flex; align-items: center; gap: 12px; }
 .val-avatar {
   width: 40px; height: 40px; border-radius: 50%;
@@ -827,7 +831,7 @@
   display: flex; align-items: center; gap: 10px; padding: 9px 12px;
   background: rgba(0,0,0,0.20); border: 1px solid var(--line-soft);
   border-left: 3px solid transparent; border-radius: 2px;
-  cursor: pointer; transition: all 0.2s ease;
+  cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease;
 }
 .val-toggle-row.active {
   border-color: var(--gold); border-left-color: var(--gold);
@@ -854,7 +858,7 @@
 .val-switch {
   flex-shrink: 0; width: 34px; height: 18px; padding: 0;
   background: rgba(0,0,0,0.4); border: 1px solid var(--line-soft);
-  border-radius: 9px; position: relative; transition: all 0.2s ease;
+  border-radius: 999px; position: relative; transition: background 0.2s ease, border-color 0.2s ease;
 }
 .val-switch.on { background: var(--gold); border-color: var(--gold); }
 .val-switch .knob {
@@ -867,6 +871,12 @@
   text-transform: uppercase; color: var(--text-dim);
   padding: 8px 0 4px; margin-top: 4px; border-top: 1px solid var(--line-soft);
 }
+.val-slider-ticks {
+  display: grid; justify-items: center;
+  font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.16em;
+  color: var(--text-dim); margin-top: 4px;
+}
+.val-slider-ticks span.active { color: var(--gold); }
 
 /* ── A11Y ── */
 button:focus-visible, a:focus-visible, input:focus-visible {
