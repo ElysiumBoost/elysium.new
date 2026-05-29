@@ -40,7 +40,7 @@
     { initials: "D.H", user: "dunehollow", quote: "Asked for Undercover Winrate and the booster respected it. No 12-game streaks. Looked natural.", from: "Gold I", to: "Diamond III", days: 6 }
   ];
   var FAQS = [
-    { q: "How does Valorant boosting work?", a: "Configure your current and target rank, pick add-ons, then confirm the order in Discord. A verified Immortal+ booster signs into your account (or queues with you in Duo mode) and plays manually until your target is hit." },
+    { q: "How does Valorant boosting work?", a: "Configure your current and target rank, pick add-ons, then complete checkout via our secure on-site checkout. A verified Immortal+ booster signs into your account (or queues with you in Duo mode) and plays manually until your target is hit." },
     { q: "Is boosting safe with Vanguard?", a: "Every booster is manual-only, on residential IPs, and follows our Vanguard-safe checklist: no shared sessions, no overlap with your active hours unless requested, no third-party tooling. 10,000+ Riot orders, zero bans." },
     { q: "Can I play with the booster?", a: "Yes. Pro Duo mode queues a verified Immortal+ booster on your team. You play your own account the entire time." },
     { q: "How long does a boost take?", a: "Most divisions complete in 12–36 hours. Diamond and above run 2–5 days. Express Priority cuts your wait to start by 80%." },
@@ -48,7 +48,7 @@
     { q: "Will my friends notice?", a: "Turn on Appear Offline (free add-on) and your status stays dark for the duration. Boosters won't accept or send invites." },
     { q: "What if the booster loses a match?", a: "We work in division targets, not match counts. You only pay for the result. If a booster trends below our 75% winrate floor, we swap them out the same day." },
     { q: "Can I watch the boost live?", a: "Add Stream Games and you get a private link plus saved VODs of every match." },
-    { q: "Refunds and pausing?", a: "Pause any time from your Discord ticket. Refunds are pro-rated against progress. Full refund if no work has started. Money-back guarantee if we miss our ETA by 48+ hours." },
+    { q: "Refunds and pausing?", a: "Pause any time from your dashboard. Refunds are pro-rated against progress. Full refund if no work has started. Money-back guarantee if we miss our ETA by 48+ hours." },
     { q: "Are your boosters really Immortal/Radiant?", a: "Every Valorant booster is verified Immortal 3 or above. Most hold Radiant on their main. We screenshot-verify each season." }
   ];
 
@@ -66,12 +66,25 @@
     co: { hours: 1, focus: "vod", server: "North America", platform: "PC" }
   };
 
-  var PLACEMENT_BASE = [3.99, 4.49, 4.99, 5.49, 5.99, 6.99, 8.49, 10.49, 13.49];
+  var PLACEMENT_PRICES = {
+    'fresh':      [3.24,  6.48,  9.72,  12.96,  16.20],
+    'iron':       [1.78,  3.56,  5.34,   7.12,   8.90],
+    'bronze':     [2.03,  4.06,  6.09,   8.12,  10.15],
+    'silver':     [2.43,  4.86,  7.29,   9.72,  12.15],
+    'gold':       [2.84,  5.68,  8.52,  11.36,  14.20],
+    'platinum':   [3.24,  6.48,  9.72,  12.96,  16.20],
+    'diamond':    [4.25,  8.50, 12.75,  17.00,  21.25],
+    'ascendant':  [6.08, 12.16, 18.24,  24.32,  30.40],
+    'immortal-1': [8.91, 17.82, 26.73,  35.64,  44.55],
+    'immortal-2': [12.96, 25.92, 38.88, 51.84,  64.80],
+    'immortal-3': [17.82, 35.64, 53.46, 71.28,  89.10],
+    'radiant':    [32.40, 64.80, 97.20, 129.60, 162.00]
+  };
 
   function calcPlacementsPrice(s) {
-    var idx = PLACEMENT_TIERS.findIndex(function (t) { return t.id === s.tier; });
-    var price = (PLACEMENT_BASE[idx] || 5.99) * s.games;
-    price *= [0.96, 1.0, 1.06][s.div] || 1;
+    var key = s.tier === 'immortal' ? 'immortal-' + (s.div + 1) : s.tier;
+    var prices = PLACEMENT_PRICES[key] || PLACEMENT_PRICES['gold'];
+    var price = prices[Math.min(s.games - 1, 4)];
     if (s.mode === "duo") price *= 1.30;
     if (s.platform !== "PC") price *= 1.08;
     if (["Korea", "Middle East", "Latin America"].indexOf(s.server) >= 0) price *= 1.06;
@@ -85,9 +98,20 @@
     var lo = addons.express ? Math.max(0, base - 1) : base;
     return [lo, lo + 1];
   }
+  var RANKED_WINS_PRICES = {
+    'iron-1': 2.48, 'iron-2': 2.48, 'iron-3': 2.48,
+    'bronze-1': 2.48, 'bronze-2': 2.48, 'bronze-3': 2.48,
+    'silver-1': 2.97, 'silver-2': 3.06, 'silver-3': 3.15,
+    'gold-1': 3.60, 'gold-2': 4.05, 'gold-3': 4.95,
+    'platinum-1': 5.40, 'platinum-2': 6.30, 'platinum-3': 7.20,
+    'diamond-1': 8.55, 'diamond-2': 10.80, 'diamond-3': 12.60,
+    'ascendant-1': 18.00, 'ascendant-2': 23.40, 'ascendant-3': 28.80,
+    'immortal-1': 36.00, 'immortal-2': 52.92, 'immortal-3': 57.33,
+    'radiant-1': 57.33
+  };
   function calcWinsPrice(s) {
-    var idx = PLACEMENT_TIERS.findIndex(function (t) { return t.id === s.tier; });
-    var perWin = (3.49 + idx * 1.15) * Math.max(0.7, 1 - (s.rrPerWin - 22) * 0.012);
+    var key = s.tier + '-' + (s.div + 1);
+    var perWin = RANKED_WINS_PRICES[key] || 2.48;
     var price = perWin * s.wins;
     if (s.mode === "duo") price *= 1.30;
     if (s.platform !== "PC") price *= 1.08;
@@ -127,13 +151,38 @@
     return t * 3 + divIdx;
   }
 
+  var RANK_BOOST_PRICES = {
+    'iron-1':     {'iron-2':4,'iron-3':8,'bronze-1':13,'bronze-2':18,'bronze-3':24,'silver-1':31,'silver-2':39,'silver-3':48,'gold-1':58,'gold-2':68,'gold-3':79,'platinum-1':91,'platinum-2':104,'platinum-3':119,'diamond-1':139,'diamond-2':164,'diamond-3':197,'ascendant-1':236,'ascendant-2':281,'ascendant-3':336,'immortal-1':401,'immortal-2':491,'immortal-3':611},
+    'iron-2':     {'iron-3':4,'bronze-1':9,'bronze-2':14,'bronze-3':20,'silver-1':27,'silver-2':35,'silver-3':44,'gold-1':54,'gold-2':64,'gold-3':75,'platinum-1':87,'platinum-2':100,'platinum-3':115,'diamond-1':135,'diamond-2':160,'diamond-3':193,'ascendant-1':232,'ascendant-2':277,'ascendant-3':332,'immortal-1':397,'immortal-2':487,'immortal-3':607},
+    'iron-3':     {'bronze-1':5,'bronze-2':10,'bronze-3':16,'silver-1':23,'silver-2':31,'silver-3':40,'gold-1':50,'gold-2':60,'gold-3':71,'platinum-1':83,'platinum-2':96,'platinum-3':111,'diamond-1':131,'diamond-2':156,'diamond-3':189,'ascendant-1':228,'ascendant-2':273,'ascendant-3':328,'immortal-1':393,'immortal-2':483,'immortal-3':603},
+    'bronze-1':   {'bronze-2':5,'bronze-3':11,'silver-1':18,'silver-2':26,'silver-3':35,'gold-1':45,'gold-2':55,'gold-3':66,'platinum-1':78,'platinum-2':91,'platinum-3':106,'diamond-1':126,'diamond-2':151,'diamond-3':184,'ascendant-1':223,'ascendant-2':268,'ascendant-3':323,'immortal-1':388,'immortal-2':478,'immortal-3':598},
+    'bronze-2':   {'bronze-3':6,'silver-1':13,'silver-2':21,'silver-3':30,'gold-1':40,'gold-2':50,'gold-3':61,'platinum-1':73,'platinum-2':86,'platinum-3':101,'diamond-1':121,'diamond-2':146,'diamond-3':179,'ascendant-1':218,'ascendant-2':263,'ascendant-3':318,'immortal-1':383,'immortal-2':473,'immortal-3':593},
+    'bronze-3':   {'silver-1':7,'silver-2':15,'silver-3':24,'gold-1':34,'gold-2':44,'gold-3':55,'platinum-1':67,'platinum-2':80,'platinum-3':95,'diamond-1':115,'diamond-2':140,'diamond-3':173,'ascendant-1':212,'ascendant-2':257,'ascendant-3':312,'immortal-1':377,'immortal-2':467,'immortal-3':587},
+    'silver-1':   {'silver-2':8,'silver-3':17,'gold-1':27,'gold-2':37,'gold-3':48,'platinum-1':60,'platinum-2':73,'platinum-3':88,'diamond-1':108,'diamond-2':133,'diamond-3':166,'ascendant-1':205,'ascendant-2':250,'ascendant-3':305,'immortal-1':370,'immortal-2':460,'immortal-3':580},
+    'silver-2':   {'silver-3':9,'gold-1':19,'gold-2':29,'gold-3':40,'platinum-1':52,'platinum-2':65,'platinum-3':80,'diamond-1':100,'diamond-2':125,'diamond-3':158,'ascendant-1':197,'ascendant-2':242,'ascendant-3':297,'immortal-1':362,'immortal-2':452,'immortal-3':572},
+    'silver-3':   {'gold-1':10,'gold-2':20,'gold-3':31,'platinum-1':43,'platinum-2':56,'platinum-3':71,'diamond-1':91,'diamond-2':116,'diamond-3':149,'ascendant-1':188,'ascendant-2':233,'ascendant-3':288,'immortal-1':353,'immortal-2':443,'immortal-3':563},
+    'gold-1':     {'gold-2':10,'gold-3':21,'platinum-1':33,'platinum-2':46,'platinum-3':61,'diamond-1':81,'diamond-2':106,'diamond-3':139,'ascendant-1':178,'ascendant-2':223,'ascendant-3':278,'immortal-1':343,'immortal-2':433,'immortal-3':553},
+    'gold-2':     {'gold-3':11,'platinum-1':23,'platinum-2':36,'platinum-3':51,'diamond-1':71,'diamond-2':96,'diamond-3':129,'ascendant-1':168,'ascendant-2':213,'ascendant-3':268,'immortal-1':333,'immortal-2':423,'immortal-3':543},
+    'gold-3':     {'platinum-1':12,'platinum-2':25,'platinum-3':40,'diamond-1':60,'diamond-2':85,'diamond-3':118,'ascendant-1':157,'ascendant-2':202,'ascendant-3':257,'immortal-1':322,'immortal-2':412,'immortal-3':532},
+    'platinum-1': {'platinum-2':13,'platinum-3':28,'diamond-1':48,'diamond-2':73,'diamond-3':106,'ascendant-1':145,'ascendant-2':190,'ascendant-3':245,'immortal-1':310,'immortal-2':400,'immortal-3':520},
+    'platinum-2': {'platinum-3':15,'diamond-1':35,'diamond-2':60,'diamond-3':93,'ascendant-1':132,'ascendant-2':177,'ascendant-3':232,'immortal-1':297,'immortal-2':387,'immortal-3':507},
+    'platinum-3': {'diamond-1':20,'diamond-2':45,'diamond-3':78,'ascendant-1':117,'ascendant-2':162,'ascendant-3':217,'immortal-1':282,'immortal-2':372,'immortal-3':492},
+    'diamond-1':  {'diamond-2':25,'diamond-3':58,'ascendant-1':97,'ascendant-2':142,'ascendant-3':197,'immortal-1':262,'immortal-2':352,'immortal-3':472},
+    'diamond-2':  {'diamond-3':33,'ascendant-1':72,'ascendant-2':117,'ascendant-3':172,'immortal-1':237,'immortal-2':327,'immortal-3':447},
+    'diamond-3':  {'ascendant-1':39,'ascendant-2':84,'ascendant-3':139,'immortal-1':204,'immortal-2':294,'immortal-3':414},
+    'ascendant-1':{'ascendant-2':45,'ascendant-3':100,'immortal-1':165,'immortal-2':255,'immortal-3':375},
+    'ascendant-2':{'ascendant-3':55,'immortal-1':120,'immortal-2':210,'immortal-3':330},
+    'ascendant-3':{'immortal-1':65,'immortal-2':155,'immortal-3':275},
+    'immortal-1': {'immortal-2':90,'immortal-3':210},
+    'immortal-2': {'immortal-3':120}
+  };
+
   function calculatePrice(s) {
-    var dist = rankIndex(s.target.tier, s.target.div) - rankIndex(s.current.tier, s.current.div);
-    if (dist <= 0) return 0;
-    var base = 8.5;
-    var price = dist * base;
-    var ti = TIERS.findIndex(function (x) { return x.id === s.target.tier; });
-    if (ti >= 5) price *= 1 + (ti - 4) * 0.22;
+    var fromKey = s.current.tier + '-' + (s.current.div + 1);
+    var toKey   = s.target.tier  + '-' + (s.target.div  + 1);
+    var row = RANK_BOOST_PRICES[fromKey];
+    var price = (row && row[toKey]) || 0;
+    if (price <= 0) return 0;
     if (s.mode === "duo") price *= 1.35;
     var rrMul = [1.30, 1.12, 1.0, 0.92][RR_RANGES.indexOf(s.rrPerWin)] || 1;
     price *= rrMul;
@@ -171,8 +220,7 @@
       var cls = t.id === activeId ? "val-rank active" : "val-rank";
       var img = t.icon ? '<img src="' + esc(t.icon) + '" alt="" loading="lazy">' : '<span class="glyph">' + esc(t.glyph) + "</span>";
       return '<button type="button" class="' + cls + '" data-' + prefix + '="' + esc(t.id) + '" aria-label="' + esc(t.name) + '" aria-pressed="' + (t.id === activeId) + '">' +
-        '<div class="val-rank-icon" style="--tier-color:' + t.color + '">' + img + "</div>" +
-        '<span class="val-rank-name">' + esc(t.name) + "</span></button>";
+        '<div class="val-rank-icon" style="--tier-color:' + t.color + '">' + img + "</div></button>";
     }).join("");
   }
 
@@ -237,7 +285,9 @@
   }
   function toggleRowHtml(key, label, badge, badgeCls, on, tip) {
     return '<div class="val-toggle-row ' + (on ? "active" : "") + '" data-toggle="' + esc(key) + '">' +
-      '<span class="nm">' + esc(label) + (tip ? ' <span class="val-tip-wrap" tabindex="0">i<span class="pop">' + esc(tip) + "</span></span>" : "") + "</span>" +
+      '<div class="val-toggle-info"><span class="nm">' + esc(label) + '</span>' +
+      (tip ? '<span class="val-toggle-desc">' + esc(tip) + '</span>' : '') +
+      '</div>' +
       '<span class="badge ' + (badgeCls || "") + '">' + esc(badge) + "</span>" +
       '<button type="button" class="val-switch ' + (on ? "on" : "") + '" data-switch="' + esc(key) + '" aria-pressed="' + on + '" aria-label="' + esc(label) + '"><span class="knob"></span></button></div>';
   }
@@ -433,7 +483,7 @@
   function renderLeveling() {
     var s = state.lv;
     var levels = Math.max(0, s.desired - s.current);
-    var price = calcLevelPrice(s, 0.50);
+    var price = calcLevelPrice(s, 12.74);
     var eta = levelETA(levels, s.addons, 25);
     var curPct = ((s.current - 1) / 499) * 100;
     var desPct = ((s.desired - 1) / 499) * 100;
@@ -443,13 +493,15 @@
     ];
     $("valConfigMount").innerHTML =
       '<div class="val-config val-config--natural"><div class="val-builder">' +
-        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 01 — Current</span><h3 class="val-step-title">Current Level</h3><span class="val-step-sub">Reach ranked-ready levels faster</span></div>' +
-          '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.current + '</span><span class="val-games-unit">Starting level<span class="v">$0.50 per level · 1–500 range</span></span></div>' +
-          sliderHtml(s.current, 1, 500, "lv-current", curPct) + '</div>' +
+        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 01 — Level Range</span><h3 class="val-step-title">Account Leveling</h3><span class="val-step-sub">$12.74 per level · 1–500 range</span></div>' +
+          '<div class="val-bp-sliders">' +
+            '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.current + '</span><span class="val-games-unit">From level</span></div>' +
+            sliderHtml(s.current, 1, 500, "lv-current", curPct) + '</div>' +
+            '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.desired + '</span><span class="val-games-unit">To level<span class="v">' + levels + (levels === 1 ? " level" : " levels") + ' to gain</span></span></div>' +
+            sliderHtml(s.desired, 1, 500, "lv-desired", desPct) + '</div>' +
+          '</div>' +
         '</div>' +
-        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 02 — Desired</span><h3 class="val-step-title">Desired Level</h3><span class="val-step-sub">Must be higher than current</span></div>' +
-          '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.desired + '</span><span class="val-games-unit">Target level<span class="v">' + levels + (levels === 1 ? " level" : " levels") + ' to gain</span></span></div>' +
-          sliderHtml(s.desired, 1, 500, "lv-desired", desPct) + '</div>' +
+        '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 02 — Region</span><h3 class="val-step-title">Server &amp; Platform</h3></div>' +
           dropdownsHtml(s.server, s.platform, "lv-server", "lv-platform") +
         '</div>' +
         tabFaqsHtml(FAQS_LV) +
@@ -457,7 +509,7 @@
       '<div class="val-summary-wrap"><aside class="val-summary has-items" aria-label="Order summary"><span class="arc-hot-trace" aria-hidden="true"></span>' +
         summaryHeadLg() +
         '<div class="val-summary-scroll">' +
-          '<div class="val-current-sel"><div class="val-rank-icon" style="--tier-color:#e5c26b"><span class="glyph" style="font-size:18px">' + s.current + '→' + s.desired + '</span></div><div><span class="lbl">Your order</span><span class="v">Level ' + s.current + ' → ' + s.desired + ' · ' + levels + ' levels<br><span class="tier">' + esc(s.server) + ' · ' + esc(s.platform) + '</span></span></div></div>' +
+          '<div class="val-current-sel"><div><span class="lbl">Your order</span><span class="v">Level ' + s.current + ' → ' + s.desired + ' · ' + levels + ' levels<br><span class="tier">' + esc(s.server) + ' · ' + esc(s.platform) + '</span></span></div></div>' +
           '<div class="val-summary-block-label">Add-ons</div><div class="val-summary-addons-scroll">' +
             toggleRowHtml("priority", "Priority Start", "+20%", "", s.addons.priority, "Skip the queue — starts within the hour.") +
             toggleRowHtml("agents", "Agent Preference", "+10%", "", s.addons.agents, "Lock in the agents the booster plays while leveling.") +
@@ -474,7 +526,7 @@
   function renderBattlePass() {
     var s = state.bp;
     var levels = Math.max(0, s.desired - s.current);
-    var price = calcLevelPrice(s, 0.50);
+    var price = calcLevelPrice(s, 7.22);
     var eta = levelETA(levels, s.addons, 8);
     var curPct = ((s.current - 1) / 54) * 100;
     var desPct = ((s.desired - 1) / 54) * 100;
@@ -486,7 +538,7 @@
       '<div class="val-config"><div class="val-builder">' +
         '<div class="val-step"><div class="val-step-head"><span class="val-step-num">Step 01 — Battle Pass</span><h3 class="val-step-title">Battle Pass Levels</h3><span class="val-step-sub">Complete your Battle Pass faster</span></div>' +
           '<div class="val-bp-sliders">' +
-            '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.current + '</span><span class="val-games-unit">Current level<span class="v">$0.50 per level</span></span></div>' +
+            '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.current + '</span><span class="val-games-unit">Current level<span class="v">$7.22 per level</span></span></div>' +
             sliderHtml(s.current, 1, 55, "bp-current", curPct) + '</div>' +
             '<div class="val-games-wrap"><div class="val-games-display"><span class="val-games-num">' + s.desired + '</span><span class="val-games-unit">Desired level<span class="v">' + levels + (levels === 1 ? " tier" : " tiers") + ' to gain</span></span></div>' +
             sliderHtml(s.desired, 1, 55, "bp-desired", desPct) + '</div>' +
@@ -499,7 +551,7 @@
       '<div class="val-summary-wrap"><aside class="val-summary has-items" aria-label="Order summary"><span class="arc-hot-trace" aria-hidden="true"></span>' +
         summaryHeadLg() +
         '<div class="val-summary-scroll">' +
-          '<div class="val-current-sel"><div class="val-rank-icon" style="--tier-color:#e5c26b"><span class="glyph" style="font-size:18px">' + s.current + '→' + s.desired + '</span></div><div><span class="lbl">Your order</span><span class="v">BP Tier ' + s.current + ' → ' + s.desired + ' · ' + levels + ' tiers<br><span class="tier">' + esc(s.server) + ' · ' + esc(s.platform) + '</span></span></div></div>' +
+          '<div class="val-current-sel"><div><span class="lbl">Your order</span><span class="v">BP Tier ' + s.current + ' → ' + s.desired + ' · ' + levels + ' tiers<br><span class="tier">' + esc(s.server) + ' · ' + esc(s.platform) + '</span></span></div></div>' +
           '<div class="val-summary-block-label">Active extras</div><div class="val-summary-addons-scroll">' +
             toggleRowHtml("priority", "Priority Start", "+20%", "", s.addons.priority, "Skip the queue — starts within the hour.") +
             toggleRowHtml("agents", "Agent Preference", "+10%", "", s.addons.agents, "Lock in agents during pass progression.") +
@@ -540,7 +592,7 @@
       '<div class="val-summary-wrap"><aside class="val-summary has-items" aria-label="Order summary"><span class="arc-hot-trace" aria-hidden="true"></span>' +
         summaryHeadLg() +
         '<div class="val-summary-scroll">' +
-          '<div class="val-current-sel"><div class="val-rank-icon" style="--tier-color:#e5c26b"><span class="glyph" style="font-size:24px">' + s.hours + 'h</span></div><div><span class="lbl">Your session</span><span class="v">' + s.hours + (s.hours === 1 ? " hour" : " hours") + ' of ' + esc(focusObj.name) + '<br><span class="tier">' + esc(s.server) + ' · ' + esc(s.platform) + '</span></span></div></div>' +
+          '<div class="val-current-sel"><div><span class="lbl">Your session</span><span class="v">' + s.hours + (s.hours === 1 ? " hour" : " hours") + ' of ' + esc(focusObj.name) + '<br><span class="tier">' + esc(s.server) + ' · ' + esc(s.platform) + '</span></span></div></div>' +
           '<div class="val-summary-block-label">Session</div>' +
           '<div class="val-toggle-row active" style="pointer-events:none"><span class="nm">' + esc(focusObj.name) + '</span><span class="badge free">' + s.hours + ' hr</span></div>' +
           '<div class="val-toggle-row active" style="pointer-events:none"><span class="nm">Platform</span><span class="badge">' + esc(s.platform) + '</span></div>' +
@@ -583,12 +635,7 @@
     mount.onchange = function (e) {
       var el = e.target;
       var render = { pl: renderPlacements, rw: renderWins, lv: renderLeveling, bp: renderBattlePass, co: renderCoaching }[tab];
-      if (el.matches("[data-slider-pl-games]")) { state.pl.games = parseInt(el.value); render(); }
-      else if (el.matches("[data-slider-rw-wins]")) { state.rw.wins = parseInt(el.value); render(); }
-      else if (el.matches("[data-slider-lv-current]")) { state.lv.current = parseInt(el.value); if (state.lv.desired <= state.lv.current) state.lv.desired = Math.min(500, state.lv.current + 1); render(); }
-      else if (el.matches("[data-slider-lv-desired]")) { state.lv.desired = Math.max(state.lv.current + 1, parseInt(el.value)); render(); }
-      else if (el.matches("[data-slider-bp-current]")) { state.bp.current = parseInt(el.value); if (state.bp.desired <= state.bp.current) state.bp.desired = Math.min(55, state.bp.current + 1); render(); }
-      else if (el.matches("[data-slider-bp-desired]")) { state.bp.desired = Math.max(state.bp.current + 1, parseInt(el.value)); render(); }
+      if (el.matches("input[type=range]")) { if (render) render(); }
       else if (el.matches("[data-select-pl-server]")) { state.pl.server = el.value; render(); }
       else if (el.matches("[data-select-pl-platform]")) { state.pl.platform = el.value; render(); }
       else if (el.matches("[data-select-rw-server]")) { state.rw.server = el.value; render(); }
@@ -604,14 +651,27 @@
     };
     mount.oninput = function (e) {
       var el = e.target;
-      if (el.matches("input[type=range]")) {
-        var slider = el.closest(".val-slider");
-        if (!slider) return;
+      if (!el.matches("input[type=range]")) return;
+      var slider = el.closest(".val-slider");
+      if (slider) {
         var min = parseInt(el.min), max = parseInt(el.max), val = parseInt(el.value);
         var pct = ((val - min) / (max - min)) * 100;
         slider.style.setProperty("--val", pct + "%");
         var fill = slider.querySelector(".val-slider-fill");
         if (fill) fill.style.width = pct + "%";
+      }
+      var v = parseInt(el.value);
+      if (el.matches("[data-slider-pl-games]")) { state.pl.games = v; }
+      else if (el.matches("[data-slider-rw-wins]")) { state.rw.wins = v; }
+      else if (el.matches("[data-slider-lv-current]")) { state.lv.current = v; if (state.lv.desired <= v) state.lv.desired = Math.min(500, v + 1); }
+      else if (el.matches("[data-slider-lv-desired]")) { state.lv.desired = Math.max(state.lv.current + 1, v); }
+      else if (el.matches("[data-slider-bp-current]")) { state.bp.current = v; if (state.bp.desired <= v) state.bp.desired = Math.min(55, v + 1); }
+      else if (el.matches("[data-slider-bp-desired]")) { state.bp.desired = Math.max(state.bp.current + 1, v); }
+      var wrap = el.closest(".val-games-wrap");
+      if (wrap) {
+        var numEl = wrap.querySelector(".val-games-num");
+        if (numEl) numEl.textContent = el.matches("[data-slider-lv-desired]") ? state.lv.desired :
+                                        el.matches("[data-slider-bp-desired]") ? state.bp.desired : v;
       }
     };
   }
@@ -648,6 +708,24 @@
         '<div class="val-review-meta"><span class="game">VALORANT</span> · ' + esc(r.from) + " → " + esc(r.to) + " · " + r.days + " days</div>" +
       "</article>";
     }).join("");
+
+    // Carousel wheel scroll — capped so vertical wheel maps to a slow,
+    // controlled horizontal scroll instead of flinging the rail.
+    if (!rail.dataset.wheelBound) {
+      rail.dataset.wheelBound = "1";
+      rail.addEventListener("wheel", function (e) {
+        var max = rail.scrollWidth - rail.clientWidth;
+        if (max <= 0) return;
+        var raw = Math.abs(e.deltaX) >= Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+        if (!raw) return;
+        var atStart = rail.scrollLeft <= 0;
+        var atEnd = rail.scrollLeft >= max - 1;
+        if ((raw < 0 && atStart) || (raw > 0 && atEnd)) return; // let the page scroll at the edges
+        e.preventDefault();
+        var capped = Math.min(Math.abs(raw), 80) * (raw < 0 ? -1 : 1);
+        rail.scrollLeft += capped * 0.3;
+      }, { passive: false });
+    }
   }
 
   function renderFaqs() {
@@ -684,7 +762,7 @@
   }
 
   function initNavScroll() {
-    var nav = $("valNav");
+    var nav = $("ebNav");
     if (!nav) return;
     function check() { nav.classList.toggle("eb-scrolled", window.scrollY > 40); }
     check();

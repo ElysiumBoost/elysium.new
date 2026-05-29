@@ -56,9 +56,8 @@
       if (typeof syncCompactToggleLabel === "function") syncCompactToggleLabel();
       if (typeof persistOrderState === "function") persistOrderState();
     });
-    $("copyOrder")?.addEventListener("click", () => copyOrder(true));
     $("memberCheckout")?.addEventListener("click", () => {
-      if (typeof showToast === "function") showToast("Member checkout coming soon.");
+      if (typeof showToast === "function") showToast("Secure checkout coming soon — join Discord for early access.");
     });
     $("cartPromoApply")?.addEventListener("click", () => {
       const input = $("cartPromoInput");
@@ -68,7 +67,7 @@
         return;
       }
       if (typeof showToast === "function") {
-        showToast("Promo codes are validated in Discord during ticket review.");
+        showToast("Promo codes are applied automatically at checkout.");
       }
     });
     $("cartPromoInput")?.addEventListener("keydown", event => {
@@ -188,7 +187,6 @@
     sanitizeNavigationState();
     cleanStaleCart();
     persistOrderState();
-    sanitizeNavigationState();
     if (state.game) syncGameHash(state.game);
     window.addEventListener("hashchange", () => {
       closeGameMenu();
@@ -298,23 +296,33 @@
       syncCartBadge();
     })();
 
-/* ── Scroll Reveal for eb-reveal elements ── */
-(function initScrollReveal() {
-  var els = document.querySelectorAll('.eb-reveal');
-  if (!els.length) return;
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) {
-        if (e.isIntersecting) {
-          e.target.classList.add('eb-in');
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-    els.forEach(function(el) { io.observe(el); });
-  } else {
-    els.forEach(function(el) { el.classList.add('eb-in'); });
-  }
+/* ── Hero stats countup ── */
+(function initStatCountup() {
+  var stats = document.querySelectorAll('.eb-stat-n[data-countup]');
+  if (!stats.length) return;
+  stats.forEach(function(el) { el.textContent = '0'; });
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      io.unobserve(entry.target);
+      var el = entry.target;
+      var target = parseFloat(el.dataset.countup);
+      var suffix = el.dataset.suffix || '';
+      var decimals = parseInt(el.dataset.decimal || '0', 10);
+      var duration = 1500;
+      var start = performance.now();
+      function tick(now) {
+        var elapsed = now - start;
+        var progress = Math.min(elapsed / duration, 1);
+        var ease = 1 - Math.pow(1 - progress, 4);
+        var value = target * ease;
+        el.textContent = (decimals > 0 ? value.toFixed(decimals) : Math.round(value).toLocaleString('en-US')) + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }, { threshold: 0.1 });
+  stats.forEach(function(el) { io.observe(el); });
 })();
 
 /* ── FAQ Accordion ── */
@@ -481,21 +489,21 @@
   };
 
   var SERVICE_META = {
-    'loadouts':     { name: 'Custom Loadout',     image: 'assets/custom-loadout.webp',   art: 'Fully kitted loadouts assembled and shipped to your Stash. Pick the weapons, mods, gear and consumables.', tags: ['Loadout','Weapons','Gear'], color: '#e08a2c' },
-    'guns':         { name: 'All Weapons',         image: 'assets/all-weapons.webp',      art: 'Every weapon in the catalogue, any tier, any mods. Sold individually or in stacks.', tags: ['Weapons','Mods'], color: '#c98a2c' },
-    'blueprints':   { name: 'Blueprints',          image: 'assets/blueprints.webp',       art: 'Unlock recipes for the gear you want to craft instead of grind.', tags: ['Blueprints'], color: '#7faedc' },
-    'leveling':     { name: 'Leveling',            image: 'assets/leveling.webp',         art: 'Account leveling, contract progress, season-pass tiers — all done manually.', tags: ['Leveling','XP'], color: '#e5c26b' },
-    'workshop':     { name: 'Workshop & Scrappy',  image: 'assets/workshop.webp',         art: 'Bench upgrades, recycled parts, scrappy contracts cleared on demand.', tags: ['Workshop','Scrap'], color: '#d4571b' },
-    'materials':    { name: 'All Materials',       image: 'assets/all-materials.webp',    art: 'Stack-priced raw materials shipped straight to your Stash.', tags: ['Materials','Resources'], color: '#a3acb1' },
-    'depositary':   { name: 'Depositary',          image: 'assets/depositary.webp',       art: 'Stash expansions, secure transfers, asset migration between characters.', tags: ['Storage'], color: '#b794d6' },
-    'bosses':       { name: 'Boss & Puzzle',       image: 'assets/boss-puzzle.webp',      art: 'Lockout bosses cleared, puzzles solved, achievements unlocked.', tags: ['Boss','Puzzle'], color: '#c75059' },
-    'coins':        { name: 'Raider Coins',        image: 'assets/raider-coins.webp',     art: 'Bulk Raider Coins delivered through verified trade routes.', tags: ['Currency'], color: '#e5c26b' },
-    'trials':       { name: 'Trials Boost',        image: 'assets/trials-boost.webp',     art: 'Weekly trial completions, perfect runs, ranked trial placements.', tags: ['Trials'], color: '#ff8a3d' },
-    'raids':        { name: 'Raid Bundles',        image: 'assets/raids.webp',            art: 'Endgame raid clears with verified Immortal-tier squad leaders.', tags: ['Raids','Squad'], color: '#ff4655' },
-    'expeditions':  { name: 'Expedition Boost',    image: 'assets/expedition-boost.webp', art: 'Full expedition runs — sites swept, loot extracted, you keep everything.', tags: ['Expedition'], color: '#4ec6e8' },
-    'coaching':     { name: 'Hourly Coaching',     image: 'assets/raid-coaching.webp',    art: '1-on-1 raid coaching with a pro: VOD review, route planning, mechanics.', tags: ['Coaching'], color: '#9b6cff' },
-    'custom':       { name: 'Custom Orders',       image: 'assets/custom-orders.webp',    art: 'Off-menu requests handled by our concierge desk in Discord.', tags: ['Custom'], color: '#e08a2c' },
-    'seeds':        { name: 'Assorted Seeds',      image: 'assets/assorted-seeds.webp',   art: 'Curated seed bundles for vault runs, drop chases, and rare encounters.', tags: ['Seeds','Drops'], color: '#4ea568' }
+    'loadouts':     { name: 'Custom Loadout',     image: 'assets/arc-raiders/images/custom-loadout.webp',   art: 'Fully kitted loadouts assembled and shipped to your Stash. Pick the weapons, mods, gear and consumables.', tags: ['Loadout','Weapons','Gear'], color: '#e08a2c' },
+    'guns':         { name: 'All Weapons',         image: 'assets/arc-raiders/images/all-weapons.webp',      art: 'Every weapon in the catalogue, any tier, any mods. Sold individually or in stacks.', tags: ['Weapons','Mods'], color: '#c98a2c' },
+    'blueprints':   { name: 'Blueprints',          image: 'assets/arc-raiders/images/blueprints.webp',       art: 'Unlock recipes for the gear you want to craft instead of grind.', tags: ['Blueprints'], color: '#7faedc' },
+    'leveling':     { name: 'Leveling',            image: 'assets/arc-raiders/images/leveling.webp',         art: 'Account leveling, contract progress, season-pass tiers — all done manually.', tags: ['Leveling','XP'], color: '#e5c26b' },
+    'workshop':     { name: 'Workshop & Scrappy',  image: 'assets/arc-raiders/images/workshop.webp',         art: 'Bench upgrades, recycled parts, scrappy contracts cleared on demand.', tags: ['Workshop','Scrap'], color: '#d4571b' },
+    'materials':    { name: 'All Materials',       image: 'assets/arc-raiders/images/all-materials.webp',    art: 'Stack-priced raw materials shipped straight to your Stash.', tags: ['Materials','Resources'], color: '#a3acb1' },
+    'depositary':   { name: 'Depositary',          image: 'assets/arc-raiders/images/depositary.webp',       art: 'Stash expansions, secure transfers, asset migration between characters.', tags: ['Storage'], color: '#b794d6' },
+    'bosses':       { name: 'Boss & Puzzle',       image: 'assets/arc-raiders/images/boss-puzzle.webp',      art: 'Lockout bosses cleared, puzzles solved, achievements unlocked.', tags: ['Boss','Puzzle'], color: '#c75059' },
+    'coins':        { name: 'Raider Coins',        image: 'assets/arc-raiders/images/raider-coins.webp',     art: 'Bulk Raider Coins delivered through verified trade routes.', tags: ['Currency'], color: '#e5c26b' },
+    'trials':       { name: 'Trials Boost',        image: 'assets/arc-raiders/images/trials-boost.webp',     art: 'Weekly trial completions, perfect runs, ranked trial placements.', tags: ['Trials'], color: '#ff8a3d' },
+    'raids':        { name: 'Raid Bundles',        image: 'assets/arc-raiders/images/raids.webp',            art: 'Endgame raid clears with verified Immortal-tier squad leaders.', tags: ['Raids','Squad'], color: '#ff4655' },
+    'expeditions':  { name: 'Expedition Boost',    image: 'assets/arc-raiders/images/expedition-boost.webp', art: 'Full expedition runs — sites swept, loot extracted, you keep everything.', tags: ['Expedition'], color: '#4ec6e8' },
+    'coaching':     { name: 'Hourly Coaching',     image: 'assets/arc-raiders/images/raid-coaching.webp',    art: '1-on-1 raid coaching with a pro: VOD review, route planning, mechanics.', tags: ['Coaching'], color: '#9b6cff' },
+    'custom':       { name: 'Custom Orders',       image: 'assets/arc-raiders/images/custom-orders.webp',    art: 'Off-menu requests handled by our concierge desk in Discord.', tags: ['Custom'], color: '#e08a2c' },
+    'seeds':        { name: 'Assorted Seeds',      image: 'assets/arc-raiders/images/assorted-seeds.webp',   art: 'Curated seed bundles for vault runs, drop chases, and rare encounters.', tags: ['Seeds','Drops'], color: '#4ea568' }
   };
 
   var artPanel = document.getElementById('arcArtPanel');
@@ -564,12 +572,14 @@
 
   // --- Sidebar ---
   function openSidebar() {
+    if (!sidebar || !sidebarOverlay) return;
     sidebar.classList.add('on');
     sidebarOverlay.classList.add('on');
     sidebar.setAttribute('aria-hidden', 'false');
   }
 
   function closeSidebar() {
+    if (!sidebar || !sidebarOverlay) return;
     sidebar.classList.remove('on');
     sidebarOverlay.classList.remove('on');
     sidebar.setAttribute('aria-hidden', 'true');
@@ -599,7 +609,7 @@
   }
 
   bindServiceButtons(hubMap);
-  bindServiceButtons(document.getElementById('arcHubMobile'));
+  const arcHub = document.getElementById('arcHubMobile'); if (arcHub) bindServiceButtons(arcHub);
   bindServiceButtons(sidebar);
 
   // --- Back to map ---

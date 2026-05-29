@@ -49,26 +49,26 @@
       --ely-purchase-mid: #a07040;
       --ely-purchase-deep: #8a5a30;
 
-      /* ── Elysium Boost Landing Design System ── */
-      --eb-bg: #080c14;
-      --eb-bg-2: #10141c;
-      --eb-bg-3: #1a1e26;
-      --eb-bg-card: #161a22;
-      --eb-gold: #c9a84c;
-      --eb-gold-bright: #edcc70;
-      --eb-gold-deep: #8d6c10;
-      --eb-gold-glow: rgba(201, 168, 76, 0.42);
-      --eb-gold-soft: rgba(201, 168, 76, 0.14);
-      --eb-amber: #d97757;
-      --eb-text: #efe6cf;
-      --eb-text-soft: rgba(239, 230, 207, 0.72);
-      --eb-text-dim: rgba(239, 230, 207, 0.48);
-      --eb-text-faint: rgba(239, 230, 207, 0.28);
-      --eb-line: rgba(201, 168, 76, 0.32);
-      --eb-line-soft: rgba(239, 230, 207, 0.08);
-      --eb-f-display: "DM Sans", system-ui, sans-serif;
-      --eb-f-body: "DM Sans", system-ui, sans-serif;
-      --eb-f-mono: "JetBrains Mono", ui-monospace, monospace;
+      /* ── Elysium Boost Landing Design System (duplicate vars removed — use global.css) ── */
+      /* --eb-bg: #080c14; */
+      /* --eb-bg-2: #10141c; */
+      /* --eb-bg-3: #1a1e26; */
+      /* --eb-bg-card: #161a22; */
+      /* --eb-gold: #c9a84c; */
+      /* --eb-gold-bright: #edcc70; */
+      /* --eb-gold-deep: #8d6c10; */
+      /* --eb-gold-glow: rgba(201, 168, 76, 0.42); */
+      /* --eb-gold-soft: rgba(201, 168, 76, 0.14); */
+      /* --eb-amber: #d97757; */
+      /* --eb-text: #efe6cf; */
+      /* --eb-text-soft: rgba(239, 230, 207, 0.72); */
+      /* --eb-text-dim: rgba(239, 230, 207, 0.48); */
+      /* --eb-text-faint: rgba(239, 230, 207, 0.28); */
+      /* --eb-line: rgba(201, 168, 76, 0.32); */
+      /* --eb-line-soft: rgba(239, 230, 207, 0.08); */
+      /* --eb-f-display: "DM Sans", system-ui, sans-serif; */
+      /* --eb-f-body: "DM Sans", system-ui, sans-serif; */
+      /* --eb-f-mono: "JetBrains Mono", ui-monospace, monospace; */
     }
 
     * { box-sizing: border-box; }
@@ -1413,6 +1413,7 @@
 
     .home-game-card {
       min-height: clamp(155px, 20vh, 205px);
+      min-width: 0;
       border: 1px solid var(--line);
       border-radius: 12px;
       background: #08051a;
@@ -6049,6 +6050,7 @@
       text-transform: uppercase;
       overflow-wrap: anywhere;
       letter-spacing: .04em;
+      color: #efe6cf;
     }
 
     .cart-item-game {
@@ -6058,8 +6060,21 @@
       font-weight: 800;
       letter-spacing: .1em;
       text-transform: uppercase;
-      color: rgba(168, 158, 140, .9);
+      color: rgba(239, 230, 207, 0.75);
     }
+
+    .cart-item-detail-option,
+    .cart-item-sub,
+    .cart-item .option-label {
+      color: rgba(239, 230, 207, 0.75);
+    }
+
+    .cart-item-price {
+      color: #e5c26b;
+      font-weight: 600;
+    }
+
+    .cart-item * { opacity: unset; }
 
     .cart-item--receipt .cart-receipt-head {
       display: flex;
@@ -11318,13 +11333,16 @@ h1, h2, .hero-title, #heroTitle {
 .eb-btn:hover .arrow { transform: translateX(4px); color: var(--eb-gold-bright); }
 
 .eb-btn-primary {
-  background: linear-gradient(180deg, #d4b056 0%, #a4821f 100%);
+  background: linear-gradient(90deg, #8a7224 0%, #c9a84c 35%, #e5c26b 55%, #c9a84c 75%, #8a7224 100%);
+  background-size: 200% 100%;
   color: #1a1208;
   border: none;
   box-shadow: 0 1px 0 rgba(255,220,150,0.45) inset, 0 12px 28px -12px var(--eb-gold-glow);
+  transition: background-position 0.5s ease, box-shadow 0.35s ease, transform 100ms ease-out;
 }
 .eb-btn-primary .arrow { color: #1a1208; }
 .eb-btn-primary:hover { color: #1a1208;
+  background-position: 100% 0;
   box-shadow: 0 1px 0 rgba(255,220,150,0.45) inset, 0 16px 36px -10px var(--eb-gold-glow), 0 0 0 1px rgba(229,194,107,0.4); }
 .eb-btn-primary:hover .arrow { color: #1a1208; }
 
@@ -11464,7 +11482,7 @@ h1, h2, .hero-title, #heroTitle {
 .eb-hero-stats {
   margin-top: 88px;
   margin-inline: calc(max(0px, min(50vw - 50% - 48px, 170px)) * -1);
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 0;
   border-top: 1px solid var(--eb-line);
   border-bottom: 1px solid var(--eb-line);
@@ -11516,7 +11534,7 @@ body.tw-hero-centered .eb-hero-copy .eb-body {
 }
 body.tw-hero-centered .eb-hero-copy .eb-body { margin-left: auto; margin-right: auto; }
 body.tw-hero-centered .eb-hero-ctas { justify-content: center; }
-body.tw-hero-centered .eb-hero-stats { text-align: left; }
+body.tw-hero-centered .eb-hero-stats { text-align: center; justify-content: center; }
 
 /* Landing hero outlined display — premium gold stroke, transparent center.
    Strengthened stroke + larger responsive clamp than the shared .eb-h1 base
@@ -11586,6 +11604,12 @@ body.tw-title-outlined .eb-hero .eb-h1 .gold {
   transition: transform 1.2s cubic-bezier(0.2,0.7,0.2,1), filter 0.6s ease;
 }
 .eb-fcard:hover .eb-fcard-art { transform: scale(1.04); filter: saturate(1.15) brightness(1.05); }
+.eb-fcard-bg-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  z-index: 0;
+}
 
 .eb-fcard-bigword {
   position: absolute;
@@ -11756,7 +11780,7 @@ body.tw-title-outlined .eb-hero .eb-h1 .gold {
   border-color: var(--eb-gold);
   box-shadow: 0 24px 60px -24px rgba(0,0,0,0.8), 0 0 56px -16px var(--eb-gold-glow);
 }
-.eb-scard.eb-soon { cursor: default; }
+.eb-scard.eb-soon { cursor: default; pointer-events: none; }
 .eb-scard.eb-soon:hover { transform: none; border-color: var(--eb-line-soft); box-shadow: none; }
 .eb-scard-art {
   position: absolute; inset: 0;
@@ -11768,7 +11792,12 @@ body.tw-title-outlined .eb-hero .eb-h1 .gold {
   content: ""; position: absolute; inset: 0;
   background: linear-gradient(180deg, transparent 0%, transparent 30%, rgba(10,8,5,0.7) 75%, rgba(10,8,5,0.95) 100%);
 }
-.eb-scard.eb-soon .eb-scard-art { filter: saturate(0.4) brightness(0.6); }
+.eb-scard-bg-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  z-index: 0;
+}
 .eb-scard-bigword {
   position: absolute; left: 50%; top: 38%;
   transform: translate(-50%, -50%);

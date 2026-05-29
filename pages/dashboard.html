@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Elysium Boost</title>
+  <meta name="description" content="Your Elysium Boost dashboard — orders, rank, and account.">
+  <meta property="og:title" content="Elysium Boost">
+  <meta property="og:description" content="Premium gaming boost service.">
+  <meta property="og:image" content="https://elysiumboost.com/assets/elysium-og.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../assets/elysium-logo-mark.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body class="db-body">
+
+  <div class="db-bg" aria-hidden="true"></div>
+  <div class="db-toasts" id="dbToasts" aria-live="polite" aria-atomic="false"></div>
+
+  <div class="db-shell">
+
+    <!-- ══ Sidebar ══ -->
+    <aside class="db-sidebar" id="dbSidebar">
+
+      <a href="../index.html" class="db-sidebar-logo" aria-label="Elysium Boost home">
+        <img src="../assets/elysium-logo-mark.png" alt="Elysium Boost" width="32" height="32" loading="eager">
+        <span>Elysium</span>
+      </a>
+
+      <div class="db-sidebar-profile">
+        <button class="db-avatar-wrap" id="dbAvatarWrap" type="button" aria-label="Change avatar">
+          <div class="db-avatar-circle" id="dbAvatarCircle" data-eb-avatar>EB</div>
+          <div class="db-avatar-overlay" aria-hidden="true">
+            <i class="ti ti-camera"></i>
+            <span>Change</span>
+          </div>
+        </button>
+        <div class="db-profile-text">
+          <div class="db-greeting" id="dbGreeting">Good evening</div>
+          <div class="db-profile-name" id="dbProfileName">Champion</div>
+          <div class="db-profile-email" id="dbProfileEmail">—</div>
+        </div>
+        <div class="db-rank-badge" id="dbRankBadge" aria-label="Your rank">
+          <i class="ti ti-crown"></i>
+          <span id="dbRankBadgeName">Veteran</span>
+        </div>
+      </div>
+
+      <nav class="db-nav" aria-label="Dashboard navigation">
+        <a class="db-nav-item is-active" href="#overview" data-section="overview">
+          <i class="ti ti-layout-dashboard"></i><span>Overview</span>
+        </a>
+        <a class="db-nav-item" href="#orders" data-section="orders">
+          <i class="ti ti-shopping-bag"></i><span>My Orders</span>
+          <span class="db-nav-badge" id="dbNavOrdersBadge" hidden>0</span>
+          <span class="db-nav-unread" id="dbNavOrdersUnread" hidden aria-label="Unread messages">0</span>
+        </a>
+        <a class="db-nav-item" href="#tickets" data-section="tickets">
+          <i class="ti ti-ticket"></i><span>My Tickets</span>
+        </a>
+        <a class="db-nav-item" href="#rank" data-section="rank">
+          <i class="ti ti-crown"></i><span>Elysium Rank</span>
+        </a>
+        <a class="db-nav-item" href="#account" data-section="account">
+          <i class="ti ti-user"></i><span>My Account</span>
+        </a>
+        <a class="db-nav-item" href="#security" data-section="security">
+          <i class="ti ti-lock"></i><span>Security</span>
+        </a>
+        <a class="db-nav-item db-nav-discord" href="#discord" data-section="discord">
+          <i class="ti ti-brand-discord"></i><span>Discord</span>
+          <span class="db-discord-dot" aria-hidden="true"></span>
+        </a>
+        <div class="db-nav-sep" role="separator"></div>
+        <button class="db-nav-item db-nav-logout" type="button" id="dbNavLogout">
+          <i class="ti ti-logout"></i><span>Logout</span>
+        </button>
+      </nav>
+
+    </aside>
+
+    <!-- ══ Main ══ -->
+    <main class="db-main" id="dbMain">
+
+      <!-- Overview -->
+      <section class="db-section" id="dbSectionOverview">
+        <div class="db-section-hd">
+          <h1 class="db-section-title">Overview</h1>
+        </div>
+
+        <!-- Stats row -->
+        <div class="db-stats-grid" id="dbStatsGrid">
+          <div class="db-stat-card"><div class="db-skel db-skel-stat"></div></div>
+          <div class="db-stat-card"><div class="db-skel db-skel-stat"></div></div>
+          <div class="db-stat-card"><div class="db-skel db-skel-stat"></div></div>
+          <div class="db-stat-card"><div class="db-skel db-skel-stat"></div></div>
+        </div>
+
+        <!-- Cards row -->
+        <div class="db-overview-2col">
+          <div class="db-ov-col db-ov-left">
+            <div class="db-card db-last-order-card" id="dbLastOrderCard">
+              <div class="db-skel db-skel-block"></div>
+            </div>
+          </div>
+          <div class="db-ov-col db-ov-right">
+            <div class="db-card db-rank-progress-card" id="dbRankProgressCard">
+              <div class="db-skel db-skel-block"></div>
+            </div>
+            <div class="db-card db-referral-card" id="dbReferralCard">
+              <div class="db-skel db-skel-block"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Continue Shopping -->
+        <div class="db-sub-hd">Continue Shopping</div>
+        <div class="db-grid-2">
+          <a class="db-game-card" href="games/arc-raiders.html">
+            <i class="ti ti-crosshair db-game-card-icon" aria-hidden="true"></i>
+            <span class="db-game-card-text">
+              <span class="db-game-card-name">Arc Raiders</span>
+              <span class="db-game-card-sub">Boosting · Coaching · Materials</span>
+            </span>
+            <i class="ti ti-arrow-right db-game-card-arrow" aria-hidden="true"></i>
+          </a>
+          <a class="db-game-card" href="games/valorant.html">
+            <i class="ti ti-sword db-game-card-icon" aria-hidden="true"></i>
+            <span class="db-game-card-text">
+              <span class="db-game-card-name">Valorant</span>
+              <span class="db-game-card-sub">Rank Boost · Coaching · Placements</span>
+            </span>
+            <i class="ti ti-arrow-right db-game-card-arrow" aria-hidden="true"></i>
+          </a>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="db-sub-hd">Quick Actions</div>
+        <div class="db-quick-actions">
+          <a class="db-quick-btn" href="#orders" data-section="orders">
+            <i class="ti ti-shopping-bag" aria-hidden="true"></i>
+            <span>My Orders</span>
+          </a>
+          <a class="db-quick-btn" href="#rank" data-section="rank">
+            <i class="ti ti-crown" aria-hidden="true"></i>
+            <span>Elysium Rank</span>
+          </a>
+          <a class="db-quick-btn" href="#account" data-section="account">
+            <i class="ti ti-user" aria-hidden="true"></i>
+            <span>My Account</span>
+          </a>
+          <a class="db-quick-btn" href="#tickets" data-section="tickets">
+            <i class="ti ti-ticket" aria-hidden="true"></i>
+            <span>My Tickets</span>
+          </a>
+        </div>
+
+        <!-- Discord + Support -->
+        <div class="db-grid-2 db-bottom-strip">
+          <a class="db-discord-cta" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer">
+            <i class="ti ti-brand-discord db-discord-cta-icon" aria-hidden="true"></i>
+            <span class="db-discord-cta-text">
+              <span class="db-discord-cta-title">Join Our Discord</span>
+              <span class="db-discord-cta-sub">Support, updates, community</span>
+            </span>
+            <i class="ti ti-arrow-right db-discord-cta-arrow" aria-hidden="true"></i>
+          </a>
+          <div class="db-support-banner">
+            <span class="db-support-text"><strong>Need help?</strong> Our team responds within 24 hours.</span>
+            <a class="eb-btn-primary db-support-btn" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer">
+              <i class="ti ti-headset" aria-hidden="true"></i> Get Support
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- My Orders -->
+      <section class="db-section db-hidden" id="dbSectionOrders">
+        <div class="db-section-hd">
+          <h1 class="db-section-title">My Orders</h1>
+          <div class="db-filter-tabs" id="dbOrderTabs" role="tablist" aria-label="Filter orders">
+            <button class="db-tab is-active" data-filter="all"       type="button" role="tab">All</button>
+            <button class="db-tab"           data-filter="active"    type="button" role="tab">Active</button>
+            <button class="db-tab"           data-filter="completed" type="button" role="tab">Completed</button>
+            <button class="db-tab"           data-filter="pending"   type="button" role="tab">Pending</button>
+          </div>
+        </div>
+        <div class="db-orders-stats" id="dbOrdersStats">
+          <div class="db-skel db-skel-order-stat"></div>
+          <div class="db-skel db-skel-order-stat"></div>
+          <div class="db-skel db-skel-order-stat"></div>
+          <div class="db-skel db-skel-order-stat"></div>
+        </div>
+        <div class="db-orders-layout">
+          <div class="db-orders-main">
+            <div class="db-orders-body" id="dbOrdersBody">
+              <div class="db-skel db-skel-table"></div>
+            </div>
+          </div>
+          <div class="db-orders-aside">
+            <div class="db-card">
+              <h3 class="db-status-guide-title">Order Status Guide</h3>
+              <div class="db-status-guide-list">
+                <div class="db-status-guide-row">
+                  <span class="db-status-guide-badge-wrap"><span class="db-status-badge db-status-pending">Pending</span></span>
+                  <span class="db-status-guide-desc">Order received, awaiting booster assignment</span>
+                </div>
+                <div class="db-status-guide-row">
+                  <span class="db-status-guide-badge-wrap"><span class="db-status-badge db-status-active">Active</span></span>
+                  <span class="db-status-guide-desc">Booster is currently working on your order</span>
+                </div>
+                <div class="db-status-guide-row">
+                  <span class="db-status-guide-badge-wrap"><span class="db-status-badge db-status-completed">Completed</span></span>
+                  <span class="db-status-guide-desc">Order delivered successfully</span>
+                </div>
+              </div>
+            </div>
+            <div class="db-card db-orders-need-help">
+              <div class="db-card-title-sm"><i class="ti ti-headset"></i> Need Help?</div>
+              <p class="db-orders-help-text">Issues with an order? Open a ticket in Discord and our team will assist you.</p>
+              <a class="db-ticket-btn" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer">
+                <i class="ti ti-brand-discord"></i> Open Ticket
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- My Tickets -->
+      <section class="db-section db-hidden" id="dbSectionTickets">
+        <div class="db-section-hd">
+          <h1 class="db-section-title">My Tickets</h1>
+          <a class="eb-btn-primary db-header-btn" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer">
+            <i class="ti ti-plus"></i> Open New Ticket
+          </a>
+        </div>
+        <div class="db-orders-stats" id="dbTicketsStats">
+          <div class="db-skel db-skel-order-stat"></div>
+          <div class="db-skel db-skel-order-stat"></div>
+          <div class="db-skel db-skel-order-stat"></div>
+        </div>
+        <div class="db-orders-layout">
+          <div class="db-orders-main">
+            <div class="db-tickets-body" id="dbTicketsBody">
+              <div class="db-skel db-skel-table"></div>
+            </div>
+          </div>
+          <div class="db-orders-aside">
+            <div class="db-card db-support-card">
+              <div class="db-card-title-sm"><i class="ti ti-clock-hour-4"></i> Response Time</div>
+              <div class="db-support-metric">&lt; 24h</div>
+              <div class="db-support-metric-sub">Average first reply</div>
+              <div class="db-support-divider"></div>
+              <ul class="db-support-list">
+                <li><i class="ti ti-bolt"></i> 24/7 monitored channels</li>
+                <li><i class="ti ti-message-2"></i> Live updates on Discord</li>
+                <li><i class="ti ti-shield-check"></i> Dispute &amp; refund help</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Elysium Rank -->
+      <section class="db-section db-hidden" id="dbSectionRank">
+        <div class="db-section-hd">
+          <h1 class="db-section-title">Elysium Rank</h1>
+        </div>
+        <div class="db-rank-hero" id="dbRankHero">
+          <div class="db-skel db-skel-rank-hero"></div>
+        </div>
+
+        <div class="db-orders-stats db-rank-facts" id="dbRankFacts">
+          <div class="db-skel db-skel-order-stat"></div>
+          <div class="db-skel db-skel-order-stat"></div>
+          <div class="db-skel db-skel-order-stat"></div>
+          <div class="db-skel db-skel-order-stat"></div>
+        </div>
+
+        <div class="db-sub-hd">Rank Ladder</div>
+        <div class="db-rank-tiers-grid" id="dbRankTiersGrid">
+          <div class="db-skel db-skel-tier"></div>
+          <div class="db-skel db-skel-tier"></div>
+          <div class="db-skel db-skel-tier"></div>
+          <div class="db-skel db-skel-tier"></div>
+          <div class="db-skel db-skel-tier"></div>
+        </div>
+
+        <div class="db-sub-hd">Rank Benefits</div>
+        <div class="db-grid-3">
+          <div class="db-card db-benefit-card">
+            <i class="ti ti-discount-2 db-benefit-icon" aria-hidden="true"></i>
+            <div class="db-benefit-name">Growing Discounts</div>
+            <p class="db-benefit-desc">Up to 20% off every order as you climb the ranks.</p>
+          </div>
+          <div class="db-card db-benefit-card">
+            <i class="ti ti-bolt db-benefit-icon" aria-hidden="true"></i>
+            <div class="db-benefit-name">Priority Support</div>
+            <p class="db-benefit-desc">Skip the queue with faster booster assignment.</p>
+          </div>
+          <div class="db-card db-benefit-card">
+            <i class="ti ti-user-star db-benefit-icon" aria-hidden="true"></i>
+            <div class="db-benefit-name">Custom Booster</div>
+            <p class="db-benefit-desc">Hand-pick your specialist on higher tiers.</p>
+          </div>
+          <div class="db-card db-benefit-card">
+            <i class="ti ti-brand-discord db-benefit-icon" aria-hidden="true"></i>
+            <div class="db-benefit-name">VIP Discord</div>
+            <p class="db-benefit-desc">Private channels and an exclusive rank badge.</p>
+          </div>
+          <div class="db-card db-benefit-card">
+            <i class="ti ti-rocket db-benefit-icon" aria-hidden="true"></i>
+            <div class="db-benefit-name">Fast Delivery</div>
+            <p class="db-benefit-desc">Expedited turnaround on every service.</p>
+          </div>
+          <div class="db-card db-benefit-card">
+            <i class="ti ti-gift db-benefit-icon" aria-hidden="true"></i>
+            <div class="db-benefit-name">Member Rewards</div>
+            <p class="db-benefit-desc">Seasonal giveaways reserved for ranked members.</p>
+          </div>
+        </div>
+
+        <div class="db-sub-hd">How to Progress</div>
+        <div class="db-grid-3">
+          <div class="db-card db-step-card">
+            <span class="db-step-num">01</span>
+            <div class="db-step-name">Place Orders</div>
+            <p class="db-benefit-desc">Every dollar spent counts toward your lifetime total.</p>
+          </div>
+          <div class="db-card db-step-card">
+            <span class="db-step-num">02</span>
+            <div class="db-step-name">Climb Tiers</div>
+            <p class="db-benefit-desc">Cross each spend threshold to unlock the next rank.</p>
+          </div>
+          <div class="db-card db-step-card">
+            <span class="db-step-num">03</span>
+            <div class="db-step-name">Unlock Perks</div>
+            <p class="db-benefit-desc">Bigger discounts and VIP treatment at every level.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- My Account -->
+      <section class="db-section db-hidden" id="dbSectionAccount">
+        <div class="db-section-hd">
+          <h1 class="db-section-title">My Account</h1>
+        </div>
+        <div class="db-orders-layout">
+          <div class="db-orders-main">
+
+            <div class="db-card db-profile-summary">
+              <div class="db-av-preview" id="dbAvPreview">EB</div>
+              <div class="db-profile-summary-meta">
+                <div class="db-profile-summary-name" id="dbAccName">Champion</div>
+                <div class="db-profile-summary-email" id="dbAccEmail">—</div>
+                <span class="db-rank-badge db-profile-summary-rank">
+                  <i class="ti ti-crown"></i><span id="dbAccRankBadge">Veteran</span>
+                </span>
+              </div>
+            </div>
+
+            <div class="db-sub-hd">Choose Avatar</div>
+            <div class="db-av-grid" id="dbAvGrid" role="radiogroup" aria-label="Select avatar"></div>
+
+            <div class="db-sub-hd">Profile Info</div>
+            <form class="db-form" id="dbAccountForm" novalidate>
+              <div class="db-field">
+                <label class="db-label" for="dbFUsername">Username</label>
+                <input class="db-input" type="text" id="dbFUsername" name="username" autocomplete="username" placeholder="Your username">
+              </div>
+              <div class="db-field">
+                <label class="db-label" for="dbFEmail">Email</label>
+                <input class="db-input db-input-ro" type="email" id="dbFEmail" name="email" readonly aria-readonly="true" placeholder="your@email.com">
+              </div>
+              <div class="db-field">
+                <label class="db-label" for="dbFDiscord">Discord Tag</label>
+                <input class="db-input" type="text" id="dbFDiscord" name="discord_id" autocomplete="off" placeholder="username or user#0000">
+              </div>
+              <div class="db-field">
+                <label class="db-label" for="dbFCountry">Country</label>
+                <input class="db-input" type="text" id="dbFCountry" name="country" autocomplete="country-name" placeholder="e.g. United States">
+              </div>
+              <button type="submit" class="eb-btn-primary db-save-btn">
+                <i class="ti ti-device-floppy"></i> Save Changes
+              </button>
+            </form>
+
+          </div>
+          <div class="db-orders-aside">
+            <div class="db-card">
+              <div class="db-card-title-sm"><i class="ti ti-circle-check"></i> Account Status</div>
+              <div class="db-info-list" id="dbAccStatusList">
+                <div class="db-skel db-skel-block"></div>
+              </div>
+            </div>
+            <div class="db-card">
+              <div class="db-card-title-sm"><i class="ti ti-users"></i> Referral Code</div>
+              <div class="db-referral-code-wrap">
+                <code class="db-referral-code" id="dbAccRefCode">—</code>
+                <button class="db-copy-btn" type="button" onclick="dbCopyAccRef()" title="Copy code" aria-label="Copy referral code"><i class="ti ti-copy"></i></button>
+              </div>
+              <p class="db-info-note">Earn <strong>3%</strong> on every order a referred friend places.</p>
+            </div>
+            <div class="db-card">
+              <div class="db-card-title-sm"><i class="ti ti-calendar-event"></i> Member Since</div>
+              <div class="db-member-date" id="dbAccMember">—</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Security -->
+      <section class="db-section db-hidden" id="dbSectionSecurity">
+        <div class="db-section-hd">
+          <h1 class="db-section-title">Security</h1>
+        </div>
+        <div class="db-security-layout">
+
+          <div class="db-grid-2">
+            <div class="db-card db-security-card">
+              <h2 class="db-card-title"><i class="ti ti-key"></i> Change Password</h2>
+              <form class="db-form" id="dbPasswordForm" novalidate>
+                <div class="db-field">
+                  <label class="db-label" for="dbFNewPw">New Password</label>
+                  <input class="db-input" type="password" id="dbFNewPw" name="new_password" autocomplete="new-password" placeholder="Minimum 8 characters">
+                </div>
+                <div class="db-field">
+                  <label class="db-label" for="dbFConfirmPw">Confirm Password</label>
+                  <input class="db-input" type="password" id="dbFConfirmPw" name="confirm_password" autocomplete="new-password" placeholder="Repeat new password">
+                </div>
+                <button type="submit" class="eb-btn-primary db-save-btn">
+                  <i class="ti ti-lock-check"></i> Update Password
+                </button>
+              </form>
+            </div>
+
+            <div class="db-card db-security-card">
+              <h2 class="db-card-title"><i class="ti ti-shield-lock"></i> Two-Factor Auth</h2>
+              <div class="db-2fa-row">
+                <div class="db-2fa-info">
+                  <span class="db-2fa-status" id="db2faStatus">Not enabled</span>
+                  <p class="db-info-note">Protect your account with a one-time code from an authenticator app.</p>
+                </div>
+                <button class="db-toggle" id="db2faToggle" type="button" role="switch" aria-checked="false" aria-label="Toggle two-factor authentication">
+                  <span class="db-toggle-knob"></span>
+                </button>
+              </div>
+              <button class="eb-btn db-2fa-btn" id="db2faBtn" type="button">
+                <i class="ti ti-shield-plus"></i> Set Up 2FA
+              </button>
+            </div>
+          </div>
+
+          <div class="db-grid-2">
+            <div class="db-card db-security-card">
+              <h2 class="db-card-title"><i class="ti ti-history"></i> Login Activity</h2>
+              <div class="db-sessions-list" id="dbSessionsList">
+                <div class="db-skel db-skel-block"></div>
+              </div>
+            </div>
+
+            <div class="db-card db-security-card">
+              <h2 class="db-card-title"><i class="ti ti-checklist"></i> Security Checklist</h2>
+              <div class="db-checklist" id="dbChecklist">
+                <div class="db-skel db-skel-block"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="db-card db-danger-card">
+            <h2 class="db-card-title db-danger-title"><i class="ti ti-alert-triangle"></i> Danger Zone</h2>
+            <p class="db-danger-desc">Permanently delete your account and all associated data. This action cannot be undone.</p>
+            <button class="db-danger-btn" type="button" id="dbDeleteAccountBtn">
+              <i class="ti ti-trash"></i> Delete Account
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Discord -->
+      <section class="db-section db-hidden" id="dbSectionDiscord">
+        <div class="db-section-hd">
+          <h1 class="db-section-title">Discord</h1>
+        </div>
+        <div class="db-orders-layout">
+          <div class="db-orders-main">
+
+            <div class="db-card db-discord-connect" id="dbDiscordConnect">
+              <div class="db-skel db-skel-block"></div>
+            </div>
+
+            <div class="db-sub-hd">Member Perks</div>
+            <div class="db-grid-2">
+              <div class="db-card db-benefit-card">
+                <i class="ti ti-badges db-benefit-icon" aria-hidden="true"></i>
+                <div class="db-benefit-name">Rank Roles</div>
+                <p class="db-benefit-desc">Your Elysium rank mirrors as a colored Discord role.</p>
+              </div>
+              <div class="db-card db-benefit-card">
+                <i class="ti ti-ticket db-benefit-icon" aria-hidden="true"></i>
+                <div class="db-benefit-name">Priority Tickets</div>
+                <p class="db-benefit-desc">Open and track order tickets directly in the server.</p>
+              </div>
+              <div class="db-card db-benefit-card">
+                <i class="ti ti-gift db-benefit-icon" aria-hidden="true"></i>
+                <div class="db-benefit-name">Giveaways</div>
+                <p class="db-benefit-desc">Member-only drops and seasonal events.</p>
+              </div>
+              <div class="db-card db-benefit-card">
+                <i class="ti ti-bell-ringing db-benefit-icon" aria-hidden="true"></i>
+                <div class="db-benefit-name">Live Updates</div>
+                <p class="db-benefit-desc">Instant booster progress and delivery alerts.</p>
+              </div>
+            </div>
+
+          </div>
+          <div class="db-orders-aside">
+            <div class="db-card db-discord-server-card">
+              <div class="db-discord-server-mark"><i class="ti ti-brand-discord"></i></div>
+              <div class="db-discord-server-name">Elysium Boost</div>
+              <div class="db-discord-server-meta" id="dbDiscordMembers">Community &amp; Support</div>
+              <a class="eb-btn-primary db-discord-join-btn" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer">
+                <i class="ti ti-brand-discord"></i> Join Server
+              </a>
+              <a class="eb-btn db-discord-open-btn" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer">
+                <i class="ti ti-external-link"></i> Open in Discord
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Mobile bottom nav -->
+  <nav class="db-mobile-nav" id="dbMobileNav" aria-label="Mobile navigation">
+    <a class="db-mob-item is-active" href="#overview"  data-section="overview"  aria-label="Overview"><i class="ti ti-layout-dashboard"></i><span>Overview</span></a>
+    <a class="db-mob-item"           href="#orders"    data-section="orders"    aria-label="Orders"><i class="ti ti-shopping-bag"></i><span>Orders</span></a>
+    <a class="db-mob-item"           href="#rank"      data-section="rank"      aria-label="Rank"><i class="ti ti-crown"></i><span>Rank</span></a>
+    <a class="db-mob-item"           href="#account"   data-section="account"   aria-label="Account"><i class="ti ti-user"></i><span>Account</span></a>
+    <a class="db-mob-item"           href="#security"  data-section="security"  aria-label="Security"><i class="ti ti-lock"></i><span>Security</span></a>
+  </nav>
+
+  <!-- Avatar picker modal -->
+  <div class="db-modal-overlay db-hidden" id="dbAvatarModal" role="dialog" aria-modal="true" aria-label="Choose avatar">
+    <div class="db-modal">
+      <div class="db-modal-hd">
+        <span class="db-modal-title">Choose Your Avatar</span>
+        <button class="db-modal-close" id="dbAvatarModalClose" type="button" aria-label="Close"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="db-modal-av-grid" id="dbModalAvGrid" role="radiogroup" aria-label="Select avatar"></div>
+    </div>
+  </div>
+
+  <!-- Delete confirm modal -->
+  <div class="db-modal-overlay db-hidden" id="dbDeleteModal" role="dialog" aria-modal="true" aria-label="Confirm account deletion">
+    <div class="db-modal db-modal-sm">
+      <div class="db-modal-hd">
+        <span class="db-modal-title">Delete Account</span>
+        <button class="db-modal-close" id="dbDeleteModalClose" type="button" aria-label="Close"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="db-modal-body">
+        <p>This will permanently delete your account, all orders, and all data. Type <strong>DELETE</strong> to confirm.</p>
+        <input class="db-input db-delete-confirm-input" type="text" id="dbDeleteConfirmInput" placeholder="Type DELETE to confirm" autocomplete="off">
+      </div>
+      <div class="db-modal-ft">
+        <button class="db-ghost-btn" type="button" id="dbDeleteCancelBtn">Cancel</button>
+        <button class="db-danger-btn" type="button" id="dbDeleteConfirmBtn" disabled>Delete Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booster chat modal -->
+  <div class="db-modal-overlay db-hidden" id="dbChatModal" role="dialog" aria-modal="true" aria-label="Chat with your booster">
+    <div class="db-modal db-chat-modal">
+      <div class="db-modal-hd">
+        <span class="db-modal-title db-chat-modal-title">
+          <span class="db-chat-avatar" id="dbChatAvatar"><i class="ti ti-user"></i></span>
+          <span class="db-chat-head-text">
+            <span id="dbChatBoosterName">Your Booster</span>
+            <span class="db-chat-head-sub" id="dbChatService">—</span>
+          </span>
+        </span>
+        <button class="db-modal-close" id="dbChatModalClose" type="button" aria-label="Close"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="db-chat-thread" id="dbChatThread"><div class="db-chat-loading">Loading…</div></div>
+      <form class="db-chat-input" id="dbChatForm">
+        <input type="text" class="db-chat-field" id="dbChatField" placeholder="Message your booster…" autocomplete="off" maxlength="2000">
+        <button type="submit" class="db-chat-send" id="dbChatSend" aria-label="Send"><i class="ti ti-send"></i></button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="../js/config.js" defer></script>
+  <script src="../js/auth.js" defer></script>
+  <script src="../js/dashboard.js" defer></script>
+  <script src="../js/chat-widget.js" defer></script>
+</body>
+</html>

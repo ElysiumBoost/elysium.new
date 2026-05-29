@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat — Elysium Boost</title>
+  <meta name="description" content="Elysium Boost site chat — talk to your booster or customer, track delivery, and share proof securely.">
+  <meta property="og:title" content="Elysium Boost">
+  <meta property="og:description" content="Premium gaming boost service.">
+  <meta property="og:image" content="https://elysiumboost.com/assets/elysium-og.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../assets/elysium-logo-mark.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/chat.css">
+</head>
+<body class="ec-body">
+
+  <div class="ec-bg" aria-hidden="true"></div>
+  <div class="ec-toasts" id="ecToasts" aria-live="polite" aria-atomic="false"></div>
+
+  <div class="ec-app" id="ecApp">
+
+    <!-- ══ LEFT — conversation list ══ -->
+    <aside class="ec-left" id="ecLeft" aria-label="Conversations">
+      <div class="ec-left-hd">
+        <a href="../index.html" class="ec-logo" aria-label="Elysium Boost home">
+          <img src="../assets/elysium-logo-mark.png" alt="" width="26" height="26">
+          <span>Messages</span>
+        </a>
+        <a class="ec-home-link" id="ecHomeLink" href="dashboard.html" aria-label="Back to dashboard"><i class="ti ti-layout-dashboard"></i></a>
+      </div>
+      <div class="ec-search-wrap">
+        <i class="ti ti-search"></i>
+        <input type="text" class="ec-search" id="ecSearch" placeholder="Search name, order, game…" autocomplete="off">
+      </div>
+      <div class="ec-filters" id="ecFilters" role="tablist">
+        <button class="ec-filter is-active" data-filter="all" type="button" role="tab">All</button>
+        <button class="ec-filter" data-filter="active" type="button" role="tab">Active</button>
+        <button class="ec-filter" data-filter="support" type="button" role="tab">Support</button>
+        <button class="ec-filter" data-filter="disputed" type="button" role="tab">Disputed</button>
+      </div>
+      <div class="ec-convos" id="ecConvoList">
+        <div class="ec-skel ec-skel-convo"></div>
+        <div class="ec-skel ec-skel-convo"></div>
+        <div class="ec-skel ec-skel-convo"></div>
+      </div>
+    </aside>
+
+    <!-- ══ CENTER — chat window ══ -->
+    <main class="ec-center" id="ecCenter" aria-label="Conversation">
+      <!-- Empty state (no conversation chosen) -->
+      <div class="ec-empty" id="ecEmptyState">
+        <i class="ti ti-messages"></i>
+        <div class="ec-empty-title">Select a conversation</div>
+        <div class="ec-empty-sub">Pick an order on the left to open its chat, track delivery, and share proof.</div>
+      </div>
+
+      <!-- Active conversation (filled by JS, hidden until a convo is chosen) -->
+      <div class="ec-conv ec-hidden" id="ecConv">
+        <header class="ec-chat-hd" id="ecChatHeader"></header>
+        <div class="ec-pinned ec-hidden" id="ecPinnedBar"></div>
+        <div class="ec-thread" id="ecMessages"></div>
+        <div class="ec-typing ec-hidden" id="ecTyping"><span class="ec-typing-dots"><span></span><span></span><span></span></span><span id="ecTypingWho"></span></div>
+        <div class="ec-flagwarn ec-hidden" id="ecFlagWarn"><i class="ti ti-shield-exclamation"></i> This message may violate platform rules. External payment is never allowed.</div>
+        <form class="ec-composer" id="ecComposer">
+          <div class="ec-composer-actions">
+            <button type="button" class="ec-comp-btn" id="ecImgBtn" aria-label="Attach image"><i class="ti ti-photo"></i></button>
+            <button type="button" class="ec-comp-btn ec-booster-only" id="ecProofBtn" aria-label="Upload proof"><i class="ti ti-shield-check"></i></button>
+            <button type="button" class="ec-comp-btn ec-booster-only" id="ecCannedBtn" aria-label="Canned replies"><i class="ti ti-message-bolt"></i></button>
+            <input type="file" id="ecFileInput" accept="image/png,image/jpeg,image/webp,video/mp4" hidden>
+          </div>
+          <textarea class="ec-input" id="ecInput" rows="1" placeholder="Write a message…" maxlength="2000"></textarea>
+          <button type="submit" class="ec-send" id="ecSend" aria-label="Send"><i class="ti ti-send"></i></button>
+          <div class="ec-canned-menu ec-hidden" id="ecCannedMenu" role="menu"></div>
+        </form>
+        <div class="ec-monitor-note"><i class="ti ti-eye"></i> Messages are monitored for platform safety. Never share external payment info.</div>
+      </div>
+    </main>
+
+    <!-- ══ RIGHT — order control panel ══ -->
+    <aside class="ec-right ec-hidden" id="ecRight" aria-label="Order details">
+      <div class="ec-right-inner" id="ecOrderPanel"></div>
+    </aside>
+  </div>
+
+  <!-- Mobile floating controls -->
+  <button class="ec-mob-back ec-hidden" id="ecMobBack" type="button" aria-label="Back to conversations"><i class="ti ti-arrow-left"></i></button>
+  <button class="ec-mob-panel ec-hidden" id="ecMobPanel" type="button" aria-label="Order details"><i class="ti ti-clipboard-list"></i></button>
+
+  <!-- Proof upload modal -->
+  <div class="ec-modal-overlay ec-hidden" id="ecProofModal" role="dialog" aria-modal="true" aria-label="Upload proof">
+    <div class="ec-modal">
+      <div class="ec-modal-hd"><span class="ec-modal-title">Upload Completion Proof</span>
+        <button class="ec-modal-close" id="ecProofClose" type="button" aria-label="Close"><i class="ti ti-x"></i></button></div>
+      <div class="ec-modal-body">
+        <div class="ec-proof-drop" id="ecProofDrop">
+          <i class="ti ti-cloud-upload"></i>
+          <span>Drag a screenshot or clip here, or <strong>browse</strong></span>
+          <span class="ec-proof-hint">PNG · JPG · MP4 · 100KB–20MB</span>
+          <input type="file" id="ecProofInput" accept="image/png,image/jpeg,image/webp,video/mp4" hidden>
+        </div>
+        <div class="ec-proof-progress ec-hidden" id="ecProofProgress"><div class="ec-proof-bar" id="ecProofBar"></div></div>
+        <div class="ec-proof-preview ec-hidden" id="ecProofPreview"></div>
+      </div>
+      <div class="ec-modal-ft">
+        <button class="ec-ghost-btn" id="ecProofCancel" type="button">Cancel</button>
+        <button class="eb-btn-primary ec-modal-cta" id="ecProofSubmit" type="button" disabled><i class="ti ti-send"></i> Submit Proof</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Proof zoom modal -->
+  <div class="ec-modal-overlay ec-hidden" id="ecZoomModal" role="dialog" aria-modal="true" aria-label="View proof">
+    <div class="ec-zoom">
+      <button class="ec-modal-close ec-zoom-close" id="ecZoomClose" type="button" aria-label="Close"><i class="ti ti-x"></i></button>
+      <div class="ec-zoom-media" id="ecZoomMedia"></div>
+      <div class="ec-zoom-meta" id="ecZoomMeta"></div>
+    </div>
+  </div>
+
+  <!-- Request help / action modal -->
+  <div class="ec-modal-overlay ec-hidden" id="ecHelpModal" role="dialog" aria-modal="true" aria-label="Request help">
+    <div class="ec-modal">
+      <div class="ec-modal-hd"><span class="ec-modal-title" id="ecHelpTitle">Request Help</span>
+        <button class="ec-modal-close" id="ecHelpClose" type="button" aria-label="Close"><i class="ti ti-x"></i></button></div>
+      <div class="ec-modal-body" id="ecHelpBody"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="../js/config.js" defer></script>
+  <script src="../js/auth.js" defer></script>
+  <script src="../js/chat.js" defer></script>
+  <script src="../js/chat-widget.js" defer></script>
+</body>
+</html>

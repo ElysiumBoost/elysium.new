@@ -3,8 +3,7 @@
    Tokens, resets, layout primitives, typography, buttons.
    ══════════════════════════════════════════════════════════════ */
 
-/* ── Shared font import (Space Grotesk — display family) ── */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+/* Space Grotesk import removed — Rajdhani and Plus Jakarta Sans are the primary fonts */
 
 /* ── @property for travelling line animation ── */
 @property --arc-trace-angle {
@@ -39,8 +38,8 @@
   --arc-rust:      #d4571b;
   --arc-rust-glow: rgba(212, 87, 27, 0.32);
 
-  --f-display: "Space Grotesk", "Rajdhani", "Plus Jakarta Sans", system-ui, sans-serif;
-  --f-body:    "Space Grotesk", "Plus Jakarta Sans", system-ui, sans-serif;
+  --f-display: "Rajdhani", "Plus Jakarta Sans", "Space Grotesk", system-ui, sans-serif;
+  --f-body:    "Plus Jakarta Sans", "Space Grotesk", system-ui, sans-serif;
   --f-mono:    "JetBrains Mono", ui-monospace, monospace;
 
   color-scheme: dark;
@@ -69,6 +68,9 @@ html, body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--gold-deep); border-radius: 3px; }
 html { scrollbar-width: thin; scrollbar-color: var(--gold-deep) transparent; }
+
+/* ── Utility ── */
+.eb-hidden { display: none !important; }
 
 /* ── Element resets ── */
 a { color: inherit; text-decoration: none; }
@@ -116,6 +118,11 @@ video { display: block; max-width: 100%; height: auto; }
 }
 .eb-h1 .gold { color: var(--gold-bright); }
 
+.eb-hero-copy {
+  text-align: center;
+  margin: 0 auto;
+}
+
 .eb-h2 {
   font-family: var(--f-display); font-weight: 600;
   font-size: clamp(36px, 4vw, 52px);
@@ -160,13 +167,20 @@ video { display: block; max-width: 100%; height: auto; }
 .eb-btn:hover .arrow { transform: translateX(4px); color: var(--gold-bright); }
 
 .eb-btn-primary {
-  background: linear-gradient(180deg, #d4b056 0%, #a4821f 100%);
+  background: linear-gradient(90deg, var(--gold-deep) 0%, var(--gold) 35%, var(--gold-bright) 55%, var(--gold) 75%, var(--gold-deep) 100%);
+  background-size: 200% 100%;
   color: #1a1208; border: none;
   box-shadow: 0 1px 0 rgba(255, 220, 150, 0.45) inset, 0 12px 28px -12px var(--gold-glow);
+  transition: background-position 0.5s ease, box-shadow 0.35s ease, transform 100ms ease-out;
 }
 .eb-btn-primary:hover {
   color: #1a1208;
+  background-position: 100% 0;
   box-shadow: 0 1px 0 rgba(255, 220, 150, 0.45) inset, 0 16px 36px -10px var(--gold-glow), 0 0 0 1px rgba(229, 194, 107, 0.4);
+}
+.eb-btn:active, .eb-btn-primary:active {
+  transform: scale(0.97);
+  transition: transform 100ms ease-out;
 }
 
 /* ── Scroll reveal ── */
@@ -175,3 +189,10 @@ video { display: block; max-width: 100%; height: auto; }
   transition: opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .eb-reveal.eb-in { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -481,6 +481,7 @@
  persistOrderState();
  renderCart();
  updateStickyOrderChip();
+ if (typeof openCart === "function") openCart();
  showToast(ui("Cart line updated."));
  return;
  }
@@ -508,6 +509,7 @@
  persistOrderState();
  renderCart();
  updateStickyOrderChip();
+ if (typeof openCart === "function") openCart();
  showToast(result.estimated ? "Estimated order added to cart." : "Added to cart.");
  };
 
