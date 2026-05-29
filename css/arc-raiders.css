@@ -757,7 +757,7 @@ body.arc-locked { overflow: hidden; }
   font-family: var(--f-display); font-weight: 700;
   font-size: 17px; color: var(--gold-bright);
 }
-.arc-bundle .price .coin { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep)); border: 1px solid var(--gold); box-shadow: 0 0 6px -2px var(--gold-glow); }
+
 .arc-bundle .price .cur { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em; color: var(--text-dim); margin-left: auto; }
 
 /* ──────────────────────────────────────────────────────────────
@@ -940,11 +940,7 @@ body.arc-locked { overflow: hidden; }
   color: var(--text-dim);
   display: inline-flex; align-items: center; gap: 6px;
 }
-.arc-bp-cell-price .coin {
-  width: 9px; height: 9px; border-radius: 50%;
-  background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep));
-  border: 1px solid var(--gold);
-}
+
 .arc-bp-cell.on .arc-bp-cell-price { color: var(--gold-bright); }
 
 /* tier pills inside a blueprint cell */
@@ -2136,7 +2132,7 @@ body.arc-locked { overflow: hidden; }
   color: var(--gold-bright);
   white-space: nowrap;
 }
-.arc-line-price .coin { width: 10px; height: 10px; border-radius: 50%; background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep)); border: 1px solid var(--gold); box-shadow: 0 0 4px -1px var(--gold-glow); }
+
 .arc-line-x {
   width: 22px; height: 22px;
   display: grid; place-items: center;
@@ -2161,7 +2157,7 @@ body.arc-locked { overflow: hidden; }
   padding: 5px 0;
 }
 .arc-cart-row .v { color: var(--text); font-family: var(--f-display); font-weight: 600; font-size: 13px; letter-spacing: 0.04em; display: inline-flex; align-items: center; gap: 6px; }
-.arc-cart-row .coin { width: 10px; height: 10px; border-radius: 50%; background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep)); border: 1px solid var(--gold); }
+
 .arc-cart-total {
   margin-top: 8px;
   padding: 12px 0 6px;
@@ -2175,7 +2171,7 @@ body.arc-locked { overflow: hidden; }
   color: var(--gold-bright);
   display: inline-flex; align-items: baseline; gap: 8px;
 }
-.arc-cart-total .v .coin { width: 14px; height: 14px; border-radius: 50%; background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep)); border: 1px solid var(--gold); align-self: center; box-shadow: 0 0 8px -2px var(--gold-glow); }
+
 .arc-cart-note {
   margin: 12px 0 14px;
   padding: 10px 12px;

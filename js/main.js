@@ -317,6 +317,34 @@
   }
 })();
 
+/* ── Hero stats countup ── */
+(function initStatCountup() {
+  var stats = document.querySelectorAll('.eb-stat-n[data-countup]');
+  if (!stats.length) return;
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      io.unobserve(entry.target);
+      var el = entry.target;
+      var target = parseFloat(el.dataset.countup);
+      var suffix = el.dataset.suffix || '';
+      var decimals = parseInt(el.dataset.decimal || '0', 10);
+      var duration = 2000;
+      var start = performance.now();
+      function tick(now) {
+        var elapsed = now - start;
+        var progress = Math.min(elapsed / duration, 1);
+        var ease = 1 - Math.pow(1 - progress, 3);
+        var value = target * ease;
+        el.textContent = (decimals > 0 ? value.toFixed(decimals) : Math.round(value).toLocaleString('en-US')) + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }, { threshold: 0.5 });
+  stats.forEach(function(el) { io.observe(el); });
+})();
+
 /* ── FAQ Accordion ── */
 (function initFaqAccordion() {
   document.addEventListener('click', function(e) {

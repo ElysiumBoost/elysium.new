@@ -199,7 +199,7 @@
   }
 
   function coinHtml(amount) {
-    return '<span class="coin"></span> ' + fmtRC(amount);
+    return fmtRC(amount) + ' RC';
   }
 
   function fmtDollar(cents) {
@@ -405,10 +405,8 @@
         priceEl.className = 'arc-line-price';
         if (isCustom) {
           priceEl.textContent = 'CUSTOM';
-        } else if (isDollar) {
-          priceEl.textContent = fmtDollar(it.price);
         } else {
-          priceEl.innerHTML = coinHtml(it.price);
+          priceEl.textContent = coinHtml(it.price);
         }
 
         var xBtn = document.createElement('button');
@@ -444,11 +442,7 @@
         sInfo.appendChild(sQty);
         var sPrice = document.createElement('span');
         sPrice.className = 'arc-line-price';
-        if (isDollar) {
-          sPrice.textContent = fmtDollar(state.streamAddon.price);
-        } else {
-          sPrice.innerHTML = coinHtml(state.streamAddon.price);
-        }
+        sPrice.textContent = coinHtml(state.streamAddon.price);
         var sX = document.createElement('span');
         streamLine.appendChild(sThumb);
         streamLine.appendChild(sInfo);
@@ -470,15 +464,9 @@
       var fee = Math.round(subtotal * 0.05);
       var total = subtotal + fee;
 
-      if (isDollar) {
-        elCartSub.textContent = fmtDollar(subtotal);
-        elCartFee.textContent = fmtDollar(fee);
-        elCartTotal.textContent = fmtDollar(total);
-      } else {
-        elCartSub.innerHTML = coinHtml(subtotal);
-        elCartFee.innerHTML = coinHtml(fee);
-        elCartTotal.innerHTML = coinHtml(total);
-      }
+      elCartSub.textContent = coinHtml(subtotal);
+      elCartFee.textContent = coinHtml(fee);
+      elCartTotal.textContent = coinHtml(total);
     }
   }
 
@@ -694,7 +682,7 @@
       cell.className = 'arc-quick-cell';
       var nameDiv = document.createElement('div');
       nameDiv.className = 'arc-quick-name';
-      nameDiv.innerHTML = escHtml(qu.name) + '<span class="pack">' + escHtml(qu.pack) + ' · ' + fmtRC(qu.per * qu.mul) + ' RC</span>';
+      nameDiv.innerHTML = escHtml(qu.name) + '<span class="pack">' + fmtRC(qu.per * qu.mul) + ' RC</span>';
       cell.appendChild(nameDiv);
       var stepper = createStepper(0, 0, 99, syncCart);
       quSteppers[qu.id] = stepper;
@@ -720,7 +708,7 @@
       if (shieldQty > 0) items.push({ id: 'cl-shield', name: 'Medium Shield', qty: shieldQty, price: shieldQty * PRICE_SHIELD, color: '#7faedc' });
       QUICK_USE.forEach(function (qu) {
         var q = quSteppers[qu.id].getValue();
-        if (q > 0) items.push({ id: qu.id, name: qu.name, qty: q * qu.mul, price: q * qu.per * qu.mul, color: qu.color, sub: qu.pack });
+        if (q > 0) items.push({ id: qu.id, name: qu.name, qty: q * qu.mul, price: q * qu.per * qu.mul, color: qu.color });
       });
       cart.replaceAll(items);
     }
@@ -871,7 +859,7 @@
                 });
                 cellHtml += '</span>';
               }
-              cellHtml += '<span class="arc-bp-cell-price"><span class="coin"></span> ' + fmtRC(p) + '</span>';
+              cellHtml += '<span class="arc-bp-cell-price">' + fmtRC(p) + ' RC</span>';
               cellHtml += '</button>';
               return cellHtml;
             }).join('') +
