@@ -113,15 +113,53 @@ function _updateNavUI(user) {
     });
     signOutBtns.forEach(el=> el.style.display = '');
     _loadAvatarFromProfile(user.id);
+    _loadBoosterRole(user.id);
   } else {
     signInBtns.forEach(el => el.style.display = '');
     userMenus.forEach(el  => el.style.display = 'none');
     signOutBtns.forEach(el=> el.style.display = 'none');
     _applyAvatarUrl(null);
+    _applyBoosterLink(null);
     window._ebCurrentAvatarUrl = '';
     _lsRemove('elysium_username');
     _lsRemove('elysium_avatar_url');
   }
+}
+
+/* Booster Panel menu item — shown only for the 'booster' role, never for
+   customers. Role is read from the profiles table, falling back to user
+   metadata so a missing column never breaks the rest of nav loading. */
+async function _loadBoosterRole(userId) {
+  let role = null;
+  try {
+    const { data } = await _sb.from('profiles').select('role').eq('id', userId).maybeSingle();
+    if (data && data.role) role = data.role;
+  } catch (_) {}
+  if (!role) role = _currentUser?.user_metadata?.role || null;
+  _applyBoosterLink(role);
+}
+
+function _applyBoosterLink(role) {
+  const isBooster = role === 'booster';
+  document.querySelectorAll('[data-eb-user-menu] .eb-user-dropdown').forEach(function (dd) {
+    const existing = dd.querySelector('.eb-user-item--booster');
+    if (!isBooster) { if (existing) existing.remove(); return; }
+    if (existing) return;
+    // Derive the path prefix from a sibling dashboard link so the href is
+    // correct from both the root page and the /pages/games/ subpages.
+    const dash = dd.querySelector('a.eb-user-item[href*="dashboard.html"]');
+    const prefix = dash ? (dash.getAttribute('href') || '').replace(/dashboard\.html.*$/, '') : 'pages/';
+    const link = document.createElement('a');
+    link.href = prefix + 'booster.html';
+    link.className = 'eb-user-item eb-user-item--booster';
+    link.setAttribute('role', 'menuitem');
+    link.textContent = '⭐ Booster Panel';
+    const sep = dd.querySelector('.eb-user-separator');
+    const logout = dd.querySelector('.eb-user-logout');
+    if (sep) dd.insertBefore(link, sep);
+    else if (logout) dd.insertBefore(link, logout);
+    else dd.appendChild(link);
+  });
 }
 
 function _applyAvatarUrl(url) {

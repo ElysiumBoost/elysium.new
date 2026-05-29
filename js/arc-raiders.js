@@ -32,14 +32,57 @@
 
   var MOD_KITS = ['Standard', 'Extended Mag', 'Suppressor', 'Holographic', 'Tac Light + Grip'];
 
+  // Quick Use Bundles — name, pack multiplier (mul), pack price in cents
   var QUICK_USE = [
-    { id: 'qu-bandage', name: 'Herbal Bandage', pack: 'Pack of 5', mul: 5, per: 35, color: '#4ea568' },
-    { id: 'qu-sterilized', name: 'Sterilized Bandage', pack: 'Pack of 3', mul: 3, per: 55, color: '#7ec48f' },
-    { id: 'qu-shield', name: 'Shield Recharger', pack: 'Pack of 5', mul: 5, per: 45, color: '#7faedc' },
-    { id: 'qu-surge', name: 'Surge Shield Recharger', pack: 'Pack of 5', mul: 5, per: 70, color: '#b794d6' },
-    { id: 'qu-nade', name: 'Trigger Nade', pack: 'Pack of 3', mul: 3, per: 60, color: '#ff8a3d' },
-    { id: 'qu-snap', name: 'Snap Hook', pack: 'Pack of 1', mul: 1, per: 25, color: '#c98a2c' }
+    { id: 'qu-wolfpack',    name: 'Wolfpack',            mul: 1, price: 125, color: '#c98a2c' },
+    { id: 'qu-fuze',        name: 'Heavy Fuze Grenade',  mul: 3, price: 150, color: '#ff8a3d' },
+    { id: 'qu-showstopper', name: 'Showstopper Grenade', mul: 5, price: 250, color: '#e08a2c' },
+    { id: 'qu-trailblazer', name: 'Trailblazer',         mul: 3, price: 150, color: '#4ea568' },
+    { id: 'qu-blaze',       name: 'Blaze Grenade',       mul: 5, price: 350, color: '#d4571b' },
+    { id: 'qu-seeker',      name: 'Seeker Grenade',      mul: 5, price: 350, color: '#7faedc' },
+    { id: 'qu-smoke',       name: 'Smoke Grenade',       mul: 5, price: 575, color: '#a3acb1' },
+    { id: 'qu-tagging',     name: 'Tagging Grenade',     mul: 3, price: 180, color: '#b794d6' }
   ];
+
+  // Custom Loadout — augment options (multi-select, price in cents)
+  var AUGMENTS = [
+    { id: 'aug-combat-flank',  name: 'Combat Mk.3 (Flanking)',    price: 100 },
+    { id: 'aug-combat-aggro',  name: 'Combat Mk.3 (Aggressive)',  price: 100 },
+    { id: 'aug-tac-def',       name: 'Tactical Mk.3 (Defensive)', price: 100 },
+    { id: 'aug-tac-heal',      name: 'Tactical Mk.3 (Healing)',   price: 70 },
+    { id: 'aug-tac-smoke',     name: 'Tactical Mk.3 (Smoke)',     price: 250 },
+    { id: 'aug-tac-revival',   name: 'Tactical Mk.3 (Revival)',   price: 100 },
+    { id: 'aug-loot-survivor', name: 'Looting Mk.3 (Survivor)',   price: 250 },
+    { id: 'aug-loot-safe',     name: 'Looting Mk.3 (Safekeeper)', price: 150 }
+  ];
+
+  // Custom Loadout — shield options (single-select, price in cents)
+  var SHIELDS = [
+    { id: 'shield-heavy',  name: 'Heavy Shield',  price: 50 },
+    { id: 'shield-medium', name: 'Medium Shield', price: 30 }
+  ];
+
+  // Trials Boost — Specific Challenge selectable challenges (multi-select)
+  var TRIALS_CHALLENGES = [
+    'Combat Trial', 'Extraction Trial', 'Survival Trial',
+    'Looting Trial', 'Objective Trial', 'Boss Trial'
+  ];
+
+  // Service card badges shown in the station list (sidebar)
+  var SERVICE_BADGES = {
+    'custom-loadout':   ['recommended'],
+    'all-weapons':      ['pricedrop'],
+    'blueprints':       ['hot', 'popular'],
+    'materials':        ['popular'],
+    'raider-coins':     ['hot', 'recommended'],
+    'expedition-boost': ['hot']
+  };
+  var BADGE_META = {
+    hot:         { label: 'Hot' },
+    pricedrop:   { label: 'Price Drop' },
+    recommended: { label: 'Recommended' },
+    popular:     { label: 'Popular' }
+  };
 
   var BUNDLES = [
     { id: 'b-10', title: '10x Bundle', n: 10, color: '#c9a84c',
@@ -136,43 +179,43 @@
 
   var MATERIALS_CATS = [
     { id: 'uncommon', label: 'Uncommon', color: '#c9a84c', items: [
-      { name: 'Battery', price: 375 }, { name: 'Canister', price: 375 }, { name: 'Crude Explosives', price: 375 },
-      { name: 'Duct Tape', price: 375 }, { name: 'Durable Cloth', price: 375 }, { name: 'Electrical Components', price: 375 },
-      { name: 'Great Mullein', price: 375 }, { name: 'Magnet', price: 375 }, { name: 'Mechanical Components', price: 375 },
-      { name: 'Mushroom', price: 375 }, { name: 'Oil', price: 375 }, { name: 'Simple Gun Parts', price: 375 },
-      { name: 'Steel Spring', price: 375 }, { name: 'Wires', price: 375 }, { name: 'Apricot', price: 375 },
-      { name: 'Arc Alloy', price: 375 }, { name: 'Lemon', price: 375 }, { name: 'Olives', price: 375 },
-      { name: 'Prickly Pear', price: 375 }, { name: 'Snitch Scanner', price: 375 }, { name: 'Tick Pod', price: 375 }
+      { name: 'Battery', price: 7 }, { name: 'Canister', price: 7 }, { name: 'Crude Explosives', price: 6 },
+      { name: 'Duct Tape', price: 5 }, { name: 'Durable Cloth', price: 6 }, { name: 'Electrical Components', price: 5 },
+      { name: 'Great Mullein', price: 8 }, { name: 'Magnet', price: 8 }, { name: 'Mechanical Components', price: 7 },
+      { name: 'Mushroom', price: 12 }, { name: 'Oil', price: 8 }, { name: 'Simple Gun Parts', price: 8 },
+      { name: 'Steel Spring', price: 10 }, { name: 'Wires', price: 8 }, { name: 'Apricot', price: 13 },
+      { name: 'Arc Alloy', price: 5 }, { name: 'Lemon', price: 13 }, { name: 'Olives', price: 13 },
+      { name: 'Prickly Pear', price: 13 }, { name: 'Snitch Scanner', price: 20 }, { name: 'Tick Pod', price: 7 }
     ]},
     { id: 'rare', label: 'Rare', color: '#7faedc', items: [
-      { name: 'Advanced Electrical Components', price: 625 }, { name: 'Advanced Mechanical Components', price: 625 },
-      { name: 'Antiseptic', price: 625 }, { name: 'Explosive Compound', price: 625 },
-      { name: 'Heavy Gun Parts', price: 625 }, { name: 'Light Gun Parts', price: 625 },
-      { name: 'Medium Gun Parts', price: 625 }, { name: 'Mod Components', price: 625 },
-      { name: 'Processor', price: 625 }, { name: 'Rusted Gear', price: 625 },
-      { name: 'Rusted Tools', price: 625 }, { name: 'Rope', price: 625 },
-      { name: 'Sensors', price: 625 }, { name: 'Speaker Component', price: 625 },
-      { name: 'Synthesized Fuel', price: 625 }, { name: 'Syringe', price: 625 },
-      { name: 'Voltage Converter', price: 625 }, { name: 'Arc Circuitry', price: 625 },
-      { name: 'Arc Motion Core', price: 625 }, { name: 'Cracked Bioscanner', price: 625 },
-      { name: 'Damaged Heatsink', price: 625 }, { name: 'Dog Collar', price: 625 },
-      { name: 'Fried Motherboard', price: 625 }, { name: 'Industrial Battery', price: 625 },
-      { name: 'Laboratory Reagents', price: 625 }, { name: 'Motor', price: 625 },
-      { name: 'Power Cable', price: 625 }, { name: 'Rusted Shut Medical Kit', price: 625 },
-      { name: 'Sentinel Firing Core', price: 625 }, { name: 'Surveyor Vault', price: 625 },
-      { name: 'Toaster', price: 625 }, { name: 'Wasp Drive', price: 625 },
-      { name: 'Comet Igniter', price: 2500 }, { name: 'Firefly Burner', price: 2500 },
-      { name: 'Arc Synthetic Resin', price: 2125 }
+      { name: 'Advanced Electrical Components', price: 10 }, { name: 'Advanced Mechanical Components', price: 10 },
+      { name: 'Antiseptic', price: 10 }, { name: 'Explosive Compound', price: 10 },
+      { name: 'Heavy Gun Parts', price: 10 }, { name: 'Light Gun Parts', price: 10 },
+      { name: 'Medium Gun Parts', price: 10 }, { name: 'Mod Components', price: 10 },
+      { name: 'Processor', price: 5 }, { name: 'Rusted Gear', price: 25 },
+      { name: 'Rusted Tools', price: 20 }, { name: 'Rope', price: 25 },
+      { name: 'Sensors', price: 15 }, { name: 'Speaker Component', price: 10 },
+      { name: 'Synthesized Fuel', price: 15 }, { name: 'Syringe', price: 9 },
+      { name: 'Voltage Converter', price: 10 }, { name: 'Arc Circuitry', price: 6 },
+      { name: 'Arc Motion Core', price: 6 }, { name: 'Cracked Bioscanner', price: 15 },
+      { name: 'Damaged Heatsink', price: 15 }, { name: 'Dog Collar', price: 25 },
+      { name: 'Fried Motherboard', price: 10 }, { name: 'Industrial Battery', price: 20 },
+      { name: 'Laboratory Reagents', price: 20 }, { name: 'Motor', price: 20 },
+      { name: 'Power Cable', price: 15 }, { name: 'Rusted Shut Medical Kit', price: 20 },
+      { name: 'Sentinel Firing Core', price: 25 }, { name: 'Surveyor Vault', price: 30 },
+      { name: 'Toaster', price: 10 }, { name: 'Wasp Drive', price: 9 },
+      { name: 'Comet Igniter', price: 50 }, { name: 'Firefly Burner', price: 50 },
+      { name: 'Arc Synthetic Resin', price: 40 }
     ]},
     { id: 'epic', label: 'Epic', color: '#b794d6', items: [
-      { name: 'Complex Gun Parts', price: 750 }, { name: 'Bastion Cell', price: 750 },
-      { name: 'Bombardier Cell', price: 750 }, { name: 'Leaper Pulse Unit', price: 1625 },
-      { name: 'Exodus Module', price: 750 }, { name: 'Power Rod', price: 750 },
-      { name: 'Magnetic Accelerator', price: 750 }, { name: 'Rocketeer Driver', price: 750 },
-      { name: 'Vaporizer Regulator', price: 4666 }, { name: 'Assessor Matrix', price: 3334 }
+      { name: 'Complex Gun Parts', price: 20 }, { name: 'Bastion Cell', price: 25 },
+      { name: 'Bombardier Cell', price: 25 }, { name: 'Leaper Pulse Unit', price: 30 },
+      { name: 'Exodus Module', price: 10 }, { name: 'Power Rod', price: 150 },
+      { name: 'Magnetic Accelerator', price: 12 }, { name: 'Rocketeer Driver', price: 30 },
+      { name: 'Vaporizer Regulator', price: 25 }, { name: 'Assessor Matrix', price: 55 }
     ]},
     { id: 'legendary', label: 'Legendary', color: '#d97757', items: [
-      { name: 'Matriarch Reactor', price: 8750 }, { name: 'Queen Reactor', price: 8750 }
+      { name: 'Matriarch Reactor', price: 55 }, { name: 'Queen Reactor', price: 55 }
     ]}
   ];
 
@@ -353,6 +396,8 @@
   var elCartDot = $('cartCount');
   var elCartFoot = $('arcCartFoot');
   var elCopyCta = $('arcCopyCta');
+  var elAddCta = $('arcAddCta');
+  var elServiceNav = $('arcServiceNav');
   var elBackBtn = $('arcBackBtn');
   var elArtBack = $('arcArtBack');
   var elReviewsRail = $('arcReviewsRail');
@@ -532,11 +577,28 @@
     // Clear cart
     cart.clear();
 
-    // Render configurator
+    // Quick category nav + configurator
+    renderServiceNav(id);
     renderConfig(id);
 
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* Quick category nav inside the service view — switch service without
+     leaving the panel. Active service highlighted. */
+  function renderServiceNav(activeId) {
+    if (!elServiceNav) return;
+    elServiceNav.innerHTML = SERVICES.map(function (svc) {
+      var on = svc.id === activeId;
+      return '<button type="button" class="arc-svc-pill' + (on ? ' on' : '') + '" data-service="' + svc.id + '"' +
+        (on ? ' aria-current="true"' : '') + '>' + escHtml(svc.name) + '</button>';
+    }).join('');
+    // Keep the active pill in view
+    var activePill = qs('.arc-svc-pill.on', elServiceNav);
+    if (activePill && activePill.scrollIntoView) {
+      activePill.scrollIntoView({ block: 'nearest', inline: 'center' });
+    }
   }
 
   function closeService() {
@@ -589,97 +651,88 @@
   function renderCustomLoadoutConfig() {
     var PRICE_PRI = 95;
     var PRICE_SEC = 55;
-    var MOD_SURCHARGE = 10; // per weapon with legendary/epic mods (0.10 RC represented as 10 for integer math — actually +0.10 per weapon, so we store in hundredths... but spec says +$0.10 per weapon. We use RC integers here.)
-    var PRICE_LOOT = 22;
-    var PRICE_SHIELD = 18;
+    var MOD_SURCHARGE = 10; // +$0.10 per weapon for Legendary/Epic mods
+
+    function weaponCol(side, label) {
+      return '<div class="arc-weapon-col">' +
+        '<span class="arc-weapon-col-label">' + label + '</span>' +
+        '<div class="arc-select-wrap"><select class="arc-select" id="cl' + side + 'Weapon">' +
+          WEAPONS.map(function (w) { return '<option value="' + escHtml(w) + '">' + escHtml(w) + '</option>'; }).join('') +
+        '</select></div>' +
+        '<div class="arc-modtoggle arc-modtoggle--stack" id="cl' + side + 'Mod">' +
+          '<button type="button" class="on" data-mod="none">No Mods</button>' +
+          '<button type="button" data-mod="legendary">Legendary / Epic <span class="price">+0.10</span></button>' +
+        '</div>' +
+        '<div class="arc-weapon-col-qty" id="cl' + side + 'Qty"></div>' +
+      '</div>';
+    }
 
     configPanel.innerHTML =
       '<div class="arc-card">' +
         '<div class="arc-card-head">' +
           '<span class="arc-card-eyebrow">◆</span>' +
-          '<h3 class="arc-card-title">Primary Weapon</h3>' +
+          '<h3 class="arc-card-title">Weapons</h3>' +
         '</div>' +
-        '<label class="arc-field-label">Weapon</label>' +
-        '<div class="arc-select-wrap"><select class="arc-select" id="clPriWeapon">' +
-          WEAPONS.map(function (w) { return '<option value="' + escHtml(w) + '">' + escHtml(w) + '</option>'; }).join('') +
-        '</select></div>' +
-        '<div class="arc-field-label-row" style="margin-top:14px"><label class="arc-field-label">Mods</label>' +
-          '<button type="button" class="arc-help" data-tip="+0.10 per weapon for Legendary/Epic">?</button>' +
-        '</div>' +
-        '<div class="arc-modtoggle" id="clPriMod">' +
-          '<button type="button" class="on" data-mod="none">No Mods</button>' +
-          '<button type="button" data-mod="legendary">Legendary / Epic <span class="price">+0.10</span></button>' +
-        '</div>' +
-        '<label class="arc-field-label" style="margin-top:14px">Quantity</label>' +
-        '<div id="clPriQty"></div>' +
-      '</div>' +
-
-      '<div class="arc-card">' +
-        '<div class="arc-card-head">' +
-          '<span class="arc-card-eyebrow">◆</span>' +
-          '<h3 class="arc-card-title">Secondary Weapon</h3>' +
-        '</div>' +
-        '<label class="arc-field-label">Weapon</label>' +
-        '<div class="arc-select-wrap"><select class="arc-select" id="clSecWeapon">' +
-          WEAPONS.map(function (w) { return '<option value="' + escHtml(w) + '">' + escHtml(w) + '</option>'; }).join('') +
-        '</select></div>' +
-        '<div class="arc-field-label-row" style="margin-top:14px"><label class="arc-field-label">Mods</label></div>' +
-        '<div class="arc-modtoggle" id="clSecMod">' +
-          '<button type="button" class="on" data-mod="none">No Mods</button>' +
-          '<button type="button" data-mod="legendary">Legendary / Epic <span class="price">+0.10</span></button>' +
-        '</div>' +
-        '<label class="arc-field-label" style="margin-top:14px">Quantity</label>' +
-        '<div id="clSecQty"></div>' +
-      '</div>' +
-
-      '<div class="arc-card">' +
-        '<div class="arc-card-head">' +
-          '<span class="arc-card-eyebrow">◆</span>' +
-          '<h3 class="arc-card-title">Gear</h3>' +
-        '</div>' +
-        '<div class="arc-gear-pair">' +
-          '<div class="arc-gear-cell" id="clGearLoot">' +
-            '<div><span class="name">Looting Mk.3</span><span class="sub">' + fmtDollar(PRICE_LOOT) + ' each</span></div>' +
-            '<div id="clLootQty"></div>' +
-          '</div>' +
-          '<div class="arc-gear-cell" id="clGearShield">' +
-            '<div><span class="name">Medium Shield</span><span class="sub">' + fmtDollar(PRICE_SHIELD) + ' each</span></div>' +
-            '<div id="clShieldQty"></div>' +
-          '</div>' +
+        '<div class="arc-weapon-cols">' +
+          weaponCol('Pri', 'Primary') +
+          weaponCol('Sec', 'Secondary') +
         '</div>' +
       '</div>' +
 
       '<div class="arc-card">' +
         '<div class="arc-card-head">' +
           '<span class="arc-card-eyebrow">◆</span>' +
-          '<h3 class="arc-card-title">Quick Use</h3>' +
+          '<h3 class="arc-card-title">Augments</h3>' +
+          '<span class="arc-card-sub">Multi-select</span>' +
         '</div>' +
-        '<div class="arc-quick" id="clQuickGrid"></div>' +
+        '<div class="arc-ws-rows" id="clAugments">' +
+          AUGMENTS.map(function (a) {
+            return '<button type="button" class="arc-ws-row" data-aug="' + a.id + '">' +
+              '<span class="arc-ws-switch"></span>' +
+              '<span class="arc-ws-name">' + escHtml(a.name) + '</span>' +
+              '<span class="arc-ws-price">+' + fmtDollar(a.price) + '</span>' +
+            '</button>';
+          }).join('') +
+        '</div>' +
+      '</div>' +
+
+      '<div class="arc-card">' +
+        '<div class="arc-card-head">' +
+          '<span class="arc-card-eyebrow">◆</span>' +
+          '<h3 class="arc-card-title">Shield</h3>' +
+          '<span class="arc-card-sub">Choose one</span>' +
+        '</div>' +
+        '<div class="arc-ws-rows" id="clShields">' +
+          SHIELDS.map(function (s) {
+            return '<button type="button" class="arc-ws-row arc-ws-row--radio" data-shield="' + s.id + '">' +
+              '<span class="arc-ws-switch"></span>' +
+              '<span class="arc-ws-name">' + escHtml(s.name) + '</span>' +
+              '<span class="arc-ws-price">+' + fmtDollar(s.price) + '</span>' +
+            '</button>';
+          }).join('') +
+        '</div>' +
+      '</div>' +
+
+      '<div class="arc-card">' +
+        '<div class="arc-card-head">' +
+          '<span class="arc-card-eyebrow">◆</span>' +
+          '<h3 class="arc-card-title">Quick Use Bundles</h3>' +
+        '</div>' +
+        '<div class="arc-quick arc-quick--scroll" id="clQuickGrid"></div>' +
       '</div>';
 
-    // Wire up steppers
+    // Wire up weapon steppers
     var priQtyStepper = createStepper(1, 0, 99, syncCart);
     $('clPriQty').appendChild(priQtyStepper);
 
     var secQtyStepper = createStepper(0, 0, 99, syncCart);
     $('clSecQty').appendChild(secQtyStepper);
 
-    var lootStepper = createStepper(0, 0, 99, function () { syncGearHighlight(); syncCart(); });
-    $('clLootQty').appendChild(lootStepper);
-
-    var shieldStepper = createStepper(0, 0, 99, function () { syncGearHighlight(); syncCart(); });
-    $('clShieldQty').appendChild(shieldStepper);
-
-    function syncGearHighlight() {
-      $('clGearLoot').classList.toggle('on', lootStepper.getValue() > 0);
-      $('clGearShield').classList.toggle('on', shieldStepper.getValue() > 0);
-    }
-
     // Mod toggles
     var priMod = 'none';
     var secMod = 'none';
 
-    function bindModToggle(containerId, getCb, setCb) {
+    function bindModToggle(containerId, setCb) {
       var container = $(containerId);
       container.addEventListener('click', function (e) {
         var btn = e.target.closest('button[data-mod]');
@@ -691,10 +744,34 @@
       });
     }
 
-    bindModToggle('clPriMod', function () { return priMod; }, function (v) { priMod = v; });
-    bindModToggle('clSecMod', function () { return secMod; }, function (v) { secMod = v; });
+    bindModToggle('clPriMod', function (v) { priMod = v; });
+    bindModToggle('clSecMod', function (v) { secMod = v; });
 
-    // Quick Use grid
+    // Augments (multi-select)
+    var augSelected = {};
+    $('clAugments').addEventListener('click', function (e) {
+      var row = e.target.closest('button[data-aug]');
+      if (!row) return;
+      var id = row.getAttribute('data-aug');
+      augSelected[id] = !augSelected[id];
+      row.classList.toggle('on', augSelected[id]);
+      syncCart();
+    });
+
+    // Shield (single-select)
+    var shieldSelected = null;
+    $('clShields').addEventListener('click', function (e) {
+      var row = e.target.closest('button[data-shield]');
+      if (!row) return;
+      var id = row.getAttribute('data-shield');
+      shieldSelected = (shieldSelected === id) ? null : id;
+      qsa('button[data-shield]', $('clShields')).forEach(function (b) {
+        b.classList.toggle('on', b.getAttribute('data-shield') === shieldSelected);
+      });
+      syncCart();
+    });
+
+    // Quick Use Bundles
     var quSteppers = {};
     var quGrid = $('clQuickGrid');
     QUICK_USE.forEach(function (qu) {
@@ -702,7 +779,7 @@
       cell.className = 'arc-quick-cell';
       var nameDiv = document.createElement('div');
       nameDiv.className = 'arc-quick-name';
-      nameDiv.innerHTML = escHtml(qu.name) + '<span class="pack">' + fmtDollar(qu.per * qu.mul) + '</span>';
+      nameDiv.innerHTML = escHtml(qu.name) + '<span class="pack">' + fmtDollar(qu.price) + ' · ' + qu.mul + 'x</span>';
       cell.appendChild(nameDiv);
       var stepper = createStepper(0, 0, 99, syncCart);
       quSteppers[qu.id] = stepper;
@@ -722,13 +799,16 @@
         var secPrice = secQty * PRICE_SEC + (secMod === 'legendary' ? secQty * MOD_SURCHARGE : 0);
         items.push({ id: 'cl-sec', name: $('clSecWeapon').value + ' (Secondary)', qty: secQty, price: secPrice, color: '#c98a2c', sub: secMod === 'legendary' ? 'Legendary/Epic Mods' : '' });
       }
-      var lootQty = lootStepper.getValue();
-      if (lootQty > 0) items.push({ id: 'cl-loot', name: 'Looting Mk.3', qty: lootQty, price: lootQty * PRICE_LOOT, color: '#4ec6e8' });
-      var shieldQty = shieldStepper.getValue();
-      if (shieldQty > 0) items.push({ id: 'cl-shield', name: 'Medium Shield', qty: shieldQty, price: shieldQty * PRICE_SHIELD, color: '#7faedc' });
+      AUGMENTS.forEach(function (a) {
+        if (augSelected[a.id]) items.push({ id: a.id, name: a.name, qty: 1, price: a.price, color: '#9b6cff', sub: 'Augment' });
+      });
+      if (shieldSelected) {
+        var sh = SHIELDS.filter(function (s) { return s.id === shieldSelected; })[0];
+        if (sh) items.push({ id: 'cl-shield', name: sh.name, qty: 1, price: sh.price, color: '#7faedc', sub: 'Shield' });
+      }
       QUICK_USE.forEach(function (qu) {
         var q = quSteppers[qu.id].getValue();
-        if (q > 0) items.push({ id: qu.id, name: qu.name, qty: q * qu.mul, price: q * qu.per * qu.mul, color: qu.color });
+        if (q > 0) items.push({ id: qu.id, name: qu.name, qty: q * qu.mul, price: q * qu.price, color: qu.color });
       });
       cart.replaceAll(items);
     }
@@ -1641,19 +1721,48 @@
      CONFIGURATOR: TRIALS BOOST
      ════════════════════════════════════════════════════════════ */
   function renderTrialsBoostConfig() {
+    var RANKUP_BASE = 2000;      // $20.00 base
+    var CHALLENGE_PRICE = 1799;  // $17.99 flat
     var weeklyOn = false;
     var rankUpOn = false;
     var challengeOn = false;
-    var rankOption = 0; // 0/1/2/3 => +$0/+$5/+$10/+$15
-    var RANK_OPTS = [
-      { label: '+0 Ranks', add: 0 },
-      { label: '+1 Rank', add: 500 },
-      { label: '+2 Ranks', add: 1000 },
-      { label: '+3 Ranks', add: 1500 }
-    ];
     var selectedRank = TRIALS_RANKS[0];
+    var rankOptionKey = '+1';
+    var challengeSelected = {};
+
+    // Rank-up options depend on the selected Current Rank.
+    function rankOptionsFor(rank) {
+      if (rank === 'Hotshot') {
+        return [{ key: 'secure', label: 'Rank Secure', total: 2000 }];
+      }
+      if (rank === 'Daredevil III') {
+        return [{ key: '+1', label: '+1 Rank', total: RANKUP_BASE + 500 }];
+      }
+      if (rank === 'Daredevil II') {
+        return [
+          { key: '+1', label: '+1 Rank',  total: RANKUP_BASE + 500 },
+          { key: '+2', label: '+2 Ranks', total: RANKUP_BASE + 1500 }
+        ];
+      }
+      return [
+        { key: '+1', label: '+1 Rank',  total: RANKUP_BASE + 500 },
+        { key: '+2', label: '+2 Ranks', total: RANKUP_BASE + 1500 },
+        { key: '+3', label: '+3 Ranks', total: RANKUP_BASE + 2500 }
+      ];
+    }
+
+    function currentRankOption() {
+      var opts = rankOptionsFor(selectedRank);
+      var match = opts.filter(function (o) { return o.key === rankOptionKey; })[0];
+      return match || opts[0];
+    }
 
     function render() {
+      var opts = rankOptionsFor(selectedRank);
+      // Keep the selected option valid for the chosen rank.
+      if (!opts.some(function (o) { return o.key === rankOptionKey; })) rankOptionKey = opts[0].key;
+      var rankOpt = currentRankOption();
+
       configPanel.innerHTML =
         '<div class="arc-card">' +
           '<div class="arc-card-head">' +
@@ -1671,7 +1780,7 @@
             '<button type="button" class="arc-ws-row' + (rankUpOn ? ' on' : '') + '" id="trRankUp">' +
               '<span class="arc-ws-switch"></span>' +
               '<span class="arc-ws-name">Rank Up Service</span>' +
-              '<span class="arc-trials-price">$' + ((2000 + RANK_OPTS[rankOption].add) / 100).toFixed(2) + '</span>' +
+              '<span class="arc-trials-price">$' + (rankOpt.total / 100).toFixed(2) + '</span>' +
             '</button>' +
 
             '<div class="arc-trials-collapse' + (rankUpOn ? ' on' : '') + '">' +
@@ -1681,9 +1790,9 @@
                   TRIALS_RANKS.map(function (r) { return '<option value="' + escHtml(r) + '"' + (r === selectedRank ? ' selected' : '') + '>' + escHtml(r) + '</option>'; }).join('') +
                 '</select></div>' +
                 '<label class="arc-field-label" style="margin-top:14px">Rank Option</label>' +
-                '<div class="arc-pilltoggle" id="trRankOpt" style="grid-template-columns:repeat(4,1fr)">' +
-                  RANK_OPTS.map(function (o, i) {
-                    return '<button type="button" data-idx="' + i + '"' + (i === rankOption ? ' class="on"' : '') + '>' + escHtml(o.label) + '</button>';
+                '<div class="arc-pilltoggle" id="trRankOpt" style="grid-template-columns:repeat(' + opts.length + ',1fr)">' +
+                  opts.map(function (o) {
+                    return '<button type="button" data-key="' + o.key + '"' + (o.key === rankOptionKey ? ' class="on"' : '') + '>' + escHtml(o.label) + '</button>';
                   }).join('') +
                 '</div>' +
               '</div>' +
@@ -1695,6 +1804,20 @@
               '<span class="arc-trials-price">$17.99</span>' +
             '</button>' +
 
+            '<div class="arc-trials-collapse' + (challengeOn ? ' on' : '') + '">' +
+              '<div class="arc-card" style="margin:0">' +
+                '<label class="arc-field-label">Select Challenges</label>' +
+                '<div class="arc-ws-rows" id="trChallengeList">' +
+                  TRIALS_CHALLENGES.map(function (c) {
+                    return '<button type="button" class="arc-ws-row' + (challengeSelected[c] ? ' on' : '') + '" data-challenge="' + escHtml(c) + '">' +
+                      '<span class="arc-ws-switch"></span>' +
+                      '<span class="arc-ws-name">' + escHtml(c) + '</span>' +
+                    '</button>';
+                  }).join('') +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+
           '</div>' +
         '</div>';
 
@@ -1704,16 +1827,28 @@
 
       var rankSel = $('trRank');
       if (rankSel) {
-        rankSel.addEventListener('change', function () { selectedRank = rankSel.value; syncCart(); });
+        rankSel.addEventListener('change', function () { selectedRank = rankSel.value; render(); });
       }
 
       var rankOptEl = $('trRankOpt');
       if (rankOptEl) {
         rankOptEl.addEventListener('click', function (e) {
-          var btn = e.target.closest('button[data-idx]');
+          var btn = e.target.closest('button[data-key]');
           if (!btn) return;
-          rankOption = parseInt(btn.getAttribute('data-idx'), 10);
+          rankOptionKey = btn.getAttribute('data-key');
           render();
+        });
+      }
+
+      var chList = $('trChallengeList');
+      if (chList) {
+        chList.addEventListener('click', function (e) {
+          var btn = e.target.closest('button[data-challenge]');
+          if (!btn) return;
+          var c = btn.getAttribute('data-challenge');
+          challengeSelected[c] = !challengeSelected[c];
+          btn.classList.toggle('on', challengeSelected[c]);
+          syncCart();
         });
       }
 
@@ -1724,10 +1859,13 @@
       var items = [];
       if (weeklyOn) items.push({ id: 'tr-weekly', name: 'Weekly All 3 Star', qty: 1, price: 2000, color: '#ff8a3d' });
       if (rankUpOn) {
-        var price = 2000 + RANK_OPTS[rankOption].add;
-        items.push({ id: 'tr-rankup', name: 'Rank Up Service', qty: 1, price: price, color: '#ff8a3d', sub: selectedRank + ' · ' + RANK_OPTS[rankOption].label });
+        var rankOpt = currentRankOption();
+        items.push({ id: 'tr-rankup', name: 'Rank Up Service', qty: 1, price: rankOpt.total, color: '#ff8a3d', sub: selectedRank + ' · ' + rankOpt.label });
       }
-      if (challengeOn) items.push({ id: 'tr-challenge', name: 'Specific Challenge', qty: 1, price: 1799, color: '#ff8a3d' });
+      if (challengeOn) {
+        var chosen = TRIALS_CHALLENGES.filter(function (c) { return challengeSelected[c]; });
+        items.push({ id: 'tr-challenge', name: 'Specific Challenge', qty: 1, price: CHALLENGE_PRICE, color: '#ff8a3d', sub: chosen.length ? chosen.join(', ') : 'Confirm in Discord' });
+      }
       cart.replaceAll(items);
     }
 
@@ -1882,9 +2020,10 @@
         '<div class="arc-card-head"><span class="arc-card-eyebrow">◆</span><h3 class="arc-card-title">Expedition Tier</h3></div>' +
         '<div class="arc-bp-tabs" id="expTiers">' +
           EXP_TIERS.map(function (t, i) {
-            return '<button type="button" class="arc-bp-tab' + (i === selectedTier ? ' active' : '') + '" data-idx="' + i + '">' + escHtml(t.label) + ' · ' + fmtDollar(t.price) + '</button>';
+            return '<button type="button" class="arc-bp-tab' + (i === selectedTier ? ' active' : '') + '" data-idx="' + i + '">' + escHtml(t.label) + '</button>';
           }).join('') +
         '</div>' +
+        '<p class="arc-tier-note">Tier info only — pricing confirmed in Discord</p>' +
       '</div>' +
 
       '<div class="arc-card">' +
@@ -1940,7 +2079,7 @@
 
     function syncCart() {
       var items = [];
-      items.push({ id: 'exp-tier', name: 'Expedition ' + EXP_TIERS[selectedTier].label, qty: 1, price: EXP_TIERS[selectedTier].price, color: '#4ec6e8' });
+      items.push({ id: 'exp-tier', name: 'Expedition ' + EXP_TIERS[selectedTier].label, qty: 1, price: 0, color: '#4ec6e8', sub: 'Tier info only — pricing in Discord' });
       STAGES.forEach(function (s, i) {
         if (selectedStages[i]) items.push({ id: 'exp-stage-' + i, name: s.name, qty: 1, price: s.price, color: '#4ec6e8', sub: 'Stage' });
       });
@@ -2451,6 +2590,7 @@
   bindServiceNav(elHubMap);
   bindServiceNav(elHubMobile);
   bindServiceNav(elSidebar);
+  bindServiceNav(elServiceNav);
 
   /* ────────────────────────────────────────────────────────────
      BACK BUTTONS
@@ -2468,62 +2608,108 @@
   });
 
   /* ────────────────────────────────────────────────────────────
-     COPY TO DISCORD
+     ORDER ACTIONS — Add to Cart and Copy for Discord are two separate
+     actions. "Add to Cart" always keeps its label; the "Copied!" state
+     belongs only to the Copy for Discord button.
      ──────────────────────────────────────────────────────────── */
+  function buildOrderSummary() {
+    var svc = getService(state.currentService);
+    if (!svc || !state.cartItems.length) return null;
+    var items = state.cartItems;
+    var isCustom = (state.cartMode === 'custom');
+    var subtotal = 0;
+    items.forEach(function (it) { subtotal += it.price; });
+    if (state.streamAddon) subtotal += state.streamAddon.price;
+    var fee = Math.round(subtotal * 0.05);
+    return { svc: svc, items: items, isCustom: isCustom, subtotal: subtotal, fee: fee, total: subtotal + fee };
+  }
+
+  function showArcToast(msg) {
+    var t = document.querySelector('.eb-toast');
+    if (!t) { t = document.createElement('div'); t.className = 'eb-toast'; document.body.appendChild(t); }
+    t.textContent = msg;
+    requestAnimationFrame(function () { t.classList.add('is-show'); });
+    clearTimeout(t._hide);
+    t._hide = setTimeout(function () { t.classList.remove('is-show'); }, 2400);
+  }
+
+  // ADD TO CART — write the configured order into the shared cart store
+  // (elyOrderStateV1) so it persists into the nav cart and checkout.
+  if (elAddCta) {
+    elAddCta.addEventListener('click', function () {
+      var o = buildOrderSummary();
+      if (!o) { showArcToast('Configure your order first'); return; }
+      var STORAGE_KEY = 'elyOrderStateV1';
+      var sel = document.getElementById('arcCurrency');
+      var currency = sel ? sel.value : 'USD';
+      var detailLines = o.items.map(function (it) {
+        var txt = it.name + ' × ' + it.qty;
+        if (it.sub) txt += ' · ' + it.sub;
+        txt += ' — ' + (o.isCustom ? 'CUSTOM' : fmtDollar(it.price));
+        return txt;
+      });
+      if (state.streamAddon) {
+        detailLines.push('Stream by PRO' + (state.streamAddon.sub ? ' · ' + state.streamAddon.sub : '') + ' — ' + (o.isCustom ? 'CUSTOM' : fmtDollar(state.streamAddon.price)));
+      }
+      var entry = {
+        id: 'arc-' + Date.now(),
+        gameId: 'arc',
+        game: 'Arc Raiders',
+        name: 'Arc Raiders — ' + o.svc.name,
+        category: o.svc.name,
+        qty: 1,
+        total: o.isCustom ? 0 : +(o.total / 100).toFixed(2),
+        custom: o.isCustom,
+        details: detailLines.join('\n'),
+        viewedCurrency: currency,
+        addedAt: Date.now()
+      };
+      var store;
+      try { store = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (e) { store = {}; }
+      if (!Array.isArray(store.cart)) store.cart = [];
+      store.cart.push(entry);
+      store.currency = currency;
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); } catch (e) {}
+      var count = store.cart.reduce(function (n, it) { return n + (it && it.qty ? it.qty : 1); }, 0);
+      if (elCartDot) { elCartDot.textContent = String(count); elCartDot.hidden = false; }
+      showArcToast('Added to cart');
+    });
+  }
+
+  // COPY FOR DISCORD — copies the order summary to the clipboard. The
+  // "Copied!" feedback lives only on this button.
   if (elCopyCta) {
     elCopyCta.addEventListener('click', function () {
-      var svc = getService(state.currentService);
-      if (!svc || !state.cartItems.length) return;
-      var items = state.cartItems;
-      var isCustom = (state.cartMode === 'custom');
-
-      function priceStr(it) {
-        if (isCustom) return 'CUSTOM';
-        return fmtDollar(it.price);
-      }
-
-      var lines = items.map(function (it) {
+      var o = buildOrderSummary();
+      if (!o) return;
+      function priceStr(it) { return o.isCustom ? 'CUSTOM' : fmtDollar(it.price); }
+      function totalStr(v) { return o.isCustom ? 'CUSTOM' : fmtDollar(v); }
+      var lines = o.items.map(function (it) {
         var txt = '▸ ' + it.name + ' × ' + it.qty;
         if (it.sub) txt += ' · ' + it.sub;
         txt += ' — ' + priceStr(it);
         return txt;
       });
-
       if (state.streamAddon) {
-        lines.push('▸ Stream by PRO' + (state.streamAddon.sub ? ' · ' + state.streamAddon.sub : '') + ' — ' + (isCustom ? 'CUSTOM' : fmtDollar(state.streamAddon.price)));
+        lines.push('▸ Stream by PRO' + (state.streamAddon.sub ? ' · ' + state.streamAddon.sub : '') + ' — ' + (o.isCustom ? 'CUSTOM' : fmtDollar(state.streamAddon.price)));
       }
-
-      var subtotal = 0;
-      items.forEach(function (it) { subtotal += it.price; });
-      if (state.streamAddon) subtotal += state.streamAddon.price;
-      var fee = Math.round(subtotal * 0.05);
-      var total = subtotal + fee;
-
-      function totalStr(v) {
-        if (isCustom) return 'CUSTOM';
-        return fmtDollar(v);
-      }
-
       var text =
         '🏰 ELYSIUM BOOST — Arc Raiders Order\n' +
         '━━━━━━━━━━━━━━━━━━━━━━━━━━━\n' +
-        'Service: ' + svc.name + '\n\n' +
+        'Service: ' + o.svc.name + '\n\n' +
         lines.join('\n') + '\n\n' +
-        'Subtotal: ' + totalStr(subtotal) + '\n' +
-        'Service Fee (5%): ' + totalStr(fee) + '\n' +
+        'Subtotal: ' + totalStr(o.subtotal) + '\n' +
+        'Service Fee (5%): ' + totalStr(o.fee) + '\n' +
         '━━━━━━━━━━━━━━━━━━━━━━━━━━━\n' +
-        'TOTAL: ' + totalStr(total) + '\n\n' +
+        'TOTAL: ' + totalStr(o.total) + '\n\n' +
         'Paste this into your Discord ticket.';
-
+      var lblEl = elCopyCta.querySelector('.lbl');
       navigator.clipboard.writeText(text).then(function () {
-        var orig = elCopyCta.textContent;
-        elCopyCta.textContent = 'Copied!';
+        if (lblEl) lblEl.textContent = 'Copied!';
+        elCopyCta.classList.add('is-copied');
         setTimeout(function () {
-          elCopyCta.textContent = '';
-          // Restore the icon + text via innerHTML for the SVG
-          elCopyCta.innerHTML =
-            '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 3H4L5 11H13L14 5H5" stroke="currentColor" stroke-width="1.4"/><circle cx="6" cy="13.5" r="0.8" fill="currentColor"/><circle cx="12" cy="13.5" r="0.8" fill="currentColor"/></svg>' +
-            'Add to Cart';
+          if (lblEl) lblEl.textContent = 'Copy for Discord';
+          elCopyCta.classList.remove('is-copied');
         }, 2000);
       });
     });
@@ -2540,6 +2726,101 @@
     });
   }
 
+  /* Station list badges (HOT / PRICE DROP / RECOMMENDED / POPULAR) */
+  function initSidebarBadges() {
+    if (!elSidebar) return;
+    qsa('.arc-sidebar-item', elSidebar).forEach(function (item) {
+      var id = item.getAttribute('data-service');
+      var badges = SERVICE_BADGES[id];
+      if (!badges || !badges.length) return;
+      var nameEl = qs('.arc-sidebar-name', item);
+      if (!nameEl) return;
+      var mid = document.createElement('span');
+      mid.className = 'arc-sidebar-mid';
+      var badgesRow = document.createElement('span');
+      badgesRow.className = 'arc-sidebar-badges';
+      badges.forEach(function (b) {
+        var meta = BADGE_META[b];
+        if (!meta) return;
+        var pill = document.createElement('span');
+        pill.className = 'arc-badge arc-badge--' + b;
+        pill.textContent = meta.label;
+        badgesRow.appendChild(pill);
+      });
+      item.insertBefore(mid, nameEl);
+      mid.appendChild(badgesRow);
+      mid.appendChild(nameEl);
+    });
+  }
+
+  /* Service + blueprint search overlay (covers the station map) */
+  function initServiceSearch() {
+    var btn = $('arcSvcSearchBtn');
+    var panel = $('arcSvcSearch');
+    var input = $('arcSvcSearchInput');
+    var results = $('arcSvcSearchResults');
+    var closeBtn = $('arcSvcSearchClose');
+    if (!btn || !panel || !input || !results) return;
+
+    var index = SERVICES.map(function (s) { return { type: 'Service', name: s.name, serviceId: s.id }; });
+    var seen = {};
+    BP_TABS.forEach(function (tab) {
+      tab.items.forEach(function (item) {
+        if (seen[item.name]) return;
+        seen[item.name] = true;
+        index.push({ type: 'Blueprint', name: item.name, serviceId: 'blueprints' });
+      });
+    });
+
+    function renderResults(q) {
+      var query = q.trim().toLowerCase();
+      var matches = query
+        ? index.filter(function (r) { return r.name.toLowerCase().indexOf(query) >= 0; })
+        : index.filter(function (r) { return r.type === 'Service'; });
+      if (!matches.length) {
+        results.innerHTML = '<div class="arc-svc-search-empty">No services or blueprints match &ldquo;' + escHtml(q) + '&rdquo;</div>';
+        return;
+      }
+      results.innerHTML = matches.slice(0, 80).map(function (r) {
+        return '<button type="button" class="arc-svc-search-item" data-service="' + r.serviceId + '">' +
+          '<span class="arc-svc-search-item-name">' + escHtml(r.name) + '</span>' +
+          '<span class="arc-svc-search-item-type">' + r.type + '</span>' +
+        '</button>';
+      }).join('');
+    }
+
+    function open() {
+      panel.classList.add('on');
+      panel.setAttribute('aria-hidden', 'false');
+      btn.setAttribute('aria-expanded', 'true');
+      renderResults('');
+      setTimeout(function () { input.focus(); }, 30);
+    }
+    function close() {
+      panel.classList.remove('on');
+      panel.setAttribute('aria-hidden', 'true');
+      btn.setAttribute('aria-expanded', 'false');
+      input.value = '';
+    }
+
+    btn.addEventListener('click', function () {
+      panel.classList.contains('on') ? close() : open();
+    });
+    if (closeBtn) closeBtn.addEventListener('click', close);
+    input.addEventListener('input', function () { renderResults(input.value); });
+    results.addEventListener('click', function (e) {
+      var item = e.target.closest('[data-service]');
+      if (!item) return;
+      close();
+      openService(item.getAttribute('data-service'));
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && panel.classList.contains('on')) close();
+    });
+  }
+
+  initSidebarBadges();
+  initServiceSearch();
   renderReviews();
   renderFaqs();
 

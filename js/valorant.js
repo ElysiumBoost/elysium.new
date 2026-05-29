@@ -708,6 +708,24 @@
         '<div class="val-review-meta"><span class="game">VALORANT</span> · ' + esc(r.from) + " → " + esc(r.to) + " · " + r.days + " days</div>" +
       "</article>";
     }).join("");
+
+    // Carousel wheel scroll — capped so vertical wheel maps to a slow,
+    // controlled horizontal scroll instead of flinging the rail.
+    if (!rail.dataset.wheelBound) {
+      rail.dataset.wheelBound = "1";
+      rail.addEventListener("wheel", function (e) {
+        var max = rail.scrollWidth - rail.clientWidth;
+        if (max <= 0) return;
+        var raw = Math.abs(e.deltaX) >= Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+        if (!raw) return;
+        var atStart = rail.scrollLeft <= 0;
+        var atEnd = rail.scrollLeft >= max - 1;
+        if ((raw < 0 && atStart) || (raw > 0 && atEnd)) return; // let the page scroll at the edges
+        e.preventDefault();
+        var capped = Math.min(Math.abs(raw), 80) * (raw < 0 ? -1 : 1);
+        rail.scrollLeft += capped * 0.3;
+      }, { passive: false });
+    }
   }
 
   function renderFaqs() {

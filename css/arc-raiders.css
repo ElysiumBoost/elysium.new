@@ -1562,7 +1562,7 @@ body.arc-locked { overflow: hidden; }
   margin-top: 0;
 }
 .arc-trials-collapse.on {
-  max-height: 360px;
+  max-height: 560px;
   opacity: 1;
   margin-top: 14px;
   overflow: visible;
@@ -2217,4 +2217,161 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   ORDER ACTIONS — secondary "Copy for Discord" button
+   ────────────────────────────────────────────────────────────── */
+.arc-cart-copy {
+  width: 100%; margin-top: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid var(--line-soft); border-radius: 4px;
+  font-family: var(--f-display); font-weight: 600;
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+.arc-cart-copy:hover { color: var(--gold-bright); border-color: var(--gold); background: rgba(201,168,76,0.06); }
+.arc-cart-copy svg { flex-shrink: 0; }
+.arc-cart-copy.is-copied { color: var(--gold-bright); border-color: var(--gold); background: rgba(201,168,76,0.08); }
+
+/* ──────────────────────────────────────────────────────────────
+   QUICK CATEGORY NAV (inside the service view)
+   ────────────────────────────────────────────────────────────── */
+.arc-svc-nav {
+  display: flex; gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 14px;
+  margin-bottom: 4px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.arc-svc-nav::-webkit-scrollbar { height: 5px; }
+.arc-svc-nav::-webkit-scrollbar-thumb { background: var(--gold-deep); border-radius: 3px; }
+.arc-svc-pill {
+  flex: 0 0 auto;
+  padding: 7px 14px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--line-soft); border-radius: 2px;
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--text-dim);
+  white-space: nowrap; cursor: pointer;
+  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+.arc-svc-pill:hover { color: var(--gold-bright); border-color: var(--gold); }
+.arc-svc-pill.on {
+  color: #0a0805; background: var(--gold); border-color: var(--gold); font-weight: 500;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   STATION LIST BADGES (HOT / PRICE DROP / RECOMMENDED / POPULAR)
+   ────────────────────────────────────────────────────────────── */
+.arc-sidebar-mid { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.arc-sidebar-mid .arc-sidebar-name { flex: none; }
+.arc-sidebar-badges { display: flex; flex-wrap: wrap; gap: 5px; }
+.arc-badge {
+  display: inline-flex; align-items: center;
+  padding: 2px 6px; border-radius: 2px;
+  font-family: var(--f-mono); font-weight: 500;
+  font-size: 8px; letter-spacing: 0.14em; line-height: 1;
+  text-transform: uppercase; white-space: nowrap;
+  border: 1px solid transparent;
+}
+.arc-badge--recommended { color: var(--gold-bright); border-color: color-mix(in srgb, var(--gold) 50%, transparent); background: var(--gold-soft); }
+.arc-badge--hot         { color: #e7a07f; border-color: color-mix(in srgb, var(--amber) 55%, transparent); background: var(--amber-glow); }
+.arc-badge--pricedrop   { color: #f07a4f; border-color: color-mix(in srgb, var(--arc-rust) 60%, transparent); background: var(--arc-rust-glow); }
+.arc-badge--popular     { color: #9fc4e8; border-color: rgba(127,174,220,0.45); background: rgba(127,174,220,0.16); }
+
+/* ──────────────────────────────────────────────────────────────
+   SERVICE + BLUEPRINT SEARCH OVERLAY (covers the station map)
+   ────────────────────────────────────────────────────────────── */
+.arc-hub-search {
+  position: absolute; top: 62px; right: 24px;
+  width: 38px; height: 38px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(8,5,3,0.7);
+  border: 1px solid var(--line); border-radius: 2px;
+  color: var(--gold-bright);
+  z-index: 6;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+.arc-hub-search:hover { border-color: var(--gold); background: rgba(8,5,3,0.9); }
+.arc-hub-search svg { width: 17px; height: 17px; }
+.arc-svc-search {
+  position: absolute; inset: 0;
+  z-index: 8;
+  display: none; flex-direction: column;
+  padding: 72px clamp(20px, 6vw, 90px) 40px;
+  background: linear-gradient(180deg, rgba(8,5,3,0.95), rgba(8,5,3,0.98));
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+.arc-svc-search.on { display: flex; }
+.arc-svc-search-bar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg-2);
+  border: 1px solid var(--line); border-radius: 3px;
+}
+.arc-svc-search-ico { color: var(--gold-bright); flex-shrink: 0; }
+.arc-svc-search-input {
+  flex: 1; min-width: 0;
+  background: transparent; border: none; outline: none;
+  font-family: var(--f-display); font-size: 16px; letter-spacing: 0.04em;
+  color: var(--text);
+}
+.arc-svc-search-input::placeholder { color: var(--text-dim); }
+.arc-svc-search-close {
+  flex-shrink: 0; width: 28px; height: 28px;
+  background: transparent; border: 1px solid var(--line-soft); border-radius: 2px;
+  color: var(--text-dim); font-size: 18px; line-height: 1; cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.arc-svc-search-close:hover { color: var(--gold-bright); border-color: var(--gold); }
+.arc-svc-search-results {
+  margin-top: 16px; overflow-y: auto;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 8px; align-content: start;
+}
+.arc-svc-search-item {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 12px 14px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--line-soft); border-left: 3px solid transparent; border-radius: 2px;
+  cursor: pointer; text-align: left;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.arc-svc-search-item:hover { border-color: var(--gold); border-left-color: var(--gold); background: rgba(201,168,76,0.06); }
+.arc-svc-search-item-name { font-family: var(--f-display); font-weight: 600; font-size: 13px; letter-spacing: 0.04em; color: var(--text); }
+.arc-svc-search-item-type { font-family: var(--f-mono); font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); flex-shrink: 0; }
+.arc-svc-search-empty { grid-column: 1 / -1; padding: 30px; text-align: center; font-family: var(--f-body); font-size: 13px; color: var(--text-dim); }
+
+/* ──────────────────────────────────────────────────────────────
+   CUSTOM LOADOUT — compact two-column weapons + scrollable bundles
+   ────────────────────────────────────────────────────────────── */
+.arc-weapon-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 560px) { .arc-weapon-cols { grid-template-columns: 1fr; } }
+.arc-weapon-col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.arc-weapon-col-label {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--gold);
+}
+.arc-modtoggle--stack { display: flex; flex-direction: column; gap: 8px; }
+.arc-quick--scroll {
+  grid-template-columns: 1fr;
+  max-height: 280px; overflow-y: auto;
+  padding-right: 4px;
+}
+.arc-quick--scroll::-webkit-scrollbar { width: 6px; }
+.arc-quick--scroll::-webkit-scrollbar-thumb { background: var(--gold-deep); border-radius: 3px; }
+
+/* Expedition tier — info-only note */
+.arc-tier-note {
+  margin: 12px 0 0;
+  font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--text-dim);
 }
