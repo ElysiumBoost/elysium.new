@@ -319,7 +319,7 @@
   var elCartFee = $('arcCartFee');
   var elCartTotal = $('arcCartTotal');
   var elCartCount = $('arcCartCount');
-  var elCartDot = $('arcCartDot');
+  var elCartDot = $('cartCount');
   var elCartFoot = $('arcCartFoot');
   var elCopyCta = $('arcCopyCta');
   var elBackBtn = $('arcBackBtn');
