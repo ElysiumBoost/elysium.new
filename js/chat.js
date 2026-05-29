@@ -23,6 +23,7 @@ let _sendLock = false;
 let _offlineQueue = [];
 let _filterMode = 'all';
 let _searchQ    = '';
+let _loadingConvos = false;
 let _typingTimer = null;
 
 // ── Bootstrap ─────────────────────────────────────────────────────────────────
@@ -78,7 +79,11 @@ function _adjustHomeLink() {
 
 // ── Conversations ─────────────────────────────────────────────────────────────
 async function loadConversations() {
+  if (_loadingConvos) return;
+  _loadingConvos = true;
+
   const list = document.getElementById('ecConvoList');
+  if (list) list.innerHTML = '';
 
   try {
     let q = _sb.from('orders').select('*, booster:profiles!booster_id(id,username,avatar_url,role)');
@@ -105,9 +110,14 @@ async function loadConversations() {
     await renderConvoList();
   } catch (_err) {
     if (list) {
-      list.innerHTML = '<div class="ec-list-msg"><i class="ti ti-wifi-off"></i><span>Could not load conversations. Check your connection.</span></div>';
+      list.innerHTML = `<div class="ec-list-msg"><i class="ti ti-wifi-off"></i><span>Could not load conversations.</span><button class="ec-retry-btn" type="button">Retry</button></div>`;
+      list.querySelector('.ec-retry-btn')?.addEventListener('click', () => {
+        _loadingConvos = false;
+        loadConversations();
+      });
     }
-    _toast('Failed to load conversations', 'error');
+  } finally {
+    _loadingConvos = false;
   }
 }
 
@@ -141,7 +151,7 @@ async function renderConvoList() {
   });
 
   if (!orders.length) {
-    list.innerHTML = '<div class="ec-list-msg"><i class="ti ti-message-off"></i><span>No conversations found.</span></div>';
+    list.innerHTML = '<div class="ec-list-msg"><i class="ti ti-message-off"></i><span>No conversations yet.</span></div>';
     return;
   }
 

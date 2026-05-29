@@ -72,13 +72,12 @@
       #ecwFab.is-pulse { animation: ecwPulse 1s ease 2; }
       @keyframes ecwPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
       .ecw-badge { position: absolute; top: -4px; right: -4px; min-width: 18px; height: 18px; border-radius: 9px; background: #e53e3e; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid var(--bg,#0a0805); }
-      .ecw-backdrop { position: fixed; inset: 0; z-index: 8001; background: rgba(0,0,0,.55); opacity: 0; transition: opacity .25s; pointer-events: none; }
-      .ecw-backdrop.is-open { opacity: 1; pointer-events: all; }
-      .ecw-drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 8002; width: 480px; background: var(--bg,#0a0805); border-left: 1px solid var(--line,rgba(201,168,76,.18)); box-shadow: -8px 0 40px rgba(0,0,0,.6); transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); pointer-events: none; }
-      .ecw-drawer.is-open { transform: translateX(0); pointer-events: all; }
+      .ecw-backdrop { display: none; }
+      .ecw-drawer { position: fixed; bottom: 88px; right: 20px; z-index: 8002; width: 380px; height: 520px; border-radius: 12px; overflow: hidden; background: var(--bg,#0a0805); border: 1px solid var(--line,rgba(201,168,76,.18)); box-shadow: 0 8px 48px rgba(0,0,0,.7), 0 0 0 1px rgba(201,168,76,.08); transform: translateY(16px); opacity: 0; transition: transform .3s cubic-bezier(.4,0,.2,1), opacity .25s; pointer-events: none; }
+      .ecw-drawer.is-open { transform: translateY(0); opacity: 1; pointer-events: all; }
       .ecw-iframe { width: 100%; height: 100%; border: none; display: block; }
       .ec-hidden { display: none !important; }
-      @media (max-width: 540px) { .ecw-drawer { width: 100vw; } }
+      @media (max-width: 540px) { .ecw-drawer { width: calc(100vw - 24px); right: 12px; } }
     `;
     document.head.appendChild(s);
   }
@@ -103,7 +102,6 @@
 
     _drawerOpen = true;
     _clearBadge();
-    document.body.style.overflow = 'hidden';
   }
 
   function _closeDrawer() {
@@ -117,7 +115,6 @@
       backdrop.classList.add('ec-hidden');
     }, 300);
     _drawerOpen = false;
-    document.body.style.overflow = '';
   }
 
   // ── Fab click ────────────────────────────────────────────────────────────────
