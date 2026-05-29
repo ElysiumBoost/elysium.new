@@ -20,14 +20,27 @@ Fix one isolated visual issue per invocation. Do not redesign surrounding elemen
 
 ## Workflow
 
-1. **Identify** — Confirm the exact element, file, and line with the issue.
-2. **Read context** — Read the relevant CSS/JS files to understand current state.
-3. **Check design tokens** — Read `css/global.css` to use correct variables.
-4. **Plan** — Describe the fix in one sentence. State which file(s) will change.
-5. **Show diff** — Show the exact changes before applying.
-6. **Wait for approval** — Do not apply changes until approved.
-7. **Apply** — Make the change only after approval.
-8. **Do not commit** — Leave committing to the user.
+1. **Read HTML** — Read the full target page HTML. Locate the broken component by its ID or class.
+2. **Read CSS** — Read the page-specific CSS file in full. Find every rule targeting that ID/class.
+3. **Read JS** — Read the page-specific JS file in full. Find any logic that toggles, shows, hides, or mutates the component.
+4. **Identify** — State the exact element (ID or class), the file, and the line(s) where the breakage lives.
+5. **Show current code** — Quote the broken code block as-is, with file:line references.
+6. **Show proposed fix as diff** — Present the change in unified diff format (`-` old, `+` new). No prose substitutes for a diff.
+7. **Wait for approval** — Do not apply anything until the user explicitly approves.
+8. **Apply** — Make the change only after approval. Touch only the lines shown in the diff.
+9. **Do not commit** — Leave committing to the user.
+
+## Read Order (always this sequence)
+
+```
+1. pages/games/<page>.html      ← find component markup and IDs/classes
+2. css/<page>.css               ← find all CSS rules for that component
+3. js/<page>.js                 ← find show/hide logic, event listeners, class toggles
+4. css/global.css               ← confirm correct variable names before writing any CSS
+5. css/components.css           ← check if component inherits shared styles
+```
+
+Do not skip steps. Do not read files out of order.
 
 ## Known Fixes to Apply When Relevant
 
@@ -45,3 +58,4 @@ Fix one isolated visual issue per invocation. Do not redesign surrounding elemen
 - Do not add animations unless the fix specifically requires it.
 - Do not move CSS between files (e.g., page CSS into global).
 - Do not combine visual fixes with migration or backend work.
+- Do not change any selector not directly involved in the broken component.
