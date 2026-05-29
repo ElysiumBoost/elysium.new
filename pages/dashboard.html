@@ -55,6 +55,7 @@
         <a class="db-nav-item" href="#orders" data-section="orders">
           <i class="ti ti-shopping-bag"></i><span>My Orders</span>
           <span class="db-nav-badge" id="dbNavOrdersBadge" hidden>0</span>
+          <span class="db-nav-unread" id="dbNavOrdersUnread" hidden aria-label="Unread messages">0</span>
         </a>
         <a class="db-nav-item" href="#tickets" data-section="tickets">
           <i class="ti ti-ticket"></i><span>My Tickets</span>
@@ -571,6 +572,27 @@
         <button class="db-ghost-btn" type="button" id="dbDeleteCancelBtn">Cancel</button>
         <button class="db-danger-btn" type="button" id="dbDeleteConfirmBtn" disabled>Delete Account</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Booster chat modal -->
+  <div class="db-modal-overlay db-hidden" id="dbChatModal" role="dialog" aria-modal="true" aria-label="Chat with your booster">
+    <div class="db-modal db-chat-modal">
+      <div class="db-modal-hd">
+        <span class="db-modal-title db-chat-modal-title">
+          <span class="db-chat-avatar" id="dbChatAvatar"><i class="ti ti-user"></i></span>
+          <span class="db-chat-head-text">
+            <span id="dbChatBoosterName">Your Booster</span>
+            <span class="db-chat-head-sub" id="dbChatService">—</span>
+          </span>
+        </span>
+        <button class="db-modal-close" id="dbChatModalClose" type="button" aria-label="Close"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="db-chat-thread" id="dbChatThread"><div class="db-chat-loading">Loading…</div></div>
+      <form class="db-chat-input" id="dbChatForm">
+        <input type="text" class="db-chat-field" id="dbChatField" placeholder="Message your booster…" autocomplete="off" maxlength="2000">
+        <button type="submit" class="db-chat-send" id="dbChatSend" aria-label="Send"><i class="ti ti-send"></i></button>
+      </form>
     </div>
   </div>
 

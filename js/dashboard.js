@@ -22,6 +22,9 @@
   var _sb, _user, _profile = {}, _orders = [];
   var _selectedAvNum = null;
   var _currentFilter = 'all';
+  var _unread = {}, _chatOrder = null, _chatChannel = null, _feedChannel = null;
+  var _chatSendLock = false;
+  var PROOF_BUCKET = 'booster-proofs';
 
   /* ── Bootstrap ─────────────────────────────────────────────── */
 
@@ -36,6 +39,7 @@
       updateGreeting();
       setupNav();
       setupForms();
+      setupChat();
       buildAvatarGrids();
       var hash = window.location.hash.slice(1) || 'overview';
       showSection(hash, false);
@@ -139,6 +143,8 @@
       var rank = computeRank(parseFloat(_profile.total_spent) || 0);
       try { localStorage.setItem('elysium_rank_discount', JSON.stringify({ rank: rank.name, discount: rank.discount })); } catch (_) {}
 
+      return loadUnread();
+    }).then(function () {
       renderSidebar();
       renderOverview();
       renderOrders();
@@ -149,7 +155,28 @@
       renderAccount();
       renderSecurity();
       renderDiscord();
+      renderNavUnread();
+      subscribeChatFeed();
     });
+  }
+
+  /* ── Unread booster messages ────────────────────────────────── */
+
+  function loadUnread() {
+    _unread = {};
+    var ids = _orders.map(function (o) { return o.id; });
+    if (!ids.length) return Promise.resolve();
+    return _sb.from('messages').select('order_id')
+      .in('order_id', ids).eq('sender_role', 'booster').is('read_at', null)
+      .then(function (res) {
+        (res.data || []).forEach(function (m) { _unread[m.order_id] = (_unread[m.order_id] || 0) + 1; });
+      });
+  }
+
+  function renderNavUnread() {
+    var total = Object.keys(_unread).reduce(function (a, k) { return a + _unread[k]; }, 0);
+    var el = document.getElementById('dbNavOrdersUnread');
+    if (el) { if (total > 0) { el.textContent = total; el.hidden = false; } else { el.hidden = true; } }
   }
 
   /* ── Rank ───────────────────────────────────────────────────── */
@@ -195,7 +222,7 @@
       }
     }
 
-    var active = _orders.filter(function (o) { return (o.status || '').toLowerCase().indexOf('progress') !== -1; }).length;
+    var active = _orders.filter(function (o) { return isActiveStatus(o.status); }).length;
     var badge  = document.getElementById('dbNavOrdersBadge');
     if (badge && active > 0) { badge.textContent = active; badge.hidden = false; }
   }
@@ -215,7 +242,7 @@
   function renderOverview() {
     var spent  = parseFloat(_profile.total_spent) || 0;
     var rank   = computeRank(spent);
-    var active = _orders.filter(function (o) { return (o.status || '').toLowerCase().indexOf('progress') !== -1; }).length;
+    var active = _orders.filter(function (o) { return isActiveStatus(o.status); }).length;
 
     /* Stat cards */
     var grid = document.getElementById('dbStatsGrid');
@@ -234,13 +261,13 @@
     /* Last order */
     var lastCard = document.getElementById('dbLastOrderCard');
     if (lastCard) {
-      var activeOrders = _orders.filter(function (o) { return (o.status || '').toLowerCase().indexOf('progress') !== -1; });
+      var activeOrders = _orders.filter(function (o) { return isActiveStatus(o.status); });
       var latest = activeOrders[0] || _orders[0];
       if (latest) {
         var sc = statusClass(latest.status);
         lastCard.innerHTML =
           '<div class="db-card-header"><span class="db-card-title-sm"><i class="ti ti-activity"></i> Latest Order</span>' +
-          '<span class="db-status-badge db-status-' + sc + '">' + esc(latest.status || 'Pending') + '</span></div>' +
+          '<span class="db-status-badge db-status-' + sc + '">' + esc(prettyStatus(latest.status)) + '</span></div>' +
           '<div class="db-last-order-game">' + esc(latest.game || 'Boost') + '</div>' +
           '<div class="db-last-order-service">' + esc(latest.service_name || latest.service || '—') + '</div>' +
           '<div class="db-last-order-meta"><span><i class="ti ti-calendar"></i> ' + fmtDate(latest.created_at || latest.date) + '</span>' +
@@ -312,7 +339,7 @@
     if (!body) return;
 
     var filtered = _orders;
-    if (_currentFilter === 'active')    filtered = _orders.filter(function (o) { return (o.status || '').toLowerCase().indexOf('progress') !== -1; });
+    if (_currentFilter === 'active')    filtered = _orders.filter(function (o) { return isActiveStatus(o.status); });
     if (_currentFilter === 'completed') filtered = _orders.filter(function (o) { return (o.status || '').toLowerCase().indexOf('complet') !== -1; });
     if (_currentFilter === 'pending')   filtered = _orders.filter(function (o) { return (o.status || '').toLowerCase() === 'pending'; });
 
@@ -336,13 +363,21 @@
   function orderRow(o) {
     var sc = statusClass(o.status);
     var discordUrl = 'https://discord.gg/elysiumgg';
+    var unread = _unread[o.id] || 0;
+    var canChat = !!o.booster_id && (o.status || '').toLowerCase() !== 'cancelled';
+    var chatBtn = canChat
+      ? '<button class="db-chat-btn" type="button" data-chat="' + o.id + '" aria-label="Chat with your booster">' +
+          '<i class="ti ti-message-2"></i> Chat' + (unread ? '<span class="db-chat-unread">' + unread + '</span>' : '') + '</button>'
+      : '';
     return '<tr class="db-order-row">' +
       '<td><span class="db-game-badge">' + esc(o.game || 'Boost') + '</span></td>' +
       '<td class="db-service-cell">' + esc(o.service_name || o.service || '—') + '</td>' +
       '<td class="db-date-cell">' + fmtDate(o.created_at || o.date) + '</td>' +
       '<td class="db-price-cell">$' + parseFloat(o.price || 0).toFixed(2) + '</td>' +
-      '<td><span class="db-status-badge db-status-' + sc + '">' + esc(o.status || 'Pending') + '</span></td>' +
-      '<td><a href="' + discordUrl + '" target="_blank" rel="noopener noreferrer" class="db-ticket-btn" aria-label="Open Discord ticket"><i class="ti ti-brand-discord"></i></a></td>' +
+      '<td><span class="db-status-badge db-status-' + sc + '">' + esc(prettyStatus(o.status)) + '</span>' + trackBar(o) + '</td>' +
+      '<td><div class="db-order-actions">' + chatBtn +
+        '<a href="' + discordUrl + '" target="_blank" rel="noopener noreferrer" class="db-ticket-btn" aria-label="Open Discord ticket"><i class="ti ti-brand-discord"></i></a>' +
+      '</div></td>' +
       '</tr>';
   }
 
@@ -352,7 +387,7 @@
     var el = document.getElementById('dbOrdersStats');
     if (!el) return;
     var total     = _orders.length;
-    var active    = _orders.filter(function (o) { return (o.status || '').toLowerCase().indexOf('progress') !== -1; }).length;
+    var active    = _orders.filter(function (o) { return isActiveStatus(o.status); }).length;
     var completed = _orders.filter(function (o) { return (o.status || '').toLowerCase().indexOf('complet') !== -1; }).length;
     var cancelled = _orders.filter(function (o) { return (o.status || '').toLowerCase().indexOf('cancel') !== -1; }).length;
     el.innerHTML =
@@ -829,6 +864,172 @@
     });
   }
 
+  /* ── Booster chat ───────────────────────────────────────────── */
+
+  function setupChat() {
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-chat]');
+      if (btn) { e.preventDefault(); openChat(btn.dataset.chat); }
+    });
+    var close = document.getElementById('dbChatModalClose');
+    if (close) close.addEventListener('click', closeChat);
+    var overlay = document.getElementById('dbChatModal');
+    if (overlay) overlay.addEventListener('click', function (e) { if (e.target === overlay) closeChat(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeChat(); });
+
+    var form = document.getElementById('dbChatForm');
+    if (form) form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (_chatSendLock || !_chatOrder) return;
+      var field = document.getElementById('dbChatField');
+      var txt = (field.value || '').trim();
+      if (!txt) return;
+      field.value = '';
+      lockChatSend();
+      _sb.from('messages').insert({
+        order_id: _chatOrder.id, sender_id: _user.id, sender_role: 'customer', content: txt,
+      }).then(function (res) { if (res.error) toast('error', res.error.message); });
+    });
+  }
+
+  function lockChatSend() {
+    _chatSendLock = true;
+    var send = document.getElementById('dbChatSend');
+    if (send) send.disabled = true;
+    setTimeout(function () { _chatSendLock = false; if (send) send.disabled = false; }, 1000);
+  }
+
+  function openChat(orderId) {
+    var o = _orders.filter(function (x) { return x.id === orderId; })[0];
+    if (!o) return;
+    _chatOrder = o;
+    setText('dbChatService', o.service_name || o.service || 'Order');
+    setText('dbChatBoosterName', 'Your Booster');
+    var av = document.getElementById('dbChatAvatar');
+    if (av) av.innerHTML = '<i class="ti ti-user"></i>';
+    if (o.booster_id) {
+      _sb.from('profiles').select('username, avatar_url').eq('id', o.booster_id).maybeSingle().then(function (res) {
+        if (!res.data) return;
+        if (res.data.username) setText('dbChatBoosterName', res.data.username);
+        if (res.data.avatar_url && av) {
+          var r = res.data.avatar_url.indexOf('assets/') === 0 ? '../' + res.data.avatar_url : res.data.avatar_url;
+          av.innerHTML = '<img src="' + r + '" alt="Booster avatar">';
+        }
+      });
+    }
+    var modal = document.getElementById('dbChatModal');
+    if (modal) modal.classList.remove('db-hidden');
+    document.body.style.overflow = 'hidden';
+    loadChatMessages(o);
+    subscribeChat(o);
+  }
+
+  function closeChat() {
+    var modal = document.getElementById('dbChatModal');
+    if (modal) modal.classList.add('db-hidden');
+    document.body.style.overflow = '';
+    if (_chatChannel) { _sb.removeChannel(_chatChannel); _chatChannel = null; }
+    _chatOrder = null;
+  }
+
+  function loadChatMessages(o) {
+    var thread = document.getElementById('dbChatThread');
+    if (thread) thread.innerHTML = '<div class="db-chat-loading">Loading…</div>';
+    _sb.from('messages').select('*').eq('order_id', o.id).order('created_at', { ascending: true }).then(function (res) {
+      renderChatThread(res.data || []);
+      markChatRead(o);
+    });
+  }
+
+  function renderChatThread(msgs) {
+    var thread = document.getElementById('dbChatThread');
+    if (!thread) return;
+    if (!msgs.length) {
+      thread.innerHTML = '<div class="db-chat-empty"><i class="ti ti-message-2"></i><p>No messages yet. Say hello to your booster!</p></div>';
+      return;
+    }
+    thread.innerHTML = msgs.map(chatBubble).join('');
+    resolveChatImages(thread);
+    chatScroll();
+  }
+
+  function chatBubble(m) {
+    var mine = m.sender_role === 'customer';
+    var body = m.image_url
+      ? '<span class="db-bubble-img" data-img-path="' + esc(m.image_url) + '"><i class="ti ti-photo"></i> Loading image…</span>'
+      : esc(m.content || '');
+    var seen = mine && m.read_at ? '<span class="db-bubble-seen">Seen</span>' : '';
+    return '<div class="db-bubble-row ' + (mine ? 'is-mine' : 'is-them') + '">' +
+      '<div class="db-bubble">' + body +
+      '<span class="db-bubble-time">' + chatTime(m.created_at) + seen + '</span></div></div>';
+  }
+
+  function resolveChatImages(scope) {
+    scope.querySelectorAll('[data-img-path]').forEach(function (el) {
+      _sb.storage.from(PROOF_BUCKET).createSignedUrl(el.dataset.imgPath, 3600).then(function (signed) {
+        if (signed && signed.data) el.innerHTML = '<img src="' + signed.data.signedUrl + '" alt="Shared image" class="db-bubble-photo">';
+      });
+    });
+  }
+
+  function subscribeChat(o) {
+    if (_chatChannel) _sb.removeChannel(_chatChannel);
+    _chatChannel = _sb.channel('cust-msg-' + o.id)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: 'order_id=eq.' + o.id }, function (payload) {
+        var thread = document.getElementById('dbChatThread');
+        if (!thread || !_chatOrder || _chatOrder.id !== o.id) return;
+        var empty = thread.querySelector('.db-chat-empty');
+        if (empty) thread.innerHTML = '';
+        thread.insertAdjacentHTML('beforeend', chatBubble(payload.new));
+        resolveChatImages(thread);
+        chatScroll();
+        if (payload.new.sender_role === 'booster') markChatRead(o);
+      })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'messages', filter: 'order_id=eq.' + o.id }, function () {
+        if (_chatOrder && _chatOrder.id === o.id) loadChatMessages(o);
+      })
+      .subscribe();
+  }
+
+  /* Global feed: keep unread badges live while the modal is closed. */
+  function subscribeChatFeed() {
+    if (_feedChannel) return;
+    _feedChannel = _sb.channel('cust-feed')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, function (payload) {
+        var m = payload.new;
+        var mine = _orders.some(function (o) { return o.id === m.order_id; });
+        if (!mine || m.sender_role !== 'booster') return;
+        if (_chatOrder && _chatOrder.id === m.order_id) return; // handled by open thread
+        _unread[m.order_id] = (_unread[m.order_id] || 0) + 1;
+        renderNavUnread();
+        renderOrders();
+        if (document.hidden) notify('New message from your booster', m.content || 'Sent an image');
+      })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'orders', filter: 'user_id=eq.' + _user.id }, function () {
+        _sb.from('orders').select('*').eq('user_id', _user.id).order('created_at', { ascending: false }).then(function (res) {
+          _orders = res.data || []; renderOrders(); renderOrdersStats(); renderSidebar();
+        });
+      })
+      .subscribe();
+  }
+
+  function markChatRead(o) {
+    _sb.from('messages').update({ read_at: new Date().toISOString() })
+      .eq('order_id', o.id).eq('sender_role', 'booster').is('read_at', null).then(function () {
+        if (_unread[o.id]) { delete _unread[o.id]; renderNavUnread(); renderOrders(); }
+      });
+  }
+
+  function chatScroll() { var t = document.getElementById('dbChatThread'); if (t) t.scrollTop = t.scrollHeight; }
+  function chatTime(s) { if (!s) return ''; try { return new Date(s).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }); } catch (_) { return ''; } }
+
+  function notify(title, body) {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      try { new Notification(title, { body: body, icon: '../assets/elysium-logo-mark.png' }); return; } catch (_) {}
+    }
+    toast('info', title);
+  }
+
   /* ── Toast ──────────────────────────────────────────────────── */
 
   function toast(type, message) {
@@ -871,8 +1072,42 @@
   function statusClass(status) {
     var s = (status || '').toLowerCase();
     if (s.indexOf('complet') !== -1) return 'completed';
-    if (s.indexOf('progress') !== -1) return 'active';
+    if (s === 'active' || s.indexOf('progress') !== -1) return 'active';
+    if (s === 'proof_submitted' || s.indexOf('review') !== -1) return 'review';
+    if (s.indexOf('disput') !== -1) return 'disputed';
     return 'pending';
+  }
+
+  function isActiveStatus(status) {
+    var s = (status || '').toLowerCase();
+    return s === 'active' || s === 'proof_submitted' || s.indexOf('progress') !== -1;
+  }
+
+  function prettyStatus(status) {
+    var s = (status || '').toLowerCase();
+    var map = { active: 'In Progress', proof_submitted: 'In Review', pending: 'Pending', completed: 'Completed', disputed: 'Disputed' };
+    if (map[s]) return map[s];
+    return status ? status.charAt(0).toUpperCase() + status.slice(1) : 'Pending';
+  }
+
+  /* Customer-facing tracking steps: Pending → Assigned → In Progress → Proof → Done */
+  function trackStep(o) {
+    var s = (o.status || '').toLowerCase();
+    if (s.indexOf('complet') !== -1) return 4;
+    if (s === 'proof_submitted' || s.indexOf('review') !== -1) return 3;
+    if (s === 'active' || s.indexOf('progress') !== -1) return 2;
+    if (o.booster_id) return 1;
+    return 0;
+  }
+
+  function trackBar(o) {
+    if ((o.status || '').toLowerCase().indexOf('cancel') !== -1) return '';
+    var labels = ['Pending', 'Assigned', 'Active', 'Proof', 'Done'];
+    var cur = trackStep(o);
+    return '<div class="db-track-mini">' + labels.map(function (l, i) {
+      var cls = i < cur ? 'is-done' : i === cur ? 'is-current' : '';
+      return '<span class="db-track-mini-dot ' + cls + '" title="' + l + '"></span>';
+    }).join('') + '</div>';
   }
 
   function fmtDate(str) {

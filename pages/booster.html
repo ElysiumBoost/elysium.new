@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booster Panel — Elysium Boost</title>
+  <meta name="description" content="Elysium Boost booster panel — pick orders, chat with customers, track deliveries, and grow your rank.">
+  <link rel="icon" href="../assets/elysium-logo-mark.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/booster.css">
+</head>
+<body class="bp-body">
+
+  <div class="bp-bg" aria-hidden="true"></div>
+  <div class="bp-toasts" id="bpToasts" aria-live="polite" aria-atomic="false"></div>
+
+  <!-- ══ Ban screen ══ -->
+  <div class="bp-ban bp-hidden" id="bpBanScreen" role="alertdialog" aria-modal="true">
+    <div class="bp-ban-card">
+      <i class="ti ti-lock-off bp-ban-icon"></i>
+      <h1 class="bp-ban-title">Erişim Engellendi</h1>
+      <p class="bp-ban-reason" id="bpBanReason">Hesabınız askıya alındı.</p>
+      <p class="bp-ban-help">İtiraz için Discord üzerinden ekibimizle iletişime geçin.</p>
+      <button class="bp-danger-btn" id="bpBanSignout" type="button"><i class="ti ti-logout"></i> Çıkış Yap</button>
+    </div>
+  </div>
+
+  <!-- ══ Rules modal (blocking) ══ -->
+  <div class="bp-rules bp-hidden" id="bpRulesModal" role="dialog" aria-modal="true" aria-labelledby="bpRulesTitle">
+    <div class="bp-rules-card">
+      <div class="bp-rules-accent" aria-hidden="true"></div>
+      <img class="bp-rules-logo" src="../assets/elysium-logo-mark.png" alt="Elysium Boost" width="48" height="48">
+      <span class="bp-rules-eyebrow">Booster Anlaşması</span>
+      <h1 class="bp-rules-title" id="bpRulesTitle">Platform Kuralları</h1>
+      <p class="bp-rules-sub">Devam etmeden önce aşağıdaki kuralları okuyup kabul etmen gerekir.</p>
+      <ul class="bp-rules-list" id="bpRulesList"></ul>
+      <div class="bp-rules-penalty">
+        <i class="ti ti-alert-octagon"></i>
+        <span>İhlal: <strong>€250 ceza + kalıcı platform banı</strong>. Ağır ihlallerde yasal işlem.</span>
+      </div>
+      <label class="bp-rules-check">
+        <input type="checkbox" id="bpRulesCheckbox">
+        <span>Tüm kuralları okudum ve kabul ediyorum.</span>
+      </label>
+      <button class="eb-btn-primary bp-rules-accept" id="bpRulesAccept" type="button" disabled>Kuralları Kabul Ediyorum</button>
+    </div>
+  </div>
+
+  <div class="bp-shell">
+
+    <!-- ══ Sidebar ══ -->
+    <aside class="bp-sidebar" id="bpSidebar">
+      <a href="../index.html" class="bp-logo" aria-label="Elysium Boost home">
+        <img src="../assets/elysium-logo-mark.png" alt="Elysium Boost" width="30" height="30" loading="eager">
+        <span class="bp-logo-text"><span class="bp-logo-name">ELYSIUM</span><span class="bp-logo-sub">Booster Panel</span></span>
+      </a>
+
+      <div class="bp-profile">
+        <button class="bp-avatar-wrap" id="bpAvatarWrap" type="button" aria-label="Change avatar">
+          <span class="bp-online-dot" id="bpOnlineDot" aria-hidden="true"></span>
+          <div class="bp-avatar-circle" id="bpAvatarCircle">B</div>
+          <div class="bp-avatar-overlay" aria-hidden="true"><i class="ti ti-camera"></i></div>
+        </button>
+        <div class="bp-profile-name" id="bpProfileName">Booster</div>
+        <code class="bp-profile-id" id="bpBoosterId">—</code>
+        <span class="bp-rank-badge"><i class="ti ti-shield"></i><span id="bpRankBadgeName">Recruit</span></span>
+
+        <button class="bp-avail" id="bpAvailToggle" type="button" role="switch" aria-checked="true">
+          <span class="bp-avail-knob"></span>
+          <span class="bp-avail-label">Ready to Boost</span>
+        </button>
+      </div>
+
+      <nav class="bp-nav" aria-label="Booster navigation">
+        <a class="bp-nav-item is-active" href="#overview" data-section="overview"><i class="ti ti-layout-dashboard"></i><span>Overview</span></a>
+        <a class="bp-nav-item" href="#pick" data-section="pick"><i class="ti ti-target-arrow"></i><span>Pick Services</span><span class="bp-nav-badge" id="bpNavPickBadge" hidden>0</span></a>
+        <a class="bp-nav-item" href="#orders" data-section="orders"><i class="ti ti-clipboard-check"></i><span>My Orders</span><span class="bp-nav-badge" id="bpNavOrdersBadge" hidden>0</span></a>
+        <a class="bp-nav-item" href="#messages" data-section="messages"><i class="ti ti-messages"></i><span>Messages</span><span class="bp-nav-badge bp-nav-badge-msg" id="bpNavMessagesBadge" hidden>0</span></a>
+        <a class="bp-nav-item" href="#profile" data-section="profile"><i class="ti ti-user-cog"></i><span>My Profile</span></a>
+        <a class="bp-nav-item" href="#earnings" data-section="earnings"><i class="ti ti-coins"></i><span>Earnings</span></a>
+        <a class="bp-nav-item" href="#rank" data-section="rank"><i class="ti ti-crown"></i><span>Booster Rank</span></a>
+        <div class="bp-nav-sep" role="separator"></div>
+        <button class="bp-nav-item bp-nav-logout" type="button" id="bpNavLogout"><i class="ti ti-logout"></i><span>Logout</span></button>
+      </nav>
+
+      <button class="bp-rules-strip" id="bpRulesStrip" type="button">
+        <i class="ti ti-shield-exclamation"></i>
+        <span>Platform Kuralları · €250 ceza + ban</span>
+      </button>
+    </aside>
+
+    <!-- ══ Main ══ -->
+    <main class="bp-main" id="bpMain">
+
+      <!-- Overview -->
+      <section class="bp-section" id="bpSectionOverview">
+        <div class="bp-section-hd">
+          <h1 class="bp-section-title"><span class="bp-greeting" id="bpGreeting">Welcome</span>, Booster</h1>
+        </div>
+        <div class="bp-stats-grid" id="bpStatsGrid">
+          <div class="bp-skel bp-skel-stat"></div><div class="bp-skel bp-skel-stat"></div>
+          <div class="bp-skel bp-skel-stat"></div><div class="bp-skel bp-skel-stat"></div>
+        </div>
+
+        <div class="bp-overview-grid">
+          <div class="bp-ov-col">
+            <div class="bp-sub-hd">Active Orders</div>
+            <div class="bp-active-list" id="bpActiveList"><div class="bp-skel bp-skel-block"></div></div>
+            <div class="bp-quick-actions">
+              <a class="bp-quick" href="#pick" data-section="pick"><i class="ti ti-target-arrow"></i><span>Pick Services</span></a>
+              <a class="bp-quick" href="#orders" data-section="orders"><i class="ti ti-clipboard-check"></i><span>My Orders</span></a>
+              <a class="bp-quick" href="#earnings" data-section="earnings"><i class="ti ti-coins"></i><span>Earnings</span></a>
+            </div>
+          </div>
+          <div class="bp-ov-col">
+            <div class="bp-sub-hd">Readiness Checklist</div>
+            <div class="bp-card"><div class="bp-checklist" id="bpChecklist"><div class="bp-skel bp-skel-block"></div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pick Services -->
+      <section class="bp-section bp-hidden" id="bpSectionPick">
+        <div class="bp-section-hd">
+          <h1 class="bp-section-title">Pick Services</h1>
+        </div>
+        <div class="bp-pick-bar">
+          <span class="bp-pick-countdown" id="bpPickCountdown">Auto-refresh in 15s</span>
+          <div class="bp-pick-bar-right">
+            <button class="bp-avail bp-auto-toggle is-on" id="bpAutoRefreshToggle" type="button" role="switch" aria-checked="true">
+              <span class="bp-avail-knob"></span><span class="bp-avail-label">Auto</span>
+            </button>
+            <button class="bp-refresh-btn" id="bpRefreshBtn" type="button"><i class="ti ti-refresh"></i> Refresh</button>
+          </div>
+        </div>
+        <div class="bp-pick-warning" id="bpPickWarning" hidden></div>
+        <div class="bp-pick-grid" id="bpPickGrid"><div class="bp-skel bp-skel-block"></div></div>
+      </section>
+
+      <!-- My Orders -->
+      <section class="bp-section bp-hidden" id="bpSectionOrders">
+        <div class="bp-section-hd">
+          <h1 class="bp-section-title">My Orders</h1>
+          <div class="bp-filter-tabs" id="bpOrderFilterTabs" role="tablist">
+            <button class="bp-tab is-active" data-filter="all" type="button" role="tab">All</button>
+            <button class="bp-tab" data-filter="active" type="button" role="tab">Active</button>
+            <button class="bp-tab" data-filter="completed" type="button" role="tab">Completed</button>
+            <button class="bp-tab" data-filter="disputed" type="button" role="tab">Disputed</button>
+          </div>
+        </div>
+        <div class="bp-ostats" id="bpOrdersStats">
+          <div class="bp-skel bp-skel-ostat"></div><div class="bp-skel bp-skel-ostat"></div><div class="bp-skel bp-skel-ostat"></div>
+        </div>
+        <div class="bp-card bp-table-card" id="bpOrdersBody"><div class="bp-skel bp-skel-block"></div></div>
+      </section>
+
+      <!-- Order Detail (JS-rendered) -->
+      <section class="bp-section bp-hidden" id="bpSectionOrder"></section>
+
+      <!-- Messages -->
+      <section class="bp-section bp-hidden" id="bpSectionMessages">
+        <div class="bp-section-hd"><h1 class="bp-section-title">Messages</h1></div>
+        <div class="bp-msg-list" id="bpMessagesList"><div class="bp-skel bp-skel-block"></div></div>
+      </section>
+
+      <!-- My Profile -->
+      <section class="bp-section bp-hidden" id="bpSectionProfile">
+        <div class="bp-section-hd"><h1 class="bp-section-title">My Profile</h1></div>
+        <div class="bp-profile-grid">
+          <div class="bp-card">
+            <div class="bp-sub-hd bp-sub-hd-flush">Booster Details</div>
+            <form class="bp-form" id="bpProfileForm" novalidate>
+              <div class="bp-field"><label class="bp-label" for="bpFUsername">Username</label>
+                <input class="bp-input" type="text" id="bpFUsername" placeholder="Your handle" autocomplete="username"></div>
+              <div class="bp-field"><label class="bp-label" for="bpFDiscord">Discord Tag</label>
+                <input class="bp-input" type="text" id="bpFDiscord" placeholder="username or user#0000"></div>
+              <div class="bp-field"><label class="bp-label" for="bpFCountry">Country</label>
+                <input class="bp-input" type="text" id="bpFCountry" placeholder="e.g. Türkiye" autocomplete="country-name"></div>
+              <div class="bp-field"><label class="bp-label" for="bpFGames">Games You Boost</label>
+                <input class="bp-input" type="text" id="bpFGames" placeholder="e.g. Valorant, Arc Raiders"></div>
+              <div class="bp-field"><label class="bp-label" for="bpFPayoutEmail">Payout Email</label>
+                <input class="bp-input" type="email" id="bpFPayoutEmail" placeholder="payouts@example.com"></div>
+              <div class="bp-field"><label class="bp-label" for="bpFPayoutMethod">Payout Method</label>
+                <select class="bp-input" id="bpFPayoutMethod">
+                  <option value="">Select method</option>
+                  <option value="paypal">PayPal (email)</option>
+                  <option value="bank">Bank Transfer (IBAN)</option>
+                  <option value="crypto">Crypto (wallet)</option>
+                </select></div>
+              <button type="submit" class="eb-btn-primary bp-save-btn"><i class="ti ti-device-floppy"></i> Save Profile</button>
+            </form>
+          </div>
+          <div class="bp-profile-aside">
+            <div class="bp-card">
+              <div class="bp-card-hd"><i class="ti ti-id-badge-2"></i> Booster ID</div>
+              <code class="bp-booster-id-ro" id="bpBoosterIdRO">—</code>
+              <p class="bp-note">Share this ID with support when opening a ticket.</p>
+            </div>
+            <div class="bp-card">
+              <div class="bp-card-hd"><i class="ti ti-checklist"></i> Verification</div>
+              <div class="bp-checklist" id="bpProfileChecklist"><div class="bp-skel bp-skel-block"></div></div>
+            </div>
+            <div class="bp-card">
+              <div class="bp-card-hd"><i class="ti ti-calendar-event"></i> Member Since</div>
+              <div class="bp-member" id="bpMemberSince">—</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Earnings -->
+      <section class="bp-section bp-hidden" id="bpSectionEarnings">
+        <div class="bp-section-hd"><h1 class="bp-section-title">Earnings</h1></div>
+        <div class="bp-ostats" id="bpEarnStats">
+          <div class="bp-skel bp-skel-ostat"></div><div class="bp-skel bp-skel-ostat"></div>
+          <div class="bp-skel bp-skel-ostat"></div><div class="bp-skel bp-skel-ostat"></div>
+        </div>
+        <div class="bp-earn-callout" id="bpEarnCallout"></div>
+        <div class="bp-earn-grid">
+          <div class="bp-ov-col">
+            <div class="bp-sub-hd">Payout History</div>
+            <div class="bp-card bp-table-card" id="bpPayoutHistory"><div class="bp-skel bp-skel-block"></div></div>
+          </div>
+          <div class="bp-ov-col">
+            <div class="bp-sub-hd">Payout Status</div>
+            <div class="bp-card" id="bpPayoutStatus"><div class="bp-skel bp-skel-block"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Booster Rank -->
+      <section class="bp-section bp-hidden" id="bpSectionRank">
+        <div class="bp-section-hd"><h1 class="bp-section-title">Booster Rank</h1></div>
+        <div class="bp-card bp-rank-hero" id="bpRankHero"><div class="bp-skel bp-skel-block"></div></div>
+        <div class="bp-sub-hd">Rank Ladder</div>
+        <div class="bp-ladder" id="bpRankLadder"><div class="bp-skel bp-skel-block"></div></div>
+        <div class="bp-sub-hd">Benefits</div>
+        <div class="bp-bene-grid">
+          <div class="bp-card bp-bene"><i class="ti ti-percentage bp-bene-icon"></i><div class="bp-bene-name">Higher Share</div><p class="bp-bene-desc">Earn up to 65% of every order as you climb.</p></div>
+          <div class="bp-card bp-bene"><i class="ti ti-bolt bp-bene-icon"></i><div class="bp-bene-name">Priority Queue</div><p class="bp-bene-desc">Higher ranks see premium orders first.</p></div>
+          <div class="bp-card bp-bene"><i class="ti ti-medal bp-bene-icon"></i><div class="bp-bene-name">Trust Badge</div><p class="bp-bene-desc">A visible rank that customers recognize.</p></div>
+        </div>
+        <div class="bp-sub-hd">How to Progress</div>
+        <div class="bp-bene-grid">
+          <div class="bp-card bp-step"><span class="bp-step-num">01</span><div class="bp-bene-name">Pick &amp; Deliver</div><p class="bp-bene-desc">Claim orders from the queue and complete them cleanly.</p></div>
+          <div class="bp-card bp-step"><span class="bp-step-num">02</span><div class="bp-bene-name">Submit Proof</div><p class="bp-bene-desc">Every verified completion counts toward your total.</p></div>
+          <div class="bp-card bp-step"><span class="bp-step-num">03</span><div class="bp-bene-name">Climb Ranks</div><p class="bp-bene-desc">Cross each threshold to raise your earnings share.</p></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Mobile bottom nav -->
+  <nav class="bp-mobile-nav" aria-label="Mobile navigation">
+    <a class="bp-mob-item is-active" href="#overview" data-section="overview"><i class="ti ti-layout-dashboard"></i><span>Overview</span></a>
+    <a class="bp-mob-item" href="#pick" data-section="pick"><i class="ti ti-target-arrow"></i><span>Pick</span><span class="bp-nav-badge" id="bpMobPickBadge" hidden>0</span></a>
+    <a class="bp-mob-item" href="#orders" data-section="orders"><i class="ti ti-clipboard-check"></i><span>Orders</span></a>
+    <a class="bp-mob-item" href="#messages" data-section="messages"><i class="ti ti-messages"></i><span>Messages</span><span class="bp-nav-badge bp-nav-badge-msg" id="bpMobMsgBadge" hidden>0</span></a>
+  </nav>
+
+  <!-- Avatar picker modal -->
+  <div class="bp-modal-overlay bp-hidden" id="bpAvatarModal" role="dialog" aria-modal="true" aria-label="Choose avatar">
+    <div class="bp-modal">
+      <div class="bp-modal-hd">
+        <span class="bp-modal-title">Choose Your Avatar</span>
+        <button class="bp-modal-close" id="bpAvatarModalClose" type="button" aria-label="Close"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="bp-modal-av-grid" id="bpModalAvGrid" role="radiogroup" aria-label="Select avatar"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="../js/auth.js" defer></script>
+  <script src="../js/booster.js" defer></script>
+</body>
+</html>

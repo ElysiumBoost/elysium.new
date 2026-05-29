@@ -65,3 +65,211 @@ create table if not exists public.promo_codes (
 alter table public.promo_codes enable row level security;
 -- Only authenticated users can read active codes (validation done server-side ideally)
 create policy "Auth users can read promo codes" on public.promo_codes for select to authenticated using (is_active = true);
+
+-- ════════════════════════════════════════════════════════════════════
+-- BOOSTER PLATFORM MIGRATION
+-- Booster panel, site-internal chat, order tracking, rank system.
+-- Additive migration — safe to run on the existing schema above.
+-- NOTE: orders.user_id IS the customer reference (the booster spec's
+--       "customer_id"); kept as-is so the customer dashboard keeps working.
+-- ════════════════════════════════════════════════════════════════════
+
+-- ── profiles: booster fields ──────────────────────────────────────
+alter table public.profiles add column if not exists role            text    not null default 'customer';
+alter table public.profiles add column if not exists booster_id_code text;
+alter table public.profiles add column if not exists is_available    boolean not null default true;
+alter table public.profiles add column if not exists is_banned       boolean not null default false;
+alter table public.profiles add column if not exists ban_reason      text;
+alter table public.profiles add column if not exists banned_at       timestamptz;
+alter table public.profiles add column if not exists rules_accepted_at timestamptz;
+alter table public.profiles add column if not exists completed_orders integer not null default 0;
+alter table public.profiles add column if not exists rating          numeric(3,2) not null default 5.0;
+alter table public.profiles add column if not exists discord_tag     text;
+alter table public.profiles add column if not exists games           text;
+alter table public.profiles add column if not exists payout_email    text;
+alter table public.profiles add column if not exists payout_method   text;
+alter table public.profiles add column if not exists max_active_orders integer not null default 5;
+
+do $$ begin
+  alter table public.profiles add constraint profiles_role_check
+    check (role in ('customer','booster','admin'));
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  alter table public.profiles add constraint profiles_payout_method_check
+    check (payout_method is null or payout_method in ('paypal','bank','crypto'));
+exception when duplicate_object then null; end $$;
+
+-- A booster needs to read other boosters' availability is NOT required;
+-- but customers/boosters must read the counterparty's public booster info
+-- (username, avatar, rank) for chat headers. Allow authenticated read of
+-- minimal profile fields via a dedicated policy.
+do $$ begin
+  create policy "Auth users can read booster public info"
+    on public.profiles for select to authenticated
+    using (role = 'booster' or auth.uid() = id);
+exception when duplicate_object then null; end $$;
+
+-- ── orders: booster + tracking fields ─────────────────────────────
+alter table public.orders add column if not exists booster_id    uuid references public.profiles(id);
+alter table public.orders add column if not exists customer_note  text;
+alter table public.orders add column if not exists embark_id      text;
+alter table public.orders add column if not exists proof_url      text;
+alter table public.orders add column if not exists picked_at      timestamptz;
+alter table public.orders add column if not exists completed_at   timestamptz;
+alter table public.orders add column if not exists eta_minutes    integer;
+
+-- Widen the status vocabulary: booster flow uses lowercase states.
+-- Keep the legacy capitalized values so existing customer rows stay valid.
+alter table public.orders drop constraint if exists orders_status_check;
+alter table public.orders add constraint orders_status_check check (
+  status in (
+    'pending','active','proof_submitted','completed','disputed',
+    'Pending','In Progress','Completed','Cancelled'
+  )
+);
+
+create index if not exists orders_booster_id_idx on public.orders(booster_id);
+create index if not exists orders_pending_idx on public.orders(status) where booster_id is null;
+
+-- Boosters can read the open pick queue + their own claimed orders.
+do $$ begin
+  create policy "Boosters read pick queue and own orders"
+    on public.orders for select to authenticated
+    using (
+      (status = 'pending' and booster_id is null)
+      or booster_id = auth.uid()
+      or user_id = auth.uid()
+    );
+exception when duplicate_object then null; end $$;
+
+-- Boosters update only orders they own (proof, status, eta).
+do $$ begin
+  create policy "Boosters update own orders"
+    on public.orders for update to authenticated
+    using (booster_id = auth.uid())
+    with check (booster_id = auth.uid());
+exception when duplicate_object then null; end $$;
+
+-- ── pick_order(): atomic claim, prevents two boosters racing ──────
+create or replace function public.pick_order(p_order_id uuid, p_booster_id uuid)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare picked_rows integer := 0;
+begin
+  -- Enforce the per-booster active cap inside the transaction.
+  if (select count(*) from public.orders
+        where booster_id = p_booster_id and status = 'active')
+     >= coalesce((select max_active_orders from public.profiles where id = p_booster_id), 5)
+  then
+    return false;
+  end if;
+
+  update public.orders
+     set booster_id = p_booster_id, status = 'active', picked_at = now()
+   where id = p_order_id and booster_id is null and status = 'pending';
+  get diagnostics picked_rows = row_count;
+  return picked_rows > 0;
+end;
+$$;
+
+-- When an order is marked completed, credit the booster's completed_orders.
+create or replace function public.on_order_completed()
+returns trigger language plpgsql security definer set search_path = public as $$
+begin
+  if new.status = 'completed' and coalesce(old.status,'') <> 'completed' and new.booster_id is not null then
+    update public.profiles set completed_orders = completed_orders + 1 where id = new.booster_id;
+    new.completed_at := coalesce(new.completed_at, now());
+  end if;
+  return new;
+end;
+$$;
+drop trigger if exists trg_order_completed on public.orders;
+create trigger trg_order_completed
+  before update on public.orders
+  for each row execute procedure public.on_order_completed();
+
+-- ── messages: site-internal order chat ────────────────────────────
+create table if not exists public.messages (
+  id          uuid primary key default gen_random_uuid(),
+  order_id    uuid not null references public.orders(id) on delete cascade,
+  sender_id   uuid not null references auth.users(id) on delete cascade,
+  sender_role text not null check (sender_role in ('booster','customer')),
+  content     text,
+  image_url   text,
+  created_at  timestamptz not null default now(),
+  read_at     timestamptz
+);
+alter table public.messages enable row level security;
+create index if not exists messages_order_id_idx on public.messages(order_id);
+
+-- Only the customer or booster of the parent order can read/send.
+do $$ begin
+  create policy "Order parties read messages"
+    on public.messages for select to authenticated
+    using (exists (
+      select 1 from public.orders o
+       where o.id = messages.order_id
+         and (o.user_id = auth.uid() or o.booster_id = auth.uid())
+    ));
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create policy "Order parties send messages"
+    on public.messages for insert to authenticated
+    with check (
+      sender_id = auth.uid()
+      and exists (
+        select 1 from public.orders o
+         where o.id = messages.order_id
+           and (o.user_id = auth.uid() or o.booster_id = auth.uid())
+      )
+    );
+exception when duplicate_object then null; end $$;
+
+-- Either party can mark messages read (set read_at).
+do $$ begin
+  create policy "Order parties update read state"
+    on public.messages for update to authenticated
+    using (exists (
+      select 1 from public.orders o
+       where o.id = messages.order_id
+         and (o.user_id = auth.uid() or o.booster_id = auth.uid())
+    ));
+exception when duplicate_object then null; end $$;
+
+-- Live updates for chat + order status.
+do $$ begin alter publication supabase_realtime add table public.messages; exception when others then null; end $$;
+do $$ begin alter publication supabase_realtime add table public.orders;   exception when others then null; end $$;
+
+-- ── Storage: booster-proofs (private) ─────────────────────────────
+insert into storage.buckets (id, name, public)
+values ('booster-proofs', 'booster-proofs', false)
+on conflict (id) do nothing;
+
+-- Writes restricted to the uploader (proof confidentiality).
+do $$ begin
+  create policy "Owner writes booster-proofs"
+    on storage.objects for insert to authenticated
+    with check (bucket_id = 'booster-proofs' and owner = auth.uid());
+exception when duplicate_object then null; end $$;
+do $$ begin
+  create policy "Owner updates booster-proofs"
+    on storage.objects for update to authenticated
+    using (bucket_id = 'booster-proofs' and owner = auth.uid());
+exception when duplicate_object then null; end $$;
+do $$ begin
+  create policy "Owner deletes booster-proofs"
+    on storage.objects for delete to authenticated
+    using (bucket_id = 'booster-proofs' and owner = auth.uid());
+exception when duplicate_object then null; end $$;
+-- Reads allowed to any authenticated user: chat images must reach the
+-- counterparty, and object keys are unguessable UUIDs behind auth + signed URLs.
+do $$ begin
+  create policy "Auth reads booster-proofs"
+    on storage.objects for select to authenticated
+    using (bucket_id = 'booster-proofs');
+exception when duplicate_object then null; end $$;
