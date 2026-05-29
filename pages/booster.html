@@ -23,10 +23,10 @@
   <div class="bp-ban bp-hidden" id="bpBanScreen" role="alertdialog" aria-modal="true">
     <div class="bp-ban-card">
       <i class="ti ti-lock-off bp-ban-icon"></i>
-      <h1 class="bp-ban-title">Erişim Engellendi</h1>
-      <p class="bp-ban-reason" id="bpBanReason">Hesabınız askıya alındı.</p>
-      <p class="bp-ban-help">İtiraz için Discord üzerinden ekibimizle iletişime geçin.</p>
-      <button class="bp-danger-btn" id="bpBanSignout" type="button"><i class="ti ti-logout"></i> Çıkış Yap</button>
+      <h1 class="bp-ban-title">Access Denied</h1>
+      <p class="bp-ban-reason" id="bpBanReason">Your account has been suspended.</p>
+      <p class="bp-ban-help">Contact our team via Discord to appeal.</p>
+      <button class="bp-danger-btn" id="bpBanSignout" type="button"><i class="ti ti-logout"></i> Sign Out</button>
     </div>
   </div>
 
@@ -35,19 +35,19 @@
     <div class="bp-rules-card">
       <div class="bp-rules-accent" aria-hidden="true"></div>
       <img class="bp-rules-logo" src="../assets/elysium-logo-mark.png" alt="Elysium Boost" width="48" height="48">
-      <span class="bp-rules-eyebrow">Booster Anlaşması</span>
-      <h1 class="bp-rules-title" id="bpRulesTitle">Platform Kuralları</h1>
-      <p class="bp-rules-sub">Devam etmeden önce aşağıdaki kuralları okuyup kabul etmen gerekir.</p>
+      <span class="bp-rules-eyebrow">BOOSTER AGREEMENT</span>
+      <h1 class="bp-rules-title" id="bpRulesTitle">Platform Rules</h1>
+      <p class="bp-rules-sub">Before continuing, you must read and accept the following rules.</p>
       <ul class="bp-rules-list" id="bpRulesList"></ul>
       <div class="bp-rules-penalty">
         <i class="ti ti-alert-octagon"></i>
-        <span>İhlal: <strong>€250 ceza + kalıcı platform banı</strong>. Ağır ihlallerde yasal işlem.</span>
+        <span>Violation: <strong>€250 penalty + permanent platform ban</strong>. Severe violations will result in legal action.</span>
       </div>
       <label class="bp-rules-check">
         <input type="checkbox" id="bpRulesCheckbox">
-        <span>Tüm kuralları okudum ve kabul ediyorum.</span>
+        <span>I have read and accept all platform rules.</span>
       </label>
-      <button class="eb-btn-primary bp-rules-accept" id="bpRulesAccept" type="button" disabled>Kuralları Kabul Ediyorum</button>
+      <button class="bp-btn-primary bp-rules-accept" id="bpRulesAccept" type="button" disabled>Accept &amp; Continue</button>
     </div>
   </div>
 
@@ -90,7 +90,7 @@
 
       <button class="bp-rules-strip" id="bpRulesStrip" type="button">
         <i class="ti ti-shield-exclamation"></i>
-        <span>Platform Kuralları · €250 ceza + ban</span>
+        <span>Platform Rules · €250 penalty + ban</span>
       </button>
     </aside>
 
@@ -192,7 +192,7 @@
                   <option value="bank">Bank Transfer (IBAN)</option>
                   <option value="crypto">Crypto (wallet)</option>
                 </select></div>
-              <button type="submit" class="eb-btn-primary bp-save-btn"><i class="ti ti-device-floppy"></i> Save Profile</button>
+              <button type="submit" class="bp-btn-primary bp-save-btn"><i class="ti ti-device-floppy"></i> Save Profile</button>
             </form>
           </div>
           <div class="bp-profile-aside">

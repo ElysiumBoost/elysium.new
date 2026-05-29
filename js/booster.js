@@ -72,6 +72,14 @@
   }
 
   function startPanel() {
+    // Retry any rules-acceptance that failed to persist previously
+    try {
+      var pending = localStorage.getItem('eb_rules_pending');
+      if (pending) {
+        _sb.from('profiles').upsert({ id: _user.id, rules_accepted_at: pending }, { onConflict: 'id' })
+          .then(function () { localStorage.removeItem('eb_rules_pending'); }).catch(function () {});
+      }
+    } catch (_) {}
     ensureBoosterCode();
     updateGreeting();
     setupNav();
@@ -197,6 +205,8 @@
     setText('bpProfileName', name);
     setText('bpBoosterId', _profile.booster_id_code || '—');
     setText('bpRankBadgeName', rank.name);
+    var badgeIcon = document.querySelector('.bp-rank-badge .ti');
+    if (badgeIcon) badgeIcon.className = 'ti ' + rank.icon;
 
     var circle = document.getElementById('bpAvatarCircle');
     if (circle) {
@@ -386,7 +396,7 @@
         '<span><i class="ti ti-clock"></i> ' + (o.eta_minutes ? o.eta_minutes + ' min ETA' : 'No ETA') + '</span>' +
         '<span><i class="ti ti-calendar"></i> ' + fmtDate(o.created_at) + '</span>' +
       '</div>' +
-      '<button class="eb-btn-primary bp-pick-btn" type="button" data-pick="' + o.id + '"' + (disabled ? ' disabled' : '') + '>' +
+      '<button class="bp-btn-primary bp-pick-btn" type="button" data-pick="' + o.id + '"' + (disabled ? ' disabled' : '') + '>' +
         '<i class="ti ti-hand-finger"></i> Pick Order</button>' +
       '</div>';
   }
@@ -399,7 +409,7 @@
         toast('success', 'Order claimed. Good luck, Booster!');
         loadData().then(function () { openOrder(orderId); history.pushState(null, '', '#order/' + orderId); });
       } else {
-        toast('error', 'Bu sipariş başka booster tarafından alındı.');
+        toast('error', 'This order was already claimed by another booster.');
         refreshPick(false);
       }
     });
@@ -453,7 +463,7 @@
           '<td class="bp-date-cell">' + fmtDate(o.picked_at || o.created_at) + '</td>' +
           '<td class="bp-net-cell">$' + netOf(o.price).toFixed(2) + '</td>' +
           '<td>' + statusBadge(o.status) + '</td>' +
-          '<td><button class="bp-view-btn" type="button" data-open-order="' + o.id + '">View' +
+          '<td><button class="bp-btn-ghost bp-view-btn" type="button" data-open-order="' + o.id + '">View' +
             (_unread[o.id] ? ' <span class="bp-unread-dot">' + _unread[o.id] + '</span>' : '') + '</button></td>' +
           '</tr>';
       }).join('') + '</tbody></table></div>';
@@ -522,14 +532,14 @@
         '</div>' +
         '<div class="bp-chat">' +
           '<div class="bp-chat-hd"><span class="bp-chat-title"><i class="ti ti-messages"></i> Site Chat</span>' +
-            '<span class="bp-chat-cust">Müşteri #' + shortId(o.user_id) + '</span></div>' +
+            '<span class="bp-chat-cust">Customer #' + shortId(o.user_id) + '</span></div>' +
           '<div class="bp-chat-thread" id="bpChatThread"><div class="bp-chat-loading">Loading…</div></div>' +
           (o.status === 'completed' || o.status === 'disputed'
             ? '<div class="bp-chat-closed">This order is ' + esc(o.status) + '. Chat is read-only.</div>'
             : '<form class="bp-chat-input" id="bpChatForm">' +
                 '<button type="button" class="bp-chat-img-btn" id="bpChatImgBtn" aria-label="Send image"><i class="ti ti-photo"></i></button>' +
                 '<input type="file" id="bpChatImgInput" accept="image/png,image/jpeg,image/webp" hidden>' +
-                '<input type="text" class="bp-chat-field" id="bpChatField" placeholder="Müşteriye yaz…" autocomplete="off" maxlength="2000">' +
+                '<input type="text" class="bp-chat-field" id="bpChatField" placeholder="Write a message…" autocomplete="off" maxlength="2000">' +
                 '<button type="submit" class="bp-chat-send" id="bpChatSend" aria-label="Send"><i class="ti ti-send"></i></button>' +
               '</form>') +
       '</div></div>';
@@ -571,12 +581,12 @@
       '</div>' +
       '<div class="bp-proof-preview" id="bpProofPreview" hidden></div>' +
       '<div class="bp-proof-actions">' +
-        '<button class="eb-btn-primary bp-proof-submit" id="bpProofSubmit" type="button" disabled><i class="ti ti-send"></i> Submit for Review</button>' +
-        '<button class="bp-report-btn" id="bpReportBtn" type="button"><i class="ti ti-flag"></i> Report Issue</button>' +
+        '<button class="bp-btn-primary bp-proof-submit" id="bpProofSubmit" type="button" disabled><i class="ti ti-send"></i> Submit for Review</button>' +
+        '<button class="bp-btn-danger bp-report-btn" id="bpReportBtn" type="button"><i class="ti ti-flag"></i> Report Issue</button>' +
       '</div>' +
       '<div class="bp-report-box bp-hidden" id="bpReportBox">' +
         '<textarea class="bp-report-text" id="bpReportText" placeholder="Describe the issue (customer unreachable, wrong details…)"></textarea>' +
-        '<button class="bp-danger-btn" id="bpReportSubmit" type="button">Submit Dispute</button>' +
+        '<button class="bp-btn-danger" id="bpReportSubmit" type="button">Submit Dispute</button>' +
       '</div></div>';
   }
 
@@ -662,7 +672,7 @@
     var thread = document.getElementById('bpChatThread');
     if (!thread) return;
     if (!msgs.length) {
-      thread.innerHTML = '<div class="bp-chat-empty"><i class="ti ti-message-2"></i><p>Henüz mesaj yok. Müşteriye merhaba de!</p></div>';
+      thread.innerHTML = '<div class="bp-chat-empty"><i class="ti ti-message-2"></i><p>No messages yet. Say hi to the customer!</p></div>';
       return;
     }
     thread.innerHTML = msgs.map(bubble).join('');
@@ -784,7 +794,7 @@
       var u = _unread[o.id] || 0;
       return '<a class="bp-msg-row' + (u ? ' has-unread' : '') + '" href="#order/' + o.id + '" data-open-order="' + o.id + '">' +
         '<span class="bp-msg-avatar"><i class="ti ti-user"></i></span>' +
-        '<span class="bp-msg-main"><span class="bp-msg-name">Müşteri #' + shortId(o.user_id) + '</span>' +
+        '<span class="bp-msg-main"><span class="bp-msg-name">Customer #' + shortId(o.user_id) + '</span>' +
           '<span class="bp-msg-sub">' + esc(o.service_name || 'Order') + '</span></span>' +
         '<span class="bp-msg-side">' + statusBadge(o.status) + (u ? '<span class="bp-unread-dot">' + u + '</span>' : '') + '</span>' +
         '</a>';
@@ -992,11 +1002,11 @@
   /* ── Rules modal ───────────────────────────────────────────── */
 
   var RULES = [
-    'Harici ödeme talebi yasaktır → €250 ceza + kalıcı ban',
-    'Müşteri bilgileri gizlidir → kalıcı ban',
-    'Sahte proof yasaktır → kalıcı ban',
-    'Sadece site içi chat → Discord dışı iletişim yasak',
-    'Hesap bilgilerini kötüye kullanmak → yasal işlem',
+    'External payment requests are strictly prohibited',
+    'Customer information is strictly confidential',
+    'Submitting fake proof is prohibited',
+    'All communication must be via site chat only',
+    'Misuse of customer account information will result in legal action',
   ];
 
   function showRulesModal(reopen) {
@@ -1020,18 +1030,26 @@
       if (accept) { accept.disabled = false; accept.textContent = 'Close'; accept.onclick = function () { closeRules(); }; return; }
     }
     if (cb && accept) {
-      cb.checked = false; accept.disabled = true; accept.textContent = 'Kuralları Kabul Ediyorum';
+      cb.checked = false; accept.disabled = true; accept.textContent = 'Accept & Continue';
       cb.onchange = function () { accept.disabled = !cb.checked; };
       accept.onclick = function () {
         if (!cb.checked) return;
-        accept.disabled = true; accept.innerHTML = '<i class="ti ti-loader-2 bp-spin"></i> …';
+        accept.disabled = true; accept.innerHTML = '<i class="ti ti-loader-2 bp-spin"></i> Saving…';
         var now = new Date().toISOString();
-        _sb.from('profiles').upsert({ id: _user.id, rules_accepted_at: now }, { onConflict: 'id' }).then(function (res) {
-          if (res.error) { toast('error', res.error.message); accept.disabled = false; accept.textContent = 'Kuralları Kabul Ediyorum'; return; }
-          _profile.rules_accepted_at = now;
-          closeRules();
-          startPanel();
-        });
+        _profile.rules_accepted_at = now; // optimistic — proceed regardless of network
+        closeRules();
+        startPanel();
+        _sb.from('profiles').upsert({ id: _user.id, rules_accepted_at: now }, { onConflict: 'id' })
+          .then(function (res) {
+            if (res.error) {
+              try { localStorage.setItem('eb_rules_pending', now); } catch (_) {}
+            } else {
+              try { localStorage.removeItem('eb_rules_pending'); } catch (_) {}
+            }
+          })
+          .catch(function () {
+            try { localStorage.setItem('eb_rules_pending', now); } catch (_) {}
+          });
       };
     }
   }
@@ -1047,7 +1065,7 @@
     var el = document.getElementById('bpBanScreen');
     if (!el) return;
     var reason = document.getElementById('bpBanReason');
-    if (reason) reason.textContent = 'Hesabınız askıya alındı: ' + (_profile.ban_reason || 'Kural ihlali');
+    if (reason) reason.textContent = 'Your account has been suspended: ' + (_profile.ban_reason || 'Rule violation');
     el.classList.remove('bp-hidden');
     var out = document.getElementById('bpBanSignout');
     if (out) out.addEventListener('click', function () { _sb.auth.signOut().then(function () { window.location.replace('../index.html'); }); });
