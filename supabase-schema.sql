@@ -317,6 +317,112 @@ alter table public.orders add column if not exists tip_amount numeric(10,2) not 
 alter table public.orders add column if not exists customer_confirmed_at timestamptz;
 
 -- Allow customers to place their own orders
-CREATE POLICY "Customers can insert own orders"
-  ON public.orders FOR INSERT TO authenticated
-  WITH CHECK (user_id = auth.uid());
+do $$ begin
+  create policy "Customers can insert own orders"
+    on public.orders for insert to authenticated
+    with check (user_id = auth.uid());
+exception when duplicate_object then null; end $$;
+
+-- ════════════════════════════════════════════════════════════════════
+-- CHAT WIDGET EXTENSION
+-- Support requests, voluntary tips, preferred boosters, and order-less
+-- support chat. Additive + idempotent.
+-- ════════════════════════════════════════════════════════════════════
+
+-- ── profiles: preferred boosters ──────────────────────────────────
+alter table public.profiles add column if not exists preferred_boosters uuid[] not null default '{}';
+
+-- ── support_requests ──────────────────────────────────────────────
+create table if not exists public.support_requests (
+  id          uuid primary key default gen_random_uuid(),
+  user_id     uuid not null references auth.users(id) on delete cascade,
+  order_id    uuid references public.orders(id) on delete set null,
+  type        text not null check (type in (
+                'change_booster','refund','eta_update','urgent','schedule',
+                'preferred_booster','report','external_payment_report')),
+  reason      text,
+  status      text not null default 'open' check (status in ('open','reviewing','resolved','rejected')),
+  urgent      boolean not null default false,
+  metadata    jsonb not null default '{}'::jsonb,
+  created_at  timestamptz not null default now(),
+  resolved_at timestamptz
+);
+alter table public.support_requests enable row level security;
+create index if not exists support_requests_user_idx   on public.support_requests(user_id);
+create index if not exists support_requests_status_idx on public.support_requests(status);
+
+do $$ begin
+  create policy "Users read own support requests"
+    on public.support_requests for select to authenticated
+    using (user_id = auth.uid());
+exception when duplicate_object then null; end $$;
+do $$ begin
+  create policy "Users create own support requests"
+    on public.support_requests for insert to authenticated
+    with check (user_id = auth.uid());
+exception when duplicate_object then null; end $$;
+do $$ begin
+  create policy "Admins manage support requests"
+    on public.support_requests for all to authenticated
+    using (exists (select 1 from public.profiles p where p.id = auth.uid() and p.role = 'admin'))
+    with check (exists (select 1 from public.profiles p where p.id = auth.uid() and p.role = 'admin'));
+exception when duplicate_object then null; end $$;
+
+-- ── tips (voluntary, 80% booster / 20% platform) ──────────────────
+create table if not exists public.tips (
+  id              uuid primary key default gen_random_uuid(),
+  order_id        uuid not null references public.orders(id) on delete cascade,
+  customer_id     uuid not null references auth.users(id) on delete cascade,
+  booster_id      uuid references public.profiles(id) on delete set null,
+  amount          numeric(10,2) not null check (amount >= 1),
+  booster_amount  numeric(10,2) not null default 0,
+  platform_amount numeric(10,2) not null default 0,
+  flagged         boolean not null default false,
+  created_at      timestamptz not null default now()
+);
+alter table public.tips enable row level security;
+create index if not exists tips_order_idx   on public.tips(order_id);
+create index if not exists tips_booster_idx on public.tips(booster_id);
+
+do $$ begin
+  create policy "Customers create own tips"
+    on public.tips for insert to authenticated
+    with check (customer_id = auth.uid());
+exception when duplicate_object then null; end $$;
+do $$ begin
+  create policy "Customers read own tips"
+    on public.tips for select to authenticated
+    using (customer_id = auth.uid());
+exception when duplicate_object then null; end $$;
+do $$ begin
+  create policy "Boosters read tips for them"
+    on public.tips for select to authenticated
+    using (booster_id = auth.uid());
+exception when duplicate_object then null; end $$;
+
+-- ── messages: order-less support conversations ────────────────────
+-- Support chat is not tied to an order. order_id becomes nullable and a
+-- support_user_id identifies the customer the support thread belongs to.
+alter table public.messages alter column order_id drop not null;
+alter table public.messages add column if not exists support_user_id uuid references auth.users(id) on delete cascade;
+create index if not exists messages_support_user_idx on public.messages(support_user_id) where order_id is null;
+
+do $$ begin
+  create policy "Users read own support messages"
+    on public.messages for select to authenticated
+    using (order_id is null and support_user_id = auth.uid());
+exception when duplicate_object then null; end $$;
+do $$ begin
+  create policy "Users send own support messages"
+    on public.messages for insert to authenticated
+    with check (order_id is null and support_user_id = auth.uid() and sender_id = auth.uid());
+exception when duplicate_object then null; end $$;
+do $$ begin
+  create policy "Users mark own support messages read"
+    on public.messages for update to authenticated
+    using (order_id is null and support_user_id = auth.uid());
+exception when duplicate_object then null; end $$;
+-- Admin read/send policies above already cover order-less support messages.
+
+-- Live updates for support requests.
+do $$ begin alter publication supabase_realtime add table public.support_requests; exception when others then null; end $$;

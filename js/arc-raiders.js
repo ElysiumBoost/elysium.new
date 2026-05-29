@@ -395,7 +395,6 @@
   var elCartCount = $('arcCartCount');
   var elCartDot = $('cartCount');
   var elCartFoot = $('arcCartFoot');
-  var elCopyCta = $('arcCopyCta');
   var elAddCta = $('arcAddCta');
   var elServiceNav = $('arcServiceNav');
   var elBackBtn = $('arcBackBtn');
@@ -432,13 +431,9 @@
     // Count text
     elCartCount.textContent = n + ' item' + (n !== 1 ? 's' : '');
 
-    // Cart badge in nav
-    if (n > 0) {
-      elCartDot.textContent = n;
-      elCartDot.hidden = false;
-    } else {
-      elCartDot.hidden = true;
-    }
+    // The nav cart badge reflects the persisted global cart (elyOrderStateV1),
+    // owned by syncNavBadge() — not this in-service configurator — so it
+    // survives leaving the service panel instead of resetting to 0.
 
     // has-items class on cart
     if (n > 0) {
@@ -2633,6 +2628,20 @@
     t._hide = setTimeout(function () { t.classList.remove('is-show'); }, 2400);
   }
 
+  // Nav cart badge = total quantity in the persisted global cart.
+  function syncNavBadge() {
+    if (!elCartDot) return;
+    var count = 0;
+    try {
+      var store = JSON.parse(localStorage.getItem('elyOrderStateV1') || '{}');
+      if (Array.isArray(store.cart)) {
+        count = store.cart.reduce(function (n, it) { return n + (it && it.qty ? it.qty : 1); }, 0);
+      }
+    } catch (e) {}
+    if (count > 0) { elCartDot.textContent = count > 99 ? '99+' : String(count); elCartDot.hidden = false; }
+    else { elCartDot.hidden = true; }
+  }
+
   // ADD TO CART — write the configured order into the shared cart store
   // (elyOrderStateV1) so it persists into the nav cart and checkout.
   if (elAddCta) {
@@ -2670,48 +2679,8 @@
       store.cart.push(entry);
       store.currency = currency;
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); } catch (e) {}
-      var count = store.cart.reduce(function (n, it) { return n + (it && it.qty ? it.qty : 1); }, 0);
-      if (elCartDot) { elCartDot.textContent = String(count); elCartDot.hidden = false; }
+      syncNavBadge();
       showArcToast('Added to cart');
-    });
-  }
-
-  // COPY FOR DISCORD — copies the order summary to the clipboard. The
-  // "Copied!" feedback lives only on this button.
-  if (elCopyCta) {
-    elCopyCta.addEventListener('click', function () {
-      var o = buildOrderSummary();
-      if (!o) return;
-      function priceStr(it) { return o.isCustom ? 'CUSTOM' : fmtDollar(it.price); }
-      function totalStr(v) { return o.isCustom ? 'CUSTOM' : fmtDollar(v); }
-      var lines = o.items.map(function (it) {
-        var txt = '▸ ' + it.name + ' × ' + it.qty;
-        if (it.sub) txt += ' · ' + it.sub;
-        txt += ' — ' + priceStr(it);
-        return txt;
-      });
-      if (state.streamAddon) {
-        lines.push('▸ Stream by PRO' + (state.streamAddon.sub ? ' · ' + state.streamAddon.sub : '') + ' — ' + (o.isCustom ? 'CUSTOM' : fmtDollar(state.streamAddon.price)));
-      }
-      var text =
-        '🏰 ELYSIUM BOOST — Arc Raiders Order\n' +
-        '━━━━━━━━━━━━━━━━━━━━━━━━━━━\n' +
-        'Service: ' + o.svc.name + '\n\n' +
-        lines.join('\n') + '\n\n' +
-        'Subtotal: ' + totalStr(o.subtotal) + '\n' +
-        'Service Fee (5%): ' + totalStr(o.fee) + '\n' +
-        '━━━━━━━━━━━━━━━━━━━━━━━━━━━\n' +
-        'TOTAL: ' + totalStr(o.total) + '\n\n' +
-        'Paste this into your Discord ticket.';
-      var lblEl = elCopyCta.querySelector('.lbl');
-      navigator.clipboard.writeText(text).then(function () {
-        if (lblEl) lblEl.textContent = 'Copied!';
-        elCopyCta.classList.add('is-copied');
-        setTimeout(function () {
-          if (lblEl) lblEl.textContent = 'Copy for Discord';
-          elCopyCta.classList.remove('is-copied');
-        }, 2000);
-      });
     });
   }
 
@@ -2821,6 +2790,7 @@
 
   initSidebarBadges();
   initServiceSearch();
+  syncNavBadge();
   renderReviews();
   renderFaqs();
 
