@@ -39,8 +39,8 @@
   --arc-rust:      #d4571b;
   --arc-rust-glow: rgba(212, 87, 27, 0.32);
 
-  --f-display: "Space Grotesk", "Rajdhani", "Plus Jakarta Sans", system-ui, sans-serif;
-  --f-body:    "Space Grotesk", "Plus Jakarta Sans", system-ui, sans-serif;
+  --f-display: "Rajdhani", "Plus Jakarta Sans", "Space Grotesk", system-ui, sans-serif;
+  --f-body:    "Plus Jakarta Sans", "Space Grotesk", system-ui, sans-serif;
   --f-mono:    "JetBrains Mono", ui-monospace, monospace;
 
   color-scheme: dark;

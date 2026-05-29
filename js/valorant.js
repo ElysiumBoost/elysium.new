@@ -687,7 +687,7 @@
   }
 
   function initNavScroll() {
-    var nav = $("valNav");
+    var nav = $("ebNav");
     if (!nav) return;
     function check() { nav.classList.toggle("eb-scrolled", window.scrollY > 40); }
     check();

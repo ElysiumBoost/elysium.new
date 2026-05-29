@@ -298,7 +298,7 @@
   /* ────────────────────────────────────────────────────────────
      DOM REFERENCES
      ──────────────────────────────────────────────────────────── */
-  var elNav = $('arcNav');
+  var elNav = $('ebNav');
   var elHubMap = $('arcHubMap');
   var elHubMobile = $('arcHubMobile');
   var elBelowMap = $('arcBelowMap');
@@ -326,7 +326,7 @@
   var elBackBtn2 = $('arcBackBtn2');
   var elReviewsRail = $('arcReviewsRail');
   var elFaqList = $('arcFaqList');
-  var elFooter = $('arcFooter');
+  var elFooter = $('siteFooter');
 
   /* ────────────────────────────────────────────────────────────
      CART

@@ -625,15 +625,6 @@
   background: rgba(201, 168, 76, 0.06);
 }
 
-/* ─────────────────────────────────────────────────────
-   CART TOTAL PULSE — fires via JS class toggle when the
-   final total changes (cart-total-pulse class).
-   ───────────────────────────────────────────────────── */
-@keyframes cartTotalPulse {
-  0%   { text-shadow: none; filter: none; }
-  35%  { text-shadow: 0 0 20px rgba(231, 201, 139, .35); filter: brightness(1.06); }
-  100% { text-shadow: none; filter: none; }
-}
 
 #cartTotal.cart-total-pulse {
   animation: cartTotalPulse 0.85s ease;

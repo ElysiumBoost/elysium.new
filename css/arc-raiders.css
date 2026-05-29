@@ -41,10 +41,6 @@ body.arc-locked { overflow: hidden; }
   font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.32em;
   text-transform: uppercase;
 }
-@keyframes arc-scroll-bounce {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(6px); }
-}
 
 /* Paragraph overlay on the map (bottom-right) */
 .arc-hub-overlay {
@@ -253,16 +249,6 @@ body.arc-locked { overflow: hidden; }
 .arc-hub-hud-r .ico { color: var(--gold-bright); flex-shrink: 0; }
 /* Always-on travelling line trace for the station-selector trigger */
 .arc-hub-hud-r .arc-hot-trace { opacity: 1; }
-@keyframes arc-nudge {
-  0%, 100% { transform: translateX(0); opacity: 0.65; }
-  50%      { transform: translateX(-3px); opacity: 1; }
-}
-@keyframes arc-blink {
-  0%, 49%   { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-@keyframes arc-pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(1.3); } }
-
 /* ──────────────────────────────────────────────────────────────
    HOTSPOTS
    ────────────────────────────────────────────────────────────── */
@@ -277,7 +263,6 @@ body.arc-locked { overflow: hidden; }
   animation: arc-hot-in 0.35s ease-out both;
 }
 .arc-hot * { cursor: pointer; }
-@keyframes arc-hot-in { from { opacity: 0; transform: translate(0, -50%) translateY(4px); } to { opacity: 1; transform: translate(0, -50%); } }
 
 .arc-hot .dot {
   position: relative;
@@ -294,11 +279,6 @@ body.arc-locked { overflow: hidden; }
   border-radius: 50%;
   border: 1px solid rgba(255,255,255,0.18);
   animation: arc-ring 2.4s ease-out infinite;
-}
-@keyframes arc-ring {
-  0%   { transform: scale(0.6); opacity: 0; }
-  20%  { opacity: 0.8; }
-  100% { transform: scale(1.8); opacity: 0; }
 }
 .arc-hot .line {
   width: 35px; height: 2px;
