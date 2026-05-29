@@ -361,7 +361,7 @@ select.eb-currency option { background: var(--bg-2, #100b07); color: var(--text,
 .eb-signin-sub {
   background: transparent; border: none; padding: 0;
   font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.32em;
-  text-transform: uppercase; color: var(--gold);
+  text-transform: uppercase; color: var(--text-soft);
   white-space: nowrap; cursor: pointer; line-height: 1;
   transition: color 0.25s ease, text-shadow 0.25s ease;
 }

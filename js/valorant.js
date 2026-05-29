@@ -171,8 +171,7 @@
       var cls = t.id === activeId ? "val-rank active" : "val-rank";
       var img = t.icon ? '<img src="' + esc(t.icon) + '" alt="" loading="lazy">' : '<span class="glyph">' + esc(t.glyph) + "</span>";
       return '<button type="button" class="' + cls + '" data-' + prefix + '="' + esc(t.id) + '" aria-label="' + esc(t.name) + '" aria-pressed="' + (t.id === activeId) + '">' +
-        '<div class="val-rank-icon" style="--tier-color:' + t.color + '">' + img + "</div>" +
-        '<span class="val-rank-name">' + esc(t.name) + "</span></button>";
+        '<div class="val-rank-icon" style="--tier-color:' + t.color + '">' + img + "</div></button>";
     }).join("");
   }
 

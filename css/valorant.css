@@ -662,7 +662,7 @@
 .val-select option { background: var(--bg-2); color: var(--text); }
 
 /* ── BATTLE PASS ── */
-.val-bp-sliders { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.val-bp-sliders { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
 @media (max-width: 720px) { .val-bp-sliders { grid-template-columns: 1fr; } }
 .val-extras-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 720px) { .val-extras-grid { grid-template-columns: 1fr; } }

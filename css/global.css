@@ -116,6 +116,11 @@ video { display: block; max-width: 100%; height: auto; }
 }
 .eb-h1 .gold { color: var(--gold-bright); }
 
+.eb-hero-copy {
+  text-align: center;
+  margin: 0 auto;
+}
+
 .eb-h2 {
   font-family: var(--f-display); font-weight: 600;
   font-size: clamp(36px, 4vw, 52px);

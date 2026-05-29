@@ -199,7 +199,7 @@
   }
 
   function coinHtml(amount) {
-    return fmtRC(amount) + ' RC';
+    return fmtDollar(amount);
   }
 
   function fmtDollar(cents) {
@@ -534,7 +534,8 @@
     cart.clear();
     configPanel.innerHTML = '';
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    var mapEl = document.getElementById('arcHubMap');
+    if (mapEl) mapEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   /* ────────────────────────────────────────────────────────────
