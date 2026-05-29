@@ -384,11 +384,6 @@
         var line = document.createElement('div');
         line.className = 'arc-line';
 
-        var thumb = document.createElement('span');
-        thumb.className = 'arc-line-thumb';
-        thumb.style.setProperty('--thumb-color', it.color || '');
-        thumb.textContent = (it.name || '?').charAt(0);
-
         var info = document.createElement('span');
         var nameEl = document.createElement('span');
         nameEl.className = 'arc-line-name';
@@ -416,7 +411,6 @@
         xBtn.textContent = '×';
         xBtn.addEventListener('click', function () { cart.remove(it.id); });
 
-        line.appendChild(thumb);
         line.appendChild(info);
         line.appendChild(priceEl);
         line.appendChild(xBtn);
@@ -427,10 +421,6 @@
       if (state.streamAddon) {
         var streamLine = document.createElement('div');
         streamLine.className = 'arc-line';
-        var sThumb = document.createElement('span');
-        sThumb.className = 'arc-line-thumb';
-        sThumb.style.setProperty('--thumb-color', '#9b6cff');
-        sThumb.textContent = '▶';
         var sInfo = document.createElement('span');
         var sName = document.createElement('span');
         sName.className = 'arc-line-name';
@@ -444,7 +434,6 @@
         sPrice.className = 'arc-line-price';
         sPrice.textContent = coinHtml(state.streamAddon.price);
         var sX = document.createElement('span');
-        streamLine.appendChild(sThumb);
         streamLine.appendChild(sInfo);
         streamLine.appendChild(sPrice);
         streamLine.appendChild(sX);
@@ -585,7 +574,7 @@
           WEAPONS.map(function (w) { return '<option value="' + escHtml(w) + '">' + escHtml(w) + '</option>'; }).join('') +
         '</select></div>' +
         '<div class="arc-field-label-row" style="margin-top:14px"><label class="arc-field-label">Mods</label>' +
-          '<button type="button" class="arc-help" data-tip="+0.10 RC per weapon for Legendary/Epic">?</button>' +
+          '<button type="button" class="arc-help" data-tip="+0.10 per weapon for Legendary/Epic">?</button>' +
         '</div>' +
         '<div class="arc-modtoggle" id="clPriMod">' +
           '<button type="button" class="on" data-mod="none">No Mods</button>' +
@@ -620,11 +609,11 @@
         '</div>' +
         '<div class="arc-gear-pair">' +
           '<div class="arc-gear-cell" id="clGearLoot">' +
-            '<div><span class="name">Looting Mk.3</span><span class="sub">' + fmtRC(PRICE_LOOT) + ' RC each</span></div>' +
+            '<div><span class="name">Looting Mk.3</span><span class="sub">' + fmtRC(PRICE_LOOT) + ' each</span></div>' +
             '<div id="clLootQty"></div>' +
           '</div>' +
           '<div class="arc-gear-cell" id="clGearShield">' +
-            '<div><span class="name">Medium Shield</span><span class="sub">' + fmtRC(PRICE_SHIELD) + ' RC each</span></div>' +
+            '<div><span class="name">Medium Shield</span><span class="sub">' + fmtRC(PRICE_SHIELD) + ' each</span></div>' +
             '<div id="clShieldQty"></div>' +
           '</div>' +
         '</div>' +
@@ -683,7 +672,7 @@
       cell.className = 'arc-quick-cell';
       var nameDiv = document.createElement('div');
       nameDiv.className = 'arc-quick-name';
-      nameDiv.innerHTML = escHtml(qu.name) + '<span class="pack">' + fmtRC(qu.per * qu.mul) + ' RC</span>';
+      nameDiv.innerHTML = escHtml(qu.name) + '<span class="pack">' + fmtRC(qu.per * qu.mul) + '</span>';
       cell.appendChild(nameDiv);
       var stepper = createStepper(0, 0, 99, syncCart);
       quSteppers[qu.id] = stepper;
@@ -860,7 +849,7 @@
                 });
                 cellHtml += '</span>';
               }
-              cellHtml += '<span class="arc-bp-cell-price">' + fmtRC(p) + ' RC</span>';
+              cellHtml += '<span class="arc-bp-cell-price">' + fmtRC(p) + '</span>';
               cellHtml += '</button>';
               return cellHtml;
             }).join('') +
@@ -1079,7 +1068,7 @@
                   return '<button type="button" class="arc-ws-row' + (benchSelected[b] ? ' on' : '') + '" data-bench="' + escHtml(b) + '">' +
                     '<span class="arc-ws-switch"></span>' +
                     '<span class="arc-ws-name">' + escHtml(b) + '</span>' +
-                    '<span class="arc-ws-price">' + fmtRC(BENCH_PRICE) + ' RC / level</span>' +
+                    '<span class="arc-ws-price">' + fmtRC(BENCH_PRICE) + ' / level</span>' +
                   '</button>';
                 }).join('') +
               '</div>' +
@@ -1443,7 +1432,7 @@
       nameSpan.textContent = it.name;
       var sub = document.createElement('span');
       sub.className = 'sub';
-      sub.textContent = fmtRC(it.price) + ' RC each';
+      sub.textContent = fmtRC(it.price) + ' each';
       info.appendChild(nameSpan);
       info.appendChild(sub);
       cell.appendChild(info);
@@ -1538,7 +1527,7 @@
           '</div>' +
           '<div class="arc-rc-stat-row">' +
             '<div><span class="arc-rc-stat-label">Amount</span>' +
-              '<span class="arc-rc-big">' + fmtShort(currentAmount) + '<span class="unit">RC</span></span></div>' +
+              '<span class="arc-rc-big">' + fmtShort(currentAmount) + '</span></div>' +
             '<div><span class="arc-rc-stat-sub">' + fmtDollar(priceCents) + (disc > 0 ? ' <span class="arc-sd-disc">−' + Math.round(disc * 100) + '%</span>' : '') + '</span></div>' +
           '</div>' +
           '<input type="range" class="arc-rc-slider" id="rcSlider" min="' + RC_MIN + '" max="' + RC_MAX + '" step="' + RC_STEP + '" value="' + currentAmount + '">' +
@@ -1572,8 +1561,16 @@
 
       slider.addEventListener('input', function () {
         currentAmount = parseInt(slider.value, 10);
-        render();
+        var p = ((currentAmount - RC_MIN) / (RC_MAX - RC_MIN)) * 100;
+        slider.style.setProperty('--p', p + '%');
+        var bigEl = configPanel.querySelector('.arc-rc-big');
+        var subEl = configPanel.querySelector('.arc-rc-stat-sub');
+        var d = getDiscount(currentAmount), pc = calcPrice(currentAmount);
+        if (bigEl) bigEl.textContent = fmtShort(currentAmount);
+        if (subEl) subEl.innerHTML = fmtDollar(pc) + (d > 0 ? ' <span class="arc-sd-disc">−' + Math.round(d * 100) + '%</span>' : '');
+        syncCart();
       });
+      slider.addEventListener('change', render);
 
       // Preset clicks
       qsa('.arc-rc-preset', configPanel).forEach(function (btn) {
@@ -1589,7 +1586,7 @@
     function syncCart() {
       var priceCents = calcPrice(currentAmount);
       var disc = getDiscount(currentAmount);
-      var sub = fmtShort(currentAmount) + ' RC';
+      var sub = fmtShort(currentAmount);
       if (disc > 0) sub += ' · −' + Math.round(disc * 100) + '%';
       cart.replaceAll([{ id: 'rc', name: 'Raider Coins', qty: 1, price: priceCents, color: '#e5c26b', sub: sub }]);
     }

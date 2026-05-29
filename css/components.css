@@ -598,3 +598,7 @@ select.eb-currency option { background: var(--bg-2, #100b07); color: var(--text,
   border-top: 1px solid var(--line-soft);
   border-bottom: 1px solid var(--line-soft);
 }
+
+@media (min-width: 768px) {
+  .ely-mobile-nav { display: none; }
+}

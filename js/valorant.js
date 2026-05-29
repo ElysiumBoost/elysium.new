@@ -586,12 +586,7 @@
     mount.onchange = function (e) {
       var el = e.target;
       var render = { pl: renderPlacements, rw: renderWins, lv: renderLeveling, bp: renderBattlePass, co: renderCoaching }[tab];
-      if (el.matches("[data-slider-pl-games]")) { state.pl.games = parseInt(el.value); render(); }
-      else if (el.matches("[data-slider-rw-wins]")) { state.rw.wins = parseInt(el.value); render(); }
-      else if (el.matches("[data-slider-lv-current]")) { state.lv.current = parseInt(el.value); if (state.lv.desired <= state.lv.current) state.lv.desired = Math.min(500, state.lv.current + 1); render(); }
-      else if (el.matches("[data-slider-lv-desired]")) { state.lv.desired = Math.max(state.lv.current + 1, parseInt(el.value)); render(); }
-      else if (el.matches("[data-slider-bp-current]")) { state.bp.current = parseInt(el.value); if (state.bp.desired <= state.bp.current) state.bp.desired = Math.min(55, state.bp.current + 1); render(); }
-      else if (el.matches("[data-slider-bp-desired]")) { state.bp.desired = Math.max(state.bp.current + 1, parseInt(el.value)); render(); }
+      if (el.matches("input[type=range]")) { if (render) render(); }
       else if (el.matches("[data-select-pl-server]")) { state.pl.server = el.value; render(); }
       else if (el.matches("[data-select-pl-platform]")) { state.pl.platform = el.value; render(); }
       else if (el.matches("[data-select-rw-server]")) { state.rw.server = el.value; render(); }
@@ -607,14 +602,27 @@
     };
     mount.oninput = function (e) {
       var el = e.target;
-      if (el.matches("input[type=range]")) {
-        var slider = el.closest(".val-slider");
-        if (!slider) return;
+      if (!el.matches("input[type=range]")) return;
+      var slider = el.closest(".val-slider");
+      if (slider) {
         var min = parseInt(el.min), max = parseInt(el.max), val = parseInt(el.value);
         var pct = ((val - min) / (max - min)) * 100;
         slider.style.setProperty("--val", pct + "%");
         var fill = slider.querySelector(".val-slider-fill");
         if (fill) fill.style.width = pct + "%";
+      }
+      var v = parseInt(el.value);
+      if (el.matches("[data-slider-pl-games]")) { state.pl.games = v; }
+      else if (el.matches("[data-slider-rw-wins]")) { state.rw.wins = v; }
+      else if (el.matches("[data-slider-lv-current]")) { state.lv.current = v; if (state.lv.desired <= v) state.lv.desired = Math.min(500, v + 1); }
+      else if (el.matches("[data-slider-lv-desired]")) { state.lv.desired = Math.max(state.lv.current + 1, v); }
+      else if (el.matches("[data-slider-bp-current]")) { state.bp.current = v; if (state.bp.desired <= v) state.bp.desired = Math.min(55, v + 1); }
+      else if (el.matches("[data-slider-bp-desired]")) { state.bp.desired = Math.max(state.bp.current + 1, v); }
+      var wrap = el.closest(".val-games-wrap");
+      if (wrap) {
+        var numEl = wrap.querySelector(".val-games-num");
+        if (numEl) numEl.textContent = el.matches("[data-slider-lv-desired]") ? state.lv.desired :
+                                        el.matches("[data-slider-bp-desired]") ? state.bp.desired : v;
       }
     };
   }
