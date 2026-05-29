@@ -71,46 +71,67 @@
   ];
 
   var BACKPACK_BLUEPRINTS = [
-    'Combat Mk.3 (Flanking)', 'Tactical Mk.3 (Defensive)', 'Looting Mk.3 (Survivor)',
-    'Combat Mk.3 (Aggressive)', 'Tactical Mk.3 (Healing)', 'Looting Mk.3 (Safekeeper)',
-    'Tactical Mk.3 (Revival)', 'Tactical Mk.3 (Smoke)'
+    { name: 'Combat Mk.3 (Flanking)', price: 100 },
+    { name: 'Tactical Mk.3 (Defensive)', price: 100 },
+    { name: 'Looting Mk.3 (Survivor)', price: 250 },
+    { name: 'Combat Mk.3 (Aggressive)', price: 100 },
+    { name: 'Tactical Mk.3 (Healing)', price: 70 },
+    { name: 'Looting Mk.3 (Safekeeper)', price: 150 },
+    { name: 'Tactical Mk.3 (Revival)', price: 100 },
+    { name: 'Tactical Mk.3 (Smoke)', price: 250 }
   ];
 
   var QUICK_USE_BLUEPRINTS = [
-    'Barricade Kit', 'Explosive Mine', 'Defibrillator', 'White Flag', 'Crash Mat',
-    'Powered Descender', 'Vita Shot', 'Vita Spray', 'Wolfpack', 'Snap Hook',
-    'Smoke Grenade', 'Showstopper', 'Lure Grenade', 'Deadline', 'Seeker Grenade',
-    'Trailblazer', 'Gas Mine', 'Pulse Mine', 'Fireworks Box', 'Blue Light Stick',
-    'Green Light Stick', 'Yellow Light Stick', 'Red Light Stick', 'Remote Raider Flare',
-    'Surge Coil', 'Tagging Grenade', 'Jolt Mine', 'Blaze Grenade', 'Trigger Nade'
+    { name: 'Barricade Kit', price: 100 }, { name: 'Explosive Mine', price: 50 },
+    { name: 'Defibrillator', price: 50 }, { name: 'White Flag', price: 50 },
+    { name: 'Crash Mat', price: 50 }, { name: 'Powered Descender', price: 50 },
+    { name: 'Vita Shot', price: 100 }, { name: 'Vita Spray', price: 60 },
+    { name: 'Wolfpack', price: 125 }, { name: 'Snap Hook', price: 125 },
+    { name: 'Smoke Grenade', price: 115 }, { name: 'Showstopper', price: 50 },
+    { name: 'Lure Grenade', price: 300 }, { name: 'Deadline', price: 50 },
+    { name: 'Seeker Grenade', price: 70 }, { name: 'Trailblazer', price: 50 },
+    { name: 'Gas Mine', price: 50 }, { name: 'Pulse Mine', price: 50 },
+    { name: 'Fireworks Box', price: 100 }, { name: 'Blue Light Stick', price: 50 },
+    { name: 'Green Light Stick', price: 50 }, { name: 'Yellow Light Stick', price: 50 },
+    { name: 'Red Light Stick', price: 50 }, { name: 'Remote Raider Flare', price: 60 },
+    { name: 'Surge Coil', price: 60 }, { name: 'Tagging Grenade', price: 60 },
+    { name: 'Jolt Mine', price: 50 }, { name: 'Blaze Grenade', price: 70 },
+    { name: 'Trigger Nade', price: 70 }
   ];
 
   var GUNPART_BLUEPRINTS = [
-    { name: 'Angled Grip', tiers: ['II', 'III'] },
-    { name: 'Compensator', tiers: ['II', 'III'] },
-    { name: 'Extended Light Mag', tiers: ['II', 'III'] },
-    { name: 'Extended Medium Mag', tiers: ['II', 'III'] },
-    { name: 'Extended Shotgun Mag', tiers: ['II', 'III'] },
-    { name: 'Muzzle Brake', tiers: ['II', 'III'] },
-    { name: 'Shotgun Choke', tiers: ['II', 'III'] },
-    { name: 'Stable Stock', tiers: ['II', 'III'] },
-    { name: 'Silencer', tiers: ['I', 'II'] },
-    { name: 'Extended Barrel' },
-    { name: 'Lightweight Stock' },
-    { name: 'Padded Stock' },
-    { name: 'Light Gun Parts' },
-    { name: 'Medium Gun Parts' },
-    { name: 'Heavy Gun Parts' },
-    { name: 'Complex Gun Parts' },
-    { name: 'Shotgun Silencer' },
-    { name: 'Vertical Grip III' }
+    { name: 'Angled Grip', tiers: ['II', 'III'], tierPrices: { 'II': 90, 'III': 125 } },
+    { name: 'Compensator', tiers: ['II', 'III'], tierPrices: { 'II': 125, 'III': 150 } },
+    { name: 'Extended Light Mag', tiers: ['II', 'III'], tierPrices: { 'II': 50, 'III': 150 } },
+    { name: 'Extended Medium Mag', tiers: ['II', 'III'], tierPrices: { 'II': 100, 'III': 200 } },
+    { name: 'Extended Shotgun Mag', tiers: ['II', 'III'], tierPrices: { 'II': 50, 'III': 150 } },
+    { name: 'Muzzle Brake', tiers: ['II', 'III'], tierPrices: { 'II': 50, 'III': 125 } },
+    { name: 'Shotgun Choke', tiers: ['II', 'III'], tierPrices: { 'II': 80, 'III': 95 } },
+    { name: 'Stable Stock', tiers: ['II', 'III'], tierPrices: { 'II': 80, 'III': 125 } },
+    { name: 'Silencer', tiers: ['I', 'II'], tierPrices: { 'I': 50, 'II': 70 } },
+    { name: 'Extended Barrel', tiers: ['II', 'III'], tierPrices: { 'II': 400, 'III': 300 } },
+    { name: 'Lightweight Stock', price: 150 },
+    { name: 'Padded Stock', price: 120 },
+    { name: 'Light Gun Parts', price: 90 },
+    { name: 'Medium Gun Parts', price: 115 },
+    { name: 'Heavy Gun Parts', price: 100 },
+    { name: 'Complex Gun Parts', price: 70 },
+    { name: 'Shotgun Silencer', price: 100 },
+    { name: 'Vertical Grip', tiers: ['II', 'III'], tierPrices: { 'II': 60, 'III': 70 } }
   ];
 
+  var WEAPON_BP_PRICES = {
+    'Anvil': 90, 'Aphelion': 60, 'Bettina': 50, 'Bobcat': 115, 'Burletta': 300,
+    'Canto': 200, 'Dolabra': 250, 'Equalizer': 95, 'Hullcracker': 300, 'Il Toro': 60,
+    'Jupiter': 95, 'Osprey': 60, 'Rascal': 500, 'Renegade': 95, 'Tempest': 125,
+    'Torrente': 60, 'Venator': 60, 'Vulcano': 125
+  };
+
   var BP_TABS = [
-    { id: 'gun', label: 'Gun Blueprints', items: WEAPONS.map(function (n) { return { name: n }; }), price: 180, sub: 'Gun Blueprint', color: '#c9a84c', enabled: true },
-    { id: 'backpack', label: 'Backpack Blueprints', items: BACKPACK_BLUEPRINTS.map(function (n) { return { name: n }; }), price: 140, sub: 'Backpack Blueprint', color: '#7faedc', enabled: true },
-    { id: 'quick', label: 'Quick Use Blueprints', items: QUICK_USE_BLUEPRINTS.map(function (n) { return { name: n }; }), price: 60, sub: 'Quick Use Blueprint', color: '#4ea568', enabled: true },
-    { id: 'gunpart', label: 'Gun Part Blueprints', items: GUNPART_BLUEPRINTS, price: 90, sub: 'Gun Part Blueprint', color: '#e08a2c', enabled: true }
+    { id: 'gun', label: 'Gun Blueprints', items: WEAPONS.map(function (n) { return { name: n, price: WEAPON_BP_PRICES[n] || 100 }; }), sub: 'Gun Blueprint', color: '#c9a84c', enabled: true },
+    { id: 'backpack', label: 'Backpack Blueprints', items: BACKPACK_BLUEPRINTS, sub: 'Backpack Blueprint', color: '#7faedc', enabled: true },
+    { id: 'quick', label: 'Quick Use Blueprints', items: QUICK_USE_BLUEPRINTS, sub: 'Quick Use Blueprint', color: '#4ea568', enabled: true },
+    { id: 'gunpart', label: 'Gun Part Blueprints', items: GUNPART_BLUEPRINTS, sub: 'Gun Part Blueprint', color: '#e08a2c', enabled: true }
   ];
 
   var MATERIALS_CATS = [
@@ -194,6 +215,13 @@
 
   function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
+  var CURRENCY_RATES = {
+    USD: { rate: 1,    symbol: '$',  code: 'USD' },
+    EUR: { rate: 0.92, symbol: '€',  code: 'EUR' },
+    GBP: { rate: 0.79, symbol: '£',  code: 'GBP' },
+    TRY: { rate: 32.5, symbol: '₺',  code: 'TRY' }
+  };
+
   function fmtRC(n) {
     return n.toLocaleString('en-US');
   }
@@ -203,7 +231,10 @@
   }
 
   function fmtDollar(cents) {
-    return '$' + (cents / 100).toFixed(2);
+    var sel = document.getElementById('arcCurrency');
+    var code = sel ? sel.value : 'USD';
+    var cur = CURRENCY_RATES[code] || CURRENCY_RATES.USD;
+    return cur.symbol + ((cents / 100) * cur.rate).toFixed(2);
   }
 
   function escHtml(s) {
@@ -292,7 +323,7 @@
     cartItems: [],
     sidebarOpen: false,
     glowState: { mode: 'idle', hoveredEl: null, activeEl: null, timer: null },
-    cartMode: 'rc' // 'rc' | 'dollar' | 'custom'
+    cartMode: 'dollar' // 'dollar' | 'custom'
   };
 
   /* ────────────────────────────────────────────────────────────
@@ -352,7 +383,6 @@
     var items = state.cartItems;
     var n = items.length;
     var isCustom = (state.cartMode === 'custom');
-    var isDollar = (state.cartMode === 'dollar');
 
     // Count text
     elCartCount.textContent = n + ' item' + (n !== 1 ? 's' : '');
@@ -474,7 +504,7 @@
     if (!svc) return;
 
     state.currentService = id;
-    state.cartMode = (id === 'materials') ? 'dollar' : (id === 'custom-orders') ? 'custom' : 'rc';
+    state.cartMode = (id === 'custom-orders') ? 'custom' : 'dollar';
     state.streamAddon = null;
     state.onCartRemove = null;
 
@@ -609,11 +639,11 @@
         '</div>' +
         '<div class="arc-gear-pair">' +
           '<div class="arc-gear-cell" id="clGearLoot">' +
-            '<div><span class="name">Looting Mk.3</span><span class="sub">' + fmtRC(PRICE_LOOT) + ' each</span></div>' +
+            '<div><span class="name">Looting Mk.3</span><span class="sub">' + fmtDollar(PRICE_LOOT) + ' each</span></div>' +
             '<div id="clLootQty"></div>' +
           '</div>' +
           '<div class="arc-gear-cell" id="clGearShield">' +
-            '<div><span class="name">Medium Shield</span><span class="sub">' + fmtRC(PRICE_SHIELD) + ' each</span></div>' +
+            '<div><span class="name">Medium Shield</span><span class="sub">' + fmtDollar(PRICE_SHIELD) + ' each</span></div>' +
             '<div id="clShieldQty"></div>' +
           '</div>' +
         '</div>' +
@@ -672,7 +702,7 @@
       cell.className = 'arc-quick-cell';
       var nameDiv = document.createElement('div');
       nameDiv.className = 'arc-quick-name';
-      nameDiv.innerHTML = escHtml(qu.name) + '<span class="pack">' + fmtRC(qu.per * qu.mul) + '</span>';
+      nameDiv.innerHTML = escHtml(qu.name) + '<span class="pack">' + fmtDollar(qu.per * qu.mul) + '</span>';
       cell.appendChild(nameDiv);
       var stepper = createStepper(0, 0, 99, syncCart);
       quSteppers[qu.id] = stepper;
@@ -802,9 +832,12 @@
     var selected = {}; // key: tabId-itemIdx, value: { tier: string|null }
     var tierChoices = {}; // key: tabId-itemIdx, value: tier string
 
-    function priceFor(tabId, base, tier) {
-      if (tabId === 'gunpart' && tier === 'III') return Math.round(base * 1.2);
-      return base;
+    function priceFor(item, tabId, tier) {
+      if (tabId === 'gunpart') {
+        if (item.tierPrices && tier && item.tierPrices[tier]) return item.tierPrices[tier];
+        return item.price || 90;
+      }
+      return item.price || 100;
     }
     function defaultTier(item) {
       if (!item.tiers) return null;
@@ -839,7 +872,7 @@
               var key = tab.id + '-' + i;
               var isOn = !!selected[key];
               var tier = tierChoices[key] || defaultTier(item);
-              var p = priceFor(tab.id, tab.price, tier);
+              var p = priceFor(item, tab.id, tier);
               var cellHtml = '<button type="button" class="arc-bp-cell' + (isOn ? ' on' : '') + '" data-idx="' + i + '">';
               cellHtml += '<span class="arc-bp-cell-name">' + escHtml(item.name) + '</span>';
               if (item.tiers) {
@@ -849,7 +882,7 @@
                 });
                 cellHtml += '</span>';
               }
-              cellHtml += '<span class="arc-bp-cell-price">' + fmtRC(p) + '</span>';
+              cellHtml += '<span class="arc-bp-cell-price">' + fmtDollar(p) + '</span>';
               cellHtml += '</button>';
               return cellHtml;
             }).join('') +
@@ -923,7 +956,7 @@
           var key = tab.id + '-' + i;
           if (!selected[key]) return;
           var tier = selected[key].tier;
-          var p = priceFor(tab.id, tab.price, tier);
+          var p = priceFor(item, tab.id, tier);
           var sub = tab.sub;
           if (tier) sub += ' · Tier ' + tier;
           items.push({ id: 'bp-' + key, name: item.name, qty: 1, price: p, color: tab.color, sub: sub });
@@ -1068,7 +1101,7 @@
                   return '<button type="button" class="arc-ws-row' + (benchSelected[b] ? ' on' : '') + '" data-bench="' + escHtml(b) + '">' +
                     '<span class="arc-ws-switch"></span>' +
                     '<span class="arc-ws-name">' + escHtml(b) + '</span>' +
-                    '<span class="arc-ws-price">' + fmtRC(BENCH_PRICE) + ' / level</span>' +
+                    '<span class="arc-ws-price">' + fmtDollar(BENCH_PRICE) + ' / level</span>' +
                   '</button>';
                 }).join('') +
               '</div>' +
@@ -1357,7 +1390,7 @@
           '</div>' +
           '<div class="arc-fromto-cell">' +
             '<span class="arc-fromto-eye">Price</span>' +
-            '<span class="arc-fromto-num" id="depPrice">' + fmtRC(MIN_SLOTS * PRICE_PER_SLOT) + '</span>' +
+            '<span class="arc-fromto-num" id="depPrice">' + fmtDollar(MIN_SLOTS * PRICE_PER_SLOT) + '</span>' +
           '</div>' +
         '</div>' +
         '<input type="range" class="arc-rc-slider" id="depSlider" min="' + MIN_SLOTS + '" max="' + MAX_SLOTS + '" step="1" value="' + MIN_SLOTS + '">' +
@@ -1372,7 +1405,7 @@
       slider.value = v;
       updateSliderFill();
       numEl.textContent = v;
-      priceNumEl.textContent = fmtRC(v * PRICE_PER_SLOT);
+      priceNumEl.textContent = fmtDollar(v * PRICE_PER_SLOT);
       syncCart();
     });
     $('depStepper').appendChild(stepper);
@@ -1387,7 +1420,7 @@
       var v = parseInt(slider.value, 10);
       stepper.setValue(v);
       numEl.textContent = v;
-      priceNumEl.textContent = fmtRC(v * PRICE_PER_SLOT);
+      priceNumEl.textContent = fmtDollar(v * PRICE_PER_SLOT);
       updateSliderFill();
       syncCart();
     });
@@ -1432,7 +1465,7 @@
       nameSpan.textContent = it.name;
       var sub = document.createElement('span');
       sub.className = 'sub';
-      sub.textContent = fmtRC(it.price) + ' each';
+      sub.textContent = fmtDollar(it.price) + ' each';
       info.appendChild(nameSpan);
       info.appendChild(sub);
       cell.appendChild(info);
@@ -2131,8 +2164,16 @@
 
       slider.addEventListener('input', function () {
         currentSeeds = parseInt(slider.value, 10);
-        render();
+        var p = ((currentSeeds - SEED_MIN) / (SEED_MAX - SEED_MIN)) * 100;
+        slider.style.setProperty('--p', p + '%');
+        var bigEl = configPanel.querySelector('.arc-rc-big');
+        var subEl = configPanel.querySelector('.arc-rc-stat-sub');
+        var d = getDiscount(currentSeeds), pc = calcPrice(currentSeeds);
+        if (bigEl) bigEl.innerHTML = currentSeeds + '<span class="unit">seeds</span>';
+        if (subEl) subEl.innerHTML = fmtDollar(pc) + (d > 0 ? ' <span class="arc-sd-disc">−' + Math.round(d * 100) + '%</span>' : '');
+        syncCart();
       });
+      slider.addEventListener('change', render);
 
       qsa('.arc-rc-preset', configPanel).forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -2425,12 +2466,10 @@
       if (!svc || !state.cartItems.length) return;
       var items = state.cartItems;
       var isCustom = (state.cartMode === 'custom');
-      var isDollar = (state.cartMode === 'dollar');
 
       function priceStr(it) {
         if (isCustom) return 'CUSTOM';
-        if (isDollar) return fmtDollar(it.price);
-        return fmtRC(it.price) + ' RC';
+        return fmtDollar(it.price);
       }
 
       var lines = items.map(function (it) {
@@ -2441,7 +2480,7 @@
       });
 
       if (state.streamAddon) {
-        lines.push('▸ Stream by PRO' + (state.streamAddon.sub ? ' · ' + state.streamAddon.sub : '') + ' — ' + (isDollar ? fmtDollar(state.streamAddon.price) : fmtRC(state.streamAddon.price) + ' RC'));
+        lines.push('▸ Stream by PRO' + (state.streamAddon.sub ? ' · ' + state.streamAddon.sub : '') + ' — ' + (isCustom ? 'CUSTOM' : fmtDollar(state.streamAddon.price)));
       }
 
       var subtotal = 0;
@@ -2452,8 +2491,7 @@
 
       function totalStr(v) {
         if (isCustom) return 'CUSTOM';
-        if (isDollar) return fmtDollar(v);
-        return fmtRC(v) + ' RC';
+        return fmtDollar(v);
       }
 
       var text =
@@ -2474,8 +2512,8 @@
           elCopyCta.textContent = '';
           // Restore the icon + text via innerHTML for the SVG
           elCopyCta.innerHTML =
-            '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" stroke="currentColor" stroke-width="1.4"/><path d="M11 5V2H2v9h3" stroke="currentColor" stroke-width="1.4"/></svg>' +
-            'Copy to Discord';
+            '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            'Confirm Order';
         }, 2000);
       });
     });
@@ -2484,6 +2522,14 @@
   /* ────────────────────────────────────────────────────────────
      INIT
      ──────────────────────────────────────────────────────────── */
+  var arcCurrencyEl = document.getElementById('arcCurrency');
+  if (arcCurrencyEl) {
+    arcCurrencyEl.addEventListener('change', function () {
+      renderCart();
+      if (state.currentService) renderConfig(state.currentService);
+    });
+  }
+
   renderReviews();
   renderFaqs();
 
