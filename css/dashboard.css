@@ -38,6 +38,11 @@
   50%       { opacity: 0.3; }
 }
 
+@keyframes db-spin {
+  to { transform: rotate(360deg); }
+}
+.db-spin { display: inline-block; animation: db-spin 0.7s linear infinite; }
+
 /* ── Base ───────────────────────────────────────────────────── */
 
 .db-body {
@@ -370,9 +375,8 @@
 
 .db-stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 14px;
-  margin-bottom: 20px;
 }
 
 .db-stat-card {
@@ -415,11 +419,21 @@
 
 /* ── Overview grid cards ────────────────────────────────────── */
 
-.db-overview-grid {
+.db-overview-2col {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 3fr 2fr;   /* 60 / 40 */
   gap: 16px;
+  align-items: start;
 }
+
+.db-ov-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.db-ov-right .db-card { flex: 1; }
 
 .db-card {
   background: rgba(20,16,8,0.85);
@@ -820,7 +834,7 @@
 
 .db-rank-tiers-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
   gap: 12px;
 }
 
@@ -829,39 +843,41 @@
   border: 1px solid var(--line-soft);
   backdrop-filter: blur(8px);
   border-radius: 14px;
-  padding: 20px 16px;
+  padding: 26px 18px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 5px;
+  gap: 7px;
   transition: border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
 }
-.db-rank-tier:hover { transform: scale(1.03); }
+.db-rank-tier:hover { transform: scale(1.03); border-color: rgba(201,168,76,0.4); }
 
 .db-rank-tier-is-unlocked { border-color: rgba(201,168,76,0.3); }
 
 .db-rank-tier-is-current {
   border-color: var(--gold);
   background: rgba(201,168,76,0.08);
-  box-shadow: 0 0 24px rgba(201,168,76,0.15);
+  box-shadow: 0 0 28px rgba(201,168,76,0.18);
   animation: rankPulse 3s ease-in-out infinite;
 }
 
-.db-rank-tier-is-locked { opacity: 0.45; }
+.db-rank-tier-is-locked { opacity: 0.55; }
 
 .db-tier-icon {
-  font-size: 1.6rem;
+  font-size: 2.5rem;
+  line-height: 1;
   color: var(--gold);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
+.db-rank-tier-is-current .db-tier-icon { color: var(--gold-bright); }
 .db-rank-tier-is-locked .db-tier-icon { color: var(--text-faint); }
 
 .db-tier-name {
   font-family: var(--f-display);
-  font-size: 1rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  color: var(--text-soft);
+  color: var(--text);
   letter-spacing: 0.03em;
 }
 .db-rank-tier-is-current .db-tier-name { color: var(--gold-bright); }
@@ -991,6 +1007,20 @@
 .db-av-cell:hover { border-color: var(--gold); transform: scale(1.08); }
 .db-av-cell.is-selected { border-color: var(--gold-bright); box-shadow: 0 0 0 3px var(--gold-glow); }
 .db-av-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.db-av-check {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(201,168,76,0.45);
+  opacity: 0;
+  transition: opacity 150ms ease;
+  pointer-events: none;
+}
+.db-av-check svg { width: 44%; height: 44%; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6)); }
+.db-av-cell.is-selected .db-av-check { opacity: 1; }
 
 /* ── Forms ──────────────────────────────────────────────────── */
 
@@ -1240,8 +1270,8 @@
 .db-toast.is-visible { opacity: 1; transform: translateX(0); }
 .db-toast .ti { font-size: 1.05rem; flex-shrink: 0; }
 
-.db-toast-success { border-left-color: #6ecf8e; }
-.db-toast-success .ti { color: #6ecf8e; }
+.db-toast-success { border-left-color: var(--gold); }
+.db-toast-success .ti { color: var(--gold-bright); }
 .db-toast-error   { border-left-color: #e05555; }
 .db-toast-error .ti { color: #e05555; }
 .db-toast-info    { border-left-color: #6ea6ed; }
@@ -1283,20 +1313,13 @@
 
 /* ── Responsive ─────────────────────────────────────────────── */
 
-@media (max-width: 1200px) {
-  .db-rank-tiers-grid { grid-template-columns: repeat(3, 1fr); }
-}
-
 @media (max-width: 1024px) {
-  .db-stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .db-overview-grid { grid-template-columns: 1fr 1fr; }
-  .db-overview-grid .db-referral-card { grid-column: 1 / -1; }
+  .db-overview-2col { grid-template-columns: 1.4fr 1fr; }
 }
 
 @media (max-width: 900px) {
   .db-sidebar { width: 220px; }
   .db-main { margin-left: 220px; padding: 36px 28px 80px; }
-  .db-rank-tiers-grid { grid-template-columns: repeat(2, 1fr); }
   .db-account-layout { grid-template-columns: 1fr; gap: 32px; }
 }
 
@@ -1305,7 +1328,7 @@
   .db-main { margin-left: 0; padding: 28px 20px 90px; }
   .db-mobile-nav { display: flex; }
   .db-section-hd { flex-direction: column; align-items: flex-start; }
-  .db-overview-grid { grid-template-columns: 1fr; }
+  .db-overview-2col { grid-template-columns: 1fr; }
   .db-rank-hero-inner { flex-direction: column; text-align: center; }
   .db-rank-hero-info { width: 100%; }
 }
@@ -1314,6 +1337,5 @@
   .db-stats-grid { grid-template-columns: 1fr 1fr; }
   .db-av-grid { grid-template-columns: repeat(3, 1fr); }
   .db-modal-av-grid { grid-template-columns: repeat(3, 1fr); }
-  .db-rank-tiers-grid { grid-template-columns: repeat(2, 1fr); }
   .db-date-cell { display: none; }
 }

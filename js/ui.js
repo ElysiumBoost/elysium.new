@@ -899,22 +899,30 @@
       const hasCustom = state.cart.some(item => item.custom);
       const sameCurrency = state.cart.length && state.cart.every(item => item.viewedCurrency === state.cart[0].viewedCurrency);
       const cartCurrency = sameCurrency ? state.cart[0].viewedCurrency : state.currency;
+      // ── Elysium rank discount (synced from dashboard login via localStorage) ──
+      let rankDiscountPct = 0, rankName = "Veteran";
+      try {
+        const rd = JSON.parse(localStorage.getItem("elysium_rank_discount") || "null");
+        if (rd && typeof rd.discount === "number") { rankDiscountPct = rd.discount; rankName = rd.rank || "Veteran"; }
+      } catch (e) {}
+      const rankSaving = (!hasCustom && rankDiscountPct > 0) ? Math.round(total * rankDiscountPct) / 100 : 0;
+      const netTotal = Math.max(0, total - rankSaving);
       const totalEl = $("cartTotal");
       if (totalEl) {
         if (state.cart.length) {
-          if (lastCartMonetaryTotal !== null && lastCartMonetaryTotal !== total) {
+          if (lastCartMonetaryTotal !== null && lastCartMonetaryTotal !== netTotal) {
             totalEl.classList.remove("cart-total-pulse");
             void totalEl.offsetWidth;
             totalEl.classList.add("cart-total-pulse");
             setTimeout(() => totalEl.classList.remove("cart-total-pulse"), 900);
           }
-          lastCartMonetaryTotal = total;
+          lastCartMonetaryTotal = netTotal;
         } else {
           lastCartMonetaryTotal = null;
         }
-        totalEl.textContent = hasCustom ? displayInCurrency(total, cartCurrency) + " + CUSTOM" : displayInCurrency(total, cartCurrency);
+        totalEl.textContent = hasCustom ? displayInCurrency(netTotal, cartCurrency) + " + CUSTOM" : displayInCurrency(netTotal, cartCurrency);
       } else {
-        if (state.cart.length) lastCartMonetaryTotal = total;
+        if (state.cart.length) lastCartMonetaryTotal = netTotal;
         else lastCartMonetaryTotal = null;
       }
       const cartUsdHintEl = $("cartUsdHint");
@@ -936,11 +944,24 @@
           ? displayInCurrency(total, cartCurrency) + " + CUSTOM"
           : displayInCurrency(total, cartCurrency);
       }
-      // Taxes & discount stay as "—" until backend/promo engine exists.
+      // Taxes stay "—" until backend exists. Discount reflects the Elysium rank.
       const taxEl = $("cartTaxAmt");
       if (taxEl && !taxEl.dataset.locked) taxEl.textContent = "—";
+      const discountLabelEl = $("cartDiscountLabel");
+      if (discountLabelEl) discountLabelEl.textContent = ui(rankName + " Discount");
       const discountEl = $("cartDiscountAmt");
-      if (discountEl && !discountEl.dataset.locked) discountEl.textContent = "—";
+      if (discountEl && !discountEl.dataset.locked) {
+        if (rankDiscountPct > 0 && state.cart.length && !hasCustom) {
+          discountEl.classList.remove("eb-cart-v--muted");
+          discountEl.textContent = "−" + rankDiscountPct + "% (" + displayInCurrency(rankSaving, cartCurrency) + ")";
+        } else if (rankDiscountPct > 0) {
+          discountEl.classList.add("eb-cart-v--muted");
+          discountEl.textContent = "−" + rankDiscountPct + "%";
+        } else {
+          discountEl.classList.add("eb-cart-v--muted");
+          discountEl.textContent = "0%";
+        }
+      }
 
       updateCartFootAlerts();
       syncClearCartButton();

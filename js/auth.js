@@ -79,7 +79,16 @@ async function ebForgotPassword(email) {
   _showAuthSuccess(`Reset link sent to ${email}`, 'ebEmailMsg');
 }
 
-async function ebSignOut() { await _sb.auth.signOut(); }
+/* localStorage helpers for cross-page nav sync (username + avatar) */
+function _lsGet(k)    { try { return localStorage.getItem(k) || ''; } catch (_) { return ''; } }
+function _lsSet(k, v) { try { localStorage.setItem(k, v); } catch (_) {} }
+function _lsRemove(k) { try { localStorage.removeItem(k); } catch (_) {} }
+
+async function ebSignOut() {
+  _lsRemove('elysium_username');
+  _lsRemove('elysium_avatar_url');
+  await _sb.auth.signOut();
+}
 function ebGetUser() { return _currentUser; }
 async function ebGetSession() { const { data } = await _sb.auth.getSession(); return data.session ?? null; }
 function ebIsLoggedIn() { return _currentUser !== null; }
@@ -91,11 +100,14 @@ function _updateNavUI(user) {
   const signOutBtns = document.querySelectorAll('[data-eb-signout]');
   const avatarEls   = document.querySelectorAll('[data-eb-avatar]');
   if (user) {
-    const name = user.user_metadata?.username || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Champion';
+    const cachedName = _lsGet('elysium_username');
+    const name = cachedName || user.user_metadata?.username || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Champion';
     const initials = name.split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase() || '?';
     signInBtns.forEach(el => el.style.display = 'none');
     userMenus.forEach(el  => el.style.display = '');
     userNames.forEach(el  => el.textContent = name);
+    const cachedAvatar = _lsGet('elysium_avatar_url');
+    if (cachedAvatar) _applyAvatarUrl(cachedAvatar);
     avatarEls.forEach(el  => {
       if (!el.getAttribute('data-has-img')) el.textContent = initials;
     });
@@ -107,6 +119,8 @@ function _updateNavUI(user) {
     signOutBtns.forEach(el=> el.style.display = 'none');
     _applyAvatarUrl(null);
     window._ebCurrentAvatarUrl = '';
+    _lsRemove('elysium_username');
+    _lsRemove('elysium_avatar_url');
   }
 }
 
@@ -124,10 +138,15 @@ function _applyAvatarUrl(url) {
 
 async function _loadAvatarFromProfile(userId) {
   try {
-    const { data } = await _sb.from('profiles').select('avatar_url').eq('id', userId).maybeSingle();
+    const { data } = await _sb.from('profiles').select('avatar_url, username').eq('id', userId).maybeSingle();
     if (data && data.avatar_url) {
       _applyAvatarUrl(data.avatar_url);
       window._ebCurrentAvatarUrl = data.avatar_url;
+      _lsSet('elysium_avatar_url', data.avatar_url);
+    }
+    if (data && data.username) {
+      _lsSet('elysium_username', data.username);
+      document.querySelectorAll('[data-eb-username]').forEach(el => { el.textContent = data.username; });
     }
   } catch (_) {}
 }
@@ -160,6 +179,7 @@ async function ebSelectAvatar(num) {
   const statusEl = document.getElementById('ebAvatarStatus');
   _applyAvatarUrl(url);
   window._ebCurrentAvatarUrl = url;
+  _lsSet('elysium_avatar_url', url);
   const modal = document.getElementById('ebAvatarModal');
   if (modal) {
     modal.querySelectorAll('[data-av-num]').forEach(function(btn) {

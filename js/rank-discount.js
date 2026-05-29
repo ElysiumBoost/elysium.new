@@ -54,6 +54,8 @@
         }
         try { localStorage.setItem('elysium_rank_discount', JSON.stringify({ rank: rank.name, discount: rank.discount })); } catch (_) {}
         window.dispatchEvent(new CustomEvent('eb:rankDiscountReady', { detail: { rank: rank.name, discount: rank.discount } }));
+        /* Refresh the cart so the discount line reflects immediately */
+        if (typeof window.renderCart === 'function') { try { window.renderCart(); } catch (_) {} }
       });
     } catch (_) {}
   });

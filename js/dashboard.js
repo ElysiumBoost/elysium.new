@@ -173,6 +173,12 @@
     if (emailEl) emailEl.textContent = _user.email || '';
     if (rankBEl) rankBEl.textContent = rank.name;
 
+    /* Cache for nav sync across pages */
+    try {
+      if (name) localStorage.setItem('elysium_username', name);
+      if (_profile.avatar_url) localStorage.setItem('elysium_avatar_url', _profile.avatar_url);
+    } catch (e) {}
+
     var circle = document.getElementById('dbAvatarCircle');
     if (circle) {
       if (_profile.avatar_url) {
@@ -490,6 +496,11 @@
         img.alt = 'Avatar ' + num;
         img.loading = 'lazy';
         btn.appendChild(img);
+        var check = document.createElement('span');
+        check.className = 'db-av-check';
+        check.setAttribute('aria-hidden', 'true');
+        check.innerHTML = '<svg viewBox="0 0 18 18" fill="none"><path d="M3 9l4 4 8-8" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        btn.appendChild(check);
         btn.addEventListener('click', function () { selectAvatar(this.dataset.avNum); });
         grid.appendChild(btn);
       }
@@ -534,10 +545,13 @@
 
     applyAvPreview(url, name);
 
+    /* Sync to nav across pages (index.html reads this on load) */
+    try { localStorage.setItem('elysium_avatar_url', url); } catch (e) {}
+    _profile.avatar_url = url;
+
     _sb.from('profiles').upsert({ id: _user.id, avatar_url: url }, { onConflict: 'id' })
       .then(function (res) {
         if (res.error) { toast('error', 'Failed to save avatar.'); return; }
-        _profile.avatar_url = url;
         toast('success', 'Avatar updated!');
       });
 
@@ -560,9 +574,19 @@
         var payload = { id: _user.id, username: username, discord_id: discord, country: country };
         if (avUrl) payload.avatar_url = avUrl;
 
+        var saveBtn = accForm.querySelector('.db-save-btn');
+        var saveLabel = saveBtn ? saveBtn.innerHTML : '';
+        if (saveBtn) { saveBtn.disabled = true; saveBtn.innerHTML = '<i class="ti ti-loader-2 db-spin"></i> Saving…'; }
+
         _sb.from('profiles').upsert(payload, { onConflict: 'id' }).then(function (res) {
+          if (saveBtn) { saveBtn.disabled = false; saveBtn.innerHTML = saveLabel; }
           if (res.error) { toast('error', res.error.message); return; }
           Object.assign(_profile, { username: username, discord_id: discord, country: country });
+          /* Sync to nav across pages */
+          try {
+            if (username) localStorage.setItem('elysium_username', username);
+            if (avUrl) localStorage.setItem('elysium_avatar_url', avUrl);
+          } catch (e2) {}
           var nameEl = document.getElementById('dbProfileName');
           if (nameEl) nameEl.textContent = username || (_user.email && _user.email.split('@')[0]) || 'Champion';
           toast('success', 'Profile updated, ' + (username || 'Champion') + ' ✓');
@@ -631,10 +655,13 @@
     var delConfirm = document.getElementById('dbDeleteConfirmBtn');
     if (delConfirm) {
       delConfirm.addEventListener('click', function () {
-        toast('info', 'Please contact support to delete your account.');
         var m = document.getElementById('dbDeleteModal');
         if (m) m.classList.add('db-hidden');
         document.body.style.overflow = '';
+        toast('info', 'Account deletion is handled by our team. Open a ticket in Discord, you will be signed out now.');
+        setTimeout(function () {
+          _sb.auth.signOut().then(function () { window.location.replace('../index.html'); });
+        }, 2600);
       });
     }
 
@@ -663,7 +690,7 @@
     setTimeout(function () {
       t.classList.remove('is-visible');
       t.addEventListener('transitionend', function () { t.remove(); }, { once: true });
-    }, 3500);
+    }, 3000);
   }
 
   /* ── Count-up ───────────────────────────────────────────────── */
