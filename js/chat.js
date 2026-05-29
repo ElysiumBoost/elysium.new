@@ -39,8 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function _init() {
-  const { data } = await _sb.from('profiles').select('*').eq('id', _user.id).maybeSingle();
-  _profile = data || { role: 'customer', id: _user.id };
+  try {
+    const { data } = await _sb.from('profiles').select('*').eq('id', _user.id).maybeSingle();
+    _profile = data || { role: 'customer', id: _user.id };
+  } catch (_) {
+    _profile = { role: 'customer', id: _user.id };
+  }
 
   _adjustHomeLink();
   _loadQueue();
@@ -70,20 +74,37 @@ function _adjustHomeLink() {
 
 // ── Conversations ─────────────────────────────────────────────────────────────
 async function loadConversations() {
-  let q = _sb.from('orders').select('*, booster:profiles!booster_id(id,username,avatar_url,role)');
+  const list = document.getElementById('ecConvoList');
 
-  if (_profile.role === 'booster') {
-    q = q.eq('booster_id', _user.id);
-  } else if (_profile.role === 'admin') {
-    // admin sees all — no filter
-  } else {
-    q = q.eq('user_id', _user.id);
+  try {
+    let q = _sb.from('orders').select('*, booster:profiles!booster_id(id,username,avatar_url,role)');
+
+    if (_profile.role === 'booster') {
+      q = q.eq('booster_id', _user.id);
+    } else if (_profile.role === 'admin') {
+      // admin sees all — no filter
+    } else {
+      q = q.eq('user_id', _user.id);
+    }
+
+    const timeout = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('timeout')), 5000)
+    );
+
+    const { data, error } = await Promise.race([
+      q.order('created_at', { ascending: false }),
+      timeout,
+    ]);
+
+    if (error) throw error;
+    _orders = data || [];
+    await renderConvoList();
+  } catch (_err) {
+    if (list) {
+      list.innerHTML = '<div class="ec-list-msg"><i class="ti ti-wifi-off"></i><span>Could not load conversations. Check your connection.</span></div>';
+    }
+    _toast('Failed to load conversations', 'error');
   }
-
-  const { data, error } = await q.order('created_at', { ascending: false });
-  if (error) { _toast('Failed to load conversations', 'error'); return; }
-  _orders = data || [];
-  await renderConvoList();
 }
 
 async function renderConvoList() {
@@ -116,7 +137,7 @@ async function renderConvoList() {
   });
 
   if (!orders.length) {
-    list.innerHTML = '<div class="ec-empty-list">No conversations found.</div>';
+    list.innerHTML = '<div class="ec-list-msg"><i class="ti ti-message-off"></i><span>No conversations found.</span></div>';
     return;
   }
 
