@@ -89,11 +89,14 @@ function _updateNavUI(user) {
   const userMenus   = document.querySelectorAll('[data-eb-user-menu]');
   const userNames   = document.querySelectorAll('[data-eb-username]');
   const signOutBtns = document.querySelectorAll('[data-eb-signout]');
+  const avatarEls   = document.querySelectorAll('[data-eb-avatar]');
   if (user) {
     const name = user.user_metadata?.username || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Champion';
+    const initials = name.split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase() || '?';
     signInBtns.forEach(el => el.style.display = 'none');
     userMenus.forEach(el  => el.style.display = '');
     userNames.forEach(el  => el.textContent = name);
+    avatarEls.forEach(el  => el.textContent = initials);
     signOutBtns.forEach(el=> el.style.display = '');
   } else {
     signInBtns.forEach(el => el.style.display = '');
@@ -102,8 +105,18 @@ function _updateNavUI(user) {
   }
 }
 
-function ebOpen()  { document.getElementById('ebModal').classList.remove('eb-hidden'); document.body.style.overflow = 'hidden'; }
-function ebClose() { document.getElementById('ebModal').classList.add('eb-hidden');    document.body.style.overflow = ''; }
+function _heroVideo() { return document.querySelector('.eb-hero-video'); }
+
+function ebOpen() {
+  document.getElementById('ebModal').classList.remove('eb-hidden');
+  document.body.style.overflow = 'hidden';
+  const v = _heroVideo(); if (v) v.pause();
+}
+function ebClose() {
+  document.getElementById('ebModal').classList.add('eb-hidden');
+  document.body.style.overflow = '';
+  const v = _heroVideo(); if (v) v.play().catch(() => {});
+}
 function ebCloseOnOverlay(e) { if (e.target === document.getElementById('ebModal')) ebClose(); }
 
 function _setLoading(btn, on, label) { if (!btn) return; btn.disabled = on; btn.textContent = label; }
@@ -113,7 +126,28 @@ function _showAuthSuccess(msg, elId = 'ebAuthMsg') { const el = document.getElem
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-eb-login]').forEach(el => el.addEventListener('click', e => { e.preventDefault(); ebOpen(); }));
   document.querySelectorAll('[data-eb-signout]').forEach(el => el.addEventListener('click', e => { e.preventDefault(); ebSignOut(); }));
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') ebClose(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { ebClose(); _closeUserMenu(); } });
+
+  // User dropdown toggle
+  const menu    = document.getElementById('ebUserMenu');
+  const trigger = document.getElementById('ebUserTrigger');
+  const dropdown = document.getElementById('ebUserDropdown');
+  function _closeUserMenu() {
+    if (!menu) return;
+    menu.classList.remove('is-open');
+    if (trigger) trigger.setAttribute('aria-expanded', 'false');
+    if (dropdown) dropdown.setAttribute('aria-hidden', 'true');
+  }
+  if (trigger && menu) {
+    trigger.addEventListener('click', () => {
+      const isOpen = menu.classList.toggle('is-open');
+      trigger.setAttribute('aria-expanded', String(isOpen));
+      if (dropdown) dropdown.setAttribute('aria-hidden', String(!isOpen));
+    });
+    document.addEventListener('click', e => {
+      if (menu.classList.contains('is-open') && !menu.contains(e.target)) _closeUserMenu();
+    });
+  }
 });
 
 window.ElysiumAuth = { getUser: ebGetUser, getSession: ebGetSession, isLoggedIn: ebIsLoggedIn, signOut: ebSignOut, signInGoogle: ebAuthGoogle, signInApple: ebAuthApple, signInDiscord: ebAuthDiscord, signIn: ebAuthEmailSignIn, signUp: ebAuthEmailSignUp, forgotPassword: ebForgotPassword, open: ebOpen, close: ebClose };

@@ -149,6 +149,37 @@
         </button>
         <button type="button" class="eb-signin-sub" id="ebLoginBtn" data-eb-login aria-label="Login">Login</button>
       </span>
+      <!-- User dropdown — shown after login, hidden by default -->
+      <div class="eb-user-menu" id="ebUserMenu" data-eb-user-menu style="display:none" aria-label="Account menu">
+        <button class="eb-user-trigger" id="ebUserTrigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Open account menu">
+          <span class="eb-user-avatar" id="ebUserAvatar" data-eb-avatar aria-hidden="true">EB</span>
+          <span class="eb-user-name" data-eb-username></span>
+          <svg class="eb-user-chevron" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="eb-user-dropdown" id="ebUserDropdown" role="menu" aria-hidden="true">
+          <a href="pages/dashboard.html" class="eb-user-item" role="menuitem">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.4"/><path d="M2 13.5c0-3.314 2.686-5 6-5s6 1.686 6 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            My Account
+          </a>
+          <button class="eb-user-item" role="menuitem" type="button">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="2" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            My Orders
+          </button>
+          <button class="eb-user-item" role="menuitem" type="button">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1l2 4.5 4.5.5-3.25 3.25L12 14 8 11.5 4 14l.75-4.75L1.5 6l4.5-.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            VIP Status
+          </button>
+          <a href="https://discord.gg/elysiumgg" class="eb-user-item" role="menuitem" target="_blank" rel="noopener noreferrer">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M13.545 2.907a13.2 13.2 0 00-3.257-1.011.05.05 0 00-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 00-3.658 0 8.26 8.26 0 00-.412-.833.051.051 0 00-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 00-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.3 13.3 0 004.001 2.02.051.051 0 00.056-.019c.308-.42.582-.863.818-1.329a.05.05 0 00-.01-.059.051.051 0 00-.018-.011 8.875 8.875 0 01-1.248-.595.05.05 0 01-.02-.066.051.051 0 01.015-.019c.084-.063.168-.129.248-.195a.05.05 0 01.051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 01.053.007c.08.066.164.132.248.195a.051.051 0 01-.004.085 8.254 8.254 0 01-1.249.594.05.05 0 00-.03.03.052.052 0 00.003.041c.24.465.515.909.817 1.329a.05.05 0 00.056.019 13.235 13.235 0 004.001-2.02.049.049 0 00.021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 00-.02-.019zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612z"/></svg>
+            Discord
+          </a>
+          <div class="eb-user-separator" role="separator" aria-hidden="true"></div>
+          <button class="eb-user-item eb-user-logout" role="menuitem" type="button" data-eb-signout>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3H3a1 1 0 00-1 1v8a1 1 0 001 1h3M10 11l3-3-3-3M13 8H6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Logout
+          </button>
+        </div>
+      </div>
       <button class="eb-cart" id="cartOpen" type="button" aria-label="Cart">
         <span class="arc-hot-trace" aria-hidden="true"></span>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 3H4L5 11H13L14 5H5" stroke="currentColor" stroke-width="1.4"/><circle cx="6" cy="13.5" r="0.8" fill="currentColor"/><circle cx="12" cy="13.5" r="0.8" fill="currentColor"/></svg>
@@ -1423,30 +1454,9 @@
 
   </nav>
 
-  <!-- Sign in / Login toasts (coming soon) -->
-
 <!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="js/auth.js"></script>
-
-  <div class="eb-toast" id="ebToast" role="status" aria-live="polite"></div>
-  <script>
-  (function () {
-    var signin = document.getElementById('ebSigninBtn');
-    var login = document.getElementById('ebLoginBtn');
-    var toast = document.getElementById('ebToast');
-    if (!toast) return;
-    var t;
-    function show(msg) {
-      toast.textContent = msg;
-      toast.classList.add('is-show');
-      clearTimeout(t);
-      t = setTimeout(function () { toast.classList.remove('is-show'); }, 2200);
-    }
-    if (signin) signin.addEventListener('click', function () { show('Sign in coming soon.'); });
-    if (login) login.addEventListener('click', function () { show('Login coming soon.'); });
-  })();
-  </script>
 
   <div id="ebModalMount">
     <!--
