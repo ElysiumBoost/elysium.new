@@ -309,11 +309,11 @@
         default: "ELYSIUM BOOST — premium manual game boosting services. Verified boosters, no cheats, Discord-confirmed orders and fast support."
       };
       const ogImages = {
-        arc: "https://elysiumboost.com/assets/backgrounds/arc-raiders-home-card.webp",
+        arc: "https://elysiumboost.com/assets/backgrounds/arc-raiders-bg.webp",
         valorant: "https://elysiumboost.com/assets/backgrounds/val33.webp",
         lol: "https://elysiumboost.com/assets/backgrounds/lol33.webp",
         tft: "https://elysiumboost.com/assets/backgrounds/tft-home-card.webp",
-        wow: "https://elysiumboost.com/assets/backgrounds/wow22.webp",
+        wow: "https://elysiumboost.com/assets/backgrounds/ana1.webp",
         cs2: "https://elysiumboost.com/assets/backgrounds/cs2-bg.webp",
         default: "https://elysiumboost.com/assets/elysium-preview.webp"
       };
@@ -646,14 +646,14 @@
       expeditions: "assets/thumb-expedition.webp",
       custom: "assets/thumb-private-order.webp",
       services: "assets/thumb-private-order.webp",
-      "rank-boosting": "assets/Rank Boosting.webp",
-      "placement-matches": "assets/Placement Matches.webp",
+      "rank-boosting": "assets/rank-boosting.webp",
+      "placement-matches": "assets/placement-matches.webp",
       "tft-placement": "assets/tft-placement-matches.webp",
-      "radiant-boost": "assets/Raidant Boost.webp",
-      "ranked-wins": "assets/Ranked Wins.webp",
-      "unrated-games": "assets/Unrated Matches.webp",
-      "account-leveling": "assets/account leveling.webp",
-      "battle-pass": "assets/Battle Pass.webp",
+      "radiant-boost": "assets/radiant-boost.webp",
+      "ranked-wins": "assets/ranked-wins.webp",
+      "unrated-games": "assets/unrated-matches.webp",
+      "account-leveling": "assets/account-leveling.webp",
+      "battle-pass": "assets/battle-pass.webp",
       "mythic-plus": "assets/thumb-private-order.webp",
       "raid-calendar": "assets/thumb-raids.webp",
       arena: "assets/thumb-private-order.webp",

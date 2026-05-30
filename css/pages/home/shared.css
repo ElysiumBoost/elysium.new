@@ -1,0 +1,1318 @@
+
+
+
+    .btn-premium {
+      border: 1px solid rgba(225, 29, 72, .38);
+      background: linear-gradient(135deg, #b8855a 0%, #d4af6e 38%, #be123c 100%);
+      color: #fff;
+      font-family: var(--display);
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      box-shadow: 0 14px 36px rgba(212, 175, 110, .2), 0 8px 24px rgba(190, 18, 60, .1);
+      transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+    }
+
+    .btn-premium:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 44px rgba(212, 175, 110, .26), 0 10px 28px rgba(190, 18, 60, .14);
+      filter: brightness(1.04);
+    }
+
+    .btn-glass {
+      border: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: var(--text);
+      box-shadow: inset 0 1px 0 var(--glass-border);
+    }
+
+    .btn-glass:hover {
+      border-color: var(--line-strong);
+      background: rgba(18, 15, 20, .88);
+    }
+
+
+    .btn, .game-menu-btn, .cat-btn, .service-btn, .tab-btn {
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.055);
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 13px;
+      font-weight: 900;
+      letter-spacing: .02em;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover, .game-menu-btn:hover, .cat-btn:hover, .service-btn:hover, .tab-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--line-strong);
+      background: rgba(212, 175, 110, .1);
+    }
+
+    button:disabled,
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: .48;
+      transform: none;
+    }
+
+    .game-menu-btn[aria-expanded="true"] {
+      border-color: rgba(212, 175, 110, .58);
+      background: linear-gradient(135deg, rgba(184, 133, 90, .32), rgba(212, 175, 110, .2));
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .35), 0 0 24px rgba(231, 201, 139, .06);
+    }
+
+    .btn-primary,
+    .cat-btn.active,
+    .service-btn.active,
+    .tab-btn.active {
+      border-color: rgba(212, 175, 110, .65);
+      background: linear-gradient(135deg, #b8855a, #d4af6e);
+      color: #fff;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .38), 0 0 20px rgba(212, 175, 110, .14);
+    }
+
+    .btn-green {
+      border-color: rgba(225, 29, 72, .45);
+      background: linear-gradient(135deg, #b8855a, #e11d48);
+      color: #fff;
+      box-shadow: 0 12px 30px rgba(17, 24, 39, .45);
+    }
+
+
+    .category-bar {
+
+
+    .faq-home {
+    .ely-sticky-order {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 88;
+      max-width: min(360px, calc(100vw - 32px));
+    }
+
+    body.cart-open .ely-sticky-order {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .ely-sticky-order__btn {
+      width: 100%;
+      min-height: 46px;
+      padding: 0 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(212, 175, 110, .45);
+      background: linear-gradient(145deg, rgba(18, 15, 20, .95), rgba(10, 8, 18, .98));
+      color: var(--text);
+      font-family: var(--display);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-align: center;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, .4), 0 0 24px rgba(212, 175, 110, .15);
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease;
+    }
+
+    .ely-sticky-order__btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 209, 102, .4);
+    }
+
+    .ely-support-widget {
+      display: none;
+      position: fixed;
+      left: 16px;
+      bottom: 16px;
+      z-index: 87;
+      max-width: 220px;
+      padding: 12px 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(212, 175, 110, .32);
+      background: linear-gradient(165deg, rgba(18, 15, 20, .96), rgba(7, 6, 14, .98));
+      box-shadow: 0 18px 48px rgba(0, 0, 0, .42);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .ely-support-widget strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #f3ead9;
+      font-family: var(--display);
+      font-size: 12px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .ely-support-widget .btn-mini {
+      margin-top: 10px;
+      width: 100%;
+      min-height: 38px;
+      font-size: 11px;
+    }
+
+    .legal-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(4, 3, 10, .72);
+    }
+
+    .legal-modal-backdrop.active {
+      display: flex;
+    }
+
+    .legal-modal {
+      width: min(520px, 100%);
+      max-height: min(78vh, 640px);
+      overflow: auto;
+      padding: 22px 20px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(212, 175, 110, .4);
+      background: linear-gradient(180deg, rgba(18, 15, 20, .98), rgba(8, 7, 16, .99));
+      box-shadow: 0 28px 80px rgba(0, 0, 0, .55);
+    }
+
+    .legal-modal h2 {
+      margin: 0 0 12px;
+      font-family: var(--display);
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .legal-modal p {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .legal-close {
+      margin-top: 12px;
+      width: 100%;
+    }
+
+    .copy-success-modal .copy-success-lead {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      margin: 0 0 14px;
+    }
+
+    .copy-success-steps {
+      margin: 0 0 18px;
+      padding-left: 1.2em;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .copy-success-steps li {
+      margin-bottom: 6px;
+    }
+
+    .copy-success-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    @media (max-width: 720px) {
+      .order-context-grid { grid-template-columns: 1fr; }
+      .ely-support-widget {
+        left: 10px;
+        bottom: 70px;
+        max-width: calc(100vw - 24px);
+      }
+      .ely-sticky-order {
+        right: 10px;
+        bottom: 10px;
+        left: 10px;
+        max-width: none;
+      }
+    }
+
+    .btn-continue {
+        padding-inline: 0;
+        border-width: 0;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .actions.search-open {
+        flex-wrap: nowrap;
+      }
+      .actions.search-open .site-search {
+        width: min(42vw, 170px);
+        flex: 1 1 130px;
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .actions .search-results {
+        right: 0;
+      }
+      .hero { min-height: 320px; padding-top: 38px; }
+      .hero.is-home { min-height: 440px; padding: 52px 0 48px; }
+      .popular-grid, .service-grid, .field-grid, .home-grid, .info-grid { grid-template-columns: 1fr; }
+      .faq-list { grid-template-columns: 1fr; }
+      .home-order-flow {
+        width: 100%;
+        font-size: 11px;
+        letter-spacing: .04em;
+      }
+      .home-combo-split {
+        grid-template-columns: 1fr;
+        min-height: 0;
+      }
+      .delivery-proof-grid,
+      .feedback-grid {
+        grid-template-columns: 1fr;
+      }
+      .home-combo-half {
+        min-height: 220px;
+      }
+      .home-combo-half + .home-combo-half {
+        border-left: 0;
+        border-top: 1px solid rgba(212, 175, 110, .42);
+        box-shadow: inset 0 14px 28px -18px rgba(0, 0, 0, .45);
+      }
+      .disabled-btn { width: 100%; min-width: 0; }
+      .service-card {
+        flex-direction: column;
+      }
+      .service-card__media {
+        flex: none;
+        max-width: none;
+        width: 100%;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .service-card__media .category-thumb,
+      .service-card__media .service-thumb {
+        min-height: 200px;
+      }
+      .popular-card__inner {
+        flex-direction: column;
+      }
+      .popular-card__media {
+        flex: none;
+        max-width: none;
+        width: 100%;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .raid-toggle-grid, .quick-raid-grid { grid-template-columns: 1fr 1fr; }
+      .detail-steps { grid-template-columns: 1fr; }
+      .quick-head, .section-head { align-items: flex-start; flex-direction: column; }
+      /* .cart-backdrop, .drawer, .drawer.drawer--wide mobile rules extracted to css/cart.css */
+      .order-center {
+    .faq-home--compact {
+      display: block;
+      margin-top: 4px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: rgba(231, 201, 139, .78);
+      line-height: 1.25;
+    }
+
+    .valorant-flow-kicker {
+      margin: 0 0 10px;
+      font-family: var(--display);
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(231, 201, 139, .82);
+    }
+
+    .cart-open-discord-anchor {
+    }
+
+    .currency:focus,
+    .site-search:focus,
+    .order-form select:focus,
+    .order-form input:focus,
+    .order-form textarea:focus {
+      outline: none;
+      border-color: rgba(212, 175, 110, .55) !important;
+      box-shadow: 0 0 0 2px rgba(212, 175, 110, .2);
+    }
+
+    .coin-slider-mark.is-active .coin-slider-mark__tick {
+      background: linear-gradient(180deg, #d4af6e, #b8855a);
+      box-shadow: 0 0 10px rgba(212, 175, 110, .45);
+    }
+
+    .service-btn.active {
+      border-color: rgba(212, 175, 110, .55) !important;
+      background: linear-gradient(165deg, rgba(18, 15, 20, .93), rgba(10, 8, 8, .9)) !important;
+      color: #fff7e8 !important;
+      box-shadow:
+        0 0 0 1px rgba(212, 175, 110, .2),
+        0 0 20px rgba(212, 175, 110, .22) !important;
+    }
+
+    input[type="range"] {
+      min-height: 42px;
+      margin-top: 0;
+      padding: 0 32px;
+    }
+
+    .hero-cta-secondary {
+      border-color: rgba(216, 185, 104, .24);
+      color: rgba(243, 234, 217, .9);
+    }
+
+    .hero-future-visual { display: none; }
+
+    .home-content {
+      padding: 18px 0 0;
+    }
+
+    .home-trust-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin: 0 0 20px;
+      padding: 8px;
+      border: 1px solid rgba(216, 185, 104, .13);
+      border-radius: 12px;
+      background: rgba(10, 8, 8, .48);
+    }
+
+    .home-trust-strip span {
+      min-width: 0;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: rgba(243, 234, 217, .035);
+      color: rgba(243, 234, 217, .84);
+      font-family: var(--display);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .detail-trust-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin: 16px 0 4px;
+      padding: 8px;
+      border: 1px solid rgba(212, 175, 110, .13);
+      border-radius: 12px;
+      background: rgba(10, 8, 8, .48);
+    }
+
+    .detail-trust-strip span {
+      min-width: 0;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: rgba(243, 234, 217, .035);
+      color: rgba(243, 234, 217, .84);
+      font-family: var(--display);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 600px) {
+      .detail-trust-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .home-section-kicker {
+    html,
+    body {
+      background-color: var(--ely-bg);
+    }
+
+    body {
+      background-image:
+        linear-gradient(180deg, rgba(10, 8, 8, .28), rgba(10, 8, 8, .5)),
+        url("../../assets/backgrounds/elyssunset.webp");
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+      background-attachment: scroll;
+      color: var(--text);
+      scrollbar-color: rgba(212, 175, 110, .38) rgba(15, 13, 18, .72);
+    }
+
+    @media (min-width: 901px) {
+      body {
+        background-attachment: fixed;
+      }
+    }
+
+    .shell,
+    .home-content > .shell,
+    .hero.is-home .hero-shell {
+      width: min(1540px, calc(100% - clamp(32px, 4vw, 72px)));
+    }
+
+    body::before {
+      background:
+        linear-gradient(90deg, rgba(15, 13, 18, .34), transparent 24%, transparent 76%, rgba(15, 13, 18, .34)),
+        linear-gradient(180deg, rgba(15, 13, 18, .14), rgba(15, 13, 18, .54));
+    }
+
+    body::after {
+      background:
+        radial-gradient(ellipse 90% 45% at 50% 0%, rgba(212, 175, 110, .08), transparent 62%),
+        linear-gradient(180deg, rgba(15, 13, 18, .08), rgba(15, 13, 18, .48));
+    }
+
+    .topbar {
+    .hero-future-visual,
+    .home-trust-strip,
+    .home-game-card,
+    .home-process article,
+    .home-why article,
+    .home-reviews article,
+    .popular-card,
+    .service-card,
+    .detail-left,
+    .detail-step,
+    .detail-specs,
+    .order-card,
+    .order-card-body,
+    .summary-total,
+    .field-block,
+    .valorant-panel-card,
+    .order-options-panel,
+    .drawer,
+    .cart-item,
+    .faq-item,
+    .site-footer-inner,
+    .ely-sticky-order__btn {
+      background: rgba(18, 15, 18, .62);
+      border-color: rgba(212, 175, 110, .2);
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, .35),
+        inset 0 1px 0 rgba(255, 255, 255, .04);
+      backdrop-filter: blur(14px) saturate(115%);
+      -webkit-backdrop-filter: blur(14px) saturate(115%);
+    }
+
+    .order-card-body,
+    .summary-total {
+      background: transparent !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    .field-block,
+    .order-options-panel,
+    .valorant-panel-card,
+    .detail-step,
+    .detail-specs {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      background: rgba(18, 15, 18, 0.85) !important;
+    }
+
+    .home-game-card,
+
+    .btn-premium,
+    .btn-primary,
+    .btn-purchase,
+    #addToCart.btn-purchase,
+    .btn-checkout-primary {
+      border-color: rgba(212, 175, 110, .4);
+      background: linear-gradient(135deg, #d4af6e, #b8855a);
+      color: #171015;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, .34), 0 0 22px rgba(212, 175, 110, .16);
+    }
+
+    .btn-premium:hover,
+    .btn-primary:hover,
+    .btn-purchase:hover,
+    #addToCart.btn-purchase:hover,
+    .btn-checkout-primary:hover {
+      filter: brightness(1.06);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, .38), 0 0 28px rgba(212, 175, 110, .22);
+    }
+
+    .btn-checkout-primary:active {
+      transform: translateY(1px);
+      filter: brightness(0.98);
+    }
+
+    .btn-glass,
+
+    input::placeholder,
+    textarea::placeholder,
+    .site-search::placeholder,
+    .ely-opt-input::placeholder {
+      color: rgba(168, 158, 140, .72);
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus,
+    .site-search:focus,
+    .currency:focus,
+    .qty-stepper-input:focus,
+    .ely-opt-input:focus {
+      outline: none;
+      border-color: rgba(212, 175, 110, .52);
+      box-shadow: 0 0 0 3px rgba(212, 175, 110, .16), 0 0 22px rgba(212, 175, 110, .12);
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, rgba(212, 175, 110, .46), rgba(184, 133, 90, .34));
+      border-color: rgba(243, 234, 217, .05);
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, rgba(212, 175, 110, .58), rgba(184, 133, 90, .44));
+    }
+
+    .cat-btn.active,
+    .service-btn.active,
+    .tab-btn.active,
+    .raid-pill.active,
+    .game-menu-item.is-active,
+    .check-row:has(input:checked),
+    .ely-toggle-row:has(.ely-toggle-input:checked),
+    .event-switch:has(input:checked) {
+      border-color: rgba(212, 175, 110, .52) !important;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(212, 175, 110, .12), transparent 42%),
+        linear-gradient(165deg, rgba(24, 22, 31, .82), rgba(15, 13, 18, .76)) !important;
+      box-shadow:
+        0 0 0 1px rgba(212, 175, 110, .16),
+        0 0 22px rgba(212, 175, 110, .18),
+        inset 0 1px 0 rgba(255, 255, 255, .05) !important;
+    }
+
+    .ely-toggle-track,
+    .event-switch.event-mode-card.ely-event-mode .ely-toggle-track {
+      background: rgba(15, 13, 18, .72);
+      border-color: rgba(212, 175, 110, .2);
+      box-shadow: inset 0 1px 8px rgba(0, 0, 0, .34);
+    }
+
+    .ely-toggle-thumb,
+    .event-switch.event-mode-card.ely-event-mode .ely-toggle-thumb {
+      background: #f3ead9;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .34);
+    }
+
+    .ely-toggle-input:checked + .ely-toggle-ui .ely-toggle-track {
+      background: linear-gradient(90deg, rgba(184, 133, 90, .92), rgba(212, 175, 110, .82));
+      border-color: rgba(212, 175, 110, .52);
+      box-shadow: 0 0 18px rgba(212, 175, 110, .2), inset 0 1px 0 rgba(255, 255, 255, .14);
+    }
+
+    .ely-toggle-input:checked + .ely-toggle-ui .ely-toggle-thumb {
+      background: #fff7e8;
+      box-shadow: 0 0 12px rgba(212, 175, 110, .34), 0 2px 8px rgba(0, 0, 0, .3);
+    }
+
+    input[type="range"] {
+      accent-color: #d4af6e;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track,
+    .dual-range-track {
+      background: rgba(15, 13, 18, .72);
+      border-color: rgba(212, 175, 110, .18);
+    }
+
+    input[type="range"]::-webkit-slider-thumb,
+    input[type="range"]::-moz-range-thumb,
+    .dual-range input[type="range"]::-webkit-slider-thumb,
+    .dual-range input[type="range"]::-moz-range-thumb {
+      border-color: rgba(243, 234, 217, .88);
+      background: radial-gradient(circle at 38% 32%, #fff7e8, #d4af6e 40%, #8b5b34 86%);
+      box-shadow: 0 0 0 4px rgba(212, 175, 110, .14), 0 0 18px rgba(212, 175, 110, .26), 0 8px 18px rgba(0, 0, 0, .44);
+    }
+
+    .dual-range-fill,
+    input[type="range"]::-moz-range-progress {
+      background: linear-gradient(90deg, rgba(184, 133, 90, .78), rgba(212, 175, 110, .74));
+      box-shadow: 0 0 18px rgba(212, 175, 110, .18);
+    }
+
+    .cat-ribbon,
+    .home-coming-soon-badge,
+    .deal-chip,
+    .estimated-tag {
+      border-color: rgba(212, 175, 110, .28);
+      background: rgba(184, 133, 90, .22);
+      color: #f3ead9;
+    }
+
+    .order-trustpilot-cta {
+      body {
+        background-attachment: scroll;
+      }
+
+      .hero-future-visual,
+      .home-trust-strip,
+      .home-game-card,
+      .home-game-card.coming-soon,
+      .home-process article,
+      .home-why article,
+      .home-reviews article,
+      .service-card,
+      .detail-left,
+      .order-card,
+      .summary-total,
+      .field-block,
+      .drawer,
+      .faq-item,
+      .site-footer-inner {
+        background-color: rgba(20, 18, 26, .74);
+      }
+
+      .home-game-card,
+      .home-game-card.coming-soon {
+        min-height: 190px;
+      }
+
+      .category-scroll-column {
+        position: relative;
+      }
+
+      .category-scroll-column::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 5;
+        width: 44px;
+        pointer-events: none;
+        border-radius: 0 14px 14px 0;
+        background: linear-gradient(90deg, rgba(10, 8, 8, 0), rgba(10, 8, 8, .78));
+      }
+
+      .category-shell.is-static-centered .category-scroll-column::after,
+      .category-shell.is-tabs-centered .category-scroll-column::after {
+        display: none;
+      }
+
+      .toast {
+        bottom: 72px;
+      }
+    }
+
+/* TFT static centered category layout */
+/* ── Hide large arc price breakdown / order preview panels ───────────── */
+
+/* ── GÖREV 1: Hero animated trust counters ─────────────────────────── */
+/* ── GÖREV 2: Real review cards ─────────────────────────────────────── */
+/* ── GÖREV 5: Hero social proof band ────────────────────────────────── */
+/* ── Review kartları güncelleme — gerçek Trustpilot yorumları ─────────── */
+
+.ely-mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  height: 64px;
+  padding: 0 4px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: linear-gradient(180deg,
+    rgba(10, 8, 8, 0.96),
+    rgba(6, 5, 5, 0.99));
+  border-top: 1px solid rgba(212, 175, 110, 0.22);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.52);
+  grid-template-columns: repeat(4, 1fr);
+  align-items: stretch;
+  gap: 0;
+}
+
+@media (max-width: 768px) {
+  .ely-mobile-nav {
+    display: grid;
+  }
+
+  body {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.ely-mobile-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 8px 4px;
+  border: none;
+  background: transparent;
+  color: var(--ely-muted, #a89e8c);
+  font-family: var(--display, 'Rajdhani', sans-serif);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color .18s ease;
+  position: relative;
+  min-width: 0;
+}
+
+.ely-mobile-nav__item:hover,
+.ely-mobile-nav__item.is-active {
+  color: var(--ely-gold, #d4af6e);
+}
+
+.ely-mobile-nav__item.is-active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 2px;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(90deg, var(--ely-bronze, #b8855a), var(--ely-gold, #d4af6e));
+}
+
+.ely-mobile-nav__icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  transition: transform .18s ease;
+}
+
+.ely-mobile-nav__item:hover .ely-mobile-nav__icon,
+.ely-mobile-nav__item.is-active .ely-mobile-nav__icon {
+  transform: translateY(-1px);
+}
+
+.ely-mobile-nav__item--discord {
+  color: rgba(114, 137, 218, 0.75);
+}
+
+.ely-mobile-nav__item--discord:hover {
+  color: #8ea0f7;
+}
+
+.ely-mobile-nav__badge {
+  position: absolute;
+  top: 6px;
+  right: calc(50% - 18px);
+  min-width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--ely-bronze, #b8855a), var(--ely-gold, #d4af6e));
+  color: #0a0808;
+  font-size: 10px;
+  font-weight: 900;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  line-height: 1;
+}
+
+.ely-mobile-nav__badge[data-count="0"] {
+  display: none;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   DÜZELTME 1: Footer "on Trustpilot" link styling
+   ════════════════════════════════════════════════════════════════════════ */
+a.site-footer__stat--tp {
+   GÖREV 5 — Valorant amber overlay
+   ════════════════════════════════════════════════════════════════════════ */
+body[data-ely-game="valorant"] .hero {
+  background-blend-mode: overlay;
+}
+
+body[data-ely-game="valorant"] .hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgba(212, 175, 110, 0.08),
+    transparent 60%,
+    rgba(184, 133, 90, 0.06));
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 6 — Refund & Guarantee bölümü
+   ════════════════════════════════════════════════════════════════════════ */
+.ely-guarantee-strip {
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 3 — Booster profil kartları
+   ════════════════════════════════════════════════════════════════════════ */
+/* Tier 1 — Primary (48px) */
+.btn-premium,
+.btn-purchase,
+.add-to-cart-main,
+#addToCart {
+  min-height: 48px !important;
+}
+
+/* Tier 2 — Secondary (40px) */
+.btn,
+.btn-secondary,
+.btn-outline {
+  min-height: 40px !important;
+}
+
+/* Tier 3 — Compact (34px) */
+.btn-sm,
+.btn-compact {
+  min-height: 34px !important;
+}
+
+/* Input / Select / Textarea */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+select,
+textarea {
+  min-height: 40px !important;
+}
+
+/* Qty stepper */
+.qty-stepper,
+.qty-wrap {
+  min-height: 40px !important;
+}
+
+/* Gold slider thumb */
+input[type="range"] {
+  accent-color: var(--ely-gold, #d4af6e);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  width: 22px !important;
+  height: 22px !important;
+  background: var(--ely-gold, #d4af6e) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 22px !important;
+  height: 22px !important;
+  background: var(--ely-gold, #d4af6e) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+}
+
+/* Form labels */
+label,
+.form-label,
+.field-label {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 2 — Topbar Services fix
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* wrong-path block removed — correct path block below */
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 7 — Top Boosters section styles
+   ════════════════════════════════════════════════════════════════════════ */
+
+.ely-top-boosters {
+   GÖREV 1 — H1/H2 beyaz, section kicker mor
+   ════════════════════════════════════════════════════════════════════════ */
+
+h1, h2, .hero-title, #heroTitle {
+.home-section-kicker {
+  color: #c9a84c !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 3 — Grain texture overlay
+   ════════════════════════════════════════════════════════════════════════ */
+
+.ely-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GÖREV 4 — Order panel — correct bg path
+
+.ely-booster-card {
+   DÜZELTME 8 — Confirm strip
+   ════════════════════════════════════════════════════════════════════════ */
+
+.ely-confirm-strip {
+   DÜZELTME 2 — Reviews Discord link wrapper
+   ════════════════════════════════════════════════════════════════════════ */
+
+.ely-reviews-discord-link {
+.eb-grain {
+  position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+  opacity: 0.05; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* layout */
+.eb-container { max-width: 1360px; margin: 0 auto; padding: 0 48px; }
+@media (max-width: 900px) { .eb-container { padding: 0 28px; } }
+.eb-section { padding: 120px 0; position: relative; }
+
+/* Typography primitives — shared base rules now live in css/global.css.
+   The landing keeps only landing-specific tweaks below (outlined hero etc.). */
+
+/* buttons */
+.eb-btn {
+  display: inline-flex; align-items: center; gap: 14px;
+  font-family: var(--eb-f-display);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 18px 28px;
+  border-radius: 4px;
+  border: 1px solid var(--eb-line);
+  background: transparent;
+  color: var(--eb-text);
+  transition: all 0.35s ease;
+  position: relative;
+  cursor: pointer;
+}
+.eb-btn .arrow { transition: transform 0.35s ease; color: var(--eb-gold); }
+.eb-btn:hover { border-color: var(--eb-gold); color: var(--eb-gold-bright);
+  box-shadow: 0 0 32px -8px var(--eb-gold-glow), inset 0 0 32px -16px var(--eb-gold-glow); }
+.eb-btn:hover .arrow { transform: translateX(4px); color: var(--eb-gold-bright); }
+
+.eb-btn-primary {
+  background: linear-gradient(90deg, #8a7224 0%, #c9a84c 35%, #e5c26b 55%, #c9a84c 75%, #8a7224 100%);
+  background-size: 200% 100%;
+  color: #1a1208;
+  border: none;
+  box-shadow: 0 1px 0 rgba(255,220,150,0.45) inset, 0 12px 28px -12px var(--eb-gold-glow);
+  transition: background-position 0.5s ease, box-shadow 0.35s ease, transform 100ms ease-out;
+}
+.eb-btn-primary .arrow { color: #1a1208; }
+.eb-btn-primary:hover { color: #1a1208;
+  background-position: 100% 0;
+  box-shadow: 0 1px 0 rgba(255,220,150,0.45) inset, 0 16px 36px -10px var(--eb-gold-glow), 0 0 0 1px rgba(229,194,107,0.4); }
+.eb-btn-primary:hover .arrow { color: #1a1208; }
+
+/* travelling gold line */
+@keyframes arc-trace-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+.arc-hot-trace {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  border-radius: 4px;
+  opacity: 1;
+  overflow: hidden;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  padding: 1.5px;
+  filter: drop-shadow(0 0 4px rgba(201, 168, 76, 0.55));
+  z-index: 10;
+}
+.arc-hot-trace::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 250%; aspect-ratio: 1;
+  transform: translate(-50%, -50%) rotate(0deg);
+  background: conic-gradient(from 0deg,
+    transparent 0deg,
+    transparent 260deg,
+    rgba(201, 168, 76, 0.05) 280deg,
+    rgba(201, 168, 76, 0.20) 310deg,
+    rgba(201, 168, 76, 0.50) 335deg,
+    rgba(229, 194, 107, 0.95) 355deg,
+    rgba(229, 194, 107, 1)   360deg);
+  animation: arc-trace-spin 4.5s linear infinite;
+}
+.eb-btn-primary > .arc-hot-trace {
+  inset: -3px;
+  padding: 2px;
+  border-radius: 6px;
+}
+
+/* scroll reveal */
+.eb-reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+.eb-reveal.eb-in { opacity: 1; transform: translateY(0); }
+.eb-section { position: relative; }
+.eb-section.eb-section-entered::before {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 50% 40% at 50% 30%, rgba(212,175,110,0.04), transparent 70%);
+  animation: eb-section-enter 1.2s ease-out forwards;
+}
+
+/* ── HERO ── */
+body.tw-hero-centered .eb-hero-inner { text-align: center; }
+body.tw-hero-centered .eb-hero-copy {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center;
+}
+body.tw-hero-centered .eb-hero-copy .eb-body {
+  font-size: 22px !important;
+  max-width: 60ch;
+}
+body.tw-hero-centered .eb-hero-copy .eb-body { margin-left: auto; margin-right: auto; }
+body.tw-hero-centered .eb-hero-ctas { justify-content: center; }
+body.tw-hero-centered .eb-hero-stats { text-align: center; justify-content: center; }
+
+/* Landing hero outlined display — premium gold stroke, transparent center.
+   Strengthened stroke + larger responsive clamp than the shared .eb-h1 base
+   so the hero feels properly heroic without overflowing. !important is
+   required to override earlier landing-only !important rules at L10634
+   (`.hero h1 { font-size: ... !important }`) and L10998
+   (`h1 { color: white !important }`). */
+body.tw-title-outlined .eb-hero .eb-h1 {
+  font-size: clamp(64px, 8.5vw, 132px) !important;
+  color: transparent !important;
+  -webkit-text-stroke: 2px var(--gold-bright);
+  text-stroke: 2px var(--gold-bright);
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  /* Defeat `.hero.is-home h1 { max-width: 760px }` at L8271 so the hero
+     title can use the full hero-copy width instead of wrapping every word. */
+  max-width: 100% !important;
+  width: 100%;
+}
+body.tw-title-outlined .eb-hero .eb-h1 .gold {
+  color: transparent !important;
+  -webkit-text-stroke: 2px var(--gold-bright);
+}
+
+/* ── GAMES ── */
+.eb-games-rail-wrap { position: relative; }
+.eb-rail-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--eb-line-soft);
+  margin-bottom: 24px;
+}
+.eb-rail-eyebrow {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--eb-f-mono); font-size: 11px; letter-spacing: 0.32em;
+  color: var(--eb-text-dim); text-transform: uppercase;
+}
+.eb-rail-eyebrow .diamond {
+  display: inline-block; width: 6px; height: 6px;
+  background: var(--eb-gold); transform: rotate(45deg);
+}
+.eb-rail-discord {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--eb-f-display); font-weight: 600;
+  font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--eb-gold-bright);
+  padding: 12px 18px;
+  border: 1px solid var(--eb-line);
+  background: rgba(201,168,76,0.06);
+  text-decoration: none;
+  transition: all 0.35s ease;
+}
+.eb-rail-discord:hover {
+  border-color: var(--eb-gold);
+  background: rgba(201,168,76,0.12);
+  box-shadow: 0 0 32px -8px var(--eb-gold-glow);
+}
+
+.eb-rail-stage { position: relative; overflow: visible; }
+.eb-rail-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 40px; height: 40px; z-index: 3;
+  background: rgba(10,8,5,0.85);
+  border: 1px solid var(--eb-line);
+  color: var(--eb-gold-bright);
+  font-family: var(--eb-f-display); font-size: 22px; line-height: 1;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: grid; place-items: center;
+}
+.eb-rail-nav:hover { border-color: var(--eb-gold); background: rgba(201,168,76,0.12); }
+.eb-rail-nav.prev { left: -8px; }
+.eb-rail-nav.next { right: -8px; }
+
+.eb-games-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(260px, 1fr);
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 16px;
+  padding: 4px 8px 16px;
+  scrollbar-width: none;
+}
+.eb-games-rail::-webkit-scrollbar { display: none; }
+
+.eb-scard {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  min-height: 280px;
+  overflow: hidden;
+  border: 1px solid var(--eb-line-soft);
+  background: #08060a;
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), border-color 0.4s ease, box-shadow 0.4s cubic-bezier(0.22,1,0.36,1);
+  text-decoration: none;
+  color: inherit;
+}
+.eb-scard:hover {
+  transform: translateY(-6px);
+  border-color: var(--eb-gold);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.55), 0 0 40px -8px rgba(212,175,110,0.12);
+}
+.eb-scard.eb-soon { cursor: default; pointer-events: none; }
+.eb-scard.eb-soon:hover { transform: none; border-color: var(--eb-line-soft); box-shadow: none; }
+.eb-scard-art {
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 12px, transparent 12px 24px),
+    var(--art-tint, linear-gradient(180deg, #1a2238 0%, #1a1208 100%));
+}
+.eb-scard-art::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 0%, transparent 30%, rgba(10,8,5,0.7) 75%, rgba(10,8,5,0.95) 100%);
+}
+.eb-scard-bg-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: left center;
+  z-index: 0;
+}
+.eb-scard-bigword {
+  position: absolute; left: 50%; top: 38%;
+  transform: translate(-50%, -50%);
+  font-family: var(--eb-f-display); font-weight: 700;
+  font-size: 64px; letter-spacing: 0.04em; text-transform: uppercase;
+  color: rgba(255,255,255,0.06);
+  -webkit-text-stroke: 1px rgba(255,255,255,0.08);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.eb-scard-badge {
+  position: absolute; top: 16px; right: 16px;
+  padding: 6px 10px;
+  font-family: var(--eb-f-mono); font-size: 9px; letter-spacing: 0.28em;
+  text-transform: uppercase;
+  background: rgba(10,8,5,0.85);
+  border: 1px solid var(--eb-line-soft);
+  z-index: 1;
+}
+.eb-scard-badge.soon { color: var(--eb-text-faint); }
+.eb-scard-meta {
+  position: absolute; left: 18px; right: 18px; bottom: 18px;
+  display: flex; flex-direction: column; gap: 8px;
+  z-index: 1;
+}
+.eb-scard-tag {
+  font-family: var(--eb-f-mono); font-size: 9px; letter-spacing: 0.32em;
+  color: var(--accent, var(--eb-gold)); text-transform: uppercase;
+}
+.eb-scard-name {
+  font-family: var(--eb-f-display); font-weight: 700;
+  font-size: 22px; line-height: 1.05;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--eb-text);
+}
+.eb-scard.eb-soon .eb-scard-name { color: var(--eb-text-dim); }
+
+/* ── HOW IT WORKS ── */
+/* ── FAQ ── */
+/* ── FOOTER ── */
+   Shared base (.eb-page-bg) lives in css/components.css.
+   Below extras only apply on landing where styles.css loads:
+   the -80px overlap and the ::before/::after fades exist to
+   interlock with .eb-hero-fade. Subpages (Arc, Valorant) use
+   their own hero seams and don't want this overlap. */
+.eb-page-bg {
+  margin-top: -80px;
+}
+.eb-page-bg::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 240px;
+  background: linear-gradient(180deg, rgba(5,4,2,1) 0%, rgba(5,4,2,0.6) 30%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+}
+.eb-page-bg::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 240px;
+  background: linear-gradient(0deg, rgba(5,4,2,1) 0%, rgba(5,4,2,0.6) 30%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+  .eb-games-featured { grid-template-columns: 1fr; }
+  .eb-games-head { grid-template-columns: 1fr; }
+  .eb-games-head .eb-body { text-align: left; }
+  .eb-rail-nav { display: none; }
+  .eb-reviews { grid-template-columns: repeat(2, 1fr); }
+  .eb-steps { grid-template-columns: 1fr; }
+  .eb-why-grid { grid-template-columns: 1fr; gap: 56px; }
+  .eb-features { grid-template-columns: 1fr; row-gap: 36px; }
+  .eb-hero-stats { grid-template-columns: repeat(2, 1fr); }
+  .eb-stat:nth-child(2) { border-right: none; }
+}
+@media (max-width: 720px) {
+  .eb-reviews { grid-template-columns: 1fr; }
+  .eb-section { padding: 80px 0; }
+  .eb-faq-btn, .eb-faq-a { grid-template-columns: 60px 1fr auto; gap: 18px; }
+  .eb-footer-grid { grid-template-columns: 1fr; }
+  .eb-footer-links, .eb-footer-social { justify-content: flex-start; }
+  .eb-rail-head { flex-direction: column; align-items: flex-start; }
+  .eb-hero { min-height: 85vh; padding: 120px 0 60px; }
+  .eb-hero-stats { margin-inline: 0; }
+}
+
+/* Keep JS-controlled hero placeholders hidden on home page */
+/* ══════════════════════════════════════════════════════════════

@@ -26,8 +26,8 @@ Make sure you have:
 ## Step 2 — Clone and Open
 
 ```bash
-git clone https://github.com/ElysiumBoost/ElysiumBoost.git
-cd ElysiumBoost
+git clone https://github.com/ElysiumBoost/elysium.new.git
+cd elysium.new
 claude
 ```
 

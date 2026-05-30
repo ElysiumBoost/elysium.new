@@ -33,11 +33,33 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Prepare web root
+        run: |
+          mkdir -p _site
+          rsync -a \
+            --exclude='_site' \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='design-extract' \
+            --exclude='supabase-schema.sql' \
+            --exclude='.claude' \
+            --exclude='.agents' \
+            --exclude='tools' \
+            --exclude='skills-lock.json' \
+            --exclude='preview.bat' \
+            --exclude='preview.ps1' \
+            --exclude='package.json' \
+            --exclude='package-lock.json' \
+            --exclude='CLAUDE.md' \
+            --exclude='DESIGN.md' \
+            --exclude='SETUP.md' \
+            --exclude='AGENTS.md' \
+            --exclude='README_BACKGROUND_MAP.txt' \
+            . _site/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          path: '_site'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5

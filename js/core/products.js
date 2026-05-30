@@ -158,14 +158,14 @@
     const ranks = ["Rookie I", "Rookie II", "Rookie III", "Tryhard I", "Tryhard II", "Tryhard III", "Wildcard I", "Wildcard II", "Wildcard III", "Daredevil I", "Daredevil II", "Daredevil III", "Hotshot"];
 
     const valorantCategories = [
-      { id: "rank-boosting", label: "Rank Boosting", icon: "rank", badge: null, badgeType: null, featured: true, thumb: "assets/Rank Boosting.webp" },
-      { id: "placement-matches", label: "Placement Matches", icon: "placement", badge: null, badgeType: null, featured: false, thumb: "assets/Placement Matches.webp" },
-      { id: "radiant-boost", label: "Radiant Boost", icon: "radiant", badge: "HOT", badgeType: "hot", featured: false, thumb: "assets/Raidant Boost.webp" },
-      { id: "ranked-wins", label: "Ranked Wins", icon: "wins", badge: null, badgeType: null, featured: false, thumb: "assets/Ranked Wins.webp" },
-      { id: "unrated-games", label: "Unrated Games", icon: "unrated", badge: null, badgeType: null, featured: false, thumb: "assets/Unrated Matches.webp" },
-      { id: "account-leveling", label: "Account Leveling", icon: "leveling", badge: null, badgeType: null, featured: false, thumb: "assets/account leveling.webp" },
-      { id: "battle-pass", label: "Battle Pass", icon: "battle-pass", badge: "NEW", badgeType: "new", featured: false, thumb: "assets/Battle Pass.webp" },
-      { id: "coaching", label: "Coaching", icon: "coaching", badge: null, badgeType: null, featured: false, thumb: "assets/Coaching.webp" }
+      { id: "rank-boosting", label: "Rank Boosting", icon: "rank", badge: null, badgeType: null, featured: true, thumb: "assets/rank-boosting.webp" },
+      { id: "placement-matches", label: "Placement Matches", icon: "placement", badge: null, badgeType: null, featured: false, thumb: "assets/placement-matches.webp" },
+      { id: "radiant-boost", label: "Radiant Boost", icon: "radiant", badge: "HOT", badgeType: "hot", featured: false, thumb: "assets/radiant-boost.webp" },
+      { id: "ranked-wins", label: "Ranked Wins", icon: "wins", badge: null, badgeType: null, featured: false, thumb: "assets/ranked-wins.webp" },
+      { id: "unrated-games", label: "Unrated Games", icon: "unrated", badge: null, badgeType: null, featured: false, thumb: "assets/unrated-matches.webp" },
+      { id: "account-leveling", label: "Account Leveling", icon: "leveling", badge: null, badgeType: null, featured: false, thumb: "assets/account-leveling.webp" },
+      { id: "battle-pass", label: "Battle Pass", icon: "battle-pass", badge: "NEW", badgeType: "new", featured: false, thumb: "assets/battle-pass.webp" },
+      { id: "coaching", label: "Coaching", icon: "coaching", badge: null, badgeType: null, featured: false, thumb: "assets/coaching.webp" }
     ];
 
     const wowCategories = [
@@ -299,8 +299,8 @@
         id: "wow",
         label: "World of Warcraft",
         tabIcon: "i-star",
-        homeCardImage: "assets/backgrounds/wow22.webp",
-        heroBg: "assets/backgrounds/wow22.webp",
+        homeCardImage: "assets/backgrounds/ana1.webp",
+        heroBg: "assets/backgrounds/ana1.webp",
         heroPosition: "center center",
         kicker: "World of Warcraft Boost",
         title: "World of Warcraft Services",
@@ -327,7 +327,7 @@
         id: "arc",
         label: "Arc Raiders",
         tabIcon: "i-raid",
-        homeCardImage: "assets/backgrounds/arc-raiders-home-card.webp?v=social-card-live1",
+        homeCardImage: "assets/backgrounds/arc-raiders-bg.webp?v=social-card-live1",
         heroBg: "assets/backgrounds/arc-raiders-bg.webp?v=social-card-live1",
         heroPosition: "center center",
         kicker: "Arc Raiders",

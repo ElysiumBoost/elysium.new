@@ -70,12 +70,12 @@ Defined in `css/global.css:17-47`. Do not introduce new color or font variables 
 
 ### Type stack
 ```
---f-display  "Space Grotesk", "Rajdhani", "Plus Jakarta Sans", system-ui, sans-serif
---f-body     "Space Grotesk", "Plus Jakarta Sans", system-ui, sans-serif
+--f-display  "Rajdhani", "Plus Jakarta Sans", "Space Grotesk", system-ui, sans-serif
+--f-body     "Plus Jakarta Sans", "Space Grotesk", system-ui, sans-serif
 --f-mono     "JetBrains Mono", ui-monospace, monospace
 ```
 
-`Space Grotesk` is loaded via Google Fonts at the top of `css/global.css`. `JetBrains Mono` is loaded elsewhere in the page.
+`JetBrains Mono` is loaded in the page `<head>`. `Space Grotesk` is a fallback only — not loaded; `css/global.css:6` notes it was removed.
 
 ---
 
@@ -287,7 +287,7 @@ When building anything new, copy the language of these existing components. Do n
 | Nav search | `css/components.css:184` | `.eb-search-toggle` + `.eb-search-dropdown` (sharp 3px backdrop-blur dropdown) |
 | Nav currency | `css/components.css:138` | `select.eb-currency` (transparent, sharp 3px, mono 10-11px) |
 | Sign-in glass capsule | `css/components.css:286` | `.eb-signin` (999px pill with 3 drifting brand-tinted blobs behind blur + outside-right `.eb-signin-sub` "LOGIN" link) |
-| Cart V2 dropdown | `css/styles.css` (post-`/* EB CART V2 */`) | `.drawer.eb-cart-panel`, `.eb-cart-head`, `.eb-cart-foot`, `.eb-cart-summary`, `.eb-cart-total`, `.eb-cart-promo`, `.eb-cart-actions`, `.eb-cart-trust`, `.eb-cart-receipt`, `.cart-empty-card.eb-cart-empty` |
+| Cart V2 dropdown | `css/pages/home/cart.css` | `.drawer.eb-cart-panel`, `.eb-cart-head`, `.eb-cart-foot`, `.eb-cart-summary`, `.eb-cart-total`, `.eb-cart-promo`, `.eb-cart-actions`, `.eb-cart-trust`, `.eb-cart-receipt`, `.cart-empty-card.eb-cart-empty` |
 | Primary CTA (gold) | `css/global.css:162` | `.eb-btn-primary` (gold gradient + inset highlight + gold-glow drop) |
 | Secondary CTA (outline) | `css/global.css:144` | `.eb-btn` (transparent + line border + inset gold-glow on hover) |
 | Shield card | `css/components.css:471` | `.val-shield-card` (28px padding, 44px gold-bordered mark, mono body) |
@@ -296,7 +296,7 @@ When building anything new, copy the language of these existing components. Do n
 | FAQ accordion | `css/components.css:624` | `.eb-faq-row` (gold accent on open, rotating plus icon) |
 | Footer | `css/components.css:414` | `.eb-footer` (3-col, gold border-top, mono base bar) |
 | Travelling-line trace | `css/components.css:678` | `.arc-hot-trace` (with `@property --arc-trace-angle` from global.css:10) |
-| Landing hero | `css/styles.css:11948` | `.eb-hero` (full-bleed video + tint + fade + vignette + haze + scroll hint) |
+| Landing hero | `css/pages/home/hero.css` | `.eb-hero` (full-bleed video + tint + fade + vignette + haze + scroll hint) |
 
 ---
 
@@ -357,7 +357,7 @@ These break the visual register. The audit and visual-fix skills should call the
 
 ## 10. Cart Design Rules
 
-The cart must feel native to ElysiumBoost. Reference: cart V2 dropdown in `css/styles.css` (post-`/* EB CART V2 */` block).
+The cart must feel native to ElysiumBoost. Reference: cart V2 dropdown in `css/pages/home/cart.css`.
 
 ### Use white cart references only for information hierarchy
 Acceptable from white references: summary title, item count, subtotal, taxes/discount, final payment, promo input, checkout buttons.
