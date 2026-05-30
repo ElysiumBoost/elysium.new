@@ -72,16 +72,22 @@
   var SERVICE_BADGES = {
     'custom-loadout':   ['recommended'],
     'all-weapons':      ['pricedrop'],
-    'blueprints':       ['hot', 'popular'],
+    'blueprints':       ['hot'],
     'materials':        ['popular'],
     'raider-coins':     ['hot', 'recommended'],
-    'expedition-boost': ['hot']
+    'expedition-boost': ['hot'],
+    'trials-boost':     ['pricedrop']
   };
   var BADGE_META = {
     hot:         { label: 'Hot' },
     pricedrop:   { label: 'Price Drop' },
     recommended: { label: 'Recommended' },
     popular:     { label: 'Popular' }
+  };
+  var TAB_BADGES = {
+    'custom-loadout': 'recommended',
+    'blueprints':     'hot',
+    'trials-boost':   'pricedrop'
   };
 
   var BUNDLES = [
@@ -404,7 +410,7 @@
   var elServiceNav = $('arcServiceNav');
   var elBackBtn = $('arcBackBtn');
   var elArtBack = $('arcArtBack');
-  var elReviewsRail = $('arcReviewsRail');
+  var elReviewsRail = null; // reviews section removed
   var elFaqList = $('arcFaqList');
   var elFooter = $('siteFooter');
 
@@ -596,8 +602,10 @@
     if (!elServiceNav) return;
     elServiceNav.innerHTML = SERVICES.map(function (svc) {
       var on = svc.id === activeId;
+      var tabBadge = TAB_BADGES[svc.id];
+      var badgeHtml = tabBadge ? '<sup class="arc-pill-badge arc-pill-badge--' + tabBadge + '">' + BADGE_META[tabBadge].label.toUpperCase() + '</sup>' : '';
       return '<button type="button" class="arc-svc-pill' + (on ? ' on' : '') + '" data-service="' + svc.id + '"' +
-        (on ? ' aria-current="true"' : '') + '>' + escHtml(svc.name) + '</button>';
+        (on ? ' aria-current="true"' : '') + '>' + escHtml(svc.name) + badgeHtml + '</button>';
     }).join('');
     // Keep the active pill in view
     var activePill = qs('.arc-svc-pill.on', elServiceNav);
@@ -664,10 +672,10 @@
         '<div class="arc-select-wrap"><select class="arc-select" id="cl' + side + 'Weapon">' +
           WEAPONS.map(function (w) { return '<option value="' + escHtml(w) + '">' + escHtml(w) + '</option>'; }).join('') +
         '</select></div>' +
-        '<div class="arc-modtoggle arc-modtoggle--stack" id="cl' + side + 'Mod">' +
-          '<button type="button" class="on" data-mod="none">No Mods</button>' +
-          '<button type="button" data-mod="legendary">Legendary / Epic <span class="price">+0.10</span></button>' +
-        '</div>' +
+        '<button type="button" class="arc-modtoggle-single" id="cl' + side + 'Mod" data-mod="none">' +
+          '<span class="arc-modtoggle-single-lbl">Legendary / Epic Mods</span>' +
+          '<span class="arc-modtoggle-single-price">+$0.10</span>' +
+        '</button>' +
         '<div class="arc-weapon-col-qty" id="cl' + side + 'Qty"></div>' +
       '</div>';
     }
@@ -690,7 +698,7 @@
           '<h3 class="arc-card-title">Augments</h3>' +
           '<span class="arc-card-sub">Set quantity</span>' +
         '</div>' +
-        '<div class="arc-gear-stack" id="clAugments"></div>' +
+        '<div class="arc-gear-fade-wrap"><div class="arc-gear-stack arc-gear-stack--scroll" id="clAugments"></div></div>' +
       '</div>' +
 
       '<div class="arc-card">' +
@@ -707,7 +715,7 @@
           '<span class="arc-card-eyebrow">◆</span>' +
           '<h3 class="arc-card-title">Quick Use Bundles</h3>' +
         '</div>' +
-        '<div class="arc-quick arc-quick--scroll" id="clQuickGrid"></div>' +
+        '<div class="arc-quick-fade-wrap"><div class="arc-quick arc-quick--scroll" id="clQuickGrid"></div></div>' +
       '</div>';
 
     // Wire up weapon steppers
@@ -721,14 +729,15 @@
     var priMod = 'none';
     var secMod = 'none';
 
-    function bindModToggle(containerId, setCb) {
-      var container = $(containerId);
-      container.addEventListener('click', function (e) {
-        var btn = e.target.closest('button[data-mod]');
-        if (!btn) return;
-        qsa('button', container).forEach(function (b) { b.classList.remove('on'); });
-        btn.classList.add('on');
-        setCb(btn.getAttribute('data-mod'));
+    function bindModToggle(btnId, setCb) {
+      var btn = $(btnId);
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var isOn = btn.getAttribute('data-mod') === 'legendary';
+        var next = isOn ? 'none' : 'legendary';
+        btn.setAttribute('data-mod', next);
+        btn.classList.toggle('on', !isOn);
+        setCb(next);
         syncCart();
       });
     }
@@ -1489,9 +1498,23 @@
      CONFIGURATOR: DEPOSITARY
      ════════════════════════════════════════════════════════════ */
   function renderDepositaryConfig() {
-    var PRICE_PER_SLOT = 35; // $0.35 => 35 cents
+    var PRICE_PER_SLOT = 35;
     var MIN_SLOTS = 20;
     var MAX_SLOTS = 280;
+    var DISC_TIERS = [
+      { min: 50, pct: 5 },
+      { min: 100, pct: 10 },
+      { min: 200, pct: 15 },
+      { min: 280, pct: 20 }
+    ];
+
+    function getDepDiscount(slots) {
+      var best = 0;
+      for (var i = 0; i < DISC_TIERS.length; i++) {
+        if (slots >= DISC_TIERS[i].min) best = DISC_TIERS[i].pct;
+      }
+      return best;
+    }
 
     configPanel.innerHTML =
       '<div class="arc-card">' +
@@ -1505,7 +1528,15 @@
             '<span class="arc-fromto-num" id="depNum">' + MIN_SLOTS + '</span>' +
           '</div>' +
         '</div>' +
+        '<div class="arc-dep-tiers" id="depTiers">' +
+          DISC_TIERS.map(function (t) {
+            return '<span class="arc-dep-tier" data-pct="' + t.pct + '" data-min="' + t.min + '">' +
+              t.min + (t.min < MAX_SLOTS ? '+' : '') + ' <span class="arc-dep-tier-pct">' + t.pct + '% OFF</span>' +
+            '</span>';
+          }).join('') +
+        '</div>' +
         '<input type="range" class="arc-rc-slider" id="depSlider" min="' + MIN_SLOTS + '" max="' + MAX_SLOTS + '" step="1" value="' + MIN_SLOTS + '">' +
+        '<div class="arc-dep-discount" id="depDiscount"></div>' +
         '<div class="arc-stepper-wide" style="margin-top:14px"><div id="depStepper"></div></div>' +
         '<p class="arc-panel-desc">Your selected slots are transferred to clean storage accounts and delivered after expedition. Any loss or in-game theft during the process is fully compensated.</p>' +
       '</div>';
@@ -1513,10 +1544,21 @@
     var slider = $('depSlider');
     var numEl = $('depNum');
 
+    function updateDepUI(slots) {
+      var disc = getDepDiscount(slots);
+      qsa('.arc-dep-tier', configPanel).forEach(function (el) {
+        var tierPct = parseInt(el.getAttribute('data-pct'), 10);
+        el.classList.toggle('active', tierPct === disc && disc > 0);
+      });
+      var discEl = $('depDiscount');
+      if (discEl) discEl.textContent = disc > 0 ? 'ACTIVE DISCOUNT: ' + disc + '% OFF' : '';
+    }
+
     var stepper = createStepper(MIN_SLOTS, MIN_SLOTS, MAX_SLOTS, function (v) {
       slider.value = v;
       updateSliderFill();
       numEl.textContent = v;
+      updateDepUI(v);
       syncCart();
     });
     $('depStepper').appendChild(stepper);
@@ -1532,15 +1574,20 @@
       stepper.setValue(v);
       numEl.textContent = v;
       updateSliderFill();
+      updateDepUI(v);
       syncCart();
     });
 
     function syncCart() {
       var slots = stepper.getValue();
-      cart.replaceAll([{ id: 'dep', name: 'Depositary Slots', qty: slots, price: slots * PRICE_PER_SLOT, color: '#b794d6', sub: slots + ' slots' }]);
+      var disc = getDepDiscount(slots);
+      var price = Math.round(slots * PRICE_PER_SLOT * (1 - disc / 100));
+      var sub = slots + ' slots' + (disc > 0 ? ' · ' + disc + '% off' : '');
+      cart.replaceAll([{ id: 'dep', name: 'Depositary Slots', qty: slots, price: price, color: '#b794d6', sub: sub }]);
     }
 
     updateSliderFill();
+    updateDepUI(MIN_SLOTS);
     syncCart();
   }
 
@@ -1644,25 +1691,49 @@
 
     var currentAmount = RC_MIN;
 
+    function getNextTier() {
+      for (var i = TIERS.length - 1; i >= 0; i--) {
+        if (currentAmount < TIERS[i].threshold) return TIERS[i];
+      }
+      return null;
+    }
+
+    function updateRcHint() {
+      var hintEl = $('rcHint');
+      if (!hintEl) return;
+      var nextT = getNextTier();
+      var newClass, newHtml;
+      if (nextT && currentAmount < RC_MAX) {
+        newClass = 'arc-rc-hint';
+        newHtml = '<span class="pct">' + Math.round(nextT.disc * 100) + '%</span> discount at ' + fmtShort(nextT.threshold) + ' — add ' + fmtShort(nextT.threshold - currentAmount) + ' more';
+      } else if (currentAmount >= RC_MAX) {
+        newClass = 'arc-rc-hint max';
+        newHtml = '<span class="pct">MAX</span> Maximum tier unlocked — 25% discount applied';
+      } else {
+        hintEl.hidden = true;
+        return;
+      }
+      if (hintEl.className !== newClass) {
+        hintEl.style.opacity = '0';
+        requestAnimationFrame(function () {
+          hintEl.className = newClass;
+          hintEl.innerHTML = newHtml;
+          hintEl.hidden = false;
+          hintEl.style.opacity = '1';
+        });
+      } else {
+        hintEl.className = newClass;
+        hintEl.innerHTML = newHtml;
+        hintEl.hidden = false;
+      }
+    }
+
     function render() {
       var disc = getDiscount(currentAmount);
       var priceCents = calcPrice(currentAmount);
       var pct = ((currentAmount - RC_MIN) / (RC_MAX - RC_MIN)) * 100;
 
-      // Next tier hint
-      var hintHtml = '';
-      var nextTier = null;
-      for (var i = TIERS.length - 1; i >= 0; i--) {
-        if (currentAmount < TIERS[i].threshold) { nextTier = TIERS[i]; break; }
-      }
-      if (nextTier && currentAmount < RC_MAX) {
-        hintHtml = '<div class="arc-rc-hint">' +
-          '<span class="pct">' + Math.round(nextTier.disc * 100) + '%</span> discount at ' + fmtShort(nextTier.threshold) +
-          ' — add ' + fmtShort(nextTier.threshold - currentAmount) + ' more' +
-        '</div>';
-      } else if (currentAmount >= RC_MAX) {
-        hintHtml = '<div class="arc-rc-hint max"><span class="pct">MAX</span> Maximum tier unlocked — 25% discount applied</div>';
-      }
+      var hintHtml = '<div class="arc-rc-hint" id="rcHint" hidden></div>';
 
       configPanel.innerHTML =
         '<div class="arc-card">' +
@@ -1703,6 +1774,7 @@
       // Slider fill
       var slider = $('rcSlider');
       slider.style.setProperty('--p', pct + '%');
+      updateRcHint();
 
       slider.addEventListener('input', function () {
         currentAmount = parseInt(slider.value, 10);
@@ -1713,6 +1785,7 @@
         var d = getDiscount(currentAmount), pc = calcPrice(currentAmount);
         if (bigEl) bigEl.textContent = fmtShort(currentAmount);
         if (subEl) subEl.innerHTML = fmtDollar(pc) + (d > 0 ? ' <span class="arc-sd-disc">−' + Math.round(d * 100) + '%</span>' : '');
+        updateRcHint();
         syncCart();
       });
       slider.addEventListener('change', render);
@@ -2181,7 +2254,7 @@
 
         '<div class="arc-card">' +
           '<div class="arc-card-head"><h3 class="arc-card-title">Session Type</h3></div>' +
-          '<div class="arc-pilltoggle" id="coachSession">' +
+          '<div class="arc-pilltoggle arc-pilltoggle--coach" id="coachSession">' +
             '<button type="button" data-sess="duo"' + (session === 'duo' ? ' class="on"' : '') + '>Duo <span class="pct">$' + (PRICES.duo / 100).toFixed(0) + '/hr</span></button>' +
             '<button type="button" data-sess="trio"' + (session === 'trio' ? ' class="on"' : '') + '>Trio <span class="pct">$' + (PRICES.trio / 100).toFixed(0) + '/hr</span></button>' +
             '<button type="button" data-sess="group"' + (session === 'group' ? ' class="on"' : '') + '>Group <span class="pct">$' + (PRICES.group / 100).toFixed(0) + '/hr</span></button>' +
@@ -2892,7 +2965,6 @@
   initSidebarBadges();
   initServiceSearch();
   syncNavBadge();
-  renderReviews();
   renderFaqs();
 
 })();
