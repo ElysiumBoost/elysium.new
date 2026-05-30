@@ -10908,7 +10908,7 @@ h1, h2, .hero-title, #heroTitle {
   inset: 0;
   z-index: 9998;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0.045;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 200px 200px;
@@ -11386,8 +11386,16 @@ h1, h2, .hero-title, #heroTitle {
 }
 
 /* scroll reveal */
-.eb-reveal { opacity: 0; transform: translateY(16px); transition: opacity 1s cubic-bezier(0.2,0.7,0.2,1), transform 1s cubic-bezier(0.2,0.7,0.2,1); }
+.eb-reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
 .eb-reveal.eb-in { opacity: 1; transform: translateY(0); }
+.eb-section { position: relative; }
+.eb-section.eb-section-entered::before {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 50% 40% at 50% 30%, rgba(212,175,110,0.04), transparent 70%);
+  animation: eb-section-enter 1.2s ease-out forwards;
+}
 
 /* ── HERO ── */
 .eb-hero {
@@ -11406,66 +11414,151 @@ h1, h2, .hero-title, #heroTitle {
   content: "";
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  height: 200px;
-  background: linear-gradient(180deg, transparent 0%, #0a0805 100%);
+  height: 120px;
+  background: linear-gradient(180deg, transparent 0%, #050402 100%);
   pointer-events: none;
-  z-index: 2;
+  z-index: 5;
 }
 .eb-hero-video {
-  position: absolute;
-  top: 0; left: 0;
+  position: absolute; top: 0; left: 0;
   width: 100%; height: 100%;
   object-fit: cover;
-  border: 0;
-  filter: saturate(1.1) contrast(1.05);
-  z-index: 0;
-}
-.eb-hero-tint {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.45);
-  pointer-events: none;
-  z-index: 0;
-}
-.eb-hero-fade {
-  position: absolute;
-  bottom: 0; left: 0;
-  width: 100%; height: 320px;
-  background: linear-gradient(180deg, transparent 0%, rgba(5,4,2,0.95) 85%, rgba(5,4,2,1) 100%);
-  pointer-events: none;
   z-index: 1;
 }
-.eb-hero-fallback {
+.eb-hero-cosmic {
   position: absolute; inset: 0; z-index: 0;
-  background:
-    radial-gradient(70% 60% at 50% 90%, rgba(217,119,87,0.55) 0%, transparent 60%),
-    radial-gradient(60% 50% at 50% 70%, rgba(229,194,107,0.32) 0%, transparent 65%),
-    radial-gradient(80% 70% at 50% 30%, rgba(201,168,76,0.18) 0%, transparent 70%),
-    linear-gradient(180deg, #050402 0%, #0c0805 30%, #1a1108 60%, #2a1a0d 85%, #3a2410 100%);
+  background: url('../assets/backgrounds/elysium-cosmic-base.webp') center 35% / cover no-repeat;
+  will-change: transform;
+  animation: eb-kenburns 50s ease-in-out infinite alternate;
 }
-.eb-hero-vignette {
+.eb-hero-depth {
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background:
-    radial-gradient(120% 80% at 50% 45%, transparent 38%, rgba(5,4,2,0.55) 78%, rgba(5,4,2,0.95) 100%),
-    linear-gradient(180deg, rgba(5,4,2,0.0) 50%, rgba(5,4,2,0.55) 80%, var(--bg, #0a0805) 100%),
-    linear-gradient(180deg, rgba(5,4,2,0.55) 0%, transparent 18%),
-    linear-gradient(90deg, rgba(5,4,2,0.65) 0%, rgba(5,4,2,0.25) 35%, transparent 55%);
+    linear-gradient(180deg, #050402 0%, rgba(5,4,2,0.85) 25%, transparent 45%, transparent 70%, rgba(5,4,2,0.80) 88%, #050402 100%),
+    linear-gradient(90deg, rgba(5,4,2,0.55) 0%, transparent 15%, transparent 85%, rgba(5,4,2,0.55) 100%);
 }
-.eb-hero-haze {
-  position: absolute; inset: -8%; z-index: 1; pointer-events: none;
-  mix-blend-mode: screen;
+.eb-hero-glow {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
   background:
-    radial-gradient(38% 30% at 28% 78%, rgba(217,119,87,0.22), transparent 70%),
-    radial-gradient(34% 28% at 72% 82%, rgba(229,194,107,0.20), transparent 70%);
-  animation: eb-haze 22s ease-in-out infinite alternate;
+    radial-gradient(80% 60% at 50% 85%, rgba(212,175,110,0.10) 0%, transparent 70%),
+    radial-gradient(60% 50% at 75% 25%, rgba(184,133,90,0.07) 0%, transparent 65%);
+  animation: eb-glow-breathe 8s ease-in-out infinite alternate;
 }
-@keyframes eb-haze {
-  0%   { transform: translate(-1%, -1%) scale(1.00); }
-  100% { transform: translate( 1%,  1%) scale(1.04); }
+.eb-hero-stars {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  overflow: hidden;
+}
+.eb-hero-stars::before,
+.eb-hero-stars::after {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 0;
+}
+.eb-hero-stars::before {
+  box-shadow:
+    120px 80px 0 0 rgba(255,255,255,0.35),
+    340px 150px 0 0 rgba(255,255,255,0.2),
+    560px 60px 0 0 rgba(255,255,255,0.4),
+    780px 200px 0 0 rgba(255,255,255,0.15),
+    920px 90px 0 0 rgba(255,255,255,0.3),
+    1100px 170px 0 0 rgba(255,255,255,0.25),
+    1300px 50px 0 0 rgba(255,255,255,0.35),
+    200px 300px 0 0 rgba(255,255,255,0.2),
+    450px 380px 0 0 rgba(255,255,255,0.45),
+    680px 320px 0 0 rgba(255,255,255,0.15),
+    850px 400px 0 0 rgba(255,255,255,0.3),
+    1050px 350px 0 0 rgba(255,255,255,0.2),
+    1250px 290px 0 0 rgba(255,255,255,0.4),
+    150px 480px 0 0 rgba(255,255,255,0.25),
+    380px 520px 0 0 rgba(255,255,255,0.15),
+    600px 550px 0 0 rgba(255,255,255,0.35),
+    820px 500px 0 0 rgba(255,255,255,0.2),
+    1000px 560px 0 0 rgba(255,255,255,0.3),
+    1180px 480px 0 0 rgba(255,255,255,0.15),
+    1350px 530px 0 0 rgba(255,255,255,0.4),
+    80px 640px 0 0 rgba(255,255,255,0.2),
+    300px 680px 0 0 rgba(255,255,255,0.35),
+    520px 720px 0 0 rgba(255,255,255,0.15),
+    740px 660px 0 0 rgba(255,255,255,0.25),
+    960px 700px 0 0 rgba(255,255,255,0.4),
+    1140px 650px 0 0 rgba(255,255,255,0.2),
+    250px 780px 0 0 rgba(255,255,255,0.3),
+    470px 820px 0 0 rgba(255,255,255,0.15),
+    700px 850px 0 0 rgba(255,255,255,0.35),
+    900px 800px 0 0 rgba(255,255,255,0.25),
+    1100px 830px 0 0 rgba(255,255,255,0.2),
+    1300px 760px 0 0 rgba(255,255,255,0.4),
+    50px 180px 0 0 rgba(255,255,255,0.1),
+    1400px 400px 0 0 rgba(255,255,255,0.3),
+    660px 440px 0 0 rgba(255,255,255,0.2),
+    1020px 130px 0 0 rgba(255,255,255,0.35),
+    400px 250px 0 0 rgba(255,255,255,0.15),
+    1200px 580px 0 0 rgba(255,255,255,0.25),
+    170px 560px 0 0 rgba(255,255,255,0.4),
+    500px 170px 0 0 rgba(255,255,255,0.2);
+  animation: eb-twinkle-a 4s ease-in-out infinite alternate;
+}
+.eb-hero-stars::after {
+  box-shadow:
+    90px 120px 0 0 rgba(255,255,255,0.3),
+    280px 200px 0 0 rgba(255,255,255,0.15),
+    470px 100px 0 0 rgba(255,255,255,0.4),
+    650px 250px 0 0 rgba(255,255,255,0.2),
+    840px 140px 0 0 rgba(255,255,255,0.35),
+    1020px 220px 0 0 rgba(255,255,255,0.1),
+    1210px 110px 0 0 rgba(255,255,255,0.3),
+    160px 350px 0 0 rgba(255,255,255,0.25),
+    360px 430px 0 0 rgba(255,255,255,0.4),
+    550px 370px 0 0 rgba(255,255,255,0.15),
+    730px 460px 0 0 rgba(255,255,255,0.3),
+    920px 390px 0 0 rgba(255,255,255,0.2),
+    1120px 420px 0 0 rgba(255,255,255,0.35),
+    70px 580px 0 0 rgba(255,255,255,0.2),
+    260px 620px 0 0 rgba(255,255,255,0.4),
+    440px 570px 0 0 rgba(255,255,255,0.1),
+    630px 640px 0 0 rgba(255,255,255,0.3),
+    810px 600px 0 0 rgba(255,255,255,0.25),
+    1000px 630px 0 0 rgba(255,255,255,0.15),
+    1190px 590px 0 0 rgba(255,255,255,0.35),
+    130px 720px 0 0 rgba(255,255,255,0.2),
+    320px 760px 0 0 rgba(255,255,255,0.3),
+    510px 800px 0 0 rgba(255,255,255,0.15),
+    700px 740px 0 0 rgba(255,255,255,0.4),
+    890px 780px 0 0 rgba(255,255,255,0.2),
+    1080px 720px 0 0 rgba(255,255,255,0.3),
+    200px 860px 0 0 rgba(255,255,255,0.15),
+    400px 900px 0 0 rgba(255,255,255,0.35),
+    590px 870px 0 0 rgba(255,255,255,0.2),
+    780px 910px 0 0 rgba(255,255,255,0.25),
+    970px 860px 0 0 rgba(255,255,255,0.4),
+    1160px 900px 0 0 rgba(255,255,255,0.15),
+    1350px 850px 0 0 rgba(255,255,255,0.3),
+    40px 440px 0 0 rgba(255,255,255,0.2),
+    1380px 300px 0 0 rgba(255,255,255,0.35),
+    750px 50px 0 0 rgba(255,255,255,0.15),
+    1050px 480px 0 0 rgba(255,255,255,0.25),
+    350px 680px 0 0 rgba(255,255,255,0.4),
+    580px 260px 0 0 rgba(255,255,255,0.1),
+    1270px 180px 0 0 rgba(255,255,255,0.3),
+    430px 740px 0 0 rgba(255,255,255,0.2);
+  animation: eb-twinkle-b 7s ease-in-out infinite alternate;
+}
+.eb-hero-comet {
+  position: absolute; top: 60%; left: 0; z-index: 3;
+  width: 30vw; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,110,0.18) 30%, rgba(229,194,107,0.22) 50%, rgba(212,175,110,0.18) 70%, transparent);
+  pointer-events: none;
+  opacity: 0;
+  animation: eb-comet 14s ease-in-out infinite;
+}
+.eb-hero-vignette {
+  position: absolute; inset: 0; z-index: 4; pointer-events: none;
+  background:
+    radial-gradient(ellipse 110% 80% at 50% 40%, transparent 35%, rgba(5,4,2,0.82) 100%),
+    linear-gradient(180deg, transparent 0%, transparent 85%, #050402 100%);
 }
 
-.eb-hero-inner { position: relative; z-index: 2; width: 100%; }
+.eb-hero-inner { position: relative; z-index: 5; width: 100%; }
 .eb-hero-copy { max-width: 920px; }
 /* Stretch the reveal wrappers so the hero title can use the full copy width
    (without this they shrink-wrap to content and the h1 wraps awkwardly). */
@@ -11566,17 +11659,16 @@ body.tw-title-outlined .eb-hero .eb-h1 .gold {
   border: 1px solid var(--eb-line-soft);
   background: #08060a;
   cursor: pointer;
-  transition: transform 0.5s cubic-bezier(0.2,0.7,0.2,1), border-color 0.5s ease, box-shadow 0.5s ease;
+  transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), border-color 0.4s ease, box-shadow 0.4s cubic-bezier(0.22,1,0.36,1);
   text-decoration: none;
   color: inherit;
 }
 .eb-fcard:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
   border-color: var(--eb-gold);
   box-shadow:
-    0 32px 80px -28px rgba(0,0,0,0.85),
-    0 0 80px -16px var(--eb-gold-glow),
-    0 0 0 1px rgba(229,194,107,0.08) inset;
+    0 24px 60px rgba(0,0,0,0.55),
+    0 0 40px -8px rgba(212,175,110,0.12);
 }
 .eb-fcard-art {
   position: absolute; inset: 0;
@@ -11753,14 +11845,14 @@ body.tw-title-outlined .eb-hero .eb-h1 .gold {
   background: #08060a;
   cursor: pointer;
   scroll-snap-align: start;
-  transition: transform 0.5s cubic-bezier(0.2,0.7,0.2,1), border-color 0.5s ease, box-shadow 0.5s ease;
+  transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), border-color 0.4s ease, box-shadow 0.4s cubic-bezier(0.22,1,0.36,1);
   text-decoration: none;
   color: inherit;
 }
 .eb-scard:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
   border-color: var(--eb-gold);
-  box-shadow: 0 24px 60px -24px rgba(0,0,0,0.8), 0 0 56px -16px var(--eb-gold-glow);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.55), 0 0 40px -8px rgba(212,175,110,0.12);
 }
 .eb-scard.eb-soon { cursor: default; pointer-events: none; }
 .eb-scard.eb-soon:hover { transform: none; border-color: var(--eb-line-soft); box-shadow: none; }
@@ -12076,12 +12168,12 @@ body.tw-title-outlined .eb-hero .eb-h1 .gold {
 /* Hide new design hero content when a game is selected (hero loses is-home) */
 .eb-hero:not(.is-home) .eb-hero-copy,
 .eb-hero:not(.is-home) .eb-hero-stats,
-.eb-hero:not(.is-home) .eb-hero-fallback,
-.eb-hero:not(.is-home) .eb-hero-video,
-.eb-hero:not(.is-home) .eb-hero-tint,
-.eb-hero:not(.is-home) .eb-hero-haze,
-.eb-hero:not(.is-home) .eb-hero-vignette,
-.eb-hero:not(.is-home) .eb-hero-fade {
+.eb-hero:not(.is-home) .eb-hero-cosmic,
+.eb-hero:not(.is-home) .eb-hero-depth,
+.eb-hero:not(.is-home) .eb-hero-glow,
+.eb-hero:not(.is-home) .eb-hero-stars,
+.eb-hero:not(.is-home) .eb-hero-comet,
+.eb-hero:not(.is-home) .eb-hero-vignette {
   display: none !important;
 }
 

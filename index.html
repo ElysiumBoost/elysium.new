@@ -204,20 +204,13 @@
 
     <!-- Hero — Home page -->
     <section class="hero is-home eb-hero" id="hero">
-      <div class="eb-hero-fallback" aria-hidden="true"></div>
-      <video
-        class="eb-hero-video"
-        src="assets/elysium-hero.mp4"
-        autoplay
-        loop
-        muted
-        playsinline
-        preload="auto"
-        aria-hidden="true"></video>
-      <div class="eb-hero-tint" aria-hidden="true"></div>
-      <div class="eb-hero-haze" aria-hidden="true"></div>
+      <video class="eb-hero-video" src="assets/elysium-hero.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+      <div class="eb-hero-cosmic" aria-hidden="true"></div>
+      <div class="eb-hero-depth" aria-hidden="true"></div>
+      <div class="eb-hero-glow" aria-hidden="true"></div>
+      <div class="eb-hero-stars" aria-hidden="true"></div>
+      <div class="eb-hero-comet" aria-hidden="true"></div>
       <div class="eb-hero-vignette" aria-hidden="true"></div>
-      <div class="eb-hero-fade" aria-hidden="true"></div>
       <div class="eb-container eb-hero-inner">
         <!-- Hidden JS-controlled placeholders (renderHero writes to these) -->
         <span id="heroKicker" style="display:none">The Realm of Champions</span>
@@ -283,6 +276,7 @@
     <!-- Home content -->
     <section class="home-content" id="homeContent">
       <div class="eb-page-bg">
+        <div class="eb-cosmic-layers" aria-hidden="true"></div>
 
         <!-- Games Section -->
         <section class="eb-section" id="ebGamesSection" style="padding-top:140px">
@@ -1009,6 +1003,7 @@
 
     <!-- Below-map content -->
     <div class="arc-hub-sections eb-page-bg">
+      <div class="eb-cosmic-layers" aria-hidden="true"></div>
 
       <!-- Section 2: Arc Info Strip -->
       <section class="arc-info">

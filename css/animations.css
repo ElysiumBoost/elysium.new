@@ -85,6 +85,68 @@
 @keyframes ec-spin-kf { to { transform: rotate(360deg); } }
 @keyframes ec-typing { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }
 
+/* Cosmic hero — Ken Burns drift */
+@keyframes eb-kenburns {
+  0%   { transform: scale(1.0) translate(0, 0); }
+  33%  { transform: scale(1.05) translate(-0.5%, 0.3%); }
+  66%  { transform: scale(1.07) translate(0.4%, -0.4%); }
+  100% { transform: scale(1.04) translate(-0.3%, 0.5%); }
+}
+
+/* Cosmic page-bg — slow organic drift of the whole layer */
+@keyframes eb-cosmos-drift {
+  0%   { transform: scale(1.00) translate(0,    0); }
+  25%  { transform: scale(1.02) translate(-0.4%, 0.2%); }
+  75%  { transform: scale(1.03) translate( 0.3%,-0.3%); }
+  100% { transform: scale(1.01) translate(-0.2%, 0.4%); }
+}
+
+/* Cosmic page-bg — star/nebula pulse A (20s) */
+@keyframes eb-cosmic-pulse-a {
+  0%   { opacity: 0.65; }
+  100% { opacity: 1.0; }
+}
+
+/* Cosmic page-bg — star pulse B (31s, offset phase via delay) */
+@keyframes eb-cosmic-pulse-b {
+  0%   { opacity: 0.38; }
+  100% { opacity: 0.88; }
+}
+
+/* Cosmic hero — amber glow breathing */
+@keyframes eb-glow-breathe {
+  0%   { opacity: 0.06; }
+  100% { opacity: 0.14; }
+}
+
+/* Cosmic hero — star twinkle group A */
+@keyframes eb-twinkle-a {
+  0%   { opacity: 0.4; }
+  100% { opacity: 0.15; }
+}
+
+/* Cosmic hero — star twinkle group B */
+@keyframes eb-twinkle-b {
+  0%   { opacity: 0.15; }
+  100% { opacity: 0.45; }
+}
+
+/* Cosmic hero — gold comet sweep */
+@keyframes eb-comet {
+  0%   { transform: translateX(-30vw); opacity: 0; }
+  15%  { opacity: 0.18; }
+  50%  { opacity: 0.18; }
+  85%  { opacity: 0; }
+  100% { transform: translateX(130vw); opacity: 0; }
+}
+
+/* Section enter — one-shot gold halo */
+@keyframes eb-section-enter {
+  0%   { opacity: 0; }
+  40%  { opacity: 0.04; }
+  100% { opacity: 0; }
+}
+
 /* Arc Raiders — pulsing ring */
 @keyframes arc-ring {
   0%   { transform: scale(0.6); opacity: 0; }
