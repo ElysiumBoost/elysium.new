@@ -229,7 +229,7 @@
       await _loadOrders();
     } catch (e) {
       console.error('[Elysium chat] orders load failed:', e);
-      pane.innerHTML = _stateMsg('⚠️', 'Reconnecting…', 'We could not reach the server. Check your connection and retry.', 'Retry', 'data-ecw="reload-orders"');
+      pane.innerHTML = _stateMsg('📦', 'No orders available', 'We could not load your orders right now. Try again in a moment.', 'Retry', 'data-ecw="reload-orders"');
       return;
     }
     if (!S.orders.length && !S.completed.length) {
@@ -357,7 +357,7 @@
       S.support = res.data || [];
     } catch (e) {
       console.error('[Elysium chat] support load failed:', e);
-      thread.innerHTML = _stateMsg('⚠️', 'Reconnecting…', 'We could not reach the server. Check your connection and retry.', 'Retry', 'data-ecw="reload-support"');
+      thread.innerHTML = _stateMsg('💬', 'Support unavailable', 'We could not reach support right now. Please try again in a moment.', 'Retry', 'data-ecw="reload-support"');
       thread.querySelector('[data-ecw="reload-support"]').addEventListener('click', _renderSupport);
       return;
     }

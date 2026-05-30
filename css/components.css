@@ -412,6 +412,16 @@ select.eb-currency option { background: var(--bg-2, #100b07); color: var(--text,
   font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.32em;
   color: var(--gold); text-transform: uppercase; margin-top: 16px;
 }
+.eb-footer-contact {
+  margin-top: 8px;
+}
+.eb-footer-contact a {
+  font-family: var(--f-mono); font-size: 11px;
+  color: var(--gold); opacity: 0.7;
+  text-decoration: none; letter-spacing: 0.04em;
+  transition: opacity 0.2s ease;
+}
+.eb-footer-contact a:hover { opacity: 1; }
 
 .eb-footer-links {
   display: flex; gap: 28px; justify-content: center;
@@ -419,7 +429,8 @@ select.eb-currency option { background: var(--bg-2, #100b07); color: var(--text,
   font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--text-soft);
 }
-.eb-footer-links a:hover { color: var(--gold-bright); }
+.eb-footer-links a:hover,
+.eb-footer-links button:hover { color: var(--gold-bright); }
 
 .eb-footer-social { display: flex; justify-content: flex-end; gap: 12px; }
 .eb-footer-social a {

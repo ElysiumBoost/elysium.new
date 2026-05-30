@@ -534,7 +534,7 @@ body.arc-locked { overflow: hidden; }
 /* ══════════════════════════════════════════════════════════════
    SERVICE PAGE (3 columns)
    ══════════════════════════════════════════════════════════════ */
-.arc-stage { position: relative; }
+.arc-stage { position: relative; padding-top: 78px; }
 .arc-state {
   transition: opacity 0.45s ease, transform 0.5s cubic-bezier(0.2,0.7,0.2,1);
 }
