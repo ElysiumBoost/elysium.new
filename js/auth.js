@@ -113,6 +113,7 @@ function _updateNavUI(user) {
     const cachedAvatar = _lsGet('elysium_avatar_url');
     if (cachedAvatar) _applyAvatarUrl(cachedAvatar);
     avatarEls.forEach(el  => {
+      el.dataset.initials = initials;
       if (!el.getAttribute('data-has-img')) el.textContent = initials;
     });
     signOutBtns.forEach(el=> el.style.display = '');
@@ -157,7 +158,7 @@ function _applyBoosterLink(role) {
     link.href = prefix + 'booster.html';
     link.className = 'eb-user-item eb-user-item--booster';
     link.setAttribute('role', 'menuitem');
-    link.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px;margin-right:5px"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Booster Panel';
+    link.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px;margin-right:5px;opacity:0.7"><path d="M12 2l2.4 4.8 5.4.8-3.9 3.8.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.9-3.8 5.4-.8z"/></svg>Booster Panel';
     const sep = dd.querySelector('.eb-user-separator');
     const logout = dd.querySelector('.eb-user-logout');
     if (sep) dd.insertBefore(link, sep);
@@ -170,7 +171,16 @@ function _applyAvatarUrl(url) {
   document.querySelectorAll('[data-eb-avatar]').forEach(function(el) {
     if (url) {
       var src = /^https?:\/\/|^\/\//.test(url) ? url : new URL(url, location.origin + '/').href;
-      el.innerHTML = '<img src="' + src + '" alt="Your avatar">';
+      var img = document.createElement('img');
+      img.alt = 'Your avatar';
+      img.onerror = function() {
+        el.innerHTML = '';
+        el.removeAttribute('data-has-img');
+        el.textContent = el.dataset.initials || '';
+      };
+      img.src = src;
+      el.innerHTML = '';
+      el.appendChild(img);
       el.setAttribute('data-has-img', 'true');
     } else {
       el.innerHTML = '';

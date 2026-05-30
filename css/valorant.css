@@ -870,12 +870,7 @@
   text-transform: uppercase; color: var(--text-dim);
   padding: 8px 0 4px; margin-top: 4px; border-top: 1px solid var(--line-soft);
 }
-.val-slider-ticks {
-  display: grid; justify-items: center;
-  font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.16em;
-  color: var(--text-dim); margin-top: 4px;
-}
-.val-slider-ticks span.active { color: var(--gold); }
+.val-slider-ticks { display: none; }
 
 /* ── A11Y ── */
 button:focus-visible, a:focus-visible, input:focus-visible {

@@ -11,6 +11,10 @@
   var AVATAR_BASE  = '../assets/avatars/elysium_unique_avatar_';
   var AVATAR_COUNT = 16;
 
+  function deriveElysianId(userId) {
+    return 'E' + String(parseInt(userId.replace(/-/g, '').slice(0, 8), 16) % 1000000).padStart(6, '0');
+  }
+
   /* Booster rank ladder — share % grows with lifetime completed orders. */
   var BRANKS = [
     { name: 'Recruit',   min: 0,   pct: 55, icon: 'ti-shield',       blurb: 'Welcome aboard. Build your record.' },
@@ -204,7 +208,7 @@
     var name = _profile.username || (_user.email && _user.email.split('@')[0]) || 'Booster';
     var rank = getRankInfo(_profile.completed_orders);
     setText('bpProfileName', name);
-    setText('bpBoosterId', _profile.booster_id_code || '—');
+    setText('bpBoosterId', deriveElysianId(_user.id));
     setText('bpRankBadgeName', rank.name);
     var badgeIcon = document.querySelector('.bp-rank-badge .ti');
     if (badgeIcon) badgeIcon.className = 'ti ' + rank.icon;
@@ -840,7 +844,7 @@
     setVal('bpFGames', _profile.games || '');
     setVal('bpFPayoutEmail', _profile.payout_email || '');
     setVal('bpFPayoutMethod', _profile.payout_method || '');
-    setText('bpBoosterIdRO', _profile.booster_id_code || '—');
+    setText('bpBoosterIdRO', deriveElysianId(_user.id));
     setText('bpMemberSince', fmtDate(_user.created_at));
 
     var check = document.getElementById('bpProfileChecklist');

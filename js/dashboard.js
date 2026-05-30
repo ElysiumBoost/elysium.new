@@ -308,6 +308,9 @@
           '<div class="db-progress-track"><div class="db-progress-fill" style="width:0%" data-pct="' + pct + '"></div></div>' +
           '<span class="db-progress-pct">' + pct + '%</span>' +
         '</div>' +
+        '<div class="db-progress-milestones" aria-hidden="true">' +
+          '<span>Veteran</span><span>Champion</span><span>Elite</span><span>Legend</span>' +
+        '</div>' +
         '<div class="db-progress-label">' + esc(msg) + '</div>';
 
       setTimeout(function () {
@@ -783,7 +786,8 @@
 
     _sb.from('profiles').upsert({ id: _user.id, avatar_url: url }, { onConflict: 'id' })
       .then(function (res) {
-        if (res.error) { toast('error', 'Failed to save avatar.'); return; }
+        if (res.error) { console.error('[dashboard] avatar save failed:', res.error.message, res.error.code); toast('error', 'Failed to save avatar.'); return; }
+        if (typeof _applyAvatarUrl === 'function') _applyAvatarUrl(url);
         toast('success', 'Avatar updated!');
       });
 
@@ -802,6 +806,11 @@
         var discord  = document.getElementById('dbFDiscord').value.trim();
         var country  = document.getElementById('dbFCountry').value.trim();
         var avUrl    = _selectedAvNum ? 'assets/avatars/elysium_unique_avatar_' + _selectedAvNum + '.png' : (_profile.avatar_url || null);
+
+        if (username && !/^[a-zA-Z0-9_]{3,20}$/.test(username)) {
+          toast('error', 'Username must be 3–20 characters: letters, numbers, underscores only.');
+          return;
+        }
 
         var payload = { id: _user.id, username: username, discord_id: discord, country: country };
         if (avUrl) payload.avatar_url = avUrl;
