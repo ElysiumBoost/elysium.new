@@ -1,0 +1,750 @@
+      margin: 48px 0 44px;
+    }
+
+    .delivery-proof-home h2 {
+      font-family: var(--display);
+      font-size: clamp(26px, 3.2vw, 34px);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin: 0 0 12px;
+    }
+
+    .delivery-proof-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .delivery-proof-card {
+      padding: 20px 20px 22px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: linear-gradient(165deg, var(--panel), rgba(7, 10, 16, .94));
+      box-shadow: 0 18px 48px rgba(0, 0, 0, .22);
+    }
+
+    .delivery-proof-card h3 {
+      margin: 0 0 10px;
+      font-family: var(--display);
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .delivery-proof-card p {
+      margin: 0;
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.52;
+    }
+
+    .verified-feedback-home {
+      margin: 44px 0 44px;
+    }
+
+    .verified-feedback-home h2 {
+      font-family: var(--display);
+      font-size: clamp(26px, 3.2vw, 34px);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin: 0 0 12px;
+    }
+
+    .feedback-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .feedback-card {
+      padding: 22px 20px 20px;
+      border-radius: 14px;
+      border: 1px solid rgba(212, 175, 110, .26);
+      background: rgba(10, 9, 22, .72);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06);
+    }
+
+    .feedback-badge {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-family: var(--display);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(251, 191, 36, .95);
+      border: 1px solid rgba(251, 191, 36, .35);
+      background: rgba(251, 191, 36, .08);
+    }
+
+    .feedback-meta {
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .feedback-card > p {
+      margin: 0 0 14px;
+      font-size: 15px;
+      line-height: 1.55;
+      color: rgba(243, 234, 217, .94);
+    }
+
+    .feedback-eta {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+.ely-review-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.ely-review-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  background: var(--ely-panel, rgba(255,255,255,0.04));
+  border: 1px solid var(--ely-border, rgba(255,255,255,0.08));
+  border-radius: 12px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.ely-review-card:hover {
+  border-color: rgba(212, 175, 110, 0.35);
+  transform: translateY(-2px);
+}
+
+.ely-review-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ely-review-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(212,175,110,0.3), rgba(212,175,110,0.12));
+  border: 1px solid rgba(212,175,110,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--gold, #d4af6e);
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.ely-review-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ely-review-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.ely-review-game {
+  font-size: 0.72rem;
+  color: var(--gold, #d4af6e);
+  opacity: 0.85;
+}
+
+.ely-review-stars {
+  color: var(--gold, #d4af6e);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
+.ely-review-text {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.72);
+  line-height: 1.55;
+  flex: 1;
+  margin: 0;
+}
+
+.ely-review-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.ely-review-badge {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--ely-gold, #d4af6e);
+  letter-spacing: 0.04em;
+}
+
+.ely-review-date {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.35);
+}
+
+@media (max-width: 768px) {
+  .ely-review-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── GÖREV 3: Trustpilot link ────────────────────────────────────────── */
+.ely-trustpilot-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px 6px 10px;
+  background: rgba(0, 180, 90, 0.12);
+  border: 1px solid rgba(0, 180, 90, 0.35);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(80, 220, 130, 0.95);
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.ely-trustpilot-link:hover {
+  background: rgba(0, 180, 90, 0.22);
+  border-color: rgba(0, 180, 90, 0.6);
+  color: #6fe6a0;
+  text-decoration: none;
+}
+
+/* ── GÖREV 4: Footer yenileme ────────────────────────────────────────── */
+.ely-review-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+@media (max-width: 900px) {
+  .ely-review-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .ely-review-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.ely-review-card:hover {
+  border-color: rgba(212, 175, 110, 0.5) !important;
+  box-shadow: 0 0 20px rgba(212, 175, 110, 0.12) !important;
+}
+
+/* Avatar renk varyantları */
+.ely-review-avatar--purple {
+  background: linear-gradient(135deg, #534AB7, #3C3489) !important;
+  border-color: rgba(83, 74, 183, 0.6) !important;
+  color: #d0ccff !important;
+}
+
+.ely-review-avatar--green {
+  background: linear-gradient(135deg, #0F6E56, #085041) !important;
+  border-color: rgba(15, 110, 86, 0.6) !important;
+  color: #7eefd4 !important;
+}
+
+/* Kart title satırı */
+.ely-review-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.88);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Lokasyon etiketi */
+.ely-review-location {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.35);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+/* Discord rating yıldızlar — altın */
+.ely-review-stars {
+  color: var(--ely-gold, #d4af6e) !important;
+}
+
+/* Verified badge — Discord gold */
+.ely-review-badge {
+  color: var(--ely-gold, #d4af6e) !important;
+  text-decoration: none;
+}
+
+/* Discord rating pill (review section header) */
+.ely-discord-rating-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px 6px 10px;
+  background: rgba(212, 175, 110, 0.10);
+  border: 1px solid rgba(212, 175, 110, 0.32);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ely-gold, #d4af6e);
+  white-space: nowrap;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   PHASE 2 — GÖREV A: Visual polish overrides
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* A-1 — Add to Cart butonu: yeşilden altın/bronz gradient */
+
+.ely-boosters-section {
+  margin-top: 60px;
+}
+
+.ely-booster-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+  .ely-booster-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.ely-booster-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background: rgba(18, 15, 12, 0.75);
+  border: 1px solid rgba(212, 175, 110, 0.18);
+  border-radius: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.ely-booster-card:hover {
+  border-color: rgba(212, 175, 110, 0.38);
+  box-shadow: 0 4px 24px rgba(212, 175, 110, 0.08);
+}
+
+.ely-booster-card--featured {
+  border-color: rgba(212, 175, 110, 0.38);
+  background: linear-gradient(160deg, rgba(20, 16, 10, 0.95) 0%, rgba(26, 20, 10, 0.9) 100%);
+  box-shadow: 0 0 0 1px rgba(212, 175, 110, 0.12) inset, 0 4px 32px rgba(212, 175, 110, 0.07);
+}
+
+.ely-booster-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(212, 175, 110, 0.15);
+  border: 2px solid rgba(212, 175, 110, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display, 'Cinzel', serif);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ely-gold, #d4af6e);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.ely-booster-avatar--gold {
+  background: rgba(212, 175, 110, 0.22);
+  border-color: rgba(212, 175, 110, 0.6);
+  color: #e8c87a;
+}
+
+.ely-booster-avatar--purple {
+  background: rgba(140, 100, 210, 0.18);
+  border-color: rgba(140, 100, 210, 0.4);
+  color: #b89de0;
+}
+
+.ely-booster-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ely-booster-name {
+  font-family: var(--display, 'Cinzel', serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ely-text, #f3ead9);
+  letter-spacing: 0.04em;
+}
+
+.ely-booster-ranks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ely-booster-rank {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.ely-booster-rank--arc {
+  background: rgba(232, 162, 58, 0.14);
+  border: 1px solid rgba(232, 162, 58, 0.36);
+  color: #e8a23a;
+}
+
+.ely-booster-rank--val {
+  background: rgba(255, 70, 84, 0.12);
+  border: 1px solid rgba(255, 70, 84, 0.32);
+  color: #ff7080;
+}
+
+.ely-booster-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.ely-booster-chip {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 3px 9px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  color: var(--ely-muted, #a89e8c);
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+  margin-bottom: 48px;
+}
+
+.ely-booster-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  margin-bottom: 16px !important;
+}
+
+@media (max-width: 900px) {
+  .ely-booster-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .ely-booster-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.ely-booster-card {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  padding: 18px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(232, 162, 58, 0.22) !important;
+  background: linear-gradient(168deg, #1a1510, #0d0b09) !important;
+  transition: border-color .2s ease, box-shadow .2s ease !important;
+}
+
+.ely-booster-card:hover {
+  border-color: rgba(232, 162, 58, 0.45) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, .4), 0 0 24px rgba(232, 162, 58, .08) !important;
+}
+
+.ely-booster-card--top {
+  border-color: rgba(232, 162, 58, 0.52) !important;
+  box-shadow:
+    0 0 0 1px rgba(232, 162, 58, .18),
+    0 16px 48px rgba(0, 0, 0, .5),
+    0 0 32px rgba(232, 162, 58, .12) !important;
+}
+
+.ely-booster-card__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ely-booster-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 8px rgba(232, 162, 58, .3));
+}
+
+.ely-booster-card__title {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ely-booster-card__name {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ely-text, #f3ead9);
+  line-height: 1;
+}
+
+.ely-booster-card__verified {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ely-gold, #d4af6e);
+}
+
+.ely-booster-top-badge {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #0d0b09;
+  background: linear-gradient(135deg, #e8a23a, #d4af6e);
+  border-radius: 999px;
+  padding: 4px 10px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.ely-booster-card__ranks {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.ely-booster-rank {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 5px 10px !important;
+  border-radius: 6px !important;
+  letter-spacing: .03em !important;
+  line-height: 1.3 !important;
+  text-transform: none !important;
+}
+
+.ely-booster-rank--arc {
+  background: rgba(232, 162, 58, 0.10) !important;
+  border: 1px solid rgba(232, 162, 58, 0.28) !important;
+  color: #e8a23a !important;
+}
+
+
+.ely-booster-card__services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.ely-booster-card__services span {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--ely-muted, #a89e8c);
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid rgba(212, 175, 110, .15);
+  border-radius: 5px;
+  padding: 3px 8px;
+}
+
+.ely-booster-card__footer {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid rgba(232, 162, 58, .15);
+}
+
+.ely-booster-orders {
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  color: var(--ely-gold, #d4af6e);
+}
+
+.ely-booster-more {
+  text-align: center;
+  padding: 12px 0;
+}
+
+.ely-booster-more__link {
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(114, 137, 218, 0.85);
+  text-decoration: none;
+  transition: color .18s;
+}
+
+.ely-booster-more__link:hover {
+  color: #8ea0f7;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  padding: 16px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(232, 162, 58, 0.22) !important;
+  background: linear-gradient(168deg, #1a1510, #0d0b09) !important;
+  transition: border-color .2s, box-shadow .2s !important;
+}
+
+.ely-booster-card--top {
+  border-color: rgba(232, 162, 58, 0.52) !important;
+  box-shadow:
+    0 0 0 1px rgba(232, 162, 58, .18),
+    0 16px 48px rgba(0, 0, 0, .5),
+    0 0 32px rgba(232, 162, 58, .12) !important;
+}
+
+.ely-booster-card__ranks {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+}
+
+.ely-booster-rank {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 5px 10px !important;
+  border-radius: 6px !important;
+  letter-spacing: .03em !important;
+  text-transform: none !important;
+}
+
+.ely-booster-rank--arc {
+  background: rgba(232, 162, 58, 0.1) !important;
+  border: 1px solid rgba(232, 162, 58, 0.28) !important;
+  color: #e8a23a !important;
+}
+
+.ely-booster-card__services {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 5px !important;
+  margin-top: 2px !important;
+}
+
+.ely-booster-card__services span {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: .05em !important;
+  text-transform: uppercase !important;
+  color: var(--ely-muted, #8a8898) !important;
+  background: rgba(255, 255, 255, .04) !important;
+  border: 1px solid rgba(212, 175, 110, .15) !important;
+  border-radius: 5px !important;
+  padding: 3px 8px !important;
+}
+
+.ely-booster-card__footer {
+  margin-top: auto !important;
+  padding-top: 10px !important;
+  border-top: 1px solid rgba(232, 162, 58, .15) !important;
+}
+
+.ely-booster-orders {
+  font-family: var(--display) !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: .04em !important;
+  color: var(--ely-gold, #d4af6e) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.ely-reviews-discord-link:hover .ely-review-card {
+  border-color: rgba(212, 175, 110, 0.45);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, .4),
+              0 0 24px rgba(212, 175, 110, .08);
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   ELYSIUM BOOST LANDING — Design System v3 (Midnight Gold)
+   Appended for the landing page redesign. Does NOT override existing
+   configurator / cart / service CSS above.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* grain overlay */
+/* ── REVIEWS ── */
+.eb-reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.eb-review {
+  position: relative; padding: 32px;
+  background: linear-gradient(180deg, rgba(31,26,18,0.6), rgba(18,12,8,0.6));
+  border: 1px solid var(--eb-line-soft);
+  min-height: 320px;
+  display: flex; flex-direction: column; gap: 22px;
+  transition: transform 0.4s ease, border-color 0.4s ease;
+}
+.eb-review:hover { transform: translateY(-3px); border-color: var(--eb-gold); }
+.eb-stars { display: flex; gap: 4px; color: var(--eb-gold-bright); font-size: 14px; }
+.eb-review-quote { font-family: var(--eb-f-body); font-size: 15px; line-height: 1.6; color: var(--eb-text); margin: 0; flex: 1; }
+.eb-review-foot { display: flex; align-items: center; gap: 14px; margin-top: auto; }
+.eb-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--eb-gold);
+  background: radial-gradient(closest-side, rgba(229,194,107,0.25), rgba(201,168,76,0.05) 70%, var(--eb-bg-card));
+  display: grid; place-items: center;
+  font-family: var(--eb-f-display); font-weight: 700; font-size: 13px; color: var(--eb-gold-bright);
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+.eb-review-user { font-family: var(--eb-f-body); font-weight: 600; font-size: 13px; color: var(--eb-text); display: block; }
+.eb-review-meta {
+  font-family: var(--eb-f-mono); font-size: 10px; letter-spacing: 0.28em;
+  color: var(--eb-text-dim); text-transform: uppercase; margin-top: 4px; display: block;
+}
+.eb-review-meta .game { color: var(--eb-gold); }
+.eb-reviews-foot {
+  margin-top: 56px;
+  display: flex; align-items: center; justify-content: center; gap: 32px;
+  font-family: var(--eb-f-mono); font-size: 11px; letter-spacing: 0.32em;
+  color: var(--eb-text-dim); text-transform: uppercase;
+}
+.eb-reviews-foot .big {
+  font-family: var(--eb-f-display); font-weight: 700; font-size: 26px;
+  color: var(--eb-gold-bright); letter-spacing: 0;
+}
+.eb-reviews-foot .sep { width: 1px; height: 18px; background: var(--eb-line); }

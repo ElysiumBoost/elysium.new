@@ -411,10 +411,35 @@ Always prefer:
 Run or check:
 
 ```bash
-find . -name "*.html" -o -name "*.css" -o -name "*.js" | head -40
+npm start      # live-server on http://127.0.0.1:3000 (also `npm run preview`)
+```
+No build, lint, or test setup exists — it's a static site. Verify changes by loading pages in the browser.
+
+## Architecture
+
+The landing page (`index.html`) is a **single-page configurator**. JS files are plain `<script defer>` tags sharing **one global scope** — there are no imports/exports, so functions and globals (`state`, `games`, `rates`, `window.addToCart`) are called across files. **Load order is fixed and matters** (set in `index.html`):
+
+```
+core/config.js → core/currency.js → core/products.js → core/state.js → core/storage.js →
+features/validation.js → features/cart.js → ui/ui.js → ui/animations.js → pages/home.js → features/order-center-upgrade.js
+then (after body): supabase UMD CDN → features/auth.js → features/rank-discount.js → ui/chat-widget.js
 ```
 
-Also:
+**CSS load order** (`index.html` `<head>`):
+```
+global.css → styles.css → reset.css → layout.css → animations.css → components.css → cart.css →
+css/pages/home/{hero,nav,sections,games,reviews,faq,footer,configurator,cart,shared}.css →
+order-center.css → layout-system.css
+```
+
+Core globals and their roles:
+- `config.js` — `rates`, currency conversion, Valorant copy/rank/price tables, placeholder SVG.
+- `products.js` — the games/services **catalog** (`games`, `prices`, coin/seed tiers, Arc intros/highlights, service factories). Games: Arc Raiders, Valorant, CS2, League of Legends, WoW, TFT.
+- `state.js` — the single mutable `state` object (selected game/category/service, cart, currency, per-game id fields, blueprint selections).
+- `storage.js` — localStorage persistence under key `elyOrderStateV1`; restore/sanitize/migrate logic (e.g. premier/faceit→cs2 remap, `applyNavRecoveryOnce` one-time repair).
+- `cart.js` / `ui.js` — render the configurator, cart drawer, totals.
+- `pages/home.js` (was `main.js`) — event wiring + boot (`restoreOrderState → sanitize → cleanStaleCart → renderAll`) + landing widgets (Discord counter, hero video, FAQ, nav search, **Arc hub map controller** `initArcHub`).
+- `auth.js` — Supabase client, OAuth + email auth, nav auth UI. Loaded on every page.
 
 1. Read `css/global.css` before touching colors, fonts, resets, or variables.
 2. Read `css/components.css` before creating buttons, cards, nav, or footer styles.
@@ -460,31 +485,24 @@ JavaScript:
 
 Assets:
 
-- Shared images go in `assets/images/`.
-- Shared icons go in `assets/icons/`.
-- Arc-specific icons/images go under `assets/arc-raiders/`.
-- Valorant-specific icons go under `assets/valorant/icons/`.
-- WebP for normal images.
-- PNG for transparent icons.
-- MP4 for videos.
-- No audio.
-
----
-
-## Git Workflow
-
-Do not commit without approval.
-
-When approved, use:
-
-```bash
-git add -A
-git commit -m "[type]: [description]"
-git push origin main
-git log --oneline -3
+```
+index.html, 404.html, reset-password.html, CNAME
+pages/  → login? dashboard, booster, chat, terms, privacy, reset-password, games/{arc-raiders,valorant}.html
+css/    → global (vars+reset), reset (browser reset), layout (shell), animations, components,
+          layout-system, styles (:root tokens only — 49 lines), cart, dashboard, booster, chat,
+          order-center, arc-raiders, valorant,
+          pages/home/ → hero, nav, sections, games, reviews, faq, footer, configurator, cart, shared
+js/     → see architecture above
+assets/ → images/ icons/ videos/ + arc-raiders/{icons,images} + valorant/icons
 ```
 
-Allowed commit types:
+Rules:
+- No inline styles. No duplicate CSS. Shared styles → `global.css`/`components.css`; landing-page styles → `css/pages/home/`; other page-specific styles stay in that page's CSS file.
+- Check for an existing file before creating one. Never invent new paths.
+- Every `<img>` has `alt`; non-hero images use `loading="lazy"`. Scripts load with `defer`.
+- No production `console.log`. IDs = JS hooks; classes = styling.
+- Images WebP; transparent icons PNG; videos MP4. **No audio** (never restore `elysium-loop.mp3`).
+- Don't hardcode prices in HTML — pricing lives in `config.js`/`products.js`.
 
 - `feat`
 - `fix`

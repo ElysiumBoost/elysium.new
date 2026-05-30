@@ -1,32 +1,30 @@
 ELYSIUMBOOST BACKGROUND MAP
 
-Canonical paths live in assets/backgrounds/:
+Canonical paths live in assets/backgrounds/. Do not invent new filenames here.
 
-1) elysium-home-mainmenu-bg.webp
-   Use for: Main homepage / main menu hero background
+1) elyssunset.webp
+   Use for: Shared utility — dashboard, booster, chat, modal overlay, hero-bg CSS token
 
 2) arc-raiders-bg.webp
-   Use for: Arc Raiders page hero / Arc Raiders tab background
+   Use for: Arc Raiders card (index.html) and hero background (products.js)
 
-3) valorant-bg.webp
-   Use for: Valorant page hero / Valorant tab background
+3) val33.webp
+   Use for: Valorant card (index.html) and hero background (products.js)
 
-4) wow-bg.webp
-   Use for: World of Warcraft page hero / WoW tab background
+4) lol33.webp
+   Use for: League of Legends card (index.html) and hero background (products.js)
 
-5) lol-bg.webp
-   Use for: League of Legends page hero / LoL tab background
+5) tft-home-card.webp
+   Use for: TFT card (index.html) and hero background (products.js)
 
-6) cs2-premier-bg.webp
-   Use for: CS2 Premier page hero / Premier tab background
+6) cs2-bg.webp
+   Use for: CS2 card (index.html) and hero background (products.js, cart.js)
 
-7) cs2-faceit-bg.webp
-   Use for: CS2 Faceit page hero / Faceit tab background
+7) ana1.webp
+   Use for: CS2 secondary section background (products.js heroBg override)
 
-8) boost-social-bg.webp
-   Use for: Boost+ and Social page hero / background
+8) socialfinale.webp
+   Use for: WoW card and hero background (products.js)
 
-9) fallback-purple-bg.webp
-   Use for: secondary generic section background / fallback hero / shared premium backup background
-
-Homepage card–only art (when split from hero) uses *-home-card.webp siblings in the same folder.
+9) elysium-cosmic-base.webp
+   Use for: Landing page cosmic section background (styles.css)

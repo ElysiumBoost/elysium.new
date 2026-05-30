@@ -1,2 +1,20 @@
 node_modules/
 design-extract/
+
+# Dev tooling — not for production
+supabase-schema.sql
+.claude/
+.agents/
+tools/
+skills-lock.json
+preview.bat
+preview.ps1
+package.json
+package-lock.json
+
+# Internal documentation
+CLAUDE.md
+DESIGN.md
+SETUP.md
+AGENTS.md
+README_BACKGROUND_MAP.txt

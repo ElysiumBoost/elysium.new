@@ -1,9 +1,3 @@
-@property --arc-trace-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
 /* ══════════════════════════════════════════════════════════════
    ARC RAIDERS — Page-Specific Styles
    ══════════════════════════════════════════════════════════════ */
