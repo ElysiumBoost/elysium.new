@@ -137,7 +137,7 @@
 .val-config--natural .val-summary-scroll { overflow: visible; padding: 25px 30px; }
 .val-config--natural .val-summary-scroll > .val-summary-addons-scroll,
 .val-config--natural .val-summary-scroll > .val-summary-addons { max-height: none; overflow-y: visible; }
-.val-builder { display: flex; flex-direction: column; gap: 28px; }
+.val-builder { display: flex; flex-direction: column; gap: 28px; align-self: start; }
 
 /* ── STEP CARDS ── */
 .val-step {

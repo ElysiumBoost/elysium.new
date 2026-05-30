@@ -21,8 +21,8 @@
     { id: 'raids', name: 'Raid Bundles', color: '#ff4655', glyph: 'R', tags: ['Raids', 'Squad'], image: '../../assets/arc-raiders/images/raids.webp', art: 'Endgame raid clears with verified Immortal-tier squad leaders.' },
     { id: 'expedition-boost', name: 'Expedition Boost', color: '#4ec6e8', glyph: 'E', tags: ['Expedition'], image: '../../assets/arc-raiders/images/expedition-boost.webp', art: 'Full expedition runs — sites swept, loot extracted, you keep everything.' },
     { id: 'raid-coaching', name: 'Hourly Coaching', color: '#9b6cff', glyph: 'C', tags: ['Coaching'], image: '../../assets/arc-raiders/images/raid-coaching.webp', art: '1-on-1 raid coaching with a pro: VOD review, route planning, mechanics.' },
-    { id: 'custom-orders', name: 'Custom Orders', color: '#e08a2c', glyph: 'O', tags: ['Custom'], image: '../../assets/arc-raiders/images/custom-orders.webp', art: 'Off-menu requests handled by our concierge desk in Discord.' },
-    { id: 'assorted-seeds', name: 'Assorted Seeds', color: '#4ea568', glyph: 'S', tags: ['Seeds', 'Drops'], image: '../../assets/arc-raiders/images/assorted-seeds.webp', art: 'Curated seed bundles for vault runs, drop chases, and rare encounters.' }
+    { id: 'assorted-seeds', name: 'Assorted Seeds', color: '#4ea568', glyph: 'S', tags: ['Seeds', 'Drops'], image: '../../assets/arc-raiders/images/assorted-seeds.webp', art: 'Curated seed bundles for vault runs, drop chases, and rare encounters.' },
+    { id: 'custom-orders', name: 'Custom Orders', color: '#e08a2c', glyph: 'O', tags: ['Custom'], image: '../../assets/arc-raiders/images/custom-orders.webp', art: 'Off-menu requests handled by our concierge desk.' }
   ];
 
   var WEAPONS = [
@@ -64,8 +64,8 @@
 
   // Trials Boost — Specific Challenge selectable challenges (multi-select)
   var TRIALS_CHALLENGES = [
-    'Combat Trial', 'Extraction Trial', 'Survival Trial',
-    'Looting Trial', 'Objective Trial', 'Boss Trial'
+    'First Challenge', 'Second Challenge', 'Third Challenge',
+    'Fourth Challenge', 'Fifth Challenge', 'Sixth Challenge'
   ];
 
   // Service card badges shown in the station list (sidebar)
@@ -237,16 +237,16 @@
   ];
 
   var ARC_FAQS = [
-    { q: 'How does Arc Raiders boosting work?', a: 'Pick a station on the map, configure your order in the middle column, copy the cart summary into our Discord ticket. A verified runner picks up the order, executes it manually in-game (or queues alongside you for coaching/raid services), and delivers items directly to your Stash. You get live updates inside the ticket the whole way.' },
+    { q: 'How does Arc Raiders boosting work?', a: 'Pick a station on the map, configure your order in the middle column, and add it to cart. Complete checkout via our secure on-site checkout. A verified runner picks up the order, executes it manually in-game (or queues alongside you for coaching/raid services), and delivers items directly to your Stash. You get live updates in your dashboard the whole way.' },
     { q: 'How is delivery handled — will it affect my account?', a: 'Delivery happens through the in-game trade and Stash systems, on residential IPs from your region, manually — the same way two friends would hand off loot. No exploits, no shared sessions. The runner signs out the moment your goods are in your Stash.' },
     { q: 'Can I choose which runner completes my order?', a: 'If you’ve worked with one of our runners before and want them again, drop their handle in your ticket and we’ll route the order to them. Otherwise, our concierge desk pairs your order with the runner whose load and timezone match yours.' },
     { q: 'How long does delivery take?', a: 'Most material and weapon orders are in your Stash within 10–30 minutes. Bundles and custom loadouts land within 1–2 hours. Boss clears, raids, and expedition runs depend on instance availability — usually same-day, never beyond 48 hours unless we tell you up front.' },
     { q: 'Are prices in real money or Raider Coins?', a: 'The configurator displays prices in Raider Coins for clarity. Checkout converts to your selected fiat or crypto at our current daily rate, shown before you confirm. No hidden conversion fees.' },
     { q: 'What happens if a run fails?', a: 'Runs are outcome contracts. A failed extract, a wiped raid, a missed objective — the runner retries until the order is fulfilled, at no extra cost. If a service genuinely can’t be completed (game outage, content gate), we refund pro-rated against any work already delivered.' },
-    { q: 'Can I watch the run live?', a: 'Yes — add the Stream Games option in Discord and you get a private link plus saved VODs of every session. Great for boss/raid services where you want to learn the routes.' },
-    { q: 'Refunds and cancellations?', a: 'Cancel any time from your Discord ticket — no penalty. Refunds are pro-rated against goods already delivered, full refund if no work has started. We honour a money-back guarantee if our ETA slips by more than 48 hours without a heads-up.' },
+    { q: 'Can I watch the run live?', a: 'Yes — add the Stream by PRO option to your order and you get a private link plus saved VODs of every session. Great for boss/raid services where you want to learn the routes.' },
+    { q: 'Refunds and cancellations?', a: 'Cancel any time from your dashboard — no penalty. Refunds are pro-rated against goods already delivered, full refund if no work has started. We honour a money-back guarantee if our ETA slips by more than 48 hours without a heads-up.' },
     { q: 'Is the service safe from bans?', a: 'Every runner is manual-only, on residential IPs, screened against our Arc Raiders safety checklist. We have shipped 2,400+ Arc Raiders orders with zero account bans on file. Encrypted login handoff via OAuth where supported — we never store credentials.' },
-    { q: 'Do you support all servers?', a: 'Yes — every published Arc Raiders region. Runner availability per region is shown in your Discord ticket; concierge will tell you up front if we need to schedule the order for a peak window in your timezone.' }
+    { q: 'Do you support all servers?', a: 'Yes — every published Arc Raiders region. Runner availability per region is confirmed in your dashboard; concierge will tell you up front if we need to schedule the order for a peak window in your timezone.' }
   ];
 
   /* ────────────────────────────────────────────────────────────
@@ -366,7 +366,9 @@
     cartItems: [],
     sidebarOpen: false,
     glowState: { mode: 'idle', hoveredEl: null, activeEl: null, timer: null },
-    cartMode: 'dollar' // 'dollar' | 'custom'
+    cartMode: 'dollar', // 'dollar' | 'custom'
+    play: 'piloted',    // 'piloted' | 'selfplay'  — selfplay adds +35% to the order
+    platform: 'PC'      // 'PC' | 'XBOX' | 'PSN'   — label only, no price change
   };
 
   /* ────────────────────────────────────────────────────────────
@@ -395,6 +397,9 @@
   var elCartCount = $('arcCartCount');
   var elCartDot = $('cartCount');
   var elCartFoot = $('arcCartFoot');
+  var elModeBar = $('arcModeBar');
+  var elCartSelfRow = $('arcCartSelfRow');
+  var elCartSelf = $('arcCartSelf');
   var elAddCta = $('arcAddCta');
   var elServiceNav = $('arcServiceNav');
   var elBackBtn = $('arcBackBtn');
@@ -516,14 +521,18 @@
       elCartSub.textContent = 'CUSTOM';
       elCartFee.textContent = 'CUSTOM';
       elCartTotal.textContent = 'CUSTOM';
+      if (elCartSelfRow) elCartSelfRow.hidden = true;
     } else {
       var subtotal = 0;
       items.forEach(function (it) { subtotal += it.price; });
       if (state.streamAddon) subtotal += state.streamAddon.price;
-      var fee = Math.round(subtotal * 0.05);
-      var total = subtotal + fee;
+      var self = (state.play === 'selfplay' && subtotal > 0) ? Math.round(subtotal * 0.35) : 0;
+      var fee = Math.round((subtotal + self) * 0.05);
+      var total = subtotal + self + fee;
 
       elCartSub.textContent = coinHtml(subtotal);
+      if (elCartSelfRow) elCartSelfRow.hidden = (self === 0);
+      if (elCartSelf) elCartSelf.textContent = coinHtml(self);
       elCartFee.textContent = coinHtml(fee);
       elCartTotal.textContent = coinHtml(total);
     }
@@ -547,6 +556,7 @@
     state.cartMode = (id === 'custom-orders') ? 'custom' : 'dollar';
     state.streamAddon = null;
     state.onCartRemove = null;
+    resetModeBar();
 
     // Hide map, show service view
     elHubMap.hidden = true;
@@ -678,17 +688,9 @@
         '<div class="arc-card-head">' +
           '<span class="arc-card-eyebrow">◆</span>' +
           '<h3 class="arc-card-title">Augments</h3>' +
-          '<span class="arc-card-sub">Multi-select</span>' +
+          '<span class="arc-card-sub">Set quantity</span>' +
         '</div>' +
-        '<div class="arc-ws-rows" id="clAugments">' +
-          AUGMENTS.map(function (a) {
-            return '<button type="button" class="arc-ws-row" data-aug="' + a.id + '">' +
-              '<span class="arc-ws-switch"></span>' +
-              '<span class="arc-ws-name">' + escHtml(a.name) + '</span>' +
-              '<span class="arc-ws-price">+' + fmtDollar(a.price) + '</span>' +
-            '</button>';
-          }).join('') +
-        '</div>' +
+        '<div class="arc-gear-stack" id="clAugments"></div>' +
       '</div>' +
 
       '<div class="arc-card">' +
@@ -697,15 +699,7 @@
           '<h3 class="arc-card-title">Shield</h3>' +
           '<span class="arc-card-sub">Choose one</span>' +
         '</div>' +
-        '<div class="arc-ws-rows" id="clShields">' +
-          SHIELDS.map(function (s) {
-            return '<button type="button" class="arc-ws-row arc-ws-row--radio" data-shield="' + s.id + '">' +
-              '<span class="arc-ws-switch"></span>' +
-              '<span class="arc-ws-name">' + escHtml(s.name) + '</span>' +
-              '<span class="arc-ws-price">+' + fmtDollar(s.price) + '</span>' +
-            '</button>';
-          }).join('') +
-        '</div>' +
+        '<div class="arc-gear-stack" id="clShields"></div>' +
       '</div>' +
 
       '<div class="arc-card">' +
@@ -742,28 +736,64 @@
     bindModToggle('clPriMod', function (v) { priMod = v; });
     bindModToggle('clSecMod', function (v) { secMod = v; });
 
-    // Augments (multi-select)
-    var augSelected = {};
-    $('clAugments').addEventListener('click', function (e) {
-      var row = e.target.closest('button[data-aug]');
-      if (!row) return;
-      var id = row.getAttribute('data-aug');
-      augSelected[id] = !augSelected[id];
-      row.classList.toggle('on', augSelected[id]);
-      syncCart();
+    // Augments (quantity steppers, min 0 — price per row = unit × qty)
+    var augSteppers = {};
+    var augStack = $('clAugments');
+    AUGMENTS.forEach(function (a) {
+      var cell = document.createElement('div');
+      cell.className = 'arc-gear-cell';
+      var info = document.createElement('div');
+      var nameSpan = document.createElement('span');
+      nameSpan.className = 'name';
+      nameSpan.textContent = a.name;
+      var sub = document.createElement('span');
+      sub.className = 'sub';
+      sub.textContent = '+' + fmtDollar(a.price) + ' each';
+      info.appendChild(nameSpan);
+      info.appendChild(sub);
+      cell.appendChild(info);
+      var stepper = createStepper(0, 0, 99, function () {
+        var q = stepper.getValue();
+        cell.classList.toggle('on', q > 0);
+        sub.textContent = q > 0 ? fmtDollar(a.price * q) : '+' + fmtDollar(a.price) + ' each';
+        syncCart();
+      });
+      augSteppers[a.id] = stepper;
+      cell.appendChild(stepper);
+      augStack.appendChild(cell);
     });
 
-    // Shield (single-select)
-    var shieldSelected = null;
-    $('clShields').addEventListener('click', function (e) {
-      var row = e.target.closest('button[data-shield]');
-      if (!row) return;
-      var id = row.getAttribute('data-shield');
-      shieldSelected = (shieldSelected === id) ? null : id;
-      qsa('button[data-shield]', $('clShields')).forEach(function (b) {
-        b.classList.toggle('on', b.getAttribute('data-shield') === shieldSelected);
+    // Shield (choose one — stepper capped at 1, radio behaviour)
+    var shieldSteppers = {};
+    var shieldStack = $('clShields');
+    SHIELDS.forEach(function (s) {
+      var cell = document.createElement('div');
+      cell.className = 'arc-gear-cell';
+      var info = document.createElement('div');
+      var nameSpan = document.createElement('span');
+      nameSpan.className = 'name';
+      nameSpan.textContent = s.name;
+      var sub = document.createElement('span');
+      sub.className = 'sub';
+      sub.textContent = '+' + fmtDollar(s.price);
+      info.appendChild(nameSpan);
+      info.appendChild(sub);
+      cell.appendChild(info);
+      var stepper = createStepper(0, 0, 1, function () {
+        var on = stepper.getValue() > 0;
+        cell.classList.toggle('on', on);
+        if (on) {
+          SHIELDS.forEach(function (other) {
+            if (other.id !== s.id && shieldSteppers[other.id].getValue() > 0) {
+              shieldSteppers[other.id].setValue(0);
+            }
+          });
+        }
+        syncCart();
       });
-      syncCart();
+      shieldSteppers[s.id] = stepper;
+      cell.appendChild(stepper);
+      shieldStack.appendChild(cell);
     });
 
     // Quick Use Bundles
@@ -795,12 +825,13 @@
         items.push({ id: 'cl-sec', name: $('clSecWeapon').value + ' (Secondary)', qty: secQty, price: secPrice, color: '#c98a2c', sub: secMod === 'legendary' ? 'Legendary/Epic Mods' : '' });
       }
       AUGMENTS.forEach(function (a) {
-        if (augSelected[a.id]) items.push({ id: a.id, name: a.name, qty: 1, price: a.price, color: '#9b6cff', sub: 'Augment' });
+        var aq = augSteppers[a.id].getValue();
+        if (aq > 0) items.push({ id: a.id, name: a.name, qty: aq, price: a.price * aq, color: '#9b6cff', sub: 'Augment' });
       });
-      if (shieldSelected) {
-        var sh = SHIELDS.filter(function (s) { return s.id === shieldSelected; })[0];
-        if (sh) items.push({ id: 'cl-shield', name: sh.name, qty: 1, price: sh.price, color: '#7faedc', sub: 'Shield' });
-      }
+      SHIELDS.forEach(function (s) {
+        var shq = shieldSteppers[s.id].getValue();
+        if (shq > 0) items.push({ id: 'cl-shield', name: s.name, qty: shq, price: s.price * shq, color: '#7faedc', sub: 'Shield' });
+      });
       QUICK_USE.forEach(function (qu) {
         var q = quSteppers[qu.id].getValue();
         if (q > 0) items.push({ id: qu.id, name: qu.name, qty: q * qu.mul, price: q * qu.price, color: qu.color });
@@ -1473,24 +1504,19 @@
             '<span class="arc-fromto-eye">Slots</span>' +
             '<span class="arc-fromto-num" id="depNum">' + MIN_SLOTS + '</span>' +
           '</div>' +
-          '<div class="arc-fromto-cell">' +
-            '<span class="arc-fromto-eye">Price</span>' +
-            '<span class="arc-fromto-num" id="depPrice">' + fmtDollar(MIN_SLOTS * PRICE_PER_SLOT) + '</span>' +
-          '</div>' +
         '</div>' +
         '<input type="range" class="arc-rc-slider" id="depSlider" min="' + MIN_SLOTS + '" max="' + MAX_SLOTS + '" step="1" value="' + MIN_SLOTS + '">' +
         '<div class="arc-stepper-wide" style="margin-top:14px"><div id="depStepper"></div></div>' +
+        '<p class="arc-panel-desc">Your selected slots are transferred to clean storage accounts and delivered after expedition. Any loss or in-game theft during the process is fully compensated.</p>' +
       '</div>';
 
     var slider = $('depSlider');
     var numEl = $('depNum');
-    var priceNumEl = $('depPrice');
 
     var stepper = createStepper(MIN_SLOTS, MIN_SLOTS, MAX_SLOTS, function (v) {
       slider.value = v;
       updateSliderFill();
       numEl.textContent = v;
-      priceNumEl.textContent = fmtDollar(v * PRICE_PER_SLOT);
       syncCart();
     });
     $('depStepper').appendChild(stepper);
@@ -1505,7 +1531,6 @@
       var v = parseInt(slider.value, 10);
       stepper.setValue(v);
       numEl.textContent = v;
-      priceNumEl.textContent = fmtDollar(v * PRICE_PER_SLOT);
       updateSliderFill();
       syncCart();
     });
@@ -1538,11 +1563,12 @@
         '<div class="arc-gear-stack" id="bpStack"></div>' +
       '</div>';
 
-    var steppers = {};
+    var selected = {};
     var stack = $('bpStack');
     ITEMS.forEach(function (it) {
-      var cell = document.createElement('div');
-      cell.className = 'arc-gear-cell';
+      var cell = document.createElement('button');
+      cell.type = 'button';
+      cell.className = 'arc-gear-cell arc-gear-cell--select';
       cell.id = 'bp-cell-' + it.id;
       var info = document.createElement('div');
       var nameSpan = document.createElement('span');
@@ -1550,24 +1576,25 @@
       nameSpan.textContent = it.name;
       var sub = document.createElement('span');
       sub.className = 'sub';
-      sub.textContent = fmtDollar(it.price) + ' each';
+      sub.textContent = fmtDollar(it.price);
       info.appendChild(nameSpan);
       info.appendChild(sub);
       cell.appendChild(info);
-      var stepper = createStepper(0, 0, 10, function () {
-        cell.classList.toggle('on', stepper.getValue() > 0);
+      var mark = document.createElement('span');
+      mark.className = 'arc-gear-check';
+      cell.appendChild(mark);
+      cell.addEventListener('click', function () {
+        selected[it.id] = !selected[it.id];
+        cell.classList.toggle('on', !!selected[it.id]);
         syncCart();
       });
-      steppers[it.id] = stepper;
-      cell.appendChild(stepper);
       stack.appendChild(cell);
     });
 
     function syncCart() {
       var items = [];
       ITEMS.forEach(function (it) {
-        var qty = steppers[it.id].getValue();
-        if (qty > 0) items.push({ id: it.id, name: it.name, qty: qty, price: qty * it.price, color: it.color });
+        if (selected[it.id]) items.push({ id: it.id, name: it.name, qty: 1, price: it.price, color: it.color });
       });
       cart.replaceAll(items);
     }
@@ -1721,6 +1748,7 @@
     var weeklyOn = false;
     var rankUpOn = false;
     var challengeOn = false;
+    var hotshotOn = false;
     var selectedRank = TRIALS_RANKS[0];
     var rankOptionKey = '+1';
     var challengeSelected = {};
@@ -1813,12 +1841,19 @@
               '</div>' +
             '</div>' +
 
+            '<button type="button" class="arc-ws-row' + (hotshotOn ? ' on' : '') + '" id="trHotshot">' +
+              '<span class="arc-ws-switch"></span>' +
+              '<span class="arc-ws-name">Hotshot to Cantina Legend</span>' +
+              '<span class="arc-trials-price">$250.00</span>' +
+            '</button>' +
+
           '</div>' +
         '</div>';
 
       $('trWeekly').addEventListener('click', function () { weeklyOn = !weeklyOn; render(); });
       $('trRankUp').addEventListener('click', function () { rankUpOn = !rankUpOn; render(); });
       $('trChallenge').addEventListener('click', function () { challengeOn = !challengeOn; render(); });
+      $('trHotshot').addEventListener('click', function () { hotshotOn = !hotshotOn; render(); });
 
       var rankSel = $('trRank');
       if (rankSel) {
@@ -1859,8 +1894,9 @@
       }
       if (challengeOn) {
         var chosen = TRIALS_CHALLENGES.filter(function (c) { return challengeSelected[c]; });
-        items.push({ id: 'tr-challenge', name: 'Specific Challenge', qty: 1, price: CHALLENGE_PRICE, color: '#ff8a3d', sub: chosen.length ? chosen.join(', ') : 'Confirm in Discord' });
+        items.push({ id: 'tr-challenge', name: 'Specific Challenge', qty: 1, price: CHALLENGE_PRICE, color: '#ff8a3d', sub: chosen.length ? chosen.join(', ') : 'Select challenges' });
       }
+      if (hotshotOn) items.push({ id: 'tr-hotshot', name: 'Hotshot to Cantina Legend', qty: 1, price: 25000, color: '#ff8a3d' });
       cart.replaceAll(items);
     }
 
@@ -1871,49 +1907,63 @@
      CONFIGURATOR: RAIDS
      ════════════════════════════════════════════════════════════ */
   function renderRaidsConfig() {
-    var BASE = 400; // $4.00 per raid
+    var BASE = 350; // $3.50 per raid
     var EVENT_ADD = 150; // $1.50 per raid
-    var TRIO_MUL = 1.50;
     var STREAM_PER = 200; // $2.00 per raid
+    var SUCCESS_MUL = 1.35;                          // Successful Raids Only
+    var TRIO_MULS = { '2p1b': 1.50, '2b1p': 1.35 };  // optional trio configurations
     var PRESETS = [2, 4, 6, 8, 10, 12];
 
-    var team = 'duo';
+    var trioConfig = null; // null = standard 1 booster | '2p1b' | '2b1p'
     var eventMode = false;
+    var successOnly = false;
     var selectedPreset = 4;
     var streamOn = false;
 
     function priceForPreset(n) {
       var base = n * BASE;
       if (eventMode) base += n * EVENT_ADD;
-      if (team === 'trio') base = Math.round(base * TRIO_MUL);
-      return base;
+      if (trioConfig && TRIO_MULS[trioConfig]) base *= TRIO_MULS[trioConfig];
+      if (successOnly) base *= SUCCESS_MUL;
+      return Math.round(base);
     }
 
     function render() {
+      var trioCardHtml = '';
+      if (selectedPreset >= 2) {
+        trioCardHtml =
+          '<div class="arc-card">' +
+            '<div class="arc-card-head"><span class="arc-card-eyebrow">◆</span><h3 class="arc-card-title">Trio Configuration</h3><span class="arc-card-sub">Optional</span></div>' +
+            '<div class="arc-focus-grid">' +
+              '<button type="button" class="arc-focus-card arc-focus-card--compact' + (trioConfig === '2p1b' ? ' on' : '') + '" data-trio="2p1b">' +
+                '<span class="arc-focus-card-title">2 Players · 1 Booster</span>' +
+                '<span class="arc-focus-card-sub">You and a friend raid alongside one of our boosters.</span>' +
+                '<span class="arc-focus-card-badge">+50%</span>' +
+              '</button>' +
+              '<button type="button" class="arc-focus-card arc-focus-card--compact' + (trioConfig === '2b1p' ? ' on' : '') + '" data-trio="2b1p">' +
+                '<span class="arc-focus-card-title">2 Boosters · 1 Player</span>' +
+                '<span class="arc-focus-card-sub">You play carried by two of our boosters.</span>' +
+                '<span class="arc-focus-card-badge">+35%</span>' +
+              '</button>' +
+            '</div>' +
+          '</div>';
+      }
+
       configPanel.innerHTML =
         '<div class="arc-card">' +
-          '<div class="arc-card-head"><span class="arc-card-eyebrow">◆</span><h3 class="arc-card-title">Raid Team</h3></div>' +
-          '<div class="arc-focus-grid">' +
-            '<button type="button" class="arc-focus-card arc-focus-card--compact' + (team === 'duo' ? ' on' : '') + '" data-team="duo">' +
-              '<span class="arc-focus-card-title">Duo</span>' +
-              '<span class="arc-focus-card-sub">Standard duo raid with one booster.</span>' +
-              '<span class="arc-focus-card-mark"></span>' +
+          '<div class="arc-card-head"><span class="arc-card-eyebrow">◆</span><h3 class="arc-card-title">Options</h3></div>' +
+          '<div class="arc-ws-rows">' +
+            '<button type="button" class="arc-ws-row arc-event-row' + (eventMode ? ' on' : '') + '" id="raidEvent">' +
+              '<span class="arc-ws-switch"></span>' +
+              '<span class="arc-event-meta"><span class="lbl">Event Mode</span><span class="sub">+$1.50 per raid</span></span>' +
+              '<span class="arc-event-badge">EVENT</span>' +
             '</button>' +
-            '<button type="button" class="arc-focus-card arc-focus-card--compact' + (team === 'trio' ? ' on' : '') + '" data-team="trio">' +
-              '<span class="arc-focus-card-title">Trio</span>' +
-              '<span class="arc-focus-card-sub">Trio squad with +50% surcharge.</span>' +
-              '<span class="arc-focus-card-badge">+50%</span>' +
+            '<button type="button" class="arc-ws-row arc-event-row' + (successOnly ? ' on' : '') + '" id="raidSuccess">' +
+              '<span class="arc-ws-switch"></span>' +
+              '<span class="arc-event-meta"><span class="lbl">Successful Raids Only</span><span class="sub">You only pay for raids our team successfully clears.</span></span>' +
+              '<span class="arc-event-badge">+35%</span>' +
             '</button>' +
           '</div>' +
-        '</div>' +
-
-        '<div class="arc-card">' +
-          '<div class="arc-card-head"><h3 class="arc-card-title">Options</h3></div>' +
-          '<button type="button" class="arc-ws-row arc-event-row' + (eventMode ? ' on' : '') + '" id="raidEvent">' +
-            '<span class="arc-ws-switch"></span>' +
-            '<span class="arc-event-meta"><span class="lbl">Event Mode</span><span class="sub">+$1.50 per raid</span></span>' +
-            '<span class="arc-event-badge">EVENT</span>' +
-          '</button>' +
         '</div>' +
 
         '<div class="arc-card">' +
@@ -1927,8 +1977,10 @@
               '</button>';
             }).join('') +
           '</div>' +
-          '<div class="arc-raid-notes"><span>Event mode adds +$1.50/raid</span><span>Trio adds +50% surcharge on base</span></div>' +
+          '<div class="arc-raid-notes"><span>Event mode adds +$1.50/raid</span><span>Trio &amp; Successful Raids add a surcharge</span></div>' +
         '</div>' +
+
+        trioCardHtml +
 
         '<div class="arc-card">' +
           '<button type="button" class="arc-ws-row' + (streamOn ? ' on' : '') + '" id="raidStream">' +
@@ -1938,16 +1990,18 @@
           '</button>' +
         '</div>';
 
-      // Team select
-      qsa('.arc-focus-card[data-team]', configPanel).forEach(function (card) {
+      // Trio configuration (optional — click again to clear)
+      qsa('.arc-focus-card[data-trio]', configPanel).forEach(function (card) {
         card.addEventListener('click', function () {
-          team = card.getAttribute('data-team');
+          var v = card.getAttribute('data-trio');
+          trioConfig = (trioConfig === v) ? null : v;
           render();
         });
       });
 
-      // Event mode
+      // Event mode + Successful Raids Only
       $('raidEvent').addEventListener('click', function () { eventMode = !eventMode; render(); });
+      $('raidSuccess').addEventListener('click', function () { successOnly = !successOnly; render(); });
 
       // Preset grid
       qsa('.arc-raid-cell', configPanel).forEach(function (cell) {
@@ -1965,8 +2019,12 @@
 
     function syncCart() {
       var p = priceForPreset(selectedPreset);
-      var sub = team === 'trio' ? 'Trio +50%' : 'Duo';
-      if (eventMode) sub += ' · Event';
+      var parts = [];
+      if (trioConfig === '2p1b') parts.push('2P·1B +50%');
+      else if (trioConfig === '2b1p') parts.push('2B·1P +35%');
+      if (eventMode) parts.push('Event');
+      if (successOnly) parts.push('Success only +35%');
+      var sub = parts.length ? parts.join(' · ') : 'Standard';
       var items = [{ id: 'raid', name: 'Raid Bundles', qty: selectedPreset, price: p, color: '#ff4655', sub: sub }];
 
       if (streamOn) {
@@ -2018,7 +2076,7 @@
             return '<button type="button" class="arc-bp-tab' + (i === selectedTier ? ' active' : '') + '" data-idx="' + i + '">' + escHtml(t.label) + '</button>';
           }).join('') +
         '</div>' +
-        '<p class="arc-tier-note">Tier info only — pricing confirmed in Discord</p>' +
+        '<p class="arc-tier-note" id="expTierNote"></p>' +
       '</div>' +
 
       '<div class="arc-card">' +
@@ -2074,7 +2132,10 @@
 
     function syncCart() {
       var items = [];
-      items.push({ id: 'exp-tier', name: 'Expedition ' + EXP_TIERS[selectedTier].label, qty: 1, price: 0, color: '#4ec6e8', sub: 'Tier info only — pricing in Discord' });
+      var tier = EXP_TIERS[selectedTier];
+      var noteEl = $('expTierNote');
+      if (noteEl) noteEl.textContent = tier.label + ' base — ' + fmtDollar(tier.price);
+      items.push({ id: 'exp-tier', name: 'Expedition ' + tier.label, qty: 1, price: tier.price, color: '#4ec6e8', sub: tier.label });
       STAGES.forEach(function (s, i) {
         if (selectedStages[i]) items.push({ id: 'exp-stage-' + i, name: s.name, qty: 1, price: s.price, color: '#4ec6e8', sub: 'Stage' });
       });
@@ -2091,7 +2152,7 @@
      CONFIGURATOR: HOURLY COACHING
      ════════════════════════════════════════════════════════════ */
   function renderCoachingConfig() {
-    var PRICES = { duo: 2000, trio: 3000, group: 2500 };
+    var PRICES = { duo: 2000, trio: 3000, group: 3500 };
     var STREAM_FLAT = 500;
     var focus = 'pvp';
     var session = 'duo';
@@ -2200,9 +2261,9 @@
       '<div class="arc-card">' +
         '<div class="arc-card-head"><span class="arc-card-eyebrow">◆</span><h3 class="arc-card-title">Custom Order</h3></div>' +
         '<p class="arc-co-section">Describe Your Request</p>' +
-        '<p class="arc-co-body-text">Tell us what you need — anything not covered by the standard stations. Our concierge desk will price it and confirm in Discord.</p>' +
+        '<p class="arc-co-body-text">Tell us what you need — anything not covered by the standard stations. Our concierge desk will price it and confirm at checkout.</p>' +
         '<textarea class="arc-textarea" id="coText" placeholder="Describe your custom order here..."></textarea>' +
-        '<div class="arc-co-hint"><span class="bolt">⚡</span> Pricing confirmed in your Discord ticket</div>' +
+        '<div class="arc-co-hint"><span class="bolt">⚡</span> Pricing confirmed after checkout</div>' +
         '<div class="arc-co-trust"><span>Manual Delivery</span><span>VPN Protected</span><span>24/7 Support</span></div>' +
       '</div>';
 
@@ -2211,7 +2272,7 @@
     function syncCart() {
       var text = $('coText').value.trim();
       if (text) {
-        cart.replaceAll([{ id: 'custom', name: 'Custom Order', qty: 1, price: 0, color: '#e08a2c', sub: 'See Discord ticket' }]);
+        cart.replaceAll([{ id: 'custom', name: 'Custom Order', qty: 1, price: 0, color: '#e08a2c', sub: 'Confirm at checkout' }]);
       } else {
         cart.replaceAll([]);
       }
@@ -2224,7 +2285,7 @@
      CONFIGURATOR: ASSORTED SEEDS
      ════════════════════════════════════════════════════════════ */
   function renderSeedsConfig() {
-    var SEED_PRICE = 40; // $0.40 per 100 seeds
+    var SEED_PRICE = 75; // $0.75 per 100 seeds
     var SEED_MIN = 100;
     var SEED_MAX = 2000;
     var SEED_STEP = 100;
@@ -2233,8 +2294,8 @@
       { threshold: 1000, disc: 0.10 }
     ];
     var PRESETS = [
-      { seeds: 1000, price: 360 },
-      { seeds: 2000, price: 640 }
+      { seeds: 1000, price: 675 },
+      { seeds: 2000, price: 1200 }
     ];
 
     var currentSeeds = SEED_MIN;
@@ -2615,8 +2676,9 @@
     var subtotal = 0;
     items.forEach(function (it) { subtotal += it.price; });
     if (state.streamAddon) subtotal += state.streamAddon.price;
-    var fee = Math.round(subtotal * 0.05);
-    return { svc: svc, items: items, isCustom: isCustom, subtotal: subtotal, fee: fee, total: subtotal + fee };
+    var self = (!isCustom && state.play === 'selfplay' && subtotal > 0) ? Math.round(subtotal * 0.35) : 0;
+    var fee = Math.round((subtotal + self) * 0.05);
+    return { svc: svc, items: items, isCustom: isCustom, subtotal: subtotal, self: self, fee: fee, total: subtotal + self + fee };
   }
 
   function showArcToast(msg) {
@@ -2660,6 +2722,10 @@
       if (state.streamAddon) {
         detailLines.push('Stream by PRO' + (state.streamAddon.sub ? ' · ' + state.streamAddon.sub : '') + ' — ' + (o.isCustom ? 'CUSTOM' : fmtDollar(state.streamAddon.price)));
       }
+      if (o.self) {
+        detailLines.push('Selfplay (+35%) — ' + fmtDollar(o.self));
+      }
+      detailLines.unshift(o.svc.name + ' · ' + state.platform + ' · ' + (state.play === 'selfplay' ? 'Selfplay' : 'Piloted'));
       var entry = {
         id: 'arc-' + Date.now(),
         gameId: 'arc',
@@ -2681,6 +2747,41 @@
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); } catch (e) {}
       syncNavBadge();
       showArcToast('Added to cart');
+    });
+  }
+
+  /* ────────────────────────────────────────────────────────────
+     SERVICE MODE BAR — Piloted/Selfplay + Platform (PC/XBOX/PSN).
+     Lives in the order-summary foot (above Add to Cart) so it
+     survives panel re-renders. Selfplay adds +35% (applied in
+     renderCart / buildOrderSummary); platform is a label only.
+     ──────────────────────────────────────────────────────────── */
+  function resetModeBar() {
+    state.play = 'piloted';
+    state.platform = 'PC';
+    if (!elModeBar) return;
+    qsa('[data-play]', elModeBar).forEach(function (b) {
+      b.classList.toggle('on', b.getAttribute('data-play') === 'piloted');
+    });
+    qsa('[data-plat]', elModeBar).forEach(function (b) {
+      b.classList.toggle('on', b.getAttribute('data-plat') === 'PC');
+    });
+  }
+
+  if (elModeBar) {
+    elModeBar.addEventListener('click', function (e) {
+      var playBtn = e.target.closest('[data-play]');
+      if (playBtn) {
+        state.play = playBtn.getAttribute('data-play');
+        qsa('[data-play]', elModeBar).forEach(function (b) { b.classList.toggle('on', b === playBtn); });
+        renderCart();
+        return;
+      }
+      var platBtn = e.target.closest('[data-plat]');
+      if (platBtn) {
+        state.platform = platBtn.getAttribute('data-plat');
+        qsa('[data-plat]', elModeBar).forEach(function (b) { b.classList.toggle('on', b === platBtn); });
+      }
     });
   }
 

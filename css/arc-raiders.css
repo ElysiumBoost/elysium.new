@@ -534,7 +534,7 @@ body.arc-locked { overflow: hidden; }
 /* ══════════════════════════════════════════════════════════════
    SERVICE PAGE (3 columns)
    ══════════════════════════════════════════════════════════════ */
-.arc-stage { position: relative; }
+.arc-stage { position: relative; padding-top: 78px; }
 .arc-state {
   transition: opacity 0.45s ease, transform 0.5s cubic-bezier(0.2,0.7,0.2,1);
 }
@@ -1900,6 +1900,39 @@ body.arc-locked { overflow: hidden; }
 .arc-gear-cell.on .name { color: var(--gold-bright); }
 .arc-gear-cell.on .sub  { color: var(--text-soft); }
 
+/* Click-to-select gear cells (boss & puzzle) — full-width button reset. */
+.arc-gear-cell--select {
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+.arc-gear-cell--select:hover { border-color: rgba(255,255,255,0.25); }
+.arc-gear-check {
+  flex-shrink: 0;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--text-faint);
+  background: rgba(0,0,0,0.45);
+  position: relative;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.arc-gear-check::after {
+  content: "";
+  position: absolute; left: 6px; top: 2px;
+  width: 5px; height: 10px;
+  border: solid transparent;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  transition: border-color 0.2s ease;
+}
+.arc-gear-cell--select.on .arc-gear-check {
+  background: var(--gold-bright); border-color: var(--gold-bright);
+}
+.arc-gear-cell--select.on .arc-gear-check::after { border-color: #1a1208; }
+
 /* boss & puzzle -- three stacked gear-cell variants */
 .arc-gear-stack { display: flex; flex-direction: column; gap: 12px; }
 
@@ -1976,6 +2009,16 @@ body.arc-locked { overflow: hidden; }
   background: var(--gold-soft); border-color: var(--gold);
 }
 .arc-ws-row.on .arc-ws-switch::after {
+  left: 18px; background: var(--gold-bright);
+  box-shadow: 0 0 8px var(--gold-glow);
+}
+/* The 20x bundle toggle reuses the same switch knob but lives on
+   `.arc-bundle-toggle`, not `.arc-ws-row` — keep the knob in sync so it
+   actually slides when bundle mode is active. */
+.arc-bundle-toggle.on .arc-ws-switch {
+  background: var(--gold-soft); border-color: var(--gold);
+}
+.arc-bundle-toggle.on .arc-ws-switch::after {
   left: 18px; background: var(--gold-bright);
   box-shadow: 0 0 8px var(--gold-glow);
 }
@@ -2146,6 +2189,72 @@ body.arc-locked { overflow: hidden; }
   padding: 20px 22px 24px;
   border-top: 1px solid var(--line-soft);
   background: rgba(8,5,3,0.45);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   SERVICE MODE BAR — Piloted/Selfplay + Platform, sits at the top of
+   the cart foot (above the totals). Tooltips appear above each option.
+   ────────────────────────────────────────────────────────────── */
+.arc-mode-bar {
+  display: flex; flex-direction: column; gap: 12px;
+  padding-bottom: 16px; margin-bottom: 14px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.arc-mode-group { display: flex; flex-direction: column; gap: 7px; }
+.arc-mode-label {
+  font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.24em;
+  text-transform: uppercase; color: var(--gold);
+}
+.arc-mode-seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.arc-mode-seg--plat { grid-template-columns: repeat(3, 1fr); }
+.arc-mode-opt {
+  position: relative;
+  padding: 9px 8px;
+  background: rgba(0,0,0,0.30);
+  border: 1px solid var(--line-soft); border-radius: 3px;
+  color: var(--text-soft); cursor: pointer;
+  font-family: var(--f-display); font-weight: 600;
+  font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase;
+  display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.arc-mode-opt:hover { border-color: rgba(255,255,255,0.25); color: var(--text); }
+.arc-mode-opt.on {
+  border-color: var(--gold);
+  background: var(--gold-soft);
+  color: var(--gold-bright);
+  box-shadow: 0 0 18px -10px var(--gold-glow);
+}
+.arc-mode-plus {
+  font-family: var(--f-mono); font-size: 8px; letter-spacing: 0.08em;
+  color: var(--amber);
+}
+.arc-mode-opt.on .arc-mode-plus { color: var(--gold-bright); }
+/* Tooltip popover above the option (hover / keyboard focus) */
+.arc-mode-tip {
+  position: absolute; bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  width: max-content; max-width: 210px;
+  padding: 8px 10px;
+  background: var(--bg-2);
+  border: 1px solid var(--gold); border-radius: 4px;
+  box-shadow: 0 10px 30px -12px rgba(0,0,0,0.8);
+  font-family: var(--f-body); font-weight: 400;
+  font-size: 11px; line-height: 1.4; letter-spacing: 0.01em;
+  text-transform: none; text-align: left;
+  color: var(--text-soft);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.16s ease, transform 0.16s ease;
+  z-index: 30;
+}
+.arc-mode-tip::after {
+  content: ""; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent; border-top-color: var(--gold);
+}
+.arc-mode-opt:hover .arc-mode-tip,
+.arc-mode-opt:focus-visible .arc-mode-tip {
+  opacity: 1; transform: translateX(-50%) translateY(0);
 }
 .arc-cart-row {
   display: flex; align-items: baseline; justify-content: space-between;
@@ -2373,5 +2482,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .arc-tier-note {
   margin: 12px 0 0;
   font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--text-dim);
+}
+/* Sentence-style muted panel description (e.g. Depositary). */
+.arc-panel-desc {
+  margin: 16px 0 0;
+  font-family: var(--f-body); font-size: 12px; line-height: 1.55;
   color: var(--text-dim);
 }

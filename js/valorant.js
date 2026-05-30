@@ -40,7 +40,7 @@
     { initials: "D.H", user: "dunehollow", quote: "Asked for Undercover Winrate and the booster respected it. No 12-game streaks. Looked natural.", from: "Gold I", to: "Diamond III", days: 6 }
   ];
   var FAQS = [
-    { q: "How does Valorant boosting work?", a: "Configure your current and target rank, pick add-ons, then confirm the order in Discord. A verified Immortal+ booster signs into your account (or queues with you in Duo mode) and plays manually until your target is hit." },
+    { q: "How does Valorant boosting work?", a: "Configure your current and target rank, pick add-ons, then complete checkout via our secure on-site checkout. A verified Immortal+ booster signs into your account (or queues with you in Duo mode) and plays manually until your target is hit." },
     { q: "Is boosting safe with Vanguard?", a: "Every booster is manual-only, on residential IPs, and follows our Vanguard-safe checklist: no shared sessions, no overlap with your active hours unless requested, no third-party tooling. 10,000+ Riot orders, zero bans." },
     { q: "Can I play with the booster?", a: "Yes. Pro Duo mode queues a verified Immortal+ booster on your team. You play your own account the entire time." },
     { q: "How long does a boost take?", a: "Most divisions complete in 12–36 hours. Diamond and above run 2–5 days. Express Priority cuts your wait to start by 80%." },
@@ -48,7 +48,7 @@
     { q: "Will my friends notice?", a: "Turn on Appear Offline (free add-on) and your status stays dark for the duration. Boosters won't accept or send invites." },
     { q: "What if the booster loses a match?", a: "We work in division targets, not match counts. You only pay for the result. If a booster trends below our 75% winrate floor, we swap them out the same day." },
     { q: "Can I watch the boost live?", a: "Add Stream Games and you get a private link plus saved VODs of every match." },
-    { q: "Refunds and pausing?", a: "Pause any time from your Discord ticket. Refunds are pro-rated against progress. Full refund if no work has started. Money-back guarantee if we miss our ETA by 48+ hours." },
+    { q: "Refunds and pausing?", a: "Pause any time from your dashboard. Refunds are pro-rated against progress. Full refund if no work has started. Money-back guarantee if we miss our ETA by 48+ hours." },
     { q: "Are your boosters really Immortal/Radiant?", a: "Every Valorant booster is verified Immortal 3 or above. Most hold Radiant on their main. We screenshot-verify each season." }
   ];
 
@@ -146,6 +146,53 @@
   function $(id) { return document.getElementById(id); }
   function esc(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 
+  /* ════════════════════════════════════════════════════════════════
+     PHASE 1 — VALORANT FREEZE FIX (root cause)
+     ----------------------------------------------------------------
+     Symptom: page becomes unresponsive when toggling add-ons / using
+     controls.
+
+     Root cause (three compounding issues, NOT an infinite loop):
+       1. Cross-tab handler bleed. bindTabEvents() assigns onclick +
+          onchange + oninput on #valConfigMount, but bindConfigEvents()
+          (rank tab) only reassigned onclick — leaving a previous tab's
+          onchange/oninput closures live on the same element after a
+          tab switch.
+       2. Synchronous render storm. Every control re-ran a full
+          innerHTML rebuild of the configurator + summary (8–9 <img>
+          rank tiles + route images, no intrinsic size) synchronously
+          on the main thread. Rapid clicks queued many blocking
+          re-layouts back to back.
+       3. No coalescing/debounce on change/input-driven recalcs.
+
+     Fix (JS only, zero layout change):
+       - scheduleRender(): coalesce click-driven re-renders into one
+         requestAnimationFrame tick (instant feel, no storm).
+       - debounce(): 250ms throttle for input/select/range-driven
+         price recalculations.
+       - bindConfigEvents() now clears onchange/oninput so a stale tab
+         handler can never fire on the rank tab.
+     ════════════════════════════════════════════════════════════════ */
+  function debounce(fn, ms) {
+    var t;
+    return function () {
+      var ctx = this, args = arguments;
+      clearTimeout(t);
+      t = setTimeout(function () { fn.apply(ctx, args); }, ms || 250);
+    };
+  }
+  var _rafPending = false, _rafFn = null;
+  function scheduleRender(fn) {
+    _rafFn = fn;
+    if (_rafPending) return;
+    _rafPending = true;
+    requestAnimationFrame(function () {
+      _rafPending = false;
+      var f = _rafFn; _rafFn = null;
+      if (typeof f === "function") f();
+    });
+  }
+
   function rankIndex(tier, divIdx) {
     var t = TIERS.findIndex(function (x) { return x.id === tier; });
     return t * 3 + divIdx;
@@ -210,9 +257,13 @@
   }
 
   function formatPrice(p) {
-    var d = Math.floor(p);
-    var c = String(Math.round((p - d) * 100)).padStart(2, "0");
-    return "$" + d + '<span class="cents">.' + c + "</span>";
+    // Prices are computed/stored in USD; display in the selected currency
+    // via the shared currency module (falls back to USD if absent).
+    var cur = window.elysiumCurrency || { rate: 1, symbol: "$" };
+    var v = p * (cur.rate || 1);
+    var d = Math.floor(v);
+    var c = String(Math.round((v - d) * 100)).padStart(2, "0");
+    return (cur.symbol || "$") + d + '<span class="cents">.' + c + "</span>";
   }
 
   function rankTilesHtml(tiers, activeId, prefix) {
@@ -360,34 +411,40 @@
 
   function bindConfigEvents() {
     var mount = $("valConfigMount");
+    // Kill any onchange/oninput left over from a previously-rendered tab
+    // (rank tab has no <select>/range controls). Prevents cross-tab bleed.
+    mount.onchange = null;
+    mount.oninput = null;
     mount.onclick = function (e) {
       var btn = e.target.closest("[data-current-tier]");
-      if (btn) { state.current.tier = btn.dataset.currentTier; renderRankConfig(); return; }
+      if (btn) { state.current.tier = btn.dataset.currentTier; scheduleRender(renderRankConfig); return; }
       btn = e.target.closest("[data-target-tier]");
-      if (btn) { state.target.tier = btn.dataset.targetTier; renderRankConfig(); return; }
+      if (btn) { state.target.tier = btn.dataset.targetTier; scheduleRender(renderRankConfig); return; }
       btn = e.target.closest("[data-seg-current-div]");
-      if (btn) { state.current.div = parseInt(btn.dataset.segCurrentDiv); renderRankConfig(); return; }
+      if (btn) { state.current.div = parseInt(btn.dataset.segCurrentDiv); scheduleRender(renderRankConfig); return; }
       btn = e.target.closest("[data-seg-target-div]");
-      if (btn) { state.target.div = parseInt(btn.dataset.segTargetDiv); renderRankConfig(); return; }
+      if (btn) { state.target.div = parseInt(btn.dataset.segTargetDiv); scheduleRender(renderRankConfig); return; }
       btn = e.target.closest("[data-seg-rr]");
-      if (btn) { state.rrPerWin = RR_RANGES[parseInt(btn.dataset.segRr)]; renderRankConfig(); return; }
+      if (btn) { state.rrPerWin = RR_RANGES[parseInt(btn.dataset.segRr)]; scheduleRender(renderRankConfig); return; }
       btn = e.target.closest("[data-chip-server]");
-      if (btn) { state.server = btn.dataset.chipServer; renderRankConfig(); return; }
+      if (btn) { state.server = btn.dataset.chipServer; scheduleRender(renderRankConfig); return; }
       btn = e.target.closest("[data-chip-platform]");
-      if (btn) { state.platform = btn.dataset.chipPlatform; renderRankConfig(); return; }
+      if (btn) { state.platform = btn.dataset.chipPlatform; scheduleRender(renderRankConfig); return; }
       btn = e.target.closest("[data-mode]");
-      if (btn) { state.mode = btn.dataset.mode; renderRankConfig(); return; }
+      if (btn) { state.mode = btn.dataset.mode; scheduleRender(renderRankConfig); return; }
+      btn = e.target.closest(".val-cta");
+      if (btn && !btn.disabled) { addRankToCart(); return; }
       btn = e.target.closest("[data-addon]");
       if (btn) {
         var id = btn.dataset.addon;
         var idx = state.addons.indexOf(id);
         if (idx >= 0) state.addons.splice(idx, 1); else state.addons.push(id);
-        renderRankConfig();
+        scheduleRender(renderRankConfig);
         return;
       }
     };
     var rrInput = $("valCurrentRR");
-    if (rrInput) rrInput.addEventListener("input", function () { state.currentRR = rrInput.value; });
+    if (rrInput) rrInput.addEventListener("input", debounce(function () { state.currentRR = rrInput.value; }, 250));
   }
 
   function renderPlacements() {
@@ -608,46 +665,49 @@
 
   function bindTabEvents(tab) {
     var mount = $("valConfigMount");
+    var render = { pl: renderPlacements, rw: renderWins, lv: renderLeveling, bp: renderBattlePass, co: renderCoaching }[tab];
+    // 250ms debounce for input/select/range-driven price recalcs.
+    var deferredRender = debounce(function () { scheduleRender(render); }, 250);
     mount.onclick = function (e) {
-      var btn, val;
+      var btn;
       btn = e.target.closest(".eb-faq-btn");
       if (btn) { var row = btn.closest(".eb-faq-row"); if (row) { row.classList.toggle("eb-open"); } return; }
+      btn = e.target.closest(".val-cta");
+      if (btn && !btn.disabled) { addTabToCart(tab); return; }
       if (tab === "rank") return;
       var s = state[tab];
-      var render = { pl: renderPlacements, rw: renderWins, lv: renderLeveling, bp: renderBattlePass, co: renderCoaching }[tab];
       btn = e.target.closest("[data-" + tab + "-tier]");
-      if (btn) { s.tier = btn.getAttribute("data-" + tab + "-tier"); render(); return; }
+      if (btn) { s.tier = btn.getAttribute("data-" + tab + "-tier"); scheduleRender(render); return; }
       btn = e.target.closest("[data-seg-" + tab + "-div]");
-      if (btn) { s.div = parseInt(btn.getAttribute("data-seg-" + tab + "-div")); render(); return; }
+      if (btn) { s.div = parseInt(btn.getAttribute("data-seg-" + tab + "-div")); scheduleRender(render); return; }
       btn = e.target.closest("[data-mode]");
-      if (btn) { s.mode = btn.dataset.mode; render(); return; }
+      if (btn) { s.mode = btn.dataset.mode; scheduleRender(render); return; }
       btn = e.target.closest("[data-switch]");
-      if (btn) { var key = btn.dataset["switch"]; s.addons[key] = !s.addons[key]; render(); return; }
+      if (btn) { var key = btn.dataset["switch"]; s.addons[key] = !s.addons[key]; scheduleRender(render); return; }
       btn = e.target.closest("[data-toggle]");
-      if (btn && !e.target.closest("[data-switch]")) { var tkey = btn.dataset.toggle; s.addons[tkey] = !s.addons[tkey]; render(); return; }
+      if (btn && !e.target.closest("[data-switch]")) { var tkey = btn.dataset.toggle; s.addons[tkey] = !s.addons[tkey]; scheduleRender(render); return; }
       btn = e.target.closest("[data-co-focus]");
-      if (btn) { s.focus = btn.dataset.coFocus; render(); return; }
+      if (btn) { s.focus = btn.dataset.coFocus; scheduleRender(render); return; }
       btn = e.target.closest("[data-step-rw-rr]");
-      if (btn) { s.rrPerWin = Math.min(40, Math.max(10, s.rrPerWin + parseInt(btn.getAttribute("data-step-rw-rr")))); render(); return; }
+      if (btn) { s.rrPerWin = Math.min(40, Math.max(10, s.rrPerWin + parseInt(btn.getAttribute("data-step-rw-rr")))); scheduleRender(render); return; }
       btn = e.target.closest("[data-step-co-hours]");
-      if (btn) { s.hours = Math.min(4, Math.max(1, s.hours + parseInt(btn.getAttribute("data-step-co-hours")))); render(); return; }
+      if (btn) { s.hours = Math.min(4, Math.max(1, s.hours + parseInt(btn.getAttribute("data-step-co-hours")))); scheduleRender(render); return; }
     };
     mount.onchange = function (e) {
       var el = e.target;
-      var render = { pl: renderPlacements, rw: renderWins, lv: renderLeveling, bp: renderBattlePass, co: renderCoaching }[tab];
-      if (el.matches("input[type=range]")) { if (render) render(); }
-      else if (el.matches("[data-select-pl-server]")) { state.pl.server = el.value; render(); }
-      else if (el.matches("[data-select-pl-platform]")) { state.pl.platform = el.value; render(); }
-      else if (el.matches("[data-select-rw-server]")) { state.rw.server = el.value; render(); }
-      else if (el.matches("[data-select-rw-platform]")) { state.rw.platform = el.value; render(); }
-      else if (el.matches("[data-select-lv-server]")) { state.lv.server = el.value; render(); }
-      else if (el.matches("[data-select-lv-platform]")) { state.lv.platform = el.value; render(); }
-      else if (el.matches("[data-select-bp-server]")) { state.bp.server = el.value; render(); }
-      else if (el.matches("[data-select-bp-platform]")) { state.bp.platform = el.value; render(); }
-      else if (el.matches("[data-select-co-server]")) { state.co.server = el.value; render(); }
-      else if (el.matches("[data-select-co-platform]")) { state.co.platform = el.value; render(); }
-      else if (el.matches("[data-stepper-rw-rr]")) { state.rw.rrPerWin = Math.min(40, Math.max(10, parseInt(el.value) || 22)); render(); }
-      else if (el.matches("[data-stepper-co-hours]")) { state.co.hours = Math.min(4, Math.max(1, parseInt(el.value) || 1)); render(); }
+      if (el.matches("input[type=range]")) { deferredRender(); }
+      else if (el.matches("[data-select-pl-server]")) { state.pl.server = el.value; deferredRender(); }
+      else if (el.matches("[data-select-pl-platform]")) { state.pl.platform = el.value; deferredRender(); }
+      else if (el.matches("[data-select-rw-server]")) { state.rw.server = el.value; deferredRender(); }
+      else if (el.matches("[data-select-rw-platform]")) { state.rw.platform = el.value; deferredRender(); }
+      else if (el.matches("[data-select-lv-server]")) { state.lv.server = el.value; deferredRender(); }
+      else if (el.matches("[data-select-lv-platform]")) { state.lv.platform = el.value; deferredRender(); }
+      else if (el.matches("[data-select-bp-server]")) { state.bp.server = el.value; deferredRender(); }
+      else if (el.matches("[data-select-bp-platform]")) { state.bp.platform = el.value; deferredRender(); }
+      else if (el.matches("[data-select-co-server]")) { state.co.server = el.value; deferredRender(); }
+      else if (el.matches("[data-select-co-platform]")) { state.co.platform = el.value; deferredRender(); }
+      else if (el.matches("[data-stepper-rw-rr]")) { state.rw.rrPerWin = Math.min(40, Math.max(10, parseInt(el.value) || 22)); deferredRender(); }
+      else if (el.matches("[data-stepper-co-hours]")) { state.co.hours = Math.min(4, Math.max(1, parseInt(el.value) || 1)); deferredRender(); }
     };
     mount.oninput = function (e) {
       var el = e.target;
@@ -674,6 +734,115 @@
                                         el.matches("[data-slider-bp-desired]") ? state.bp.desired : v;
       }
     };
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     PHASE 2 — CART INTEGRATION
+     The 6-tab configurator already existed and computes prices, but its
+     CTA buttons (.val-cta) were never wired to anything. cart.js is not
+     loaded on this page, so we persist into the shared cart store
+     (localStorage 'elyOrderStateV1') — the same contract Arc Raiders
+     uses — and update the nav cart badge.
+     ════════════════════════════════════════════════════════════════ */
+  var STORE_KEY = "elyOrderStateV1";
+
+  function currentCurrency() {
+    var sel = $("valCurrency");
+    return sel ? sel.value : "USD";
+  }
+
+  function makeEntry(name, category, priceUsd, details) {
+    return {
+      id: "val-" + Date.now(),
+      gameId: "valorant",
+      game: "Valorant",
+      name: "Valorant — " + name,
+      category: category,
+      qty: 1,
+      total: Math.round(priceUsd * 100) / 100,
+      custom: false,
+      details: details,
+      viewedCurrency: currentCurrency(),
+      addedAt: Date.now()
+    };
+  }
+
+  function pushCartEntry(entry) {
+    var store;
+    try { store = JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch (e) { store = {}; }
+    if (!Array.isArray(store.cart)) store.cart = [];
+    store.cart.push(entry);
+    store.currency = entry.viewedCurrency;
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (e) {}
+    syncNavBadge();
+    valToast("Added to cart");
+  }
+
+  function addRankToCart() {
+    var ci = rankIndex(state.current.tier, state.current.div);
+    var ti = rankIndex(state.target.tier, state.target.div);
+    if (ti <= ci) { valToast("Pick a higher target rank first"); return; }
+    var price = calculatePrice(state);
+    if (price <= 0) { valToast("Select a valid rank range"); return; }
+    var ct = TIERS.find(function (t) { return t.id === state.current.tier; });
+    var tt = TIERS.find(function (t) { return t.id === state.target.tier; });
+    var details = [
+      ct.name + " " + DIVISIONS[state.current.div] + " → " + tt.name + " " + DIVISIONS[state.target.div],
+      "Mode: " + (state.mode === "duo" ? "Pro Duo" : "Solo"),
+      "RR/Win: " + state.rrPerWin + " · " + state.server + " · " + state.platform,
+      state.addons.length ? "Add-ons: " + state.addons.join(", ") : "No add-ons"
+    ].join("\n");
+    pushCartEntry(makeEntry("Rank Boost", "Rank Boosting", price, details));
+  }
+
+  function addTabToCart(tab) {
+    if (tab === "rank") { addRankToCart(); return; }
+    var s = state[tab];
+    if (tab === "pl") {
+      var tp = PLACEMENT_TIERS.find(function (x) { return x.id === s.tier; });
+      pushCartEntry(makeEntry("Placements", "Placements", calcPlacementsPrice(s),
+        s.games + " placement games · " + tp.name + (s.tier !== "radiant" ? " " + DIVISIONS[s.div] : "") +
+        "\nMode: " + (s.mode === "duo" ? "Pro Duo" : "Solo") + " · " + s.server + " · " + s.platform));
+    } else if (tab === "rw") {
+      var tw = PLACEMENT_TIERS.find(function (x) { return x.id === s.tier; });
+      pushCartEntry(makeEntry("Ranked Wins", "Ranked Wins", calcWinsPrice(s),
+        s.wins + " wins · " + tw.name + (s.tier !== "radiant" ? " " + DIVISIONS[s.div] : "") +
+        "\nMode: " + (s.mode === "duo" ? "Pro Duo" : "Solo") + " · " + s.server + " · " + s.platform));
+    } else if (tab === "lv") {
+      var lvls = Math.max(0, s.desired - s.current);
+      if (lvls <= 0) { valToast("Target level must be higher"); return; }
+      pushCartEntry(makeEntry("Account Leveling", "Account Leveling", calcLevelPrice(s, 12.74),
+        "Level " + s.current + " → " + s.desired + " (" + lvls + " levels)\n" + s.server + " · " + s.platform));
+    } else if (tab === "bp") {
+      var tiers = Math.max(0, s.desired - s.current);
+      if (tiers <= 0) { valToast("Target tier must be higher"); return; }
+      pushCartEntry(makeEntry("Battle Pass", "Battle Pass", calcLevelPrice(s, 7.22),
+        "BP Tier " + s.current + " → " + s.desired + " (" + tiers + " tiers)\n" + s.server + " · " + s.platform));
+    } else if (tab === "co") {
+      var f = COACHING_FOCI.find(function (x) { return x.id === s.focus; });
+      pushCartEntry(makeEntry("Coaching", "Coaching", Math.round(16.99 * s.hours * 100) / 100,
+        s.hours + (s.hours === 1 ? " hour · " : " hours · ") + f.name + "\n" + s.server + " · " + s.platform));
+    }
+  }
+
+  function syncNavBadge() {
+    var dot = $("cartCount");
+    if (!dot) return;
+    var count = 0;
+    try {
+      var store = JSON.parse(localStorage.getItem(STORE_KEY) || "{}");
+      if (Array.isArray(store.cart)) count = store.cart.reduce(function (n, it) { return n + (it && it.qty ? it.qty : 1); }, 0);
+    } catch (e) {}
+    dot.textContent = count > 99 ? "99+" : String(count);
+  }
+
+  function valToast(msg) {
+    var t = document.querySelector(".eb-toast");
+    if (!t) { t = document.createElement("div"); t.className = "eb-toast"; document.body.appendChild(t); }
+    t.textContent = msg;
+    requestAnimationFrame(function () { t.classList.add("is-show"); });
+    clearTimeout(t._h);
+    t._h = setTimeout(function () { t.classList.remove("is-show"); }, 2400);
   }
 
   function switchTab(tabId) {
@@ -770,9 +939,22 @@
   }
 
   function initTabs() {
+    if (initTabs._done) return;
+    initTabs._done = true;
     document.querySelectorAll(".val-tab[data-tab]").forEach(function (tab) {
       tab.addEventListener("click", function () { switchTab(tab.dataset.tab); });
     });
+  }
+
+  function rerenderCurrent() {
+    switch (state.tab) {
+      case "rank": renderRankConfig(); break;
+      case "placements": renderPlacements(); break;
+      case "wins": renderWins(); break;
+      case "leveling": renderLeveling(); break;
+      case "battlepass": renderBattlePass(); break;
+      case "coaching": renderCoaching(); break;
+    }
   }
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -782,5 +964,9 @@
     renderRankConfig();
     renderReviews();
     renderFaqs();
+    syncNavBadge();
+    // Re-render the active configurator when the shared currency changes
+    // so live totals reflect the selected currency.
+    window.addEventListener("eb:currencychange", function () { scheduleRender(rerenderCurrent); });
   });
 })();

@@ -53,7 +53,7 @@
       cta: 'Mark urgent', sys: 'Order marked as urgent. Admin notified.' },
     { type: 'schedule', icon: '📅', label: 'Schedule Order', needsOrder: true, datetime: true,
       cta: 'Send schedule request', sys: 'Schedule request sent for {datetime}.' },
-    { type: 'preferred_booster', icon: '⭐', label: 'Add to Preferred Booster', needsOrder: true, needsBooster: true,
+    { type: 'preferred_booster', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="#e5c26b" aria-hidden="true" style="vertical-align:-2px"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>', label: 'Add to Preferred Booster', needsOrder: true, needsBooster: true,
       note: 'Work with this booster again on future orders.',
       cta: 'Add to preferred', sys: 'Booster added to your preferred list.' },
     { type: 'report', icon: '⚠️', label: 'Report Issue',
@@ -228,7 +228,8 @@
     try {
       await _loadOrders();
     } catch (e) {
-      pane.innerHTML = _stateMsg('⚠️', 'Could not load orders', 'Check your connection and retry.', 'Retry', 'data-ecw="reload-orders"');
+      console.error('[Elysium chat] orders load failed:', e);
+      pane.innerHTML = _stateMsg('📦', 'No orders available', 'We could not load your orders right now. Try again in a moment.', 'Retry', 'data-ecw="reload-orders"');
       return;
     }
     if (!S.orders.length && !S.completed.length) {
@@ -355,7 +356,8 @@
       if (res.error) throw res.error;
       S.support = res.data || [];
     } catch (e) {
-      thread.innerHTML = _stateMsg('⚠️', 'Could not load messages', 'Check your connection and retry.', 'Retry', 'data-ecw="reload-support"');
+      console.error('[Elysium chat] support load failed:', e);
+      thread.innerHTML = _stateMsg('💬', 'Support unavailable', 'We could not reach support right now. Please try again in a moment.', 'Retry', 'data-ecw="reload-support"');
       thread.querySelector('[data-ecw="reload-support"]').addEventListener('click', _renderSupport);
       return;
     }
@@ -691,6 +693,14 @@
     if (!S.user) { _login(); return; }
     if (orderId) { location.href = _chatPage() + '?order=' + encodeURIComponent(orderId); return; }
     if (!S.open) _open();
+  };
+
+  // Open the widget directly on the Support tab (used by the dashboard
+  // "My Tickets" tab to start/continue a support conversation).
+  window.EcwOpenSupport = function () {
+    if (!S.user) { _login(); return; }
+    S.tab = 'support';
+    if (!S.open) _open(); else _switchTab('support');
   };
 
   /* ── Boot ── */

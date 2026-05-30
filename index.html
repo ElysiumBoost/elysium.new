@@ -24,18 +24,18 @@
 
   <!-- ── SEO & Meta ── -->
   <title>ELYSIUM BOOST | Premium Game Services</title>
-  <meta name="description" content="ELYSIUM BOOST – premium manual game services, verified boosters, Discord ticket orders, and fast support.">
+  <meta name="description" content="ELYSIUM BOOST – premium manual game services, verified boosters, secure on-site checkout, and fast support.">
   <meta name="theme-color" content="#0a0808">
 
   <!-- ── Open Graph ── -->
   <meta property="og:type"        content="website">
   <meta property="og:title"       content="ELYSIUM BOOST | Premium Game Services">
-  <meta property="og:description" content="Premium manual game services with verified boosters, clean Discord ticket flow, and fast support.">
-  <meta property="og:image"       content="https://elysiumboost.com/assets/elysium-preview.webp">
+  <meta property="og:description" content="Premium manual game services with verified boosters, secure on-site checkout, and fast support.">
+  <meta property="og:image"       content="https://elysiumboost.github.io/elysium.new/assets/elysium-preview.webp">
 
   <!-- ── Twitter Card ── -->
   <meta name="twitter:card"  content="summary_large_image">
-  <meta name="twitter:image" content="https://elysiumboost.com/assets/elysium-preview.webp">
+  <meta name="twitter:image" content="https://elysiumboost.github.io/elysium.new/assets/elysium-preview.webp">
 
   <!-- ── Canonical ── -->
   <link rel="canonical" href="https://elysiumboost.com/" id="canonicalUrl">
@@ -265,9 +265,9 @@
             <div class="eb-hero-ctas">
               <button type="button" class="eb-btn eb-btn-primary hero-cta" onclick="document.getElementById('heroCta').click()">
                 <span class="arc-hot-trace" aria-hidden="true"></span>
-                Start Your Climb <span class="arrow"><svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M0 5H14M14 5L10 1M14 5L10 9" stroke="currentColor" stroke-width="1.5"/></svg></span>
+                Start Your Climb
               </button>
-              <a href="#howItWorksTitle" class="eb-btn">How it works <span class="arrow"><svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M0 5H14M14 5L10 1M14 5L10 9" stroke="currentColor" stroke-width="1.5"/></svg></span></a>
+              <a href="#howItWorksTitle" class="eb-btn">How it works</a>
             </div>
           </div>
         </div>
@@ -400,8 +400,8 @@
                 <div class="eb-step">
                   <div class="eb-step-n">01</div>
                   <div class="tick"></div>
-                  <h3 class="eb-step-title">Choose your service</h3>
-                  <p class="eb-step-body">Rank boost, in-game items, coaching: pick your game and configure exactly what you need.</p>
+                  <h3 class="eb-step-title">Choose Your Service</h3>
+                  <p class="eb-step-body">Pick your game, configure your order, add to cart.</p>
                   <span class="eb-step-arrow" aria-hidden="true"></span>
                 </div>
               </div>
@@ -409,8 +409,8 @@
                 <div class="eb-step">
                   <div class="eb-step-n">02</div>
                   <div class="tick"></div>
-                  <h3 class="eb-step-title">Confirm in Discord</h3>
-                  <p class="eb-step-body">Copy your order ticket and drop it in Discord. Our team confirms scope, timing, and your booster.</p>
+                  <h3 class="eb-step-title">Complete Checkout</h3>
+                  <p class="eb-step-body">Pay securely on-site. Your order is confirmed instantly and appears in your dashboard with a unique order ID.</p>
                   <span class="eb-step-arrow" aria-hidden="true"></span>
                 </div>
               </div>
@@ -418,8 +418,8 @@
                 <div class="eb-step">
                   <div class="eb-step-n">03</div>
                   <div class="tick"></div>
-                  <h3 class="eb-step-title">Delivery begins</h3>
-                  <p class="eb-step-body">Your verified booster starts. Clean, manual, no cheats. Tracked until done.</p>
+                  <h3 class="eb-step-title">Delivery Begins</h3>
+                  <p class="eb-step-body">Your verified booster starts. Track live progress in your dashboard until delivery is confirmed.</p>
                 </div>
               </div>
             </div>
@@ -767,21 +767,16 @@
             <button class="eb-cart-promo-apply" id="cartPromoApply" type="button">Apply</button>
           </div>
 
-          <p class="cart-verify-note eb-cart-note" id="cartVerifyNote">Attach receipt only if support asks.</p>
-
           <div class="eb-cart-actions">
-            <button class="eb-btn-primary eb-cart-checkout btn-order-copy" id="copyOrder" type="button">
+            <button class="eb-btn-primary eb-cart-checkout" id="memberCheckout" type="button">
               Checkout
-            </button>
-            <button class="eb-cart-member" id="memberCheckout" type="button">
-              Member Checkout
             </button>
           </div>
 
           <div class="eb-cart-trust" aria-label="Service guarantees">
             <span>Manual</span><span class="sep"></span>
             <span>No cheats</span><span class="sep"></span>
-            <span>Discord confirmed</span>
+            <span>Secure checkout</span>
           </div>
 
           <div class="eb-cart-receipt">
@@ -791,11 +786,6 @@
           </div>
 
           <div class="copy-status" id="copyStatus" aria-live="polite"></div>
-          <a id="openDiscord"
-             class="cart-open-discord-anchor"
-             href="https://discord.gg/elysiumgg"
-             target="_blank" rel="noopener"
-             tabindex="-1" aria-hidden="true">Open Discord</a>
         </div>
       </div>
     </aside>
@@ -807,7 +797,7 @@
   <div class="id-modal-backdrop" id="arcIdModal" aria-hidden="true">
     <div class="id-modal" role="dialog" aria-modal="true" aria-labelledby="arcIdTitle">
       <h2 id="arcIdTitle">Embark ID</h2>
-      <p id="arcIdCopy">Add your in-game ID before copying or opening the Discord ticket.</p>
+      <p id="arcIdCopy">Add your in-game ID before proceeding to checkout.</p>
       <label id="arcIdLabel" for="arcIdInput">Embark ID</label>
       <input id="arcIdInput" type="text" autocomplete="off" placeholder="Name#0000">
       <div class="id-modal-actions">
@@ -1053,7 +1043,6 @@
       <!-- Section 2: Arc Info Strip -->
       <section class="arc-info">
         <div class="eb-container">
-          <span class="arc-info-eyebrow">Extraction · Launch Season</span>
           <h2 class="arc-info-title">Arc <span class="accent">Raiders.</span></h2>
           <div class="arc-info-stats" role="list">
             <span class="item" role="listitem">
@@ -1159,7 +1148,7 @@
         <div class="eb-container">
           <div class="arc-reviews-head">
             <span>Verified reviews</span>
-            <span class="big">4.92 / 5</span>
+            <span class="big">4.9★</span>
             <span>based on Arc Raiders orders</span>
           </div>
           <div class="arc-reviews-rail">
@@ -1249,7 +1238,7 @@
                 <span class="eb-faq-q">What payment methods do you accept?</span>
                 <span class="eb-faq-plus">+</span>
               </button>
-              <div class="eb-faq-panel"><div class="eb-faq-a"><span></span><p>We accept all major payment methods via Discord ticket — PayPal, crypto, bank transfer, and card payments through our secure checkout. Pricing is shown in USD or Raider Coins depending on the service.</p><span></span></div></div>
+              <div class="eb-faq-panel"><div class="eb-faq-a"><span></span><p>We accept all major payment methods via our secure on-site checkout — PayPal, crypto, bank transfer, and card payments. Pricing is shown in USD or Raider Coins depending on the service. Pricing is shown in USD or Raider Coins depending on the service.</p><span></span></div></div>
             </div>
             <div class="eb-faq-row">
               <button class="eb-faq-btn" type="button" aria-expanded="false">
@@ -1291,11 +1280,13 @@
             </div>
           </div>
           <div class="eb-footer-tag">The Realm of Champions · Built by veterans.</div>
+          <div class="eb-footer-contact"><a href="mailto:support@elysiumboost.com">support@elysiumboost.com</a></div>
         </div>
         <div class="eb-footer-links">
           <a href="#ebGamesSection">Games</a>
           <a href="https://discord.gg/elysiumgg" target="_blank" rel="noopener">Discord</a>
           <button type="button" id="footerLegalBtn">Terms</button>
+          <a href="pages/privacy.html">Privacy</a>
         </div>
         <div class="eb-footer-social">
           <a href="https://discord.gg/elysiumgg" target="_blank" rel="noopener" aria-label="Discord">
@@ -1304,7 +1295,7 @@
         </div>
       </div>
       <div class="eb-footer-base">
-        <span>© 2025 Elysium Boost · All rights reserved</span>
+        <span>© 2026 Elysium Boost · All rights reserved</span>
         <span>10,000+ Orders · 500+ Discord Members · 4.9★</span>
       </div>
     </div>
@@ -1324,19 +1315,9 @@
        ══════════════════════════════════ -->
   <div class="legal-modal-backdrop" id="copySuccessModal" aria-hidden="true">
     <div class="legal-modal copy-success-modal" role="dialog" aria-modal="true" aria-labelledby="copySuccessTitle">
-      <h2 id="copySuccessTitle">Ticket copied successfully</h2>
-      <p class="copy-success-lead">Open Discord, paste your order, and wait for support confirmation.</p>
-      <ol class="copy-success-steps">
-        <li>Open Discord</li>
-        <li>Paste your order</li>
-        <li>Wait for confirmation</li>
-      </ol>
-      <p class="copy-success-receipt-note">Attach the receipt image only if support asks.</p>
+      <h2 id="copySuccessTitle">Order summary ready</h2>
+      <p class="copy-success-lead">Your order summary has been prepared. Download your receipt or close to return to your cart.</p>
       <div class="copy-success-actions">
-        <a class="btn btn-premium copy-success-discord-primary"
-           id="copySuccessDiscord"
-           href="https://discord.gg/elysiumgg"
-           target="_blank" rel="noopener">Open Discord</a>
         <button type="button" class="btn btn-glass copy-success-receipt-secondary" id="copySuccessReceipt">
           Download Receipt Image
         </button>
@@ -1344,6 +1325,7 @@
           Close
         </button>
       </div>
+      <p class="copy-success-lead" style="margin-top:12px;font-size:0.82rem">Need help? <a href="https://discord.gg/elysiumgg" target="_blank" rel="noopener" style="color:var(--gold)">Join our Discord</a> for support.</p>
     </div>
   </div>
 
@@ -1372,6 +1354,7 @@
        only order preserved.
        ════════════════════════════════════ -->
   <script src="js/config.js?v=v5-fix1" defer></script>
+  <script src="js/currency.js?v=v5-fix1" defer></script>
   <script src="js/products.js?v=v5-fix1" defer></script>
   <script src="js/state.js?v=v5-fix1" defer></script>
   <script src="js/storage.js?v=v5-fix1" defer></script>
@@ -1506,7 +1489,7 @@
             <div class="eb-panel active" id="ebSignInPanel">
               <div class="eb-field"><label>Email</label><input type="email" id="siEmail" placeholder="you@example.com" autocomplete="email"></div>
               <div class="eb-field"><label>Password</label><div class="eb-pass-wrap"><input type="password" id="siPass" placeholder="••••••••" autocomplete="current-password"><button class="eb-pass-eye" onclick="ebTogglePass('siPass',this)" type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
-              <div class="eb-forgot"><button type="button" onclick="ebForgotPassword(document.getElementById('siEmail').value)">Forgot password?</button></div>
+              <div class="eb-forgot"><button type="button" onclick="ebShowForgot()">Forgot password?</button></div>
               <button class="eb-cta" id="ebEmailCta" onclick="ebAuthEmailSignIn(document.getElementById('siEmail').value,document.getElementById('siPass').value)">Enter the Realm</button>
               <div class="eb-msg" id="ebEmailMsg"></div>
               <div class="eb-shields"><div class="eb-shield"><div class="eb-shield-dot"></div>Manual Only</div><div class="eb-shield"><div class="eb-shield-dot"></div>Zero Bans</div><div class="eb-shield"><div class="eb-shield-dot"></div>Encrypted</div></div>
@@ -1520,11 +1503,18 @@
               <div class="eb-msg" id="ebSignUpMsg"></div>
               <div class="eb-shields"><div class="eb-shield"><div class="eb-shield-dot"></div>Manual Only</div><div class="eb-shield"><div class="eb-shield-dot"></div>Zero Bans</div><div class="eb-shield"><div class="eb-shield-dot"></div>Encrypted</div></div>
             </div>
+            <div class="eb-panel" id="ebForgotPanel">
+              <p class="eb-sub" style="margin-bottom:14px">Enter your account email and we'll send a secure reset link.</p>
+              <div class="eb-field"><label>Email</label><input type="email" id="fpEmail" placeholder="you@example.com" autocomplete="email"></div>
+              <button class="eb-cta" id="fpCta" onclick="ebSendReset()">Send Reset Link</button>
+              <div class="eb-msg" id="fpMsg"></div>
+              <div class="eb-forgot"><button type="button" onclick="ebHideForgot()">&larr; Back to sign in</button></div>
+            </div>
           </div>
         </div>
 
         <div class="eb-footer">
-          <p class="eb-footer-txt">By continuing you agree to our <a href="/terms">Terms</a> &amp; <a href="/privacy">Privacy Policy</a></p>
+          <p class="eb-footer-txt">By continuing you agree to our <a href="pages/terms.html">Terms</a> &amp; <a href="pages/privacy.html">Privacy Policy</a></p>
         </div>
       </div>
     </div>
@@ -1532,6 +1522,9 @@
     <script>
     function ebShowEmailPanel(){document.getElementById('ebOAuthView').style.display='none';document.getElementById('ebEmailView').style.display='block';}
     function ebShowOAuthPanel(){document.getElementById('ebEmailView').style.display='none';document.getElementById('ebOAuthView').style.display='';}
+    function ebShowForgot(){var si=document.getElementById('siEmail'),fp=document.getElementById('fpEmail');if(si&&fp&&si.value)fp.value=si.value;var tabs=document.querySelector('#ebEmailView .eb-tabs');if(tabs)tabs.style.display='none';document.getElementById('ebSignInPanel').classList.remove('active');document.getElementById('ebSignUpPanel').classList.remove('active');document.getElementById('ebForgotPanel').classList.add('active');var m=document.getElementById('fpMsg');if(m){m.className='eb-msg';m.textContent='';}}
+    function ebHideForgot(){document.getElementById('ebForgotPanel').classList.remove('active');var tabs=document.querySelector('#ebEmailView .eb-tabs');if(tabs)tabs.style.display='';ebEmailTab('signin');}
+    function ebSendReset(){var email=document.getElementById('fpEmail').value;if(typeof ebForgotPassword==='function')ebForgotPassword(email,'fpMsg');}
     function ebEmailTab(t){const isIn=t==='signin';document.getElementById('ebTabSignIn').classList.toggle('active',isIn);document.getElementById('ebTabSignUp').classList.toggle('active',!isIn);document.getElementById('ebSignInPanel').classList.toggle('active',isIn);document.getElementById('ebSignUpPanel').classList.toggle('active',!isIn);}
     function ebTogglePass(id,btn){const inp=document.getElementById(id);const show=inp.type==='password';inp.type=show?'text':'password';btn.innerHTML=show?'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>':'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';}
     </script>

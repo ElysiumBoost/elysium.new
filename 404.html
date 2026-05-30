@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 — Elysium Boost</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      background: #0a0805;
+      color: #efe6cf;
+      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      gap: 22px;
+    }
+    .logo {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+    }
+    .glyph {
+      font-family: "Rajdhani", system-ui, sans-serif;
+      font-weight: 700;
+      font-size: clamp(90px, 18vw, 120px);
+      color: #c9a84c;
+      line-height: 1;
+      letter-spacing: 0.04em;
+      text-shadow: 0 0 40px rgba(201, 168, 76, 0.45);
+    }
+    .subtitle {
+      color: #efe6cf;
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 40ch;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .btn-fill,
+    .btn-outline {
+      padding: 12px 26px;
+      border-radius: 4px;
+      font-family: "Rajdhani", system-ui, sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+    }
+    .btn-fill {
+      background: linear-gradient(90deg, #8a6f32, #c9a84c, #e5c26b, #c9a84c, #8a6f32);
+      color: #0a0805;
+      border: none;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(201, 168, 76, 0.5);
+      color: #e5c26b;
+    }
+  </style>
+</head>
+<body>
+  <img class="logo" src="/assets/elysium-logo-mark.png" alt="Elysium Boost" style="width:64px;height:64px;object-fit:contain">
+  <div class="glyph">404</div>
+  <p class="subtitle" style="color:#efe6cf">The realm you seek doesn't exist.</p>
+  <div class="actions">
+    <a class="btn-fill" href="/">Back to Home</a>
+    <a class="btn-outline" href="/index.html#ebGamesSection">Browse Services</a>
+  </div>
+</body>
+</html>

@@ -50,7 +50,7 @@
   overflow: hidden;
   border: 1px solid var(--line-strong);
   border-radius: 14px;
-  background: linear-gradient(165deg, rgba(18, 15, 20, .97), rgba(10, 8, 8, .98));
+  background: linear-gradient(165deg, rgba(20, 14, 8, .97), rgba(10, 8, 5, .98));
   box-shadow:
     0 18px 50px rgba(0, 0, 0, .5),
     0 0 0 1px rgba(231, 201, 139, .08);
@@ -93,7 +93,7 @@
   flex-direction: column;
   flex-shrink: 0;
   gap: 8px;
-  background: linear-gradient(180deg, rgba(10, 8, 8, .72), rgba(18, 15, 20, .995));
+  background: linear-gradient(180deg, rgba(10, 8, 5, .72), rgba(20, 14, 8, .995));
   box-shadow: 0 -16px 40px rgba(0, 0, 0, .42);
 }
 

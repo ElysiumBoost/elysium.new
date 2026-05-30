@@ -72,11 +72,15 @@ async function ebAuthEmailSignUp(email, password, meta = {}) {
   return data.user;
 }
 
-async function ebForgotPassword(email) {
-  if (!email) { _showAuthError('Enter your email above first.', 'ebEmailMsg'); return; }
-  const { error } = await _sb.auth.resetPasswordForEmail(email, { redirectTo: `${REDIRECT_ORIGIN}/reset-password.html` });
-  if (error) { _showAuthError(error.message, 'ebEmailMsg'); return; }
-  _showAuthSuccess(`Reset link sent to ${email}`, 'ebEmailMsg');
+async function ebForgotPassword(email, msgId) {
+  msgId = msgId || 'ebEmailMsg';
+  if (!email) { _showAuthError('Enter your email first.', msgId); return; }
+  // Resolve against the document base so the redirect works on both the
+  // custom domain and the GitHub Pages /elysium.new/ project path.
+  const resetUrl = new URL('pages/reset-password.html', document.baseURI).href;
+  const { error } = await _sb.auth.resetPasswordForEmail(email, { redirectTo: resetUrl });
+  if (error) { _showAuthError(error.message, msgId); return; }
+  _showAuthSuccess('Check your email. Reset link sent.', msgId);
 }
 
 /* localStorage helpers for cross-page nav sync (username + avatar) */
@@ -153,7 +157,7 @@ function _applyBoosterLink(role) {
     link.href = prefix + 'booster.html';
     link.className = 'eb-user-item eb-user-item--booster';
     link.setAttribute('role', 'menuitem');
-    link.textContent = '⭐ Booster Panel';
+    link.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px;margin-right:5px"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Booster Panel';
     const sep = dd.querySelector('.eb-user-separator');
     const logout = dd.querySelector('.eb-user-logout');
     if (sep) dd.insertBefore(link, sep);
@@ -165,7 +169,8 @@ function _applyBoosterLink(role) {
 function _applyAvatarUrl(url) {
   document.querySelectorAll('[data-eb-avatar]').forEach(function(el) {
     if (url) {
-      el.innerHTML = '<img src="' + url + '" alt="Your avatar">';
+      var src = /^https?:\/\/|^\/\//.test(url) ? url : new URL(url, location.origin + '/').href;
+      el.innerHTML = '<img src="' + src + '" alt="Your avatar">';
       el.setAttribute('data-has-img', 'true');
     } else {
       el.innerHTML = '';
