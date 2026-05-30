@@ -11,15 +11,15 @@
     { id: 'custom-loadout', name: 'Custom Loadout', color: '#e08a2c', glyph: 'L', tags: ['Loadout', 'Weapons', 'Gear'], image: '../../assets/arc-raiders/images/custom-loadout.webp', art: 'Fully kitted loadouts assembled and shipped to your Stash. Pick the weapons, mods, gear and consumables; delivery is instant.' },
     { id: 'all-weapons', name: 'All Weapons', color: '#c98a2c', glyph: 'W', image: '../../assets/arc-raiders/images/all-weapons.webp', tags: ['Weapons', 'Mods'], art: 'Every weapon in the catalogue, any tier, any mods. Sold individually or in stacks.' },
     { id: 'blueprints', name: 'Blueprints', color: '#7faedc', glyph: 'B', image: '../../assets/arc-raiders/images/blueprints.webp', tags: ['Blueprints'], art: 'Unlock recipes for the gear you want to craft instead of grind.' },
-    { id: 'leveling', name: 'Leveling', color: '#e5c26b', glyph: '↑', tags: ['Leveling', 'XP'], image: '../../assets/arc-raiders/images/leveling.webp', art: 'Account leveling, contract progress, season-pass tiers — all done manually.' },
+    { id: 'leveling', name: 'Leveling', color: '#e5c26b', glyph: '↑', tags: ['Leveling', 'XP'], image: '../../assets/arc-raiders/images/leveling.webp', art: 'Account leveling, contract progress, season-pass tiers — all done manually.', serviceMode: true },
     { id: 'workshop', name: 'Workshop & Scrappy', color: '#d4571b', glyph: '⚙', tags: ['Workshop', 'Scrap'], image: '../../assets/arc-raiders/images/workshop.webp', art: 'Bench upgrades, recycled parts, scrappy contracts cleared on demand.' },
     { id: 'materials', name: 'All Materials', color: '#a3acb1', glyph: 'M', tags: ['Materials', 'Resources'], image: '../../assets/arc-raiders/images/all-materials.webp', art: 'Stack-priced raw materials shipped straight to your Stash.' },
     { id: 'depositary', name: 'Depositary', color: '#b794d6', glyph: 'D', tags: ['Storage'], image: '../../assets/arc-raiders/images/depositary.webp', art: 'Stash expansions, secure transfers, asset migration between characters.' },
     { id: 'boss-puzzle', name: 'Boss & Puzzle', color: '#c75059', glyph: '✦', tags: ['Boss', 'Puzzle'], image: '../../assets/arc-raiders/images/boss-puzzle.webp', art: 'Lockout bosses cleared, puzzles solved, achievements unlocked.' },
     { id: 'raider-coins', name: 'Raider Coins', color: '#e5c26b', glyph: '¤', tags: ['Currency'], image: '../../assets/arc-raiders/images/raider-coins.webp', art: 'Bulk Raider Coins delivered through verified trade routes.' },
-    { id: 'trials-boost', name: 'Trials Boost', color: '#ff8a3d', glyph: 'T', tags: ['Trials'], image: '../../assets/arc-raiders/images/trials-boost.webp', art: 'Weekly trial completions, perfect runs, ranked trial placements.' },
+    { id: 'trials-boost', name: 'Trials Boost', color: '#ff8a3d', glyph: 'T', tags: ['Trials'], image: '../../assets/arc-raiders/images/trials-boost.webp', art: 'Weekly trial completions, perfect runs, ranked trial placements.', serviceMode: true },
     { id: 'raids', name: 'Raid Bundles', color: '#ff4655', glyph: 'R', tags: ['Raids', 'Squad'], image: '../../assets/arc-raiders/images/raids.webp', art: 'Endgame raid clears with verified Immortal-tier squad leaders.' },
-    { id: 'expedition-boost', name: 'Expedition Boost', color: '#4ec6e8', glyph: 'E', tags: ['Expedition'], image: '../../assets/arc-raiders/images/expedition-boost.webp', art: 'Full expedition runs — sites swept, loot extracted, you keep everything.' },
+    { id: 'expedition-boost', name: 'Expedition Boost', color: '#4ec6e8', glyph: 'E', tags: ['Expedition'], image: '../../assets/arc-raiders/images/expedition-boost.webp', art: 'Full expedition runs — sites swept, loot extracted, you keep everything.', serviceMode: true },
     { id: 'raid-coaching', name: 'Hourly Coaching', color: '#9b6cff', glyph: 'C', tags: ['Coaching'], image: '../../assets/arc-raiders/images/raid-coaching.webp', art: '1-on-1 raid coaching with a pro: VOD review, route planning, mechanics.' },
     { id: 'assorted-seeds', name: 'Assorted Seeds', color: '#4ea568', glyph: 'S', tags: ['Seeds', 'Drops'], image: '../../assets/arc-raiders/images/assorted-seeds.webp', art: 'Curated seed bundles for vault runs, drop chases, and rare encounters.' },
     { id: 'custom-orders', name: 'Custom Orders', color: '#e08a2c', glyph: 'O', tags: ['Custom'], image: '../../assets/arc-raiders/images/custom-orders.webp', art: 'Off-menu requests handled by our concierge desk.' }
@@ -563,6 +563,7 @@
     state.streamAddon = null;
     state.onCartRemove = null;
     resetModeBar();
+    if (elModeBar) elModeBar.hidden = !svc.serviceMode;
 
     // Hide map, show service view
     elHubMap.hidden = true;

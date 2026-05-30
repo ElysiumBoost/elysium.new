@@ -349,7 +349,6 @@
   }
   function summaryFootHtml(etaLo, etaHi, price, ctaLabel) {
     return '<div class="val-summary-foot">' +
-      '<div class="val-eta"><span class="k">Estimated</span><span class="v">~ ' + etaLo + "–" + etaHi + ' days</span></div>' +
       '<div class="val-total"><span class="k">Total</span><span class="v">' + formatPrice(price) + "</span></div>" +
       '<button type="button" class="eb-btn eb-btn-primary val-cta val-cta-shield">' + shieldSvg() + " " + esc(ctaLabel) + ' <span class="arrow">' + arrowSvg() + "</span></button>" +
       '<div class="val-trust"><span>Fast Checkout</span><span class="sep"></span><span>Verified Pros</span><span class="sep"></span><span>Money-Back</span></div></div>';
@@ -398,7 +397,6 @@
             '<div class="val-summary-block-label">Add-ons</div>' + summaryAddonsHtml(state.addons) +
           "</div>" +
           '<div class="val-summary-foot">' +
-            '<div class="val-eta"><span class="k">Estimated</span><span class="v">~ ' + eta[0] + "–" + eta[1] + ' days</span></div>' +
             '<div class="val-total"><span class="k">Total</span><span class="v">' + formatPrice(price) + "</span></div>" +
             '<button type="button" class="eb-btn eb-btn-primary val-cta"' + (invalid ? ' disabled' : "") + '>Rank Up <span class="arrow">' + arrowSvg() + "</span></button>" +
             '<div class="val-trust"><span>Fast Checkout</span><span class="sep"></span><span>Verified Pros</span><span class="sep"></span><span>Money-Back</span></div>' +

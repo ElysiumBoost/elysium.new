@@ -11592,7 +11592,7 @@ body.tw-title-outlined .eb-hero .eb-h1 .gold {
   /* Wordmark is baked into the art (≈2.05:1). `cover` cropped the sides and
      clipped the first/last letters; `contain` keeps the full logo visible —
      the .eb-fcard-art hatch/tint layer fills the letterbox. */
-  object-fit: contain; object-position: center;
+  object-fit: cover; object-position: left center;
   z-index: 0;
 }
 
@@ -11739,12 +11739,9 @@ body.tw-title-outlined .eb-hero .eb-h1 .gold {
   scroll-snap-type: x mandatory;
   scroll-padding: 0 16px;
   padding: 4px 8px 16px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--eb-gold-deep) transparent;
+  scrollbar-width: none;
 }
-.eb-games-rail::-webkit-scrollbar { height: 6px; }
-.eb-games-rail::-webkit-scrollbar-track { background: transparent; }
-.eb-games-rail::-webkit-scrollbar-thumb { background: var(--eb-gold-deep); border-radius: 3px; }
+.eb-games-rail::-webkit-scrollbar { display: none; }
 
 .eb-scard {
   position: relative;
@@ -11780,10 +11777,7 @@ body.tw-title-outlined .eb-hero .eb-h1 .gold {
 .eb-scard-bg-img {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
-  /* Landscape art in a 4/5 portrait card: `cover` cropped >50% of the width
-     and gutted the centered logo. `contain` shows the whole wordmark over the
-     .eb-scard-art tint. */
-  object-fit: contain; object-position: center;
+  object-fit: cover; object-position: left center;
   z-index: 0;
 }
 .eb-scard-bigword {
