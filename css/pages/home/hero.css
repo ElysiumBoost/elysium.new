@@ -238,6 +238,10 @@
     }
 
     .how-it-works--compact {
+      margin-top: 16px;
+      padding-top: 0;
+    }
+
     .hero.is-home {
       display: block;
       min-height: clamp(380px, 42vw, 500px);

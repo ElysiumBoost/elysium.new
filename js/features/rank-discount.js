@@ -34,27 +34,29 @@
     return { discounted: discounted, saving: saving, rank: info.rank, pct: info.discount };
   }
 
-  /* After Supabase login, refresh rank from profiles table */
+  var SB_URL = 'https://ylaxzlejhzgakhtfmsbt.supabase.co';
+  var SB_KEY = 'sb_publishable_hjqgJX_RSpeypqtjJDk4xQ_pPGSnWAT';
+
+  /* After Supabase login, refresh rank from profiles table.
+     Uses a plain fetch with the session token — no extra Supabase client
+     creation, which caused a GoTrueClient cascade in the old version. */
   window.addEventListener('eb:authChange', function (e) {
-    var user = e.detail && e.detail.user;
-    if (!user) { localStorage.removeItem('elysium_rank_discount'); return; }
-
-    var SB_URL = 'https://ylaxzlejhzgakhtfmsbt.supabase.co';
-    var SB_KEY = 'sb_publishable_hjqgJX_RSpeypqtjJDk4xQ_pPGSnWAT';
-
+    var detail = e.detail || {};
+    var user   = detail.user;
+    var token  = detail.session && detail.session.access_token;
+    if (!user || !token) { localStorage.removeItem('elysium_rank_discount'); return; }
     try {
-      var sb = supabase.createClient(SB_URL, SB_KEY, {
-        auth: { persistSession: true, autoRefreshToken: false, detectSessionInUrl: false },
-      });
-      sb.from('profiles').select('total_spent').eq('id', user.id).maybeSingle().then(function (res) {
-        var spent = parseFloat((res.data && res.data.total_spent) || 0);
+      fetch(SB_URL + '/rest/v1/profiles?select=total_spent&id=eq.' + user.id, {
+        headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + token }
+      }).then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
+        var row   = Array.isArray(rows) ? rows[0] : rows;
+        var spent = parseFloat((row && row.total_spent) || 0);
         var rank  = RANKS[0];
         for (var i = RANKS.length - 1; i >= 0; i--) {
           if (spent >= RANKS[i].min) { rank = RANKS[i]; break; }
         }
         try { localStorage.setItem('elysium_rank_discount', JSON.stringify({ rank: rank.name, discount: rank.discount })); } catch (_) {}
         window.dispatchEvent(new CustomEvent('eb:rankDiscountReady', { detail: { rank: rank.name, discount: rank.discount } }));
-        /* Refresh the cart so the discount line reflects immediately */
         if (typeof window.renderCart === 'function') { try { window.renderCart(); } catch (_) {} }
       });
     } catch (_) {}
