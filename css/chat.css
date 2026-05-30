@@ -430,15 +430,6 @@
 
 /* ── Support pane ── */
 #ecwSupportPane { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
-.ecw-chips { flex-shrink: 0; display: flex; flex-wrap: nowrap; gap: 8px; padding: 10px 12px; overflow-x: auto; scrollbar-width: none; position: relative; }
-.ecw-chips::-webkit-scrollbar { display: none; }
-.ecw-chips::after { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 32px; background: linear-gradient(to left, #0a0805, transparent); pointer-events: none; }
-.ecw-chip { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(255,255,255,0.02); border: 1px solid var(--line-soft, rgba(239,230,207,0.08)); border-radius: 999px;
-  padding: 6px 12px; cursor: pointer; font-family: var(--f-body, sans-serif); font-size: 0.74rem;
-  color: var(--text-soft, rgba(239,230,207,0.72)); white-space: nowrap; transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease; }
-.ecw-chip:hover { border-color: var(--gold, #c9a84c); color: var(--gold-bright, #e5c26b); background: var(--gold-soft, rgba(201,168,76,0.14)); }
-.ecw-chip-ico { font-size: 0.85rem; }
 .ecw-reply-eta { flex-shrink: 0; display: flex; align-items: center; gap: 7px; padding: 7px 14px;
   font-family: var(--f-mono, monospace); font-size: 0.6rem; letter-spacing: 0.04em; color: var(--text-dim, #8a7d5e);
   border-top: 1px solid var(--line-soft, rgba(239,230,207,0.08)); }

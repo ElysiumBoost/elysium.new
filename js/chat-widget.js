@@ -141,7 +141,6 @@
       '</div>' +
       '<div class="ecw-pane" id="ecwOrdersPane"></div>' +
       '<div class="ecw-pane ecw-hidden" id="ecwSupportPane">' +
-        '<div class="ecw-chips" id="ecwChips"></div>' +
         '<div class="ecw-reply-eta"><span class="ecw-dot"></span> Support usually replies in ~5 min</div>' +
         '<div class="ecw-thread" id="ecwThread"></div>' +
         '<div class="ecw-flagwarn ecw-hidden" id="ecwFlagWarn">This message may violate platform rules. External payment is never allowed.</div>' +
@@ -163,7 +162,6 @@
       t.addEventListener('click', function () { _switchTab(t.dataset.tab); });
     });
     _$('ecwOrdersPane').addEventListener('click', _onOrdersClick);
-    _$('ecwChips').addEventListener('click', _onChipClick);
     _$('ecwForm').addEventListener('submit', _onSupportSend);
     _$('ecwInput').addEventListener('input', _onSupportInput);
   }
@@ -335,15 +333,10 @@
   /* ════════════ SUPPORT TAB ════════════ */
   async function _renderSupport() {
     if (!S.user) {
-      _$('ecwChips').innerHTML = '';
       _$('ecwThread').innerHTML = _stateMsg('🔒', 'Login to message support', 'Sign in to start a conversation with our team.', 'Login', 'data-ecw="login"');
       _$('ecwThread').querySelector('[data-ecw="login"]').addEventListener('click', _login);
       return;
     }
-    _$('ecwChips').innerHTML = ACTIONS.map(function (a) {
-      return '<button class="ecw-chip" data-action="' + a.type + '" type="button">' +
-        '<span class="ecw-chip-ico" aria-hidden="true">' + a.icon + '</span>' + _esc(a.label) + '</button>';
-    }).join('');
 
     var thread = _$('ecwThread');
     if (!_sbReady()) { thread.innerHTML = _stateMsg('⚠️', 'Chat unavailable', 'Please reload and try again.'); return; }
@@ -368,7 +361,7 @@
   function _paintThread() {
     var thread = _$('ecwThread');
     if (!S.support.length) {
-      thread.innerHTML = '<div class="ecw-thread-empty">Send us a message or tap a quick action above. We reply fast.</div>';
+      thread.innerHTML = '<div class="ecw-thread-empty">Send us a message and our team will reply fast.</div>';
       return;
     }
     thread.innerHTML = S.support.map(function (m) {
@@ -438,14 +431,11 @@
     } catch (e) {}
   }
 
-  /* ════════════ QUICK-ACTION MODALS ════════════ */
-  function _onChipClick(e) {
-    var chip = e.target.closest('[data-action]');
-    if (!chip) return;
-    var action = ACTIONS.filter(function (a) { return a.type === chip.getAttribute('data-action'); })[0];
-    if (action) _openAction(action);
-  }
-
+  /* ════════════ QUICK-ACTION MODALS ════════════
+     The quick-action chip row was removed from the support pane. The action
+     modal machinery below (ACTIONS, _openAction, …) is retained so these
+     support flows can be re-surfaced from a future entry point without a
+     rebuild. */
   function _orderOptions(boosterOnly) {
     var list = S.orders.concat(S.completed).filter(function (o) { return boosterOnly ? o.booster_id : true; });
     if (!list.length) return '';
