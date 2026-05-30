@@ -20,7 +20,7 @@
 
   /* ── State ─────────────────────────────────────────────────── */
 
-  var _sb, _user, _profile = {}, _orders = [];
+  var _sb, _user, _profile = {}, _orders = [], _tickets = [];
   var _selectedAvNum = null;
   var _currentFilter = 'all';
   var _unread = {}, _chatOrder = null, _chatChannel = null, _feedChannel = null;
@@ -158,8 +158,7 @@
       renderOverview();
       renderOrders();
       renderOrdersStats();
-      renderTickets();
-      renderTicketsStats();
+      loadTickets();
       renderRank();
       renderAccount();
       renderSecurity();
@@ -424,55 +423,96 @@
     return { label: 'Waiting Reply', cls: 'pending' };
   }
 
+  /* Tickets are real support_requests rows for this user (not Discord). */
+  var TICKET_TYPE_LABEL = {
+    change_booster: 'Change booster request',
+    refund: 'Refund request',
+    eta_update: 'ETA update request',
+    urgent: 'Marked order as urgent',
+    schedule: 'Schedule request',
+    preferred_booster: 'Preferred booster request',
+    report: 'Issue report',
+    external_payment_report: 'External payment report'
+  };
+  function ticketCode(id) {
+    var n = parseInt(String(id).replace(/[^0-9a-f]/gi, '').slice(0, 6), 16);
+    if (isNaN(n)) n = 0;
+    return 'ST' + String(n % 10000).padStart(4, '0');
+  }
+  function ticketStatusMeta(status) {
+    if (status === 'resolved') return { cls: 'completed', label: 'Resolved' };
+    if (status === 'rejected') return { cls: 'pending', label: 'Closed' };
+    if (status === 'reviewing') return { cls: 'active', label: 'Reviewing' };
+    return { cls: 'active', label: 'Open' };
+  }
+  function ticketSubject(t) {
+    var s = t.reason || TICKET_TYPE_LABEL[t.type] || 'Support request';
+    return s.length > 60 ? s.slice(0, 60) + '…' : s;
+  }
+
+  function bindSupportButtons() {
+    if (bindSupportButtons._done) return;
+    bindSupportButtons._done = true;
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-open-support]');
+      if (!b) return;
+      e.preventDefault();
+      if (typeof window.EcwOpenSupport === 'function') window.EcwOpenSupport();
+      else if (typeof window.EcwOpenChat === 'function') window.EcwOpenChat();
+    });
+  }
+
+  function loadTickets() {
+    bindSupportButtons();
+    if (!_sb || !_user) { renderTicketsStats(); renderTickets(); return; }
+    _sb.from('support_requests')
+      .select('id, type, reason, status, urgent, created_at, order_id')
+      .eq('user_id', _user.id)
+      .order('created_at', { ascending: false })
+      .then(function (res) {
+        if (res.error) { console.error('[dashboard] tickets load failed:', res.error); _tickets = []; }
+        else { _tickets = res.data || []; }
+        renderTicketsStats();
+        renderTickets();
+      });
+  }
+
   function renderTicketsStats() {
     var el = document.getElementById('dbTicketsStats');
     if (!el) return;
-    var ticketed = _orders.filter(function (o) { return !!o.discord_ticket_id; });
-    var open    = ticketed.filter(function (o) { return ticketState(o).cls === 'active'; }).length;
-    var waiting = ticketed.filter(function (o) { return ticketState(o).cls === 'pending'; }).length;
-    var solved  = ticketed.filter(function (o) { return ticketState(o).cls === 'completed'; }).length;
-    el.innerHTML = oStat(open, 'Open') + oStat(waiting, 'Waiting Reply') + oStat(solved, 'Solved');
+    var open     = _tickets.filter(function (t) { return t.status === 'open' || t.status === 'reviewing'; }).length;
+    var resolved = _tickets.filter(function (t) { return t.status === 'resolved'; }).length;
+    el.innerHTML = oStat(_tickets.length, 'Total') + oStat(open, 'Open') + oStat(resolved, 'Resolved');
   }
 
   function renderTickets() {
     var body = document.getElementById('dbTicketsBody');
     if (!body) return;
-    var ticketed = _orders.filter(function (o) { return !!o.discord_ticket_id; });
 
-    if (!ticketed.length) {
+    if (!_tickets.length) {
       body.innerHTML =
         '<div class="db-orders-empty">' +
         '<i class="ti ti-ticket db-empty-icon"></i>' +
         '<p class="db-empty-title">No tickets yet</p>' +
-        '<a href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer" class="eb-btn-primary"><i class="ti ti-brand-discord"></i> Open a Ticket on Discord</a>' +
-        '<div class="db-help-topics">' +
-          helpTopic('ti-package', 'Where is my order?') +
-          helpTopic('ti-arrows-exchange', 'Request a refund or change') +
-          helpTopic('ti-user-star', 'Switch my assigned booster') +
-        '</div>' +
+        '<p class="db-empty-sub">Open a support request and our team replies right in your chat.</p>' +
+        '<button type="button" class="eb-btn-primary" data-open-support><i class="ti ti-headset"></i> Open New Ticket</button>' +
         '</div>';
       return;
     }
 
     body.innerHTML =
       '<div class="db-table-wrap"><table class="db-table">' +
-      '<thead><tr><th>Subject</th><th>Status</th><th class="db-date-cell">Last Update</th><th>Action</th></tr></thead>' +
-      '<tbody>' + ticketed.map(function (o) {
-        var st = ticketState(o);
+      '<thead><tr><th>Ticket</th><th>Subject</th><th>Status</th><th class="db-date-cell">Opened</th></tr></thead>' +
+      '<tbody>' + _tickets.map(function (t) {
+        var st = ticketStatusMeta(t.status);
         return '<tr class="db-order-row">' +
-          '<td class="db-service-cell">' + esc(o.service_name || o.service || 'Support ticket') + '</td>' +
+          '<td><span class="db-ticket-code">' + ticketCode(t.id) + '</span></td>' +
+          '<td class="db-service-cell">' + esc(ticketSubject(t)) + '</td>' +
           '<td><span class="db-status-badge db-status-' + st.cls + '">' + st.label + '</span></td>' +
-          '<td class="db-date-cell">' + fmtDate(o.created_at || o.date) + '</td>' +
-          '<td><a href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer" class="db-ticket-btn"><i class="ti ti-external-link"></i> Open</a></td>' +
+          '<td class="db-date-cell">' + fmtDate(t.created_at) + '</td>' +
           '</tr>';
       }).join('') +
       '</tbody></table></div>';
-  }
-
-  function helpTopic(icon, label) {
-    return '<a class="db-help-topic" href="https://discord.gg/elysiumgg" target="_blank" rel="noopener noreferrer">' +
-      '<i class="ti ' + icon + '"></i><span>' + esc(label) + '</span>' +
-      '<i class="ti ti-arrow-right db-help-topic-arrow"></i></a>';
   }
 
   /* ── Rank section ───────────────────────────────────────────── */
