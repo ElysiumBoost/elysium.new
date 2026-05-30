@@ -1826,3 +1826,7 @@
 .db-chat-send:hover { background: var(--gold-bright); }
 .db-chat-send:active { transform: scale(0.94); }
 .db-chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* My Tickets — support_requests rows */
+.db-ticket-code { font-family: var(--f-mono, monospace); font-size: 12px; letter-spacing: 0.06em; color: var(--gold-bright, #e5c26b); }
+.db-empty-sub { margin: 6px 0 16px; font-size: 13px; color: var(--text-soft, rgba(239,230,207,0.72)); max-width: 36ch; }

@@ -400,8 +400,8 @@
                 <div class="eb-step">
                   <div class="eb-step-n">01</div>
                   <div class="tick"></div>
-                  <h3 class="eb-step-title">Choose your service</h3>
-                  <p class="eb-step-body">Rank boost, in-game items, coaching: pick your game and configure exactly what you need.</p>
+                  <h3 class="eb-step-title">Choose Your Service</h3>
+                  <p class="eb-step-body">Pick your game, configure your order, add to cart.</p>
                   <span class="eb-step-arrow" aria-hidden="true"></span>
                 </div>
               </div>
@@ -409,8 +409,8 @@
                 <div class="eb-step">
                   <div class="eb-step-n">02</div>
                   <div class="tick"></div>
-                  <h3 class="eb-step-title">Confirm your order</h3>
-                  <p class="eb-step-body">Complete checkout via our secure on-site checkout. Our team confirms scope, timing, and your booster.</p>
+                  <h3 class="eb-step-title">Complete Checkout</h3>
+                  <p class="eb-step-body">Pay securely on-site. Your order is confirmed instantly and appears in your dashboard with a unique order ID.</p>
                   <span class="eb-step-arrow" aria-hidden="true"></span>
                 </div>
               </div>
@@ -418,8 +418,8 @@
                 <div class="eb-step">
                   <div class="eb-step-n">03</div>
                   <div class="tick"></div>
-                  <h3 class="eb-step-title">Delivery begins</h3>
-                  <p class="eb-step-body">Your verified booster starts. Clean, manual, no cheats. Tracked until done.</p>
+                  <h3 class="eb-step-title">Delivery Begins</h3>
+                  <p class="eb-step-body">Your verified booster starts. Track live progress in your dashboard until delivery is confirmed.</p>
                 </div>
               </div>
             </div>
@@ -545,6 +545,69 @@
                 <span>10,000+ Orders</span>
                 <span class="sep"></span>
                 <span>Discord Rating</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- The Team -->
+        <section class="eb-section eb-team-section" aria-labelledby="teamTitle">
+          <div class="eb-container">
+            <div class="eb-secheader">
+              <div class="eb-reveal"><span class="eb-label">THE TEAM</span></div>
+              <div class="eb-reveal" style="transition-delay:80ms"><h2 class="eb-h2" id="teamTitle">Verified Boosters.</h2></div>
+            </div>
+            <div class="eb-team-grid">
+              <div class="eb-reveal">
+                <article class="eb-booster-card">
+                  <div class="eb-booster-head">
+                    <img class="eb-booster-av" src="assets/avatars/elysium_unique_avatar_03.png" alt="Archi, Arc Raiders specialist" loading="lazy" width="72" height="72">
+                    <div class="eb-booster-id">
+                      <span class="eb-booster-name">Archi</span>
+                      <span class="eb-booster-role">Arc Raiders Specialist</span>
+                    </div>
+                  </div>
+                  <div class="eb-booster-stats">
+                    <span class="eb-booster-pill">1,200+ Orders</span>
+                    <span class="eb-booster-pill">94% Win Rate</span>
+                  </div>
+                  <p class="eb-booster-bio">Extraction-focused runner with the fastest stash delivery in the realm.</p>
+                  <div class="eb-booster-tags"><span class="eb-booster-tag">Arc Raiders</span></div>
+                </article>
+              </div>
+              <div class="eb-reveal" style="transition-delay:80ms">
+                <article class="eb-booster-card">
+                  <div class="eb-booster-head">
+                    <img class="eb-booster-av" src="assets/avatars/elysium_unique_avatar_07.png" alt="Draton, multi-game veteran" loading="lazy" width="72" height="72">
+                    <div class="eb-booster-id">
+                      <span class="eb-booster-name">Draton</span>
+                      <span class="eb-booster-role">Multi-Game Veteran</span>
+                    </div>
+                  </div>
+                  <div class="eb-booster-stats">
+                    <span class="eb-booster-pill">800+ Orders</span>
+                    <span class="eb-booster-pill">91% Win Rate</span>
+                  </div>
+                  <p class="eb-booster-bio">From Radiant climbs to raid clears, versatile and reliable.</p>
+                  <div class="eb-booster-tags"><span class="eb-booster-tag">Arc Raiders</span><span class="eb-booster-tag">Valorant</span></div>
+                </article>
+              </div>
+              <div class="eb-reveal" style="transition-delay:160ms">
+                <article class="eb-booster-card">
+                  <div class="eb-booster-head">
+                    <img class="eb-booster-av" src="assets/avatars/elysium_unique_avatar_11.png" alt="Fivex, Valorant expert" loading="lazy" width="72" height="72">
+                    <div class="eb-booster-id">
+                      <span class="eb-booster-name">Fivex</span>
+                      <span class="eb-booster-role">Valorant Expert</span>
+                    </div>
+                  </div>
+                  <div class="eb-booster-stats">
+                    <span class="eb-booster-pill">600+ Orders</span>
+                    <span class="eb-booster-pill">96% Win Rate</span>
+                  </div>
+                  <p class="eb-booster-bio">Immortal+ certified coach and rank boost specialist.</p>
+                  <div class="eb-booster-tags"><span class="eb-booster-tag">Valorant</span></div>
+                </article>
               </div>
             </div>
           </div>
@@ -1355,6 +1418,7 @@
        only order preserved.
        ════════════════════════════════════ -->
   <script src="js/config.js?v=v5-fix1" defer></script>
+  <script src="js/currency.js?v=v5-fix1" defer></script>
   <script src="js/products.js?v=v5-fix1" defer></script>
   <script src="js/state.js?v=v5-fix1" defer></script>
   <script src="js/storage.js?v=v5-fix1" defer></script>
@@ -1489,7 +1553,7 @@
             <div class="eb-panel active" id="ebSignInPanel">
               <div class="eb-field"><label>Email</label><input type="email" id="siEmail" placeholder="you@example.com" autocomplete="email"></div>
               <div class="eb-field"><label>Password</label><div class="eb-pass-wrap"><input type="password" id="siPass" placeholder="••••••••" autocomplete="current-password"><button class="eb-pass-eye" onclick="ebTogglePass('siPass',this)" type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
-              <div class="eb-forgot"><button type="button" onclick="ebForgotPassword(document.getElementById('siEmail').value)">Forgot password?</button></div>
+              <div class="eb-forgot"><button type="button" onclick="ebShowForgot()">Forgot password?</button></div>
               <button class="eb-cta" id="ebEmailCta" onclick="ebAuthEmailSignIn(document.getElementById('siEmail').value,document.getElementById('siPass').value)">Enter the Realm</button>
               <div class="eb-msg" id="ebEmailMsg"></div>
               <div class="eb-shields"><div class="eb-shield"><div class="eb-shield-dot"></div>Manual Only</div><div class="eb-shield"><div class="eb-shield-dot"></div>Zero Bans</div><div class="eb-shield"><div class="eb-shield-dot"></div>Encrypted</div></div>
@@ -1503,11 +1567,18 @@
               <div class="eb-msg" id="ebSignUpMsg"></div>
               <div class="eb-shields"><div class="eb-shield"><div class="eb-shield-dot"></div>Manual Only</div><div class="eb-shield"><div class="eb-shield-dot"></div>Zero Bans</div><div class="eb-shield"><div class="eb-shield-dot"></div>Encrypted</div></div>
             </div>
+            <div class="eb-panel" id="ebForgotPanel">
+              <p class="eb-sub" style="margin-bottom:14px">Enter your account email and we'll send a secure reset link.</p>
+              <div class="eb-field"><label>Email</label><input type="email" id="fpEmail" placeholder="you@example.com" autocomplete="email"></div>
+              <button class="eb-cta" id="fpCta" onclick="ebSendReset()">Send Reset Link</button>
+              <div class="eb-msg" id="fpMsg"></div>
+              <div class="eb-forgot"><button type="button" onclick="ebHideForgot()">&larr; Back to sign in</button></div>
+            </div>
           </div>
         </div>
 
         <div class="eb-footer">
-          <p class="eb-footer-txt">By continuing you agree to our <a href="/terms">Terms</a> &amp; <a href="/privacy">Privacy Policy</a></p>
+          <p class="eb-footer-txt">By continuing you agree to our <a href="pages/terms.html">Terms</a> &amp; <a href="pages/privacy.html">Privacy Policy</a></p>
         </div>
       </div>
     </div>
@@ -1515,6 +1586,9 @@
     <script>
     function ebShowEmailPanel(){document.getElementById('ebOAuthView').style.display='none';document.getElementById('ebEmailView').style.display='block';}
     function ebShowOAuthPanel(){document.getElementById('ebEmailView').style.display='none';document.getElementById('ebOAuthView').style.display='';}
+    function ebShowForgot(){var si=document.getElementById('siEmail'),fp=document.getElementById('fpEmail');if(si&&fp&&si.value)fp.value=si.value;var tabs=document.querySelector('#ebEmailView .eb-tabs');if(tabs)tabs.style.display='none';document.getElementById('ebSignInPanel').classList.remove('active');document.getElementById('ebSignUpPanel').classList.remove('active');document.getElementById('ebForgotPanel').classList.add('active');var m=document.getElementById('fpMsg');if(m){m.className='eb-msg';m.textContent='';}}
+    function ebHideForgot(){document.getElementById('ebForgotPanel').classList.remove('active');var tabs=document.querySelector('#ebEmailView .eb-tabs');if(tabs)tabs.style.display='';ebEmailTab('signin');}
+    function ebSendReset(){var email=document.getElementById('fpEmail').value;if(typeof ebForgotPassword==='function')ebForgotPassword(email,'fpMsg');}
     function ebEmailTab(t){const isIn=t==='signin';document.getElementById('ebTabSignIn').classList.toggle('active',isIn);document.getElementById('ebTabSignUp').classList.toggle('active',!isIn);document.getElementById('ebSignInPanel').classList.toggle('active',isIn);document.getElementById('ebSignUpPanel').classList.toggle('active',!isIn);}
     function ebTogglePass(id,btn){const inp=document.getElementById(id);const show=inp.type==='password';inp.type=show?'text':'password';btn.innerHTML=show?'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>':'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';}
     </script>

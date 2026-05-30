@@ -72,11 +72,15 @@ async function ebAuthEmailSignUp(email, password, meta = {}) {
   return data.user;
 }
 
-async function ebForgotPassword(email) {
-  if (!email) { _showAuthError('Enter your email above first.', 'ebEmailMsg'); return; }
-  const { error } = await _sb.auth.resetPasswordForEmail(email, { redirectTo: `${REDIRECT_ORIGIN}/reset-password.html` });
-  if (error) { _showAuthError(error.message, 'ebEmailMsg'); return; }
-  _showAuthSuccess(`Reset link sent to ${email}`, 'ebEmailMsg');
+async function ebForgotPassword(email, msgId) {
+  msgId = msgId || 'ebEmailMsg';
+  if (!email) { _showAuthError('Enter your email first.', msgId); return; }
+  // Resolve against the document base so the redirect works on both the
+  // custom domain and the GitHub Pages /elysium.new/ project path.
+  const resetUrl = new URL('pages/reset-password.html', document.baseURI).href;
+  const { error } = await _sb.auth.resetPasswordForEmail(email, { redirectTo: resetUrl });
+  if (error) { _showAuthError(error.message, msgId); return; }
+  _showAuthSuccess('Check your email. Reset link sent.', msgId);
 }
 
 /* localStorage helpers for cross-page nav sync (username + avatar) */

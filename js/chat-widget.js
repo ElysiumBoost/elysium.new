@@ -228,7 +228,8 @@
     try {
       await _loadOrders();
     } catch (e) {
-      pane.innerHTML = _stateMsg('⚠️', 'Could not load orders', 'Check your connection and retry.', 'Retry', 'data-ecw="reload-orders"');
+      console.error('[Elysium chat] orders load failed:', e);
+      pane.innerHTML = _stateMsg('⚠️', 'Reconnecting…', 'We could not reach the server. Check your connection and retry.', 'Retry', 'data-ecw="reload-orders"');
       return;
     }
     if (!S.orders.length && !S.completed.length) {
@@ -355,7 +356,8 @@
       if (res.error) throw res.error;
       S.support = res.data || [];
     } catch (e) {
-      thread.innerHTML = _stateMsg('⚠️', 'Could not load messages', 'Check your connection and retry.', 'Retry', 'data-ecw="reload-support"');
+      console.error('[Elysium chat] support load failed:', e);
+      thread.innerHTML = _stateMsg('⚠️', 'Reconnecting…', 'We could not reach the server. Check your connection and retry.', 'Retry', 'data-ecw="reload-support"');
       thread.querySelector('[data-ecw="reload-support"]').addEventListener('click', _renderSupport);
       return;
     }
@@ -691,6 +693,14 @@
     if (!S.user) { _login(); return; }
     if (orderId) { location.href = _chatPage() + '?order=' + encodeURIComponent(orderId); return; }
     if (!S.open) _open();
+  };
+
+  // Open the widget directly on the Support tab (used by the dashboard
+  // "My Tickets" tab to start/continue a support conversation).
+  window.EcwOpenSupport = function () {
+    if (!S.user) { _login(); return; }
+    S.tab = 'support';
+    if (!S.open) _open(); else _switchTab('support');
   };
 
   /* ── Boot ── */
