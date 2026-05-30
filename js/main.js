@@ -300,7 +300,6 @@
 (function initStatCountup() {
   var stats = document.querySelectorAll('.eb-stat-n[data-countup]');
   if (!stats.length) return;
-  stats.forEach(function(el) { el.textContent = '0'; });
   var io = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (!entry.isIntersecting) return;

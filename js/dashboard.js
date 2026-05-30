@@ -784,7 +784,7 @@
     try { localStorage.setItem('elysium_avatar_url', url); } catch (e) {}
     _profile.avatar_url = url;
 
-    _sb.from('profiles').upsert({ id: _user.id, avatar_url: url }, { onConflict: 'id' })
+    _sb.from('profiles').upsert({ id: _user.id, avatar_url: url, role: 'user' }, { onConflict: 'id' })
       .then(function (res) {
         if (res.error) { console.error('[dashboard] avatar save failed:', res.error.message, res.error.code); toast('error', 'Failed to save avatar.'); return; }
         if (typeof _applyAvatarUrl === 'function') _applyAvatarUrl(url);
@@ -812,7 +812,7 @@
           return;
         }
 
-        var payload = { id: _user.id, username: username, discord_id: discord, country: country };
+        var payload = { id: _user.id, role: 'user', username: username, discord_id: discord, country: country };
         if (avUrl) payload.avatar_url = avUrl;
 
         var saveBtn = accForm.querySelector('.db-save-btn');
