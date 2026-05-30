@@ -209,7 +209,7 @@
 
       <!-- Overlay text -->
       <p class="arc-hub-overlay">
-        Loot, currencies, blueprints, and raid services. Configure in-site and lock details with our team in Discord.
+        Loot, currencies, blueprints, and raid services. Configure in-site and check out securely.
       </p>
 
       <!-- Scroll hint -->
@@ -234,8 +234,8 @@
       <button data-service="raids">Raid Bundles</button>
       <button data-service="expedition-boost">Expedition Boost</button>
       <button data-service="raid-coaching">Hourly Coaching</button>
-      <button data-service="custom-orders">Custom Orders</button>
       <button data-service="assorted-seeds">Assorted Seeds</button>
+      <button data-service="custom-orders">Custom Orders</button>
     </div>
 
     <!-- ══════════════════════════════════
@@ -313,14 +313,14 @@
           <span class="arc-sidebar-name">Hourly Coaching</span>
           <span class="arc-sidebar-arrow">&#8250;</span>
         </button>
-        <button class="arc-sidebar-item" data-service="custom-orders">
-          <span class="arc-sidebar-icon"><img src="../../assets/arc-raiders/images/custom-orders.webp" alt="" loading="lazy"></span>
-          <span class="arc-sidebar-name">Custom Orders</span>
-          <span class="arc-sidebar-arrow">&#8250;</span>
-        </button>
         <button class="arc-sidebar-item" data-service="assorted-seeds">
           <span class="arc-sidebar-icon"><img src="../../assets/arc-raiders/images/assorted-seeds.webp" alt="" loading="lazy"></span>
           <span class="arc-sidebar-name">Assorted Seeds</span>
+          <span class="arc-sidebar-arrow">&#8250;</span>
+        </button>
+        <button class="arc-sidebar-item" data-service="custom-orders">
+          <span class="arc-sidebar-icon"><img src="../../assets/arc-raiders/images/custom-orders.webp" alt="" loading="lazy"></span>
+          <span class="arc-sidebar-name">Custom Orders</span>
           <span class="arc-sidebar-arrow">&#8250;</span>
         </button>
       </div>
@@ -501,7 +501,29 @@
               <div class="arc-cart-empty" id="arcCartEmpty">Configure your order above</div>
             </div>
             <div class="arc-cart-foot" id="arcCartFoot">
+              <div class="arc-mode-bar" id="arcModeBar">
+                <div class="arc-mode-group">
+                  <span class="arc-mode-label">Service Mode</span>
+                  <div class="arc-mode-seg" role="group" aria-label="Service mode">
+                    <button type="button" class="arc-mode-opt on" data-play="piloted">Piloted
+                      <span class="arc-mode-tip" role="tooltip">Our skilled players complete the service on your account.</span>
+                    </button>
+                    <button type="button" class="arc-mode-opt" data-play="selfplay">Selfplay <span class="arc-mode-plus">+35%</span>
+                      <span class="arc-mode-tip" role="tooltip">You play on your own account alongside our skilled players.</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="arc-mode-group">
+                  <span class="arc-mode-label">Platform</span>
+                  <div class="arc-mode-seg arc-mode-seg--plat" role="group" aria-label="Platform">
+                    <button type="button" class="arc-mode-opt on" data-plat="PC">PC</button>
+                    <button type="button" class="arc-mode-opt" data-plat="Xbox">Xbox</button>
+                    <button type="button" class="arc-mode-opt" data-plat="PSN">PSN</button>
+                  </div>
+                </div>
+              </div>
               <div class="arc-cart-row"><span>Subtotal</span><span class="v" id="arcCartSub"><span class="coin"></span> 0</span></div>
+              <div class="arc-cart-row" id="arcCartSelfRow" hidden><span>Selfplay (+35%)</span><span class="v" id="arcCartSelf"><span class="coin"></span> 0</span></div>
               <div class="arc-cart-row"><span>Service fee (5%)</span><span class="v" id="arcCartFee"><span class="coin"></span> 0</span></div>
               <div class="arc-cart-total">
                 <span class="k">Total</span>
